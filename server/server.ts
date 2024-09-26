@@ -5,6 +5,7 @@ import createError from "http-errors";
 import connectDB from "./Model/DB";
 import adminRouter from "./Routes/Admin";
 import sellerRouter from "./Routes/Seller";
+import productRouter from "./Routes/Product";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(logger("dev"));
 // Endpoints
 app.use("/api/admin", adminRouter);
 app.use("/api/seller", sellerRouter);
+app.use("/api/product", productRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World from TypeScript!");

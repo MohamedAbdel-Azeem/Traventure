@@ -6,7 +6,7 @@ export async function addProduct(product: any) {
     const newProduct = await productModel.create(product);
     return newProduct;
   } catch (error) {
-    return error;
+    throw error;
   }
 }
 
