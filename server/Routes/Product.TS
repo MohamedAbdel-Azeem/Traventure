@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import { matchedData, validationResult } from "express-validator";
-import { addProduct } from "../Model/Queries/product_queries";
+import { addProduct, getProducts } from "../Model/Queries/product_queries";
 import { productAddValidator } from "../utils/express-validator/productValidator";
 
 const router = Router();
@@ -22,5 +22,14 @@ router.post(
     }
   }
 );
+
+router.get("/", async (req: Request, res: Response) => {
+  try {
+    const products = await getProducts();
+    res.status(200).send(products);
+  } catch (error) {
+    res.status(500).send("Error Fetching Products");
+  }
+});
 
 export default router;

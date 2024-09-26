@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import productModel from "../Schemas/Product";
 
 export async function addProduct(product: any) {
@@ -10,4 +9,13 @@ export async function addProduct(product: any) {
   }
 }
 
-module.exports = { addProduct };
+export async function getProducts() {
+  try {
+    const products = await productModel.find();
+    return products;
+  } catch (error) {
+    throw error;
+  }
+}
+
+module.exports = { addProduct, getProducts };
