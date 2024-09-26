@@ -16,6 +16,7 @@ router.post("/add",categoryValidator,async (req: Request, res: Response)=>{
         res.status(201).send("Category added successfully");
     }
     catch(err){
+        
         res.status(500).send("error creating category");
     }
 })

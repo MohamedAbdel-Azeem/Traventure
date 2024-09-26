@@ -1,14 +1,13 @@
 import mongoose from "mongoose";
 import Category from "../Schemas/Category";
-import e from "express";
 
-export const addCategory = async (Category: any) => {
+export const addCategory = async (newCategory: any) => {
   try{
-    const category = new Category(Category);
-  await await category.save();
-  return category;}
-  catch(e){
-   throw e;}
+    const addedcategory = new Category(newCategory);
+  await  addedcategory.save();
+  return addedcategory;}
+  catch(err){
+   throw err;}
 
 }
 
