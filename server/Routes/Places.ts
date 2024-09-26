@@ -51,6 +51,10 @@ router.patch(
   placeUpdateValidator,
   async (req: Request, res: Response) => {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
       const place = matchedData(req);
       const updatedPlace = await updatePlace(req.params.id, place);
       res.status(200).send("Place updated successfully");
