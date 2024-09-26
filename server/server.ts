@@ -4,6 +4,7 @@ import logger from "morgan";
 import createError from "http-errors";
 import connectDB from "./Model/DB";
 import adminRouter from "./Routes/Admin";
+import categoryRouter from "./Routes/Category";
 
 const app = express();
 
@@ -14,7 +15,7 @@ app.use(logger("dev"));
 
 // Endpoints
 app.use("/api/admin", adminRouter);
-
+app.use("/api/category", categoryRouter);
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World from TypeScript!");
 });
