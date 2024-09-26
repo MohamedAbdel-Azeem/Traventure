@@ -18,4 +18,22 @@ export async function getProducts() {
   }
 }
 
-module.exports = { addProduct, getProducts };
+export async function getProduct(ObjectId: string) {
+  try {
+    const product = await productModel.findById(ObjectId);
+    return product;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function updateProduct(ObjectId: string, newProduct: Object) {
+  try {
+    const product = await productModel.findByIdAndUpdate(ObjectId, newProduct);
+    return product;
+  } catch (error) {
+    throw error;
+  }
+}
+
+module.exports = { addProduct, getProducts, getProduct, updateProduct };
