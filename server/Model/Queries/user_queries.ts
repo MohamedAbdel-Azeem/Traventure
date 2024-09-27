@@ -29,7 +29,7 @@ export async function getprofileInfo(username: string, type: string) {
   }
 }
 
-async function getAllUsers(username: string | undefined) {
+export async function getAllUsers(username: string | undefined) {
   try {
     const advertisers = await advertiserModel.find();
     const sellers = await sellerModel.find();

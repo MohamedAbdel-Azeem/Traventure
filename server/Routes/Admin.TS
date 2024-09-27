@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import AdminSchema from "../Model/Schemas/Admin";
 import Router from "express";
 import { matchedData, validationResult, body } from "express-validator";
-import getAllUsers from "../Model/Queries/user_queries";
+import { getAllUsers } from "../Model/Queries/user_queries";
 import {
   createUser,
   handleRegisterErrors,
@@ -39,15 +39,14 @@ router.post(
   }
 );
 
-
 // return all users including admins except the current user (current Admin)
 router.get("/all", async (req: Request, res: Response) => {
-    try {
-        const users = await getAllUsers(req.body.username);
-        res.status(200).send(users);
-    } catch (err) {
-        res.status(500).send("error getting users");
-    }
+  try {
+    const users = await getAllUsers(req.body.username);
+    res.status(200).send(users);
+  } catch (err) {
+    res.status(500).send("error getting users");
+  }
 });
 
 export default router;
