@@ -18,26 +18,26 @@ const AdminPage = () => {
     const [isSideBarOpen, setIsSideBarOpen] = useState(false);
     const sideBarData = [
         {
-            title: "Home",
-            icon: <AiIcons.AiFillHome />,
+            title: "Activities",
+            icon: <FontAwesomeIcon icon={faPeopleGroup} />,
             iconClosed: <RiIcons.RiArrowDownSFill />,
             iconOpened: <RiIcons.RiArrowUpSFill />,
-            content: <Dashboard />,
+            // content: <Reports />
         },
         {
-            title: "Students",
+            title: "Users",
             icon: <IoPersonSharp />,
             iconClosed: <RiIcons.RiArrowDownSFill />,
             iconOpened: <RiIcons.RiArrowUpSFill />,
             subNav: [
                 {
-                    title: "Active Students",
+                    title: "Accepted Users",
                     content: <ActiveStudents/>,
                     icon: <IoIcons.IoIosPaper />,
                     // data: RegDonorData
                 },
                 {
-                    title: "Inactive Students",
+                    title: "Pending Users",
                     content: <InactiveStudents/>,
                     icon: <IoIcons.IoIosPaper />,
                     // data: PendingDonorData
@@ -45,47 +45,18 @@ const AdminPage = () => {
             ],
         },
         {
-            title: "Materials",
+            title: "Shop",
+            icon: <AiIcons.AiFillHome />,
+            iconClosed: <RiIcons.RiArrowDownSFill />,
+            iconOpened: <RiIcons.RiArrowUpSFill />,
+            content: <Dashboard />,
+        },
+        {
+            title: "Places",
             icon: <FontAwesomeIcon icon={faBook} /> ,
             iconClosed: <RiIcons.RiArrowDownSFill />,
             iconOpened: <RiIcons.RiArrowUpSFill />,
             content: <Materials/>
-        },
-        {
-            title: "Videos",
-            icon: <FontAwesomeIcon icon={faVideo} />,
-            iconClosed: <RiIcons.RiArrowDownSFill />,
-            iconOpened: <RiIcons.RiArrowUpSFill />,
-            content: <Videos/>
-        },
-        {
-            title: "Submissions",
-            icon: <FontAwesomeIcon icon={faEnvelope} />,
-            iconClosed: <RiIcons.RiArrowDownSFill />,
-            iconOpened: <RiIcons.RiArrowUpSFill />,
-            content: <Submissions />
-        },
-       
-        {
-            title: "Assistants",
-            icon: <FontAwesomeIcon icon={faPeopleGroup} />,
-            iconClosed: <RiIcons.RiArrowDownSFill />,
-            iconOpened: <RiIcons.RiArrowUpSFill />,
-            // content: <Reports />
-        },
-        {
-            title: "Calls",
-            icon: <FontAwesomeIcon icon={faPhone} />,
-            iconClosed: <RiIcons.RiArrowDownSFill />,
-            iconOpened: <RiIcons.RiArrowUpSFill />,
-            // content: <Reports />
-        },
-        {
-            title: "Reports",
-            icon: <FontAwesomeIcon icon={faChartSimple} />,
-            iconClosed: <RiIcons.RiArrowDownSFill />,
-            iconOpened: <RiIcons.RiArrowUpSFill />,
-            content: <Reports />
         },
     ];
 
