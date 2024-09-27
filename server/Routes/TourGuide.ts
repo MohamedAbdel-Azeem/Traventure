@@ -12,7 +12,7 @@ router.post('/add',guestAddValidator, async (req: Request, res: Response) => {
     }
     const newUser = matchedData(req);
     try {
-        await createUser(newUser,'advertiser');
+        await createUser(newUser,'tourGuide');
         res.status(201).send({ message: 'User created successfully' });
     } catch (error) {
         const err = error as any;
@@ -23,4 +23,3 @@ router.post('/add',guestAddValidator, async (req: Request, res: Response) => {
 
 
 export default router;
- 

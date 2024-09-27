@@ -8,7 +8,14 @@ const tourGuideSchema = new Schema({
   password: { type: String, required: true },
   mobileNumber:  String,
   yearsOfExperience:  Number,
-  previousWork: [String],
+  previousWork: [{
+    companyName: String,
+    startDate: Date,
+    endDate: Date,
+    role: String,
+    location: String,
+    description: String
+}],
   isAccepted: { type: Boolean, default: false }
 });
 
