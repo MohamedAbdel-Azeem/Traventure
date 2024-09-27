@@ -9,10 +9,6 @@ import AccountButton from "./AccountButton"; // <-- Add this import
 
 const Navbar = ({
   sideBarFlag = false,
-  showSideBar = () => {},
-  isSideBarOpen = false,
-  sideBarData = [],
-  sideBarFunction,
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [content, setContent] = useState('dashboard'); // Placeholder content state
@@ -42,13 +38,6 @@ const Navbar = ({
           : "header-navbar landing sticky-top"
       }`}
     >
-      <div
-        className={
-          !isScrolled && !sideBarFlag
-            ? "header-background"
-            : "header-background scrolled"
-        }
-      ></div>
       <nav
         className={
           sideBarFlag
@@ -58,21 +47,10 @@ const Navbar = ({
             : "navbar landing navbar-expand navbar-light sticky-top"
         }
       >
-        {sideBarFlag ? (
-          <Burger
-            color="#29C5F6"
-            size="lg"
-            opened={isSideBarOpen}
-            onClick={showSideBar}
-            style={{ margin: "0 2rem" }}
-            aria-label="Toggle navigation"
-          />
-        ) : null}
 
         {/* Right side elements */}
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center" }}>
-          <SearchBar />
-          {/* Account Button */}
+          <SearchBar globalStyling={undefined} formStyling={undefined} inputStyle={undefined} buttonStyle={undefined} searchResultsData={undefined} onSearchResultSelection={undefined} resultLabellKey={undefined} searchResultsListStyle={undefined} />
           <AccountButton
             email="user@example.com" // Provide the user's email
             name="John Doe" // Provide the user's name
@@ -81,14 +59,6 @@ const Navbar = ({
           />
         </div>
       </nav>
-      {isSideBarOpen && (
-        <Sidebar
-          sideBarState={[isSideBarOpen, showSideBar]}
-          sideBarData={sideBarData}
-          sideBarFunction={sideBarFunction}
-          resultLabellKey="title"
-        />
-      )}
     </div>
   );
 };
