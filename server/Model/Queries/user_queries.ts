@@ -2,9 +2,9 @@ import mongoose, { models } from "mongoose";
 import advertiserModel from "../Schemas/Advertiser";
 import sellerModel from "../Schemas/Seller";
 import tourGuideModel from "../Schemas/TourGuide";
-import IAdvertiser from "../../Interfaces/Users/IAdvertiser";
-import ISeller from "../../Interfaces/Users/ISeller";
-import ITourGuide from "../../Interfaces/Users/ITourGuide";
+import touristModel from "../Schemas/Tourist";
+import adminModel from "../Schemas/Admin";
+import { get } from "http";
 
 export async function getprofileInfo(username: string, type: string) {
   let model: mongoose.Model<any>;
@@ -29,4 +29,17 @@ export async function getprofileInfo(username: string, type: string) {
   }
 }
 
-module.exports = { getprofileInfo };
+export async function getAllUsers(username: string | undefined) {
+  try {
+    const advertisers = await advertiserModel.find();
+    const sellers = await sellerModel.find();
+    const tourGuides = await tourGuideModel.find();
+    const tourists = await touristModel.find();
+    const admins = await adminModel.find({ username: { $ne: username } });
+    return { advertisers, sellers, tourGuides, tourists, admins };
+  } catch (err) {
+    throw err;
+  }
+}
+
+module.exports = { getprofileInfo, getAllUsers };
