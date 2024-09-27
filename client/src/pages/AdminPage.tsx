@@ -1,4 +1,5 @@
 import Navbar from "../components/navbar";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import * as AiIcons from "react-icons/ai";
 import * as IoIcons from "react-icons/io";
@@ -7,11 +8,14 @@ import { IoPersonSharp } from "react-icons/io5";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook,faPeopleGroup,faLocationPin } from '@fortawesome/free-solid-svg-icons';
 import Dashboard from "../components/Admin/Dashboard";
-import ActiveStudents from "../components/Admin/ActiveStudents";
+import ActiveStudents from "../components/Admin/Tourists";
 import InactiveStudents from "../components/Admin/InactiveStudents";
 import Materials from "../components/Admin/Materials"
+import Tourists from "../components/Admin/Tourists";
 const AdminPage = () => {
     const [isSideBarOpen, setIsSideBarOpen] = useState(false);
+    const navigate = useNavigate(); // Initialize useNavigate
+
     const sideBarData = [
         {
             title: "Activities",
@@ -28,8 +32,9 @@ const AdminPage = () => {
             subNav: [
                 {
                     title: "Accepted Users",
-                    content: <ActiveStudents/>,
+                    content: <Tourists/>,
                     icon: <IoIcons.IoIosPaper />,
+                    onClick: () => navigate('/Tourists')
                     // data: RegDonorData
                 },
                 {
