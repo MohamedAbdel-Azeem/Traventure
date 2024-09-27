@@ -1,6 +1,6 @@
 import productModel from "../Schemas/Product";
 
-export async function addProduct(product: any) {
+export async function addProduct(product: Object) {
   try {
     const newProduct = await productModel.create(product);
     return newProduct;

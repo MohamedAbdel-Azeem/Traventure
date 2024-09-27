@@ -8,7 +8,7 @@ import sellerRouter from "./Routes/Seller";
 import productRouter from "./Routes/Product";
 import  advertiserRouter  from "./Routes/Advertiser";
 import  tourGuideRouter  from "./Routes/TourGuide";
-
+import placeRouter from "./Routes/Places";
 
 
 const app = express();
@@ -22,11 +22,13 @@ app.use(logger("dev"));
 app.use("/api/admin", adminRouter);
 app.use("/api/seller", sellerRouter);
 app.use("/api/product", productRouter);
+app.use("/api/place", placeRouter);
 app.use("/api/advertiser", advertiserRouter);
 app.use("/api/tourGuide", tourGuideRouter);
 
+
 app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World from TypeScript!");
+  res.send("Welcome to Traventure API");
 });
 
 app.listen(3000, () => {
