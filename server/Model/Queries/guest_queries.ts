@@ -2,6 +2,7 @@ import { model } from 'mongoose';
 import advertiserModel from '../Schemas/Advertiser';
 import sellerModel from '../Schemas/Seller';
 import tourGuideModel from '../Schemas/TourGuide';
+import adminModel from '../Schemas/Admin';
 
 import { Response } from 'express'; 
 import { hashPassword } from '../../utils/functions/bcrypt_functions';
@@ -16,10 +17,18 @@ export async function createUser(user:any,type:string) {
       model = sellerModel;break;
     case "tourGuide":
       model = tourGuideModel;break;
+    case "admin":
+      model = adminModel;break;
       
   }
   try {
-    await isUniqueUsernameAndEmail(user.username, user.email);
+    
+    if(model == adminModel){
+      await isUniqueUsername(user.username);
+    }
+    else{
+      await isUniqueUsernameAndEmail(user.username, user.email);
+    }
     user.password = await hashPassword(user.password);
     const newProduct = await model.create(user);
     return newProduct;
@@ -28,18 +37,25 @@ export async function createUser(user:any,type:string) {
   } 
 }
 
+async function isUniqueUsername(username: string) {
+
+    // Check for existing username
+    const usernameExists = await Promise.all([
+      sellerModel.findOne({ username }),
+      advertiserModel.findOne({ username }),
+      tourGuideModel.findOne({ username }),
+      adminModel.findOne({ username })
+    ]);
+  
+    if (usernameExists.some(result => result !== null)) {
+      throw new Error('Username already exists');
+    }
+}
+
 async function isUniqueUsernameAndEmail(username: string, email: string) {
+
   // Check for existing username
-  const usernameExists = await Promise.all([
-    sellerModel.findOne({ username }),
-    advertiserModel.findOne({ username }),
-    tourGuideModel.findOne({ username })
-  ]);
-
-  if (usernameExists.some(result => result !== null)) {
-    throw new Error('Username already exists');
-  }
-
+  isUniqueUsername(username);
   // Check for existing email
   const emailExists = await Promise.all([
     sellerModel.findOne({ email }),
