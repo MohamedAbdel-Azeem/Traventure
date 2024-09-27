@@ -5,9 +5,10 @@ import {
 import { Request, Response, Router } from "express";
 import { guestAddValidator } from "../utils/express-validator/GuestValidator";
 import { matchedData, validationResult } from "express-validator";
-import { getprofileInfo } from "../Model/Queries/user_queries";
+import { getprofileInfo,updateProfileInfo } from "../Model/Queries/user_queries";
 import tourguidemodel from "../Model/Schemas/TourGuide";
 import { ITourGuide } from "../Interfaces/Users/ITourGuide";
+import {tourGuideUpdateValidator} from "../utils/express-validator/TourguideValidator";
 const router = Router();
 
 router.post("/add", guestAddValidator, async (req: Request, res: Response) => {
@@ -41,4 +42,27 @@ router.get("/:username", async (req: Request, res: Response) => {
   }
 });
 
+
+router.patch("/update/:username",tourGuideUpdateValidator, async (req: Request, res: Response) => {
+
+    try {
+        const errors = validationResult(req);
+         if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+  }
+        const username = req.params.username;
+        const updatedInfo = req.body;
+        const user = (await getprofileInfo(username, "tourGuide")) as ITourGuide;
+        if (!user) return res.status(404).send("user not found");
+        if(!user.isAccepted){
+            return res.status(403).send("user is not accepted yet");
+        }
+        const updatedUser = await updateProfileInfo(username, "tourGuide", updatedInfo);
+
+        return res.status(200).json(updatedUser);
+    } catch (err) {
+        res.status(500).send("error updating user profile");
+    }
+
+});
 export default router;
