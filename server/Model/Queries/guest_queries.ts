@@ -4,6 +4,7 @@ import sellerModel from '../Schemas/Seller';
 import tourGuideModel from '../Schemas/TourGuide';
 
 import { Response } from 'express'; 
+import { hashPassword } from '../../utils/functions/bcrypt_functions';
 
 
 export async function createUser(user:any,type:string) {
@@ -19,6 +20,7 @@ export async function createUser(user:any,type:string) {
   }
   try {
     await isUniqueUsernameAndEmail(user.username, user.email);
+    user.password = await hashPassword(user.password);
     const newProduct = await model.create(user);
     return newProduct;
   } catch (error) {
