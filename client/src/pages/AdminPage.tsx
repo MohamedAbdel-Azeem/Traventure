@@ -1,19 +1,15 @@
-import Navbar from "../components/Navbar";
+import Navbar from "../components/navbar";
 import { useState } from "react";
 import * as AiIcons from "react-icons/ai";
 import * as IoIcons from "react-icons/io";
 import * as RiIcons from "react-icons/ri";
 import { IoPersonSharp } from "react-icons/io5";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBook,faVideo,faChartSimple,faPhone,faEnvelope,faPeopleGroup } from '@fortawesome/free-solid-svg-icons';  // Import the Font Awesome icon you need
+import { faBook,faPeopleGroup,faLocationPin } from '@fortawesome/free-solid-svg-icons';
 import Dashboard from "../components/Admin/Dashboard";
 import ActiveStudents from "../components/Admin/ActiveStudents";
 import InactiveStudents from "../components/Admin/InactiveStudents";
 import Materials from "../components/Admin/Materials"
-import Videos from "../components/Admin/Videos"
-import Submissions from "../components/Admin/Submissions"
-import Reports from "../components/Admin/Reports"
-
 const AdminPage = () => {
     const [isSideBarOpen, setIsSideBarOpen] = useState(false);
     const sideBarData = [
@@ -53,7 +49,7 @@ const AdminPage = () => {
         },
         {
             title: "Places",
-            icon: <FontAwesomeIcon icon={faBook} /> ,
+            icon: <FontAwesomeIcon icon={faLocationPin} /> ,
             iconClosed: <RiIcons.RiArrowDownSFill />,
             iconOpened: <RiIcons.RiArrowUpSFill />,
             content: <Materials/>
