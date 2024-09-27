@@ -1,0 +1,149 @@
+  /* Container Styling */
+  .materials-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    background: #f4f4f4;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Course Section Styling */
+  .materials-section {
+    margin-bottom: 20px;
+    padding: 0;
+    background: #ffffff;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+
+  .materials-section:not(.expanded):hover {
+    background: #e9f1f7;
+  }
+
+  /* Section Header Styling */
+  .materials-section .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  .materials-section:not(.expanded) .section-header:hover h2 {
+    color: #0056b3;
+  }
+
+  /* Section Header Text Styling */
+  .materials-section .section-header h2 {
+    color: #007bff;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+    transition: color 0.3s ease;
+  }
+
+  /* List Styling */
+  .materials-section ul {
+    list-style-type: none;
+    padding-left: 20px;
+    margin: 0;
+    border-left: 2px solid #ddd;
+  }
+
+  .materials-section ul > li {
+    margin: 10px 0;
+    padding: 10px;
+    padding-left: 20px;
+    position: relative;
+    background: #fafafa;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+  }
+
+  .materials-section ul > li:hover {
+    background: #f0f8ff;
+  }
+
+  /* Nested List Styling */
+  .materials-section ul ul {
+    margin-left: 20px;
+    border-left: none;
+  }
+
+  .materials-section ul ul li {
+    background: #fff;
+    border-left: 2px solid #007bff;
+    cursor: auto; /* Remove cursor pointer from nested list items */
+  }
+
+  .materials-section ul ul li:hover {
+    background: #f0f8ff; /* Highlight individual items on hover */
+  }
+
+  /* Bullet Point Styling */
+  /* Bullet Point Styling */
+  .materials-section ul li:before {
+    content: '•';
+    position: absolute;
+    left: -15px;
+    color: #007bff;
+    font-size: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* Clickable Link Styling */
+  .materials-section ul li a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    width: calc(100% - 120px); /* Adjust width for button */
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  .materials-section ul li a:hover {
+    text-decoration: underline;
+  }
+
+  /* Toggle Button Styling */
+  .materials-section ul li button {
+    background-color: #007bff; /* Blue button */
+    padding: 6px 12px;
+
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    margin: 2px;
+  }
+
+  .materials-section ul li button:hover {
+    background-color: #2e7ad1;
+  }
+
+  /* Button Container Styling */
+  .materials-section .Butt {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .materials-section .suspend-button {
+    padding: 6px 12px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    
+  }
+
+  .materials-section .suspend-button:hover {
+    background-color: #c82333;
+  }
