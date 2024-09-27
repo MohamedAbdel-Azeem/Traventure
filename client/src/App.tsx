@@ -1,8 +1,18 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AdminPage from "./pages/AdminPage";
+import "@mantine/core/styles.css";
+import { MantineProvider } from "@mantine/core";
+
 function App() {
   return (
-    <>
-      <h1 className="text-3xl text-blue-500">Hello world!</h1>
-    </>
+    <MantineProvider>
+      <Router>
+        <Routes>
+          <Route path="/admin" element={<AdminPage />} />
+         
+        </Routes>
+      </Router>
+    </MantineProvider>
   );
 }
 
