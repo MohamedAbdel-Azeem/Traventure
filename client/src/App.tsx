@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AdminPage from "./pages/AdminPage";
+import NewApp from "./NewApp";
 import "@mantine/core/styles.css";
 import { MantineProvider } from "@mantine/core";
 
@@ -8,7 +8,7 @@ function App() {
     <MantineProvider>
       <Router>
         <Routes>
-          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin" element={<NewApp />} />
          
         </Routes>
       </Router>
