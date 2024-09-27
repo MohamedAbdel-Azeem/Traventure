@@ -1,21 +1,46 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 
-const AdvertiserProfile: React.FC = () => {
+
+const TouristProfile: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState({
     username: 'MinaAhmed21',
-    email: 'mina@advertiser.com',
-    sitelink: '',
-    hotline: '',
-    companyprofile: '',
+    email: 'mina@gmail.com',
+    mobile: '+201186948329',
+    nationality: 'American',
+    dob: '1990-05-15',
+    job: 'Photographer',
     profilePicture: 'src/assets/t2.jpg',
+    wallet: '456',
   });
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
+
   const handleEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    if (name === 'dob') {
+        if (!value) {
+            setError('Date of Birth cannot be empty.');
+            return;
+          }
+      const todaysdate = new Date();
+      const birthday = new Date(value);
+      const monthdiff = todaysdate.getMonth() - birthday.getMonth();
+      let age = todaysdate.getFullYear() - birthday.getFullYear();
+      if (monthdiff < 0 || (monthdiff === 0 && todaysdate.getDate() < birthday.getDate())) {
+        age--;
+      }
+
+      if (age < 18) {
+        setError('Age must be 18 years or older.');
+        return;
+      } else {
+        setError(null);
+      }
+    }
 
     setUserData((prevData) => ({
       ...prevData,
@@ -42,6 +67,8 @@ const AdvertiserProfile: React.FC = () => {
     
     navigate('/'); 
   };
+
+
 
   return (
     <div
@@ -79,47 +106,70 @@ const AdvertiserProfile: React.FC = () => {
 
         <div className="mt-8 grid grid-cols-2 gap-6">
           <div className="flex flex-col">
-            <label className="text-lg font-semibold text-gray-700">Website Link:</label>
+            <label className="text-lg font-semibold text-gray-700">Mobile Number:</label>
             {isEditing ? (
               <input
-                type="text"
-                name="sitelink"
-                value={userData.sitelink}
+                type="tel"
+                name="mobile"
+                value={userData.mobile}
                 onChange={handleEdit}
                 className="text-lg p-3 border border-gray-300 rounded-md"
               />
             ) : (
-              <p className="text-gray-800 text-lg">{userData.sitelink}</p>
+              <p className="text-gray-800 text-lg">{userData.mobile}</p>
             )}
           </div>
           <div className="flex flex-col">
-            <label className="text-lg font-semibold text-gray-700">Hotline:</label>
-            {isEditing ? (
-              <input
-                type="number"
-                name="hotline"
-                value={userData.hotline}
-                onChange={handleEdit}
-                className="text-lg p-3 border border-gray-300 rounded-md"
-              />
-            ) : (
-              <p className="text-gray-800 text-lg">{userData.hotline}</p>
-            )}
-          </div>
-          <div className="flex flex-col">
-            <label className="text-lg font-semibold text-gray-700">Company Profile:</label>
+            <label className="text-lg font-semibold text-gray-700">Nationality:</label>
             {isEditing ? (
               <input
                 type="text"
-                name="companyprofile"
-                value={userData.companyprofile}
+                name="nationality"
+                value={userData.nationality}
                 onChange={handleEdit}
                 className="text-lg p-3 border border-gray-300 rounded-md"
               />
             ) : (
-              <p className="text-gray-800 text-lg">{userData.companyprofile}</p>
+              <p className="text-gray-800 text-lg">{userData.nationality}</p>
+            )}
+          </div>
+          <div className="flex flex-col">
+            <label className="text-lg font-semibold text-gray-700">Date of Birth:</label>
+            {isEditing ? (
+              <input
+                type="date"
+                name="dob"
+                value={userData.dob}
+                onChange={handleEdit}
+                className="text-lg p-3 border border-gray-300 rounded-md"
+              />
+            ) : (
+              <p className="text-gray-800 text-lg">{userData.dob}</p>
             )}
             {error && <p className="text-red-600 mt-1">{error}</p>}
+          </div>
+          <div className="flex flex-col">
+            <label className="text-lg font-semibold text-gray-700">Job:</label>
+            {isEditing ? (
+              <input
+                type="text"
+                name="job"
+                value={userData.job}
+                onChange={handleEdit}
+                className="text-lg p-3 border border-gray-300 rounded-md"
+              />
+            ) : (
+              <p className="text-gray-800 text-lg">{userData.job}</p>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-8 flex justify-center items-center bg-purple-50 py-3 px-4 rounded-lg shadow-md border border-purple-200 max-w-md mx-auto">
+          <div className="flex items-center space-x-4">
+            <div className="flex flex-col items-center">
+              <label className="text-xl font-semibold text-purple-700">Wallet Balance:</label>
+              <p className="text-4xl font-bold text-purple-900">${userData.wallet}</p>
+            </div>
           </div>
         </div>
 
@@ -147,10 +197,7 @@ const AdvertiserProfile: React.FC = () => {
               Edit Profile
             </button>
           )}
-          <button
-            onClick={handleLogout}
-            className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
-          >
+          <button  onClick={handleLogout} className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200">
             Log Out
           </button>
         </div>
@@ -159,4 +206,4 @@ const AdvertiserProfile: React.FC = () => {
   );
 };
 
-export default AdvertiserProfile;
+export default TouristProfile;

@@ -1,21 +1,25 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 
-const AdvertiserProfile: React.FC = () => {
+
+const SellerProfile: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState({
-    username: 'MinaAhmed21',
-    email: 'mina@advertiser.com',
-    sitelink: '',
-    hotline: '',
-    companyprofile: '',
+    username: 'Ahmedmina21',
+    email: 'minaSeller@gmail.com',
     profilePicture: 'src/assets/t2.jpg',
+    name: '',
+    description: '',
+  
   });
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
+
   const handleEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+  
 
     setUserData((prevData) => ({
       ...prevData,
@@ -38,10 +42,15 @@ const AdvertiserProfile: React.FC = () => {
     }
   };
 
+
+
+
   const handleLogout = () => {
     
     navigate('/'); 
   };
+
+
 
   return (
     <div
@@ -79,49 +88,37 @@ const AdvertiserProfile: React.FC = () => {
 
         <div className="mt-8 grid grid-cols-2 gap-6">
           <div className="flex flex-col">
-            <label className="text-lg font-semibold text-gray-700">Website Link:</label>
+            <label className="text-lg font-semibold text-gray-700">Name:</label>
             {isEditing ? (
               <input
                 type="text"
-                name="sitelink"
-                value={userData.sitelink}
+                name="name"
+                value={userData.name}
                 onChange={handleEdit}
                 className="text-lg p-3 border border-gray-300 rounded-md"
               />
             ) : (
-              <p className="text-gray-800 text-lg">{userData.sitelink}</p>
+              <p className="text-gray-800 text-lg">{userData.name}</p>
             )}
           </div>
           <div className="flex flex-col">
-            <label className="text-lg font-semibold text-gray-700">Hotline:</label>
-            {isEditing ? (
-              <input
-                type="number"
-                name="hotline"
-                value={userData.hotline}
-                onChange={handleEdit}
-                className="text-lg p-3 border border-gray-300 rounded-md"
-              />
-            ) : (
-              <p className="text-gray-800 text-lg">{userData.hotline}</p>
-            )}
-          </div>
-          <div className="flex flex-col">
-            <label className="text-lg font-semibold text-gray-700">Company Profile:</label>
+            <label className="text-lg font-semibold text-gray-700">Description:</label>
             {isEditing ? (
               <input
                 type="text"
-                name="companyprofile"
-                value={userData.companyprofile}
+                name="description"
+                value={userData.description}
                 onChange={handleEdit}
                 className="text-lg p-3 border border-gray-300 rounded-md"
               />
             ) : (
-              <p className="text-gray-800 text-lg">{userData.companyprofile}</p>
+              <p className="text-gray-800 text-lg">{userData.description}</p>
             )}
-            {error && <p className="text-red-600 mt-1">{error}</p>}
           </div>
+         
         </div>
+
+    
 
         <div className="mt-8 flex justify-end space-x-4">
           {isEditing ? (
@@ -147,10 +144,7 @@ const AdvertiserProfile: React.FC = () => {
               Edit Profile
             </button>
           )}
-          <button
-            onClick={handleLogout}
-            className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
-          >
+          <button onClick={handleLogout} className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200">
             Log Out
           </button>
         </div>
@@ -159,4 +153,4 @@ const AdvertiserProfile: React.FC = () => {
   );
 };
 
-export default AdvertiserProfile;
+export default SellerProfile;

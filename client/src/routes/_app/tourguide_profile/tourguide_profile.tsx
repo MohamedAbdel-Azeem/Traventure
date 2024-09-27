@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 
-const AdvertiserProfile: React.FC = () => {
+
+const TourGuideProfile: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState({
     username: 'MinaAhmed21',
-    email: 'mina@advertiser.com',
-    sitelink: '',
-    hotline: '',
-    companyprofile: '',
+    email: 'mina@tourguide.com',
+    mobile: '',
+    yox: '',
+    prevwork: '',
     profilePicture: 'src/assets/t2.jpg',
   });
   const [error, setError] = useState<string | null>(null);
@@ -16,6 +17,9 @@ const AdvertiserProfile: React.FC = () => {
 
   const handleEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+   
+    
 
     setUserData((prevData) => ({
       ...prevData,
@@ -79,49 +83,52 @@ const AdvertiserProfile: React.FC = () => {
 
         <div className="mt-8 grid grid-cols-2 gap-6">
           <div className="flex flex-col">
-            <label className="text-lg font-semibold text-gray-700">Website Link:</label>
-            {isEditing ? (
-              <input
-                type="text"
-                name="sitelink"
-                value={userData.sitelink}
-                onChange={handleEdit}
-                className="text-lg p-3 border border-gray-300 rounded-md"
-              />
-            ) : (
-              <p className="text-gray-800 text-lg">{userData.sitelink}</p>
-            )}
-          </div>
-          <div className="flex flex-col">
-            <label className="text-lg font-semibold text-gray-700">Hotline:</label>
+            <label className="text-lg font-semibold text-gray-700">Mobile Number:</label>
             {isEditing ? (
               <input
                 type="number"
-                name="hotline"
-                value={userData.hotline}
+                name="mobile"
+                value={userData.mobile}
                 onChange={handleEdit}
                 className="text-lg p-3 border border-gray-300 rounded-md"
               />
             ) : (
-              <p className="text-gray-800 text-lg">{userData.hotline}</p>
+              <p className="text-gray-800 text-lg">{userData.mobile}</p>
             )}
           </div>
+          
           <div className="flex flex-col">
-            <label className="text-lg font-semibold text-gray-700">Company Profile:</label>
+            <label className="text-lg font-semibold text-gray-700">Years of work:</label>
             {isEditing ? (
               <input
-                type="text"
-                name="companyprofile"
-                value={userData.companyprofile}
+                type="number"
+                name="yox"
+                value={userData.yox}
                 onChange={handleEdit}
                 className="text-lg p-3 border border-gray-300 rounded-md"
               />
             ) : (
-              <p className="text-gray-800 text-lg">{userData.companyprofile}</p>
+              <p className="text-gray-800 text-lg">{userData.yox}</p>
             )}
             {error && <p className="text-red-600 mt-1">{error}</p>}
           </div>
+          <div className="flex flex-col">
+            <label className="text-lg font-semibold text-gray-700">Previous work experience:</label>
+            {isEditing ? (
+              <input
+                type="text"
+                name="prevwork"
+                value={userData.prevwork}
+                onChange={handleEdit}
+                className="text-lg p-3 border border-gray-300 rounded-md"
+              />
+            ) : (
+              <p className="text-gray-800 text-lg">{userData.prevwork}</p>
+            )}
+          </div>
         </div>
+
+     
 
         <div className="mt-8 flex justify-end space-x-4">
           {isEditing ? (
@@ -147,10 +154,7 @@ const AdvertiserProfile: React.FC = () => {
               Edit Profile
             </button>
           )}
-          <button
-            onClick={handleLogout}
-            className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
-          >
+          <button  onClick={handleLogout} className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200">
             Log Out
           </button>
         </div>
@@ -159,4 +163,4 @@ const AdvertiserProfile: React.FC = () => {
   );
 };
 
-export default AdvertiserProfile;
+export default TourGuideProfile;
