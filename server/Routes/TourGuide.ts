@@ -6,7 +6,6 @@ import { Request, Response, Router } from "express";
 import { guestAddValidator } from "../utils/express-validator/GuestValidator";
 import { matchedData, validationResult } from "express-validator";
 import { getprofileInfo } from "../Model/Queries/user_queries";
-import tourguidemodel from "../Model/Schemas/TourGuide";
 import { ITourGuide } from "../Interfaces/Users/ITourGuide";
 const router = Router();
 
