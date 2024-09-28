@@ -1,5 +1,6 @@
 import './Table.css';
-import CollapsibleTable from "./ImprovedTable"
+import TouristTable from "./TouristTable"
+import AdminTable from "./AdminTable"
 import ImprovedSidebar from './ImprovedSidebar';
 
 const Accounts = () => {
@@ -7,8 +8,11 @@ const Accounts = () => {
     <div className="w-full flex items-center justify-center">
         <div className="w-[1500px]">
             <ImprovedSidebar/>
-            <div className="mt-8">
-                <CollapsibleTable />
+            <div className="my-8">
+                <TouristTable />
+            </div>
+            <div className="my-8">
+                <AdminTable />
             </div>
         </div>
     </div>

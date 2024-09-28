@@ -1,7 +1,5 @@
 import React from 'react';
-import Chip from '@mui/material/Chip';
-import Stack from '@mui/material/Stack';
-import FaceIcon from '@mui/icons-material/Face';
+import Rating from '@mui/material/Rating';
 const ItineraryCard: React.FC = () => {
 
     const activityCategories = [
@@ -53,7 +51,7 @@ const ItineraryCard: React.FC = () => {
                 <div className="flex flex-col items-end justify-end text-[13px] mr-2 mb-1">08/05/2026</div>
             </div>
             <div className="flex flex-col items-center justify-center text-[13px] border-dotted border-r-2 border-gray-400">$100,000,000</div>
-        <div className="flex flex-col items-center justify-center text-[13px]">90%</div>
+        <div className="flex flex-col items-center justify-center text-[13px]"><Rating name="half-rating" value={3.75} precision={0.01} readOnly/></div>
         </div>
         </div>
             </div>

@@ -102,7 +102,7 @@ const initialRows = [
   createData('frank.white@example.com', 'FrankWhite', 'password505', '6789012345', 'Democratic Republic of Congo', '08/08/1998', 'Architect'),
   createData('grace.black@example.com', 'GraceBlack', 'password606', '7890123456', 'Trinidad & Tobago', '09/09/1999', 'Scientist'),
 ];
-export default function CollapsibleTable() {
+export default function TouristTable() {
   const [rows, setRows] = useState(initialRows);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -162,8 +162,10 @@ export default function CollapsibleTable() {
           <Table aria-label="collapsible table">
             <TableHead> 
               <TableCell colSpan={7}>
-                <LuggageIcon />
-                Tourists
+                <div className="justify-center flex flex-row">
+                  <LuggageIcon sx={{ fontSize: 40 }}/>
+                  <p className="text-[22px] leading-[45px]">Tourists</p>
+                </div>
               </TableCell>
               </TableHead>
             <TableHead>
@@ -172,8 +174,7 @@ export default function CollapsibleTable() {
                   <TableSortLabel
                     active={orderBy === 'email'}
                     direction={orderBy === 'email' ? order : 'asc'}
-                    onClick={() => handleRequestSort('email')}
-                  >
+                    onClick={() => handleRequestSort('email')}>
                     Email
                   </TableSortLabel>
                 </TableCell>
@@ -181,8 +182,7 @@ export default function CollapsibleTable() {
                   <TableSortLabel
                     active={orderBy === 'Username'}
                     direction={orderBy === 'Username' ? order : 'asc'}
-                    onClick={() => handleRequestSort('Username')}
-                  >
+                    onClick={() => handleRequestSort('Username')}>
                     Username
                   </TableSortLabel>
                 </TableCell>
@@ -190,8 +190,7 @@ export default function CollapsibleTable() {
                   <TableSortLabel
                     active={orderBy === 'nationality'}
                     direction={orderBy === 'nationality' ? order : 'asc'}
-                    onClick={() => handleRequestSort('nationality')}
-                  >
+                    onClick={() => handleRequestSort('nationality')}>
                     Nationality
                   </TableSortLabel>
                 </TableCell>
@@ -199,8 +198,7 @@ export default function CollapsibleTable() {
                   <TableSortLabel
                     active={orderBy === 'mobileNumber'}
                     direction={orderBy === 'mobileNumber' ? order : 'asc'}
-                    onClick={() => handleRequestSort('mobileNumber')}
-                  >
+                    onClick={() => handleRequestSort('mobileNumber')}>
                     Phone
                   </TableSortLabel>
                 </TableCell>
@@ -208,8 +206,7 @@ export default function CollapsibleTable() {
                 <TableSortLabel
                   active={orderBy === 'Occupation'}
                   direction={orderBy === 'Occupation' ? order : 'asc'}
-                  onClick={() => handleRequestSort('Occupation')}
-                >
+                  onClick={() => handleRequestSort('Occupation')}>
                   Occupation
                 </TableSortLabel>
               </TableCell>
@@ -217,8 +214,7 @@ export default function CollapsibleTable() {
                 <TableSortLabel
                   active={orderBy === 'DOB'}
                   direction={orderBy === 'DOB' ? order : 'asc'}
-                  onClick={() => handleRequestSort('DOB')}
-                >
+                  onClick={() => handleRequestSort('DOB')}>
                   DOB
                 </TableSortLabel>
               </TableCell>
@@ -228,8 +224,7 @@ export default function CollapsibleTable() {
                   size="small"
                   placeholder="Search"
                   value={searchQuery}
-                  onChange={handleSearchChange}
-                />
+                  onChange={handleSearchChange}/>
               </TableCell>
               </StyledTableRow>
             </TableHead>
@@ -247,8 +242,7 @@ export default function CollapsibleTable() {
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+          onRowsPerPageChange={handleChangeRowsPerPage}/>
       </Paper>
     </div>
   );
