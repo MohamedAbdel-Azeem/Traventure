@@ -8,6 +8,7 @@ import sellerRouter from "./Routes/Seller";
 import productRouter from "./Routes/Product";
 import  advertiserRouter  from "./Routes/Advertiser";
 import  tourGuideRouter  from "./Routes/TourGuide";
+import  touristRouter  from "./Routes/Tourist";
 import placeRouter from "./Routes/Places";
 
 
@@ -25,6 +26,7 @@ app.use("/api/product", productRouter);
 app.use("/api/place", placeRouter);
 app.use("/api/advertiser", advertiserRouter);
 app.use("/api/tourGuide", tourGuideRouter);
+app.use("/api/tourist", touristRouter);
 
 
 app.get("/", (req: Request, res: Response) => {

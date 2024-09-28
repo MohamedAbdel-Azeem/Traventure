@@ -5,8 +5,10 @@ import {
 import { Request, Response, Router } from "express";
 import { guestAddValidator } from "../utils/express-validator/GuestValidator";
 import { matchedData, validationResult } from "express-validator";
+
 import { getprofileInfo,updateProfileInfo } from "../Model/Queries/user_queries";
 import tourguidemodel from "../Model/Schemas/TourGuide";
+
 import { ITourGuide } from "../Interfaces/Users/ITourGuide";
 import {tourGuideUpdateValidator} from "../utils/express-validator/TourguideValidator";
 const router = Router();

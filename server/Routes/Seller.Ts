@@ -3,8 +3,13 @@ import { Request, Response } from "express";
 import { matchedData, validationResult } from "express-validator";
 import { addProduct } from "../Model/Queries/product_queries";
 import { productAddValidator } from "../utils/express-validator/productValidator";
-import { createUser,handleRegisterErrors } from "../Model/Queries/guest_queries";
+import {
+  createUser,
+  handleRegisterErrors,
+} from "../Model/Queries/guest_queries";
 import { guestAddValidator } from "../utils/express-validator/GuestValidator";
+import ISeller from "../Interfaces/Users/ISeller";
+import { getprofileInfo } from "../Model/Queries/user_queries";
 
 const router = Router();
 
@@ -20,6 +25,22 @@ router.post("/add", guestAddValidator, async (req: Request, res: Response) => {
   } catch (error) {
     const err = error as any;
     handleRegisterErrors(err, res);
+  }
+});
+
+router.get("/:username", async (req: Request, res: Response) => {
+  try {
+    const username = req.params.username;
+    const user = (await getprofileInfo(username, "seller")) as ISeller;
+    if (!user) res.status(404).send("user not found");
+    else {
+      if (user.isAccepted) {
+        return res.status(200).json(user);
+      }
+      res.status(403).json(user);
+    }
+  } catch (err) {
+    res.status(500).send("error getting user profile");
   }
 });
 
