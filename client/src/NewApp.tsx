@@ -83,7 +83,7 @@ const fetch_testing = () => {
             } catch (error) {
                 console.error("Error fetching data:", error); 
                 const axiosError = error as AxiosError;
-                setError(axiosError.message); // Now this is safe
+                setError(axiosError.message);
                 setLoading(false);
             }
         };
