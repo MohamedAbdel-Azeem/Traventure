@@ -1,9 +1,9 @@
-import * as React from 'react';
-import { useState } from 'react';
-import {Table, TableBody, TableContainer, TableHead, TableRow, TableCell, TextField, TableSortLabel, TablePagination, Paper, Button} from '@mui/material';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import React, { useState } from 'react';
+import { Table, TableBody, TableContainer, TableHead, TableRow, TableCell, TableSortLabel, TablePagination, Paper, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { styled } from '@mui/material/styles';
+
 function createData(
     username:string,
     password: string,
@@ -96,6 +96,9 @@ export default function AdminTable() {
   const [searchQuery, setSearchQuery] = useState('');
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
   const [orderBy, setOrderBy] = useState<keyof ReturnType<typeof createData>>('username');
+  const [open, setOpen] = useState(false);
+  const [newUsername, setNewUsername] = useState('');
+  const [newPassword, setNewPassword] = useState('');
 
   const handleDelete = (username: string) => {
     if (window.confirm(`Are you sure you want to delete the user ${username}?`)) {
@@ -136,11 +139,54 @@ export default function AdminTable() {
     return 0;
   });
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleAddAdmin = () => {
+    setRows([...rows, { username: newUsername, password: newPassword }]);
+    setNewUsername('');
+    setNewPassword('');
+    handleClose();
+  };
   const paginatedRows = sortedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
     <div className="w-full flex items-center justify-center">
       <Paper className="w-[1100px]">
+      <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>Add New Admin</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Please enter the username and password for the new admin.
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              label="Username"
+              type="text"
+              fullWidth
+              value={newUsername}
+              onChange={(e) => setNewUsername(e.target.value)}
+            />
+            <TextField
+              margin="dense"
+              label="Password"
+              type="password"
+              fullWidth
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleAddAdmin}>Add</Button>
+          </DialogActions>
+        </Dialog>
         <TableContainer component={Paper}>
           <Table aria-label="collapsible table">
             <TableHead> 
@@ -148,7 +194,9 @@ export default function AdminTable() {
                 <div className="flex flex-row relative">
                   <AdminPanelSettingsIcon  sx={{ fontSize: 40 }} className="ml-auto"/>
                   <p className="text-[22px] leading-[45px] mr-auto">Admins</p>
-                  <Button sx={{
+                  <Button
+                  onClick={handleClickOpen}
+                  sx={{
                     fontSize: '22px',
                     position: 'absolute',
                     top: 0,
