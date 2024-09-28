@@ -1,35 +1,62 @@
-import React from 'react'
+import React from 'react';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+import FaceIcon from '@mui/icons-material/Face';
 const ItineraryCard: React.FC = () => {
+
+    const activityCategories = [
+        { category: 'Dig out', color: 'bg-red-500' },
+        { category: 'Spanish', color: 'bg-yellow-500' },
+        { category: 'Historical', color: 'bg-green-500' },
+        { category: 'Food', color: 'bg-blue-500' },
+        { category: 'Recreation', color: 'bg-purple-500' },
+        { category: 'Educational', color: 'bg-pink-500' },
+        { category: 'Spiritual', color: 'bg-indigo-500' },
+        { category: 'Labor', color: 'bg-teal-500' },
+      ];
+
     return ( 
         <div className="flex flex-col items-center justify-center mt-12">
-
-<div className="w-[352px] h-[425px] bg-slate-600 rounded-[19px]">
-            <div className="w-[352px] h-[208px] bg-slate-200 rounded-t-[19px]">
-            <img src="https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630" alt="Itinerary Image" className="w-[352px] h-[208px] bg-slate-200 rounded-t-[19px]" />
-        </div>
-        <p className="text-[38px]">THE GREEEEEEEEEEN</p>
-        <p className="text-[18px]">Are you tired of being robbed in First World Countries? Come try the same experience but in Egypt!</p>
-        <div className="w-[352px] h-[52px] grid grid-cols-4">
-        <div className="w-[82px] h-[22px] rounded-[34px]  bg-slate-100 text-[11px] flex flex-col items-center justify-center">Prostitution</div>
-        <div className="w-[82px] h-[22px] rounded-[34px]  bg-slate-100 text-[11px] flex flex-col items-center justify-center">Spanish</div>
-        <div className="w-[82px] h-[22px] rounded-[34px]  bg-slate-100 text-[11px] flex flex-col items-center justify-center">Historical</div>
-        <div className="w-[82px] h-[22px] rounded-[34px]  bg-slate-100 text-[11px] flex flex-col items-center justify-center">Food</div>
-        <div className="w-[82px] h-[22px] rounded-[34px]  bg-slate-100 text-[11px] flex flex-col items-center justify-center">Recreation</div>
-        <div className="w-[82px] h-[22px] rounded-[34px]  bg-slate-100 text-[11px] flex flex-col items-center justify-center">Educational</div>
-        <div className="w-[82px] h-[22px] rounded-[34px]  bg-slate-100 text-[11px] flex flex-col items-center justify-center">Spiritual</div>
-        <div className="w-[82px] h-[22px] rounded-[34px]  bg-slate-100 text-[11px] flex flex-col items-center justify-center">Prostitution</div>
-        </div>
-        <hr/>
-        <div className="w-[352px] h-[47px] rounded-b-[19px] bg-slate-100 grid grid-cols-3">
-            <div className="border-r">
-                <div className="flex flex-col items-start justify-start text-[13px] ml-2">19/02/2025</div>
-                <div className="flex flex-col items-end justify-end text-[13px] mr-2">08/05/2026</div>
+            <div className="rounded-[19px]">
+            <div className="w-[352px] h-[425px] bg-[#2a7306] rounded-[19px]"
+            style={{
+                background: `
+                  radial-gradient(ellipse at top right, #2a7306 0%, #63ea1f 76%, #00000000 100%),
+                  radial-gradient(ellipse at top left, #2a7306 0%, #63ea1f 76%, #00000000 100%)
+                `,
+              }}>
+            <div className="w-[352px] h-[206px] rounded-t-[19px]">
+                <img src="https://s3-eu-west-1.amazonaws.com/blog-ecotree/blog/0001/01/ad46dbb447cd0e9a6aeecd64cc2bd332b0cbcb79.jpeg"
+                    alt="Itinerary Image"
+                    className="w-full h-full object-cover rounded-t-[19px] border-black border-[1px]"/>
             </div>
-            <div className="flex flex-col items-center justify-center text-[13px]  border-r">$100,000,000</div>
+        <div className="text-[38px] h-[45px] text-center leading-[43px]">THE GREEEEEEEN</div>
+        <div className="text-[18px] h-[66px] text-center leading-[20px]">Are you tired of being robbed in First World Countries? Come try the same experience but in Egypt!</div>
+        <div className="w-[352px] h-[60px] grid grid-cols-4 ">
+        {activityCategories.map(text => (
+            <div className={`w-[82px] h-[22px] rounded-[34px] mx-auto my-auto text-[11px] flex flex-col items-center justify-center ${text.color}`}>
+                {text.category}
+            </div>
+            ))}
+        </div>
+        <hr className="border-dotted border-t-2 border-gray-400" />
+        <div className="w-[352px] h-[46px] rounded-b-[19px] grid grid-cols-3"
+        style={{
+            background: `
+                radial-gradient(ellipse at bottom left, #2a7306 0%, #00000000 30%),
+                radial-gradient(ellipse at bottom right, #2a7306 0%, #00000000 30%),
+                radial-gradient(ellipse at bottom , #2a7306 0%, #00000000 30%)
+            `,
+          }}>
+            <div className="border-dotted border-r-2 border-gray-400">
+                <div className="flex flex-col items-start justify-start text-[13px] ml-2 mt-1">19/02/2025</div>
+                <div className="flex flex-col items-end justify-end text-[13px] mr-2 mb-1">08/05/2026</div>
+            </div>
+            <div className="flex flex-col items-center justify-center text-[13px] border-dotted border-r-2 border-gray-400">$100,000,000</div>
         <div className="flex flex-col items-center justify-center text-[13px]">90%</div>
         </div>
         </div>
-            
+            </div>
         </div>
         
      );
