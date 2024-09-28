@@ -5,7 +5,7 @@ export interface IAdvertiser extends Document {
   email: string;
   password: string;
   websiteLink?: String;
-  otline: String;
+  hotline: String;
   companyProfile: String;
   isAccepted: boolean;
 }
