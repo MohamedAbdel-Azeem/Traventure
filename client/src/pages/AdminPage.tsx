@@ -14,7 +14,7 @@ const AdminPage = () => {
             <ImprovedSidebar/>
             <div
                 style={{
-                    margin: `20px 20px 20px 270px`,
+                    margin: `20px 20px 20px 100px`,
                     transition: "200ms",
                 }}
             >

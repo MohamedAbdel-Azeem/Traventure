@@ -1,6 +1,4 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
-import { AccountsData } from '../data/AccountsData';
 import ItineraryCard from '../ItineraryCard';
 const Dashboard = () => {
     type CardDetails = {

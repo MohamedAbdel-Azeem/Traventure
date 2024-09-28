@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useState } from 'react';
 import {Table, TableBody, TableContainer, TableHead, TableRow, TableCell, TextField, TableSortLabel, TablePagination, Paper} from '@mui/material';
+import LuggageIcon from '@mui/icons-material/Luggage';
+import { styled } from '@mui/material/styles';
 function createData(
     email: string,
     Username:string,
@@ -21,12 +23,21 @@ function createData(
   };
 }
 
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
+
 function Row(props: { row: ReturnType<typeof createData>, onDelete: (username: string) => void }) {
   const { row, onDelete } = props;
 
   return (
     <React.Fragment>
-      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }} >
+      <StyledTableRow sx={{ '& > *': { borderBottom: 'unset' } }} >
         <TableCell className="max-w-[2px] break-words" component="th" scope="row">
           {row.email}
         </TableCell>
@@ -75,7 +86,7 @@ function Row(props: { row: ReturnType<typeof createData>, onDelete: (username: s
               </svg>
             </button>
           </TableCell>
-      </TableRow>
+      </StyledTableRow>
     </React.Fragment>
   );
 }
@@ -149,8 +160,14 @@ export default function CollapsibleTable() {
       <Paper className="w-[1100px]">
         <TableContainer component={Paper}>
           <Table aria-label="collapsible table">
+            <TableHead> 
+              <TableCell colSpan={7}>
+                <LuggageIcon />
+                Tourists
+              </TableCell>
+              </TableHead>
             <TableHead>
-              <TableRow>
+              <StyledTableRow>
                 <TableCell className="w-[20%]">
                   <TableSortLabel
                     active={orderBy === 'email'}
@@ -214,7 +231,7 @@ export default function CollapsibleTable() {
                   onChange={handleSearchChange}
                 />
               </TableCell>
-              </TableRow>
+              </StyledTableRow>
             </TableHead>
             <TableBody>
               {paginatedRows.map((row) => (

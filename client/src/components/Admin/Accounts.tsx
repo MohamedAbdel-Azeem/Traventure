@@ -2,16 +2,18 @@ import './Table.css';
 import CollapsibleTable from "./ImprovedTable"
 import ImprovedSidebar from './ImprovedSidebar';
 
-const Tourists = () => {
+const Accounts = () => {
     return (
     <div className="w-full flex items-center justify-center">
         <div className="w-[1500px]">
-        <ImprovedSidebar/>
-            <CollapsibleTable />
+            <ImprovedSidebar/>
+            <div className="mt-8">
+                <CollapsibleTable />
+            </div>
         </div>
     </div>
         
     );
 }
 
-export default Tourists;
+export default Accounts;
