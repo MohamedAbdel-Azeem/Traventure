@@ -9,7 +9,6 @@ function App() {
       <Router>
         <Routes>
           <Route path="/admin" element={<NewApp />} />
-         
         </Routes>
       </Router>
     </MantineProvider>
