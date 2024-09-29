@@ -53,13 +53,15 @@ res.status(200).send("error deleting ");
         const id = req.params.id;
         try{
             const categroyExists = await Category.findOne({name: categroyData.name});
-            if (!categroyExists){
-                return res.status(400).send("Category already exists");
+            
+            if (categroyExists){
+                return res.status(409).send("Category already exists");
             }
             await updateCategory(id,categroyData);
             res.status(200).send("updated successfully");
         }
         catch(err){
+            
             res.status(500).send("error updating category");
         }
     })

@@ -37,7 +37,7 @@ export const updateCategory = async(id: string, updatedCategory: any)=>{
 }
 
 
- module.exports = {addCategory, getCategories,deleteCategory};   
+ module.exports = {addCategory, getCategories,deleteCategory,updateCategory};   
     
 
 

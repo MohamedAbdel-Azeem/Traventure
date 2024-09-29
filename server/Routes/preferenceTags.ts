@@ -51,10 +51,10 @@ router.put("/update/:id",preferenceTagsUpdateValidator, async (req: Request, res
     const id = req.params.id;
     try {
         const nameExists = await preferenceTagsModel.findOne({name: preferenceTagData.preferenceTagName});
-        console.log(nameExists);
-        if (!nameExists)  
+        
+        if (nameExists)  
             {
-                return res.status(400).send("Preference Tag already exists");
+                return res.status(409).send("Preference Tag already exists");
             }
         await updatePreferenceTag(id, preferenceTagData);
         res.status(200).send("Preference Tag updated successfully");

@@ -17,7 +17,7 @@ router.post("/add",addActivityValidator,async (req: Request, res: Response)=>{
         res.status(201).send("Activity added successfully");
     }
     catch(err){
-        console.log(err);
+       
         res.status(500).send("error creating activity");
     }
 });
@@ -43,7 +43,7 @@ router.delete("/delete/:id",async (req: Request, res: Response)=>{
         res.status(500).send("error deleting activity");
     }
 });
-router.patch("/update/:id",updateActivityValidator,async (req: Request, res: Response)=>{
+router.put("/update/:id",updateActivityValidator,async (req: Request, res: Response)=>{
     const errors = validationResult(req);
     if (! errors.isEmpty()){
         return res.status(400).json({errors : errors.array()});
