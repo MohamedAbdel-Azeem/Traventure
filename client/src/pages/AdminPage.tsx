@@ -10,9 +10,7 @@ import Dashboard from "../components/Admin/Dashboard";
 import ActiveStudents from "../components/Admin/ActiveStudents";
 import InactiveStudents from "../components/Admin/InactiveStudents";
 import Materials from "../components/Admin/Materials"
-import Videos from "../components/Admin/Videos"
-import Submissions from "../components/Admin/Submissions"
-import Reports from "../components/Admin/Reports"
+import ShopPage from "../components/ShopPage";
 
 const AdminPage = () => {
     const [isSideBarOpen, setIsSideBarOpen] = useState(false);
@@ -49,7 +47,7 @@ const AdminPage = () => {
             icon: <AiIcons.AiFillHome />,
             iconClosed: <RiIcons.RiArrowDownSFill />,
             iconOpened: <RiIcons.RiArrowUpSFill />,
-            content: <Dashboard />,
+            content: <ShopPage />,
         },
         {
             title: "Places",

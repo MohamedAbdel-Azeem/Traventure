@@ -71,7 +71,7 @@ const Navbar = ({
 
         {/* Right side elements */}
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center" }}>
-          <SearchBar />
+          {/* <SearchBar /> */}
           {/* Account Button */}
           <AccountButton
             email="user@example.com" // Provide the user's email
