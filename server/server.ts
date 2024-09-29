@@ -4,6 +4,9 @@ import logger from "morgan";
 import createError from "http-errors";
 import connectDB from "./Model/DB";
 import adminRouter from "./Routes/Admin";
+import categoryRouter from "./Routes/Category";
+import activityRouter from "./Routes/Activity";
+import preferenceTagsRouter from "./Routes/preferenceTags";
 import sellerRouter from "./Routes/Seller";
 import productRouter from "./Routes/Product";
 import  advertiserRouter  from "./Routes/Advertiser";
@@ -22,6 +25,9 @@ app.use(logger("dev"));
 
 // Endpoints
 app.use("/api/admin", adminRouter);
+app.use("/api/category", categoryRouter);
+app.use("/api/activity", activityRouter);
+app.use("/api/preferenceTags", preferenceTagsRouter);
 app.use("/api/seller", sellerRouter);
 app.use("/api/product", productRouter);
 app.use("/api/place", placeRouter);
