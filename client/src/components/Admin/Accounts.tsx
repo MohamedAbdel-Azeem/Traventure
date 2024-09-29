@@ -1,7 +1,7 @@
 import './Table.css';
 import TouristTable from "./TouristTable"
 import Admin_TourismGovernorTable from "./Admin_TourismGovernorTable"
-import ImprovedSidebar from './ImprovedSidebar';
+import ImprovedSidebar from '../ImprovedSidebar';
 import TourGuide_Advertiser_SellerTable from './TourGuide_Advertiser_SellerTable';
 
 const Accounts = () => {

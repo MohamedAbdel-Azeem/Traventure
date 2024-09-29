@@ -1,9 +1,9 @@
 import Navbar from "../components/navbar";
 import { useState } from "react";
-import Dashboard from "../components/Admin/Dashboard";
-import ImprovedSidebar from "../components/Admin/ImprovedSidebar";
+import ImprovedSidebar from "../components/ImprovedSidebar";
+import TGoDashboard from "../components/TourismGovernor/TGoDashboard";
 const TourismGovernorPage = () => {
-   const [content, setContent] = useState(<Dashboard/>);
+   const [content, setContent] = useState(<TGoDashboard/>);
 
 
     return (

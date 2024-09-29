@@ -1,7 +1,7 @@
 import Navbar from "../components/navbar";
 import { useState } from "react";
 import Dashboard from "../components/Admin/Dashboard";
-import ImprovedSidebar from "../components/Admin/ImprovedSidebar";
+import ImprovedSidebar from "../components/ImprovedSidebar";
 const SellerPage = () => {
    const [content, setContent] = useState(<Dashboard/>);
 

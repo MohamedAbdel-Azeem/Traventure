@@ -12,6 +12,56 @@ import ActivityIcon from '@mui/icons-material/LocalActivity';
 
 const drawerWidth = 240;
 
+const adminsidebaritems =
+[
+  { text: 'Home', icon: <HomeIcon />, path: '/admin' },
+  { text: 'Shop', icon: <ShopIcon />, path: '/shop' },
+  { text: 'Locations', icon: <LocationOnIcon />, path: '/locations' },
+  { text: 'Account Management', icon: <AccountCircleIcon />, path: '/admin/users' },
+  { text: 'Activity Management', icon: <ActivityIcon />, path: '/activities' },
+];
+const TGsidebaritems =
+[
+  { text: 'Home', icon: <HomeIcon />, path: '/admin' },
+  { text: 'Shop', icon: <ShopIcon />, path: '/shop' },
+  { text: 'Locations', icon: <LocationOnIcon />, path: '/locations' },
+  { text: 'Account Management', icon: <AccountCircleIcon />, path: '/admin/users' },
+  { text: 'Activity Management', icon: <ActivityIcon />, path: '/activities' },
+];
+const TGosidebaritems =
+[
+  { text: 'Home', icon: <HomeIcon />, path: '/admin' },
+  { text: 'Locations', icon: <LocationOnIcon />, path: '/locations' },
+];
+const touristsidebaritems =
+[
+  { text: 'Home', icon: <HomeIcon />, path: '/admin' },
+  { text: 'Shop', icon: <ShopIcon />, path: '/shop' },
+  { text: 'Locations', icon: <LocationOnIcon />, path: '/locations' },
+  { text: 'Account Management', icon: <AccountCircleIcon />, path: '/admin/users' },
+  { text: 'Activity Management', icon: <ActivityIcon />, path: '/activities' },
+];
+const advertisersidebaritems =
+[
+  { text: 'Home', icon: <HomeIcon />, path: '/admin' },
+  { text: 'Shop', icon: <ShopIcon />, path: '/shop' },
+  { text: 'Locations', icon: <LocationOnIcon />, path: '/locations' },
+  { text: 'Account Management', icon: <AccountCircleIcon />, path: '/admin/users' },
+  { text: 'Activity Management', icon: <ActivityIcon />, path: '/activities' },
+];
+const sellersidebaritems =
+[
+  { text: 'Home', icon: <HomeIcon />, path: '/admin' },
+  { text: 'Shop', icon: <ShopIcon />, path: '/shop' },
+  { text: 'Locations', icon: <LocationOnIcon />, path: '/locations' },
+  { text: 'Account Management', icon: <AccountCircleIcon />, path: '/admin/users' },
+  { text: 'Activity Management', icon: <ActivityIcon />, path: '/activities' },
+];
+
+
+
+
+
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
   transition: theme.transitions.create('width', {
@@ -95,13 +145,7 @@ export default function ImprovedSidebar() {
         </DrawerHeader>
         <Divider />
         <List>
-          {[
-            { text: 'Home', icon: <HomeIcon />, path: '/admin' },
-            { text: 'Shop', icon: <ShopIcon />, path: '/shop' },
-            { text: 'Locations', icon: <LocationOnIcon />, path: '/locations' },
-            { text: 'Account Management', icon: <AccountCircleIcon />, path: '/Tourists' },
-            { text: 'Activity Management', icon: <ActivityIcon />, path: '/activities' },
-          ].map((item) => (
+          {TGosidebaritems.map((item) => (
             <ListItem key={item.text} disablePadding className="block"
               sx={{
                 backgroundColor: location.pathname === item.path ? 'grey.300' : 'inherit',

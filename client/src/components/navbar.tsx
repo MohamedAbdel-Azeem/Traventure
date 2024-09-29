@@ -1,9 +1,4 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { useDisclosure } from "@mantine/hooks";
-import { Burger } from "@mantine/core";
-import Sidebar from "./Sidebar";
 import SearchBar from "./SearchBar/SearchBar";
 import AccountButton from "./AccountButton"; // <-- Add this import
 
