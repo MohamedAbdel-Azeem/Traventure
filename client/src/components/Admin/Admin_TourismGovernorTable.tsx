@@ -3,19 +3,15 @@ import { Table, TableBody, TableContainer, TableHead, TableRow, TableCell, Table
 import AddIcon from '@mui/icons-material/Add';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { styled } from '@mui/material/styles';
+import PublicIcon from '@mui/icons-material/Public';
 
-function createData(
-    username:string,
-    password: string,
-) {
-  return {
-    username,
-    password
-  };
-}
+type AdminTourismGovernorTabletype = {
+  username: string;
+  password: string
+};
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
+  '&:nth-of-type(odd) td': {
     backgroundColor: theme.palette.action.hover,
   },
   '&:last-child td, &:last-child th': {
@@ -23,13 +19,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function Row(props: { row: ReturnType<typeof createData>, onDelete: (username: string) => void }) {
+function Row(props: { row: AdminTourismGovernorTabletype , onDelete: (username: string) => void }) {
   const { row, onDelete } = props;
 
   return (
     <React.Fragment>
       <StyledTableRow sx={{ '& > *': { borderBottom: 'unset' } }} >
-        <TableCell className="max-w-[2px] break-words" component="th" scope="row">
+        <TableCell className="max-w-[2px] break-words" scope="row">
           {row.username}
         </TableCell>
         <TableCell className="max-w-[2px] break-words">{row.password}</TableCell>
@@ -78,24 +74,18 @@ function Row(props: { row: ReturnType<typeof createData>, onDelete: (username: s
   );
 }
 
-const userCredentials = [
-  { username: 'Naefu', password: 'randomPassword123' },
-  { username: 'JohnDoe1', password: 'password123' },
-  { username: 'JaneDoe2', password: 'password4562' },
-  { username: 'JaneDoe3', password: 'password4563' },
-  { username: 'JaneDoe4', password: 'password4564' },
-  { username: 'JaneDoe5', password: 'password4565' },
-  { username: 'JaneDoe6', password: 'password4566' },
-  { username: 'JaneDoe7', password: 'password4567' },
-];
+interface Admin_TourismGovernorTableProps {
+  data: Array<{ username: string; password: string;}>;
+  name: string;
+}
 
-export default function AdminTable() {
-  const [rows, setRows] = useState(userCredentials);
+const Admin_TourismGovernorTable: React.FC<Admin_TourismGovernorTableProps> = ({ data, name }) => {
+  const [rows, setRows] = useState(data);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchQuery, setSearchQuery] = useState('');
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
-  const [orderBy, setOrderBy] = useState<keyof ReturnType<typeof createData>>('username');
+  const [orderBy, setOrderBy] = useState<keyof AdminTourismGovernorTabletype>('username');
   const [open, setOpen] = useState(false);
   const [newUsername, setNewUsername] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -124,7 +114,7 @@ export default function AdminTable() {
     row.username.includes(searchQuery) ||
     row.password.includes(searchQuery) 
   );
-  const handleRequestSort = (property: keyof ReturnType<typeof createData>) => {
+  const handleRequestSort = (property: keyof AdminTourismGovernorTabletype) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
@@ -147,7 +137,7 @@ export default function AdminTable() {
     setOpen(false);
   };
 
-  const handleAddAdmin = () => {
+  const handleAdd = () => {
     setRows([...rows, { username: newUsername, password: newPassword }]);
     setNewUsername('');
     setNewPassword('');
@@ -159,7 +149,7 @@ export default function AdminTable() {
     <div className="w-full flex items-center justify-center">
       <Paper className="w-[1100px]">
       <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Add New Admin</DialogTitle>
+          <DialogTitle>{"Add New "+name}</DialogTitle>
           <DialogContent>
             <DialogContentText>
               Please enter the username and password for the new admin.
@@ -184,7 +174,7 @@ export default function AdminTable() {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleAddAdmin}>Add</Button>
+            <Button onClick={handleAdd}>Add</Button>
           </DialogActions>
         </Dialog>
         <TableContainer component={Paper}>
@@ -192,22 +182,25 @@ export default function AdminTable() {
             <TableHead> 
               <TableCell colSpan={3}>
                 <div className="flex flex-row relative">
-                  <AdminPanelSettingsIcon  sx={{ fontSize: 40 }} className="ml-auto"/>
-                  <p className="text-[22px] leading-[45px] mr-auto">Admins</p>
+                  {name.includes("Admin")?
+                <AdminPanelSettingsIcon  sx={{ fontSize: 40 }} className="ml-auto"/>
+                :<PublicIcon  sx={{ fontSize: 40 }} className="ml-auto"/>
+              }
+                  <p className="text-[22px] leading-[45px] mr-auto">{name}</p>
                   <Button
                   onClick={handleClickOpen}
                   sx={{
-                    fontSize: '22px',
+                    fontSize: '16px',
                     position: 'absolute',
-                    top: 0,
-                    right: 20,
+                    top: 6,
+                    right: -10,
                     zIndex: 10,
                   }} variant="outlined" 
                   color="inherit"
                   size="small"
                   startIcon={<AddIcon/>}
                   >
-                    Add Admin
+                    {"Add "+name}
                   </Button>
                 </div>
               </TableCell>
@@ -258,4 +251,5 @@ export default function AdminTable() {
       </Paper>
     </div>
   );
-}
+};
+export default Admin_TourismGovernorTable;
