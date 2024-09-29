@@ -10,6 +10,7 @@ import  advertiserRouter  from "./Routes/Advertiser";
 import  tourGuideRouter  from "./Routes/TourGuide";
 import  touristRouter  from "./Routes/Tourist";
 import placeRouter from "./Routes/Places";
+import governerRouter from "./Routes/Governer";
 
 
 const app = express();
@@ -27,6 +28,7 @@ app.use("/api/place", placeRouter);
 app.use("/api/advertiser", advertiserRouter);
 app.use("/api/tourGuide", tourGuideRouter);
 app.use("/api/tourist", touristRouter);
+app.use("/api/governer",governerRouter);
 
 
 app.get("/", (req: Request, res: Response) => {
