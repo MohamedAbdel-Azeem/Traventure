@@ -24,4 +24,4 @@ const AdvertiserPage = () => {
     );
 };
 
-export default AdminPage;
+export default AdvertiserPage;

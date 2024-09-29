@@ -24,4 +24,4 @@ const SellerPage = () => {
     );
 };
 
-export default AdminPage;
+export default SellerPage;

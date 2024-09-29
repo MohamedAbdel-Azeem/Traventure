@@ -2,9 +2,8 @@ import Navbar from "../components/navbar";
 import { useState } from "react";
 import Dashboard from "../components/Admin/Dashboard";
 import ImprovedSidebar from "../components/Admin/ImprovedSidebar";
-const AdvertiserPage = () => {
+const TouristPage = () => {
    const [content, setContent] = useState(<Dashboard/>);
-
 
     return (
         <div>
@@ -23,5 +22,4 @@ const AdvertiserPage = () => {
         </div>
     );
 };
-
-export default AdminPage;
+export default TouristPage;
