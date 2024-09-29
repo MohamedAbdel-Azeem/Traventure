@@ -1,7 +1,8 @@
 import { Request, Response, Router } from "express";
-import {addCategory,getCategories,deleteCategory} from "../Model/Queries/CategoryQueries";
+import {addCategory,getCategories,deleteCategory,updateCategory} from "../Model/Queries/category_queries";
 import {validationResult , matchedData} from "express-validator"
-import { categoryValidator } from "../utils/express-validator/categoryValidator";
+import { categoryValidator,categoryUpdateValidator } from "../utils/express-validator/categoryValidator";
+import Category from "../Model/Schemas/Category";
 const router = Router();
 
 router.post("/add",categoryValidator,async (req: Request, res: Response)=>{
@@ -30,6 +31,7 @@ router.get("/",async(req: Request, res: Response)=>{
     }
 })
 
+
 router.delete("/delete/:id",async (req: Request, res: Response)=>{
 const id = req.params.id;
 
@@ -41,5 +43,25 @@ catch(err){
 res.status(200).send("error deleting ");
 }
 })
+
+    router.put("/update/:id",categoryUpdateValidator,async (req: Request, res: Response)=>{
+        const errors = validationResult(req);
+        if (! errors.isEmpty()){
+            return res.status(400).json({errors : errors.array()});
+        }
+        const categroyData = matchedData(req);
+        const id = req.params.id;
+        try{
+            const categroyExists = await Category.findOne({name: categroyData.name});
+            if (!categroyExists){
+                return res.status(400).send("Category already exists");
+            }
+            await updateCategory(id,categroyData);
+            res.status(200).send("updated successfully");
+        }
+        catch(err){
+            res.status(500).send("error updating category");
+        }
+    })
 export default router;
 

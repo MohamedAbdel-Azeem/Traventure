@@ -3,8 +3,7 @@ import Category from "../Schemas/Category";
 
 export const addCategory = async (newCategory: any) => {
   try{
-    const addedcategory = new Category(newCategory);
-  await  addedcategory.save();
+    const addedcategory = Category.create(newCategory);
   return addedcategory;}
   catch(err){
    throw err;}
@@ -28,6 +27,14 @@ export const deleteCategory = async(id: string)=>{
     }
 }    
 
+export const updateCategory = async(id: string, updatedCategory: any)=>{
+    try{
+        return await Category.findByIdAndUpdate(id, updatedCategory);
+    }
+    catch(err){
+        throw err;
+    }
+}
 
 
  module.exports = {addCategory, getCategories,deleteCategory};   

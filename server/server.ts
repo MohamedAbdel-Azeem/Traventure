@@ -6,6 +6,7 @@ import connectDB from "./Model/DB";
 import adminRouter from "./Routes/Admin";
 import categoryRouter from "./Routes/Category";
 import activityRouter from "./Routes/Activity";
+import preferenceTagsRouter from "./Routes/preferenceTags";
 const app = express();
 
 app.use(express.json());
@@ -17,6 +18,7 @@ app.use(logger("dev"));
 app.use("/api/admin", adminRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/activity", activityRouter);
+app.use("/api/preferenceTags", preferenceTagsRouter);
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World from TypeScript!");
 });

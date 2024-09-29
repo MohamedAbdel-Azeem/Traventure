@@ -1,12 +1,11 @@
 import { Request, Response, Router } from "express";
 import {validationResult , matchedData} from "express-validator"
 import { addActivityValidator,updateActivityValidator } from "../utils/express-validator/activityValidator";
-import { addActivity, getActivities, deleteActivity,updateActivity } from "../Model/Queries/ActivityQueries";
+import { addActivity, getActivities, deleteActivity,updateActivity } from "../Model/Queries/activity_queries";
 const router = Router();
 
 router.post("/add",addActivityValidator,async (req: Request, res: Response)=>{
     const errors = validationResult(req);
-    console.log(req.body.Location);
     if (! errors.isEmpty()){
         return res.status(400).json({errors : errors.array()});
     }
@@ -29,6 +28,7 @@ router.get("/",async (req: Request, res: Response)=>{
         res.status(200).send(activities);
     }
     catch(err){
+       
         res.status(500).send("error getting activities");
     }
 });

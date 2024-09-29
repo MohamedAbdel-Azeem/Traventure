@@ -3,9 +3,8 @@ import Activity from "../Schemas/Activity";
 
 export const addActivity = async (newActivity: any) => {
   try{
-    const addedActivity = new Activity(newActivity);
-  await  addedActivity.save();
-  return addedActivity;}
+    await Activity.create(newActivity);
+  return newActivity;}
   catch(err){
    throw err;}
 
@@ -13,7 +12,7 @@ export const addActivity = async (newActivity: any) => {
 
 export const getActivities = async () => {
     try{
-    return await Activity.find();}
+    return  await Activity.find().populate("Tags");}
     catch(e){
     throw e;}
     }
