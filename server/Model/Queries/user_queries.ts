@@ -18,6 +18,9 @@ export async function getprofileInfo(username: string, type: string) {
       case "tourGuide":
         model = tourGuideModel;
         break;
+      case "tourist":
+        model = touristModel;
+        break;
       default:
         throw new Error("Invalid user type");
     }
@@ -40,6 +43,9 @@ export async function getprofileInfo(username: string, type: string) {
         break;
       case "tourGuide":
         model = tourGuideModel;
+        break;
+      case "tourist":
+        model = touristModel;
         break;
       default:
         throw new Error("Invalid user type");
