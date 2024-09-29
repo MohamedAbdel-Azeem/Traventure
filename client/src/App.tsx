@@ -11,6 +11,8 @@ import SellerPage from "./pages/SellerPage";
 import AdvertiserPage from "./pages/AdvertiserPage";
 import Locations from "./components/Locations";
 import TouristPage from "./pages/TouristPage";
+import CategoryTable from "./components/Activity/CategoryTable";
+
 function App() {
   return (
     <MantineProvider>
@@ -27,6 +29,9 @@ function App() {
         <Route path="/activities" element={<Accounts />} />
         <Route path="/itineraries" element={<Accounts />} />
         <Route path="/" element={<NewApp />} />
+        <Route path="/Tourists" element={<Accounts />} />
+        <Route path="/Categories" element={<CategoryTable />} />
+         
         </Routes>
       </Router>
     </MantineProvider>
