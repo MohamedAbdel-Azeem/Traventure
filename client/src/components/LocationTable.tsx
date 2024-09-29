@@ -20,14 +20,14 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function Row(props: { row: ReturnType<typeof createData>, onDelete: (name: string) => void, onUpdate: (updatedRow: ReturnType<typeof createData>) => void, updateSingleRow: (name: string, newName: string) => void }) {
+function Row(props: { row: ReturnType<typeof createData>, onDelete: (name: string) => void, updateSingleRow: (name: string, newName: string) => void }) {
   const { row, onDelete } = props;
     const [isEditable, setIsEditable] = useState(false);
     const [newName, setNewName] = useState(row.name);
 
 
 
-    function handleSave(oldname, newName){ 
+    function handleSave(oldname: string, newName: string){ 
         props.updateSingleRow(oldname, newName);
         setIsEditable(false);
     }
@@ -140,13 +140,8 @@ export default function LocationTable() {
     setRows(newRows);
     }
 
-
-
-
-
-
   const handleDelete = (name: string) => {
-    if (window.confirm(`Are you sure you want to delete this location ${name}?`)) {
+    if (window.confirm(`Are you sure you want to delete this location "${name}"?`)) {
       setRows(rows.filter(row => row.name !== name));
     }
   };
