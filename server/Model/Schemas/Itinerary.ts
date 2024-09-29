@@ -22,12 +22,12 @@ const itinerarychema = new schema({
     total: {type: Number, required:true},
     language:{type: String, required:true},
     places:[{
-        place_id: { type: String, required: true },
+        place_id: { type: String, required: true ,ref: 'Place'},
     }],
     activities:[{
-        activity_id: { type: String, required: true },
+        activity_id: { type: String, required: true , },
     }]
-    
+    //ToDO add ref for activity once it is done
   });
   
   export default mongoose.model("Itinerary", itinerarychema);

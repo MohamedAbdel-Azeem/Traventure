@@ -7,7 +7,7 @@ export async function getItinerary( tour_guide_id :String) {
       const itineraries = await Itinerary.find({
        
         added_By: { $regex: tour_guide_id }  
-        });
+        }).populate('places') ;
   
       return itineraries;
     } catch (error) {
@@ -18,14 +18,12 @@ export async function getItinerary( tour_guide_id :String) {
   export async function getUpcomingItinerary() {
     try {
       const currentDate = new Date();
-      const nextMonthDate = dayjs(currentDate).add(1, 'month').toDate(); 
   
       const itineraries = await Itinerary.find({
         starting_Date: {
-          $gte: currentDate,  
-          $lte: nextMonthDate  
+          $gte: currentDate 
         }
-      });
+      }).populate('place_id') ;
   
       return itineraries;
     } catch (error) {
