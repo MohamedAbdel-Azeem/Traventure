@@ -1,4 +1,5 @@
 import React from 'react';
+import LocationTable from '../LocationTable';
 const TGoDashboard = () => {
     type CardDetails = {
         image: string;
@@ -13,7 +14,7 @@ const TGoDashboard = () => {
 
     return (
         <div className="grid grid-cols-3">
-            Welcome Tourism Governor
+            <LocationTable/>
         </div>
     );
 };

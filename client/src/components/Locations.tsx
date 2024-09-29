@@ -1,10 +1,11 @@
 import React from "react";
+import LocationTable from "./LocationTable";
 
 
 const Locations = () => {
     return ( 
         <div>
-            Testing
+            <LocationTable/>
         </div>
 
      );
