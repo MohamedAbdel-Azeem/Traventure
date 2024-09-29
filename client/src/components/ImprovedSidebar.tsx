@@ -145,7 +145,7 @@ export default function ImprovedSidebar() {
         </DrawerHeader>
         <Divider />
         <List>
-          {TGosidebaritems.map((item) => (
+          {adminsidebaritems.map((item) => (
             <ListItem key={item.text} disablePadding className="block"
               sx={{
                 backgroundColor: location.pathname === item.path ? 'grey.300' : 'inherit',
