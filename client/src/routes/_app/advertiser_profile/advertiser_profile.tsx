@@ -72,7 +72,7 @@ const AdvertiserProfile: React.FC = () => {
                 className="mt-1 text-lg text-gray-600 p-3 border border-gray-300 rounded-md w-full"
               />
             ) : (
-              <p className="text-lg text-gray-600">{userData.email}</p>
+              <p className="text-lg text-gray-600 overflow-auto w-[255px]">{userData.email}</p>
             )}
           </div>
         </div>
@@ -82,6 +82,7 @@ const AdvertiserProfile: React.FC = () => {
             <label className="text-lg font-semibold text-gray-700">Website Link:</label>
             {isEditing ? (
               <input
+                title="sitelink"
                 type="text"
                 name="sitelink"
                 value={userData.sitelink}
@@ -89,7 +90,7 @@ const AdvertiserProfile: React.FC = () => {
                 className="text-lg p-3 border border-gray-300 rounded-md"
               />
             ) : (
-              <p className="text-gray-800 text-lg">{userData.sitelink}</p>
+              <p className="text-gray-800 text-lg overflow-auto w-[404px]">{userData.sitelink}</p>
             )}
           </div>
           <div className="flex flex-col">
@@ -103,7 +104,7 @@ const AdvertiserProfile: React.FC = () => {
                 className="text-lg p-3 border border-gray-300 rounded-md"
               />
             ) : (
-              <p className="text-gray-800 text-lg">{userData.hotline}</p>
+              <p className="text-gray-800 text-lg overflow-auto w-[404px]">{userData.hotline}</p>
             )}
           </div>
           <div className="flex flex-col">
@@ -117,7 +118,7 @@ const AdvertiserProfile: React.FC = () => {
                 className="text-lg p-3 border border-gray-300 rounded-md"
               />
             ) : (
-              <p className="text-gray-800 text-lg">{userData.companyprofile}</p>
+              <p className="text-gray-800 text-lg overflow-auto w-[404px]">{userData.companyprofile}</p>
             )}
             {error && <p className="text-red-600 mt-1">{error}</p>}
           </div>

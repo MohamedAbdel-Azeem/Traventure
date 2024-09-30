@@ -26,9 +26,7 @@ const Register: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email || !username || !password || (role !== 'tourist' && (!nationality || !mobile || !job || !dob))) {
-      setError('Please fill out all fields.');
-    } else if (dob && getAge(dob) < 18) {
+    if (dob && getAge(dob) < 18) {
         setError('You must be above 18 years old to register.');
       }
     else {
@@ -67,6 +65,7 @@ const Register: React.FC = () => {
             <div>
               <label className="block text-gray-700 font-semibold text-lg mb-2">Role</label>
               <select
+                title="Role"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition duration-200"
@@ -83,6 +82,7 @@ const Register: React.FC = () => {
                 <div>
                   <label className="block text-gray-700 font-semibold text-lg mb-2">Email</label>
                   <input
+                    required
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -93,6 +93,7 @@ const Register: React.FC = () => {
                 <div>
                   <label className="block text-gray-700 font-semibold text-lg mb-2">Username</label>
                   <input
+                    required
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
@@ -103,6 +104,7 @@ const Register: React.FC = () => {
                 <div>
                   <label className="block text-gray-700 font-semibold text-lg mb-2">Password</label>
                   <input
+                    required
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -113,6 +115,7 @@ const Register: React.FC = () => {
                 <div>
                   <label className="block text-gray-700 font-semibold text-lg mb-2">Mobile Number</label>
                   <input
+                    required
                     type="tel"
                     value={mobile}
                     onChange={(e) => setMobile(e.target.value)}
@@ -123,6 +126,7 @@ const Register: React.FC = () => {
                 <div>
                   <label className="block text-gray-700 font-semibold text-lg mb-2">Nationality</label>
                   <input
+                    required
                     type="text"
                     value={nationality}
                     onChange={(e) => setNationality(e.target.value)}
@@ -133,6 +137,8 @@ const Register: React.FC = () => {
                 <div>
                   <label className="block text-gray-700 font-semibold text-lg mb-2">Date of Birth</label>
                   <input
+                    title="DOB"
+                    required
                     type="date"
                     value={dob}
                     onChange={(e) => setDob(e.target.value)}
@@ -142,6 +148,7 @@ const Register: React.FC = () => {
                 <div>
                   <label className="block text-gray-700 font-semibold text-lg mb-2">Job</label>
                   <input
+                    required
                     type="text"
                     value={job}
                     onChange={(e) => setJob(e.target.value)}
@@ -157,6 +164,7 @@ const Register: React.FC = () => {
                 <div>
                   <label className="block text-gray-700 font-semibold text-lg mb-2">Username</label>
                   <input
+                    required
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
@@ -167,6 +175,7 @@ const Register: React.FC = () => {
                 <div>
                   <label className="block text-gray-700 font-semibold text-lg mb-2">Email</label>
                   <input
+                    required
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -177,6 +186,7 @@ const Register: React.FC = () => {
                 <div>
                   <label className="block text-gray-700 font-semibold text-lg mb-2">Password</label>
                   <input
+                    required
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}

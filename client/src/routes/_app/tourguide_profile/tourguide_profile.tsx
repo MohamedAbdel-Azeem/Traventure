@@ -76,7 +76,7 @@ const TourGuideProfile: React.FC = () => {
                 className="mt-1 text-lg text-gray-600 p-3 border border-gray-300 rounded-md w-full"
               />
             ) : (
-              <p className="text-lg text-gray-600">{userData.email}</p>
+              <p className="text-lg text-gray-600 overflow-auto w-[255px]">{userData.email}</p>
             )}
           </div>
         </div>
@@ -93,7 +93,7 @@ const TourGuideProfile: React.FC = () => {
                 className="text-lg p-3 border border-gray-300 rounded-md"
               />
             ) : (
-              <p className="text-gray-800 text-lg">{userData.mobile}</p>
+              <p className="text-gray-800 text-lg overflow-auto w-[404px]">{userData.mobile}</p>
             )}
           </div>
           
@@ -108,7 +108,7 @@ const TourGuideProfile: React.FC = () => {
                 className="text-lg p-3 border border-gray-300 rounded-md"
               />
             ) : (
-              <p className="text-gray-800 text-lg">{userData.yox}</p>
+              <p className="text-gray-800 text-lg overflow-auto w-[404px]">{userData.yox}</p>
             )}
             {error && <p className="text-red-600 mt-1">{error}</p>}
           </div>
@@ -123,7 +123,7 @@ const TourGuideProfile: React.FC = () => {
                 className="text-lg p-3 border border-gray-300 rounded-md"
               />
             ) : (
-              <p className="text-gray-800 text-lg">{userData.prevwork}</p>
+              <p className="text-gray-800 text-lg overflow-auto w-[404px]">{userData.prevwork}</p>
             )}
           </div>
         </div>

@@ -99,14 +99,14 @@ const TouristProfile: React.FC = () => {
                 className="mt-1 text-lg text-gray-600 p-3 border border-gray-300 rounded-md w-full"
               />
             ) : (
-              <p className="text-lg text-gray-600">{userData.email}</p>
+              <p className="text-lg text-gray-600 overflow-auto w-[255px]">{userData.email}</p>
             )}
           </div>
         </div>
 
         <div className="mt-8 grid grid-cols-2 gap-6">
           <div className="flex flex-col">
-            <label className="text-lg font-semibold text-gray-700">Mobile Number:</label>
+            <label className="text-lg font-semibold text-gray-700 ">Mobile Number:</label>
             {isEditing ? (
               <input
                 type="tel"
@@ -116,7 +116,7 @@ const TouristProfile: React.FC = () => {
                 className="text-lg p-3 border border-gray-300 rounded-md"
               />
             ) : (
-              <p className="text-gray-800 text-lg">{userData.mobile}</p>
+              <p className="text-gray-800 text-lg overflow-auto w-[404px]">{userData.mobile}</p>
             )}
           </div>
           <div className="flex flex-col">
@@ -130,7 +130,7 @@ const TouristProfile: React.FC = () => {
                 className="text-lg p-3 border border-gray-300 rounded-md"
               />
             ) : (
-              <p className="text-gray-800 text-lg">{userData.nationality}</p>
+              <p className="text-gray-800 text-lg overflow-auto w-[404px]">{userData.nationality}</p>
             )}
           </div>
           <div className="flex flex-col">
@@ -144,7 +144,7 @@ const TouristProfile: React.FC = () => {
                 className="text-lg p-3 border border-gray-300 rounded-md"
               />
             ) : (
-              <p className="text-gray-800 text-lg">{userData.dob}</p>
+              <p className="text-gray-800 text-lg overflow-auto w-[404px]">{userData.dob}</p>
             )}
             {error && <p className="text-red-600 mt-1">{error}</p>}
           </div>
@@ -159,7 +159,7 @@ const TouristProfile: React.FC = () => {
                 className="text-lg p-3 border border-gray-300 rounded-md"
               />
             ) : (
-              <p className="text-gray-800 text-lg">{userData.job}</p>
+              <p className="text-gray-800 text-lg overflow-auto w-[404px]">{userData.job}</p>
             )}
           </div>
         </div>
