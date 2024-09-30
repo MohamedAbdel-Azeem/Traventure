@@ -60,8 +60,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <div className="card-header">
                 <img src={product.imageUrls[0]} alt="Product" className="product-image" />
                 <div className="card-actions">
-                    <button className="edit-button"><FontAwesomeIcon icon={faPencil} /></button>
-                    <button className="delete-button"><FontAwesomeIcon icon={faTrashCan} /></button>
+                    <button title="edit" className="edit-button"><FontAwesomeIcon icon={faPencil} /></button>
+                    <button title="delete" className="delete-button"><FontAwesomeIcon icon={faTrashCan} /></button>
                     
                 </div>
             </div>
