@@ -16,7 +16,7 @@ const adminsidebaritems =
 [
   { text: 'Home', icon: <HomeIcon />, path: '/admin' },
   { text: 'Shop', icon: <ShopIcon />, path: '/admin/shop' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/locations' },
+  { text: 'Locations', icon: <LocationOnIcon />, path: '/admin/locations' },
   { text: 'Account Management', icon: <AccountCircleIcon />, path: '/admin/users' },
   { text: 'Activity Management', icon: <ActivityIcon />, path: '/activities' },
 ];
@@ -34,7 +34,7 @@ const TGosidebaritems =
 const touristsidebaritems =
 [
   { text: 'Home', icon: <HomeIcon />, path: '/tourist' },
-  { text: 'Shop', icon: <ShopIcon />, path: '/sho/touristp' },
+  { text: 'Shop', icon: <ShopIcon />, path: '/tourist/shop' },
   { text: 'Locations', icon: <LocationOnIcon />, path: '/tourist/locations' },
   { text: 'Activity Management', icon: <ActivityIcon />, path: '/tourist/activities' },
 ];

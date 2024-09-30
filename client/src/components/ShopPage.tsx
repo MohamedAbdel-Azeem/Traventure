@@ -4,6 +4,7 @@ import ProductCard from './ProductCard';
 import { ProductData } from './data/ProductData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBackward, faForward } from '@fortawesome/free-solid-svg-icons';
+import ImprovedSidebar from "./ImprovedSidebar";
 
 const itemsPerPage = 9; // Set number of products per page to 9
 
@@ -89,7 +90,8 @@ const ProductList: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="">
+      <ImprovedSidebar title="Admin"/>
       <div className="search-bar">
         <input
           type="text"

@@ -30,7 +30,7 @@ const Locations = () => {
     };
     return ( 
     <div className="flex justify-center">
-        <ImprovedSidebar/>
+        <ImprovedSidebar title="Admin"/>
     <div className="grid grid-cols-3 mt-10">
     <div className="flex w-[422px] h-[334px] bg-[#D9D9D9] rounded-[11px] m-4 hover:bg-[#c0c0c0] transition duration-300 cursor-pointer" onClick={handleCreate}>
                     <p className="m-auto text-[40px]">
