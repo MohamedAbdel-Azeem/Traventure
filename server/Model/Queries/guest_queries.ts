@@ -30,7 +30,7 @@ export async function createUser(user:any,type:string) {
       await isUniqueUsername(user.username);
     }
     else{
-      await isUniqueUsernameAndEmail(user.username, user.email);
+      await isUniqueUsernameAndEmailAndMobileNumber(user.username, user.email, user.mobileNumber);
     }
     user.password = await hashPassword(user.password);
     const newUser = await model.create(user);
@@ -51,34 +51,98 @@ async function isUniqueUsername(username: string) {
       touristModel.findOne({ username})    
     ]);
   
-    if (usernameExists.some(result => result !== null)) {
+    const existingModel = usernameExists.find(result => result !== null);
+    if (existingModel) {
       throw new Error('Username already exists');
     }
 }
 
-async function isUniqueUsernameAndEmail(username: string, email: string) {
+async function isUniqueUsernameAndEmailAndMobileNumber(username: string, email: string, mobileNumber: string) {
 
   // Check for existing username
-  isUniqueUsername(username);
-  // Check for existing email
-  const emailExists = await Promise.all([
-    sellerModel.findOne({ email }),
-    advertiserModel.findOne({ email }),
-    tourGuideModel.findOne({ email }),
-    touristModel.findOne({ email })
-  ]);
 
-  if (emailExists.some(result => result !== null)) {
-    throw new Error('Email already exists');
+  try {
+    // Check for existing username
+    await isUniqueUsername(username);
+  } catch (err:any) {
+    // If the error is 'Username already exists', rethrow it to be handled later
+    if (err.message === 'Username already exists') {
+      throw err;
+    } else {
+      // Handle other potential errors
+      throw new Error('An unexpected error occurred while checking the username');
+    }
   }
+
+  // Check for existing email
+  try{
+    await isUniqueEmail(username, email);
+  }
+  catch(err:any){
+    if (err.message === 'Email already exists') {
+      throw err;
+    } else {
+      throw new Error('An unexpected error occurred while checking the email');
+    }
+  }
+
+  // Check for existing mobile number
+  try{
+    await isUniqueMobileNumber(mobileNumber);
+  }
+  catch(err:any){
+    if (err.message === 'Mobile number already exists') {
+      throw err;
+    } else {
+      throw new Error('An unexpected error occurred while checking the mobile number');
+    }
+  }
+
+
 }
 
-export async function handleRegisterErrors(err :any , res: any) {
+async function isUniqueEmail(username: string, email: string) {
+
+    // Check for existing email
+    const emailExists = await Promise.all([
+      sellerModel.findOne({ email }),
+      advertiserModel.findOne({ email }),
+      tourGuideModel.findOne({ email }),
+      touristModel.findOne({ email })
+    ]);
+  
+    if (emailExists.some(result => result !== null)) {
+      throw new Error('Email already exists');
+    }
+
+}
+
+async function isUniqueMobileNumber(mobileNumber: string) {
+      // Check for existing email
+      const mobileNumberExists = await Promise.all([
+        sellerModel.findOne({ mobileNumber }),
+        advertiserModel.findOne({ mobileNumber }),
+        tourGuideModel.findOne({ mobileNumber }),
+        touristModel.findOne({ mobileNumber })
+      ]);
+
+      if (mobileNumberExists.some(result => result !== null)) {
+        throw new Error('Mobile number already exists');
+      }
+
+}
+
+
+export async function handleRegisterErrors(err: any, res: any) {
+  console.log("djvbuasfae", err);
   if (err.message === 'Username already exists') {
     res.status(409).send({ error: err.message });
   } else if (err.message === 'Email already exists') {
     res.status(409).send({ error: err.message });
-} else {
+} else if (err.message === 'Mobile number already exists') {
+    res.status(409).send({ error: err.message });
+} 
+else {
     res.status(500).send({ error: err.message });
 }
 
@@ -86,4 +150,4 @@ export async function handleRegisterErrors(err :any , res: any) {
 
 
 
-module.exports = {createUser,handleRegisterErrors , isUniqueUsername, isUniqueUsernameAndEmail};
+module.exports = {createUser,handleRegisterErrors , isUniqueUsername, isUniqueUsernameAndEmail: isUniqueUsernameAndEmailAndMobileNumber};

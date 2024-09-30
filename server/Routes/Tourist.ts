@@ -3,8 +3,12 @@ import { Request, Response,Router } from 'express';
 import { touristAddValidator, touristUpdateValidator } from '../utils/express-validator/touristValidator';
 import { matchedData,validationResult} from 'express-validator';
 import { getprofileInfo , updateProfileInfo} from '../Model/Queries/user_queries';
+import { getActivities } from '../Model/Queries/activity_queries';
+import  {getAll}  from '../Model/Queries/tourist_queries';
+import { get } from 'http';
 
 const router = Router();
+
 
 router.post('/add',touristAddValidator, async (req: Request, res: Response) => {
     const errors = validationResult(req);
@@ -19,6 +23,16 @@ router.post('/add',touristAddValidator, async (req: Request, res: Response) => {
         const err = error as any;
         handleRegisterErrors(err, res);
     }
+});
+
+router.get('/upcoming', async (req: Request, res: Response) => {
+
+  try {
+   const all = await getAll();
+   res.status(200).send(all);
+} catch (error) {
+    res.status(500).send("error getting upcoming activities");
+}
 });
 
 router.get('/:username', async (req: Request, res: Response) => {
@@ -60,8 +74,6 @@ router.get('/:username', async (req: Request, res: Response) => {
     }
 
     });
-
-
 
      
 
