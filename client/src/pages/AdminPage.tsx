@@ -12,7 +12,7 @@ const AdminPage = () => {
             <Navbar
                 sideBarFlag={true}
             />
-            <ImprovedSidebar/>
+            <ImprovedSidebar title="Admin"/>
             <div
                 style={{
                     margin: `20px 20px 20px 100px`,

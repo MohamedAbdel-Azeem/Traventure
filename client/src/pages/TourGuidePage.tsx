@@ -11,7 +11,7 @@ const TourGuidePage = () => {
             <Navbar
                 sideBarFlag={true}
             />
-            <ImprovedSidebar/>
+            <ImprovedSidebar title="Tour Guide"/>
             <div
                 style={{
                     margin: `20px 20px 20px 100px`,

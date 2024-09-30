@@ -11,7 +11,7 @@ const AdvertiserPage = () => {
             <Navbar
                 sideBarFlag={true}
             />
-            <ImprovedSidebar/>
+            <ImprovedSidebar title="Advertiser"/>
             <div
                 style={{
                     margin: `20px 20px 20px 100px`,

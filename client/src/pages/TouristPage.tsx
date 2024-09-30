@@ -10,7 +10,7 @@ const TouristPage = () => {
             <Navbar
                 sideBarFlag={true}
             />
-            <ImprovedSidebar/>
+            <ImprovedSidebar title="Tourist"/>
             <div
                 style={{
                     margin: `20px 20px 20px 100px`,

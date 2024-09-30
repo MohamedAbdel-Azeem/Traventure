@@ -22,40 +22,32 @@ const adminsidebaritems =
 ];
 const TGsidebaritems =
 [
-  { text: 'Home', icon: <HomeIcon />, path: '/admin' },
+  { text: 'Home', icon: <HomeIcon />, path: '/tourguide' },
   { text: 'Shop', icon: <ShopIcon />, path: '/shop' },
   { text: 'Locations', icon: <LocationOnIcon />, path: '/locations' },
-  { text: 'Account Management', icon: <AccountCircleIcon />, path: '/admin/users' },
-  { text: 'Activity Management', icon: <ActivityIcon />, path: '/activities' },
 ];
 const TGosidebaritems =
 [
-  { text: 'Home', icon: <HomeIcon />, path: '/admin' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/locations' },
+  { text: 'Home', icon: <HomeIcon />, path: '/tourismgovernor' },
+  { text: 'Locations', icon: <LocationOnIcon />, path: '/tourismgovernor/locations' },
 ];
 const touristsidebaritems =
 [
-  { text: 'Home', icon: <HomeIcon />, path: '/admin' },
-  { text: 'Shop', icon: <ShopIcon />, path: '/shop' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/locations' },
-  { text: 'Account Management', icon: <AccountCircleIcon />, path: '/admin/users' },
-  { text: 'Activity Management', icon: <ActivityIcon />, path: '/activities' },
+  { text: 'Home', icon: <HomeIcon />, path: '/tourist' },
+  { text: 'Shop', icon: <ShopIcon />, path: '/sho/touristp' },
+  { text: 'Locations', icon: <LocationOnIcon />, path: '/tourist/locations' },
+  { text: 'Activity Management', icon: <ActivityIcon />, path: '/tourist/activities' },
 ];
 const advertisersidebaritems =
 [
-  { text: 'Home', icon: <HomeIcon />, path: '/admin' },
-  { text: 'Shop', icon: <ShopIcon />, path: '/shop' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/locations' },
-  { text: 'Account Management', icon: <AccountCircleIcon />, path: '/admin/users' },
-  { text: 'Activity Management', icon: <ActivityIcon />, path: '/activities' },
+  { text: 'Home', icon: <HomeIcon />, path: '/advertiser' },
+  { text: 'Locations', icon: <LocationOnIcon />, path: '/advertiser/locations' },
+  { text: 'Activity Management', icon: <ActivityIcon />, path: '/advertiser/activities' },
 ];
 const sellersidebaritems =
 [
-  { text: 'Home', icon: <HomeIcon />, path: '/admin' },
-  { text: 'Shop', icon: <ShopIcon />, path: '/shop' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/locations' },
-  { text: 'Account Management', icon: <AccountCircleIcon />, path: '/admin/users' },
-  { text: 'Activity Management', icon: <ActivityIcon />, path: '/activities' },
+  { text: 'Home', icon: <HomeIcon />, path: '/seller' },
+  { text: 'Shop', icon: <ShopIcon />, path: '/seller/shop' },
 ];
 
 
@@ -117,10 +109,38 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function ImprovedSidebar() {
+interface ImprovedSidebarProps {
+  title: string;
+}
+
+const getSidebarItems = (title : string) => {
+  switch (true) {
+      case title.includes("Seller"):
+        console.log("Seller");
+          return sellersidebaritems;
+      case title.includes("Admin"):
+          console.log("Admin");
+          return adminsidebaritems;
+      case title.includes("Tourist"):
+          console.log("Tourist");
+          return touristsidebaritems;
+      case title.includes("Tourism Governor"):
+          console.log("Tourism Governor");
+          return TGosidebaritems;
+      case title.includes("Tour Guide"):
+          console.log("Tour Guide");
+          return TGsidebaritems;
+      default:
+          return advertisersidebaritems;
+  }
+};
+
+export default function ImprovedSidebar({ title = "" }: ImprovedSidebarProps) {
     const [open, setOpen] = React.useState(false);
     const navigate = useNavigate();
     const location = useLocation();
+
+  const whichoptions = getSidebarItems(title);
 
   const handleDrawer = () => {
     setOpen(!open);
@@ -145,7 +165,7 @@ export default function ImprovedSidebar() {
         </DrawerHeader>
         <Divider />
         <List>
-          {adminsidebaritems.map((item) => (
+          {whichoptions.map((item) => (
             <ListItem key={item.text} disablePadding className="block"
               sx={{
                 backgroundColor: location.pathname === item.path ? 'grey.300' : 'inherit',

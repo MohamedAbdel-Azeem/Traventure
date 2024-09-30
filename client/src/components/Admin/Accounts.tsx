@@ -66,7 +66,7 @@ const Accounts = () => {
     return (
     <div className="w-full flex items-center justify-center">
         <div className="w-[1500px]">
-            <ImprovedSidebar/>
+        <ImprovedSidebar title="Admin"/>
             <div className="my-8">
                 <TouristTable />
             </div>

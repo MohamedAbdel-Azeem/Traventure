@@ -23,13 +23,12 @@ function App() {
         <Route path="/tourismgovernor" element={<TourismGovernorPage />} />
         <Route path="/advertiser" element={<AdvertiserPage />} />
         <Route path="/tourist" element={<TouristPage />} />
-        <Route path="/sellerpage" element={<SellerPage />} />
+        <Route path="/seller" element={<SellerPage />} />
         <Route path="/admin/users" element={<Accounts />} />
-        <Route path="/locations" element={<Locations />} />
+        <Route path="/tourismgovernor/locations" element={<Locations />} />
         <Route path="/activities" element={<Accounts />} />
         <Route path="/itineraries" element={<Accounts />} />
         <Route path="/" element={<NewApp />} />
-        <Route path="/Tourists" element={<Accounts />} />
         <Route path="/Categories" element={<CategoryTable />} />
          
         </Routes>

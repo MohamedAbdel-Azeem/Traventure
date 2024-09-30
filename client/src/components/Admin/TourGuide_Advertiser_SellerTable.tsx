@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { Table, TableBody, TableContainer, TableHead, TableRow, TableCell, TableSortLabel, TablePagination, Paper, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import { Table, TableBody, TableContainer, TableHead, TableRow, TableCell, TableSortLabel, TablePagination, Paper, TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import StoreIcon from '@mui/icons-material/Store';
 import TourIcon from '@mui/icons-material/Tour';
@@ -84,16 +82,6 @@ function Row(props: { row: ReturnType<typeof createData>, onDelete: (username: s
   );
 }
 
-const userCredentials = [
-  { username: 'Naefu', password: 'randomPassword123', email: 'man1@example.com' },
-  { username: 'JohnDoe1', password: 'password123', email: 'ma2@example.com' },
-  { username: 'JaneDoe2', password: 'password4562', email: 'man3@example.com' },
-  { username: 'JaneDoe3', password: 'password4563', email: 'man4@example.com' },
-  { username: 'JaneDoe4', password: 'password4564', email: 'man5@example.com' },
-  { username: 'JaneDoe5', password: 'password4565', email: 'man6@example.com' },
-  { username: 'JaneDoe6', password: 'password4566', email: 'man7@example.com' },
-  { username: 'JaneDoe7', password: 'password4567', email: 'man8@example.com' },
-];
 
 interface TourGuideAdvertiserSellerTableProps {
   data: Array<{ username: string; password: string; email: string }>;
