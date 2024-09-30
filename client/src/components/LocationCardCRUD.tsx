@@ -15,13 +15,15 @@ interface LocationCardCRUDProps {
     className?: string;
 }
 
-const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({ id, locationName: initialLocationName, description: initialDescription, price: initialPrice, hours: initialHours, location: initialLocation, image, onDelete, className }) => {
+const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({ id, locationName: initialLocationName, description: initialDescription, price: initialPrice, hours: initialHours, location: initialLocation, image: initialImage, onDelete, className }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [locationName, setLocationName] = useState(initialLocationName);
     const [description, setDescription] = useState(initialDescription);
     const [price, setPrice] = useState(initialPrice);
     const [hours, setHours] = useState(initialHours);
     const [location, setLocation] = useState(initialLocation);
+    const [fileName, setFileName] = useState("");
+    const [image, setImage] = useState(initialImage);
 
     const handleEditClick = () => {
         setIsEditing(!isEditing);
@@ -31,11 +33,36 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({ id, locationName: i
         onDelete(id);
     };
 
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                if (event.target && event.target.result) {
+                    setImage(event.target.result as string);
+                }
+            };
+            reader.readAsDataURL(e.target.files[0]);
+            setFileName(e.target.files[0].name);
+        }
+    };
+
     return ( 
     <div>
         <div className={`w-[422px] h-[334px] bg-[#D9D9D9] rounded-[11px] m-4 ${className}`}>
-        <div className="w-[422px] h-[121px]">
-                <img src={image} alt={locationName} className="w-full h-full object-cover rounded-t-[11px]" />
+        <div className="w-[422px] h-[121px] relative">
+        {isEditing ? (
+                    <div className="flex items-center justify-center w-full h-full">
+                        <input
+                            type="file"
+                            onChange={handleImageChange}
+                            title="Upload Image"
+                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        />
+                        <span className="z-10 text-center">{fileName || "Choose File"}</span>
+                    </div>
+                ) : (
+                    <img src={image} alt={locationName} className="w-full h-full object-cover rounded-t-[11px]" />
+                )}
             </div>
             <div className="w-[422px] h-[37px]">
             {isEditing ? (
