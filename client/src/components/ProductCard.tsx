@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './ProductCard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark, faChevronLeft, faChevronRight, faCartShopping } from '@fortawesome/free-solid-svg-icons';
+import { faXmark, faChevronLeft, faChevronRight, faCartShopping, faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
 interface Product {
     imageUrls: string[];
@@ -60,8 +60,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <div className="card-header">
                 <img src={product.imageUrls[0]} alt="Product" className="product-image" />
                 <div className="card-actions">
-                    <button className="edit-button">✎</button>
-                    <button className="delete-button">🗑</button>
+                    <button className="edit-button"><FontAwesomeIcon icon={faPencil} /></button>
+                    <button className="delete-button"><FontAwesomeIcon icon={faTrashCan} /></button>
                     
                 </div>
             </div>
