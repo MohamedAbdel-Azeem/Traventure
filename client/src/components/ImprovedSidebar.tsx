@@ -15,7 +15,7 @@ const drawerWidth = 240;
 const adminsidebaritems =
 [
   { text: 'Home', icon: <HomeIcon />, path: '/admin' },
-  { text: 'Shop', icon: <ShopIcon />, path: '/shop' },
+  { text: 'Shop', icon: <ShopIcon />, path: '/admin/shop' },
   { text: 'Locations', icon: <LocationOnIcon />, path: '/locations' },
   { text: 'Account Management', icon: <AccountCircleIcon />, path: '/admin/users' },
   { text: 'Activity Management', icon: <ActivityIcon />, path: '/activities' },

@@ -17,6 +17,7 @@ import TouristProfile from './routes/_app/tourist_profile/tourist_profile';
 import SellerProfile from './routes/_app/seller_profile/seller_profile';
 import TourGuideProfile from './routes/_app/tourguide_profile/tourguide_profile';
 import AdvertiserProfile from './routes/_app/advertiser_profile/advertiser_profile';
+import ShopPage from "./components/ShopPage";
 
 
 
@@ -32,6 +33,7 @@ function App() {
         <Route path="/tourist" element={<TouristPage />} />
         <Route path="/seller" element={<SellerPage />} />
         <Route path="/admin/users" element={<Accounts />} />
+        <Route path="/admin/shop" element={<ShopPage />} />
         <Route path="/tourismgovernor/locations" element={<Locations />} />
         <Route path="/activities" element={<Accounts />} />
         <Route path="/itineraries" element={<Accounts />} />
@@ -41,7 +43,6 @@ function App() {
         <Route path="/sellerprofile" element={<SellerProfile />} />
         <Route path="/tourguideprofile" element={<TourGuideProfile />} />
         <Route path="/advertiserprofile" element={<AdvertiserProfile />} />
-
         <Route path="/Categories" element={<CategoryTable />} />
          
         </Routes>

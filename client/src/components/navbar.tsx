@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import SearchBar from "./SearchBar/SearchBar";
 import AccountButton from "./AccountButton"; // <-- Add this import
 
 const Navbar = ({
@@ -45,7 +44,8 @@ const Navbar = ({
 
         {/* Right side elements */}
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center" }}>
-          <SearchBar globalStyling={undefined} formStyling={undefined} inputStyle={undefined} buttonStyle={undefined} searchResultsData={undefined} onSearchResultSelection={undefined} resultLabellKey={undefined} searchResultsListStyle={undefined} />
+          {/* <SearchBar /> */}
+          {/* Account Button */}
           <AccountButton
             email="user@example.com" // Provide the user's email
             name="John Doe" // Provide the user's name
