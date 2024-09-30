@@ -6,7 +6,11 @@ import { Request, Response, Router } from "express";
 import { guestAddValidator } from "../utils/express-validator/GuestValidator";
 import { matchedData, validationResult } from "express-validator";
 import { IAdvertiser } from "../Interfaces/Users/IAdvertiser";
-import { getprofileInfo } from "../Model/Queries/user_queries";
+import {
+  getprofileInfo,
+  updateProfileInfo,
+} from "../Model/Queries/user_queries";
+import { advertiserPatchValidator } from "../utils/express-validator/advertiserValidator";
 
 const router = Router();
 
@@ -40,5 +44,33 @@ router.get("/:username", async (req: Request, res: Response) => {
     res.status(500).send("error getting user profile");
   }
 });
+
+router.patch(
+  "/update/:username",
+  advertiserPatchValidator,
+  async (req: Request, res: Response) => {
+    try {
+      const username = req.params.username;
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+      const updatedUserData = matchedData(req);
+      const user = (await getprofileInfo(
+        username,
+        "advertiser"
+      )) as IAdvertiser;
+      if (!user) return res.status(404).send("user not found");
+      const updatedUser = await updateProfileInfo(
+        username,
+        "advertiser",
+        updatedUserData
+      );
+      res.status(200).json(updatedUser);
+    } catch (err) {
+      res.status(500).send("error updating user profile");
+    }
+  }
+);
 
 export default router;
