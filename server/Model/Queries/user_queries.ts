@@ -4,6 +4,7 @@ import sellerModel from "../Schemas/Seller";
 import tourGuideModel from "../Schemas/TourGuide";
 import touristModel from "../Schemas/Tourist";
 import adminModel from "../Schemas/Admin";
+import governerModel from "../Schemas/Governer";
 import { get } from "http";
 
 export async function getprofileInfo(username: string, type: string) {
@@ -72,5 +73,35 @@ export async function getAllUsers(username: string | undefined) {
   }
 }
 
-module.exports = { getprofileInfo, getAllUsers , updateProfileInfo };
+export async function loginUser(username: string, password: string) {
+  try {
+    const results = await Promise.all([
+      sellerModel.findOne({ username }),
+      advertiserModel.findOne({ username }),
+      tourGuideModel.findOne({ username }),
+      adminModel.findOne({ username }),
+      touristModel.findOne({ username }),
+      governerModel.findOne({ username}),
+    ]);
+
+    const models = ['seller', 'advertiser', 'tourGuide', 'admin', 'tourist','Governer'];
+
+    for (let i = 0; i < results.length; i++) {
+      if (results[i]) {
+        const user = results[i];
+        if ((user as any).password !== password) {
+          throw new Error('Incorrect password');
+        }
+
+        return { type: models[i], user: results[i] };
+      }
+    }
+
+    throw new Error('Username not found in any table');
+  } catch (err) {
+    throw err;
+  }
+}
+
+module.exports = { getprofileInfo, getAllUsers , updateProfileInfo , loginUser};
 
