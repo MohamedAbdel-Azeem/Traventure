@@ -89,7 +89,7 @@ const Register: React.FC = () => {
         backgroundPosition: 'center',
       }}
     >
-      <div className="bg-white rounded-lg shadow-2xl w-1/2 h-1/2 grid grid-cols-1 overflow-hidden backdrop-blur-md bg-opacity-70">
+      <div className="bg-white rounded-lg shadow-2xl w-1/2 h-1/2 grid grid-cols-1 overflow-hidden backdrop-blur-md bg-opacity-70 my-8">
         <div className="flex flex-col justify-center items-center p-12 space-y-8">
           <div className="flex flex-col items-center">
             <img
