@@ -52,12 +52,12 @@ export async function addGoverner(governer: any, username: string) {
         break;
         default: 
         model = touristModel;}
-        const user = await model.findOne({ username: username.toLowerCase() });
+        const user = await model.findOne({ username: username });
         if (user==null) {
           return null; 
         }
     
-        await model.deleteOne({ username: username.toLowerCase() });        
+        await model.deleteOne({ username: username });        
         return user; 
 
 }

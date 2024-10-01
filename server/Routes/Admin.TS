@@ -69,7 +69,7 @@ router.post("/add/governer",
       
       const governer = await addGoverner(governerData,governerData.username);
       if(!governer)
-      res.status(401).send("Usernme already exists");
+      res.status(401).send("Username already exists");
 
       else
       res.status(201).json( governer );
@@ -81,9 +81,9 @@ router.post("/add/governer",
 );
 
 
-router.delete("/delete/user/:username",
+router.delete("/delete/user/:username/:type",
   async (req: Request, res: Response) => {
-    const type=req.body.type;
+    const type=req.params.type;
     const us=req.params.username;
     try{
     const user = await deleteUser(us,type);

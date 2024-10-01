@@ -4,6 +4,7 @@ import sellerModel from "../Schemas/Seller";
 import tourGuideModel from "../Schemas/TourGuide";
 import touristModel from "../Schemas/Tourist";
 import adminModel from "../Schemas/Admin";
+import governerModel from "../Schemas/Governer"
 import { get } from "http";
 
 export async function getprofileInfo(username: string, type: string) {
@@ -65,8 +66,9 @@ export async function getAllUsers(username: string | undefined) {
     const sellers = await sellerModel.find();
     const tourGuides = await tourGuideModel.find();
     const tourists = await touristModel.find();
+    const governers = await governerModel.find();
     const admins = await adminModel.find({ username: { $ne: username } });
-    return { advertisers, sellers, tourGuides, tourists, admins };
+    return { advertisers, sellers, tourGuides, tourists, admins, governers };
   } catch (err) {
     throw err;
   }

@@ -23,6 +23,7 @@
     "@mui/material": "^6.1.1",
     "@mui/styled-engine-sc": "^6.1.1",
     "@tabler/icons-react": "^3.18.0",
+    "@tanstack/router": "^0.0.1-beta.53",
     "axios": "^1.7.7",
     "radix-ui": "^1.0.1",
     "react": "^18.3.1",
@@ -37,6 +38,9 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
+    "@tanstack/router-devtools": "^1.58.15",
+    "@tanstack/router-plugin": "^1.58.12",
+    "@types/node": "^22.7.4",
     "@types/react": "^18.3.9",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react-swc": "^3.5.0",

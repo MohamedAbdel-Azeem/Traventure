@@ -3,65 +3,127 @@ import TouristTable from "./TouristTable"
 import Admin_TourismGovernorTable from "./Admin_TourismGovernorTable"
 import ImprovedSidebar from '../ImprovedSidebar';
 import TourGuide_Advertiser_SellerTable from './TourGuide_Advertiser_SellerTable';
+import axios, { AxiosError } from 'axios';
+import React from 'react';
+
+
+
+
+
+interface Advertiser {
+  _id: string;
+  username: string;
+  email: string;
+  password: string; // Note: It's best not to expose passwords in a real app
+  isAccepted: boolean;
+  __v: number;
+  hotline: string;
+  websiteLink: string;
+}
+
+// Seller interface
+interface Seller {
+  _id: string;
+  username: string;
+  email: string;
+  password: string; // Note: It's best not to expose passwords in a real app
+  isAccepted: boolean;
+  __v: number;
+  description?: string; // Optional field
+  name?: string; // Optional field
+}
+
+// Tour Guide interface
+interface TourGuide {
+  _id: string;
+  username: string;
+  email: string;
+  password: string; // Note: It's best not to expose passwords in a real app
+  isAccepted: boolean;
+  previousWork: any[]; // Assuming this could be an array of any type
+  __v: number;
+  mobileNumber: string;
+  yearsOfExperience: number;
+}
+
+// Tourist interface
+interface Tourist {
+  _id: string;
+  username: string;
+  email: string;
+  password: string; // Note: It's best not to expose passwords in a real app
+  mobileNumber: string;
+  dateOfBirth: string; // ISO date string
+  nationality: string;
+  Occupation: string; // It's better to use camelCase for consistency
+  __v: number;
+}
+
+// Admin interface
+interface Admin {
+  _id: string;
+  username: string;
+  password: string; // Note: It's best not to expose passwords in a real app
+  __v: number;
+}
+
+
+interface TourismGovernor {
+  _id: string;
+  username: string;
+  password: string; // Note: It's best not to expose passwords in a real app
+  __v: number;
+}
+
+// Combine all interfaces into a single type to represent the full structure
+interface DataStructure {
+  advertisers: Advertiser[];
+  sellers: Seller[];
+  tourGuides: TourGuide[];
+  tourists: Tourist[];
+  admins: Admin[];
+  governers: TourismGovernor[];
+}
+
+
+const fetch_testing = () => {
+  const [data, setData] = React.useState<DataStructure | null>(null);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("traventure/api/admin/all", {
+          params: {
+            username: "Ibra",
+          },
+        });
+        
+        // Assuming the response data structure is correct and contains a 'tourists' array
+        setData(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        const axiosError = error as AxiosError;
+        setError(axiosError.message);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return { data, loading, error };
+};
+
+
+
+
+
 
 const Accounts = () => {
-
-
-    const TGCredentials = [
-        { username: 'Naefu', password: 'randomPassword123', email: 'man1@example.com' },
-        { username: 'TGJohnDoe1', password: 'password123', email: 'ma2@example.com' },
-        { username: 'TGJaneDoe2', password: 'password4562', email: 'man3@example.com' },
-        { username: 'TGJaneDoe3', password: 'password4563', email: 'man4@example.com' },
-        { username: 'TGJaneDoe4', password: 'password4564', email: 'man5@example.com' },
-        { username: 'TGJaneDoe5', password: 'password4565', email: 'man6@example.com' },
-        { username: 'TGJaneDoe6', password: 'password4566', email: 'man7@example.com' },
-        { username: 'TGJaneDoe7', password: 'password4567', email: 'man8@example.com' },
-      ];
-
-      const AdvCredentials = [
-        { username: 'Naefu', password: 'randomPassword123', email: 'man1@example.com' },
-        { username: 'AJohnDoe1', password: 'password123', email: 'ma2@example.com' },
-        { username: 'AJaneDoe2', password: 'password4562', email: 'man3@example.com' },
-        { username: 'AJaneDoe3', password: 'password4563', email: 'man4@example.com' },
-        { username: 'AJaneDoe4', password: 'password4564', email: 'man5@example.com' },
-        { username: 'AJaneDoe5', password: 'password4565', email: 'man6@example.com' },
-        { username: 'AJaneDoe6', password: 'password4566', email: 'man7@example.com' },
-        { username: 'AJaneDoe7', password: 'password4567', email: 'man8@example.com' },
-      ];
-
-      const SellerCredentials = [
-        { username: 'Naefu', password: 'randomPassword123', email: 'man1@example.com' },
-        { username: 'SJohnDoe1', password: 'password123', email: 'ma2@example.com' },
-        { username: 'SJaneDoe2', password: 'password4562', email: 'man3@example.com' },
-        { username: 'SJaneDoe3', password: 'password4563', email: 'man4@example.com' },
-        { username: 'SJaneDoe4', password: 'password4564', email: 'man5@example.com' },
-        { username: 'SJaneDoe5', password: 'password4565', email: 'man6@example.com' },
-        { username: 'SJaneDoe6', password: 'password4566', email: 'man7@example.com' },
-        { username: 'SJaneDoe7', password: 'password4567', email: 'man8@example.com' },
-      ];
-
-      const AdminuserCredentials = [
-        { username: 'ANaefu', password: 'randomPassword123' },
-        { username: 'AJohnDoe1', password: 'password123' },
-        { username: 'AJaneDoe2', password: 'password4562' },
-        { username: 'AJaneDoe3', password: 'password4563' },
-        { username: 'AJaneDoe4', password: 'password4564' },
-        { username: 'AJaneDoe5', password: 'password4565' },
-        { username: 'AJaneDoe6', password: 'password4566' },
-        { username: 'AJaneDoe7', password: 'password4567' },
-      ];
-      const TGouserCredentials = [
-        { username: 'ANaefu', password: 'randomPassword123' },
-        { username: 'AJohnDoe1', password: 'password123' },
-        { username: 'AJaneDoe2', password: 'password4562' },
-        { username: 'AJaneDoe3', password: 'password4563' },
-        { username: 'AJaneDoe4', password: 'password4564' },
-        { username: 'AJaneDoe5', password: 'password4565' },
-        { username: 'AJaneDoe6', password: 'password4566' },
-        { username: 'AJaneDoe7', password: 'password4567' },
-      ];
-
-
+    const { data } = fetch_testing();
 
     return (
     <div className="w-full flex items-center justify-center">
@@ -71,19 +133,19 @@ const Accounts = () => {
                 <TouristTable />
             </div>
             <div className="my-8">
-                <Admin_TourismGovernorTable data={TGouserCredentials} name="Tourism Governor"/>
+                <Admin_TourismGovernorTable dataG={data?.governers} dataA={data?.admins} name="Tourism Governor"/>
             </div>
             <div className="my-8">
-                <Admin_TourismGovernorTable data={AdminuserCredentials} name="Admin"/>
+                <Admin_TourismGovernorTable dataG={data?.governers} dataA={data?.admins} name="Admin"/>
             </div>
             <div className="my-8">
-                <TourGuide_Advertiser_SellerTable data={TGCredentials} name="Tour Guide"/>
+                <TourGuide_Advertiser_SellerTable dataT={data?.tourGuides} dataS={data?.sellers} dataA={data?.advertisers} name="Tour Guide"/>
             </div>
             <div className="my-8">
-                <TourGuide_Advertiser_SellerTable data={AdvCredentials} name="Advertiser"/>
+                <TourGuide_Advertiser_SellerTable dataT={data?.tourGuides} dataS={data?.sellers} dataA={data?.advertisers} name="Advertiser"/>
             </div>
             <div className="my-8">
-                <TourGuide_Advertiser_SellerTable data={SellerCredentials} name="Seller"/>
+                <TourGuide_Advertiser_SellerTable dataT={data?.tourGuides} dataS={data?.sellers} dataA={data?.advertisers} name="Seller"/>
             </div>
         </div>
     </div>

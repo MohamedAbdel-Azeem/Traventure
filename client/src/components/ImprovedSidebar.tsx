@@ -17,7 +17,7 @@ const adminsidebaritems =
   { text: 'Home', icon: <HomeIcon />, path: '/admin' },
   { text: 'Shop', icon: <ShopIcon />, path: '/admin/shop' },
   { text: 'Locations', icon: <LocationOnIcon />, path: '/admin/locations' },
-  { text: 'Account Management', icon: <AccountCircleIcon />, path: '/admin/users' },
+  { text: 'Account Management', icon: <AccountCircleIcon />, path: '/admin-users' },
   { text: 'Activity Management', icon: <ActivityIcon />, path: '/activities' },
 ];
 const TGsidebaritems =
@@ -138,6 +138,7 @@ const getSidebarItems = (title : string) => {
 export default function ImprovedSidebar({ title = "" }: ImprovedSidebarProps) {
     const [open, setOpen] = React.useState(false);
     const navigate = useNavigate();
+    
     const location = useLocation();
 
   const whichoptions = getSidebarItems(title);

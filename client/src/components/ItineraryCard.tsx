@@ -14,7 +14,7 @@ const ItineraryCard: React.FC = () => {
       ];
 
     return ( 
-        <div className="flex flex-col items-center justify-center mt-12">
+        <div className="flex flex-col items-center justify-center mt-12 mx-4">
             <div className="rounded-[19px]">
             <div className="w-[352px] h-[425px] bg-[#2a7306] rounded-[19px]"
             style={{

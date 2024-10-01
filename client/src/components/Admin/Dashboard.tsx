@@ -12,8 +12,8 @@ const Dashboard = () => {
     }
 
 
-    return (
-        <div className="grid grid-cols-3">
+    return (<div className="flex justify-center">
+<div className="grid grid-cols-3">
                 <ItineraryCard/>
                 <ItineraryCard/>
                 <ItineraryCard/>
@@ -26,6 +26,8 @@ const Dashboard = () => {
                 <ItineraryCard/>
                 <ItineraryCard/>
         </div>
+    </div>
+        
     );
 };
 

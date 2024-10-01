@@ -18,6 +18,7 @@ import SellerProfile from './routes/_app/seller_profile/seller_profile';
 import TourGuideProfile from './routes/_app/tourguide_profile/tourguide_profile';
 import AdvertiserProfile from './routes/_app/advertiser_profile/advertiser_profile';
 import ShopPage from "./components/ShopPage";
+import NewApp from "./NewApp";
 
 
 
@@ -26,13 +27,14 @@ function App() {
     <MantineProvider>
       <Router>
         <Routes>
+        <Route path="/newapp" element={<NewApp />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/tourguide" element={<TourGuidePage />} />
         <Route path="/tourismgovernor" element={<TourismGovernorPage />} />
         <Route path="/advertiser" element={<AdvertiserPage />} />
         <Route path="/tourist" element={<TouristPage />} />
         <Route path="/seller" element={<SellerPage />} />
-        <Route path="/admin/users" element={<Accounts />} />
+        <Route path="/admin-users" element={<Accounts />} />
         <Route path="/admin/shop" element={<ShopPage />} />
         <Route path="/tourismgovernor/locations" element={<Locations />} />
         <Route path="/admin/locations" element={<Locations />} />

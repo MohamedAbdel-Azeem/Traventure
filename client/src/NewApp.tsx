@@ -98,7 +98,7 @@ const NewApp =()=>{
 
     return ( 
     <div>
-        {data?.advertisers?.map(
+        {data?.tourists?.map(
             request => (
             <div key="request">
                 {request.username}
