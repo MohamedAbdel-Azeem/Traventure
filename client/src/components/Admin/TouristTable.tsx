@@ -4,7 +4,7 @@ import { useState } from 'react';
 import {Table, TableBody, TableContainer, TableHead, TableRow, TableCell, TextField, TableSortLabel, TablePagination, Paper} from '@mui/material';
 import LuggageIcon from '@mui/icons-material/Luggage';
 import { styled } from '@mui/material/styles';
-import { fetch_testing } from "../../custom_hooks/tourist";
+import { fetch_testing, deleteUsers } from "../../custom_hooks/tourist";
 function createData(
   _id: string,
   username: string,
@@ -163,58 +163,9 @@ interface Advertiser {
     admins: Admin[];
   }
 
-  // const fetch_testing = () => {
-  //   const [data, setData] = React.useState<DataStructure | null>(null);
-  //   const [loading, setLoading] = React.useState(true);
-  //   const [error, setError] = React.useState<string | null>(null);
-  
-  //   React.useEffect(() => {
-  //     const fetchData = async () => {
-  //       try {
-  //         const response = await axios.get("traventure/api/admin/all", {
-  //           params: {
-  //             username: "SeifTarek",
-  //           },
-  //         });
-          
-  //         // Assuming the response data structure is correct and contains a 'tourists' array
-  //         setData(response.data);
-  //         setLoading(false);
-  //       } catch (error) {
-  //         console.error("Error fetching data:", error);
-  //         const axiosError = error as AxiosError;
-  //         setError(axiosError.message);
-  //         setLoading(false);
-  //       }
-  //     };
-  
-  //     fetchData();
-  //   }, []);
-  
-  //   return { data, loading, error };
-  // };
-  
-  const data = fetch_testing;
-  const deleteUsers = async (username: string, type: string) => {
-      const response = await fetch(`traventure/api/admin/delete/user/${username}/tourist`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to delete user');
-      }
-  
-      // Re-fetch the users after deleting
-      fetch_testing();
-      alert(`${username} deleted successfully.`);
- 
-  };
 
 export default function TouristTable() {
-  const { data, loading, error } = fetch_testing();
+  const { data } = fetch_testing();
 
   const [rows, setRows] = useState<Tourist[]>([]);
   const [page, setPage] = useState(0);
@@ -225,13 +176,12 @@ export default function TouristTable() {
 
   React.useEffect(() => {
     if (data && data.tourists) {
-      setRows(data.tourists); // Update rows state with fetched tourists
+      setRows(data.tourists);
     }
   }, [data]);
 
   const handleDelete = (username: string) => {
     if (window.confirm(`Are you sure you want to delete the user ${username}?`)) {
-      //setRows(rows.filter(row => row.username !== username));
       deleteUsers(username, "tourist");
     }
   };

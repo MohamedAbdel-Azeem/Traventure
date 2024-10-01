@@ -65,6 +65,25 @@ interface DataStructure {
   tourists: Tourist[];
   admins: Admin[];
 }
+
+export const deleteUsers = async (username: string, type: string) => {
+  const response = await fetch(`traventure/api/admin/delete/user/${username}/tourist`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to delete user');
+  }
+  alert(`${username} deleted successfully.`);
+
+};
+
+
+
+
 export const fetch_testing = () => {
     const [data, setData] = React.useState<DataStructure | null>(null);
     const [loading, setLoading] = React.useState(true);

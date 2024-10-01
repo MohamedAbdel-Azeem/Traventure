@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 import StoreIcon from '@mui/icons-material/Store';
 import TourIcon from '@mui/icons-material/Tour';
 import CampaignIcon from '@mui/icons-material/Campaign';
-
+import { deleteUsers } from '../../custom_hooks/tourguideadvertiserseller';
 function createData(
     username:string,
     password: string,
@@ -134,21 +134,6 @@ const TourGuide_Advertiser_SellerTable: React.FC<TourGuideAdvertiserSellerTableP
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
   const [orderBy, setOrderBy] = useState<keyof ReturnType<typeof createData>>('email');
 
-  const deleteUsers = async (username: string, type: string) => {
-    const response = await fetch(`traventure/api/admin/delete/user/${username}/${name}}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to delete user');
-    }
-
-    alert(`${username} deleted successfully.`);
-
-};
 
   const handleDelete = (username: string) => {
     if (window.confirm(`Are you sure you want to delete the user ${username}?`)) {
