@@ -1,20 +1,20 @@
-import  express , { Request, Response } from "express";
 import cookieParser from "cookie-parser";
-import logger from "morgan";
+import express, { Request, Response } from "express";
 import createError from "http-errors";
+import logger from "morgan";
 import connectDB from "./Model/DB";
-import adminRouter from "./Routes/Admin";
-import categoryRouter from "./Routes/Category";
 import activityRouter from "./Routes/Activity";
-import preferenceTagsRouter from "./Routes/preferenceTags";
-import sellerRouter from "./Routes/Seller";
-import productRouter from "./Routes/Product";
-import  advertiserRouter  from "./Routes/Advertiser";
-import  tourGuideRouter  from "./Routes/TourGuide";
-import  touristRouter  from "./Routes/Tourist";
-import placeRouter from "./Routes/Places";
+import adminRouter from "./Routes/Admin";
+import advertiserRouter from "./Routes/Advertiser";
+import categoryRouter from "./Routes/Category";
 import governerRouter from "./Routes/Governer";
-
+import itineraryRouter from "./Routes/Itinerary";
+import placeRouter from "./Routes/Places";
+import productRouter from "./Routes/Product";
+import sellerRouter from "./Routes/Seller";
+import tourGuideRouter from "./Routes/TourGuide";
+import touristRouter from "./Routes/Tourist";
+import preferenceTagsRouter from "./Routes/preferenceTags";
 
 const app = express();
 
@@ -34,8 +34,8 @@ app.use("/api/place", placeRouter);
 app.use("/api/advertiser", advertiserRouter);
 app.use("/api/tourGuide", tourGuideRouter);
 app.use("/api/tourist", touristRouter);
-app.use("/api/governer",governerRouter);
-
+app.use("/api/governer", governerRouter);
+app.use("/api/itinerary", itineraryRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Traventure API");
