@@ -81,12 +81,14 @@ router.post("/add/governer",
 );
 
 
-router.delete("/delete/user/:username",
+router.delete("/delete/user/:username/:type",
   async (req: Request, res: Response) => {
-    const type=req.body.type;
-    const us=req.params.username;
+    // const type=req.body.type;
+    // const us=req.params.username;
+    const {username,type}=req.params;
+    console.log( "csdb;abs    :",username,type);
     try{
-    const user = await deleteUser(us,type);
+    const user = await deleteUser(username,type);
 
     if(user==null)
     res.status(404).send("User not found");
