@@ -6,6 +6,8 @@ import touristModel from "../Schemas/Tourist";
 import adminModel from "../Schemas/Admin";
 import governerModel from "../Schemas/Governer";
 import { get } from "http";
+import {comparePassword} from "../../utils/functions/bcrypt_functions"
+import { compare } from "bcryptjs";
 
 export async function getprofileInfo(username: string, type: string) {
     let model: mongoose.Model<any>;
@@ -89,7 +91,7 @@ export async function loginUser(username: string, password: string) {
     for (let i = 0; i < results.length; i++) {
       if (results[i]) {
         const user = results[i];
-        if ((user as any).password !== password) {
+        if (! comparePassword(password, (user as any).password)) {
           throw new Error('Incorrect password');
         }
 
