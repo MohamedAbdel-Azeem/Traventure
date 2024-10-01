@@ -7,27 +7,57 @@ import adminModel from "../Schemas/Admin";
 import { get } from "http";
 
 export async function getprofileInfo(username: string, type: string) {
-  let model: mongoose.Model<any>;
-  switch (type) {
-    case "advertiser":
-      model = advertiserModel;
-      break;
-    case "seller":
-      model = sellerModel;
-      break;
-    case "tourGuide":
-      model = tourGuideModel;
-      break;
-    default:
-      throw new Error("Invalid user type");
+    let model: mongoose.Model<any>;
+    switch (type) {
+      case "advertiser":
+        model = advertiserModel;
+        break;
+      case "seller":
+        model = sellerModel;
+        break;
+      case "tourGuide":
+        model = tourGuideModel;
+        break;
+      case "tourist":
+        model = touristModel;
+        break;
+      default:
+        throw new Error("Invalid user type");
+    }
+    try {
+      const user = await model.findOne({ username: username });
+      return user;
+    } catch (err) {
+      throw err;
+    }
   }
-  try {
-    const user = await model.findOne({ username: username });
-    return user;
-  } catch (err) {
-    throw err;
+
+  export async function updateProfileInfo(username: string, type: string, updatedInfo: any) {
+    let model: mongoose.Model<any>;
+    switch (type) {
+      case "advertiser":
+        model = advertiserModel;
+        break;
+      case "seller":
+        model = sellerModel;
+        break;
+      case "tourGuide":
+        model = tourGuideModel;
+        break;
+      case "tourist":
+        model = touristModel;
+        break;
+      default:
+        throw new Error("Invalid user type");
+    }
+    try {
+      const user = await model.findOneAndUpdate({ username: username }, updatedInfo, { new: true });
+      return user;
+    } catch (err) {
+      throw err;
+    }
   }
-}
+  
 
 export async function getAllUsers(username: string | undefined) {
   try {
@@ -42,4 +72,5 @@ export async function getAllUsers(username: string | undefined) {
   }
 }
 
-module.exports = { getprofileInfo, getAllUsers };
+module.exports = { getprofileInfo, getAllUsers , updateProfileInfo };
+
