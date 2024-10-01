@@ -86,7 +86,7 @@ router.delete("/delete/user/:username/:type",
     // const type=req.body.type;
     // const us=req.params.username;
     const {username,type}=req.params;
-    console.log( "csdb;abs    :",username,type);
+    
     try{
     const user = await deleteUser(username,type);
 

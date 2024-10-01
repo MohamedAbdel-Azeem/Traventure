@@ -9,7 +9,12 @@ const AdvertiserSchema = new Schema({
   password: { type: String, required: true },
   websiteLink: String,
   hotline: String,
-  companyProfile: String,
+  companyProfile: {
+    companyName: String,
+    companyAddress: String,
+    companyLogo: String,
+    companyDescription: String
+  },
   isAccepted: { type: Boolean, default: false },
 });
 
