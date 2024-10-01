@@ -68,7 +68,7 @@ const Register: React.FC = () => {
       mobile: '',
       dob: new Date().toISOString().split('T')[0],
       nationality: 'Egyptian',
-      job: '',
+      job: '',  
       role: 'tourist',
     }
   });
