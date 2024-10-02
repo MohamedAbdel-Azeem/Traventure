@@ -7,7 +7,9 @@ import Place from '../Schemas/Places';
 export async function getAll() {
     try {
          // Fetch upcoming itineraries
-         const itineraries = await Itinerary.find({ starting_Date: { $gte: new Date() } }).populate('places').populate('activities');
+         const itineraries = await Itinerary.find({ starting_Date: { $gte: new Date() } }).populate('added_By')
+         .populate('plan.place')
+         .populate('plan.place.activity_id');
 
          // Fetch upcoming activities
          const activities = await Activity.find({ DateAndTime: { $gte: new Date() } }).populate("Tags").populate("Category");

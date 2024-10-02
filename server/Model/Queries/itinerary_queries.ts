@@ -3,11 +3,11 @@ import Itinerary from "../Schemas/Itinerary";
 
 export async function getItinerary(tour_guide_id: String) {
   try {
-    // Use MongoDB's query to find items with the searchTerm in a certain field (e.g., "name" or "description")
     const itineraries = await Itinerary.find({
-      added_By: { $regex: tour_guide_id }
-    }).populate('places.place_id')
-      .populate('activities.activity_id')
+      added_By: tour_guide_id // Find all items with the given tour_guide_id
+    }).populate('added_By')
+    .populate('plan.place')
+    .populate('plan.place.activity_id')
 
     return itineraries;
   } catch (error) {
@@ -15,19 +15,6 @@ export async function getItinerary(tour_guide_id: String) {
   }
 }
 
-export async function getUpcomingItinerary() {
-  try {
-    const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0);
-    const itineraries = await Itinerary.find()
-      .populate('places.place_id')
-      .populate('activities.activity_id')
-
-    return itineraries;
-  } catch (error) {
-    throw error;
-  }
-}
 
 export async function addItinerary(itinerary: Object) {
   try {

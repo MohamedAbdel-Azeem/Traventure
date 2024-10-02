@@ -1,4 +1,5 @@
 import { body } from "express-validator";
+import mongoose from "mongoose";
 
 export const itineraryAddValidator = [
   body("main_Picture")
@@ -42,12 +43,31 @@ export const itineraryAddValidator = [
   body("language").isString().withMessage("Language is required"),
   body("pickup_location").isString().withMessage("Pickup location is required"),
   body("dropoff_location").isString().withMessage("Dropoff location is required"),
-  body('places')
-    .optional()
-    .isArray(),
-  body('activities')
-    .optional()
-    .isArray(),
+  body('plan')
+    .isArray({ min: 1 })
+    .withMessage('Plan must be an array with at least one element')
+    .custom((plan) => {
+      plan.forEach((item:any) => {
+        if (!item.place || !mongoose.Types.ObjectId.isValid(item.place)) {
+          throw new Error('Each plan item must have a valid place ID');
+        }
+        if (item.activities) {
+          item.activities.forEach((activity: any) => {
+            if (!activity.activity_id || !mongoose.Types.ObjectId.isValid(activity.activity_id)) {
+              throw new Error('Each activity must have a valid activity ID');
+            }
+            if (typeof activity.activity_duration !== 'number' || activity.activity_duration <= 0) {
+              throw new Error('Each activity must have a positive activity duration');
+            }
+            const validTimeUnits = ['sec', 'min', 'hours', 'days', 'month', 'years'];
+            if (typeof activity.time_unit !== 'string' || !validTimeUnits.includes(activity.time_unit.trim())) {
+              throw new Error('Each activity must have a valid time unit (sec, min, hours, days, month, years)');
+            }
+          });
+        }
+      });
+      return true;
+    }),
   body('booked_By')
     .optional()
     .isArray(),
@@ -106,13 +126,46 @@ export const itineraryUpdateValidator = [
     .isString()
     .notEmpty()
     .withMessage("Language is required"),
-  body("places")
+  body("pickup_location")
+    .optional()
+    .isString()
+    .withMessage("Pickup location is required"),
+  body("dropoff_location")
+    .optional()
+    .isString()
+    .withMessage("Dropoff location is required"),
+  body('plan')
+    .optional()
+    .isArray({ min: 1 })
+    .withMessage('Plan must be an array with at least one element')
+    .custom((plan) => {
+      plan.forEach((item: any) => {
+        if (!item.place || !mongoose.Types.ObjectId.isValid(item.place)) {
+          throw new Error('Each plan item must have a valid place ID');
+        }
+         if (item.activities) {
+          item.activities.forEach((activity: any) => {
+            if (!activity.activity_id || !mongoose.Types.ObjectId.isValid(activity.activity_id)) {
+              throw new Error('Each activity must have a valid activity ID');
+            }
+            if (typeof activity.activity_duration !== 'number' || activity.activity_duration <= 0) {
+              throw new Error('Each activity must have a positive activity duration');
+            }
+            const validTimeUnits = ['sec', 'min', 'hours', 'days', 'month', 'years'];
+            if (typeof activity.time_unit !== 'string' || !validTimeUnits.includes(activity.time_unit.trim())) {
+              throw new Error('Each activity must have a valid time unit (sec, min, hours, days, month, years)');
+            }
+          });
+        }
+      });
+      return true;
+    }),
+  body('booked_By')
     .optional()
     .isArray(),
-  body("activities")
+  body('accesibility')
     .optional()
-    .isArray()
-
+    .isBoolean()
 ];
 
 module.exports = { itineraryAddValidator, itineraryUpdateValidator };
