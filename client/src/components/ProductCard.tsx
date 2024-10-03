@@ -62,21 +62,22 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 <div className="card-actions">
                     <button className="edit-button"><FontAwesomeIcon icon={faPencil} /></button>
                     <button className="delete-button"><FontAwesomeIcon icon={faTrashCan} /></button>
-                    
                 </div>
             </div>
 
             <div className="card-body">
                 <h3 className="product-title">{product.title}</h3>
                 <p className="product-description">{getTruncatedDescription(product.description)}</p>
-                <div className="card-footer flex justify-center items-center relative">
-                    <span className="product-price absolute right-0">{product.price}</span>
-                    <span className="product-rating mr-4">
+                <div className="card-footer flex flex-row justify-center items-center">
+                    
+                    <div className="product-rating mr-auto ">
                         {'★'.repeat(product.rating)}{'☆'.repeat(5 - product.rating)}
-                    </span>
+                    </div>
                     <button onClick={togglePopup} className="view-more-button mx-auto w-20 h-5">
                         View more
                     </button>
+                    <div className="product-price ml-auto ">{product.price}</div>
+                    
                 </div>
             </div>
 
