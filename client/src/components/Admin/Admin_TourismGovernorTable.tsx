@@ -28,7 +28,6 @@ function Row(props: { row: AdminTourismGovernorTabletype , onDelete: (username: 
         <TableCell className="max-w-[2px] break-words" scope="row">
           {row.username}
         </TableCell>
-        <TableCell className="max-w-[2px] break-words">{row.password}</TableCell>
         <TableCell className="max-w-[2px] break-words">
         <button className="bin-button mx-auto" title="Delete"
             onClick={() => onDelete(row.username)}>
@@ -74,13 +73,50 @@ function Row(props: { row: AdminTourismGovernorTabletype , onDelete: (username: 
   );
 }
 
+
+type Admin = {
+  _id: string;
+  username: string;
+  password: string; // Note: It's best not to expose passwords in a real app
+  __v: number;
+}
+type TourismGovernor = {
+  _id: string;
+  username: string;
+  password: string; // Note: It's best not to expose passwords in a real app
+  __v: number;
+}
+
+
 interface Admin_TourismGovernorTableProps {
-  data: Array<{ username: string; password: string;}>;
+  dataA: Admin[] | undefined;
+  dataG: TourismGovernor[] | undefined;
   name: string;
 }
 
-const Admin_TourismGovernorTable: React.FC<Admin_TourismGovernorTableProps> = ({ data, name }) => {
-  const [rows, setRows] = useState(data);
+
+
+
+const Admin_TourismGovernorTable: React.FC<Admin_TourismGovernorTableProps> = ({ dataA, dataG, name }) => {
+  const [rows, setRows] = useState(
+    name.includes("Tourism")?dataG:dataA
+  );
+  console.log(dataA);
+  console.log(dataG);
+
+
+  React.useEffect(() => {
+    if (dataA && name.includes("Admin")) {
+      setRows(dataA); 
+    }
+    if(dataG && name.includes("Tourism Governor")){
+      setRows(dataG); 
+    }
+  }, [dataG,dataA]);
+
+
+
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchQuery, setSearchQuery] = useState('');
@@ -92,7 +128,7 @@ const Admin_TourismGovernorTable: React.FC<Admin_TourismGovernorTableProps> = ({
 
   const handleDelete = (username: string) => {
     if (window.confirm(`Are you sure you want to delete the user ${username}?`)) {
-      setRows(rows.filter(row => row.username !== username));
+      setRows(rows?.filter(row => row.username !== username));
     }
   };
 
@@ -110,16 +146,15 @@ const Admin_TourismGovernorTable: React.FC<Admin_TourismGovernorTableProps> = ({
     setPage(0);
   };
 
-  const filteredRows = rows.filter(row => 
-    row.username.includes(searchQuery) ||
-    row.password.includes(searchQuery) 
+  const filteredRows = rows?.filter(row => 
+    row.username.includes(searchQuery)
   );
   const handleRequestSort = (property: keyof AdminTourismGovernorTabletype) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
-  const sortedRows = filteredRows.sort((a, b) => {
+  const sortedRows = filteredRows?.sort((a, b) => {
     if (a[orderBy] < b[orderBy]) {
       return order === 'asc' ? -1 : 1;
     }
@@ -143,7 +178,7 @@ const Admin_TourismGovernorTable: React.FC<Admin_TourismGovernorTableProps> = ({
     setNewPassword('');
     handleClose();
   };
-  const paginatedRows = sortedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const paginatedRows = sortedRows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
     <div className="w-full flex items-center justify-center">
@@ -207,20 +242,12 @@ const Admin_TourismGovernorTable: React.FC<Admin_TourismGovernorTableProps> = ({
               </TableHead>
               <TableHead>
                 <StyledTableRow>
-                  <TableCell className="w-[30%]">
+                  <TableCell className="w-[75%]">
                     <TableSortLabel
                       active={orderBy === 'username'}
                       direction={orderBy === 'username' ? order : 'asc'}
                       onClick={() => handleRequestSort('username')}>
                       Username
-                    </TableSortLabel>
-                  </TableCell>
-                  <TableCell className="w-[45%]">
-                    <TableSortLabel
-                      active={orderBy === 'password'}
-                      direction={orderBy === 'password' ? order : 'asc'}
-                      onClick={() => handleRequestSort('password')}>
-                      Password
                     </TableSortLabel>
                   </TableCell>
                   <TableCell className="w-[25%]">
@@ -234,7 +261,7 @@ const Admin_TourismGovernorTable: React.FC<Admin_TourismGovernorTableProps> = ({
                 </StyledTableRow>
               </TableHead>
             <TableBody>
-              {paginatedRows.map((row) => (
+              {paginatedRows?.map((row) => (
                 <Row key={row.username} row={row} onDelete={handleDelete} />
               ))}
             </TableBody>
@@ -243,7 +270,7 @@ const Admin_TourismGovernorTable: React.FC<Admin_TourismGovernorTableProps> = ({
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={filteredRows.length}
+          count={filteredRows?.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

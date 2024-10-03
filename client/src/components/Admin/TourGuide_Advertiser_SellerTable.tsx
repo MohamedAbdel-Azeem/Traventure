@@ -137,7 +137,7 @@ const TourGuide_Advertiser_SellerTable: React.FC<TourGuideAdvertiserSellerTableP
 
   const handleDelete = (username: string) => {
     if (window.confirm(`Are you sure you want to delete the user ${username}?`)) {
-      //setRows(rows.filter(row => row.username !== username));
+      setRows(rows.filter(row => row.username !== username));
       deleteUsers(username, name);
     }
   };
