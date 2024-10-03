@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 import StoreIcon from '@mui/icons-material/Store';
 import TourIcon from '@mui/icons-material/Tour';
 import CampaignIcon from '@mui/icons-material/Campaign';
-
+import { deleteUsers } from '../../custom_hooks/tourguideadvertiserseller';
 function createData(
     username:string,
     password: string,
@@ -36,7 +36,6 @@ function Row(props: { row: ReturnType<typeof createData>, onDelete: (username: s
           {row.email}
         </TableCell>
         <TableCell className="max-w-[2px] break-words">{row.username}</TableCell>
-        <TableCell className="max-w-[2px] break-words">{row.password}</TableCell>
         <TableCell className="max-w-[2px] break-words">
         <button className="bin-button mx-auto" title="Delete"
             onClick={() => onDelete(row.username)}>
@@ -82,24 +81,64 @@ function Row(props: { row: ReturnType<typeof createData>, onDelete: (username: s
   );
 }
 
+type Advertiser = {
+  _id: string;
+  username: string;
+  email: string;
+  password: string; // Note: It's best not to expose passwords in a real app
+  isAccepted: boolean;
+  __v: number;
+  hotline: string;
+  websiteLink: string;
+}
+
+// Seller interface
+type Seller = {
+  _id: string;
+  username: string;
+  email: string;
+  password: string; // Note: It's best not to expose passwords in a real app
+  isAccepted: boolean;
+  __v: number;
+  description?: string; // Optional field
+  name?: string; // Optional field
+}
+
+type TourGuide = {
+  _id: string;
+  username: string;
+  email: string;
+  password: string; // Note: It's best not to expose passwords in a real app
+  isAccepted: boolean;
+  previousWork: any[]; // Assuming this could be an array of any type
+  __v: number;
+  mobileNumber: string;
+  yearsOfExperience: number;
+}
 
 interface TourGuideAdvertiserSellerTableProps {
-  data: Array<{ username: string; password: string; email: string }>;
+  dataA: Advertiser[] | undefined;
+  dataS: Seller[] | undefined;
+  dataT: TourGuide[] | undefined;
   name: string;
 }
 
 
-const TourGuide_Advertiser_SellerTable: React.FC<TourGuideAdvertiserSellerTableProps> = ({ data, name }) => {
-  const [rows, setRows] = useState(data);
+const TourGuide_Advertiser_SellerTable: React.FC<TourGuideAdvertiserSellerTableProps> = ({ dataT, dataS, dataA, name }) => {
+  const [rows, setRows] = useState(
+    name.includes("Tour Guide")?dataT:name.includes("Advertiser")?dataA:dataS
+  );
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchQuery, setSearchQuery] = useState('');
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
   const [orderBy, setOrderBy] = useState<keyof ReturnType<typeof createData>>('email');
 
+
   const handleDelete = (username: string) => {
     if (window.confirm(`Are you sure you want to delete the user ${username}?`)) {
-      setRows(rows.filter(row => row.username !== username));
+      //setRows(rows.filter(row => row.username !== username));
+      deleteUsers(username, name);
     }
   };
 
@@ -117,9 +156,8 @@ const TourGuide_Advertiser_SellerTable: React.FC<TourGuideAdvertiserSellerTableP
     setPage(0);
   };
 
-  const filteredRows = rows.filter(row => 
+  const filteredRows = rows?.filter(row => 
     row.username.includes(searchQuery) ||
-    row.password.includes(searchQuery) ||
     row.email.includes(searchQuery) 
   );
   const handleRequestSort = (property: keyof ReturnType<typeof createData>) => {
@@ -127,7 +165,7 @@ const TourGuide_Advertiser_SellerTable: React.FC<TourGuideAdvertiserSellerTableP
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
-  const sortedRows = filteredRows.sort((a, b) => {
+  const sortedRows = filteredRows?.sort((a, b) => {
     if (a[orderBy] < b[orderBy]) {
       return order === 'asc' ? -1 : 1;
     }
@@ -138,7 +176,18 @@ const TourGuide_Advertiser_SellerTable: React.FC<TourGuideAdvertiserSellerTableP
   });
 
 
-  const paginatedRows = sortedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const paginatedRows = sortedRows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  React.useEffect(() => {
+    if (dataT && name.includes("Tour Guide")) {
+      setRows(dataT); 
+    }
+    if(dataS && name.includes("Seller")){
+      setRows(dataS); 
+    }
+    if(dataA && name.includes("Advertiser")){
+      setRows(dataA); 
+    }
+  }, [dataS,dataA,dataT]);
 
   return (
     <div className="w-full flex items-center justify-center">
@@ -160,7 +209,7 @@ const TourGuide_Advertiser_SellerTable: React.FC<TourGuideAdvertiserSellerTableP
               </TableHead>
               <TableHead>
                 <StyledTableRow>
-                  <TableCell className="w-[30%]">
+                  <TableCell className="w-[35%]">
                     <TableSortLabel
                       active={orderBy === 'email'}
                       direction={orderBy === 'email' ? order : 'asc'}
@@ -168,20 +217,12 @@ const TourGuide_Advertiser_SellerTable: React.FC<TourGuideAdvertiserSellerTableP
                       Email
                     </TableSortLabel>
                   </TableCell>
-                  <TableCell className="w-[20%]">
+                  <TableCell className="w-[40%]">
                     <TableSortLabel
                       active={orderBy === 'username'}
                       direction={orderBy === 'username' ? order : 'asc'}
                       onClick={() => handleRequestSort('username')}>
                       Username
-                    </TableSortLabel>
-                  </TableCell>
-                  <TableCell className="w-[25%]">
-                    <TableSortLabel
-                      active={orderBy === 'password'}
-                      direction={orderBy === 'password' ? order : 'asc'}
-                      onClick={() => handleRequestSort('password')}>
-                      Password
                     </TableSortLabel>
                   </TableCell>
                   <TableCell className="w-[25%]">
@@ -195,7 +236,7 @@ const TourGuide_Advertiser_SellerTable: React.FC<TourGuideAdvertiserSellerTableP
                 </StyledTableRow>
               </TableHead>
             <TableBody>
-              {paginatedRows.map((row) => (
+              {paginatedRows?.map((row) => (
                 <Row key={row.username} row={row} onDelete={handleDelete} />
               ))}
             </TableBody>
@@ -204,7 +245,7 @@ const TourGuide_Advertiser_SellerTable: React.FC<TourGuideAdvertiserSellerTableP
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={filteredRows.length}
+          count={filteredRows?.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
