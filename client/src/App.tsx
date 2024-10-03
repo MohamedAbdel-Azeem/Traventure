@@ -8,6 +8,7 @@ import TourismGovernorPage from "./pages/TourismGovernorPage";
 import TourGuidePage from "./pages/TourGuidePage";
 import SellerPage from "./pages/SellerPage";
 import AdvertiserPage from "./pages/AdvertiserPage";
+import LandingPage from "./pages/LandingPage";
 import Locations from "./components/Locations";
 import TouristPage from "./pages/TouristPage";
 import CategoryTable from "./components/Activity/CategoryTable";
@@ -47,6 +48,7 @@ function App() {
         <Route path="/tourguideprofile" element={<TourGuideProfile />} />
         <Route path="/advertiserprofile" element={<AdvertiserProfile />} />
         <Route path="/Categories" element={<CategoryTable />} />
+        <Route path="/landingpage" element={<LandingPage />} />
          
         </Routes>
       </Router>
