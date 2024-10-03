@@ -32,7 +32,7 @@ const schema = z.object({
   const { role, dob, job } = data;
 
   // Age validation for non-tourist roles
-  if (role !== 'tourist') {
+  if (role === 'tourist') {
     const age = getAge(dob);
     if (age < 18) {
       ctx.addIssue({
@@ -51,7 +51,7 @@ const schema = z.object({
       message: 'Job is required for tourists',
     });
   }
-});;
+});
 
 const Register: React.FC = () => {
   const {
