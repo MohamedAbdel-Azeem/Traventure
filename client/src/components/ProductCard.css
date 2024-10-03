@@ -44,6 +44,32 @@
     cursor: pointer;
     font-size: 18px;
     margin-left: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.delete-button {
+   
+    border: none;
+    border-radius: 50%; /* Circular shape */
+    padding: 10px; /* Padding to increase size */
+    cursor: pointer; /* Pointer cursor */
+    
+    display: flex; /* Centering icon */
+    align-items: center; /* Centering icon vertically */
+    justify-content: center; /* Centering icon horizontally */
+    width: 40px; /* Set a width for the circle */
+    height: 40px; /* Set a height for the circle */
+}
+
+.delete-button:hover {
+    background-color: red; /* Red background on hover */
+ 
+    transform: scale(1.05); /* Slightly increase size on hover */
+}
+
+.edit-button:hover {
+    background-color: #A594F9; /* Blue background on hover */
+    transform: scale(1.05); /* Slightly increase size on hover */
 }
 
 .card-body {

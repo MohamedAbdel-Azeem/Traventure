@@ -1,0 +1,61 @@
+/* WaitingResponse.css */
+.waiting-response-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+  
+  .waiting-response-content {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+  
+  .waiting-response-message {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .waiting-response-buttons {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .confirm-button,
+  .cancel-button {
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 0 10px;
+  }
+  
+  .confirm-button {
+    background-color: #4caf50; /* Green */
+    color: white;
+  }
+  
+  .cancel-button {
+    background-color: #f44336; /* Red */
+    color: white;
+  }
+  
+  .confirm-button:hover {
+    background-color: #45a049;
+  }
+  
+  .cancel-button:hover {
+    background-color: #e53935;
+  }
+  

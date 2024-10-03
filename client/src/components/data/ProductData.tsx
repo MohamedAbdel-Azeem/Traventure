@@ -6,7 +6,7 @@ export const ProductData = [
     ],
     id: 1,
     title: "Product 1",
-    price: '$50',
+    price: 50,
     rating: 4.5,
     description: 'A cool product description.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.',
     seller: 'Seller Name',
@@ -19,7 +19,7 @@ export const ProductData = [
     ],
     id: 2,
     title: "Product 2",
-    price: '$75',
+    price: 75,    
     rating: 4.2,
     description: 'Another awesome product.',
     seller: 'Another Seller',
@@ -32,7 +32,7 @@ export const ProductData = [
     ],
     id: 3,
     title: "Product 3",
-    price: '$100',
+    price: 100,
     rating: 4.8,
     description: 'The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.The best product ever.',
     seller: 'Best Seller',
@@ -45,7 +45,7 @@ export const ProductData = [
     ],
     id: 4,
     title: "Product 1",
-    price: '$50',
+    price: 50,
     rating: 4.5,
     description: 'A cool product description.',
     seller: 'Seller Name',
@@ -58,7 +58,7 @@ export const ProductData = [
     ],
     id: 5,
     title: "Product 2",
-    price: '$75',
+    price: 75,
     rating: 4.2,
     description: 'Another awesome product.',
     seller: 'Another Seller',
@@ -71,7 +71,7 @@ export const ProductData = [
     ],
     id: 6,
     title: "Product 3",
-    price: '$100',
+    price: 100,
     rating: 4.8,
     description: 'The best product ever.',
     seller: 'Best Seller',
@@ -84,7 +84,7 @@ export const ProductData = [
     ],
     id: 7,
     title: "Product 1",
-    price: '$50',
+    price: 50,
     rating: 4.5,
     description: 'A cool product description.',
     seller: 'Seller Name',
@@ -97,7 +97,7 @@ export const ProductData = [
     ],
     id: 8,
     title: "Product 2",
-    price: '$75',
+    price: 75,
     rating: 4.2,
     description: 'Another awesome product.',
     seller: 'Another Seller',
@@ -110,7 +110,7 @@ export const ProductData = [
     ],
     id: 9,
     title: "Product 3",
-    price: '$100',
+    price: 100,
     rating: 4.8,
     description: 'The best product ever.',
     seller: 'Best Seller',
@@ -123,7 +123,7 @@ export const ProductData = [
     ],
     id: 10,
     title: "Product 1",
-    price: '$50',
+    price: 50,
     rating: 4.5,
     description: 'A cool product description.',
     seller: 'Seller Name',
@@ -136,7 +136,7 @@ export const ProductData = [
     ],
     id: 11,
     title: "Product 2",
-    price: '$75',
+    price: 75,
     rating: 4.2,
     description: 'Another awesome product.',
     seller: 'Another Seller',
@@ -149,7 +149,7 @@ export const ProductData = [
     ],
     id: 12,
     title: "Product 3",
-    price: '$100',
+    price: 100,
     rating: 4.8,
     description: 'The best product ever.',
     seller: 'Best Seller',
@@ -162,7 +162,7 @@ export const ProductData = [
     ],
     id: 13,
     title: "Product 1",
-    price: '$50',
+    price: 50,    
     rating: 4.5,
     description: 'A cool product description.',
     seller: 'Seller Name',
@@ -175,7 +175,7 @@ export const ProductData = [
     ],
     id: 14,
     title: "Product 2",
-    price: '$75',
+    price: 75,   
     rating: 4.2,
     description: 'Another awesome product.',
     seller: 'Another Seller',
@@ -188,10 +188,22 @@ export const ProductData = [
     ],
     id: 15,
     title: "Product 3",
-    price: '$100',
+    price: 100,
     rating: 4.8,
     description: 'The best product ever.',
     seller: 'Best Seller',
     reviews: ['Amazing!', 'Would buy again!']
   }
 ];
+
+
+export interface Product {
+  imageUrls: string[];
+  title: string;
+  description: string;
+  price: number;
+  rating: number;
+  seller: string;
+  reviews: string[];
+  id: number; // Add id property to Product interface
+}

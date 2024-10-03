@@ -1,80 +1,127 @@
 import React, { useState } from 'react';
-import './ProductCard.css'; // Assuming styles are in this file
+import './WaitingResponse.css'; // Assuming styles are in this file
 import ProductCard from './ProductCard';
-import { ProductData } from './data/ProductData';
+import { ProductData, Product } from './data/ProductData';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBackward, faForward } from '@fortawesome/free-solid-svg-icons';
-import ImprovedSidebar from "./ImprovedSidebar";
+import ImprovedSidebar from './ImprovedSidebar';
+import WaitingResponse from './WaitingResponse';
+import EditProductModal from './EditProductModal'; // Import your EditProductModal
+import ShowingResponse from './ShowingResponse'; // Import your ShowingResponse component
 
 const itemsPerPage = 9; // Set number of products per page to 9
 
 const ProductList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState(''); // New state for search term
+  const [searchTerm, setSearchTerm] = useState('');
+  const [products, setProducts] = useState(ProductData);
+  const [showWarning, setShowWarning] = useState(false);
+  const [productIdToDelete, setProductIdToDelete] = useState<number | null>(null);
+  const [responseMessage, setResponseMessage] = useState<string | null>(null);
+  const [showResponse, setShowResponse] = useState(false); // State for showing response
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  // Calculate total pages
-  const totalPages = Math.ceil(ProductData.length / itemsPerPage);
-
-  // Function to handle page change
-  const goToPage = (page: number) => {
-    if (page < 1 || page > totalPages) return; // Prevent out-of-bounds
-    setCurrentPage(page);
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+    setCurrentPage(1);
   };
 
-  // Function to filter products based on the search term
-  const filteredProducts = ProductData.filter(product =>
-    product.title.toLowerCase().includes(searchTerm.toLowerCase()) // Adjust based on your ProductData structure
+  const handleDelete = (id: number) => {
+    setShowWarning(true);
+    setProductIdToDelete(id);
+  };
+
+  const handleConfirmDelete = () => {
+    if (productIdToDelete !== null) {
+      setProducts(prevProducts => prevProducts.filter(product => product.id !== productIdToDelete));
+      setResponseMessage(`Product with id ${productIdToDelete} deleted.`); // Set response message
+      setShowResponse(true); // Show response message
+    }
+    setShowWarning(false);
+    setProductIdToDelete(null);
+  };
+
+  const handleCancelDelete = () => {
+    setShowWarning(false);
+    setProductIdToDelete(null);
+  };
+
+  const handleEdit = (product: Product) => {
+    setSelectedProduct(product);
+    setIsEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedProduct(null);
+  };
+
+  const saveChanges = (updatedProduct: Product) => {
+    setProducts(prevProducts =>
+      prevProducts.map(product =>
+        product.id === updatedProduct.id ? updatedProduct : product
+      )
+    );
+    setResponseMessage(`Product with id ${updatedProduct.id} updated.`);
+    setShowResponse(true); // Show response message
+    closeEditModal();
+  };
+
+  const handleResponseClose = () => {
+    setShowResponse(false);
+    setResponseMessage(null);
+  };
+
+  const filteredProducts = products.filter(product =>
+    product.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Get the products for the current page
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const displayedProducts = filteredProducts.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  // Handle search input change
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-    setCurrentPage(1); // Reset to first page when search term changes
+  const goToPage = (page: number) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
   };
 
-  // Function to display pagination with ellipses
   const paginationDisplay = () => {
-    const pageNumbers = [];
-    const maxVisiblePages = 3; // Maximum number of pages to display
+    const pageNumbers: (number | string)[] = [];
+    const maxVisiblePages = 3;
 
-    const totalPagesFiltered = Math.ceil(filteredProducts.length / itemsPerPage);
-
-    if (totalPagesFiltered <= maxVisiblePages) {
-      for (let i = 1; i <= totalPagesFiltered; i++) {
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
       }
     } else {
       const leftEllipsis = currentPage > Math.floor(maxVisiblePages / 2) + 1;
-      const rightEllipsis = currentPage < totalPagesFiltered - Math.floor(maxVisiblePages / 2);
+      const rightEllipsis = currentPage < totalPages - Math.floor(maxVisiblePages / 2);
 
       if (!leftEllipsis && rightEllipsis) {
         for (let i = 1; i <= maxVisiblePages; i++) {
           pageNumbers.push(i);
         }
         pageNumbers.push('...');
-        pageNumbers.push(totalPagesFiltered);
+        pageNumbers.push(totalPages);
       } else if (leftEllipsis && !rightEllipsis) {
         pageNumbers.push(1);
         pageNumbers.push('...');
-        for (let i = totalPagesFiltered - maxVisiblePages + 1; i <= totalPagesFiltered; i++) {
+        for (let i = totalPages - maxVisiblePages + 1; i <= totalPages; i++) {
           pageNumbers.push(i);
         }
       } else {
         pageNumbers.push(1);
         pageNumbers.push('...');
         for (let i = currentPage - Math.floor(maxVisiblePages / 2); i <= currentPage + Math.floor(maxVisiblePages / 2); i++) {
-          if (i > 0 && i <= totalPagesFiltered) {
+          if (i > 0 && i <= totalPages) {
             pageNumbers.push(i);
           }
         }
         pageNumbers.push('...');
-        pageNumbers.push(totalPagesFiltered);
+        pageNumbers.push(totalPages);
       }
     }
 
@@ -83,7 +130,7 @@ const ProductList: React.FC = () => {
         {typeof number === 'number' ? (
           <a onClick={() => goToPage(number)}>{number}</a>
         ) : (
-          <span>{number}</span> // Display ellipsis
+          <span>{number}</span>
         )}
       </li>
     ));
@@ -91,21 +138,39 @@ const ProductList: React.FC = () => {
 
   return (
     <div className="">
-      <ImprovedSidebar title="Admin"/>
+      <ImprovedSidebar title="Admin" />
       <div className="search-bar">
         <input
           type="text"
           placeholder="Search products by name..."
           value={searchTerm}
           onChange={handleSearchChange}
+          aria-label="Search products"
         />
       </div>
 
       <div className="product-list">
-        {displayedProducts.map((product, index) => (
-          <ProductCard key={index} product={product} />
-        ))}
+        {displayedProducts.length > 0 ? (
+          displayedProducts.map((product) => (
+            <ProductCard 
+              key={product.id}
+              product={product}
+              onDelete={handleDelete}
+              productId={product.id}
+              onEdit={handleEdit}
+            />
+          ))
+        ) : (
+          <p>No products found.</p>
+        )}
       </div>
+
+      {showResponse && responseMessage && (
+        <ShowingResponse 
+          message={responseMessage} 
+          onClose={handleResponseClose} 
+        />
+      )}
 
       <div className="pagination">
         <ul>
@@ -122,6 +187,22 @@ const ProductList: React.FC = () => {
           </li>
         </ul>
       </div>
+
+      {showWarning && (
+        <WaitingResponse
+          message="Are you sure you want to delete this product?"
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+        />
+      )}
+
+      {isEditModalOpen && selectedProduct && (
+        <EditProductModal
+          product={selectedProduct}
+          closeModal={closeEditModal}
+          saveChanges={saveChanges}
+        />
+      )}
     </div>
   );
 };

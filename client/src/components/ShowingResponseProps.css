@@ -1,0 +1,42 @@
+/* ShowingResponse.css */
+
+.response-overlay {
+    position: fixed;
+    top: 20px; /* Start just below the top */
+    right: 20px; /* Position from the right */
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999; /* Make sure this is high enough */
+    opacity: 0; /* Start hidden */
+    transform: translateY(-20px); /* Move up */
+    transition: opacity 0.5s ease, transform 0.5s ease; /* Transition effects */
+}
+
+
+
+
+.response-overlay.show {
+    opacity: 1; /* Show the overlay */
+    transform: translateY(0); /* Reset to original position */
+}
+
+.response-content {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    position: relative; /* Allow for absolute positioning of elements within */
+}
+
+h4 {
+    margin: 0 0 10px 0; /* Adjust margin for heading */
+}
+
+p {
+    margin: 0 0 15px 0; /* Adjust margin for paragraph */
+    font-size: 16px; /* Make sure the text is readable */
+    color: #333; /* Dark gray color for better contrast */
+}
