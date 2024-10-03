@@ -1,3 +1,586 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* Global styles */
+.body {
+    align-items: center;
+    background-color: #f9f9f9;
+  }
+  
+  /* Button styling */
+  .btn,
+  .login-btn {
+    background-color: #3ba1f4;
+    color: white;
+    border: 1px solid #3ba1f4;
+    padding: 10px;
+    border-radius: 100px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    width: 100%;
+  }
+  
+  .btn:hover,
+  .login-btn:hover {
+    background-color: white;
+    color: #3ba1f4;
+    border: 1px solid #3ba1f4;
+  }
+  
+  .btn:focus,
+  .btn:active,
+  .login-btn:focus,
+  .login-btn:active {
+    background-color: #3ba1f4;
+    border-color: #3ba1f4;
+  }
+  
+  /* Form control focus */
+  .form-control:focus,
+  .form-select:focus {
+    border-color: #3d8de9;
+    box-shadow: 0 0 0 0.1rem rgba(14, 71, 88, 0.25);
+  }
+  
+  /* Navbar styling */
+  .navbar {
+    display: flex; /* Make sure the navbar is a flex container */
+    justify-content: space-between; /* Space items evenly */
+    align-items: center; /* Center items vertically */
+    padding: 10px;
+    width: 100%;
+    background-color: #fffffc;
+    position: sticky;
+    height: 9vh;
+    box-shadow: 0 0.46875rem 2.1875rem rgba(4, 9, 20, 0.03),
+                0 0.9375rem 1.40625rem rgba(4, 9, 20, 0.03),
+                0 0.25rem 0.53125rem rgba(4, 9, 20, 0.05),
+                0 0.125rem 0.1875rem rgba(4, 9, 20, 0.03);
+  }
+  
+  
+  .navbar.landing {
+    padding: 5px;
+    width: 80%;
+    height: 9vh;
+    border-radius: 100px;
+    background-color: #ddf9e8;
+    position: sticky;
+  }
+  
+  .navbar.landing.scrolled {
+    width: 100%;
+    border-radius: 0px;
+    border: 0px;
+    background-size: cover;
+    background-position: center;
+    height: 9vh;
+  }
+  
+  .container-fluid {
+    border-radius: 0px;
+  }
+  
+  .navbar-light .navbar-nav .nav-item {
+    padding: 5px;
+    font-weight: bolder;
+  }
+  
+  .navbar-logo {
+    padding-top: 5px;
+    height: 9vh;
+    pointer-events: none;
+  }
+  
+  .navbar-light .navbar-nav .nav-link {
+    color: #0ca678;
+  }
+  
+  .navbar-light .navbar-nav .nav-link:hover {
+    color: rgb(1, 41, 1);
+  }
+  
+  .navbar .navbar-brand {
+    color: #144e2e;
+    padding: 15px;
+    text-decoration: underline;
+    font-weight: bold;
+  }
+  
+  .navbar .navbar-brand:hover {
+    color: rgb(1, 41, 1);
+  }
+  
+  .header-navbar {
+    background-size: cover;
+    background-position: center;
+    height: 10vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.7s ease-out;
+  }
+  
+  .header-navbar.landing {
+    background-size: cover;
+    background-position: center;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.7s ease-out;
+  }
+  
+  .header-navbar.scrolled {
+    animation: fadeOutAnimation2 0.5s linear;
+    animation-duration: 0.5s;
+    height: 10vh;
+  }
+  
+  @keyframes fadeOutAnimation2 {
+    0% {
+      height: 20vh;
+    }
+  
+    100% {
+      height: 10vh;
+    }
+  }
+  /* LoginPage.css */
+  
+  /* Whole page layout */
+  .login-page {
+    display: flex;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Left half styles */
+  .left-half {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background-color: #f8f8f8;
+    /* Light grey background */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 20px;
+  }
+  
+  .background-image {
+    position: absolute;
+    top: 50%;
+    /* Center vertically */
+    left: 50%;
+    /* Center horizontally */
+    transform: translate(-50%, -50%);
+    /* Center the image */
+    max-width: 80%;
+    /* Adjust the width */
+    max-height: 75vh;
+    /* Adjust the height */
+    object-fit: contain;
+    /* Ensure the image fits within its container */
+  }
+  
+  .logo-image {
+    position: absolute;
+    top: 20px;
+    /* Adjust as needed */
+    left: 20px;
+    /* Adjust as needed */
+    width: 150px;
+    /* Adjust width */
+    height: auto;
+    /* Maintain aspect ratio */
+  }
+  
+  /* Right half styles */
+  .right-half {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #fff;
+    /* White background */
+  }
+  
+  .login-form {
+    width: 100%;
+    /* Full width */
+    max-width: 500px;
+    /* text-align: center; */
+    padding: 20px;
+  }
+  
+  .form-control {
+    width: 100%;
+    /* Full width input */
+    margin: 10px 0;
+    /* Adjust margin */
+    padding: 10px;
+    /* Adjust padding */
+    font-size: 16px;
+    /* Font size */
+  }
+  
+  .login-button {
+    width: 100%;
+    background-color: #3ba1f4;
+    color: white;
+    border: none;
+    padding: 14px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 0;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .login-button:hover {
+    background-color: #45a049;
+  }
+  
+  .alert-box {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffdddd;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  /* Responsive Design */
+  
+  @media (max-width: 768px) {
+    /* Adjust navbar for smaller screens */
+    .navbar.landing {
+      width: 100%;
+      border-radius: 0;
+    }
+    
+    /* Adjust logo size on smaller screens */
+    .logo-image {
+      width: 100px;
+    }
+    
+    /* Adjust background image size on smaller screens */
+    .background-image {
+      max-width: 100%;
+      max-height: 500vh;
+    }
+    
+    /* Adjust padding in the left half for smaller screens */
+    .left-half {
+      padding: 10px;
+    }
+    
+    /* Adjust padding in the right half for smaller screens */
+    .right-half {
+      padding: 10px;
+    }
+    
+    /* Adjust form control size on smaller screens */
+    .form-control {
+      font-size: 14px;
+    }
+    
+    /* Adjust login button size on smaller screens */
+    .login-button {
+      padding: 12px 16px;
+      font-size: 14px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    /* Further adjustments for extra small screens */
+    .logo-image {
+      width: 80px;
+    }
+    
+    .background-image {
+      max-width: 100%;
+      max-height: 40vh;
+    }
+    
+    .form-control {
+      font-size: 13px;
+    }
+    
+    .login-button {
+      padding: 10px 14px;
+      font-size: 13px;
+    }
+  }
+  
+  
+  
+  
+  
+  
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure modal is on top */
+  }
+  
+  .modal-content {
+    background-color: #fff; /* White background */
+    padding: 20px;
+    max-width: 50%; /* Half the screen width */
+    width: 100%;
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 80%; /* Limit modal height to 80% of viewport height */
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 44px;
+    color: black;
+    border: 2px;
+    cursor: pointer;
+  }
+  
+  .modal-header {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .modal-title {
+    font-size: 24px;
+    margin: 0;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-left: 7px;
+  }
+  
+  .form-input {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 40px;
+  }
+  
+  .password-input-group {
+    display: flex;
+    align-items: center;
+  }
+  
+  .toggle-password-button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: #007bff; /* Blue button */
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: auto; /* Align to the right */
+  }
+  
+  .toggle-password-button:hover {
+    background-color: #0056b3; /* Darker shade of blue on hover */
+  }
+  
+  .submit-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff; /* Blue button */
+    color: #fff;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .submit-button:hover {
+    background-color: #0056b3; /* Darker shade of blue on hover */
+  }
+  
+  .cancel-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #ff0000; /* Red button */
+    color: #fff;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+  }
+  
+  .cancel-button:hover {
+    background-color: #cc0000; /* Darker shade of red on hover */
+  }
+  
+  .gender-checkboxes {
+    display: flex;
+    align-items: center;
+  }
+  
+  .gender-checkboxes label {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+  }
+  
+  .gender-checkboxes input[type="checkbox"] {
+    margin-right: 5px;
+  }
+  
+  .gender-icon {
+    width: 80px;
+    height: 80px;
+  }
+  
+  
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .modal-content {
+      max-width: 90%;
+    }
+  }
+  
+  
+  .add-student-button{
+    background-color: #3ba1f4;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 0;
+    cursor: pointer;
+  
+  }
+  .bin-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    border-radius: 13px;
+    background-color: rgb(255, 95, 95);
+    cursor: pointer;
+    border: 3px solid rgb(255, 201, 201);
+    transition-duration: 0.3s;
+  }
+  .bin-bottom {
+    width: 13px;
+  }
+  .bin-top {
+    width: 15px;
+    transform-origin: right;
+    transition-duration: 0.3s;
+  }
+  .bin-button:hover .bin-top {
+    transform: rotate(45deg);
+  }
+  .bin-button:hover {
+    background-color: rgb(255, 0, 0);
+  }
+  .bin-button:active {
+    transform: scale(0.9);
+  }
+  .editBtn {
+    width: 45px;
+    height: 45px;
+    border-radius: 13px;
+    border: none;
+    background-color: rgb(86, 130, 88);
+    border: 3px solid rgb(180, 200, 183);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.123);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .editBtn::before {
+    content: "";
+    width: 200%;
+    height: 200%;
+    background-color: rgb(37, 100, 61);
+    position: absolute;
+    z-index: 1;
+    transform: scale(0);
+    transition: all 0.3s;
+    border-radius: 50%;
+    filter: blur(10px);
+  }
+  .editBtn:hover::before {
+    transform: scale(1);
+  }
+  .editBtn:hover {
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.336);
+  }
+  
+  .editBtn svg {
+    height: 17px;
+    fill: white;
+    z-index: 3;
+    transition: all 0.2s;
+    transform-origin: bottom;
+  }
+  .editBtn:hover svg {
+    transform: rotate(-15deg) translateX(5px);
+  }
+  .editBtn::after {
+    content: "";
+    width: 16px;
+    height: 1.5px;
+    position: absolute;
+    bottom: 10px;
+    left: -5px;
+    background-color: white;
+    border-radius: 2px;
+    z-index: 2;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s ease-out;
+  }
+  .editBtn:hover::after {
+    transform: scaleX(1);
+    left: 0px;
+    transform-origin: right;
+  }
+  
