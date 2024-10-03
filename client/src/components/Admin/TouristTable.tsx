@@ -4,7 +4,7 @@ import { useState } from 'react';
 import {Table, TableBody, TableContainer, TableHead, TableRow, TableCell, TextField, TableSortLabel, TablePagination, Paper} from '@mui/material';
 import LuggageIcon from '@mui/icons-material/Luggage';
 import { styled } from '@mui/material/styles';
-import { fetch_testing, deleteUsers } from "../../custom_hooks/tourist";
+import { useGetAllUsers, deleteUsers } from "../../custom_hooks/tourist";
 function createData(
   _id: string,
   username: string,
@@ -165,7 +165,7 @@ interface Advertiser {
 
 
 export default function TouristTable() {
-  const { data } = fetch_testing();
+  const { data } = useGetAllUsers();
 
   const [rows, setRows] = useState<Tourist[]>([]);
   const [page, setPage] = useState(0);

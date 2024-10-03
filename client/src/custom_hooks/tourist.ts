@@ -57,14 +57,22 @@ interface Admin {
   __v: number;
 }
 
-// Combine all interfaces into a single type to represent the full structure
+interface TourismGovernor {
+  _id: string;
+  username: string;
+  password: string; // Note: It's best not to expose passwords in a real app
+  __v: number;
+}
+
 interface DataStructure {
   advertisers: Advertiser[];
   sellers: Seller[];
   tourGuides: TourGuide[];
   tourists: Tourist[];
   admins: Admin[];
+  governers: TourismGovernor[];
 }
+
 
 export const deleteUsers = async (username: string, type: string) => {
   const response = await fetch(`traventure/api/admin/delete/user/${username}/tourist`, {
@@ -84,7 +92,7 @@ export const deleteUsers = async (username: string, type: string) => {
 
 
 
-export const fetch_testing = () => {
+export const useGetAllUsers = () => {
     const [data, setData] = React.useState<DataStructure | null>(null);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);

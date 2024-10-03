@@ -20,6 +20,7 @@ import TourGuideProfile from './routes/_app/tourguide_profile/tourguide_profile'
 import AdvertiserProfile from './routes/_app/advertiser_profile/advertiser_profile';
 import ShopPage from "./components/ShopPage";
 import NewApp from "./NewApp";
+import { Activities } from "./routes/_app/Activities/Activities";
 
 
 
@@ -39,7 +40,7 @@ function App() {
         <Route path="/admin/shop" element={<ShopPage />} />
         <Route path="/tourismgovernor/locations" element={<Locations />} />
         <Route path="/admin/locations" element={<Locations />} />
-        <Route path="/activities" element={<Accounts />} />
+        <Route path="/advertiser/activities" element={<Activities />} />
         <Route path="/itineraries" element={<Accounts />} />
         <Route path="/" element={<SignIn />} />
         <Route path="/register" element={<Register />} />
