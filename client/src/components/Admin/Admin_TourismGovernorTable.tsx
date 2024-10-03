@@ -5,6 +5,7 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { styled } from '@mui/material/styles';
 import PublicIcon from '@mui/icons-material/Public';
 import { deleteUsers } from '../../custom_hooks/governorandadmin';
+import useAddAdminandGovernor from "../../custom_hooks/governorandadminadd";
 type AdminTourismGovernorTabletype = {
   username: string;
   password: string
@@ -177,6 +178,7 @@ const Admin_TourismGovernorTable: React.FC<Admin_TourismGovernorTableProps> = ({
 
   const handleAdd = () => {
     setRows([...rows, { username: newUsername, password: newPassword }]);
+    useAddAdminandGovernor();
     setNewUsername('');
     setNewPassword('');
     handleClose();
