@@ -13,7 +13,7 @@ const itinerarychema = new schema({
     main_Picture: { type: String },
     title: { type: String, required: true },
     description: { type: String, required: true },
-    added_By: { type: String, required: true },
+    added_By: { type: mongoose.Types.ObjectId, required: true , ref:'TourGuide' },
     price: { type: Number, required: true },
     starting_Date: { type: Date, required: true },
     ending_Date: { type: Date, required: true },
@@ -22,18 +22,22 @@ const itinerarychema = new schema({
     language: { type: String, required: true },
     pickup_location: { type: String, required: true },
     dropoff_location: { type: String, required: true },
-    places: [{
-        place_id: { type: String, ref: 'Place' },
-        //add order to plan el order of timeline
-    }],
-    activities: [{
-        activity_id: { type: String, ref: 'Activity' },
-        //activity_duration: {} to be asked  
-        //add order to plan el order of timeline
-        // ne add date for each activity w ne sort it by date and somehow make both in one array
-    }],
+    plan:[
+        {
+            place: { type: mongoose.Types.ObjectId, ref: 'Place' },
+            activities: [{
+                activity_id: { type: mongoose.Types.ObjectId, ref: 'Activity' },
+                activity_duration:{ 
+                    type: Number, required:true
+                },
+                time_unit:{
+                    type: String, required:true
+                }
+            }],
+        }
+    ],
     booked_By: [{
-        user_id: { type: String, ref: 'Tourist' }
+        user_id: { type: mongoose.Types.ObjectId, ref: 'Tourist' }
     }],
     accesibility: { type: Boolean, required: true }
 });

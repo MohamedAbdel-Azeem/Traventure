@@ -3,7 +3,7 @@ import { matchedData, validationResult } from "express-validator";
 import {
   addItinerary,
   deleteItinerary,
-  getItinerary, getUpcomingItinerary, updateItinerary
+  getItinerary, updateItinerary
 } from "..//Model//Queries//itinerary_queries";
 import {
   itineraryAddValidator, itineraryUpdateValidator
@@ -20,9 +20,6 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
     const itinerary_Data = matchedData(req);
-    if (itinerary_Data.places.length + itinerary_Data.activities.length === 0) {
-      return res.status(400).send(`Atleast one place or activity is required`);
-    }
     try {
       const itinerary = await addItinerary(itinerary_Data);
       res.status(200).send("itinerary Added Successfully !!");
@@ -42,14 +39,6 @@ router.get("/:id", async (req: Request, res: Response) => {
   }
 })
 
-router.get("/upcoming", async (req: Request, res: Response) => {
-  try {
-    const products = await getUpcomingItinerary();
-    res.status(200).send(products);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-})
 
 router.patch(
   "/update/:id",
