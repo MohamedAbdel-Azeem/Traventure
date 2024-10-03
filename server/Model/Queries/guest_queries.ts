@@ -76,7 +76,7 @@ async function isUniqueUsernameAndEmailAndMobileNumber(username: string, email: 
 
   // Check for existing email
   try{
-    await isUniqueEmail(username, email);
+    await isUniqueEmail(email);
   }
   catch(err:any){
     if (err.message === 'Email already exists') {
@@ -101,7 +101,10 @@ async function isUniqueUsernameAndEmailAndMobileNumber(username: string, email: 
 
 }
 
-async function isUniqueEmail(username: string, email: string) {
+async function isUniqueEmail(email: string) {
+  if(email === undefined){
+    return;
+  }
 
     // Check for existing email
     const emailExists = await Promise.all([
@@ -118,6 +121,9 @@ async function isUniqueEmail(username: string, email: string) {
 }
 
 async function isUniqueMobileNumber(mobileNumber: string) {
+  if(mobileNumber === undefined){
+    return;
+  }
       // Check for existing email
       const mobileNumberExists = await Promise.all([
         sellerModel.findOne({ mobileNumber }),
@@ -125,7 +131,7 @@ async function isUniqueMobileNumber(mobileNumber: string) {
         tourGuideModel.findOne({ mobileNumber }),
         touristModel.findOne({ mobileNumber })
       ]);
-
+      
       if (mobileNumberExists.some(result => result !== null)) {
         throw new Error('Mobile number already exists');
       }
