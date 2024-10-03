@@ -4,7 +4,7 @@ import touristModel from "../Schemas/Tourist";
 import tourGuideModel from "../Schemas/TourGuide";
 import sellerModel from "../Schemas/Seller";
 import advertiserModel from "../Schemas/Advertiser";
-
+import adminModel from "../Schemas/Admin"
 import { hashPassword } from '../../utils/functions/bcrypt_functions';
 
 
@@ -46,6 +46,9 @@ export async function addGoverner(governer: any, username: string) {
         break;
         case"tourist":
         model = touristModel;
+        break;
+        case"admin":
+        model = adminModel;
         break;
         case"governer":
         model = governerModel;

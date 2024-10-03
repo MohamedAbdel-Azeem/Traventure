@@ -182,9 +182,11 @@ export default function TouristTable() {
 
   const handleDelete = (username: string) => {
     if (window.confirm(`Are you sure you want to delete the user ${username}?`)) {
+      setRows(rows.filter(row => row.username !== username));
       deleteUsers(username, "tourist");
     }
   };
+
 
 
   const handleChangePage = (event: unknown, newPage: number) => {
