@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import './EditProductModal.css'; // Add your styles here
 
 interface Product {
-  id: number;
-  name: string;
-  price: number;
-  // Include any other product properties you need
+    title: string;
+    price: Nummber;
+    description: string;
+    rating: number;
+    imageUrls: string[];
+    seller: string;
 }
 
 interface EditProductModalProps {
