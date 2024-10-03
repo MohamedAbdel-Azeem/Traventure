@@ -9,7 +9,6 @@ import { useGetAllUsers } from '../../custom_hooks/tourist_fetchandelete';
 
 const Accounts = () => {
     const { data } = useGetAllUsers();
-
     return (
     <div className="w-full flex items-center justify-center">
         <div className="w-[1500px]">
@@ -18,10 +17,10 @@ const Accounts = () => {
                 <TouristTable />
             </div>
             <div className="my-8">
-                <Admin_TourismGovernorTable dataG={data?.governers} dataA={data?.admins} name="Tourism Governor"/>
+                <Admin_TourismGovernorTable dataG={data?.governors} dataA={data?.admins} name="Tourism Governor"/>
             </div>
             <div className="my-8">
-                <Admin_TourismGovernorTable dataG={data?.governers} dataA={data?.admins} name="Admin"/>
+                <Admin_TourismGovernorTable dataG={data?.governors} dataA={data?.admins} name="Admin"/>
             </div>
             <div className="my-8">
                 <TourGuide_Advertiser_SellerTable dataT={data?.tourGuides} dataS={data?.sellers} dataA={data?.advertisers} name="Tour Guide"/>

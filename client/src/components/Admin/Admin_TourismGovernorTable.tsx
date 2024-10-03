@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { styled } from '@mui/material/styles';
 import PublicIcon from '@mui/icons-material/Public';
-
+import { deleteUsers } from '../../custom_hooks/governorandadmin';
 type AdminTourismGovernorTabletype = {
   username: string;
   password: string
@@ -99,10 +99,11 @@ interface Admin_TourismGovernorTableProps {
 
 const Admin_TourismGovernorTable: React.FC<Admin_TourismGovernorTableProps> = ({ dataA, dataG, name }) => {
   const [rows, setRows] = useState(
-    name.includes("Tourism")?dataG:dataA
+    name.includes("Admin")?dataA:dataG
   );
-  console.log(dataA);
+  console.log("----------------");
   console.log(dataG);
+  console.log("----------------");
 
 
   React.useEffect(() => {
@@ -126,9 +127,11 @@ const Admin_TourismGovernorTable: React.FC<Admin_TourismGovernorTableProps> = ({
   const [newUsername, setNewUsername] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
+
   const handleDelete = (username: string) => {
     if (window.confirm(`Are you sure you want to delete the user ${username}?`)) {
       setRows(rows?.filter(row => row.username !== username));
+      deleteUsers(username, name);
     }
   };
 

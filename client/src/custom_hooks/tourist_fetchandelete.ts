@@ -70,7 +70,7 @@ interface DataStructure {
   tourGuides: TourGuide[];
   tourists: Tourist[];
   admins: Admin[];
-  governers: TourismGovernor[];
+  governors: TourismGovernor[];
 }
 
 
@@ -106,7 +106,6 @@ export const useGetAllUsers = () => {
             },
           });
           
-          // Assuming the response data structure is correct and contains a 'tourists' array
           setData(response.data);
           setLoading(false);
         } catch (error) {
