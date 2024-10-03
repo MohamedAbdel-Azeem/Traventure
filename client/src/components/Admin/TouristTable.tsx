@@ -4,7 +4,7 @@ import { useState } from 'react';
 import {Table, TableBody, TableContainer, TableHead, TableRow, TableCell, TextField, TableSortLabel, TablePagination, Paper} from '@mui/material';
 import LuggageIcon from '@mui/icons-material/Luggage';
 import { styled } from '@mui/material/styles';
-import { useGetAllUsers, deleteUsers } from "../../custom_hooks/tourist";
+import { useGetAllUsers, deleteUsers } from "../../custom_hooks/tourist_fetchandelete";
 function createData(
   _id: string,
   username: string,

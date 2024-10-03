@@ -5,7 +5,7 @@ import ImprovedSidebar from '../ImprovedSidebar';
 import TourGuide_Advertiser_SellerTable from './TourGuide_Advertiser_SellerTable';
 import axios, { AxiosError } from 'axios';
 import React from 'react';
-import { useGetAllUsers } from '../../custom_hooks/tourist';
+import { useGetAllUsers } from '../../custom_hooks/tourist_fetchandelete';
 
 const Accounts = () => {
     const { data } = useGetAllUsers();
