@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const schema = mongoose.Schema;
 
+//TODO : Add Tags
 const placeSchema = new schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
