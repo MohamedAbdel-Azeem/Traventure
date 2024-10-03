@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 import StoreIcon from '@mui/icons-material/Store';
 import TourIcon from '@mui/icons-material/Tour';
 import CampaignIcon from '@mui/icons-material/Campaign';
-import { deleteUsers } from '../../custom_hooks/tourguideadvertiserseller';
+import { deleteUsers } from '../../custom_hooks/tgas';
 function createData(
     username:string,
     password: string,
