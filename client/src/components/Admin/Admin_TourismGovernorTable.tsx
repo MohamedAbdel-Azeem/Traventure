@@ -118,7 +118,11 @@ const Admin_TourismGovernorTable: React.FC<Admin_TourismGovernorTableProps> = ({
 
 
 
+  const [apiBody, setApiBody] = useState({});
 
+  const { data, loading, error } = useAddAdminandGovernor(apiBody, name);
+
+  
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchQuery, setSearchQuery] = useState('');
@@ -177,8 +181,9 @@ const Admin_TourismGovernorTable: React.FC<Admin_TourismGovernorTableProps> = ({
   };
 
   const handleAdd = () => {
-    setRows([...rows, { username: newUsername, password: newPassword }]);
-    useAddAdminandGovernor();
+    const body = {username:newUsername,password:newPassword};
+    setApiBody(body);
+
     setNewUsername('');
     setNewPassword('');
     handleClose();
