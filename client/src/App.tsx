@@ -33,7 +33,7 @@ function App() {
         <Route path="/advertiser" element={<AdvertiserPage />} />
         <Route path="/tourist" element={<TouristPage />} />
         <Route path="/seller" element={<SellerPage />} />
-        <Route path="/admin/users" element={<Accounts />} />
+        <Route path="/admin-users" element={<Accounts />} />
         <Route path="/admin/shop" element={<ShopPage />} />
         <Route path="/tourismgovernor/locations" element={<Locations />} />
         <Route path="/admin/locations" element={<Locations />} />
@@ -41,7 +41,7 @@ function App() {
         <Route path="/itineraries" element={<Accounts />} />
         <Route path="/" element={<SignIn />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/touristprofile" element={<TouristProfile />} />
+        {/* <Route path="/touristprofile" element={<TouristProfile />} /> */}
         <Route path="/sellerprofile" element={<SellerProfile />} />
         <Route path="/tourguideprofile" element={<TourGuideProfile />} />
         <Route path="/advertiserprofile" element={<AdvertiserProfile />} />
