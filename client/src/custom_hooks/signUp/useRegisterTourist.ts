@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-function useRegisterTourist(body: object | null, role: string) {
-  const url = "traventure/api/tourist/add";
+function useRegisterUser(body: object | null, role: string) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (role !== "tourist") return;
+      if (role === null) return;
       if (body === null) return;
+      const url = `traventure/api/${role}/add`;
       console.log(body);
       setLoading(true);
       setError(null);
@@ -33,4 +33,4 @@ function useRegisterTourist(body: object | null, role: string) {
   return { data, loading, error };
 }
 
-export default useRegisterTourist;
+export default useRegisterUser;

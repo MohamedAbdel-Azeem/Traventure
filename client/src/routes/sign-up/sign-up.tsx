@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { date, z } from "zod";
-import useRegisterTourist from "../../custom_hooks/signUp/useRegisterTourist";
+import useRegisterUser from "../../custom_hooks/signUp/useRegisterTourist";
 
 // TODO: Use the Loading and error returning from the hook
 
@@ -92,7 +92,7 @@ const Register: React.FC = () => {
 
   const [apiBody, setApiBody] = useState(null);
 
-  const { data, loading, error } = useRegisterTourist(apiBody, role);
+  const { data, loading, error } = useRegisterUser(apiBody, role);
 
   const onSubmit = (data: any) => {
     setApiBody(data);
