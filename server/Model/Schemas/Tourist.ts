@@ -11,7 +11,6 @@ const touristSchema = new Schema({
   nationality: { type: String, required: true },
   Occupation: { type: String, required: true},
   wallet: { type: Number, required: true, default: 0 }
-  
 });
 
 export default mongoose.model('Tourist', touristSchema);

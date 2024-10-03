@@ -4,7 +4,7 @@ export const advertiserPatchValidator = [
   body("email").isEmail().optional(),
   body("websiteLink").isURL().optional(),
   body("hotline").isString().optional(),
-  body("companyProfile").isString().optional(),
+  body("company").isString().optional(),
   body("isAccepted").isBoolean().optional(),
 ];
 

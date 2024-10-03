@@ -13,7 +13,7 @@ export const tourGuideUpdateValidator = [
     .optional()
     .isArray()
     .withMessage("Previous work must be an array"),
-    body("previousWork.*.companyName")
+    body("previousWork.*.company")
     .optional()
     .isString()
     .withMessage("Company name must be a string"),
