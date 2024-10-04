@@ -2,7 +2,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { date, z } from "zod";
-import useRegisterUser from "../../custom_hooks/signUp/useRegisterTourist";
+
+import useRegisterUser from "../../custom_hooks/useRegisterUser";
 import ClipLoader from "react-spinners/ClipLoader";
 import Swal from "sweetalert2";
 
@@ -103,19 +104,17 @@ const Register: React.FC = () => {
   };
 
   useEffect(() => {
-    function handleError (){
-      if(error !== null && role === "tourist"){
-      Swal.fire({
-        title: "User was not created!",
-        text: error,
-        icon: "error",
-      })
+    function handleError() {
+      if (error !== null && role === "tourist") {
+        Swal.fire({
+          title: "User was not created!",
+          text: error,
+          icon: "error",
+        });
+      }
     }
-  } 
-  handleError();
+    handleError();
   }, [error]);
-
-
 
   return (
     <div
@@ -391,10 +390,10 @@ const Register: React.FC = () => {
                 className="bg-purple-500 text-white px-6 py-3 rounded-lg font-bold hover:bg-purple-600 transition duration-300"
               >
                 {loading ? (
-        <ClipLoader size={20} color="#ffffff" /> // Show spinner while loading
-      ) : (
-        'Register'
-      )}
+                  <ClipLoader size={20} color="#ffffff" /> // Show spinner while loading
+                ) : (
+                  "Register"
+                )}
               </button>
             </div>
           </form>
