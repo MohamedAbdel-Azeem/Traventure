@@ -55,7 +55,7 @@ const schema = z
       if (age < 18) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          path: ["dob"],
+          path: ["dateOfBirth"],
           message: "You must be above 18 years old to register for this role",
         });
       }
@@ -65,7 +65,7 @@ const schema = z
     if (role === "tourist" && !Occupation) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        path: ["job"],
+        path: ["Occupation"],
         message: "Job is required for tourists",
       });
     }
