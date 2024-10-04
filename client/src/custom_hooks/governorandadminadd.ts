@@ -32,5 +32,4 @@ function useAddAdminandGovernor(body: object | null, role: string) {
   }, [body, role]);
   return { data, loading, error };
 }
-
 export default useAddAdminandGovernor;
