@@ -1,8 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { date, z } from "zod";
 import useRegisterUser from "../../custom_hooks/signUp/useRegisterTourist";
+import ClipLoader from "react-spinners/ClipLoader";
+import Swal from "sweetalert2";
 
 // TODO: Use the Loading and error returning from the hook
 
@@ -19,6 +21,8 @@ const getAge = (dob: string): number => {
   }
   return age;
 };
+
+
 
 // Zod schema with conditional `job` requirement for tourist role
 const schema = z
@@ -97,6 +101,21 @@ const Register: React.FC = () => {
   const onSubmit = (data: any) => {
     setApiBody(data);
   };
+
+  useEffect(() => {
+    function handleError (){
+      if(error !== null && role === "tourist"){
+      Swal.fire({
+        title: "User was not created!",
+        text: error,
+        icon: "error",
+      })
+    }
+  } 
+  handleError();
+  }, [error]);
+
+
 
   return (
     <div
@@ -371,7 +390,11 @@ const Register: React.FC = () => {
                 type="submit"
                 className="bg-purple-500 text-white px-6 py-3 rounded-lg font-bold hover:bg-purple-600 transition duration-300"
               >
-                Register
+                {loading ? (
+        <ClipLoader size={20} color="#ffffff" /> // Show spinner while loading
+      ) : (
+        'Register'
+      )}
               </button>
             </div>
           </form>
