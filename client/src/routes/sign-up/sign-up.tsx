@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { date, z } from "zod";
-import useRegisterUser from "../../custom_hooks/signUp/useRegisterTourist";
+import useRegisterUser from "../../custom_hooks/useRegisterUser";
 
 // TODO: Use the Loading and error returning from the hook
 
