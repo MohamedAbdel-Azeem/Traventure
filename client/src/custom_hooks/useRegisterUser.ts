@@ -10,20 +10,35 @@ function useRegisterUser(body: object | null, role: string) {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  function handlenewUser (){
-    if(role === "tourist"){
+  useEffect(() => {
+    function handleNewUser() {
+      let title = "User created successfully!";
+      switch (role) {
+        case "tourist":
+          title = "New Tourist";
+          break;
+        case "tourguide":
+          title = "New Tour Guide";
+          break;
+        case "seller":
+          title = "New Seller";
+          break;
+        case "advertiser":
+          title = "New Advertiser";
+          break;
+        default:
+          title = "User created successfully!";
+      }
+
       Swal.fire({
-        title: "New Tourist",
+        title: title,
         text: "You can now login",
         icon: "success",
-  }).then(() => {
-    navigate("/");
-  });
-}
-  }
+      }).then(() => {
+        navigate("/");
+      });
+    }
 
-
-  useEffect(() => {
     const fetchData = async () => {
       if (role === null) return;
       if (body === null) return;
@@ -35,22 +50,22 @@ function useRegisterUser(body: object | null, role: string) {
         const response = await axios.post(url, body);
         if (response.status >= 200 && response.status < 300) {
           setData(response.data);
-          if(body !== null){
-          handlenewUser();
-          }
-        }
-        else if(response.status === 409){
-          throw new Error(); 
-          }
-         else {
+          handleNewUser();
+        } else if (response.status === 409) {
+          throw new Error();
+        } else {
           throw new Error("Server can't be reached!");
         }
       } catch (error: any) {
-
-          if (error.response && error.response.data && error.response.data.error) {
-          setError(error.response.data.error); 
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.error
+        ) {
+          setError(error.response.data.error);
         } else {
-          setError(error.message);}
+          setError(error.message);
+        }
       } finally {
         setLoading(false);
       }

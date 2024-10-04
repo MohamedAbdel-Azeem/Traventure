@@ -23,8 +23,6 @@ const getAge = (dob: string): number => {
   return age;
 };
 
-
-
 // Zod schema with conditional `job` requirement for tourist role
 const schema = z
   .object({
@@ -105,7 +103,7 @@ const Register: React.FC = () => {
 
   useEffect(() => {
     function handleError() {
-      if (error !== null && role === "tourist") {
+      if (error !== null) {
         Swal.fire({
           title: "User was not created!",
           text: error,
@@ -349,8 +347,14 @@ const Register: React.FC = () => {
             </div>
           </form>
           <div className="text-center ">
-              Already have an account? <a href="/" className="text-purple-700 hover:text-purple-600 underline">Sign In</a>
-            </div>
+            Already have an account?{" "}
+            <a
+              href="/"
+              className="text-purple-700 hover:text-purple-600 underline"
+            >
+              Sign In
+            </a>
+          </div>
         </div>
       </div>
     </div>
