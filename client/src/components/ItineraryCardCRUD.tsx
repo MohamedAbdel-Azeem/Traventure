@@ -44,7 +44,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
     image: initialImage, 
     onDelete, 
     className,
-    places: initialPlaces // Rename prop to avoid conflict
+    places: initialPlaces 
 }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [title, setTitle] = useState(initialTitle);
@@ -191,25 +191,26 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
                     </div>
                 </div>
                 <div className="mt-4 flex justify-between items-center">
-                    <button
+                    {/* <button
                         className="editBtn p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition"
                         onClick={handleEditClick}
                     >
                         <EditIcon />
-                    </button>
-                    <button
-                        className="deleteBtn p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition"
-                        onClick={handleDeleteClick}
-                    >
-                        <DeleteIcon />
-                    </button>
-                    <Link
+                    </button> */}
+                     <Link
                         to={`/itinerary/${id}`}
                         state={{ title, description, price, date, rating, image, places: initialPlaces }} // Pass initialPlaces here
                         className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center"
                     >
                         <VisibilityIcon />
                     </Link>
+                    <button
+                        className="deleteBtn p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition"
+                        onClick={handleDeleteClick}
+                    >
+                        <DeleteIcon />
+                    </button>
+                   
                 </div>
             </div>
         </div>
