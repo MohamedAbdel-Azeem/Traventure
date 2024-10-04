@@ -56,6 +56,7 @@ router.patch(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
+  
     try {
       const username = req.params.username;
       const updatedInfo = matchedData(req);

@@ -1,45 +1,53 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, set } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-
+import {ISeller} from './ISeller';
+import { useUpdateSeller } from '../../../custom_hooks/sellerGetUpdate';
 // Define Zod schema for validation
+
+interface SellerProfileProps {
+  seller: ISeller;
+}
 const sellerSchema = z.object({
   email: z.string().email('Invalid email address'),
   name: z.string().min(1, 'Name is required'),
   description: z.string().min(1, 'Description is required'),
+  username: z.string().min(1, 'Username is required')
 });
 
-type SellerProfileFormValues = z.infer<typeof sellerSchema>;
+export type SellerProfileFormValues = z.infer<typeof sellerSchema>;
 
-type SellerProfileType = {
-  username: String,
-  email: string,
-  password: String,
-  name: string,
-  description:string,
-  isAccepted: boolean
-}
-interface SellerProfileProps {
-  seller: SellerProfileType;
-}
+// type SellerProfileType = {
+//   username: String,
+//   email: string,
+//   password: String,
+//   name: string,
+//   description:string,
+//   isAccepted: boolean
+// }
+
 const SellerProfile: React.FC<SellerProfileProps>= ({seller}) => {
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
-
+  const [currentSeller,setCurrentSeller ] = useState(seller);
+  const[apiBody, setApiBody] = useState({});
+  const[apiUsername, setApiUsername] = useState('');
+  const response = useUpdateSeller(apiBody,apiUsername);
   // React Hook Form setup with Zod validation
   const {
     control,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<SellerProfileFormValues>({
+  } = useForm<ISeller>({
     resolver: zodResolver(sellerSchema),
     defaultValues: {
-      email: seller.email,
-      name: seller.name,
-      description: seller.description,
+      email: currentSeller.email,
+      name: currentSeller.name,
+      description: currentSeller.description,
+      username: currentSeller.username
     },
   });
 
@@ -49,9 +57,12 @@ const SellerProfile: React.FC<SellerProfileProps>= ({seller}) => {
   };
 
   // Save the form
-  const onSubmit = (data: SellerProfileFormValues) => {
+  const onSubmit = (data: ISeller) => {
     console.log('Saved data:', data);
     setIsEditing(false);
+    setApiBody(data);
+    setApiUsername(data.username);
+    setCurrentSeller(data);
     // UPDATE INFO TO DATABASE HERE
   };
 
@@ -94,7 +105,7 @@ const SellerProfile: React.FC<SellerProfileProps>= ({seller}) => {
                   )}
                 />
               ) : (
-                <p className="text-lg text-gray-600 overflow-auto w-[255px]">{seller.email}</p>
+                <p className="text-lg text-gray-600 overflow-auto w-[255px]">{currentSeller.email}</p>
               )}
               {errors.email && <p className="text-red-600">{errors.email.message}</p>}
             </div>
@@ -115,7 +126,7 @@ const SellerProfile: React.FC<SellerProfileProps>= ({seller}) => {
                   )}
                 />
               ) : (
-                <p className="text-gray-800 text-lg overflow-auto w-[404px]">{seller.name}</p>
+                <p className="text-gray-800 text-lg overflow-auto w-[404px]">{currentSeller.name}</p>
               )}
               {errors.name && <p className="text-red-600">{errors.name.message}</p>}
             </div>
@@ -134,7 +145,7 @@ const SellerProfile: React.FC<SellerProfileProps>= ({seller}) => {
                   )}
                 />
               ) : (
-                <p className="text-gray-800 text-lg overflow-auto w-[404px]">{seller.description}</p>
+                <p className="text-gray-800 text-lg overflow-auto w-[404px]">{currentSeller.description}</p>
               )}
               {errors.description && <p className="text-red-600">{errors.description.message}</p>}
             </div>
