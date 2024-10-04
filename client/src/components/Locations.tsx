@@ -6,25 +6,75 @@ import ImprovedSidebar from "./ImprovedSidebar";
 const Locations = () => {
 
     const [cards, setCards] = useState([
-        { id: 1, locationName: "Giza Pyramids", description: "The only wonder of the seven with actual substantial evidence that proves they exist.", price: "Free→$1000", hours: "9:00→5:00", location: "Giza, Egypt", image: "https://upload.wikimedia.org/wikipedia/commons/e/e3/Kheops-Pyramid.jpg" },
-        { id: 2, locationName: "Eiffel Tower", description: "An iconic symbol of France, located in Paris.", price: "$25→$100", hours: "9:00→11:00", location: "Paris, France", image: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg" },
-        { id: 3, locationName: "Great Wall of China", description: "A historic wall stretching across northern China.", price: "$10→$50", hours: "8:00→6:00", location: "China", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/The_Great_Wall_of_China_at_Jinshanling-edit.jpg/1200px-The_Great_Wall_of_China_at_Jinshanling-edit.jpg" },
-        { id: 4, locationName: "Statue of Liberty", description: "A symbol of freedom and democracy in the United States.", price: "$20→$50", hours: "8:30→4:00", location: "New York, USA", image: "https://upload.wikimedia.org/wikipedia/commons/a/a1/Statue_of_Liberty_7.jpg" },
-        { id: 5, locationName: "Taj Mahal", description: "A magnificent mausoleum built by Mughal Emperor Shah Jahan.", price: "$15→$60", hours: "6:00→7:00", location: "Agra, India", image: "https://upload.wikimedia.org/wikipedia/commons/d/da/Taj-Mahal.jpg" },
+        { id: "1", name: "Giza Pyramids",
+            description: "The only wonder of the seven with actual substantial evidence that proves they exist.",
+            ticket_price: {
+                native: 10,
+                foreign: 100,
+                student: 5,
+            }, opening_hrs: "9:00→5:00", location: {
+            latitude:30.0,longitude:31.2
+            },
+            pictures: ["https://upload.wikimedia.org/wikipedia/commons/e/e3/Kheops-Pyramid.jpg"] },
+        { id: "2", name: "Eiffel Tower",
+            description: "An iconic symbol of France, located in Paris.",
+            ticket_price: {
+                native: 10,
+                foreign: 100,
+                student: 5,
+            }, opening_hrs: "9:00→11:00", location: {
+                latitude:30.0,longitude:31.2
+            },
+            pictures: ["https://upload.wikimedia.org/wikipedia/commons/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg"] },
+        { id: "3", name: "Great Wall of China",
+            description: "A historic wall stretching across northern China.",
+            ticket_price: {
+                native: 10,
+                foreign: 100,
+                student: 5,
+            }, opening_hrs: "8:00→6:00", location: {
+                latitude:30.0,longitude:31.2
+            },
+            pictures: ["https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/The_Great_Wall_of_China_at_Jinshanling-edit.jpg/1200px-The_Great_Wall_of_China_at_Jinshanling-edit.jpg"] },
+        { id: "4", name: "Statue of Liberty",
+            description: "A symbol of freedom and democracy in the United States.",
+            ticket_price: {
+                        native: 10,
+                        foreign: 100,
+                        student: 5,
+                    }
+            , opening_hrs: "8:30→4:00", location: {
+                latitude:30.0,longitude:31.2
+            },
+            pictures: ["https://upload.wikimedia.org/wikipedia/commons/a/a1/Statue_of_Liberty_7.jpg"] },
+        { id: "5", name: "Taj Mahal", description: "A magnificent mausoleum built by Mughal Emperor Shah Jahan.",
+            ticket_price: {
+                native: 10,
+                foreign: 100,
+                student: 5,
+            }, opening_hrs: "6:00→7:00", location: {
+                latitude:30.0,longitude:31.2
+            },
+            pictures: ["https://upload.wikimedia.org/wikipedia/commons/d/da/Taj-Mahal.jpg"] },
     ]);
-
     const handleDelete = (id: number) => {
         setCards(cards.filter(card => card.id !== id));
     };
     const handleCreate = () => {
         const newCard = {
             id: cards.length + 1,
-            locationName: "New Place",
+            name: "New Place",
             description: "Description of the new place.",
-            price: "Free",
-            hours: "9:00→5:00",
-            location: "Unknown",
-            image: "https://via.placeholder.com/422x121",
+            ticket_price: {
+                native: 10,
+                foreign: 100,
+                student: 5,
+            },
+            opening_hrs: "9:00→5:00",
+            location: {
+                latitude:30.0,longitude:31.2
+            },
+            pictures: ["https://via.placeholder.com/422x121"],
         };
         setCards([...cards, newCard]);
     };
@@ -41,12 +91,12 @@ const Locations = () => {
                 <LocationCardCRUD
                 key={card.id}
                 id={card.id}
-                locationName={card.locationName}
+                name={card.name}
                 description={card.description}
-                price={card.price}
-                hours={card.hours}
+                ticket_price={card.ticket_price}
+                opening_hrs={card.opening_hrs}
                 location={card.location}
-                image={card.image}
+                pictures={card.pictures}
                 onDelete={handleDelete}
                 className="hover:bg-[#f0f0f0] transition duration-300"
             />

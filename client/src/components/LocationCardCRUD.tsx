@@ -1,21 +1,30 @@
 import React, { useState } from "react";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
-import { Input, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 
 interface LocationCardCRUDProps {
-    id: number;
-    locationName: string;
-    description: string;
-    price: string;
-    hours: string;
-    location: string;
-    image: string;
-    onDelete: (id: number) => void;
+    id: string,
+    name: string,
+    description: string,
+    pictures: [string],
+    location: {
+        latitude: number,
+        longitude: number,
+    },
+    opening_hrs: string,
+    ticket_price: {
+        native: number,
+        foreign: number,
+        student: number,
+    },
+    onDelete: (id: string) => void;
     className?: string;
 }
 
-const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({ id, locationName: initialLocationName, description: initialDescription, price: initialPrice, hours: initialHours, location: initialLocation, image: initialImage, onDelete, className }) => {
+const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
+    { id, name: initialLocationName, description: initialDescription, ticket_price: initialPrice, opening_hrs: initialHours, location: initialLocation,
+        pictures: initialImage, onDelete, className }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [locationName, setLocationName] = useState(initialLocationName);
     const [description, setDescription] = useState(initialDescription);
@@ -23,7 +32,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({ id, locationName: i
     const [hours, setHours] = useState(initialHours);
     const [location, setLocation] = useState(initialLocation);
     const [fileName, setFileName] = useState("");
-    const [image, setImage] = useState(initialImage);
+    const [images, setImages] = useState(initialImage);
 
     const handleEditClick = () => {
         setIsEditing(!isEditing);
@@ -32,13 +41,13 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({ id, locationName: i
     const handleDeleteClick = () => {
         onDelete(id);
     };
-
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const reader = new FileReader();
             reader.onload = (event) => {
                 if (event.target && event.target.result) {
-                    setImage(event.target.result as string);
+                    const newimage=event.target.result as string
+                    setImages([newimage]);
                 }
             };
             reader.readAsDataURL(e.target.files[0]);
@@ -61,7 +70,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({ id, locationName: i
                         <span className="z-10 text-center">{fileName || "Choose File"}</span>
                     </div>
                 ) : (
-                    <img src={image} alt={locationName} className="w-full h-full object-cover rounded-t-[11px]" />
+                    <img src={images} alt={locationName} className="w-full h-full object-cover rounded-t-[11px]" />
                 )}
             </div>
             <div className="w-[422px] h-[37px]">
@@ -112,17 +121,25 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({ id, locationName: i
             <div className="w-[422px] h-[92px] flex">
                 <div className="w-[140px] h-[92px] bg-[#2D7D10] rounded-bl-[11px]">
                 {isEditing ? (
-                            <TextField
-                                value={location}
-                                size="small"
-                                onChange={(e) => setLocation(e.target.value)}
-                                className="w-[124px]"
-                                placeholder="Location"
-                                variant="outlined"
-                            />
+                    <TextField
+                        value={location}
+                        size="small"
+                        onChange={(e) => setLocation(e.target.value)}
+                        className="w-[124px]"
+                        placeholder="Location"
+                        variant="outlined"
+                    /><TextField
+                    value={location}
+                    size="small"
+                    onChange={(e) => setLocation(e.target.value)}
+                    className="w-[124px]"
+                    placeholder="Location"
+                    variant="outlined"
+                />
                         ) : ( 
                         <p className="text-[16px] h-[84px] overflow-auto">
-                            {location}
+                            {location.latitude}
+                            {location.longitude}
                         </p>
                         )}
                 </div>
