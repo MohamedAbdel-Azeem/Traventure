@@ -19,10 +19,25 @@ import TourGuideProfile from './routes/_app/tourguide_profile/tourguide_profile'
 import AdvertiserProfile from './routes/_app/advertiser_profile/advertiser_profile';
 import ShopPage from "./components/ShopPage";
 import { Activities } from "./routes/_app/advertiseractivity/Activities";
+import CT from "./components/Activity/CT";
+import { useState } from "react";
 
 
 
 function App() {
+
+
+  const [userData, setUserData] = useState({
+    username: 'MinaAhmed21',
+    email: 'mina@gmail.com',
+    mobileNumber: '+201186948329',
+    nationality: 'American',
+    dob: '1990-05-15',
+    occupation: 'Photographer',
+    profilePicture: 'src/assets/t2.jpg',
+    wallet: 456,
+    password: '123456'
+  });
   return (
     <MantineProvider>
       <Router>
@@ -41,11 +56,11 @@ function App() {
         <Route path="/itineraries" element={<Accounts />} />
         <Route path="/" element={<SignIn />} />
         <Route path="/register" element={<Register />} />
-        {/* <Route path="/touristprofile" element={<TouristProfile />} /> */}
+        <Route path="/touristprofile" element={<TouristProfile tourist={userData}/>} />
         <Route path="/sellerprofile" element={<SellerProfile />} />
         <Route path="/tourguideprofile" element={<TourGuideProfile />} />
         <Route path="/advertiserprofile" element={<AdvertiserProfile />} />
-        <Route path="/Categories" element={<CategoryTable />} />
+        <Route path="/CategoriesandTags" element={<CT />} />
          
         </Routes>
       </Router>

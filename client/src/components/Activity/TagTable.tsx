@@ -3,7 +3,7 @@ import { Table, TableBody, TableContainer, TableHead, TableRow, TableCell, Table
 import AddIcon from '@mui/icons-material/Add';
 import { styled } from '@mui/material/styles';
 import LuggageIcon from '@mui/icons-material/Luggage';
-import { useGetAllCategories, deleteCategories, useAddCategory, useUpdateCategory } from "../../custom_hooks/categoryandTagCRUD"
+import { useGetAllTags, deleteTags, useAddTag, useUpdateTag } from "../../custom_hooks/categoryandTagCRUD"
 
 
 
@@ -110,8 +110,8 @@ function Row(props: { row: string, onDelete: (name: string) => void, updateSingl
   );
 }
 
-export default function CategoryTable() {
-  const { data, loading, error } = useGetAllCategories();
+export default function TagTable() {
+  const { data, loading, error } = useGetAllTags();
   const [open, setOpen] = useState(false);
   const [newName, setNewName] = useState('');
   const [rows, setRows] = useState(data);
@@ -150,8 +150,8 @@ export default function CategoryTable() {
     };
 
   const handleDelete = (name: string) => {
-    if (window.confirm(`Are you sure you want to delete this category ${name}?`)) {
-      deleteCategories(name);
+    if (window.confirm(`Are you sure you want to delete this tag ${name}?`)) {
+      deleteTags(name);
       setRows(rows.filter(row => row !== name));
     }
   };
@@ -206,17 +206,17 @@ export default function CategoryTable() {
   const [uapiBody, setUapiBody] = useState({});
   const [ouapiBody, setoUapiBody] = useState('');
 
-  const { adata, aloading, aerror } = useAddCategory(apiBody);
-  const { udata, uloading, uerror } = useUpdateCategory(ouapiBody,uapiBody);
+  const { adata, aloading, aerror } = useAddTag(apiBody);
+  const { udata, uloading, uerror } = useUpdateTag(ouapiBody,uapiBody);
 
   return (
-    <div className="w-full flex items-center justify-center my-8">
+    <div className="w-full flex items-center justify-center">
       <Paper className="w-[1100px]">
       <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>{"Add New Category"}</DialogTitle>
+          <DialogTitle>{"Add New Tag"}</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Please enter the name of the new category.
+              Please enter the name of the new tag.
             </DialogContentText>
             <TextField
               autoFocus
@@ -240,7 +240,7 @@ export default function CategoryTable() {
                 <div className="flex flex-row relative">
              
                 <LuggageIcon sx={{ fontSize: 40 }} className='ml-auto'/>
-                <p className="text-[22px] leading-[45px] mr-auto ">Categories</p>
+                <p className="text-[22px] leading-[45px] mr-auto ">Tags</p>
                   <Button
                   onClick={handleClickOpen}
                   sx={{
@@ -254,7 +254,7 @@ export default function CategoryTable() {
                   size="small"
                   startIcon={<AddIcon/>}
                   >
-                    {"Add Category"}
+                    Add Tag
                   </Button>
                 </div>
               </TableCell> 
