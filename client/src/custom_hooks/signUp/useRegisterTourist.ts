@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { set } from "react-hook-form";
+// import { set } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 function useRegisterUser(body: object | null, role: string) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   function handlenewUser (){
     if(role === "tourist"){
@@ -14,10 +16,11 @@ function useRegisterUser(body: object | null, role: string) {
         title: "New Tourist",
         text: "You can now login",
         icon: "success",
-  })
-  }
+  }).then(() => {
+    navigate("/");
+  });
 }
-
+  }
 
 
   useEffect(() => {
