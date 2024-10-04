@@ -331,55 +331,6 @@ const Register: React.FC = () => {
                     <p className="text-red-500">{errors.password.message}</p>
                   )}
                 </div>
-
-                {/* Mobile Number */}
-                <div>
-                  <label className="block text-gray-700 font-semibold text-lg mb-2">
-                    Mobile Number
-                  </label>
-                  <input
-                    type="tel"
-                    {...register("mobileNumber")}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition duration-200"
-                    placeholder="Enter your mobile number"
-                  />
-                  {errors.mobileNumber && (
-                    <p className="text-red-500">
-                      {errors.mobileNumber.message}
-                    </p>
-                  )}
-                </div>
-
-                {/* Nationality */}
-                <div>
-                  <label className="block text-gray-700 font-semibold text-lg mb-2">
-                    Nationality
-                  </label>
-                  <input
-                    type="text"
-                    {...register("nationality")}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition duration-200"
-                    placeholder="Enter your nationality"
-                  />
-                  {errors.nationality && (
-                    <p className="text-red-500">{errors.nationality.message}</p>
-                  )}
-                </div>
-
-                {/* Date of Birth */}
-                <div>
-                  <label className="block text-gray-700 font-semibold text-lg mb-2">
-                    Date of Birth
-                  </label>
-                  <input
-                    type="date"
-                    {...register("dateOfBirth")}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition duration-200"
-                  />
-                  {errors.dateOfBirth && (
-                    <p className="text-red-500">{errors.dateOfBirth.message}</p>
-                  )}
-                </div>
               </>
             )}
 
@@ -397,6 +348,9 @@ const Register: React.FC = () => {
               </button>
             </div>
           </form>
+          <div className="text-center ">
+              Already have an account? <a href="/" className="text-purple-700 hover:text-purple-600 underline">Sign In</a>
+            </div>
         </div>
       </div>
     </div>
