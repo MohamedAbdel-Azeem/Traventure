@@ -26,7 +26,6 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
 
   // Define the Zod schema for form validation
   const schema = z.object({
-    username: z.string().min(1, 'Username is required'),
     email: z.string().email('Invalid email address'),
     mobileNumber: z.string().min(1, 'Mobile number is required'),
     nationality: z.string().min(1, 'Nationality is required'),
@@ -91,21 +90,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
               className="w-32 h-32 rounded-full object-cover shadow-md border-4 border-purple-500"
             />
             <div className="text-left">
-              {isEditing ? (
-                <Controller
-                  name="username"
-                  control={control}
-                  render={({ field }) => (
-                    <input
-                      {...field}
-                      className="mt-1 text-lg text-gray-600 p-3 border border-gray-300 rounded-md w-full"
-                    />
-                  )}
-                />
-              ) : (
-                <h2 className="text-4xl font-extrabold text-purple-700">{tourist.username}</h2>
-              )}
-              {errors.username && <p className="text-red-600">{errors.username.message}</p>}
+                <h2 className="text-4xl font-extrabold text-purple-700">{tourist.username}</h2>        
             </div>
           </div>
 
