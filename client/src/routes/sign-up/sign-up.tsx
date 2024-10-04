@@ -2,11 +2,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { date, z } from "zod";
-
+import { Controller } from "react-hook-form";
 import useRegisterUser from "../../custom_hooks/useRegisterUser";
 import ClipLoader from "react-spinners/ClipLoader";
 import Swal from "sweetalert2";
-
+import { PhoneInput } from "../../components/PhoneInput/phone-input";
+import { E164Number } from "libphonenumber-js";
+import countryList from 'react-select-country-list';
 // TODO: Use the Loading and error returning from the hook
 
 const getAge = (dob: string): number => {
@@ -76,6 +78,7 @@ const Register: React.FC = () => {
     register,
     handleSubmit,
     watch,
+    control,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
@@ -85,7 +88,7 @@ const Register: React.FC = () => {
       password: "",
       mobileNumber: "",
       dateOfBirth: new Date().toISOString().split("T")[0],
-      nationality: "Egyptian",
+      nationality: "Egypt",
       Occupation: "",
       role: "tourist",
     },
@@ -96,7 +99,7 @@ const Register: React.FC = () => {
   const [apiBody, setApiBody] = useState(null);
 
   const { data, loading, error } = useRegisterUser(apiBody, role);
-
+  const countries = countryList().getData();
   const onSubmit = (data: any) => {
     setApiBody(data);
   };
@@ -149,7 +152,7 @@ const Register: React.FC = () => {
               <select
                 title="Role"
                 {...register("role")}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition duration-200"
+                className="custom-select w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition duration-200  "
               >
                 <option value="tourist">Tourist</option>
                 <option value="tourguide">Tour Guide</option>
@@ -172,7 +175,7 @@ const Register: React.FC = () => {
                   <input
                     type="email"
                     {...register("email")}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition duration-200"
+                    className="w-full custom-select px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition duration-200"
                     placeholder="Enter your email"
                   />
                   {errors.email && (
@@ -217,12 +220,27 @@ const Register: React.FC = () => {
                   <label className="block text-gray-700 font-semibold text-lg mb-2">
                     Mobile Number
                   </label>
-                  <input
-                    type="tel"
-                    {...register("mobileNumber")}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition duration-200"
-                    placeholder="Enter your mobile number"
-                  />
+                   <Controller
+                      name="mobileNumber"
+                      
+                      control={control}
+                      render={({ field }) => (
+                        <PhoneInput
+                        
+                          defaultCountry="EG"
+                          placeholder="Enter a phone number"
+                          international={true}
+                          value={field.value as unknown as E164Number}
+                          onChange={(value) => {
+                            if (value !== "") {
+                              field.onChange(value);
+                            } else {
+                              field.onChange(undefined);
+                            }
+                          }}
+                        />
+                      )}
+                    />
                   {errors.mobileNumber && (
                     <p className="text-red-500">
                       {errors.mobileNumber.message}
@@ -235,12 +253,24 @@ const Register: React.FC = () => {
                   <label className="block text-gray-700 font-semibold text-lg mb-2">
                     Nationality
                   </label>
-                  <input
-                    type="text"
-                    {...register("nationality")}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition duration-200"
-                    placeholder="Enter your nationality"
-                  />
+                   <Controller
+          name="nationality"
+          control={control}
+          render={({ field }) => (
+            <select
+              {...field}
+              value={field.value || ""}
+              className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition duration-200'
+            >
+              <option value="" disabled>Select a country</option>
+              {countries.map((country) => (
+              <option key={country.value} value={country.label}>
+                {country.label}
+              </option>
+              ))}
+            </select>
+          )}
+        />
                   {errors.nationality && (
                     <p className="text-red-500">{errors.nationality.message}</p>
                   )}
