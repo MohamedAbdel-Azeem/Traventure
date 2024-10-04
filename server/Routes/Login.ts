@@ -3,7 +3,7 @@ import { loginUser } from "../Model/Queries/user_queries";
 
 const router = Router();
 
-router.get("/", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const user = await loginUser(req.body.username, req.body.password);
     if (!user) res.status(404).send("user not found");

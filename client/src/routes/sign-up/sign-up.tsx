@@ -1,8 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { date, z } from "zod";
-import useRegisterUser from "../../custom_hooks/signUp/useRegisterTourist";
+
+import useRegisterUser from "../../custom_hooks/useRegisterUser";
+import ClipLoader from "react-spinners/ClipLoader";
+import Swal from "sweetalert2";
 
 // TODO: Use the Loading and error returning from the hook
 
@@ -97,6 +100,19 @@ const Register: React.FC = () => {
   const onSubmit = (data: any) => {
     setApiBody(data);
   };
+
+  useEffect(() => {
+    function handleError() {
+      if (error !== null) {
+        Swal.fire({
+          title: "User was not created!",
+          text: error,
+          icon: "error",
+        });
+      }
+    }
+    handleError();
+  }, [error]);
 
   return (
     <div
@@ -313,55 +329,6 @@ const Register: React.FC = () => {
                     <p className="text-red-500">{errors.password.message}</p>
                   )}
                 </div>
-
-                {/* Mobile Number */}
-                <div>
-                  <label className="block text-gray-700 font-semibold text-lg mb-2">
-                    Mobile Number
-                  </label>
-                  <input
-                    type="tel"
-                    {...register("mobileNumber")}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition duration-200"
-                    placeholder="Enter your mobile number"
-                  />
-                  {errors.mobileNumber && (
-                    <p className="text-red-500">
-                      {errors.mobileNumber.message}
-                    </p>
-                  )}
-                </div>
-
-                {/* Nationality */}
-                <div>
-                  <label className="block text-gray-700 font-semibold text-lg mb-2">
-                    Nationality
-                  </label>
-                  <input
-                    type="text"
-                    {...register("nationality")}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition duration-200"
-                    placeholder="Enter your nationality"
-                  />
-                  {errors.nationality && (
-                    <p className="text-red-500">{errors.nationality.message}</p>
-                  )}
-                </div>
-
-                {/* Date of Birth */}
-                <div>
-                  <label className="block text-gray-700 font-semibold text-lg mb-2">
-                    Date of Birth
-                  </label>
-                  <input
-                    type="date"
-                    {...register("dateOfBirth")}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition duration-200"
-                  />
-                  {errors.dateOfBirth && (
-                    <p className="text-red-500">{errors.dateOfBirth.message}</p>
-                  )}
-                </div>
               </>
             )}
 
@@ -371,10 +338,23 @@ const Register: React.FC = () => {
                 type="submit"
                 className="bg-purple-500 text-white px-6 py-3 rounded-lg font-bold hover:bg-purple-600 transition duration-300"
               >
-                Register
+                {loading ? (
+                  <ClipLoader size={20} color="#ffffff" /> // Show spinner while loading
+                ) : (
+                  "Register"
+                )}
               </button>
             </div>
           </form>
+          <div className="text-center ">
+            Already have an account?{" "}
+            <a
+              href="/"
+              className="text-purple-700 hover:text-purple-600 underline"
+            >
+              Sign In
+            </a>
+          </div>
         </div>
       </div>
     </div>
