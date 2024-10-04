@@ -25,6 +25,7 @@ const TGsidebaritems =
   { text: 'Home', icon: <HomeIcon />, path: '/tourguide' },
   { text: 'Shop', icon: <ShopIcon />, path: '/shop' },
   { text: 'Locations', icon: <LocationOnIcon />, path: '/locations' },
+  { text: 'Activity Management', icon: <ActivityIcon />, path: '/advertiser/activities' },
 ];
 const TGosidebaritems =
 [

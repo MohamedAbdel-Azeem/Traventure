@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import LocationCardCRUD from "./LocationCardCRUD";
 import ImprovedSidebar from "./ImprovedSidebar";
-
+import ItineraryCardCRUD from "./ItineraryCardCRUD";
 
 const Locations = () => {
 
