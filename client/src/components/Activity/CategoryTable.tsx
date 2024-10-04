@@ -1,17 +1,11 @@
 import React, { useState } from 'react';
 import { Table, TableBody, TableContainer, TableHead, TableRow, TableCell, TableSortLabel, TablePagination, Paper, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { styled } from '@mui/material/styles';
-import PublicIcon from '@mui/icons-material/Public';
 import LuggageIcon from '@mui/icons-material/Luggage';
-function createData(
-    name: string
-) {
-  return {
-   name
-  };
-}
+import { useGetAllCategories, deleteCategories, useAddCategory, useUpdateCategory} from "../../custom_hooks/categoryCRUD"
+
+
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
@@ -22,26 +16,24 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function Row(props: { row: ReturnType<typeof createData>, onDelete: (name: string) => void, onUpdate: (updatedRow: ReturnType<typeof createData>) => void, updateSingleRow: (name: string, newName: string) => void }) {
+function Row(props: { row: string, onDelete: (name: string) => void, updateSingleRow: (name: string, newName: string) => void }) {
   const { row, onDelete } = props;
     const [isEditable, setIsEditable] = useState(false);
-    const [newName, setNewName] = useState(row.name);
+    const [newName, setNewName] = useState(row);
 
 
 
-    function handleSave(oldname, newName){ 
+    function handleSave(oldname: string, newName: string){ 
         props.updateSingleRow(oldname, newName);
         setIsEditable(false);
     }
-
-
 
   return (
     <React.Fragment>
       <StyledTableRow sx={{ '& > *': { borderBottom: 'unset' } }} >
         <TableCell className="max-w-[2px] break-words" component="th" scope="row">
           {!isEditable?
-          row.name:<TextField
+          row:<TextField
               variant="outlined"
                 size="small"
                 value={newName}
@@ -54,7 +46,7 @@ function Row(props: { row: ReturnType<typeof createData>, onDelete: (name: strin
             <div className="flex items-center justify-center">
                 {!isEditable?
                 (
-                    <button className="editBtn"
+                    <button title="edit" className="editBtn"
                     onClick={() => setIsEditable(true)}>
               <svg height="1em" viewBox="0 0 512 512">
                 <path
@@ -65,14 +57,14 @@ function Row(props: { row: ReturnType<typeof createData>, onDelete: (name: strin
 
                 ):(
                      <Button 
-                     onClick={() => handleSave(row.name, newName)}
+                     onClick={() => handleSave(row, newName)}
                      >Save</Button>
                 )
 
                 }
     
         <button className="bin-button mx-auto" title="Delete"
-            onClick={() => onDelete(row.name)}>
+            onClick={() => onDelete(row)}>
               <svg
                 className="bin-top"
                 viewBox="0 0 39 7"
@@ -117,39 +109,50 @@ function Row(props: { row: ReturnType<typeof createData>, onDelete: (name: strin
     </React.Fragment>
   );
 }
-const initialRows = [
-  createData('Food' ),
-  createData('SPorts'),
 
-];
 export default function CategoryTable() {
+  const { data, loading, error } = useGetAllCategories();
   const [open, setOpen] = useState(false);
   const [newName, setNewName] = useState('');
-  const [rows, setRows] = useState(initialRows);
+  const [rows, setRows] = useState(data);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchQuery, setSearchQuery] = useState('');
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
-  const [orderBy, setOrderBy] = useState<keyof ReturnType<typeof createData>>('name');
+  const [orderBy, setOrderBy] = useState('name');
+
+  React.useEffect(() => {
+    if (data) {
+      setRows(data);
+    }
+  }, [data]);
+
 
     function updatesingleRow(oldrowname:string, newrowname:string){
-    const newRows = rows.map((row) => {
-      if (row.name === oldrowname) {
-        return { name: newrowname };
+    const newRows = rows.map(row => {
+      if (row === oldrowname) {
+        return  newrowname ;
       }
       return row;
     });
     setRows(newRows);
+    setoUapiBody(oldrowname);
+    const body = {name:newrowname};
+    setUapiBody(body);
     }
 
-
-
-
-
+    const handleAdd = () => {
+      setRows([...rows, newName]);
+      setNewName('');
+      handleClose();
+      const body = {name:newName};
+      setApiBody(body);
+    };
 
   const handleDelete = (name: string) => {
     if (window.confirm(`Are you sure you want to delete this category ${name}?`)) {
-      setRows(rows.filter(row => row.name !== name));
+      deleteCategories(name);
+      setRows(rows.filter(row => row !== name));
     }
   };
 
@@ -168,19 +171,20 @@ export default function CategoryTable() {
   };
 
   const filteredRows = rows.filter(row => 
-    row.name.toLowerCase().includes(searchQuery.toLowerCase())
-
+    row.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  const handleRequestSort = (property: keyof ReturnType<typeof createData>) => {
+  
+  const handleRequestSort = (property: string) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
+
   const sortedRows = filteredRows.sort((a, b) => {
-    if (a[orderBy] < b[orderBy]) {
+    if (a < b) {
       return order === 'asc' ? -1 : 1;
     }
-    if (a[orderBy] > b[orderBy]) {
+    if (a > b) {
       return order === 'asc' ? 1 : -1;
     }
     return 0;
@@ -194,27 +198,30 @@ export default function CategoryTable() {
   const handleClickOpen = () => {
     setOpen(true);
   };
-  const handleAdd = () => {
-    setRows([...rows, { name: newName}]);
-    setNewName('');
-    handleClose();
-  };
+
 
   const paginatedRows = sortedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
+  const [apiBody, setApiBody] = useState({});
+  const [uapiBody, setUapiBody] = useState({});
+  const [ouapiBody, setoUapiBody] = useState('');
+
+  const { adata, aloading, aerror } = useAddCategory(apiBody);
+  const { udata, uloading, uerror } = useUpdateCategory(ouapiBody,uapiBody);
 
   return (
     <div className="w-full flex items-center justify-center">
       <Paper className="w-[1100px]">
       <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>{"Add New "+name}</DialogTitle>
+          <DialogTitle>{"Add New Category"}</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Please enter the username and password for the new admin.
+              Please enter the name of the new category.
             </DialogContentText>
             <TextField
               autoFocus
               margin="dense"
-              label="Username"
+              label="Name"
               type="text"
               fullWidth
               value={newName}
@@ -277,7 +284,7 @@ export default function CategoryTable() {
             </TableHead>
             <TableBody>
               {paginatedRows.map((row) => (
-                <Row key={row.name} row={row} onDelete={handleDelete} updateSingleRow={updatesingleRow} />
+                <Row key={row} row={row} onDelete={handleDelete} updateSingleRow={updatesingleRow} />
               ))}
             </TableBody>
           </Table>
@@ -294,3 +301,4 @@ export default function CategoryTable() {
     </div>
   );
 }
+

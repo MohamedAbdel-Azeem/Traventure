@@ -102,9 +102,6 @@ const Admin_TourismGovernorTable: React.FC<Admin_TourismGovernorTableProps> = ({
   const [rows, setRows] = useState(
     name.includes("Admin")?dataA:dataG
   );
-  console.log("----------------");
-  console.log(dataG);
-  console.log("----------------");
 
 
   React.useEffect(() => {
