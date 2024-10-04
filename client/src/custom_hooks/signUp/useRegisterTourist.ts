@@ -10,16 +10,32 @@ function useRegisterUser(body: object | null, role: string) {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  function handlenewUser (){
-    if(role === "tourist"){
-      Swal.fire({
-        title: "New Tourist",
-        text: "You can now login",
-        icon: "success",
-  }).then(() => {
-    navigate("/");
-  });
-}
+  function handlenewUser() {
+    let title = "User created successfully!";
+    switch (role) {
+      case "tourist":
+        title = "New Tourist";
+        break;
+      case "tourguide":
+        title = "New Tour Guide";
+        break;
+      case "seller":
+        title = "New Seller";
+        break;
+      case "advertiser":
+        title = "New Advertiser";
+        break;
+      default:
+        title = "User created successfully!";
+    }
+
+    Swal.fire({
+      title: title,
+      text: "You can now login",
+      icon: "success",
+    }).then(() => {
+      navigate("/"); 
+    });
   }
 
 

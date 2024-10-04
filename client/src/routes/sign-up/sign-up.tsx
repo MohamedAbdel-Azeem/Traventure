@@ -104,7 +104,7 @@ const Register: React.FC = () => {
 
   useEffect(() => {
     function handleError (){
-      if(error !== null && role === "tourist"){
+      if(error !== null){
       Swal.fire({
         title: "User was not created!",
         text: error,
