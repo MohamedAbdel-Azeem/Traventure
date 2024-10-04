@@ -77,7 +77,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
     };
 
     return (
-        <div className={`w-[420px] h-auto bg-white shadow-md rounded-lg overflow-hidden m-4 transition transform hover:scale-105 ${className}`}>
+        <div className={`m-4 transition transform hover:scale-105 w-96 ${className}`}> {/* Adjusted width here */}
             <div className="relative w-full h-[200px]">
                 {isEditing ? (
                     <div className="flex items-center justify-center w-full h-full bg-gray-200">
@@ -191,13 +191,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
                     </div>
                 </div>
                 <div className="mt-4 flex justify-between items-center">
-                    {/* <button
-                        className="editBtn p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition"
-                        onClick={handleEditClick}
-                    >
-                        <EditIcon />
-                    </button> */}
-                     <Link
+                    <Link
                         to={`/itinerary/${id}`}
                         state={{ title, description, price, date, rating, image, places: initialPlaces }} // Pass initialPlaces here
                         className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center"
@@ -210,7 +204,6 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
                     >
                         <DeleteIcon />
                     </button>
-                   
                 </div>
             </div>
         </div>
