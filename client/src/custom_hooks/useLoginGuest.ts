@@ -16,12 +16,13 @@ function useLoginGuest(body: object | null) {
         const response = await axios.post(url, body);
         if (response.status >= 200 && response.status < 300) {
           setData(response.data);
-          console.log(response.data);
+        } else if (response.status >= 400 && response.status < 500) {
+          throw new Error("Username or Password is incorrect");
         } else {
           throw new Error("Server can't be reached!");
         }
       } catch (error: any) {
-        setError(error.message);
+        setError(error.response.data);
       } finally {
         setLoading(false);
       }

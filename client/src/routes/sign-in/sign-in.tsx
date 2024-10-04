@@ -5,6 +5,7 @@ import image3 from "../../assets/splash/s3.jpg";
 import image4 from "../../assets/splash/s4.jpg";
 import image5 from "../../assets/splash/s5.jpg";
 import useLoginGuest from "../../custom_hooks/useLoginGuest";
+import { useNavigate } from "react-router-dom";
 
 const SignIn: React.FC = () => {
   const [username, setUsername] = useState<string>("");
@@ -13,10 +14,16 @@ const SignIn: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
   const [fadeIn, setFadeIn] = useState<boolean>(true);
   const [apiBody, setBody] = useState<object | null>(null);
+  const navigate = useNavigate();
 
   const images = [image1, image2, image3, image4, image5];
 
-  useLoginGuest(apiBody);
+  const { data, loading, error: apiError } = useLoginGuest(apiBody);
+
+  useEffect(() => {
+    if (data === null) return;
+    navigate(`/${data.type}/${data.user._id}`);
+  }, [data]);
 
   useEffect(() => {
     const interval = setInterval(() => {
