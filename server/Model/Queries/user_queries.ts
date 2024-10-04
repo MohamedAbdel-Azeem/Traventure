@@ -75,8 +75,9 @@ export async function getAllUsers(username: string | undefined) {
     const sellers = await sellerModel.find();
     const tourGuides = await tourGuideModel.find();
     const tourists = await touristModel.find();
+    const governors = await governerModel.find();
     const admins = await adminModel.find({ username: { $ne: username } });
-    return { advertisers, sellers, tourGuides, tourists, admins };
+    return { advertisers, sellers, tourGuides, tourists, admins, governors };
   } catch (err) {
     throw err;
   }
