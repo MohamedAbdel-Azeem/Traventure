@@ -13,7 +13,7 @@ import {
   IconButton,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { SelectChangeEvent } from '@mui/material/Select'; // Import SelectChangeEvent
+import { SelectChangeEvent } from '@mui/material/Select'; 
 
 interface Activity {
   id: string;
@@ -65,7 +65,7 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
     image: '',
   });
 
-  // Explicitly define the type for places state
+
   const [places, setPlaces] = React.useState<SelectedPlace[]>([{ place: '', activities: [] }]);
 
   const handleChange = (index: number, e: SelectChangeEvent<string>) => {

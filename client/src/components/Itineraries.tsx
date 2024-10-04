@@ -13,6 +13,22 @@ const Itineraries = () => {
       date: "9:00→5:00",
       rating: "4.5",
       image: "https://upload.wikimedia.org/wikipedia/commons/e/e3/Kheops-Pyramid.jpg",
+      places: [
+        {
+          name: "Pyramids of Giza",
+          activities: [
+            { name: "Guided Tour", duration: "2 hours" },
+            { name: "Camel Ride", duration: "1 hour" }
+          ]
+        },
+        {
+          name: "Luxor Temple",
+          activities: [
+            { name: "Historical Tour", duration: "1.5 hours" },
+            { name: "Photography", duration: "30 minutes" }
+          ]
+        }
+      ]
     },
     {
       id: 2,
@@ -22,6 +38,15 @@ const Itineraries = () => {
       date: "9:00→11:00",
       rating: "4.2",
       image: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg",
+      places: [
+        {
+          name: "Splash Waterpark",
+          activities: [
+            { name: "Wave Pool Fun", duration: "1 hour" },
+            { name: "Water Slide Rides", duration: "1 hour" }
+          ]
+        }
+      ]
     },
     {
       id: 3,
@@ -31,6 +56,15 @@ const Itineraries = () => {
       date: "8:00→6:00",
       rating: "4.7",
       image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/The_Great_Wall_of_China_at_Jinshanling-edit.jpg/1200px-The_Great_Wall_of_China_at_Jinshanling-edit.jpg",
+      places: [
+        {
+          name: "Tropical Beach Resort",
+          activities: [
+            { name: "Beach Volleyball", duration: "2 hours" },
+            { name: "Snorkeling", duration: "2 hours" }
+          ]
+        }
+      ]
     },
     {
       id: 4,
@@ -40,6 +74,15 @@ const Itineraries = () => {
       date: "8:30→4:00",
       rating: "4.3",
       image: "https://upload.wikimedia.org/wikipedia/commons/a/a1/Statue_of_Liberty_7.jpg",
+      places: [
+        {
+          name: "Temple of Karnak",
+          activities: [
+            { name: "Temple Exploration", duration: "2 hours" },
+            { name: "Guided Tour", duration: "1 hour" }
+          ]
+        }
+      ]
     },
     {
       id: 5,
@@ -49,7 +92,16 @@ const Itineraries = () => {
       date: "6:00→7:00",
       rating: "4.8",
       image: "https://upload.wikimedia.org/wikipedia/commons/d/da/Taj-Mahal.jpg",
-    },
+      places: [
+        {
+          name: "Luxury Yacht",
+          activities: [
+            { name: "Sunset Dinner Cruise", duration: "2 hours" },
+            { name: "Swimming", duration: "1 hour" }
+          ]
+        }
+      ]
+    }
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -84,6 +136,7 @@ const Itineraries = () => {
             image={card.image}
             onDelete={handleDelete}
             className="hover:bg-[#f0f0f0] transition duration-300"
+            places={card.places} 
           />
         ))}
       </div>

@@ -1,5 +1,5 @@
+import { Box, Card, CardContent, CardMedia, Divider, Rating, Typography } from "@mui/material";
 import { useParams, useLocation } from "react-router-dom";
-import { Card, CardContent, CardMedia, Typography, Box, Divider, Rating } from "@mui/material";
 
 const ItineraryDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -37,25 +37,31 @@ const ItineraryDetails: React.FC = () => {
                         {itinerary.description}
                     </Typography>
 
+                    <Divider className="my-4" />
+
+                    {itinerary.places && itinerary.places.map((place: any, placeIndex: number) => (
+                        <Box key={placeIndex} className="mb-4">
+                            <Typography variant="h6" className="font-semibold mb-2 text-gray-800">
+                                {place.name}
+                            </Typography>
+
+                            {place.activities && place.activities.map((activity: any, activityIndex: number) => (
+                                <Box key={activityIndex} className="ml-4">
+                                    <Typography variant="body1" className="text-gray-700">
+                                        <span className="font-semibold">Activity:</span> {activity.name}
+                                    </Typography>
+                                    <Typography variant="body2" className="text-gray-600">
+                                        <span className="font-semibold">Duration:</span> {activity.duration}
+                                    </Typography>
+                                </Box>
+                            ))}
+                        </Box>
+                    ))}
+
+                    <Divider className="my-4" />
+
                     <Box className="flex justify-between items-center mt-6">
-                        <Rating value={parseFloat(itinerary.rating)} precision={0.5} readOnly size="large" />
-                        <Typography variant="h6" className="text-yellow-500 font-bold">
-                            {itinerary.rating}/5
-                        </Typography>
-                    </Box>
-
-                    <Divider className="my-6" />
-
-                    <Box className="text-center">
-                        <Typography variant="body1" className="text-gray-500">
-                            Detailed Itinerary Information
-                        </Typography>
-                        <a
-                            href="#"
-                            className="inline-block mt-4 bg-blue-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-600 transition duration-200"
-                        >
-                            Download Itinerary PDF
-                        </a>
+                        <Rating value={parseFloat(itinerary.rating)} precision={0.5} readOnly />
                     </Box>
                 </CardContent>
             </Card>
