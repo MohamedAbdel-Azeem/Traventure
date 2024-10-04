@@ -32,7 +32,7 @@ function useRegisterUser(body: object | null, role: string) {
         const response = await axios.post(url, body);
         if (response.status >= 200 && response.status < 300) {
           setData(response.data);
-          if(data !== null){
+          if(body !== null){
           handlenewUser();
           }
         }
