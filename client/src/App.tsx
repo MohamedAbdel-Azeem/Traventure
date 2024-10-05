@@ -20,48 +20,44 @@ import { Activities } from "./routes/_app/advertiseractivity/Activities";
 import CT from "./components/Activity/CT";
 import { useState } from "react";
 
-
 import { Tourist_Profile } from "./routes/_app/tourist_profile/tourist-profile-main";
 import { Seller_Profile } from "./routes/_app/seller_profile/seller-profile-main";
 
 function App() {
-
-
   const [userData, setUserData] = useState({
-    username: 'MinaAhmed21',
-    email: 'mina@gmail.com',
-    mobileNumber: '+201186948329',
-    nationality: 'American',
-    dob: '1990-05-15',
-    occupation: 'Photographer',
-    profilePicture: 'src/assets/t2.jpg',
+    username: "MinaAhmed21",
+    email: "mina@gmail.com",
+    mobileNumber: "+201186948329",
+    nationality: "American",
+    dob: "1990-05-15",
+    occupation: "Photographer",
+    profilePicture: "src/assets/t2.jpg",
     wallet: 456,
-    password: '123456'
+    password: "123456",
   });
   return (
     <MantineProvider>
       <Router>
         <Routes>
-        <Route path="/admin/:id" element={<AdminPage />} />
-        <Route path="/tourguide" element={<TourGuidePage />} />
-        <Route path="/tourismgovernor" element={<TourismGovernorPage />} />
-        <Route path="/advertiser" element={<AdvertiserPage />} />
-        <Route path="/tourist/:id" element={<TouristPage />} />
-        <Route path="/seller" element={<SellerPage />} />
-        <Route path="/admin-users" element={<Accounts />} />
-        <Route path="/admin/shop" element={<ShopPage />} />
-        <Route path="/tourismgovernor/locations" element={<Locations />} />
-        <Route path="/admin/locations" element={<Locations />} />
-        <Route path="/advertiser/activities" element={<Activities />} />
-        <Route path="/itineraries" element={<Accounts />} />
-        <Route path="/" element={<SignIn />} />
-        <Route path="/register" element={<Register />} />
-          <Route path="/touristprofile" element={<Tourist_Profile />} /> 
-          <Route path="/sellerprofile" element={<Seller_Profile />} />
-        <Route path="/tourguideprofile" element={<TourGuideProfile />} />
-        <Route path="/advertiserprofile" element={<AdvertiserProfile />} />
-        <Route path="/CategoriesandTags" element={<CT />} />
-
+          <Route path="/admin/:id" element={<AdminPage />} />
+          <Route path="/tourguide" element={<TourGuidePage />} />
+          <Route path="/tourismgovernor" element={<TourismGovernorPage />} />
+          <Route path="/advertiser" element={<AdvertiserPage />} />
+          <Route path="/tourist/:id" element={<TouristPage />} />
+          <Route path="/seller" element={<SellerPage />} />
+          <Route path="/admin-users" element={<Accounts />} />
+          <Route path="/admin/shop" element={<ShopPage />} />
+          <Route path="/tourismgovernor/locations" element={<Locations />} />
+          <Route path="/admin/locations" element={<Locations />} />
+          <Route path="/advertiser/activities" element={<Activities />} />
+          <Route path="/itineraries" element={<Accounts />} />
+          <Route path="/" element={<SignIn />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/touristprofile" element={<Tourist_Profile />} />
+          <Route path="/sellerprofile/:username" element={<Seller_Profile />} />
+          <Route path="/tourguideprofile" element={<TourGuideProfile />} />
+          <Route path="/advertiserprofile" element={<AdvertiserProfile />} />
+          <Route path="/CategoriesandTags" element={<CT />} />
         </Routes>
       </Router>
     </MantineProvider>
