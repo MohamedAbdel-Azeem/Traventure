@@ -31,15 +31,15 @@ interface Itinerary {
   title: string;
   image: string;
   startDate: string;
-  endDate: string;   
+  endDate: string;
   price: string;
   description: string;
   rating: string;
   places: Place[];
-  language: string; 
-  pickupLocation: string;  
+  language: string;
+  pickupLocation: string;
   dropoffLocation: string;
-  selectedTags?: string[]; // Tag array
+  selectedTags?: string[]; 
 }
 
 const ItineraryDetails: React.FC = () => {
@@ -49,7 +49,7 @@ const ItineraryDetails: React.FC = () => {
 
   const [itinerary, setItinerary] = useState(initialItinerary);
   const [isEditing, setIsEditing] = useState(false);
-  const [newTag, setNewTag] = useState(""); 
+  const [newTag, setNewTag] = useState("");
 
   if (!itinerary) return <p>No itinerary data found</p>;
 
@@ -199,12 +199,13 @@ const ItineraryDetails: React.FC = () => {
                       </Typography>
                     </Box>
                   ))}
+
               </Box>
             ))}
 
           <Divider className="my-4" />
 
-        
+          
           {Array.isArray(itinerary.selectedTags) && itinerary.selectedTags.length > 0 && (
             <div className="mb-2">
               <div className="flex flex-wrap justify-center items-center">
@@ -234,118 +235,89 @@ const ItineraryDetails: React.FC = () => {
             fullWidth
             value={itinerary.title}
             onChange={(e) => handleChange(e, "title")}
-            margin="none"
+            margin="dense"
           />
           <TextField
-            label="Start Date"
-            type="date" 
+            label="Image URL"
             fullWidth
-            value={itinerary.startDate}
-            onChange={(e) => handleChange(e, "startDate")} 
-            margin="normal"
-            InputLabelProps={{
-              shrink: true, 
-            }}
-          />
-          <TextField
-            label="End Date"
-            type="date"
-            fullWidth
-            value={itinerary.endDate}
-            onChange={(e) => handleChange(e, "endDate")}
-            margin="normal"
-            InputLabelProps={{
-              shrink: true, 
-            }}
-          />
-          <TextField
-            label="Price"
-            fullWidth
-            value={itinerary.price}
-            onChange={(e) => handleChange(e, "price")}
-            margin="normal"
+            value={itinerary.image}
+            onChange={(e) => handleChange(e, "image")}
+            margin="dense"
           />
           <TextField
             label="Description"
+            fullWidth
             multiline
             rows={4}
-            fullWidth
             value={itinerary.description}
             onChange={(e) => handleChange(e, "description")}
-            margin="normal"
-          />
-          <TextField
-            label="Language"
-            fullWidth
-            value={itinerary.language}
-            onChange={(e) => handleChange(e, "language")}
-            margin="normal"
-          />
-          <TextField
-            label="Pickup Location"
-            fullWidth
-            value={itinerary.pickupLocation}
-            onChange={(e) => handleChange(e, "pickupLocation")}
-            margin="normal"
-          />
-          <TextField
-            label="Dropoff Location"
-            fullWidth
-            value={itinerary.dropoffLocation}
-            onChange={(e) => handleChange(e, "dropoffLocation")}
-            margin="normal"
+            margin="dense"
           />
 
-       
-          <TextField
-            label="Add Tag"
-            fullWidth
-            value={newTag}
-            onChange={(e) => setNewTag(e.target.value)}
-            margin="normal"
-          />
-          <Button variant="outlined" color="primary" onClick={handleAddTag}>
-            Add Tag
-          </Button>
+         
+          <Box className="flex items-center mb-4">
+            <TextField
+              label="Add Tag"
+              value={newTag}
+              onChange={(e) => setNewTag(e.target.value)}
+              margin="dense"
+            />
+            <Button variant="contained" color="primary" onClick={handleAddTag} className="ml-2">
+              Add
+            </Button>
+          </Box>
+
+     
+          {Array.isArray(itinerary.selectedTags) && itinerary.selectedTags.length > 0 && (
+            <div className="mb-2">
+              <div className="flex flex-wrap justify-center items-center">
+                {itinerary.selectedTags.map((tag, index) => (
+                  <span key={index} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm mr-2 mb-2 flex items-center">
+                    {tag}
+                    <Button onClick={() => handleRemoveTag(tag)} size="small" color="secondary" className="ml-1">x</Button>
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
 
          
           {itinerary.places.map((place, placeIndex) => (
-            <Box key={placeIndex} mb={2}>
+            <div key={placeIndex}>
               <TextField
                 label="Place Name"
-                fullWidth
                 value={place.name}
                 onChange={(e) => handlePlaceChange(placeIndex, "name", e.target.value)}
-                margin="normal"
+                fullWidth
+                margin="dense"
               />
-              <Button variant="outlined" color="secondary" onClick={() => handleRemovePlace(placeIndex)}>
-                Remove Place
-              </Button>
               {place.activities.map((activity, activityIndex) => (
-                <Box key={activityIndex} mt={1} ml={2}>
+                <div key={activityIndex} className="flex items-center">
                   <TextField
                     label="Activity Name"
                     value={activity.name}
                     onChange={(e) => handleActivityChange(placeIndex, activityIndex, "name", e.target.value)}
-                    margin="normal"
+                    fullWidth
+                    margin="dense"
                   />
                   <TextField
                     label="Duration"
                     value={activity.duration}
                     onChange={(e) => handleActivityChange(placeIndex, activityIndex, "duration", e.target.value)}
-                    margin="normal"
+                    margin="dense"
                   />
-                  <Button variant="outlined" color="secondary" onClick={() => handleRemoveActivity(placeIndex, activityIndex)}>
-                    Remove Activity
-                  </Button>
-                </Box>
+                  <Button onClick={() => handleRemoveActivity(placeIndex, activityIndex)} color="secondary">Remove</Button>
+                </div>
               ))}
-              <Button variant="outlined" color="primary" onClick={() => handleAddActivity(placeIndex)}>
+              <Button onClick={() => handleAddActivity(placeIndex)} color="primary">
                 Add Activity
               </Button>
-            </Box>
+              <Button onClick={() => handleRemovePlace(placeIndex)} color="secondary">
+                Remove Place
+              </Button>
+            </div>
           ))}
-          <Button variant="outlined" color="primary" onClick={handleAddPlace}>
+          <Button onClick={handleAddPlace} color="primary">
             Add Place
           </Button>
         </DialogContent>
@@ -353,8 +325,8 @@ const ItineraryDetails: React.FC = () => {
           <Button onClick={handleCloseModal} color="primary">
             Cancel
           </Button>
-          <Button onClick={() => { /* Save changes logic here */ handleCloseModal(); }} color="primary">
-            Save Changes
+          <Button onClick={handleCloseModal} color="primary">
+            Save
           </Button>
         </DialogActions>
       </Dialog>
