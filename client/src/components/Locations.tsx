@@ -150,7 +150,7 @@ const Locations = () => {
                 label="Image"
                 type="string"
                 value={image}
-                onChange={(e) => {setImage(e.target.value); setImages([...images,image])}}
+                onChange={(e) => {setImages([...images,(e.target.value)])}}
                 fullWidth
                 margin="normal"
               />

@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import { TextField } from "@mui/material";
 import useUpdatePlace from "../custom_hooks/places/useUpdatePlace";
 import  Place  from "../custom_hooks/places/place_interface";
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import TheMAP from "./TheMAP";
 interface LocationCardCRUDProps {
     id: string,
     onDelete: (id: string) => void;
@@ -23,9 +25,17 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
     const [latitude, setLatitude] = useState(details?.location.latitude ?? 0);
     const [longitude, setLongitude] = useState(details?.location.longitude ?? 0);
     const [images, setImages] = useState(details?.pictures || []);
+    const [image, setImage] = useState('');
     
-    const [apiBody, setApiBody] = useState<Place | null>(details);
 
+function addImage(){
+    setImages([...images,image]);
+}
+
+
+
+    const [apiBody, setApiBody] = useState<Place | null>(details);
+    console.log();
     useUpdatePlace(id,apiBody);
 
 
@@ -47,6 +57,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
                 student: student,
             },
         });
+        console.log("LIFE IS PAIN, I HATE MYSELF"+latitude);
     };
     const handleDeleteClick = () => {
         onDelete(id);
@@ -59,7 +70,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
         {isEditing ? (
                     <div className="flex items-center justify-center w-full h-full">
                         <TextField title="Upload Image" 
-                            onChange={(e)=>setImages([...images,(e.target.value)])}/>
+                            onChange={(e)=>{setImage(e.target.value);addImage()}}/>
                     </div>
                 ) : (<div className="w-full h-full object-cover rounded-t-[11px] relative">
                     <img src={images[0]} alt={locationName} className="w-full h-full object-cover rounded-t-[11px]" />
@@ -160,29 +171,16 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
                 <div className="w-[311px] h-full rounded-bl-[11px]">
                 {isEditing ? (
                     <div>
-                            <TextField
-                                value={latitude}
-                                size="small"
-                                onChange={(e) => setLatitude(Number(e.target.value))}
-                                className="w-[124px]"
-                                placeholder="Location"
-                                variant="outlined"
-                            />
-                            <TextField
-                                value={longitude}
-                                size="small"
-                                onChange={(e) => setLongitude(Number(e.target.value))}
-                                className="w-[124px]"
-                                placeholder="Location"
-                                variant="outlined"
-                            />
+                            <TheMAP lat={latitude} long={longitude}
+                            setLatitude={setLatitude}
+                            setLongitude={setLongitude}/>
                     </div>
                         ) : ( 
-                        <p className="text-[16px] h-full overflow-auto">
-                            <iframe title="map" className="h-full rounded-bl-[11px]" src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${latitude}!3d${longitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
+                        <div className="text-[16px] h-full overflow-auto">
+                            <iframe title="map" className="h-full rounded-bl-[11px]" src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${longitude}!3d${latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
                             width="311px"
                             ></iframe>
-                        </p>
+                        </div>
                         )}
                 </div>
                 <div className="flex flex-col">
