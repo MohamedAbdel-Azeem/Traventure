@@ -124,7 +124,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
                 <div className="mt-4 flex justify-between items-center">
                     <Link
                         to={`/itinerary/${id}`}
-                        state={{ title, description, price, startDate, endDate, rating, image, language, pickupLocation, dropoffLocation, places }} 
+                        state={{ title, description, price, startDate, endDate, rating, image, language, pickupLocation, dropoffLocation, places,selectedTags, }} 
                         className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center"
                     >
                         View Details

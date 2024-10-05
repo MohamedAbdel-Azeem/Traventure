@@ -13,9 +13,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
 } from "@mui/material";
 import { useParams, useLocation } from "react-router-dom";
 
@@ -42,6 +39,7 @@ interface Itinerary {
   language: string; 
   pickupLocation: string;  
   dropoffLocation: string;
+  selectedTags?: string[]; // Tag array
 }
 
 const ItineraryDetails: React.FC = () => {
@@ -51,6 +49,7 @@ const ItineraryDetails: React.FC = () => {
 
   const [itinerary, setItinerary] = useState(initialItinerary);
   const [isEditing, setIsEditing] = useState(false);
+  const [newTag, setNewTag] = useState(""); 
 
   if (!itinerary) return <p>No itinerary data found</p>;
 
@@ -70,10 +69,6 @@ const ItineraryDetails: React.FC = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     field: string
   ) => {
-    setItinerary({ ...itinerary, [field]: e.target.value });
-  };
-
-  const handleSelectChange = (e: SelectChangeEvent<string>, field: string) => {
     setItinerary({ ...itinerary, [field]: e.target.value });
   };
 
@@ -98,7 +93,7 @@ const ItineraryDetails: React.FC = () => {
   };
 
   const handleRemovePlace = (placeIndex: number) => {
-    const updatedPlaces = itinerary.places.filter((_: any, index: number) => index !== placeIndex);
+    const updatedPlaces = itinerary.places.filter((_, index) => index !== placeIndex);
     setItinerary({ ...itinerary, places: updatedPlaces });
   };
 
@@ -112,9 +107,26 @@ const ItineraryDetails: React.FC = () => {
   const handleRemoveActivity = (placeIndex: number, activityIndex: number) => {
     const updatedPlaces = [...itinerary.places];
     updatedPlaces[placeIndex].activities = updatedPlaces[placeIndex].activities.filter(
-      (_: any, index: number) => index !== activityIndex
+      (_, index) => index !== activityIndex
     );
     setItinerary({ ...itinerary, places: updatedPlaces });
+  };
+
+  const handleAddTag = () => {
+    if (newTag && !itinerary.selectedTags?.includes(newTag)) {
+      setItinerary((prev) => ({
+        ...prev,
+        selectedTags: [...(prev.selectedTags || []), newTag],
+      }));
+      setNewTag("");
+    }
+  };
+
+  const handleRemoveTag = (tagToRemove: string) => {
+    setItinerary((prev) => ({
+      ...prev,
+      selectedTags: prev.selectedTags?.filter((tag) => tag !== tagToRemove),
+    }));
   };
 
   return (
@@ -192,6 +204,19 @@ const ItineraryDetails: React.FC = () => {
 
           <Divider className="my-4" />
 
+        
+          {Array.isArray(itinerary.selectedTags) && itinerary.selectedTags.length > 0 && (
+            <div className="mb-2">
+              <div className="flex flex-wrap justify-center items-center">
+                {itinerary.selectedTags.map((tag, index) => (
+                  <span key={index} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm mr-2 mb-2">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
           <Box className="flex justify-between items-center mt-6">
             <Rating value={parseFloat(itinerary.rating)} precision={0.5} readOnly />
             <Button variant="contained" color="primary" onClick={handleOpenModal}>
@@ -227,7 +252,7 @@ const ItineraryDetails: React.FC = () => {
             type="date"
             fullWidth
             value={itinerary.endDate}
-            onChange={(e) => handleChange(e, "endDate")} 
+            onChange={(e) => handleChange(e, "endDate")}
             margin="normal"
             InputLabelProps={{
               shrink: true, 
@@ -242,9 +267,9 @@ const ItineraryDetails: React.FC = () => {
           />
           <TextField
             label="Description"
-            fullWidth
             multiline
             rows={4}
+            fullWidth
             value={itinerary.description}
             onChange={(e) => handleChange(e, "description")}
             margin="normal"
@@ -270,7 +295,20 @@ const ItineraryDetails: React.FC = () => {
             onChange={(e) => handleChange(e, "dropoffLocation")}
             margin="normal"
           />
-          <Divider className="my-4" />
+
+       
+          <TextField
+            label="Add Tag"
+            fullWidth
+            value={newTag}
+            onChange={(e) => setNewTag(e.target.value)}
+            margin="normal"
+          />
+          <Button variant="outlined" color="primary" onClick={handleAddTag}>
+            Add Tag
+          </Button>
+
+         
           {itinerary.places.map((place, placeIndex) => (
             <Box key={placeIndex} mb={2}>
               <TextField
@@ -278,46 +316,45 @@ const ItineraryDetails: React.FC = () => {
                 fullWidth
                 value={place.name}
                 onChange={(e) => handlePlaceChange(placeIndex, "name", e.target.value)}
+                margin="normal"
               />
+              <Button variant="outlined" color="secondary" onClick={() => handleRemovePlace(placeIndex)}>
+                Remove Place
+              </Button>
               {place.activities.map((activity, activityIndex) => (
-                <Box key={activityIndex} mb={1}>
+                <Box key={activityIndex} mt={1} ml={2}>
                   <TextField
                     label="Activity Name"
-                    fullWidth
                     value={activity.name}
-                    onChange={(e) =>
-                      handleActivityChange(placeIndex, activityIndex, "name", e.target.value)
-                    }
+                    onChange={(e) => handleActivityChange(placeIndex, activityIndex, "name", e.target.value)}
+                    margin="normal"
                   />
                   <TextField
                     label="Duration"
-                    fullWidth
                     value={activity.duration}
-                    onChange={(e) =>
-                      handleActivityChange(placeIndex, activityIndex, "duration", e.target.value)
-                    }
+                    onChange={(e) => handleActivityChange(placeIndex, activityIndex, "duration", e.target.value)}
+                    margin="normal"
                   />
-                  <Button onClick={() => handleRemoveActivity(placeIndex, activityIndex)}>Remove Activity</Button>
+                  <Button variant="outlined" color="secondary" onClick={() => handleRemoveActivity(placeIndex, activityIndex)}>
+                    Remove Activity
+                  </Button>
                 </Box>
               ))}
-              <Button onClick={() => handleAddActivity(placeIndex)}>Add Activity</Button>
-              <Button onClick={() => handleRemovePlace(placeIndex)}>Remove Place</Button>
+              <Button variant="outlined" color="primary" onClick={() => handleAddActivity(placeIndex)}>
+                Add Activity
+              </Button>
             </Box>
           ))}
-          <Button onClick={handleAddPlace}>Add Place</Button>
+          <Button variant="outlined" color="primary" onClick={handleAddPlace}>
+            Add Place
+          </Button>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModal} color="primary">
             Cancel
           </Button>
-          <Button
-            onClick={() => {
-              handleCloseModal();
-              
-            }}
-            color="primary"
-          >
-            Save
+          <Button onClick={() => { /* Save changes logic here */ handleCloseModal(); }} color="primary">
+            Save Changes
           </Button>
         </DialogActions>
       </Dialog>
