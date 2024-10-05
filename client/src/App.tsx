@@ -23,6 +23,7 @@ import { useState } from "react";
 
 import { Tourist_Profile } from "./routes/_app/tourist_profile/tourist-profile-main";
 import { Seller_Profile } from "./routes/_app/seller_profile/seller-profile-main";
+import LandingPage from "./pages/LandingPage";
 
 function App() {
 
@@ -56,6 +57,7 @@ function App() {
         <Route path="/itineraries" element={<Accounts />} />
         <Route path="/" element={<SignIn />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/landing" element={<LandingPage />} />
           <Route path="/touristprofile" element={<Tourist_Profile />} /> 
           <Route path="/sellerprofile" element={<Seller_Profile />} />
         <Route path="/tourguideprofile" element={<TourGuideProfile />} />
