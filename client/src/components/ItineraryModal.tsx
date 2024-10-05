@@ -59,9 +59,9 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
   const [formData, setFormData] = React.useState({
     title: '',
     description: '',
-    price: '',
-    startDate: '', // Updated to startDate
-    endDate: '',   // Updated to endDate
+    price: 0,
+    startDate: '', 
+    endDate: '',   
     rating: '',
     image: '',
     language: '',
@@ -196,15 +196,17 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
           />
           <TextField
             name="price"
+            type="number"
             placeholder="Price"
             variant="outlined"
             fullWidth
             margin="normal"
-            onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+            onChange={(e) => 
+            setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })
+            }
             sx={{ mb: 2 }}
-          />
-
-          {/* Updated to include Start Date and End Date */}
+            />
+        
           <TextField
             name="startDate"
             placeholder="Start Date"
@@ -245,7 +247,7 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
             sx={{ mb: 2 }}
           />
           
-          {/* New input fields for language, pickup, and dropoff locations */}
+        
           <TextField
             name="language"
             placeholder="Language"

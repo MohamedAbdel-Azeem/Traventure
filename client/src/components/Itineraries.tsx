@@ -9,7 +9,7 @@ const Itineraries = () => {
       id: 1,
       title: "Egyptian History Trip",
       description: "Come visit Egypt!",
-      price: "Free→$1000",
+      price: 1000, // price as number
       startDate: new Date("2024-10-10T09:00:00"),
       endDate: new Date("2024-10-10T17:00:00"),
       rating: "4.5",
@@ -38,7 +38,7 @@ const Itineraries = () => {
       id: 2,
       title: "Waterpark Adventure",
       description: "Time to get wet.",
-      price: "$25→$100",
+      price: 100, // price as number
       startDate: new Date("2024-10-15T09:00:00"),
       endDate: new Date("2024-10-15T11:00:00"),
       rating: "4.2",
@@ -60,7 +60,7 @@ const Itineraries = () => {
       id: 3,
       title: "Tropical Escape",
       description: "Have some fun on the beach!",
-      price: "$10→$50",
+      price: 50, // price as number
       startDate: new Date("2024-10-20T08:00:00"),
       endDate: new Date("2024-10-20T18:00:00"),
       rating: "4.7",
@@ -82,7 +82,7 @@ const Itineraries = () => {
       id: 4,
       title: "Temple Visit",
       description: "Come visit these ancient temples",
-      price: "$20→$50",
+      price: 50, // price as number
       startDate: new Date("2024-10-25T08:30:00"),
       endDate: new Date("2024-10-25T16:00:00"),
       rating: "4.3",
@@ -104,7 +104,7 @@ const Itineraries = () => {
       id: 5,
       title: "Mediterranean Cruise",
       description: "Have fun on our boat",
-      price: "$15→$60",
+      price: 60,
       startDate: new Date("2024-10-30T18:00:00"),
       endDate: new Date("2024-10-30T19:00:00"),
       rating: "4.8",

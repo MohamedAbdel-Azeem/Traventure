@@ -23,7 +23,7 @@ interface ItineraryCardCRUDProps {
     id: number;
     title: string;
     description: string;
-    price: string;
+    price: number; 
     startDate: string; 
     endDate: string; 
     rating: string;
@@ -95,7 +95,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
                 <div className="flex justify-center items-center mb-4 space-x-4">
                     <div className="bg-red-500 text-white p-2 rounded-lg flex flex-col items-center w-1/2">
                         <p className="text-sm flex items-center">
-                            <ConfirmationNumberIcon className="mr-1" /> {price}
+                            <ConfirmationNumberIcon className="mr-1" /> {price.toFixed(2)} 
                         </p>
                     </div>
                     <div className="bg-yellow-500 text-white p-2 rounded-lg flex flex-col items-center w-1/2">
