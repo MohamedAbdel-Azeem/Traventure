@@ -21,8 +21,10 @@ import { useState } from "react";
 
 import { Tourist_Profile } from "./routes/_app/tourist_profile/tourist-profile-main";
 import { Seller_Profile } from "./routes/_app/seller_profile/seller-profile-main";
+import { Advertiser_Profile } from "./routes/_app/advertiser_profile/advertiser_profile-main";
 import LandingPage from "./pages/LandingPage";
 import { TourGuide_Profile } from "./routes/_app/tourguide_profile/tourguide-profile-main";
+
 
 function App() {
   const [userData, setUserData] = useState({
@@ -61,8 +63,9 @@ function App() {
             path="/tourguideprofile/:username"
             element={<TourGuide_Profile />}
           />
-          <Route path="/advertiserprofile" element={<AdvertiserProfile />} />
+          <Route path="/advertiserprofile/:username" element={<Advertiser_Profile />} />
           <Route path="/CategoriesandTags" element={<CT />} />
+
         </Routes>
       </Router>
     </MantineProvider>

@@ -6,6 +6,10 @@ export const advertiserPatchValidator = [
   body("hotline").isString().optional(),
   body("company").isString().optional(),
   body("isAccepted").isBoolean().optional(),
+  body("founded").isNumeric().optional(),
+  body("description").isString().optional(),
+  body("location").isString().optional(),
+
 ];
 
 module.exports = { advertiserPatchValidator };
