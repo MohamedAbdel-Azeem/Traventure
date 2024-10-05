@@ -179,7 +179,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
                     </div>
                         ) : ( 
                         <p className="text-[16px] h-full overflow-auto">
-                            <iframe title="map" className="h-full rounded-bl-[11px]" src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4${latitude}.855933447735!2d${longitude}.321447549598684!3d10.!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14583f7e406772f5%3A0x4bfd4ca20c13262a!2sYour%20clinic!5e0!3m2!1sen!2seg!4v1714583676383!5m2!1sen!2seg`}
+                            <iframe title="map" className="h-full rounded-bl-[11px]" src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${latitude}!3d${longitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
                             width="160px"
                             ></iframe>
                         </p>
