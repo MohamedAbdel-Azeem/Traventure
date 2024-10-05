@@ -6,6 +6,8 @@ import image4 from "../../assets/splash/s4.jpg";
 import image5 from "../../assets/splash/s5.jpg";
 import useLoginGuest from "../../custom_hooks/useLoginGuest";
 import { useNavigate } from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
+import Swal from "sweetalert2";
 
 const SignIn: React.FC = () => {
   const [username, setUsername] = useState<string>("");
@@ -18,7 +20,7 @@ const SignIn: React.FC = () => {
 
   const images = [image1, image2, image3, image4, image5];
 
-  const { data, loading, error: apiError } = useLoginGuest(apiBody);
+  const { data, loading, err} = useLoginGuest(apiBody);
 
   useEffect(() => {
     if (data === null) return;
@@ -48,6 +50,19 @@ const SignIn: React.FC = () => {
     }
     setBody({ username: username, password: password });
   };
+
+  useEffect(() => {
+    function handleError() {
+      if(err === null) return;
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: err,
+      });
+    }
+  
+    handleError();
+  }, [err]);
 
   return (
     <div
@@ -103,7 +118,11 @@ const SignIn: React.FC = () => {
               type="submit"
               className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-transform duration-200 transform hover:scale-105 shadow-lg"
             >
-              Sign In
+              {loading ? (
+                  <ClipLoader size={20} color="#ffffff" /> // Show spinner while loading
+                ) : (
+                  "Sign In"
+                )}
             </button>
             {error && <p className="text-red-500 text-center mt-2">{error}</p>}
             <div className="text-center">
