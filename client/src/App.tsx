@@ -17,8 +17,7 @@ import AdvertiserProfile from "./routes/_app/advertiser_profile/advertiser_profi
 import ShopPage from "./components/ShopPage";
 import { Activities } from "./routes/_app/advertiseractivity/Activities";
 import CT from "./components/Activity/CT";
-import { useState } from "react";
-
+import ItineraryDetails from "./components/ItineraryDetails";
 import { Tourist_Profile } from "./routes/_app/tourist_profile/tourist-profile-main";
 import { Seller_Profile } from "./routes/_app/seller_profile/seller-profile-main";
 import { Advertiser_Profile } from "./routes/_app/advertiser_profile/advertiser_profile-main";
@@ -27,17 +26,6 @@ import { TourGuide_Profile } from "./routes/_app/tourguide_profile/tourguide-pro
 
 
 function App() {
-  const [userData, setUserData] = useState({
-    username: "MinaAhmed21",
-    email: "mina@gmail.com",
-    mobileNumber: "+201186948329",
-    nationality: "American",
-    dob: "1990-05-15",
-    occupation: "Photographer",
-    profilePicture: "src/assets/t2.jpg",
-    wallet: 456,
-    password: "123456",
-  });
   return (
     <MantineProvider>
       <Router>
@@ -65,7 +53,7 @@ function App() {
           />
           <Route path="/advertiserprofile/:username" element={<Advertiser_Profile />} />
           <Route path="/CategoriesandTags" element={<CT />} />
-
+<Route path="/itinerary/:id" element={<ItineraryDetails />} />
         </Routes>
       </Router>
     </MantineProvider>

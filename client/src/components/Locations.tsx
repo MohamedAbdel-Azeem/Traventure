@@ -10,6 +10,7 @@ import Modal from '@mui/material/Modal';
 import { FormControl, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
 import useCreatePlace from "../custom_hooks/places/useCreatePlace";
 import TheMAP from "./TheMAP";
+import ItineraryCardCRUD from "./ItineraryCardCRUD";
 
 const Locations = () => {
     const [open, setOpen] = React.useState(false);
