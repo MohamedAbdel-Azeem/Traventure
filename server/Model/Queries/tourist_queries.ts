@@ -9,7 +9,7 @@ export async function getAll() {
          // Fetch upcoming itineraries
          const itineraries = await Itinerary.find({ starting_Date: { $gte: new Date() } }).populate('added_By')
          .populate('plan.place')
-         .populate('plan.place.activity_id');
+         .populate('plan.activities.activity_id');
 
          // Fetch upcoming activities
          const activities = await Activity.find({ DateAndTime: { $gte: new Date() } }).populate("Tags").populate("Category");

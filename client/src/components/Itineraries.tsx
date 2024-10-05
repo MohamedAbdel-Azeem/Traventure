@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ImprovedSidebar from "./ImprovedSidebar";
 import ItineraryCardCRUD from "./ItineraryCardCRUD";
 import ItineraryModal from "./ItineraryModal";
+import useGetItinerary from "../custom_hooks/itineraries/useGetItinerary";
 
 const Itineraries = () => {
   const [cards, setCards] = useState([
@@ -149,6 +150,14 @@ const Itineraries = () => {
     setCards([...cards, newItinerary]);
   };
 
+  const{itinerary, loading, error} = useGetItinerary('66f6e4f9fe182e23156d18d6');
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
+
   return (
     <div className="flex justify-center">
       <ImprovedSidebar title="Admin" />
@@ -159,7 +168,7 @@ const Itineraries = () => {
         >
           <p className="m-auto text-[24px] text-center font-bold">Create New Itinerary</p>
         </div>
-        {cards.map((card) => (
+        {itinerary && itinerary.map((card: any) => (
           <ItineraryCardCRUD
             key={card.id}
             id={card.id}
@@ -179,6 +188,27 @@ const Itineraries = () => {
             selectedTags={card.tags}
           />
         ))}
+
+         {/* {cards.map((card) => (
+          <ItineraryCardCRUD
+            key={card.id}
+            id={card.id}
+            title={card.title}
+            description={card.description}
+            price={card.price}
+            startDate={card.startDate.toLocaleString()}
+            endDate={card.endDate.toLocaleString()}
+            rating={card.rating}
+            language={card.language}
+            pickupLocation={card.pickupLocation}
+            dropoffLocation={card.dropoffLocation}
+            image={card.image}
+            onDelete={handleDelete}
+            className="hover:bg-[#f0f0f0] transition duration-300 rounded-lg shadow-md overflow-hidden"
+            places={card.places}
+            selectedTags={card.tags}
+          />
+        ))}  */}
       </div>
       <ItineraryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleCreate} />
     </div>

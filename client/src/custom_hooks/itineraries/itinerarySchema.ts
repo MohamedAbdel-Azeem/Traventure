@@ -3,6 +3,7 @@ import Place from "../places/place_interface";
 import { TouristProfileData } from "../../routes/_app/tourist_profile/tourist_profile_data";
 
 interface Itinerary {
+  map(arg0: (card: any) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
   main_Picture?: string;
   title: string;
   description: string;

@@ -7,7 +7,7 @@ export async function getItinerary(tour_guide_id: String) {
       added_By: tour_guide_id // Find all items with the given tour_guide_id
     }).populate('added_By')
     .populate('plan.place')
-    .populate('plan.place.activity_id')
+    .populate('plan.activities.activity_id')
 
     return itineraries;
   } catch (error) {
