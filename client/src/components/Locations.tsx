@@ -158,7 +158,7 @@ const Locations = () => {
         </Box>
         </Box>
       </Modal>
-    <div className="flex w-[422px] h-[334px] bg-[#D9D9D9] rounded-[11px] m-4 hover:bg-[#c0c0c0] transition duration-300 cursor-pointer" onClick={handleOpen}>
+    <div className="flex w-[422px] h-[422px] bg-[#D9D9D9] rounded-[11px] m-4 hover:bg-[#c0c0c0] transition duration-300 cursor-pointer" onClick={handleOpen}>
                     <p className="m-auto text-[40px]">
                         Create New Place
                     </p>
