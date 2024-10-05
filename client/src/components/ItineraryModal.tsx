@@ -11,9 +11,10 @@ import {
   MenuItem,
   Divider,
   IconButton,
+  FormHelperText,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { SelectChangeEvent } from '@mui/material/Select'; 
+import { SelectChangeEvent } from '@mui/material/Select';
 
 interface Activity {
   id: string;
@@ -62,7 +63,7 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
     price: 0,
     startDate: '', 
     endDate: '',   
-    rating: '',
+    rating: 0,
     image: '',
     language: '',
     pickupLocation: '', 
@@ -70,6 +71,7 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
   });
 
   const [places, setPlaces] = React.useState<SelectedPlace[]>([{ place: '', activities: [] }]);
+  const [errors, setErrors] = React.useState<string[]>([]);
 
   const handleChange = (index: number, e: SelectChangeEvent<string>) => {
     const value = e.target.value as string;
@@ -123,7 +125,36 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
     setPlaces(updatedPlaces);
   };
 
+  const validateForm = (): boolean => {
+    const newErrors: string[] = [];
+    
+    if (!formData.title) newErrors.push('Title is required.');
+    if (!formData.description) newErrors.push('Description is required.');
+    if (formData.price <= 0) newErrors.push('Price must be greater than 0.');
+    if (!formData.startDate) newErrors.push('Start date is required.');
+    if (!formData.endDate) newErrors.push('End date is required.');
+    if (new Date(formData.startDate) >= new Date(formData.endDate)) newErrors.push('End date must be after start date.');
+    
+    places.forEach((place, placeIndex) => {
+      if (!place.place) {
+        newErrors.push(`Place ${placeIndex + 1} is required.`);
+      }
+      place.activities.forEach((activity, activityIndex) => {
+        if (!activity.name) {
+          newErrors.push(`Activity ${activityIndex + 1} in place ${placeIndex + 1} is required.`);
+        }
+        if (!activity.duration) {
+          newErrors.push(`Duration for activity ${activityIndex + 1} in place ${placeIndex + 1} is required.`);
+        }
+      });
+    });
+
+    setErrors(newErrors);
+    return newErrors.length === 0;
+  };
+
   const handleSubmit = () => {
+    if (!validateForm()) return; // Validate form before submission
     const itineraryData = {
       ...formData, 
       places: places.map((place) => ({
@@ -175,6 +206,14 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
             Create New Itinerary
           </Typography>
           <Divider sx={{ mb: 2 }} />
+          
+          {errors.length > 0 && (
+            <Box sx={{ mb: 2, color: 'red' }}>
+              {errors.map((error, index) => (
+                <Typography key={index}>{error}</Typography>
+              ))}
+            </Box>
+          )}
 
           <TextField
             name="title"
@@ -201,11 +240,9 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
             variant="outlined"
             fullWidth
             margin="normal"
-            onChange={(e) => 
-            setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })
-            }
+            onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })}
             sx={{ mb: 2 }}
-            />
+          />
         
           <TextField
             name="startDate"
@@ -228,15 +265,7 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
             sx={{ mb: 2 }}
           />
 
-          <TextField
-            name="rating"
-            placeholder="Rating"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            onChange={(e) => setFormData({ ...formData, rating: e.target.value })}
-            sx={{ mb: 2 }}
-          />
+          
           <TextField
             name="image"
             placeholder="Image URL"
@@ -247,7 +276,6 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
             sx={{ mb: 2 }}
           />
           
-        
           <TextField
             name="language"
             placeholder="Language"
@@ -257,6 +285,7 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
             onChange={(e) => setFormData({ ...formData, language: e.target.value })}
             sx={{ mb: 2 }}
           />
+          
           <TextField
             name="pickupLocation"
             placeholder="Pickup Location"
@@ -266,6 +295,7 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
             onChange={(e) => setFormData({ ...formData, pickupLocation: e.target.value })}
             sx={{ mb: 2 }}
           />
+          
           <TextField
             name="dropoffLocation"
             placeholder="Dropoff Location"
@@ -276,86 +306,75 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
             sx={{ mb: 2 }}
           />
 
-          <Divider sx={{ my: 2 }} />
-
           {places.map((place, placeIndex) => (
             <Box key={placeIndex} sx={{ mb: 3 }}>
-              <FormControl fullWidth margin="normal">
+              <FormControl fullWidth variant="outlined">
                 <InputLabel id={`place-label-${placeIndex}`}>Select Place</InputLabel>
                 <Select
                   labelId={`place-label-${placeIndex}`}
                   value={place.place}
                   onChange={(e) => handleChange(placeIndex, e)}
                 >
-                  {placesData.map((placeData) => (
-                    <MenuItem key={placeData.id} value={placeData.name}>
-                      {placeData.name}
+                  {placesData.map((place) => (
+                    <MenuItem key={place.id} value={place.name}>
+                      {place.name}
                     </MenuItem>
                   ))}
                 </Select>
+                {place.place === '' && <FormHelperText error>This field is required</FormHelperText>}
               </FormControl>
+
               {place.activities.map((activity, activityIndex) => (
-                <Box key={activityIndex} sx={{ mb: 1 }}>
-                  <FormControl fullWidth margin="normal">
-                    <InputLabel id={`activity-label-${placeIndex}-${activityIndex}`}>
-                      Select Activity
-                    </InputLabel>
+                <Box key={activityIndex} sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id={`activity-label-${placeIndex}-${activityIndex}`}>Select Activity</InputLabel>
                     <Select
                       labelId={`activity-label-${placeIndex}-${activityIndex}`}
                       value={activity.name}
                       onChange={(e) => handleActivityChange(placeIndex, activityIndex, e)}
                     >
                       {placesData
-                        .find((p) => p.name === place.place)?.activities.map((activity) => (
+                        .find((p) => p.name === place.place)
+                        ?.activities.map((activity) => (
                           <MenuItem key={activity.id} value={activity.name}>
                             {activity.name}
                           </MenuItem>
                         ))}
                     </Select>
+                    {activity.name === '' && <FormHelperText error>This field is required</FormHelperText>}
                   </FormControl>
 
-                  <FormControl fullWidth margin="normal">
-                    <InputLabel id={`duration-label-${placeIndex}-${activityIndex}`}>
-                      Select Duration
-                    </InputLabel>
+                  <FormControl fullWidth>
+                    <InputLabel id={`duration-label-${placeIndex}-${activityIndex}`}>Duration</InputLabel>
                     <Select
                       labelId={`duration-label-${placeIndex}-${activityIndex}`}
                       value={activity.duration}
                       onChange={(e) => handleDurationChange(placeIndex, activityIndex, e)}
                     >
-                      {placesData
-                        .find((p) => p.name === place.place)?.activities.find((a) => a.name === activity.name)
-                        ?.durationOptions.map((duration, index) => (
-                          <MenuItem key={index} value={duration}>
-                            {duration}
-                          </MenuItem>
-                        ))}
+                      {activities.find((a) => a.name === activity.name)?.durationOptions.map((option) => (
+                        <MenuItem key={option} value={option}>
+                          {option}
+                        </MenuItem>
+                      ))}
                     </Select>
+                    {activity.duration === '' && <FormHelperText error>This field is required</FormHelperText>}
                   </FormControl>
 
-                  <Button onClick={() => deleteActivity(placeIndex, activityIndex)} color="error" sx={{ mt: 1 }}>
-                    Delete Activity
-                  </Button>
+                  <IconButton onClick={() => deleteActivity(placeIndex, activityIndex)}>
+                    <CloseIcon />
+                  </IconButton>
                 </Box>
               ))}
-              <Button onClick={() => addAnotherActivity(placeIndex)} color="primary">
-                Add Another Activity
-              </Button>
-              <Button onClick={() => deletePlace(placeIndex)} color="error" sx={{ mt: 1 }}>
-                Delete Place
-              </Button>
+              <Button onClick={() => addAnotherActivity(placeIndex)}>Add Another Activity</Button>
+              <IconButton onClick={() => deletePlace(placeIndex)}>
+                <CloseIcon />
+              </IconButton>
             </Box>
           ))}
-
-          <Button onClick={addAnotherPlace} color="primary">
-            Add Another Place
+          <Button onClick={addAnotherPlace}>Add Another Place</Button>
+          <Button onClick={handleSubmit} variant="contained" color="primary" sx={{ mt: 2 }}>
+            Submit Itinerary
           </Button>
-
-          <Box sx={{ mt: 3 }}>
-            <Button onClick={handleSubmit} variant="contained" color="primary" fullWidth>
-              Submit Itinerary
-            </Button>
-          </Box>
         </Box>
       </Box>
     </Modal>
