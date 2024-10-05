@@ -154,7 +154,7 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
   };
 
   const handleSubmit = () => {
-    if (!validateForm()) return; // Validate form before submission
+    if (!validateForm()) return;
     const itineraryData = {
       ...formData, 
       places: places.map((place) => ({
