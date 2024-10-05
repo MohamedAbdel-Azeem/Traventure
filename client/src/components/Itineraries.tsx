@@ -10,7 +10,8 @@ const Itineraries = () => {
       title: "Egyptian History Trip",
       description: "Come visit Egypt!",
       price: "Free→$1000",
-      date: "9:00→5:00",
+      startDate: new Date("2024-10-10T09:00:00"),
+      endDate: new Date("2024-10-10T17:00:00"),
       rating: "4.5",
       language: "English",
       pickupLocation: "Cairo Airport",
@@ -38,7 +39,8 @@ const Itineraries = () => {
       title: "Waterpark Adventure",
       description: "Time to get wet.",
       price: "$25→$100",
-      date: "9:00→11:00",
+      startDate: new Date("2024-10-15T09:00:00"),
+      endDate: new Date("2024-10-15T11:00:00"),
       rating: "4.2",
       language: "English",
       pickupLocation: "Local Hotel",
@@ -59,7 +61,8 @@ const Itineraries = () => {
       title: "Tropical Escape",
       description: "Have some fun on the beach!",
       price: "$10→$50",
-      date: "8:00→6:00",
+      startDate: new Date("2024-10-20T08:00:00"),
+      endDate: new Date("2024-10-20T18:00:00"),
       rating: "4.7",
       language: "English",
       pickupLocation: "Beach Resort",
@@ -80,7 +83,8 @@ const Itineraries = () => {
       title: "Temple Visit",
       description: "Come visit these ancient temples",
       price: "$20→$50",
-      date: "8:30→4:00",
+      startDate: new Date("2024-10-25T08:30:00"),
+      endDate: new Date("2024-10-25T16:00:00"),
       rating: "4.3",
       language: "English",
       pickupLocation: "Local Hotel",
@@ -101,7 +105,8 @@ const Itineraries = () => {
       title: "Mediterranean Cruise",
       description: "Have fun on our boat",
       price: "$15→$60",
-      date: "6:00→7:00",
+      startDate: new Date("2024-10-30T18:00:00"),
+      endDate: new Date("2024-10-30T19:00:00"),
       rating: "4.8",
       language: "English",
       pickupLocation: "Dock",
@@ -132,6 +137,8 @@ const Itineraries = () => {
       language: "English",
       pickupLocation: newCard.pickupLocation || "Default Pickup Location",
       dropoffLocation: newCard.dropoffLocation || "Default Dropoff Location", 
+      startDate: new Date(newCard.startDate),
+      endDate: new Date(newCard.endDate),
     };
     setCards([...cards, newItinerary]);
   };
@@ -153,7 +160,8 @@ const Itineraries = () => {
             title={card.title}
             description={card.description}
             price={card.price}
-            date={card.date}
+            startDate={card.startDate.toLocaleString()} 
+            endDate={card.endDate.toLocaleString()} 
             rating={card.rating}
             language={card.language}
             pickupLocation={card.pickupLocation} 

@@ -60,7 +60,8 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
     title: '',
     description: '',
     price: '',
-    date: '',
+    startDate: '', // Updated to startDate
+    endDate: '',   // Updated to endDate
     rating: '',
     image: '',
     language: '',
@@ -202,15 +203,29 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
             onChange={(e) => setFormData({ ...formData, price: e.target.value })}
             sx={{ mb: 2 }}
           />
+
+          {/* Updated to include Start Date and End Date */}
           <TextField
-            name="date"
-            placeholder="Date"
+            name="startDate"
+            placeholder="Start Date"
+            type="date"
             variant="outlined"
             fullWidth
             margin="normal"
-            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+            onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
             sx={{ mb: 2 }}
           />
+          <TextField
+            name="endDate"
+            placeholder="End Date"
+            type="date"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+            sx={{ mb: 2 }}
+          />
+
           <TextField
             name="rating"
             placeholder="Rating"
@@ -269,97 +284,76 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
                   labelId={`place-label-${placeIndex}`}
                   value={place.place}
                   onChange={(e) => handleChange(placeIndex, e)}
-                  name="place"
-                  variant="outlined"
-                  sx={{
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#1976d2',
-                    },
-                  }}
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {placesData.map((place) => (
-                    <MenuItem key={place.id} value={place.name}>
-                      {place.name}
+                  {placesData.map((placeData) => (
+                    <MenuItem key={placeData.id} value={placeData.name}>
+                      {placeData.name}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
-
               {place.activities.map((activity, activityIndex) => (
-                <Box key={activityIndex} sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-                  <FormControl sx={{ mr: 1 }} fullWidth>
-                    <InputLabel id={`activity-label-${placeIndex}-${activityIndex}`}>Activity</InputLabel>
+                <Box key={activityIndex} sx={{ mb: 1 }}>
+                  <FormControl fullWidth margin="normal">
+                    <InputLabel id={`activity-label-${placeIndex}-${activityIndex}`}>
+                      Select Activity
+                    </InputLabel>
                     <Select
                       labelId={`activity-label-${placeIndex}-${activityIndex}`}
                       value={activity.name}
                       onChange={(e) => handleActivityChange(placeIndex, activityIndex, e)}
-                      name="activity"
-                      variant="outlined"
                     >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      {placesData[placeIndex]?.activities.map((activity) => (
-                        <MenuItem key={activity.id} value={activity.name}>
-                          {activity.name}
-                        </MenuItem>
-                      ))}
+                      {placesData
+                        .find((p) => p.name === place.place)?.activities.map((activity) => (
+                          <MenuItem key={activity.id} value={activity.name}>
+                            {activity.name}
+                          </MenuItem>
+                        ))}
                     </Select>
                   </FormControl>
-                  <FormControl sx={{ mr: 1 }} fullWidth>
-                    <InputLabel id={`duration-label-${placeIndex}-${activityIndex}`}>Duration</InputLabel>
+
+                  <FormControl fullWidth margin="normal">
+                    <InputLabel id={`duration-label-${placeIndex}-${activityIndex}`}>
+                      Select Duration
+                    </InputLabel>
                     <Select
                       labelId={`duration-label-${placeIndex}-${activityIndex}`}
                       value={activity.duration}
                       onChange={(e) => handleDurationChange(placeIndex, activityIndex, e)}
-                      name="duration"
-                      variant="outlined"
                     >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      {placesData[placeIndex]?.activities
-                        .find((activityItem) => activityItem.name === activity.name)
-                        ?.durationOptions.map((duration) => (
-                          <MenuItem key={duration} value={duration}>
+                      {placesData
+                        .find((p) => p.name === place.place)?.activities.find((a) => a.name === activity.name)
+                        ?.durationOptions.map((duration, index) => (
+                          <MenuItem key={index} value={duration}>
                             {duration}
                           </MenuItem>
                         ))}
                     </Select>
                   </FormControl>
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    onClick={() => deleteActivity(placeIndex, activityIndex)}
-                  >
-                    Delete
+
+                  <Button onClick={() => deleteActivity(placeIndex, activityIndex)} color="error" sx={{ mt: 1 }}>
+                    Delete Activity
                   </Button>
                 </Box>
               ))}
-              <Button variant="outlined" onClick={() => addAnotherActivity(placeIndex)}>
+              <Button onClick={() => addAnotherActivity(placeIndex)} color="primary">
                 Add Another Activity
               </Button>
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={() => deletePlace(placeIndex)}
-              >
+              <Button onClick={() => deletePlace(placeIndex)} color="error" sx={{ mt: 1 }}>
                 Delete Place
               </Button>
             </Box>
           ))}
-          <Button variant="outlined" onClick={addAnotherPlace}>
+
+          <Button onClick={addAnotherPlace} color="primary">
             Add Another Place
           </Button>
 
-          <Divider sx={{ my: 2 }} />
-
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
-            Submit Itinerary
-          </Button>
+          <Box sx={{ mt: 3 }}>
+            <Button onClick={handleSubmit} variant="contained" color="primary" fullWidth>
+              Submit Itinerary
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Modal>

@@ -26,7 +26,8 @@ interface ItineraryCardCRUDProps {
     title: string;
     description: string;
     price: string;
-    date: string;
+    startDate: string; 
+    endDate: string; 
     rating: string;
     image: string;
     language: string;
@@ -42,7 +43,8 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
     title: initialTitle, 
     description: initialDescription, 
     price: initialPrice, 
-    date: initialDate, 
+    startDate: initialStartDate,
+    endDate: initialEndDate, 
     rating: initialRating, 
     image: initialImage, 
     language: initialLanguage,
@@ -56,7 +58,8 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
     const [title, setTitle] = useState(initialTitle);
     const [description, setDescription] = useState(initialDescription);
     const [price, setPrice] = useState(initialPrice);
-    const [date, setDate] = useState(initialDate);
+    const [startDate, setStartDate] = useState(initialStartDate); 
+    const [endDate, setEndDate] = useState(initialEndDate); 
     const [rating, setRating] = useState(initialRating);
     const [fileName, setFileName] = useState("");
     const [image, setImage] = useState(initialImage);
@@ -144,17 +147,27 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
                 <div className="grid grid-cols-3 gap-3">
                     <div className="bg-green-500 text-white p-2 rounded-lg flex flex-col items-center">
                         {isEditing ? (
-                            <TextField
-                                value={date}
-                                size="small"
-                                onChange={(e) => setDate(e.target.value)}
-                                className="w-full"
-                                placeholder="Date"
-                                variant="outlined"
-                            />
+                            <>
+                                <TextField
+                                    type="date"
+                                    value={startDate}
+                                    size="small"
+                                    onChange={(e) => setStartDate(e.target.value)}
+                                    className="w-full"
+                                    variant="outlined"
+                                />
+                                <TextField
+                                    type="date"
+                                    value={endDate}
+                                    size="small"
+                                    onChange={(e) => setEndDate(e.target.value)}
+                                    className="w-full"
+                                    variant="outlined"
+                                />
+                            </>
                         ) : (
                             <p className="text-sm flex items-center">
-                                <AccessTimeIcon className="mr-1" /> {date}
+                                <AccessTimeIcon className="mr-1" /> {startDate} - {endDate}
                             </p>
                         )}
                     </div>
@@ -202,7 +215,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
                 <div className="mt-4 flex justify-between items-center">
                     <Link
                         to={`/itinerary/${id}`}
-                        state={{ title, description, price, date, rating, image, language, pickupLocation, dropoffLocation, places: initialPlaces }} // Pass new fields here
+                        state={{ title, description, price, startDate, endDate, rating, image, language, pickupLocation, dropoffLocation, places: initialPlaces }} 
                         className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center"
                     >
                         <VisibilityIcon />

@@ -33,7 +33,8 @@ interface Itinerary {
   id: string;
   title: string;
   image: string;
-  date: string;
+  startDate: string;
+  endDate: string;   
   price: string;
   description: string;
   rating: string;
@@ -134,21 +135,25 @@ const ItineraryDetails: React.FC = () => {
 
           <Box className="flex justify-between mb-4 text-gray-600">
             <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">Date:</span> {itinerary.date}
+              <span className="mr-2 font-semibold">Start Date:</span> {itinerary.startDate}
             </Typography>
+            <Typography variant="body1" className="flex items-center">
+              <span className="mr-2 font-semibold">End Date:</span> {itinerary.endDate}
+            </Typography>
+          </Box>
+
+          <Box className="flex justify-between mb-4 text-gray-600">
             <Typography variant="body1" className="flex items-center">
               <span className="mr-2 font-semibold">Price:</span> {itinerary.price}
             </Typography>
           </Box>
 
-          {/* Display the language */}
           <Box className="flex justify-between mb-4 text-gray-600">
             <Typography variant="body1" className="flex items-center">
               <span className="mr-2 font-semibold">Language:</span> {itinerary.language}
             </Typography>
           </Box>
 
-          {/* Display the pickup and dropoff locations */}
           <Box className="flex justify-between mb-4 text-gray-600">
             <Typography variant="body1" className="flex items-center">
               <span className="mr-2 font-semibold">Pickup Location:</span> {itinerary.pickupLocation}
@@ -196,7 +201,6 @@ const ItineraryDetails: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* Edit Modal */}
       <Dialog open={isEditing} onClose={handleCloseModal} maxWidth="md" fullWidth>
         <DialogTitle>Edit Itinerary</DialogTitle>
         <DialogContent>
@@ -208,11 +212,26 @@ const ItineraryDetails: React.FC = () => {
             margin="none"
           />
           <TextField
-            label="Date"
+            label="Start Date"
+            type="date" 
             fullWidth
-            value={itinerary.date}
-            onChange={(e) => handleChange(e, "date")}
+            value={itinerary.startDate}
+            onChange={(e) => handleChange(e, "startDate")} 
             margin="normal"
+            InputLabelProps={{
+              shrink: true, 
+            }}
+          />
+          <TextField
+            label="End Date"
+            type="date"
+            fullWidth
+            value={itinerary.endDate}
+            onChange={(e) => handleChange(e, "endDate")} 
+            margin="normal"
+            InputLabelProps={{
+              shrink: true, 
+            }}
           />
           <TextField
             label="Price"
@@ -231,6 +250,13 @@ const ItineraryDetails: React.FC = () => {
             margin="normal"
           />
           <TextField
+            label="Language"
+            fullWidth
+            value={itinerary.language}
+            onChange={(e) => handleChange(e, "language")}
+            margin="normal"
+          />
+          <TextField
             label="Pickup Location"
             fullWidth
             value={itinerary.pickupLocation}
@@ -244,23 +270,7 @@ const ItineraryDetails: React.FC = () => {
             onChange={(e) => handleChange(e, "dropoffLocation")}
             margin="normal"
           />
-
-          <Select
-            label="Language"
-            fullWidth
-            value={itinerary.language}
-            onChange={(e) => handleSelectChange(e, "language")} 
-            margin="none"
-          >
-            <MenuItem value="English">English</MenuItem>
-            <MenuItem value="Spanish">Spanish</MenuItem>
-            <MenuItem value="French">French</MenuItem>
-            <MenuItem value="German">German</MenuItem>
-          </Select>
-
           <Divider className="my-4" />
-
-          <Typography variant="h6" className="mb-2">Places:</Typography>
           {itinerary.places.map((place, placeIndex) => (
             <Box key={placeIndex} mb={2}>
               <TextField
@@ -269,18 +279,23 @@ const ItineraryDetails: React.FC = () => {
                 value={place.name}
                 onChange={(e) => handlePlaceChange(placeIndex, "name", e.target.value)}
               />
-              <Typography variant="body2" className="mt-2">Activities:</Typography>
               {place.activities.map((activity, activityIndex) => (
-                <Box key={activityIndex} mb={1} className="ml-2">
+                <Box key={activityIndex} mb={1}>
                   <TextField
                     label="Activity Name"
+                    fullWidth
                     value={activity.name}
-                    onChange={(e) => handleActivityChange(placeIndex, activityIndex, "name", e.target.value)}
+                    onChange={(e) =>
+                      handleActivityChange(placeIndex, activityIndex, "name", e.target.value)
+                    }
                   />
                   <TextField
                     label="Duration"
+                    fullWidth
                     value={activity.duration}
-                    onChange={(e) => handleActivityChange(placeIndex, activityIndex, "duration", e.target.value)}
+                    onChange={(e) =>
+                      handleActivityChange(placeIndex, activityIndex, "duration", e.target.value)
+                    }
                   />
                   <Button onClick={() => handleRemoveActivity(placeIndex, activityIndex)}>Remove Activity</Button>
                 </Box>
@@ -298,6 +313,7 @@ const ItineraryDetails: React.FC = () => {
           <Button
             onClick={() => {
               handleCloseModal();
+              
             }}
             color="primary"
           >
