@@ -57,7 +57,7 @@ router.patch(
       }
       const place = matchedData(req);
       const updatedPlace = await updatePlace(req.params.id, place);
-      res.status(200).send("Place updated successfully");
+      res.status(200).send(updatedPlace);
     } catch (error) {
       res.status(500).json({ error: error });
     }

@@ -1,52 +1,180 @@
 import React, { useState } from "react";
 import LocationCardCRUD from "./LocationCardCRUD";
 import ImprovedSidebar from "./ImprovedSidebar";
+import useGetPlace from "../custom_hooks/places/useGetPlace"
+import  Place  from "../custom_hooks/places/place_interface";
+import {usedeletePlaces} from "../custom_hooks/places/useDeletePlace";
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
+import { FormControl, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
+import useCreatePlace from "../custom_hooks/places/useCreatePlace";
+import TheMAP from "./TheMAP";
 import ItineraryCardCRUD from "./ItineraryCardCRUD";
 
 const Locations = () => {
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [nativePrice, setNativePrice] = useState(10);
+    const [foreignPrice, setForeignPrice] = useState(100);
+    const [studentPrice, setStudentPrice] = useState(5);
+    const [hours, setHours] = useState("9:00→5:00");
+    const [latitude, setLatitude] = useState(30.0);
+    const [longitude, setLongitude] = useState(31.2);
+    const [image, setImage] = useState<string>('');
+    const [images, setImages] = useState<string[]>([]);
+    const [apiBody, setApiBody] = useState<Place | null>(null);
 
-    const [cards, setCards] = useState([
-        { id: 1, locationName: "Giza Pyramids", description: "The only wonder of the seven with actual substantial evidence that proves they exist.", price: "Free→$1000", hours: "9:00→5:00", location: "Giza, Egypt", image: "https://upload.wikimedia.org/wikipedia/commons/e/e3/Kheops-Pyramid.jpg" },
-        { id: 2, locationName: "Eiffel Tower", description: "An iconic symbol of France, located in Paris.", price: "$25→$100", hours: "9:00→11:00", location: "Paris, France", image: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg" },
-        { id: 3, locationName: "Great Wall of China", description: "A historic wall stretching across northern China.", price: "$10→$50", hours: "8:00→6:00", location: "China", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/The_Great_Wall_of_China_at_Jinshanling-edit.jpg/1200px-The_Great_Wall_of_China_at_Jinshanling-edit.jpg" },
-        { id: 4, locationName: "Statue of Liberty", description: "A symbol of freedom and democracy in the United States.", price: "$20→$50", hours: "8:30→4:00", location: "New York, USA", image: "https://upload.wikimedia.org/wikipedia/commons/a/a1/Statue_of_Liberty_7.jpg" },
-        { id: 5, locationName: "Taj Mahal", description: "A magnificent mausoleum built by Mughal Emperor Shah Jahan.", price: "$15→$60", hours: "6:00→7:00", location: "Agra, India", image: "https://upload.wikimedia.org/wikipedia/commons/d/da/Taj-Mahal.jpg" },
-    ]);
+    useCreatePlace(apiBody);
 
-    const handleDelete = (id: number) => {
-        setCards(cards.filter(card => card.id !== id));
-    };
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+      };
+    const { places } = useGetPlace();
+    const [newcards, setNewcards] = useState(places);
+ 
     const handleCreate = () => {
+      setImages([...images,image])
         const newCard = {
-            id: cards.length + 1,
-            locationName: "New Place",
-            description: "Description of the new place.",
-            price: "Free",
-            hours: "9:00→5:00",
-            location: "Unknown",
-            image: "https://via.placeholder.com/422x121",
+          id: Date.now().toString(),
+          name,
+          description,
+          ticket_price: {
+            native: nativePrice,
+            foreign: foreignPrice,
+            student: studentPrice,
+          },
+          opening_hrs:hours,
+          location: {
+            latitude,
+            longitude,
+          },
+          pictures: images,
         };
-        setCards([...cards, newCard]);
-    };
+        
+        setApiBody(newCard);
+        setOpen(false);
+      };
+    console.log(newcards);
+
+
+      const handleDelete = (id: string) => {
+        usedeletePlaces(id);
+      };
+    
+    React.useEffect(() => {
+        if (places) {
+            setNewcards(places);
+        }
+      }, [places]);
+
     return ( 
     <div className="flex justify-center">
         <ImprovedSidebar title="Admin"/>
-    <div className="grid grid-cols-3 mt-10">
-    <div className="flex w-[422px] h-[334px] bg-[#D9D9D9] rounded-[11px] m-4 hover:bg-[#c0c0c0] transition duration-300 cursor-pointer" onClick={handleCreate}>
+    <div className="grid grid-cols-3 mt-10"><Modal
+        open={open}
+        onClose={handleClose}
+      >
+        <Box sx={style}>
+        <Box className="grid grid-cols-2">
+              <FormControl fullWidth sx={{ marginY: 1 }}><InputLabel>Name</InputLabel>
+                <OutlinedInput
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  label="Name"
+                />
+              </FormControl>
+
+              <FormControl fullWidth sx={{ marginY: 1 }}><InputLabel>Description</InputLabel>
+                <OutlinedInput
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  label="Description"
+              /></FormControl>
+
+              <FormControl fullWidth sx={{ marginY: 1 }}>
+                <InputLabel>Native Price</InputLabel>
+                <OutlinedInput
+                type="number"
+                value={nativePrice}
+                startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                onChange={(e) => setNativePrice(Number(e.target.value))}
+                label="Native Price"
+              /></FormControl>
+              
+              <FormControl fullWidth sx={{ marginY: 1 }}>
+                <InputLabel>Foreign Price</InputLabel>
+                <OutlinedInput
+                type="number"
+                value={foreignPrice}
+                startAdornment={<InputAdornment position="start">EGP</InputAdornment>}
+                onChange={(e) => setForeignPrice(Number(e.target.value))}
+                label="Foreign Price"
+              /></FormControl>
+              
+              <FormControl fullWidth sx={{ marginY: 1 }}>
+                <InputLabel>Student Price</InputLabel>
+                <OutlinedInput
+                type="number"
+                value={studentPrice}
+                startAdornment={<InputAdornment position="start">₫</InputAdornment>}
+                onChange={(e) => setStudentPrice(Number(e.target.value))}
+                label="Student Price"
+              /></FormControl>
+              
+              <FormControl fullWidth sx={{ marginY: 1 }}>
+                <InputLabel>Hours</InputLabel>
+                <OutlinedInput
+                label="Hours"
+                type="string"
+                value={hours}
+                onChange={(e) => setHours(e.target.value)}
+              /></FormControl>
+              <FormControl fullWidth sx={{ marginY: 1 }}  className="col-span-2">
+                <div>
+                  <TheMAP lat={latitude} long={longitude}
+                  setLatitude={setLatitude}
+                  setLongitude={setLongitude}/>
+                </div>
+                </FormControl>
+
+
+                <FormControl fullWidth sx={{ marginY: 1 }}>
+                <InputLabel>Image</InputLabel>
+                <OutlinedInput
+                label="Image"
+                type="string"
+                value={image}
+                onChange={(e) => {setImage(e.target.value)}}
+              /></FormControl>
+
+<Button onClick={handleCreate}>Add</Button>
+              
+              
+        </Box>
+        </Box>
+      </Modal>
+    <div className="flex w-[422px] h-[422px] bg-[#D9D9D9] rounded-[11px] m-4 hover:bg-[#c0c0c0] transition duration-300 cursor-pointer" onClick={handleOpen}>
                     <p className="m-auto text-[40px]">
                         Create New Place
                     </p>
                 </div>
-            {cards.map(card => (
+            {newcards?.map(card => (
                 <LocationCardCRUD
-                key={card.id}
-                id={card.id}
-                locationName={card.locationName}
-                description={card.description}
-                price={card.price}
-                hours={card.hours}
-                location={card.location}
-                image={card.image}
+                wholeLocation={card}
+                key={card._id}
+                id={card._id ?? ""}
                 onDelete={handleDelete}
                 className="hover:bg-[#f0f0f0] transition duration-300"
             />

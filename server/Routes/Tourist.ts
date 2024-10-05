@@ -42,10 +42,7 @@ router.get('/:username', async (req: Request, res: Response) => {
         const user =  await getprofileInfo(username, "tourist");
         if (!user) res.status(404).send("user not found");
         else {
-          if (user.isAccepted) {
-            return res.status(200).json(user);
-          }
-          res.status(403).json(user);
+          return res.status(200).json(user);
         }
       } catch (err) {
         res.status(500).send("error getting user profile");

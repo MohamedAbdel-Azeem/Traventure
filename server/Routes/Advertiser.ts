@@ -68,6 +68,7 @@ router.patch(
       );
       res.status(200).json(updatedUser);
     } catch (err) {
+      console.log(err);
       res.status(500).send("error updating user profile");
     }
   }
