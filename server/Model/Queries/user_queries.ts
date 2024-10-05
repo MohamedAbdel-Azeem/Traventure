@@ -28,7 +28,10 @@ export async function getprofileInfo(username: string, type: string) {
       throw new Error("Invalid user type");
   }
   try {
-    const user = await model.findOne({ username: username });
+    let user = await model.findOne({ username: username });
+    if (type === "advertiser" && user) {
+      user = await user.populate("company");
+    }
     return user;
   } catch (err) {
     throw err;
