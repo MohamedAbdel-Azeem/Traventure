@@ -6,37 +6,23 @@ import useUpdatePlace from "../custom_hooks/places/useUpdatePlace";
 import  Place  from "../custom_hooks/places/place_interface";
 interface LocationCardCRUDProps {
     id: string,
-    name: string,
-    description: string,
-    pictures: string[],
-    location: {
-        latitude: number,
-        longitude: number,
-    },
-    opening_hrs: string,
-    ticket_price: {
-        native: number,
-        foreign: number,
-        student: number,
-    },
     onDelete: (id: string) => void;
     className?: string;
     wholeLocation:Place|null;
 }
 
 const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
-    { id, name: initialLocationName, description: initialDescription, ticket_price: initialPrice, opening_hrs: initialHours, location: initialLocation, pictures: initialImages, onDelete, className, wholeLocation:details }) => {
+    { id, onDelete, className, wholeLocation:details }) => {
     const [isEditing, setIsEditing] = useState(false);
-    const [locationName, setLocationName] = useState(initialLocationName);
-    const [description, setDescription] = useState(initialDescription);
-    const [native, setNative] = useState(initialPrice.native);
-    const [foreign, setForeign] = useState(initialPrice.foreign);
-    const [student, setStudent] = useState(initialPrice.student);
-    const [hours, setHours] = useState(initialHours);
-    const [latitude, setLatitude] = useState(initialLocation.latitude);
-    const [longitude, setLongitude] = useState(initialLocation.longitude);
-    const [fileName, setFileName] = useState("");
-    const [images, setImages] = useState(initialImages);
+    const [locationName, setLocationName] = useState(details?.name || "");
+    const [description, setDescription] = useState(details?.description || "");
+    const [native, setNative] = useState(details?.ticket_price.native ?? 0);
+    const [foreign, setForeign] = useState(details?.ticket_price.foreign ?? 0);
+    const [student, setStudent] = useState(details?.ticket_price.student ?? 0);
+    const [hours, setHours] = useState(details?.opening_hrs || "");
+    const [latitude, setLatitude] = useState(details?.location.latitude ?? 0);
+    const [longitude, setLongitude] = useState(details?.location.longitude ?? 0);
+    const [images, setImages] = useState(details?.pictures || []);
     
     const [apiBody, setApiBody] = useState<Place | null>(details);
 
@@ -49,7 +35,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
         setApiBody({
             name: locationName,
             description: description,
-            pictures: images,
+            pictures: images || [],
             location: {
                 latitude: latitude,
                 longitude: longitude,

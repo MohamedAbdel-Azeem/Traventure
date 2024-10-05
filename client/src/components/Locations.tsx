@@ -6,7 +6,6 @@ import  Place  from "../custom_hooks/places/place_interface";
 import {usedeletePlaces} from "../custom_hooks/places/useDeletePlace";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { TextField } from "@mui/material";
 import useCreatePlace from "../custom_hooks/places/useCreatePlace";
@@ -169,12 +168,6 @@ const Locations = () => {
                 wholeLocation={card}
                 key={card._id}
                 id={card._id ?? ""}
-                name={card.name}
-                description={card.description}
-                ticket_price={card.ticket_price}
-                opening_hrs={card.opening_hrs}
-                location={card.location}
-                pictures={card.pictures}
                 onDelete={handleDelete}
                 className="hover:bg-[#f0f0f0] transition duration-300"
             />

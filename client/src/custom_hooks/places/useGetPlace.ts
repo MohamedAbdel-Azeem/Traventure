@@ -1,7 +1,6 @@
-import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import  Place  from "./place_interface";
-import React from "react";
+import axios from "axios";
 
 const useGetPlace = () => {
     const [places, setPlaces] = useState<Place[] | null>(null);
