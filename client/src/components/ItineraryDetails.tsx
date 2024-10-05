@@ -144,7 +144,7 @@ const ItineraryDetails: React.FC = () => {
 
           <Box className="flex justify-between mb-4 text-gray-600">
             <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">Price:</span> {itinerary.price}
+              <span className="mr-2 font-semibold">Price:</span> ${itinerary.price}
             </Typography>
           </Box>
 
