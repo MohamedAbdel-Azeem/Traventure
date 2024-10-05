@@ -6,6 +6,58 @@
     padding: 16px;
 }
 
+
+
+
+.submit-button2 {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff; /* Blue button */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .submit-button2:hover {
+    background-color: #0056b3; /* Darker shade of blue on hover */
+  }
+
+
+
+  .submit-button3 {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #A594F9; /* Blue button */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-left: 16px;
+  }
+  
+  .submit-button3:hover {
+    background-color: #0056b3; /* Darker shade of blue on hover */
+  }
+
+
+
+  .cancel-button2{
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #ff0000; /* Red button */
+    color: #fff;
+    border: none;
+    
+    cursor: pointer;
+  }
+  
+  .cancel-button2:hover {
+    background-color: #cc0000; /* Darker shade of red on hover */
+  }
+
 /* Product Card Styles */
 .product-card {
     border: 1px solid #ccc;
@@ -44,6 +96,32 @@
     cursor: pointer;
     font-size: 18px;
     margin-left: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.delete-button {
+   
+    border: none;
+    border-radius: 50%; /* Circular shape */
+    padding: 10px; /* Padding to increase size */
+    cursor: pointer; /* Pointer cursor */
+    
+    display: flex; /* Centering icon */
+    align-items: center; /* Centering icon vertically */
+    justify-content: center; /* Centering icon horizontally */
+    width: 40px; /* Set a width for the circle */
+    height: 40px; /* Set a height for the circle */
+}
+
+.delete-button:hover {
+    background-color: red; /* Red background on hover */
+ 
+    transform: scale(1.05); /* Slightly increase size on hover */
+}
+
+.edit-button:hover {
+    background-color: #A594F9; /* Blue background on hover */
+    transform: scale(1.05); /* Slightly increase size on hover */
 }
 
 .card-body {
@@ -86,9 +164,10 @@
     padding: 1px 1px; /* Padding for size */
     cursor: pointer; /* Pointer cursor */
     font-size: 10px; /* Font size */
-    border-radius: 5px; /* Rounded corners */
+    border-radius: 3px; /* Rounded corners */
     transition: background-color 0.3s, transform 0.2s; /* Transition for hover effects */
 }
+
 
 .view-more-button:hover {
     background-color: #0056b3; /* Darker blue on hover */
@@ -351,4 +430,186 @@
 .search-bar input:focus {
     outline: none;
     border-color: #6eb4ff;
+}
+
+
+
+
+
+
+.sort-container {
+  position: relative;
+  display: inline-block;
+}
+
+.sorting-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.rating-container {
+  position: relative;
+}
+
+.rating-options {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  background-color: white;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 200;
+}
+
+.rating-container:hover .rating-options {
+  display: block;
+}
+
+.rating-options button {
+  padding: 8px 12px;
+  width: 120px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.rating-options button:hover {
+  background-color: #f1f1f1;
+}
+
+
+
+
+
+  
+  .sort-button {
+    background-color: #A594F9;;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 10px;
+  }
+  
+
+  
+
+  
+  .sorting-options button {
+    display: block;
+    width: 100%;
+    margin: 5px 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    padding: 5px;
+  }
+  
+  .sorting-options button:hover {
+    background-color: #f0f0f0;
+  }
+  
+
+
+
+  
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .price-filter {
+        flex-direction: column; /* Stack inputs vertically on small screens */
+        align-items: stretch; /* Stretch inputs to fill the container */
+    }
+
+    .price-filter input[type="number"] {
+        width: 100%; /* Full width for inputs on small screens */
+        margin-bottom: 10px; /* Space between inputs */
+    }
+
+      .product-list {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* More columns on smaller screens */
+    }
+    
+    .popup-content {
+        width: 90%; /* Responsive width */
+    }
+}
+
+
+
+.filter-options {
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space out the inputs */
+    align-items: center; /* Center items vertically */
+    position: absolute; /* Keeps the dropdown positioning */
+    top: 100%; /* Position it below the button */
+    left: 0; /* Align it with the button */
+    background: white; /* Change to the desired background */
+    border: 1px solid #ccc; /* Optional border */
+    z-index: 1000; /* Ensures it appears above other content */
+    padding: 10px; /* Adds some padding */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Optional shadow for effect */
+    width: 320px; /* Adjust the width as needed */
+}
+
+.filter-options input {
+    width: 100px; /* Set a fixed width for the input fields */
+    padding: 10px; /* Padding for the input field */
+    margin: 0 5px; /* Space between input fields */
+    border: 1px solid #ccc; /* Border for the input fields */
+    border-radius: 4px; /* Optional rounding for corners */
+    font-size: 15px; /* Larger text for better readability */
+}
+
+
+
+
+
+
+
+
+  /* Filter Section Styles */
+.price-filter {
+    display: flex;
+    justify-content: space-between; /* Space between min and max price inputs */
+    margin: 20px 0; /* Margin for spacing */
+    padding: 10px; /* Padding for the filter section */
+    background-color: #f7f7f7; /* Light background color */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Price Input Styles */
+.price-filter input[type="number"] {
+    width: 5%; /* Adjust width for both inputs */
+    padding: 10px; /* Padding for the inputs */
+    border: 1px solid #ccc; /* Border for the inputs */
+    border-radius: 4px; /* Rounded corners */
+    font-size: 16px; /* Font size */
+    transition: border-color 0.3s; /* Transition for border color */
+}
+
+/* Input focus effect */
+.price-filter input[type="number"]:focus {
+    border-color: #A594F9; /* Change border color on focus */
+    outline: none; /* Remove default outline */
+}
+
+
+
+/* Submit Button Styles */
+
+
+
+.submit-button,
+.sort-button
+{
+    background-color: #A594F9;
 }
