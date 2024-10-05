@@ -205,7 +205,6 @@ const ItineraryDetails: React.FC = () => {
 
           <Divider className="my-4" />
 
-          
           {Array.isArray(itinerary.selectedTags) && itinerary.selectedTags.length > 0 && (
             <div className="mb-2">
               <div className="flex flex-wrap justify-center items-center">
@@ -253,79 +252,140 @@ const ItineraryDetails: React.FC = () => {
             onChange={(e) => handleChange(e, "description")}
             margin="dense"
           />
+          <TextField
+            label="Start Date"
+            type="date" 
+            fullWidth
+            value={itinerary.startDate}
+            onChange={(e) => handleChange(e, "startDate")}
+            margin="dense"
+          />
+          <TextField
+            label="End Date"
+            type="date" 
+            fullWidth
+            value={itinerary.endDate}
+            onChange={(e) => handleChange(e, "endDate")}
+            margin="dense"
+          />
+          <TextField
+            label="Price"
+            fullWidth
+            type="number"
+            value={itinerary.price}
+            onChange={(e) => handleChange(e, "price")}
+            margin="dense"
+          />
+          <TextField
+            label="Language"
+            fullWidth
+            value={itinerary.language}
+            onChange={(e) => handleChange(e, "language")}
+            margin="dense"
+          />
+          <TextField
+            label="Pickup Location"
+            fullWidth
+            value={itinerary.pickupLocation}
+            onChange={(e) => handleChange(e, "pickupLocation")}
+            margin="dense"
+          />
+          <TextField
+            label="Dropoff Location"
+            fullWidth
+            value={itinerary.dropoffLocation}
+            onChange={(e) => handleChange(e, "dropoffLocation")}
+            margin="dense"
+          />
+          <Box className="mt-4">
+            <Typography variant="h6">Places</Typography>
+            {itinerary.places.map((place, placeIndex) => (
+              <Box key={placeIndex} className="mb-2">
+                <TextField
+                  label="Place Name"
+                  fullWidth
+                  value={place.name}
+                  onChange={(e) => handlePlaceChange(placeIndex, "name", e.target.value)}
+                  margin="dense"
+                />
+                <Box className="mt-2">
+                  <Typography variant="subtitle1">Activities</Typography>
+                  {place.activities.map((activity, activityIndex) => (
+                    <Box key={activityIndex} className="mb-2">
+                      <TextField
+                        label="Activity Name"
+                        fullWidth
+                        value={activity.name}
+                        onChange={(e) => handleActivityChange(placeIndex, activityIndex, "name", e.target.value)}
+                        margin="dense"
+                      />
+                      <TextField
+                        label="Duration"
+                        fullWidth
+                        value={activity.duration}
+                        onChange={(e) => handleActivityChange(placeIndex, activityIndex, "duration", e.target.value)}
+                        margin="dense"
+                      />
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={() => handleRemoveActivity(placeIndex, activityIndex)}
+                      >
+                        Remove Activity
+                      </Button>
+                    </Box>
+                  ))}
+                  <Button variant="outlined" onClick={() => handleAddActivity(placeIndex)}>
+                    Add Activity
+                  </Button>
+                </Box>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => handleRemovePlace(placeIndex)}
+                >
+                  Remove Place
+                </Button>
+              </Box>
+            ))}
+            <Button variant="outlined" onClick={handleAddPlace}>
+              Add Place
+            </Button>
+          </Box>
 
-         
-          <Box className="flex items-center mb-4">
+          <Box className="mt-4">
+            <Typography variant="h6">Tags</Typography>
             <TextField
               label="Add Tag"
+              fullWidth
               value={newTag}
               onChange={(e) => setNewTag(e.target.value)}
               margin="dense"
             />
-            <Button variant="contained" color="primary" onClick={handleAddTag} className="ml-2">
-              Add
+            <Button variant="outlined" onClick={handleAddTag}>
+              Add Tag
             </Button>
-          </Box>
-
-     
-          {Array.isArray(itinerary.selectedTags) && itinerary.selectedTags.length > 0 && (
-            <div className="mb-2">
-              <div className="flex flex-wrap justify-center items-center">
-                {itinerary.selectedTags.map((tag, index) => (
-                  <span key={index} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm mr-2 mb-2 flex items-center">
-                    {tag}
-                    <Button onClick={() => handleRemoveTag(tag)} size="small" color="secondary" className="ml-1">x</Button>
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-         
-          {itinerary.places.map((place, placeIndex) => (
-            <div key={placeIndex}>
-              <TextField
-                label="Place Name"
-                value={place.name}
-                onChange={(e) => handlePlaceChange(placeIndex, "name", e.target.value)}
-                fullWidth
-                margin="dense"
-              />
-              {place.activities.map((activity, activityIndex) => (
-                <div key={activityIndex} className="flex items-center">
-                  <TextField
-                    label="Activity Name"
-                    value={activity.name}
-                    onChange={(e) => handleActivityChange(placeIndex, activityIndex, "name", e.target.value)}
-                    fullWidth
-                    margin="dense"
-                  />
-                  <TextField
-                    label="Duration"
-                    value={activity.duration}
-                    onChange={(e) => handleActivityChange(placeIndex, activityIndex, "duration", e.target.value)}
-                    margin="dense"
-                  />
-                  <Button onClick={() => handleRemoveActivity(placeIndex, activityIndex)} color="secondary">Remove</Button>
-                </div>
+            <div className="flex flex-wrap mt-2">
+              {itinerary.selectedTags?.map((tag, index) => (
+                <span key={index} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm mr-2 mb-2">
+                  {tag}
+                  <Button size="small" onClick={() => handleRemoveTag(tag)}>Remove</Button>
+                </span>
               ))}
-              <Button onClick={() => handleAddActivity(placeIndex)} color="primary">
-                Add Activity
-              </Button>
-              <Button onClick={() => handleRemovePlace(placeIndex)} color="secondary">
-                Remove Place
-              </Button>
             </div>
-          ))}
-          <Button onClick={handleAddPlace} color="primary">
-            Add Place
-          </Button>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModal} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleCloseModal} color="primary">
+          <Button
+            onClick={() => {
+              console.log(itinerary); 
+              handleCloseModal();
+            }}
+            color="primary"
+          >
             Save
           </Button>
         </DialogActions>
