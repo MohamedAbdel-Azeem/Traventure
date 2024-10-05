@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
-import { TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import useUpdatePlace from "../custom_hooks/places/useUpdatePlace";
 import  Place  from "../custom_hooks/places/place_interface";
+import TheMAP from "./TheMAP";
 interface LocationCardCRUDProps {
     id: string,
     onDelete: (id: string) => void;
@@ -23,14 +24,20 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
     const [latitude, setLatitude] = useState(details?.location.latitude ?? 0);
     const [longitude, setLongitude] = useState(details?.location.longitude ?? 0);
     const [images, setImages] = useState(details?.pictures || []);
+    const [image, setImage] = useState('');
     
-    const [apiBody, setApiBody] = useState<Place | null>(details);
 
+
+
+    const [apiBody, setApiBody] = useState<Place | null>(details);
+    console.log();
     useUpdatePlace(id,apiBody);
 
 
 
     const handleEditClick = () => {
+        const filteredImages = images.filter(image => image !== '');
+        setImages(filteredImages);
         setIsEditing(!isEditing);
         setApiBody({
             name: locationName,
@@ -47,22 +54,53 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
                 student: student,
             },
         });
+        console.log("LIFE IS PAIN, I HATE MYSELF"+latitude);
     };
     const handleDeleteClick = () => {
         onDelete(id);
     };
-
+    const handleImageChange = (index:number, newValue:string) => {
+        if (newValue === '') {
+            const updatedImages = images.filter((_, i) => i !== index);
+            setImages(updatedImages);
+          }else {
+        const updatedImages = [...images];
+        updatedImages[index] = newValue;
+        setImages(updatedImages);}
+      };
     return ( 
     <div>
         <div className={`w-[422px] h-[422px] bg-[#D9D9D9] rounded-[11px] m-4 ${className}`}>
         <div className="w-[422px] h-[121px] relative">
-        {isEditing ? (
-                    <div className="flex items-center justify-center w-full h-full">
-                        <TextField title="Upload Image" 
-                            onChange={(e)=>setImages([...images,(e.target.value)])}/>
+        {isEditing ? (<div className="flex flex-col">
+                     <div className="flex w-full h-full object-cover overflow-auto whitespace-nowrap">
+                     {images?.map((cimage, index) => (
+                        <TextField
+                        key={index}
+                        title="Upload Image"
+                        value={cimage}
+                        onChange={(e) => handleImageChange(index, e.target.value)}
+                        className="pr-[10px]"
+                      />
+                     ))}
+                 </div>
+                 <div className="flex flex-row">
+                        <TextField
+                        onChange={(e) => setImage(e.target.value)}/>
+                        <Button 
+                        onClick={() => setImages([...images,image])}
+                        >Add Image</Button>
+                        </div>
+                 </div>
+                ) : (
+                <div className="w-full h-full object-cover rounded-t-[11px] relative">
+
+                    <div className="flex bg-[#333333] w-full h-full object-cover overflow-auto whitespace-nowrap">
+                        {images?.map(cimage => (<img className="pr-[10px]" src={cimage} alt={locationName}/>
+                        ))}
                     </div>
-                ) : (<div className="w-full h-full object-cover rounded-t-[11px] relative">
-                    <img src={images[0]} alt={locationName} className="w-full h-full object-cover rounded-t-[11px]" />
+
+
                     </div>
                 )}<button title="Edit" className="editBtn absolute top-[10px] right-[70px]" onClick={handleEditClick}
                 >
@@ -122,6 +160,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
                         sx={{
                             '& .MuiInputBase-input': {
                                 textAlign: 'center',
+                                padding: '4px'
                             },
                             '& .MuiInputBase-input::placeholder': {
                                 textAlign: 'center',
@@ -138,7 +177,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
             {isEditing ? (
                     <TextField
                     multiline
-                    maxRows="3"
+                    maxRows="2"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     className="text-[16px] text-center w-full"
@@ -147,6 +186,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
                     sx={{
                         '& .MuiInputBase-input': {
                             textAlign: 'center',
+                            padding: '0px'
                         },
                     }}
                     />
@@ -160,29 +200,16 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
                 <div className="w-[311px] h-full rounded-bl-[11px]">
                 {isEditing ? (
                     <div>
-                            <TextField
-                                value={latitude}
-                                size="small"
-                                onChange={(e) => setLatitude(Number(e.target.value))}
-                                className="w-[124px]"
-                                placeholder="Location"
-                                variant="outlined"
-                            />
-                            <TextField
-                                value={longitude}
-                                size="small"
-                                onChange={(e) => setLongitude(Number(e.target.value))}
-                                className="w-[124px]"
-                                placeholder="Location"
-                                variant="outlined"
-                            />
+                            <TheMAP lat={latitude} long={longitude}
+                            setLatitude={setLatitude}
+                            setLongitude={setLongitude}/>
                     </div>
                         ) : ( 
-                        <p className="text-[16px] h-full overflow-auto">
-                            <iframe title="map" className="h-full rounded-bl-[11px]" src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${latitude}!3d${longitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
+                        <div className="text-[16px] h-full overflow-auto">
+                            <iframe title="map" className="h-full rounded-bl-[11px]" src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${longitude}!3d${latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
                             width="311px"
                             ></iframe>
-                        </p>
+                        </div>
                         )}
                 </div>
                 <div className="flex flex-col">
