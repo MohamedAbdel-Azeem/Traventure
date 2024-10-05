@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faChevronLeft, faChevronRight, faCartShopping, faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { Product } from './data/ProductData';
 
-
 interface ProductCardProps {
     product: Product;
     onDelete: (id: number) => void; // Pass the product ID to the onDelete function
@@ -57,14 +56,18 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onDelete, productId,
     return (
         <div className="product-card">
             <div className="card-header">
-                <img src={product.imageUrls[0]} alt="Product" className="product-image" />
+                {product.imageUrls.length > 0 ? (
+                    <img src={product.imageUrls[0]} alt="Product" className="product-image" />
+                ) : (
+                    <div className="no-image">No images</div> // Display "No images" when there are no images
+                )}
                 <div className="card-actions">
                     <button onClick={handleEdit} title="edit" className="edit-button">
                         <FontAwesomeIcon icon={faPencil} />
                     </button>
-                    <button onClick={handleDelete} title="delete" className="delete-button">
+                    {/* <button onClick={handleDelete} title="delete" className="delete-button">
                         <FontAwesomeIcon icon={faTrashCan} />
-                    </button>
+                    </button> */}
                 </div>
             </div>
 
@@ -72,9 +75,16 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onDelete, productId,
                 <h3 className="product-title">{product.title}</h3>
                 <p className="product-description">{getTruncatedDescription(product.description)}</p>
                 <div className="card-footer">
-                    <span className="product-price">{product.price}</span>
+                    <span className="product-price">${product.price}</span>
                     <span className="product-rating">
-                        {'★'.repeat(product.rating)}{'☆'.repeat(5 - product.rating)}
+                        {Array.from({ length: 5 }, (v, i) => {
+                            if (i < Math.floor(product.rating)) {
+                                return '★'; // Full star
+                            } else if (i < product.rating) {
+                                return '☆'; // Half star (if rating is decimal)
+                            }
+                            return '☆'; // Empty star
+                        })}
                     </span>
                     <button onClick={togglePopup} className="view-more-button">
                         View more
@@ -86,19 +96,25 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onDelete, productId,
                 <div className="popup-overlay" onClick={togglePopup}>
                     <div className="popup-content" onClick={(e) => e.stopPropagation()}>
                         <div className="carousel">
-                            <img
-                                src={product.imageUrls[currentImageIndex]}
-                                alt="Product"
-                                className="popup-image"
-                            />
-                            <div className="carousel-buttons">
-                                <button onClick={handlePrevImage} className="prev-image">
-                                    <FontAwesomeIcon icon={faChevronLeft} />
-                                </button>
-                                <button onClick={handleNextImage} className="next-image">
-                                    <FontAwesomeIcon icon={faChevronRight} />
-                                </button>
-                            </div>
+                            {product.imageUrls.length > 0 ? (
+                                <>
+                                    <img
+                                        src={product.imageUrls[currentImageIndex]}
+                                        alt="Product"
+                                        className="popup-image"
+                                    />
+                                    <div className="carousel-buttons">
+                                        <button onClick={handlePrevImage} className="prev-image">
+                                            <FontAwesomeIcon icon={faChevronLeft} />
+                                        </button>
+                                        <button onClick={handleNextImage} className="next-image">
+                                            <FontAwesomeIcon icon={faChevronRight} />
+                                        </button>
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="no-image">No images</div> // Display "No images" in the popup
+                            )}
                         </div>
                         <div className="popup-flex">
                             <div className="popup-description-box">
@@ -118,7 +134,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onDelete, productId,
                         </div>
                         <div className="popup-bottom">
                             <div>
-                                <p><strong>Price:</strong> {product.price}</p>
+                                <p><strong>Price:</strong> ${product.price}</p>
                                 <p><strong>Seller:</strong> {product.seller}</p>
                             </div>
                             <button className="add-to-cart-button">

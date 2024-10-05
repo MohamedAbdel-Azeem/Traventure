@@ -4,52 +4,85 @@ import WaitingResponse from './WaitingResponse';
 import ShowingResponse from './ShowingResponse';
 
 interface EditProductModalProps {
-  product: Product;
+  product: Product | null;
   closeModal: () => void;
   saveChanges: (product: Product) => void;
 }
 
 const EditProductModal: React.FC<EditProductModalProps> = ({ product, closeModal, saveChanges }) => {
-  const [editedProduct, setEditedProduct] = useState<Product>({ ...product });
+  const [editedProduct, setEditedProduct] = useState<Product>(
+    product
+      ? { ...product, imageUrls: product.imageUrls || [] }
+      : {
+          title: '',
+          description: '',
+          price: 0,
+          rating: 0,
+          seller: '',
+          reviews: [],
+          imageUrls: [],
+          id: 0,
+          quantity: 1, // Initialize quantity
+        }
+  );
+
   const [showSaveConfirm, setShowSaveConfirm] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
-  const [showResponse, setShowResponse] = useState(false); // State to control showing response
+  const [showResponse, setShowResponse] = useState(false);
+  const [newImageUrl, setNewImageUrl] = useState<string>('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    const newValue = name === 'price' ? parseFloat(value) : value;
+    const newValue = name === 'price' || name === 'quantity' ? parseFloat(value) : value;
     setEditedProduct(prevProduct => ({
       ...prevProduct,
-      [name]: newValue
+      [name]: newValue,
     }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setShowSaveConfirm(true); // Show save confirmation
+    setShowSaveConfirm(true);
   };
 
   const handleCancel = () => {
-    setShowCancelConfirm(true); // Show cancel confirmation
+    setShowCancelConfirm(true);
   };
 
   const confirmSave = () => {
-    saveChanges(editedProduct);   // Save the product changes
-    setShowSaveConfirm(false);    // Hide save confirmation dialog
-    setShowResponse(true);        // Show response message after saving
+    saveChanges(editedProduct);
+    setShowSaveConfirm(false);
+    setShowResponse(true);
   };
 
   const cancelSave = () => {
-    setShowSaveConfirm(false);    // Hide save confirmation dialog without saving
+    setShowSaveConfirm(false);
   };
 
   const confirmCancel = () => {
     closeModal();
-    setShowCancelConfirm(false);  // Hide cancel confirmation and close modal
+    setShowCancelConfirm(false);
   };
 
   const cancelCloseModal = () => {
-    setShowCancelConfirm(false);  // Hide cancel confirmation and keep modal open
+    setShowCancelConfirm(false);
+  };
+
+  const deleteImageUrl = (index: number) => {
+    setEditedProduct(prevProduct => ({
+      ...prevProduct,
+      imageUrls: prevProduct.imageUrls.filter((_, i) => i !== index),
+    }));
+  };
+
+  const addImageUrl = () => {
+    if (newImageUrl.trim() !== '') {
+      setEditedProduct(prevProduct => ({
+        ...prevProduct,
+        imageUrls: [...prevProduct.imageUrls, newImageUrl.trim()],
+      }));
+      setNewImageUrl('');
+    }
   };
 
   return (
@@ -83,6 +116,18 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ product, closeModal
             />
           </div>
           <div className="form-group">
+            <label className="form-label">Quantity:</label>
+            <input
+              type="number"
+              className="form-input"
+              name="quantity"
+              value={editedProduct.quantity.toString()} // Add quantity input
+              onChange={handleChange}
+              min="1" // Ensure quantity is at least 1
+              required
+            />
+          </div>
+          <div className="form-group">
             <label className="form-label">Description:</label>
             <textarea
               className="form-input"
@@ -92,23 +137,34 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ product, closeModal
               required
             />
           </div>
+
           <div className="form-group">
-            <label className="form-label">Image URLs (comma separated):</label>
+            <label className="form-label">Add New Image URL:</label>
             <input
               type="text"
               className="form-input"
-              name="imageUrls"
-              value={editedProduct.imageUrls.join(', ')}
-              onChange={(e) => {
-                const value = e.target.value.split(',').map(url => url.trim());
-                setEditedProduct(prevProduct => ({
-                  ...prevProduct,
-                  imageUrls: value
-                }));
-              }}
-              required
+              value={newImageUrl}
+              onChange={(e) => setNewImageUrl(e.target.value)}
+              placeholder="Enter new image URL"
             />
+            <button type="button" className="add-image-button" onClick={addImageUrl}>
+              Add Image URL
+            </button>
           </div>
+
+          <div className="form-group">
+            <ul className="image-url-list">
+              {editedProduct.imageUrls.map((url, index) => (
+                <li key={index} className="image-url-item">
+                  <span className="image-url-text">{url}</span>
+                  <button type="button" className="delete-image-button" onClick={() => deleteImageUrl(index)}>
+                    &times;
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+{/* 
           <div className="form-group">
             <label className="form-label">Seller:</label>
             <input
@@ -119,14 +175,13 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ product, closeModal
               onChange={handleChange}
               required
             />
-          </div>
+          </div> */}
           <div className="form-group">
-            <button type="submit" className="submit-button">Save Changes</button>
-            <button type="button" className="cancel-button" onClick={handleCancel}>Cancel</button>
+            <button type="submit" className="submit-button2">Save Changes</button>
+            <button type="button" className="cancel-button2" onClick={handleCancel}>Cancel</button>
           </div>
         </form>
 
-        {/* Showing save confirmation */}
         {showSaveConfirm && (
           <WaitingResponse
             message="Are you sure you want to save these changes?"
@@ -135,7 +190,6 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ product, closeModal
           />
         )}
 
-        {/* Showing cancel confirmation */}
         {showCancelConfirm && (
           <WaitingResponse
             message="Are you sure you want to cancel? Your changes will not be saved."
@@ -145,11 +199,10 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ product, closeModal
         )}
       </div>
 
-      {/* Show response only after save is confirmed */}
       {showResponse && (
-        <ShowingResponse 
-          message="Product changes saved successfully." 
-          onClose={() => setShowResponse(false)} // Handle close action for the response message
+        <ShowingResponse
+          message="Product changes saved successfully."
+          onClose={() => setShowResponse(false)}
         />
       )}
     </div>

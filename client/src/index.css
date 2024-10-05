@@ -432,7 +432,7 @@
     background-color: #0056b3; /* Darker shade of blue on hover */
   }
   
-  .cancel-button {
+  .bin-top {
     padding: 10px 20px;
     font-size: 16px;
     background-color: #ff0000; /* Red button */
@@ -445,6 +445,70 @@
   .cancel-button:hover {
     background-color: #cc0000; /* Darker shade of red on hover */
   }
+
+  .image-url-list {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 10px;
+    border-top: 1px solid #ccc;
+  }
+  
+  .image-url-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f8f8;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+  }
+  
+  .image-url-text {
+    font-size: 14px;
+    word-break: break-all;
+    width: 90%; /* Allows the text to take up most of the space */
+  }
+  
+  .delete-image-button {
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .add-image-button {
+    margin-top: 5px;
+    padding: 5px 10px;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+  }
+  .add-image-button:hover {
+    background-color: darkgreen;
+
+  }
+  
+  .form-input {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
   
   .gender-checkboxes {
     display: flex;

@@ -15,7 +15,7 @@ const WaitingResponse: React.FC<WaitingResponseProps> = ({ message, onConfirm, o
         <h3 className="waiting-response-message">{message}</h3>
         <div className="waiting-response-buttons">
           <button className="confirm-button" onClick={onConfirm}>Yes</button>
-          <button className="cancel-button" onClick={onCancel}>No</button>
+          <button className="cancel-button2" onClick={onCancel}>No</button>
         </div>
       </div>
     </div>
