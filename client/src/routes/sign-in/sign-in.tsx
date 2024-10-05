@@ -6,6 +6,7 @@ import image4 from "../../assets/splash/s4.jpg";
 import image5 from "../../assets/splash/s5.jpg";
 import useLoginGuest from "../../custom_hooks/useLoginGuest";
 import { useNavigate } from "react-router-dom";
+import BlockedAccountPopup from "../../components/BlockedAccountPopup";
 
 const SignIn: React.FC = () => {
   const [username, setUsername] = useState<string>("");
@@ -14,6 +15,7 @@ const SignIn: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
   const [fadeIn, setFadeIn] = useState<boolean>(true);
   const [apiBody, setBody] = useState<object | null>(null);
+  const [showBlockedPopup, setShowBlockedPopup] = useState<boolean>(false); // State for popup
   const navigate = useNavigate();
 
   const images = [image1, image2, image3, image4, image5];
@@ -22,6 +24,13 @@ const SignIn: React.FC = () => {
 
   useEffect(() => {
     if (data === null) return;
+    if (data.type === "seller" || data.type === "advertiser" || data.type === "tourguide") {
+      if (data.user.isAccepted === false) {
+        setShowBlockedPopup(true);
+        return;
+      }
+    }
+    // Assuming that data.type and data.user._id are valid
     navigate(`/${data.type}/${data.user._id}`);
   }, [data]);
 
@@ -43,10 +52,17 @@ const SignIn: React.FC = () => {
 
     if (!username || !password) {
       setError("Please enter both username and password.");
-    } else {
-      setError("");
+      return;
     }
+
+    setError("");
     setBody({ username: username, password: password });
+
+
+  };
+
+  const closePopup = () => {
+    setShowBlockedPopup(false); // Close the popup
   };
 
   return (
@@ -115,7 +131,7 @@ const SignIn: React.FC = () => {
                 Create an account
               </a>
               <br />
-              <br></br>
+              <br />
               <a
                 href="/forgot-password"
                 className="text-purple-700 hover:text-purple-600 underline"
@@ -130,13 +146,15 @@ const SignIn: React.FC = () => {
           <img
             src={images[currentImageIndex]}
             alt="Sign In Illustration"
-            className={`object-cover w-full h-full rounded-r-lg transition-opacity duration-500 ${
-              fadeIn ? "opacity-100" : "opacity-0"
-            }`}
+            className={`object-cover w-full h-full rounded-r-lg transition-opacity duration-500 ${fadeIn ? "opacity-100" : "opacity-0"
+              }`}
           />
           <div className="absolute inset-0 bg-gradient-to-l from-purple-600 opacity-30"></div>
         </div>
       </div>
+
+      {/* Blocked Account Popup */}
+      {showBlockedPopup && <BlockedAccountPopup onClose={closePopup} />}
     </div>
   );
 };

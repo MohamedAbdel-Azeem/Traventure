@@ -1,65 +1,86 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, set } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { TouristProfileData } from './tourist_profile_data';
+import {usePatchUserProfile} from '../../../custom_hooks/updateTouristProfile';
 
-type TouristSchemaType = {
-  username: string;
-  email: string;
-  password: string;
-  mobileNumber: string;
-  dob: string; // Adjusted to string for easier handling of dates
-  nationality: string;
-  occupation: string;
-  profilePicture: string;
-  wallet: number;
-};
+// type TouristSchemaType = {
+//   username: string;
+//   email: string;
+//   password: string;
+//   mobileNumber: string;
+//   dob: string; // Adjusted to string for easier handling of dates
+//   nationality: string;
+//   occupation: string;
+//   profilePicture: string;
+//   wallet: number;
+// };
 
 interface TouristProfileProps {
-  tourist: TouristSchemaType;
+  tourist: TouristProfileData;
 }
+
+
+const schema = z.object({
+  username: z.string().min(1, 'Username is required'),
+  email: z.string().email('Invalid email address'),
+  mobileNumber: z.string().min(1, 'Mobile number is required'),
+  nationality: z.string().min(1, 'Nationality is required'),
+  dateOfBirth: z.string().refine((val) => {
+    const today = new Date();
+    const dob = new Date(val);
+    const age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+      return age - 1 >= 18;
+    }
+    return age >= 18;
+  }, 'You must be 18 years or older'),
+  Occupation: z.string().min(1, 'Occupation is required'),
+});
+export type TouristProfileUpdate= z.infer<typeof schema>;
 
 const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
+  const [currentTourist,setCurrentTourist ] = useState(tourist);
+  const[apiBody, setApiBody] = useState({});
+  const[apiUsername, setApiUsername] = useState('');
+  const response =usePatchUserProfile(apiBody, apiUsername);
+
+
+  //  tourist = usePatchUserProfile(tourist, tourist.username).response as TouristProfileData;
 
   // Define the Zod schema for form validation
-  const schema = z.object({
-    email: z.string().email('Invalid email address'),
-    mobileNumber: z.string().min(1, 'Mobile number is required'),
-    nationality: z.string().min(1, 'Nationality is required'),
-    dob: z.string().refine((val) => {
-      const today = new Date();
-      const dob = new Date(val);
-      const age = today.getFullYear() - dob.getFullYear();
-      const monthDiff = today.getMonth() - dob.getMonth();
-      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
-        return age - 1 >= 18;
-      }
-      return age >= 18;
-    }, 'You must be 18 years or older'),
-    occupation: z.string().min(1, 'Occupation is required'),
-  });
-  type TouristUpadateProfile = z.infer<typeof schema>;
   // Initialize useForm with default values from props
-  const { control, handleSubmit, formState: { errors } } = useForm({
+  const { control, handleSubmit, formState: { errors } } = useForm<TouristProfileData>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      username: tourist.username,
-      email: tourist.email,
-      mobileNumber: tourist.mobileNumber,
-      nationality: tourist.nationality,
-      dob: tourist.dob,
-      occupation: tourist.occupation,
+    defaultValues:{
+      username: currentTourist.username,
+      email: currentTourist.email,
+      mobileNumber: currentTourist.mobileNumber,
+      nationality: currentTourist.nationality,
+      dateOfBirth: currentTourist.dateOfBirth,
+      Occupation: currentTourist.Occupation,
     },
   });
 
   // Handle form submission (save edited data)
-  const onSubmit = (data: TouristUpadateProfile) => {
+  const onSubmit = (data: TouristProfileData) => {
+
+    
     console.log('Saved data:', data);
     setIsEditing(false);
-    // UPDATE INFO TO DATABASE HERE
+    setApiBody(data);
+    setApiUsername(data.username);
+
+    setCurrentTourist(data);
+
+
+   
+    
   };
 
   const toggleEdit = () => {
@@ -85,12 +106,26 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex items-center space-x-6">
             <img
-              src={tourist.profilePicture}
+              src={currentTourist.profilePicture}
               alt="Profile"
               className="w-32 h-32 rounded-full object-cover shadow-md border-4 border-purple-500"
             />
             <div className="text-left">
-                <h2 className="text-4xl font-extrabold text-purple-700">{tourist.username}</h2>        
+              {isEditing ? (
+                <Controller
+                  name="username"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      className="mt-1 text-lg text-gray-600 p-3 border border-gray-300 rounded-md w-full"
+                    />
+                  )}
+                />
+              ) : (
+                <h2 className="text-4xl font-extrabold text-purple-700">{currentTourist.username}</h2>
+              )}
+              {errors.username && <p className="text-red-600">{errors.username.message}</p>}
             </div>
           </div>
 
@@ -110,7 +145,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
                   )}
                 />
               ) : (
-                <p className="text-gray-800 text-lg">{tourist.email}</p>
+                <p className="text-gray-800 text-lg">{currentTourist.email}</p>
               )}
               {errors.email && <p className="text-red-600">{errors.email.message}</p>}
             </div>
@@ -129,7 +164,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
                   )}
                 />
               ) : (
-                <p className="text-gray-800 text-lg">{tourist.mobileNumber}</p>
+                <p className="text-gray-800 text-lg">{currentTourist.mobileNumber}</p>
               )}
               {errors.mobileNumber && <p className="text-red-600">{errors.mobileNumber.message}</p>}
             </div>
@@ -148,7 +183,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
                   )}
                 />
               ) : (
-                <p className="text-gray-800 text-lg">{tourist.nationality}</p>
+                <p className="text-gray-800 text-lg">{currentTourist.nationality}</p>
               )}
               {errors.nationality && <p className="text-red-600">{errors.nationality.message}</p>}
             </div>
@@ -157,7 +192,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
               <label className="text-lg font-semibold text-gray-700">Date of Birth:</label>
               {isEditing ? (
                 <Controller
-                  name="dob"
+                  name="dateOfBirth"
                   control={control}
                   render={({ field }) => (
                     <input
@@ -168,16 +203,16 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
                   )}
                 />
               ) : (
-                <p className="text-gray-800 text-lg">{tourist.dob}</p>
+                <p className="text-gray-800 text-lg">{currentTourist.dateOfBirth.split("T00:00:00.000Z")}</p>
               )}
-              {errors.dob && <p className="text-red-600">{errors.dob.message}</p>}
+              {errors.dateOfBirth && <p className="text-red-600">{errors.dateOfBirth.message}</p>}
             </div>
 
             <div className="flex flex-col">
               <label className="text-lg font-semibold text-gray-700">Occupation:</label>
               {isEditing ? (
                 <Controller
-                  name="occupation"
+                  name="Occupation"
                   control={control}
                   render={({ field }) => (
                     <input
@@ -187,9 +222,9 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
                   )}
                 />
               ) : (
-                <p className="text-gray-800 text-lg">{tourist.occupation}</p>
+                <p className="text-gray-800 text-lg">{currentTourist.Occupation}</p>
               )}
-              {errors.occupation && <p className="text-red-600">{errors.occupation.message}</p>}
+              {errors.Occupation && <p className="text-red-600">{errors.Occupation.message}</p>}
             </div>
           </div>
 
@@ -197,7 +232,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
             <div className="flex items-center space-x-4">
               <div className="flex flex-col items-center">
                 <label className="text-xl font-semibold text-purple-700">Wallet Balance:</label>
-                <p className="text-4xl font-bold text-purple-900">${tourist.wallet}</p>
+                <p className="text-4xl font-bold text-purple-900">${currentTourist.wallet}</p>
               </div>
             </div>
           </div>
