@@ -111,7 +111,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
           </svg>
         </button>
             </div>
-            <div className="w-[422px] h-[37px]">
+            <div className="w-[422px] h-[30px]">
             {isEditing ? (
                     <TextField
                         value={locationName}
@@ -134,7 +134,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
                     </p>
                 )}
             </div>
-            <div className="w-[422px] h-[84px]">
+            <div className="w-[422px] h-[60px]">
             {isEditing ? (
                     <TextField
                     multiline
@@ -156,8 +156,8 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
                     </p>
                 )}
             </div>
-            <div className="w-[422px] h-[92px] flex">
-                <div className="w-[140px] h-[92px] bg-[#2D7D10] rounded-bl-[11px]">
+            <div className="w-[422px] h-[123px] flex">
+                <div className="w-[160px] h-full rounded-bl-[11px]">
                 {isEditing ? (
                     <div>
                             <TextField
@@ -178,13 +178,14 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
                             />
                     </div>
                         ) : ( 
-                        <p className="text-[16px] h-[84px] overflow-auto">
-                            {latitude}/
-                            {longitude}
+                        <p className="text-[16px] h-full overflow-auto">
+                            <iframe title="map" className="h-full rounded-bl-[11px]" src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4${latitude}.855933447735!2d${longitude}.321447549598684!3d10.!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14583f7e406772f5%3A0x4bfd4ca20c13262a!2sYour%20clinic!5e0!3m2!1sen!2seg!4v1714583676383!5m2!1sen!2seg`}
+                            width="160px"
+                            ></iframe>
                         </p>
                         )}
                 </div>
-                <div className="w-[152px] h-[92px] bg-[#B03131] flex flex-col">
+                <div className="w-[152px] h-full bg-[#B03131] flex flex-col">
                 <div className="m-auto flex flex-row"><ConfirmationNumberIcon/>{isEditing ? (
                     <div>
                     <TextField
@@ -244,7 +245,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
                         </p>
                         )}</div>
                 </div>
-                <div className="w-[140px] h-[92px] bg-[#7CC7E7] rounded-br-[11px] grid grid-cols-2">
+                <div className="w-[110px] h-full bg-[#7CC7E7] rounded-br-[11px] grid">
                 
                 <div className="m-auto flex flex-row"><AccessTimeIcon/>{isEditing ? (
                             <TextField
