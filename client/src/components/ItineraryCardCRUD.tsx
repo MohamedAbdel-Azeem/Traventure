@@ -29,6 +29,9 @@ interface ItineraryCardCRUDProps {
     date: string;
     rating: string;
     image: string;
+    language: string;
+    pickupLocation: string; 
+    dropoffLocation: string; 
     onDelete: (id: number) => void;
     className?: string;
     places: Place[]; 
@@ -42,6 +45,9 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
     date: initialDate, 
     rating: initialRating, 
     image: initialImage, 
+    language: initialLanguage,
+    pickupLocation: initialPickupLocation, 
+    dropoffLocation: initialDropoffLocation,
     onDelete, 
     className,
     places: initialPlaces 
@@ -54,6 +60,9 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
     const [rating, setRating] = useState(initialRating);
     const [fileName, setFileName] = useState("");
     const [image, setImage] = useState(initialImage);
+    const [language, setLanguage] = useState(initialLanguage);
+    const [pickupLocation, setPickupLocation] = useState(initialPickupLocation); 
+    const [dropoffLocation, setDropoffLocation] = useState(initialDropoffLocation); 
 
     const handleEditClick = () => {
         setIsEditing(!isEditing);
@@ -77,7 +86,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
     };
 
     return (
-        <div className={`m-4 transition transform hover:scale-105 w-96 ${className}`}> {/* Adjusted width here */}
+        <div className={`m-4 transition transform hover:scale-105 w-96 ${className}`}>
             <div className="relative w-full h-[200px]">
                 {isEditing ? (
                     <div className="flex items-center justify-center w-full h-full bg-gray-200">
@@ -193,7 +202,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
                 <div className="mt-4 flex justify-between items-center">
                     <Link
                         to={`/itinerary/${id}`}
-                        state={{ title, description, price, date, rating, image, places: initialPlaces }} // Pass initialPlaces here
+                        state={{ title, description, price, date, rating, image, language, pickupLocation, dropoffLocation, places: initialPlaces }} // Pass new fields here
                         className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center"
                     >
                         <VisibilityIcon />

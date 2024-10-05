@@ -13,13 +13,40 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
 } from "@mui/material";
 import { useParams, useLocation } from "react-router-dom";
+
+interface Activity {
+  name: string;
+  duration: string;
+}
+
+interface Place {
+  name: string;
+  activities: Activity[];
+}
+
+interface Itinerary {
+  id: string;
+  title: string;
+  image: string;
+  date: string;
+  price: string;
+  description: string;
+  rating: string;
+  places: Place[];
+  language: string; 
+  pickupLocation: string;  
+  dropoffLocation: string;
+}
 
 const ItineraryDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
-  const initialItinerary = location.state;
+  const initialItinerary = location.state as Itinerary;
 
   const [itinerary, setItinerary] = useState(initialItinerary);
   const [isEditing, setIsEditing] = useState(false);
@@ -38,7 +65,14 @@ const ItineraryDetails: React.FC = () => {
     setIsEditing(false);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, field: string) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    field: string
+  ) => {
+    setItinerary({ ...itinerary, [field]: e.target.value });
+  };
+
+  const handleSelectChange = (e: SelectChangeEvent<string>, field: string) => {
     setItinerary({ ...itinerary, [field]: e.target.value });
   };
 
@@ -76,7 +110,9 @@ const ItineraryDetails: React.FC = () => {
 
   const handleRemoveActivity = (placeIndex: number, activityIndex: number) => {
     const updatedPlaces = [...itinerary.places];
-    updatedPlaces[placeIndex].activities = updatedPlaces[placeIndex].activities.filter((_: any, index: number) => index !== activityIndex);
+    updatedPlaces[placeIndex].activities = updatedPlaces[placeIndex].activities.filter(
+      (_: any, index: number) => index !== activityIndex
+    );
     setItinerary({ ...itinerary, places: updatedPlaces });
   };
 
@@ -105,6 +141,23 @@ const ItineraryDetails: React.FC = () => {
             </Typography>
           </Box>
 
+          {/* Display the language */}
+          <Box className="flex justify-between mb-4 text-gray-600">
+            <Typography variant="body1" className="flex items-center">
+              <span className="mr-2 font-semibold">Language:</span> {itinerary.language}
+            </Typography>
+          </Box>
+
+          {/* Display the pickup and dropoff locations */}
+          <Box className="flex justify-between mb-4 text-gray-600">
+            <Typography variant="body1" className="flex items-center">
+              <span className="mr-2 font-semibold">Pickup Location:</span> {itinerary.pickupLocation}
+            </Typography>
+            <Typography variant="body1" className="flex items-center">
+              <span className="mr-2 font-semibold">Dropoff Location:</span> {itinerary.dropoffLocation}
+            </Typography>
+          </Box>
+
           <Typography variant="body2" className="text-gray-700 text-justify leading-relaxed mb-4">
             {itinerary.description}
           </Typography>
@@ -112,14 +165,14 @@ const ItineraryDetails: React.FC = () => {
           <Divider className="my-4" />
 
           {itinerary.places &&
-            itinerary.places.map((place: any, placeIndex: number) => (
+            itinerary.places.map((place, placeIndex) => (
               <Box key={placeIndex} className="mb-4">
                 <Typography variant="h6" className="font-semibold mb-2 text-gray-800">
                   {place.name}
                 </Typography>
 
                 {place.activities &&
-                  place.activities.map((activity: any, activityIndex: number) => (
+                  place.activities.map((activity, activityIndex) => (
                     <Box key={activityIndex} className="ml-4 mb-2">
                       <Typography variant="body1" className="text-gray-700">
                         <span className="font-semibold">Activity:</span> {activity.name}
@@ -143,7 +196,6 @@ const ItineraryDetails: React.FC = () => {
         </CardContent>
       </Card>
 
-
       {/* Edit Modal */}
       <Dialog open={isEditing} onClose={handleCloseModal} maxWidth="md" fullWidth>
         <DialogTitle>Edit Itinerary</DialogTitle>
@@ -153,7 +205,7 @@ const ItineraryDetails: React.FC = () => {
             fullWidth
             value={itinerary.title}
             onChange={(e) => handleChange(e, "title")}
-            margin="normal"
+            margin="none"
           />
           <TextField
             label="Date"
@@ -178,79 +230,77 @@ const ItineraryDetails: React.FC = () => {
             onChange={(e) => handleChange(e, "description")}
             margin="normal"
           />
+          <TextField
+            label="Pickup Location"
+            fullWidth
+            value={itinerary.pickupLocation}
+            onChange={(e) => handleChange(e, "pickupLocation")}
+            margin="normal"
+          />
+          <TextField
+            label="Dropoff Location"
+            fullWidth
+            value={itinerary.dropoffLocation}
+            onChange={(e) => handleChange(e, "dropoffLocation")}
+            margin="normal"
+          />
+
+          <Select
+            label="Language"
+            fullWidth
+            value={itinerary.language}
+            onChange={(e) => handleSelectChange(e, "language")} 
+            margin="none"
+          >
+            <MenuItem value="English">English</MenuItem>
+            <MenuItem value="Spanish">Spanish</MenuItem>
+            <MenuItem value="French">French</MenuItem>
+            <MenuItem value="German">German</MenuItem>
+          </Select>
 
           <Divider className="my-4" />
 
-          <Typography variant="h6" className="font-semibold mb-2 text-gray-800">
-            Places
-          </Typography>
-
-          {itinerary.places &&
-            itinerary.places.map((place: any, placeIndex: number) => (
-              <Box key={placeIndex} className="mb-4">
-                <TextField
-                  label="Place Name"
-                  fullWidth
-                  value={place.name}
-                  onChange={(e) => handlePlaceChange(placeIndex, "name", e.target.value)}
-                  margin="normal"
-                />
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={() => handleRemovePlace(placeIndex)}
-                >
-                  Remove Place
-                </Button>
-
-                {place.activities &&
-                  place.activities.map((activity: any, activityIndex: number) => (
-                    <Box key={activityIndex} className="ml-4 mb-2">
-                      <TextField
-                        label="Activity Name"
-                        fullWidth
-                        value={activity.name}
-                        onChange={(e) =>
-                          handleActivityChange(placeIndex, activityIndex, "name", e.target.value)
-                        }
-                        margin="normal"
-                      />
-                      <TextField
-                        label="Duration"
-                        fullWidth
-                        value={activity.duration}
-                        onChange={(e) =>
-                          handleActivityChange(placeIndex, activityIndex, "duration", e.target.value)
-                        }
-                        margin="normal"
-                      />
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        onClick={() => handleRemoveActivity(placeIndex, activityIndex)}
-                      >
-                        Remove Activity
-                      </Button>
-                    </Box>
-                  ))}
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  onClick={() => handleAddActivity(placeIndex)}
-                >
-                  Add Activity
-                </Button>
-              </Box>
-            ))}
-          <Button variant="outlined" color="primary" onClick={handleAddPlace}>
-            Add Place
-          </Button>
+          <Typography variant="h6" className="mb-2">Places:</Typography>
+          {itinerary.places.map((place, placeIndex) => (
+            <Box key={placeIndex} mb={2}>
+              <TextField
+                label="Place Name"
+                fullWidth
+                value={place.name}
+                onChange={(e) => handlePlaceChange(placeIndex, "name", e.target.value)}
+              />
+              <Typography variant="body2" className="mt-2">Activities:</Typography>
+              {place.activities.map((activity, activityIndex) => (
+                <Box key={activityIndex} mb={1} className="ml-2">
+                  <TextField
+                    label="Activity Name"
+                    value={activity.name}
+                    onChange={(e) => handleActivityChange(placeIndex, activityIndex, "name", e.target.value)}
+                  />
+                  <TextField
+                    label="Duration"
+                    value={activity.duration}
+                    onChange={(e) => handleActivityChange(placeIndex, activityIndex, "duration", e.target.value)}
+                  />
+                  <Button onClick={() => handleRemoveActivity(placeIndex, activityIndex)}>Remove Activity</Button>
+                </Box>
+              ))}
+              <Button onClick={() => handleAddActivity(placeIndex)}>Add Activity</Button>
+              <Button onClick={() => handleRemovePlace(placeIndex)}>Remove Place</Button>
+            </Box>
+          ))}
+          <Button onClick={handleAddPlace}>Add Place</Button>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModal} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleCloseModal} color="primary">
+          <Button
+            onClick={() => {
+              handleCloseModal();
+            }}
+            color="primary"
+          >
             Save
           </Button>
         </DialogActions>

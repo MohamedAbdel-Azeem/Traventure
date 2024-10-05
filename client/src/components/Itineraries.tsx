@@ -12,6 +12,9 @@ const Itineraries = () => {
       price: "Free→$1000",
       date: "9:00→5:00",
       rating: "4.5",
+      language: "English",
+      pickupLocation: "Cairo Airport",
+      dropoffLocation: "Giza",
       image: "https://upload.wikimedia.org/wikipedia/commons/e/e3/Kheops-Pyramid.jpg",
       places: [
         {
@@ -37,6 +40,9 @@ const Itineraries = () => {
       price: "$25→$100",
       date: "9:00→11:00",
       rating: "4.2",
+      language: "English",
+      pickupLocation: "Local Hotel",
+      dropoffLocation: "Waterpark",
       image: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg",
       places: [
         {
@@ -55,6 +61,9 @@ const Itineraries = () => {
       price: "$10→$50",
       date: "8:00→6:00",
       rating: "4.7",
+      language: "English",
+      pickupLocation: "Beach Resort",
+      dropoffLocation: "Tropical Beach",
       image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/The_Great_Wall_of_China_at_Jinshanling-edit.jpg/1200px-The_Great_Wall_of_China_at_Jinshanling-edit.jpg",
       places: [
         {
@@ -73,6 +82,9 @@ const Itineraries = () => {
       price: "$20→$50",
       date: "8:30→4:00",
       rating: "4.3",
+      language: "English",
+      pickupLocation: "Local Hotel",
+      dropoffLocation: "Temple of Karnak",
       image: "https://upload.wikimedia.org/wikipedia/commons/a/a1/Statue_of_Liberty_7.jpg",
       places: [
         {
@@ -91,6 +103,9 @@ const Itineraries = () => {
       price: "$15→$60",
       date: "6:00→7:00",
       rating: "4.8",
+      language: "English",
+      pickupLocation: "Dock",
+      dropoffLocation: "Luxury Yacht",
       image: "https://upload.wikimedia.org/wikipedia/commons/d/da/Taj-Mahal.jpg",
       places: [
         {
@@ -111,7 +126,14 @@ const Itineraries = () => {
   };
 
   const handleCreate = (newCard: any) => {
-    setCards([...cards, { ...newCard, id: cards.length + 1 }]);
+    const newItinerary = {
+      ...newCard,
+      id: cards.length + 1,
+      language: "English",
+      pickupLocation: newCard.pickupLocation || "Default Pickup Location",
+      dropoffLocation: newCard.dropoffLocation || "Default Dropoff Location", 
+    };
+    setCards([...cards, newItinerary]);
   };
 
   return (
@@ -133,6 +155,9 @@ const Itineraries = () => {
             price={card.price}
             date={card.date}
             rating={card.rating}
+            language={card.language}
+            pickupLocation={card.pickupLocation} 
+            dropoffLocation={card.dropoffLocation} 
             image={card.image}
             onDelete={handleDelete}
             className="hover:bg-[#f0f0f0] transition duration-300 rounded-lg shadow-md overflow-hidden"
