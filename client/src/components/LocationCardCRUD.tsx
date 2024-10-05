@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
-import { TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import useUpdatePlace from "../custom_hooks/places/useUpdatePlace";
 import  Place  from "../custom_hooks/places/place_interface";
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import TheMAP from "./TheMAP";
 interface LocationCardCRUDProps {
     id: string,
@@ -28,10 +27,6 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
     const [image, setImage] = useState('');
     
 
-function addImage(){
-    setImages([...images,image]);
-}
-
 
 
     const [apiBody, setApiBody] = useState<Place | null>(details);
@@ -41,6 +36,8 @@ function addImage(){
 
 
     const handleEditClick = () => {
+        const filteredImages = images.filter(image => image !== '');
+        setImages(filteredImages);
         setIsEditing(!isEditing);
         setApiBody({
             name: locationName,
@@ -62,18 +59,48 @@ function addImage(){
     const handleDeleteClick = () => {
         onDelete(id);
     };
-
+    const handleImageChange = (index:number, newValue:string) => {
+        if (newValue === '') {
+            const updatedImages = images.filter((_, i) => i !== index);
+            setImages(updatedImages);
+          }else {
+        const updatedImages = [...images];
+        updatedImages[index] = newValue;
+        setImages(updatedImages);}
+      };
     return ( 
     <div>
         <div className={`w-[422px] h-[422px] bg-[#D9D9D9] rounded-[11px] m-4 ${className}`}>
         <div className="w-[422px] h-[121px] relative">
-        {isEditing ? (
-                    <div className="flex items-center justify-center w-full h-full">
-                        <TextField title="Upload Image" 
-                            onChange={(e)=>{setImage(e.target.value);addImage()}}/>
+        {isEditing ? (<div className="flex flex-col">
+                     <div className="flex w-full h-full object-cover overflow-auto whitespace-nowrap">
+                     {images?.map((cimage, index) => (
+                        <TextField
+                        key={index}
+                        title="Upload Image"
+                        value={cimage}
+                        onChange={(e) => handleImageChange(index, e.target.value)}
+                        className="pr-[10px]"
+                      />
+                     ))}
+                 </div>
+                 <div className="flex flex-row">
+                        <TextField
+                        onChange={(e) => setImage(e.target.value)}/>
+                        <Button 
+                        onClick={() => setImages([...images,image])}
+                        >Add Image</Button>
+                        </div>
+                 </div>
+                ) : (
+                <div className="w-full h-full object-cover rounded-t-[11px] relative">
+
+                    <div className="flex bg-[#333333] w-full h-full object-cover overflow-auto whitespace-nowrap">
+                        {images?.map(cimage => (<img className="pr-[10px]" src={cimage} alt={locationName}/>
+                        ))}
                     </div>
-                ) : (<div className="w-full h-full object-cover rounded-t-[11px] relative">
-                    <img src={images[0]} alt={locationName} className="w-full h-full object-cover rounded-t-[11px]" />
+
+
                     </div>
                 )}<button title="Edit" className="editBtn absolute top-[10px] right-[70px]" onClick={handleEditClick}
                 >
@@ -133,6 +160,7 @@ function addImage(){
                         sx={{
                             '& .MuiInputBase-input': {
                                 textAlign: 'center',
+                                padding: '4px'
                             },
                             '& .MuiInputBase-input::placeholder': {
                                 textAlign: 'center',
@@ -149,7 +177,7 @@ function addImage(){
             {isEditing ? (
                     <TextField
                     multiline
-                    maxRows="3"
+                    maxRows="2"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     className="text-[16px] text-center w-full"
@@ -158,6 +186,7 @@ function addImage(){
                     sx={{
                         '& .MuiInputBase-input': {
                             textAlign: 'center',
+                            padding: '0px'
                         },
                     }}
                     />

@@ -7,8 +7,9 @@ import {usedeletePlaces} from "../custom_hooks/places/useDeletePlace";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
-import { TextField } from "@mui/material";
+import { FormControl, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
 import useCreatePlace from "../custom_hooks/places/useCreatePlace";
+import TheMAP from "./TheMAP";
 
 const Locations = () => {
     const [open, setOpen] = React.useState(false);
@@ -43,6 +44,7 @@ const Locations = () => {
     const [newcards, setNewcards] = useState(places);
  
     const handleCreate = () => {
+      setImages([...images,image])
         const newCard = {
           id: Date.now().toString(),
           name,
@@ -59,6 +61,7 @@ const Locations = () => {
           },
           pictures: images,
         };
+        
         setApiBody(newCard);
         setOpen(false);
       };
@@ -84,77 +87,80 @@ const Locations = () => {
       >
         <Box sx={style}>
         <Box className="grid grid-cols-2">
-        <TextField
-                label="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                fullWidth
-                margin="normal"
-              />
-              <TextField
-                label="Description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                fullWidth
-                margin="normal"
-              />
-              <TextField
-                label="Native Price"
+              <FormControl fullWidth sx={{ marginY: 1 }}><InputLabel>Name</InputLabel>
+                <OutlinedInput
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  label="Name"
+                />
+              </FormControl>
+
+              <FormControl fullWidth sx={{ marginY: 1 }}><InputLabel>Description</InputLabel>
+                <OutlinedInput
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  label="Description"
+              /></FormControl>
+
+              <FormControl fullWidth sx={{ marginY: 1 }}>
+                <InputLabel>Native Price</InputLabel>
+                <OutlinedInput
                 type="number"
                 value={nativePrice}
+                startAdornment={<InputAdornment position="start">$</InputAdornment>}
                 onChange={(e) => setNativePrice(Number(e.target.value))}
-                fullWidth
-                margin="normal"
-              />
-              <TextField
-                label="Foreign Price"
+                label="Native Price"
+              /></FormControl>
+              
+              <FormControl fullWidth sx={{ marginY: 1 }}>
+                <InputLabel>Foreign Price</InputLabel>
+                <OutlinedInput
                 type="number"
                 value={foreignPrice}
+                startAdornment={<InputAdornment position="start">EGP</InputAdornment>}
                 onChange={(e) => setForeignPrice(Number(e.target.value))}
-                fullWidth
-                margin="normal"
-              />
-              <TextField
-                label="Student Price"
+                label="Foreign Price"
+              /></FormControl>
+              
+              <FormControl fullWidth sx={{ marginY: 1 }}>
+                <InputLabel>Student Price</InputLabel>
+                <OutlinedInput
                 type="number"
                 value={studentPrice}
+                startAdornment={<InputAdornment position="start">₫</InputAdornment>}
                 onChange={(e) => setStudentPrice(Number(e.target.value))}
-                fullWidth
-                margin="normal"
-              />
-              <TextField
+                label="Student Price"
+              /></FormControl>
+              
+              <FormControl fullWidth sx={{ marginY: 1 }}>
+                <InputLabel>Hours</InputLabel>
+                <OutlinedInput
                 label="Hours"
                 type="string"
                 value={hours}
                 onChange={(e) => setHours(e.target.value)}
-                fullWidth
-                margin="normal"
-              />
-              <TextField
-                label="Latitude"
-                type="number"
-                value={latitude}
-                onChange={(e) => setLatitude(Number(e.target.value))}
-                fullWidth
-                margin="normal"
-              />
-              <TextField
-                label="Longitude"
-                type="number"
-                value={longitude}
-                onChange={(e) => setLongitude(Number(e.target.value))}
-                fullWidth
-                margin="normal"
-              />
-              <TextField
+              /></FormControl>
+              <FormControl fullWidth sx={{ marginY: 1 }}  className="col-span-2">
+                <div>
+                  <TheMAP lat={latitude} long={longitude}
+                  setLatitude={setLatitude}
+                  setLongitude={setLongitude}/>
+                </div>
+                </FormControl>
+
+
+                <FormControl fullWidth sx={{ marginY: 1 }}>
+                <InputLabel>Image</InputLabel>
+                <OutlinedInput
                 label="Image"
                 type="string"
                 value={image}
-                onChange={(e) => {setImages([...images,(e.target.value)])}}
-                fullWidth
-                margin="normal"
-              />
-              <Button onClick={handleCreate}>Add</Button>
+                onChange={(e) => {setImage(e.target.value)}}
+              /></FormControl>
+
+<Button onClick={handleCreate}>Add</Button>
+              
+              
         </Box>
         </Box>
       </Modal>
