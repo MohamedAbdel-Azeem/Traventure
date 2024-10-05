@@ -26,7 +26,11 @@ export const useGetTourGuide = (username: string | undefined) => {
   return { user, loading, error };
 };
 
-export function useUpdateTourGuide(body: object, username: string) {
+export function useUpdateTourGuide(
+  body: object,
+  username: string | undefined,
+  isUpdate: boolean
+) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [response, setresponse] = useState<ITourGuide | null>(null);
@@ -42,7 +46,7 @@ export function useUpdateTourGuide(body: object, username: string) {
         setLoading(false);
       }
     };
-    if (username && body) updateTourGuide();
-  }, [body, username]);
+    if (username && body && isUpdate) updateTourGuide();
+  }, [body, username, isUpdate]);
   return { response, loading, error };
 }

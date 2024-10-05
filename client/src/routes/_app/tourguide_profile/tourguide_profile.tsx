@@ -3,18 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { set } from "react-hook-form";
-import { any } from "zod";
+import { any, string } from "zod";
 import { ITourGuide } from "./ITourGuide";
 import { useUpdateTourGuide } from "../../../custom_hooks/tourGuideGetUpdate";
-
-interface Company {
-  _id: string;
-  name: string;
-  address: string;
-  logo: string;
-  about: string;
-  __v: number;
-}
+import { Box, Button, Modal, TextField } from "@mui/material";
+import { Textarea } from "@mantine/core";
 
 interface TourGuideProfileProps {
   tourGuide: ITourGuide;
@@ -24,12 +17,30 @@ const TourGuideProfile: React.FC<TourGuideProfileProps> = ({ tourGuide }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [userData, setUserData] = useState<ITourGuide>(tourGuide);
+  const [currentData, setCurrentData] = useState<ITourGuide>(tourGuide);
   const navigate = useNavigate();
-  
+  //Modal States
+  const [open, setOpen] = useState(false);
+  const [company, setCompany] = useState<string>("");
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [role, setRole] = useState<string>("");
+  const [description, setdescription] = useState<string>("");
+  const [stillWorking, setStillWorking] = useState<boolean>(false);
+  const [location, setLocation] = useState<string>("");
+
+  const [update, setUpdate] = useState(false);
+
+  const {
+    response,
+    loading,
+    error: updateError,
+  } = useUpdateTourGuide(currentData, userData.username, update);
+
   const handleEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    setUserData((prevData) => ({
+    setCurrentData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -41,8 +52,15 @@ const TourGuideProfile: React.FC<TourGuideProfileProps> = ({ tourGuide }) => {
 
   const handleSave = () => {
     if (!error) {
-      setIsEditing(false);
-      console.log("Saved data:", userData);
+      setUpdate(true);
+      if (updateError) {
+        console.log("Error updating");
+      }
+      if (!loading && response) {
+        console.log("Successfully updated");
+        setUserData(response);
+        setIsEditing(false);
+      }
     } else {
       console.log("Cannot save due to validation error");
     }
@@ -52,13 +70,49 @@ const TourGuideProfile: React.FC<TourGuideProfileProps> = ({ tourGuide }) => {
     navigate("/");
   };
 
-  function handleDelete(): void {
-    // DELETE INFO FROM DATABASE HERE
+  function handleDelete(_id: string): void {
+    setCurrentData((prevData) => ({
+      ...prevData,
+      previousWork: prevData.previousWork?.filter((work) => work._id !== _id),
+    }));
   }
 
   function handleAdd(): void {
-    // CREATE A MODAL TO ADD INFO AND WHEN SUBMITTING ADD TO DATABASE
+    if (!company || !startDate || !role || !description) {
+      return;
+    }
+    if (!stillWorking && !endDate) {
+      return;
+    }
+    const newWork = {
+      company,
+      startDate,
+      endDate: endDate,
+      stillWorkHere: stillWorking,
+      role,
+      description,
+      location,
+    };
+    setCurrentData((prevData) => ({
+      ...prevData,
+      previousWork: prevData.previousWork
+        ? [...prevData.previousWork, newWork]
+        : [newWork],
+    }));
+    setOpen(false);
   }
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
 
   return (
     <div
@@ -71,6 +125,74 @@ const TourGuideProfile: React.FC<TourGuideProfileProps> = ({ tourGuide }) => {
         backgroundColor: "rgba(0, 0, 0, 0.7)",
       }}
     >
+      <Modal open={open} onClose={() => setOpen(false)}>
+        <Box sx={style}>
+          <Box className="flex flex-col">
+            <TextField
+              label="Company Name"
+              value={company}
+              type="text"
+              onChange={(e) => setCompany(String(e.target.value))}
+              fullWidth
+              margin="normal"
+            />
+            <div>
+              <label>Start Date</label>
+              <input
+                type="date"
+                value={startDate ? startDate.toISOString().split("T")[0] : ""}
+                onChange={(e) => setStartDate(new Date(e.target.value))}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition duration-200"
+              />
+            </div>
+            {!stillWorking && (
+              <div>
+                <label>End Date</label>
+                <input
+                  type="date"
+                  value={endDate ? endDate.toISOString().split("T")[0] : ""}
+                  onChange={(e) => setEndDate(new Date(e.target.value))}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition duration-200"
+                />
+              </div>
+            )}
+            <div>
+              <label>Still Working Here</label>
+              <input
+                type="checkbox"
+                checked={stillWorking}
+                onChange={(e) => setStillWorking(e.target.checked)}
+              />
+            </div>
+
+            <TextField
+              label="role"
+              type="text"
+              value={role}
+              onChange={(e) => setRole(String(e.target.value))}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="location"
+              type="text"
+              value={location}
+              onChange={(e) => setLocation(String(e.target.value))}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Description"
+              type="text"
+              value={description}
+              onChange={(e) => setdescription(String(e.target.value))}
+              fullWidth
+              margin="normal"
+            />
+            <Button onClick={handleAdd}>Add</Button>
+          </Box>
+        </Box>
+      </Modal>
       <div className="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl p-8 backdrop-blur-lg bg-opacity-90">
         <div className="flex items-center space-x-6">
           <img
@@ -86,7 +208,7 @@ const TourGuideProfile: React.FC<TourGuideProfileProps> = ({ tourGuide }) => {
               <input
                 type="email"
                 name="email"
-                value={userData.email}
+                value={currentData.email}
                 onChange={handleEdit}
                 className="mt-1 text-lg text-gray-600 p-3 border border-gray-300 rounded-md w-full"
               />
@@ -107,7 +229,7 @@ const TourGuideProfile: React.FC<TourGuideProfileProps> = ({ tourGuide }) => {
               <input
                 type="number"
                 name="mobileNumber"
-                value={userData.mobileNumber}
+                value={currentData.mobileNumber}
                 onChange={handleEdit}
                 className="text-lg p-3 border border-gray-300 rounded-md"
               />
@@ -126,7 +248,7 @@ const TourGuideProfile: React.FC<TourGuideProfileProps> = ({ tourGuide }) => {
               <input
                 type="number"
                 name="yearsOfExperience"
-                value={userData.yearsOfExperience}
+                value={currentData.yearsOfExperience}
                 onChange={handleEdit}
                 className="text-lg p-3 border border-gray-300 rounded-md"
               />
@@ -143,8 +265,8 @@ const TourGuideProfile: React.FC<TourGuideProfileProps> = ({ tourGuide }) => {
             </label>
             {isEditing ? (
               <ul className="flex flex-col gap-3 pt-2">
-                {userData.previousWork &&
-                  userData.previousWork.map((work, index) => (
+                {currentData.previousWork &&
+                  currentData.previousWork.map((work, index) => (
                     <li
                       key={index}
                       className="flex flex-row bg-white p-4 mb-2 rounded-md justify-around"
@@ -165,7 +287,9 @@ const TourGuideProfile: React.FC<TourGuideProfileProps> = ({ tourGuide }) => {
                           {" "}
                           <b>Duration</b> :{" "}
                           {new Date(work.startDate).toLocaleDateString()} -{" "}
-                          {new Date(work.endDate).toLocaleDateString()}
+                          {work.endDate
+                            ? new Date(work.endDate).toLocaleDateString()
+                            : "Present"}
                         </p>
                         <p>
                           {" "}
@@ -173,7 +297,7 @@ const TourGuideProfile: React.FC<TourGuideProfileProps> = ({ tourGuide }) => {
                         </p>
                       </div>
                       <button
-                        onClick={() => handleDelete()}
+                        onClick={() => handleDelete(work._id)}
                         className=" size-10 self-center hover:text-red-500"
                       >
                         <FontAwesomeIcon icon={faTrash} />
@@ -182,7 +306,9 @@ const TourGuideProfile: React.FC<TourGuideProfileProps> = ({ tourGuide }) => {
                   ))}
 
                 <button
-                  onClick={() => handleAdd()}
+                  onClick={() => {
+                    setOpen(true);
+                  }}
                   className="bg-purple-600  text-white w-1/4 self-center py-2 px-6 rounded-lg hover:bg-purple-700 transition duration-200 "
                 >
                   Add
@@ -208,7 +334,9 @@ const TourGuideProfile: React.FC<TourGuideProfileProps> = ({ tourGuide }) => {
                           {" "}
                           <b>Duration</b> :{" "}
                           {new Date(work.startDate).toLocaleDateString()} -{" "}
-                          {new Date(work.endDate).toLocaleDateString()}
+                          {work.endDate
+                            ? new Date(work.endDate).toLocaleDateString()
+                            : "Present"}
                         </p>
                         <p>
                           {" "}

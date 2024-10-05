@@ -14,6 +14,7 @@ const tourGuideSchema = new Schema({
       company: String,
       startDate: Date,
       endDate: Date,
+      stillWorkHere: Boolean,
       role: String,
       location: String,
       description: String,

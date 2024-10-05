@@ -8,7 +8,8 @@ export interface ITourGuide {
   previousWork?: {
     company: string;
     startDate: Date;
-    endDate: Date;
+    endDate: Date | null;
+    stillWorkHere: boolean;
     role: string;
     location: string;
     description: string;
