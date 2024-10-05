@@ -8,10 +8,13 @@ const AdvertiserSchema = new Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  websiteLink: String,
-  hotline: String,
-  company: { type: Schema.Types.ObjectId, ref: "Company" },
+  company: { type: String },
   isAccepted: { type: Boolean, default: false },
+  websiteLink: { type: String },
+  hotline: { type: String},
+  founded: { type: Number },
+  description: { type: String },
+  location: { type: String}
 });
 
 export default mongoose.model<IAdvertiser>("Advertiser", AdvertiserSchema);

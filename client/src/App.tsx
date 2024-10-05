@@ -23,6 +23,7 @@ import { useState } from "react";
 import { Tourist_Profile } from "./routes/_app/tourist_profile/tourist-profile-main";
 import { Seller_Profile } from "./routes/_app/seller_profile/seller-profile-main";
 import LandingPage from "./pages/LandingPage";
+import { Advertiser_Profile } from "./routes/_app/advertiser_profile/advertiser_profile-main";
 
 function App() {
   const [userData, setUserData] = useState({
@@ -59,7 +60,7 @@ function App() {
           <Route path="/touristprofile" element={<Tourist_Profile />} /> 
           <Route path="/sellerprofile/:username" element={<Seller_Profile />} />
         <Route path="/tourguideprofile" element={<TourGuideProfile />} />
-        <Route path="/advertiserprofile" element={<AdvertiserProfile />} />
+        <Route path="/advertiserprofile/:username" element={<Advertiser_Profile />} />
         <Route path="/CategoriesandTags" element={<CT />} />
 
         </Routes>
