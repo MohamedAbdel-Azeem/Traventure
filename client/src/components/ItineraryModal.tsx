@@ -12,6 +12,8 @@ import {
   Divider,
   IconButton,
   FormHelperText,
+  Checkbox,
+  ListItemText,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { SelectChangeEvent } from '@mui/material/Select';
@@ -44,6 +46,17 @@ interface ItineraryModalProps {
   onSubmit: (data: any) => void;
 }
 
+const tagsOptions = [
+    'Adventure',
+    'Relaxation',
+    'Culture',
+    'Nature',
+    'Food',
+    'History',
+    'Family',
+  ];
+
+
 const activities: Activity[] = [
   { id: '1', name: 'Hiking', durationOptions: ['1 hour', '2 hours', '3 hours'] },
   { id: '2', name: 'Sightseeing', durationOptions: ['1 hour', '2 hours', '3 hours', '4 hours'] },
@@ -71,6 +84,7 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
   });
 
   const [places, setPlaces] = React.useState<SelectedPlace[]>([{ place: '', activities: [] }]);
+  const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
   const [errors, setErrors] = React.useState<string[]>([]);
 
   const handleChange = (index: number, e: SelectChangeEvent<string>) => {
@@ -125,6 +139,14 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
     setPlaces(updatedPlaces);
   };
 
+  const handleTagsChange = (event: SelectChangeEvent<string[]>) => {
+    const {
+      target: { value },
+    } = event;
+    setSelectedTags(typeof value === 'string' ? value.split(',') : value);
+  };
+
+
   const validateForm = (): boolean => {
     const newErrors: string[] = [];
     
@@ -157,6 +179,7 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
     if (!validateForm()) return;
     const itineraryData = {
       ...formData, 
+      tags: selectedTags,
       places: places.map((place) => ({
         name: place.place,
         activities: place.activities,
@@ -233,6 +256,35 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             sx={{ mb: 2 }}
           />
+
+<FormControl fullWidth margin="normal">
+      <InputLabel id="tags-select-label">Tags</InputLabel>
+      <Select
+        labelId="tags-select-label"
+        multiple
+        value={selectedTags}
+        onChange={handleTagsChange}
+        renderValue={(selected) => selected.join(', ')}
+        MenuProps={{
+          PaperProps: {
+            style: {
+              maxHeight: 200, 
+              width: 250,
+            },
+          },
+        }}
+      >
+        {tagsOptions.map((tag) => (
+          <MenuItem key={tag} value={tag}>
+            <Checkbox checked={selectedTags.indexOf(tag) > -1} />
+            <ListItemText primary={tag} />
+          </MenuItem>
+        ))}
+      </Select>
+      <FormHelperText>Select multiple tags</FormHelperText>
+    </FormControl>
+
+
           <TextField
             name="price"
             type="number"

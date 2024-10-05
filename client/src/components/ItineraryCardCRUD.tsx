@@ -34,6 +34,7 @@ interface ItineraryCardCRUDProps {
     onDelete: (id: number) => void;
     className?: string;
     places: Place[]; 
+    selectedTags?: string[]; 
 }
 
 const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({ 
@@ -50,7 +51,8 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
     dropoffLocation,
     onDelete, 
     className,
-    places 
+    places,
+    selectedTags = [],
 }) => {
     const handleDeleteClick = () => {
         onDelete(id);
@@ -73,6 +75,20 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
                 <div className="mb-4">
                     <p className="text-gray-600 text-center text-sm truncate">{description}</p>
                 </div>
+
+              
+                {Array.isArray(selectedTags) && selectedTags.length > 0 && (
+                    <div className="mb-2">
+            
+                        <div className="flex flex-wrap justify-center items-center">
+                            {selectedTags.map((tag, index) => (
+                                <span key={index} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm mr-2 mb-2">
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 <div className="flex justify-center items-center mb-4">
                     <div className="flex flex-col items-center mx-2">
@@ -111,12 +127,9 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
                         state={{ title, description, price, startDate, endDate, rating, image, language, pickupLocation, dropoffLocation, places }} 
                         className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center"
                     >
-                        <VisibilityIcon />
+                        View Details
                     </Link>
-                    <button
-                        className="deleteBtn p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition"
-                        onClick={handleDeleteClick}
-                    >
+                    <button onClick={handleDeleteClick} className="text-red-500 hover:text-red-700 transition">
                         <DeleteIcon />
                     </button>
                 </div>

@@ -9,7 +9,7 @@ const Itineraries = () => {
       id: 1,
       title: "Egyptian History Trip",
       description: "Come visit Egypt!",
-      price: 1000, // price as number
+      price: 1000,
       startDate: new Date("2024-10-10T09:00:00"),
       endDate: new Date("2024-10-10T17:00:00"),
       rating: "4.5",
@@ -22,23 +22,24 @@ const Itineraries = () => {
           name: "Pyramids of Giza",
           activities: [
             { name: "Guided Tour", duration: "2 hours" },
-            { name: "Camel Ride", duration: "1 hour" }
-          ]
+            { name: "Camel Ride", duration: "1 hour" },
+          ],
         },
         {
           name: "Luxor Temple",
           activities: [
             { name: "Historical Tour", duration: "1.5 hours" },
-            { name: "Photography", duration: "30 minutes" }
-          ]
-        }
-      ]
+            { name: "Photography", duration: "30 minutes" },
+          ],
+        },
+      ],
+      tags: ["history", "culture", "Egypt"], 
     },
     {
       id: 2,
       title: "Waterpark Adventure",
       description: "Time to get wet.",
-      price: 100, // price as number
+      price: 100,
       startDate: new Date("2024-10-15T09:00:00"),
       endDate: new Date("2024-10-15T11:00:00"),
       rating: "4.2",
@@ -51,16 +52,17 @@ const Itineraries = () => {
           name: "Splash Waterpark",
           activities: [
             { name: "Wave Pool Fun", duration: "1 hour" },
-            { name: "Water Slide Rides", duration: "1 hour" }
-          ]
-        }
-      ]
+            { name: "Water Slide Rides", duration: "1 hour" },
+          ],
+        },
+      ],
+      tags: ["fun", "adventure", "waterpark"],
     },
     {
       id: 3,
       title: "Tropical Escape",
       description: "Have some fun on the beach!",
-      price: 50, // price as number
+      price: 50,
       startDate: new Date("2024-10-20T08:00:00"),
       endDate: new Date("2024-10-20T18:00:00"),
       rating: "4.7",
@@ -73,16 +75,17 @@ const Itineraries = () => {
           name: "Tropical Beach Resort",
           activities: [
             { name: "Beach Volleyball", duration: "2 hours" },
-            { name: "Snorkeling", duration: "2 hours" }
-          ]
-        }
-      ]
+            { name: "Snorkeling", duration: "2 hours" },
+          ],
+        },
+      ],
+      tags: ["beach", "relaxation", "tropical"],
     },
     {
       id: 4,
       title: "Temple Visit",
       description: "Come visit these ancient temples",
-      price: 50, // price as number
+      price: 50,
       startDate: new Date("2024-10-25T08:30:00"),
       endDate: new Date("2024-10-25T16:00:00"),
       rating: "4.3",
@@ -95,10 +98,11 @@ const Itineraries = () => {
           name: "Temple of Karnak",
           activities: [
             { name: "Temple Exploration", duration: "2 hours" },
-            { name: "Guided Tour", duration: "1 hour" }
-          ]
-        }
-      ]
+            { name: "Guided Tour", duration: "1 hour" },
+          ],
+        },
+      ],
+      tags: ["history", "temple", "culture"], 
     },
     {
       id: 5,
@@ -117,17 +121,18 @@ const Itineraries = () => {
           name: "Luxury Yacht",
           activities: [
             { name: "Sunset Dinner Cruise", duration: "2 hours" },
-            { name: "Swimming", duration: "1 hour" }
-          ]
-        }
-      ]
-    }
+            { name: "Swimming", duration: "1 hour" },
+          ],
+        },
+      ],
+      tags: ["cruise", "luxury", "adventure"], 
+    },
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleDelete = (id: number) => {
-    setCards(cards.filter(card => card.id !== id));
+    setCards(cards.filter((card) => card.id !== id));
   };
 
   const handleCreate = (newCard: any) => {
@@ -136,9 +141,10 @@ const Itineraries = () => {
       id: cards.length + 1,
       language: "English",
       pickupLocation: newCard.pickupLocation || "Default Pickup Location",
-      dropoffLocation: newCard.dropoffLocation || "Default Dropoff Location", 
+      dropoffLocation: newCard.dropoffLocation || "Default Dropoff Location",
       startDate: new Date(newCard.startDate),
       endDate: new Date(newCard.endDate),
+      tags: newCard.tags || [], 
     };
     setCards([...cards, newItinerary]);
   };
@@ -153,23 +159,24 @@ const Itineraries = () => {
         >
           <p className="m-auto text-[24px] text-center font-bold">Create New Itinerary</p>
         </div>
-        {cards.map(card => (
+        {cards.map((card) => (
           <ItineraryCardCRUD
             key={card.id}
             id={card.id}
             title={card.title}
             description={card.description}
             price={card.price}
-            startDate={card.startDate.toLocaleString()} 
-            endDate={card.endDate.toLocaleString()} 
+            startDate={card.startDate.toLocaleString()}
+            endDate={card.endDate.toLocaleString()}
             rating={card.rating}
             language={card.language}
-            pickupLocation={card.pickupLocation} 
-            dropoffLocation={card.dropoffLocation} 
+            pickupLocation={card.pickupLocation}
+            dropoffLocation={card.dropoffLocation}
             image={card.image}
             onDelete={handleDelete}
             className="hover:bg-[#f0f0f0] transition duration-300 rounded-lg shadow-md overflow-hidden"
-            places={card.places} 
+            places={card.places}
+            selectedTags={card.tags}
           />
         ))}
       </div>
