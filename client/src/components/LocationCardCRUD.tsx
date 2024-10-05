@@ -54,7 +54,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
 
     return ( 
     <div>
-        <div className={`w-[422px] h-[334px] bg-[#D9D9D9] rounded-[11px] m-4 ${className}`}>
+        <div className={`w-[422px] h-[422px] bg-[#D9D9D9] rounded-[11px] m-4 ${className}`}>
         <div className="w-[422px] h-[121px] relative">
         {isEditing ? (
                     <div className="flex items-center justify-center w-full h-full">
@@ -156,8 +156,8 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
                     </p>
                 )}
             </div>
-            <div className="w-[422px] h-[123px] flex">
-                <div className="w-[160px] h-full rounded-bl-[11px]">
+            <div className="w-[422px] h-[211px] flex">
+                <div className="w-[311px] h-full rounded-bl-[11px]">
                 {isEditing ? (
                     <div>
                             <TextField
@@ -180,13 +180,14 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
                         ) : ( 
                         <p className="text-[16px] h-full overflow-auto">
                             <iframe title="map" className="h-full rounded-bl-[11px]" src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${latitude}!3d${longitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
-                            width="160px"
+                            width="311px"
                             ></iframe>
                         </p>
                         )}
                 </div>
-                <div className="w-[152px] h-full bg-[#B03131] flex flex-col">
-                <div className="m-auto flex flex-row"><ConfirmationNumberIcon/>{isEditing ? (
+                <div className="flex flex-col">
+                <div className="w-[111px] h-full bg-[#B03131] flex flex-col">
+                <div className="m-auto"><ConfirmationNumberIcon/>{isEditing ? (
                     <div>
                     <TextField
                         value={native}
@@ -269,6 +270,8 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
                         </p>
                         )}</div>
                 </div>
+                </div>
+                
 
             </div>
         </div>
