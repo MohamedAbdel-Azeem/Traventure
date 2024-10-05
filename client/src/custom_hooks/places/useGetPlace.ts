@@ -1,9 +1,10 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import  Place  from "./place_interface";
+import React from "react";
 
 const useGetPlace = () => {
-    const [places, setPlaces] = useState<Place | null>(null);
+    const [places, setPlaces] = useState<Place[] | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     useEffect(() => {
@@ -26,3 +27,4 @@ const useGetPlace = () => {
 };
 
 export default useGetPlace;
+

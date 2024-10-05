@@ -51,7 +51,7 @@ function App() {
         <Route path="/admin-users" element={<Accounts />} />
         <Route path="/admin/shop" element={<ShopPage />} />
         <Route path="/tourismgovernor/locations" element={<Locations />} />
-        <Route path="/admin/locations" element={<Locations />} />
+        <Route path="/admin-locations" element={<Locations />} />
         <Route path="/advertiser/activities" element={<Activities />} />
         <Route path="/itineraries" element={<Accounts />} />
         <Route path="/" element={<SignIn />} />

@@ -1,96 +1,174 @@
 import React, { useState } from "react";
 import LocationCardCRUD from "./LocationCardCRUD";
 import ImprovedSidebar from "./ImprovedSidebar";
-
+import useGetPlace from "../custom_hooks/places/useGetPlace"
+import  Place  from "../custom_hooks/places/place_interface";
+import {usedeletePlaces} from "../custom_hooks/places/useDeletePlace";
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import { TextField } from "@mui/material";
+import useCreatePlace from "../custom_hooks/places/useCreatePlace";
 
 const Locations = () => {
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [nativePrice, setNativePrice] = useState(10);
+    const [foreignPrice, setForeignPrice] = useState(100);
+    const [studentPrice, setStudentPrice] = useState(5);
+    const [hours, setHours] = useState("9:00→5:00");
+    const [latitude, setLatitude] = useState(30.0);
+    const [longitude, setLongitude] = useState(31.2);
+    const [image, setImage] = useState<string>('');
+    const [images, setImages] = useState<string[]>([]);
+    const [apiBody, setApiBody] = useState<Place | null>(null);
 
-    const [cards, setCards] = useState([
-        { id: "1", name: "Giza Pyramids",
-            description: "The only wonder of the seven with actual substantial evidence that proves they exist.",
-            ticket_price: {
-                native: 10,
-                foreign: 100,
-                student: 5,
-            }, opening_hrs: "9:00→5:00", location: {
-            latitude:30.0,longitude:31.2
-            },
-            pictures: ["https://upload.wikimedia.org/wikipedia/commons/e/e3/Kheops-Pyramid.jpg"] },
-        { id: "2", name: "Eiffel Tower",
-            description: "An iconic symbol of France, located in Paris.",
-            ticket_price: {
-                native: 10,
-                foreign: 100,
-                student: 5,
-            }, opening_hrs: "9:00→11:00", location: {
-                latitude:30.0,longitude:31.2
-            },
-            pictures: ["https://upload.wikimedia.org/wikipedia/commons/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg"] },
-        { id: "3", name: "Great Wall of China",
-            description: "A historic wall stretching across northern China.",
-            ticket_price: {
-                native: 10,
-                foreign: 100,
-                student: 5,
-            }, opening_hrs: "8:00→6:00", location: {
-                latitude:30.0,longitude:31.2
-            },
-            pictures: ["https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/The_Great_Wall_of_China_at_Jinshanling-edit.jpg/1200px-The_Great_Wall_of_China_at_Jinshanling-edit.jpg"] },
-        { id: "4", name: "Statue of Liberty",
-            description: "A symbol of freedom and democracy in the United States.",
-            ticket_price: {
-                        native: 10,
-                        foreign: 100,
-                        student: 5,
-                    }
-            , opening_hrs: "8:30→4:00", location: {
-                latitude:30.0,longitude:31.2
-            },
-            pictures: ["https://upload.wikimedia.org/wikipedia/commons/a/a1/Statue_of_Liberty_7.jpg"] },
-        { id: "5", name: "Taj Mahal", description: "A magnificent mausoleum built by Mughal Emperor Shah Jahan.",
-            ticket_price: {
-                native: 10,
-                foreign: 100,
-                student: 5,
-            }, opening_hrs: "6:00→7:00", location: {
-                latitude:30.0,longitude:31.2
-            },
-            pictures: ["https://upload.wikimedia.org/wikipedia/commons/d/da/Taj-Mahal.jpg"] },
-    ]);
-    const handleDelete = (id: number) => {
-        setCards(cards.filter(card => card.id !== id));
-    };
+    useCreatePlace(apiBody);
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+      };
+    const { places } = useGetPlace();
+    const [newcards, setNewcards] = useState(places);
+ 
     const handleCreate = () => {
         const newCard = {
-            id: cards.length + 1,
-            name: "New Place",
-            description: "Description of the new place.",
-            ticket_price: {
-                native: 10,
-                foreign: 100,
-                student: 5,
-            },
-            opening_hrs: "9:00→5:00",
-            location: {
-                latitude:30.0,longitude:31.2
-            },
-            pictures: ["https://via.placeholder.com/422x121"],
+          id: Date.now().toString(),
+          name,
+          description,
+          ticket_price: {
+            native: nativePrice,
+            foreign: foreignPrice,
+            student: studentPrice,
+          },
+          opening_hrs:hours,
+          location: {
+            latitude,
+            longitude,
+          },
+          pictures: images,
         };
-        setCards([...cards, newCard]);
-    };
+        setApiBody(newCard);
+        setOpen(false);
+      };
+    console.log(newcards);
+
+
+      const handleDelete = (id: string) => {
+        usedeletePlaces(id);
+      };
+    
+    React.useEffect(() => {
+        if (places) {
+            setNewcards(places);
+        }
+      }, [places]);
+
     return ( 
     <div className="flex justify-center">
         <ImprovedSidebar title="Admin"/>
-    <div className="grid grid-cols-3 mt-10">
-    <div className="flex w-[422px] h-[334px] bg-[#D9D9D9] rounded-[11px] m-4 hover:bg-[#c0c0c0] transition duration-300 cursor-pointer" onClick={handleCreate}>
+    <div className="grid grid-cols-3 mt-10"><Modal
+        open={open}
+        onClose={handleClose}
+      >
+        <Box sx={style}>
+        <Box className="grid grid-cols-2">
+        <TextField
+                label="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="Description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="Native Price"
+                type="number"
+                value={nativePrice}
+                onChange={(e) => setNativePrice(Number(e.target.value))}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="Foreign Price"
+                type="number"
+                value={foreignPrice}
+                onChange={(e) => setForeignPrice(Number(e.target.value))}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="Student Price"
+                type="number"
+                value={studentPrice}
+                onChange={(e) => setStudentPrice(Number(e.target.value))}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="Hours"
+                type="string"
+                value={hours}
+                onChange={(e) => setHours(e.target.value)}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="Latitude"
+                type="number"
+                value={latitude}
+                onChange={(e) => setLatitude(Number(e.target.value))}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="Longitude"
+                type="number"
+                value={longitude}
+                onChange={(e) => setLongitude(Number(e.target.value))}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                label="Image"
+                type="string"
+                value={image}
+                onChange={(e) => {setImage(e.target.value); setImages([...images,image])}}
+                fullWidth
+                margin="normal"
+              />
+              <Button onClick={handleCreate}>Add</Button>
+        </Box>
+        </Box>
+      </Modal>
+    <div className="flex w-[422px] h-[334px] bg-[#D9D9D9] rounded-[11px] m-4 hover:bg-[#c0c0c0] transition duration-300 cursor-pointer" onClick={handleOpen}>
                     <p className="m-auto text-[40px]">
                         Create New Place
                     </p>
                 </div>
-            {cards.map(card => (
+            {newcards?.map(card => (
                 <LocationCardCRUD
-                key={card.id}
-                id={card.id}
+                wholeLocation={card}
+                key={card._id}
+                id={card._id ?? ""}
                 name={card.name}
                 description={card.description}
                 ticket_price={card.ticket_price}

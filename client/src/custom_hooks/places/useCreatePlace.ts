@@ -2,7 +2,7 @@ import axios from "axios";
 import {useState , useEffect} from "react";
 import Place from "./place_interface.ts"
 
-const useCreatePlace = (body : Place) => {
+const useCreatePlace = (body : Place | null) => {
     const [data,setData] = useState<Place | null>(null);
     const [loading,setLoading] = useState(false);
     const [error,setError] = useState<string | null>(null);
