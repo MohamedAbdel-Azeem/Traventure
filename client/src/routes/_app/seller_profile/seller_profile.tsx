@@ -1,45 +1,53 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
-import { useForm, Controller } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useForm, Controller, set } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ISeller } from "./ISeller";
+import { useUpdateSeller } from "../../../custom_hooks/sellerGetUpdate";
 // Define Zod schema for validation
+
+interface SellerProfileProps {
+  seller: ISeller;
+}
 const sellerSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  name: z.string().min(1, 'Name is required'),
-  description: z.string().min(1, 'Description is required'),
+  email: z.string().email("Invalid email address"),
+  name: z.string().min(1, "Name is required"),
+  description: z.string().min(1, "Description is required"),
+  username: z.string().min(1, "Username is required"),
 });
 
-type SellerProfileFormValues = z.infer<typeof sellerSchema>;
+export type SellerProfileFormValues = z.infer<typeof sellerSchema>;
 
-type SellerProfileType = {
-  username: String,
-  email: string,
-  password: String,
-  name: string,
-  description:string,
-  isAccepted: boolean
-}
-interface SellerProfileProps {
-  seller: SellerProfileType;
-}
-const SellerProfile: React.FC<SellerProfileProps>= ({seller}) => {
+// type SellerProfileType = {
+//   username: String,
+//   email: string,
+//   password: String,
+//   name: string,
+//   description:string,
+//   isAccepted: boolean
+// }
+
+const SellerProfile: React.FC<SellerProfileProps> = ({ seller }) => {
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
-
+  const [currentSeller, setCurrentSeller] = useState(seller);
+  const [apiBody, setApiBody] = useState({});
+  const [apiUsername, setApiUsername] = useState("");
+  const response = useUpdateSeller(apiBody, apiUsername);
   // React Hook Form setup with Zod validation
   const {
     control,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<SellerProfileFormValues>({
+  } = useForm<ISeller>({
     resolver: zodResolver(sellerSchema),
     defaultValues: {
-      email: seller.email,
-      name: seller.name,
-      description: seller.description,
+      email: currentSeller.email,
+      name: currentSeller.name,
+      description: currentSeller.description,
+      username: currentSeller.username,
     },
   });
 
@@ -49,38 +57,43 @@ const SellerProfile: React.FC<SellerProfileProps>= ({seller}) => {
   };
 
   // Save the form
-  const onSubmit = (data: SellerProfileFormValues) => {
-    console.log('Saved data:', data);
+  const onSubmit = (data: ISeller) => {
+    console.log("Saved data:", data);
     setIsEditing(false);
+    setApiBody(data);
+    setApiUsername(data.username);
+    setCurrentSeller(data);
     // UPDATE INFO TO DATABASE HERE
   };
 
   // Handle logout
   const handleLogout = () => {
-    navigate('/');
+    navigate("/");
   };
 
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-gray-900"
       style={{
-        backgroundImage: `url('src/assets/mtn.jpg')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundBlendMode: 'overlay',
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        backgroundImage: `url('/src/assets/mtn.jpg')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundBlendMode: "overlay",
+        backgroundColor: "rgba(0, 0, 0, 0.7)",
       }}
     >
       <div className="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl p-8 backdrop-blur-lg bg-opacity-90">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex items-center space-x-6">
             <img
-              src="src/assets/t2.jpg" // Hardcoded profile picture
+              src="/src/assets/t2.jpg" // Hardcoded profile picture
               alt="Profile"
               className="w-32 h-32 rounded-full object-cover shadow-md border-4 border-purple-500"
             />
             <div className="text-left">
-              <h2 className="text-4xl font-extrabold text-purple-700">Email:</h2>
+              <h2 className="text-4xl font-extrabold text-purple-700">
+                Email:
+              </h2>
               {isEditing ? (
                 <Controller
                   name="email"
@@ -94,15 +107,21 @@ const SellerProfile: React.FC<SellerProfileProps>= ({seller}) => {
                   )}
                 />
               ) : (
-                <p className="text-lg text-gray-600 overflow-auto w-[255px]">{seller.email}</p>
+                <p className="text-lg text-gray-600 overflow-auto w-[255px]">
+                  {currentSeller.email}
+                </p>
               )}
-              {errors.email && <p className="text-red-600">{errors.email.message}</p>}
+              {errors.email && (
+                <p className="text-red-600">{errors.email.message}</p>
+              )}
             </div>
           </div>
 
           <div className="mt-8 grid grid-cols-2 gap-6">
             <div className="flex flex-col">
-              <label className="text-lg font-semibold text-gray-700">Name:</label>
+              <label className="text-lg font-semibold text-gray-700">
+                Name:
+              </label>
               {isEditing ? (
                 <Controller
                   name="name"
@@ -115,13 +134,19 @@ const SellerProfile: React.FC<SellerProfileProps>= ({seller}) => {
                   )}
                 />
               ) : (
-                <p className="text-gray-800 text-lg overflow-auto w-[404px]">{seller.name}</p>
+                <p className="text-gray-800 text-lg overflow-auto w-[404px]">
+                  {currentSeller.name}
+                </p>
               )}
-              {errors.name && <p className="text-red-600">{errors.name.message}</p>}
+              {errors.name && (
+                <p className="text-red-600">{errors.name.message}</p>
+              )}
             </div>
 
             <div className="flex flex-col">
-              <label className="text-lg font-semibold text-gray-700">Description:</label>
+              <label className="text-lg font-semibold text-gray-700">
+                Description:
+              </label>
               {isEditing ? (
                 <Controller
                   name="description"
@@ -134,9 +159,13 @@ const SellerProfile: React.FC<SellerProfileProps>= ({seller}) => {
                   )}
                 />
               ) : (
-                <p className="text-gray-800 text-lg overflow-auto w-[404px]">{seller.description}</p>
+                <p className="text-gray-800 text-lg overflow-auto w-[404px]">
+                  {currentSeller.description}
+                </p>
               )}
-              {errors.description && <p className="text-red-600">{errors.description.message}</p>}
+              {errors.description && (
+                <p className="text-red-600">{errors.description.message}</p>
+              )}
             </div>
           </div>
 
