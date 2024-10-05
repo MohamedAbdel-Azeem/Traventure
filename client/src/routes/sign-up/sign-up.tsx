@@ -8,7 +8,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import Swal from "sweetalert2";
 import { PhoneInput } from "../../components/PhoneInput/phone-input";
 import { E164Number } from "libphonenumber-js";
-import countryList from 'react-select-country-list';
+import countryList from "react-select-country-list";
 // TODO: Use the Loading and error returning from the hook
 
 const getAge = (dob: string): number => {
@@ -220,27 +220,25 @@ const Register: React.FC = () => {
                   <label className="block text-gray-700 font-semibold text-lg mb-2">
                     Mobile Number
                   </label>
-                   <Controller
-                      name="mobileNumber"
-                      
-                      control={control}
-                      render={({ field }) => (
-                        <PhoneInput
-                        
-                          defaultCountry="EG"
-                          placeholder="Enter a phone number"
-                          international={true}
-                          value={field.value as unknown as E164Number}
-                          onChange={(value) => {
-                            if (value !== "") {
-                              field.onChange(value);
-                            } else {
-                              field.onChange(undefined);
-                            }
-                          }}
-                        />
-                      )}
-                    />
+                  <Controller
+                    name="mobileNumber"
+                    control={control}
+                    render={({ field }) => (
+                      <PhoneInput
+                        defaultCountry="EG"
+                        placeholder="Enter a phone number"
+                        international={true}
+                        value={field.value as unknown as E164Number}
+                        onChange={(value) => {
+                          if (value !== "") {
+                            field.onChange(value);
+                          } else {
+                            field.onChange(undefined);
+                          }
+                        }}
+                      />
+                    )}
+                  />
                   {errors.mobileNumber && (
                     <p className="text-red-500">
                       {errors.mobileNumber.message}
@@ -253,24 +251,26 @@ const Register: React.FC = () => {
                   <label className="block text-gray-700 font-semibold text-lg mb-2">
                     Nationality
                   </label>
-                   <Controller
-          name="nationality"
-          control={control}
-          render={({ field }) => (
-            <select
-              {...field}
-              value={field.value || ""}
-              className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition duration-200'
-            >
-              <option value="" disabled>Select a country</option>
-              {countries.map((country) => (
-              <option key={country.value} value={country.label}>
-                {country.label}
-              </option>
-              ))}
-            </select>
-          )}
-        />
+                  <Controller
+                    name="nationality"
+                    control={control}
+                    render={({ field }) => (
+                      <select
+                        {...field}
+                        value={field.value || ""}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition duration-200"
+                      >
+                        <option value="" disabled>
+                          Select a country
+                        </option>
+                        {countries.map((country) => (
+                          <option key={country.value} value={country.label}>
+                            {country.label}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                  />
                   {errors.nationality && (
                     <p className="text-red-500">{errors.nationality.message}</p>
                   )}

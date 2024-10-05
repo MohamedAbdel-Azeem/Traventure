@@ -3,7 +3,6 @@ import { ITourGuide } from "../../Interfaces/Users/ITourGuide";
 
 const Schema = mongoose.Schema;
 
-
 const tourGuideSchema = new Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
@@ -12,7 +11,7 @@ const tourGuideSchema = new Schema({
   yearsOfExperience: Number,
   previousWork: [
     {
-      company: { type: Schema.Types.ObjectId, ref: "Company" },
+      company: String,
       startDate: Date,
       endDate: Date,
       role: String,
