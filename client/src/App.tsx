@@ -25,6 +25,7 @@ import LandingPage from "./pages/LandingPage";
 import { TourGuide_Profile } from "./routes/_app/tourguide_profile/tourguide-profile-main";
 import ItineraryDetailsTourist from "./components/ItineraryDetailsTourist";
 import MoreItineraries from "./components/MoreItineraries";
+import MorePlaces from "./components/MorePlaces";
 
 function App() {
   return (
@@ -59,6 +60,7 @@ function App() {
 <Route path="/itinerary/:id" element={<ItineraryDetails />} />
 <Route path="/tourist-itinerary/:id" element={<ItineraryDetailsTourist />} />
 <Route path="/more-itineraries" element={<MoreItineraries />} />
+<Route path="/more-places" element={<MorePlaces />} />
         </Routes>
       </Router>
     </MantineProvider>
