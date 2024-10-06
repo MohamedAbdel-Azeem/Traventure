@@ -5,14 +5,14 @@ import ItineraryModal from "./ItineraryModal";
 import useGetItinerary from "../custom_hooks/itineraries/useGetItinerary";
 import Itinerary from "../custom_hooks/itineraries/itinerarySchema";
 import useDeleteItinerary from "../custom_hooks/itineraries/useDeleteItinerary";
- 
 
 const Itineraries = () => {
   const [cards, setCards] = useState<Itinerary[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null); // To track which card is being deleted
 
   const { itinerary, loading, error } = useGetItinerary("66f6e4f9fe182e23156d18d6");
-  const { deleteItinerary, success } = useDeleteItinerary();  
+  const { deleteItinerary, success } = useDeleteItinerary();
 
   useEffect(() => {
     if (itinerary) {
@@ -21,44 +21,28 @@ const Itineraries = () => {
   }, [itinerary]);
 
   const handleDelete = async (id: string) => {
-    await deleteItinerary(id); 
+    setDeletingId(id); // Mark the current itinerary as being deleted
+    await deleteItinerary(id);
 
     if (success) {
-        const filteredCards = cards.filter((card: Itinerary) => card._id !== id);
-        setCards(filteredCards);
+      const filteredCards = cards.filter((card: Itinerary) => card._id !== id);
+      setCards(filteredCards);
     } else {
-        console.error("Error deleting itinerary");
+      console.error("Error deleting itinerary");
     }
+
+    setDeletingId(null); // Reset deletion state
   };
 
   const handleCreate = (newCard: Partial<Itinerary>) => {
-    // const newItinerary: Itinerary = {
-    //   ...newCard,
-    //   _id: `${cards.length + 1}`, // Replace with your actual ID generation logic
-    //   language: newCard.language || "English",
-    //   pickup_location: newCard.pickup_location || "Default Pickup Location",
-    //   dropoff_location: newCard.dropoff_location || "Default Dropoff Location",
-    //   starting_Date: newCard.starting_Date || new Date().toISOString(),
-    //   ending_Date: newCard.ending_Date || new Date().toISOString(),
-    //   selectedTags: newCard.selectedTags || [],
-    //   plan: newCard.plan || [],
-    //   booked_By: [],
-    //   accesibility: newCard.accesibility || false,
-    //   price: newCard.price || 0,
-    //   title: newCard.title || "Untitled",
-    //   description: newCard.description || "No description available",
-    //   rating: newCard.rating || 0,
-    //   main_Picture: newCard.main_Picture || "",
-    //   total: newCard.total || 0,
-    // };
-    // setCards([...cards, newItinerary]);
+    // Handle the creation of a new itinerary
   };
 
   if (loading) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
   if (error) {
-    return <div>Error: {error}</div>; 
+    return <div>Error: {error}</div>;
   }
 
   return (
@@ -87,10 +71,11 @@ const Itineraries = () => {
             main_Picture={card.main_Picture}
             plan={card.plan}
             selectedTags={card.selectedTags}
-            onDelete={handleDelete} 
-            added_By={""} 
-            total={0} 
-            booked_By={[]} 
+            onDelete={() => handleDelete(card._id)}
+            isDeleting={deletingId === card._id} // Pass the deleting state to the card
+            added_By={""}
+            total={0}
+            booked_By={[]}
             accesibility={false}
           />
         ))}
