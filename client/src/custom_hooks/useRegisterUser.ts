@@ -42,7 +42,7 @@ function useRegisterUser(body: object | null, role: string) {
     const fetchData = async () => {
       if (role === null) return;
       if (body === null) return;
-      const url = `traventure/api/${role}/add`;
+      const url = `/traventure/api/${role}/add`;
       setLoading(true);
       setError(null);
       console.log(body);

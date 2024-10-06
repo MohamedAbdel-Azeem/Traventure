@@ -13,7 +13,7 @@ import TheMAP from "./TheMAP";
 import ItineraryCardCRUD from "./ItineraryCardCRUD";
 
 const Locations = () => {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [name, setName] = useState('');
@@ -149,8 +149,7 @@ const Locations = () => {
                 </div>
                 </FormControl>
 
-
-                <FormControl fullWidth sx={{ marginY: 1 }}>
+              <FormControl fullWidth sx={{ marginY: 1 }}>
                 <InputLabel>Image</InputLabel>
                 <OutlinedInput
                 label="Image"
@@ -159,7 +158,7 @@ const Locations = () => {
                 onChange={(e) => {setImage(e.target.value)}}
               /></FormControl>
 
-<Button onClick={handleCreate}>Add</Button>
+          <Button onClick={handleCreate}>Add</Button>
               
               
         </Box>

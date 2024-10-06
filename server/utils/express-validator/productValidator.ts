@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, check, validationResult } from "express-validator";
 
 export const productAddValidator = [
   body("name")
@@ -13,7 +13,6 @@ export const productAddValidator = [
     .isString()
     .isLength({ min: 10 })
     .withMessage("Description must be at least 10 characters long"),
-  body("seller").isString().exists().withMessage("Seller must be a string"),
   body("imageUrl")
     .isString()
     .exists()
@@ -22,6 +21,24 @@ export const productAddValidator = [
     .isNumeric()
     .custom((value) => value >= 0)
     .withMessage("Quantity must be a number"),
+  check("seller")
+    .optional()
+    .isString()
+    .withMessage("Seller must be a string"),
+  check("externalseller")
+    .optional()
+    .isString()
+    .withMessage("External seller must be a string"),
+  body()
+    .custom((value, { req }) => {
+      if (!req.body.seller && !req.body.externalseller) {
+        throw new Error("Either seller or externalseller must be provided");
+      }
+      if (req.body.seller && req.body.externalseller) {
+        throw new Error("Only one of seller or externalseller can be provided");
+      }
+      return true;
+    })
 ];
 
 export const productUpdateValidator = [
@@ -41,14 +58,10 @@ export const productUpdateValidator = [
     .isLength({ min: 10 })
     .withMessage("Description must be at least 10 characters long"),
   body("seller")
-    .optional()
-    .isString()
-    .exists()
-    .withMessage("Seller must be a string"),
+    .optional(),
   body("imageUrl")
     .optional()
     .isString()
-    .exists()
     .withMessage("Image URL must be a string"),
   body("quantity")
     .optional()

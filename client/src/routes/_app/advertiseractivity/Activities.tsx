@@ -22,7 +22,6 @@ const [activities, setActivities] = useState<Activity[]>( [
 ]);
 
   const handleEdit = (activity: Activity) => {
-    // Implement your edit logic here, e.g., open a modal or navigate to an edit page
     console.log('Editing activity:', activity);
 };
 
