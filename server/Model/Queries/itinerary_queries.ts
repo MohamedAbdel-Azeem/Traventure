@@ -8,6 +8,7 @@ export async function getItinerary(tour_guide_id: String) {
     }).populate('added_By')
     .populate('plan.place')
     .populate('plan.activities.activity_id')
+    .populate('selectedTags')
 
     return itineraries;
   } catch (error) {
@@ -36,6 +37,13 @@ export async function updateItinerary(itinerary_Id: string, new_Itinerary: Objec
 
 export async function deleteItinerary(itinerary_Id: string) {
   try {
+    const itinerary = await Itinerary.findById(itinerary_Id).lean();
+    if(itinerary) {
+      const { booked_By } = itinerary;
+    if (booked_By.length > 0) {
+      throw new Error("Cannot delete itinerary that has been booked.");
+    }
+  }
     const place = await Itinerary.findByIdAndDelete(itinerary_Id);
     return place;
   } catch (error) {
