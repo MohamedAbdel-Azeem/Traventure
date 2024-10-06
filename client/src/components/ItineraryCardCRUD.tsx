@@ -43,8 +43,8 @@ interface ItineraryCardCRUDProps {
     user_id?: TouristProfileData;
   }[];
   accesibility: boolean;
-  onDelete: (id: string) => void;
-  isDeleting: boolean; 
+  onDelete?: (id: string) => void; 
+  isDeleting?: boolean; 
 }
 
 const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
@@ -62,10 +62,12 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
   selectedTags = [],
   plan,
   onDelete,
-  isDeleting, 
+  isDeleting = false, 
 }) => {
   const handleDeleteClick = () => {
-    onDelete(_id);
+    if (onDelete) {
+      onDelete(_id);
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -78,7 +80,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
   };
 
   return (
-    <div className="m-4 transition transform hover:scale-105 w-96">
+    <div className="m-4 transition transform hover:scale-105 w-96 bg-gray-100 rounded-lg">  
       <div className="relative w-full h-[200px]">
         <img src={main_Picture} alt={title} className="w-full h-full object-cover" />
       </div>
@@ -158,15 +160,17 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
             View Details
           </Link>
 
-          {isDeleting ? (
-            <CircularProgress size={24} className="text-red-500" />
-          ) : (
-            <button
-              onClick={handleDeleteClick}
-              className="text-red-500 hover:text-red-700 transition"
-            >
-              <DeleteIcon />
-            </button>
+          {onDelete && (
+            isDeleting ? (
+              <CircularProgress size={24} className="text-red-500" />
+            ) : (
+              <button
+                onClick={handleDeleteClick}
+                className="text-red-500 hover:text-red-700 transition"
+              >
+                <DeleteIcon />
+              </button>
+            )
           )}
         </div>
       </div>
