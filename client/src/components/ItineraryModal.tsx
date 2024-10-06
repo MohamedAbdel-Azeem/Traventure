@@ -47,15 +47,14 @@ interface ItineraryModalProps {
 }
 
 const tagsOptions = [
-    'Adventure',
-    'Relaxation',
-    'Culture',
-    'Nature',
-    'Food',
-    'History',
-    'Family',
-  ];
-
+  'Adventure',
+  'Relaxation',
+  'Culture',
+  'Nature',
+  'Food',
+  'History',
+  'Family',
+];
 
 const activities: Activity[] = [
   { id: '1', name: 'Hiking', durationOptions: ['1 hour', '2 hours', '3 hours'] },
@@ -74,13 +73,13 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
     title: '',
     description: '',
     price: 0,
-    startDate: '', 
-    endDate: '',   
+    starting_Date: '', // renamed for consistency
+    ending_Date: '',   // renamed for consistency
     rating: 0,
-    image: '',
+    main_Picture: '',
     language: '',
-    pickupLocation: '', 
-    dropoffLocation: '', 
+    pickup_location: '', 
+    dropoff_location: '', 
   });
 
   const [places, setPlaces] = React.useState<SelectedPlace[]>([{ place: '', activities: [] }]);
@@ -146,16 +145,16 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
     setSelectedTags(typeof value === 'string' ? value.split(',') : value);
   };
 
-
   const validateForm = (): boolean => {
     const newErrors: string[] = [];
     
     if (!formData.title) newErrors.push('Title is required.');
     if (!formData.description) newErrors.push('Description is required.');
     if (formData.price <= 0) newErrors.push('Price must be greater than 0.');
-    if (!formData.startDate) newErrors.push('Start date is required.');
-    if (!formData.endDate) newErrors.push('End date is required.');
-    if (new Date(formData.startDate) >= new Date(formData.endDate)) newErrors.push('End date must be after start date.');
+    if (!formData.starting_Date) newErrors.push('Start date is required.');
+    if (!formData.ending_Date) newErrors.push('End date is required.');
+    if (new Date(formData.starting_Date) >= new Date(formData.ending_Date)) 
+      newErrors.push('End date must be after start date.');
     
     places.forEach((place, placeIndex) => {
       if (!place.place) {
@@ -178,16 +177,17 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
   const handleSubmit = () => {
     if (!validateForm()) return;
     const itineraryData = {
-      ...formData, 
-      tags: selectedTags,
-      places: places.map((place) => ({
-        name: place.place,
+      ...formData,
+      selectedTags,
+      plan: places.map((place) => ({
+        place: place.place,
         activities: place.activities,
       })),
     };
     onSubmit(itineraryData); 
     onClose();
   };
+
 
   return (
     <Modal open={isOpen} onClose={onClose}>
@@ -303,7 +303,7 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
             variant="outlined"
             fullWidth
             margin="normal"
-            onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+            onChange={(e) => setFormData({ ...formData, starting_Date: e.target.value })}
             sx={{ mb: 2 }}
           />
           <TextField
@@ -313,7 +313,7 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
             variant="outlined"
             fullWidth
             margin="normal"
-            onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+            onChange={(e) => setFormData({ ...formData, ending_Date: e.target.value })}
             sx={{ mb: 2 }}
           />
 
@@ -324,7 +324,7 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
             variant="outlined"
             fullWidth
             margin="normal"
-            onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+            onChange={(e) => setFormData({ ...formData, main_Picture: e.target.value })}
             sx={{ mb: 2 }}
           />
           
@@ -344,7 +344,7 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
             variant="outlined"
             fullWidth
             margin="normal"
-            onChange={(e) => setFormData({ ...formData, pickupLocation: e.target.value })}
+            onChange={(e) => setFormData({ ...formData, pickup_location: e.target.value })}
             sx={{ mb: 2 }}
           />
           
@@ -354,7 +354,7 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
             variant="outlined"
             fullWidth
             margin="normal"
-            onChange={(e) => setFormData({ ...formData, dropoffLocation: e.target.value })}
+            onChange={(e) => setFormData({ ...formData, dropoff_location: e.target.value })}
             sx={{ mb: 2 }}
           />
 
