@@ -13,6 +13,8 @@ const MoreItineraries: React.FC = () => {
 
     const [searchType, setSearchType] = useState<'name' | 'tag'>('name');
     const [searchTerm, setSearchTerm] = useState('');
+    const [sortType, setSortType] = useState<'price' | 'rating'>('price');
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
     if (loading) {
         return <div>Loading...</div>;
@@ -21,15 +23,29 @@ const MoreItineraries: React.FC = () => {
         return <div>Error Fetching: {error}</div>;
     }
 
-    
-    const filteredItineraries = upcoming?.itineraries.filter((itinerary) => {
-        if (searchType === 'name') {
-            return itinerary.title.toLowerCase().includes(searchTerm.toLowerCase());
-        } else if (searchType === 'tag') {
-            console.log('hi');
-        }
-        return true; 
-    });
+    const filteredItineraries = upcoming?.itineraries
+        .filter((itinerary) => {
+            const term = searchTerm.toLowerCase();
+            if (searchType === 'name') {
+                return itinerary.title.toLowerCase().includes(term);
+            } else if (searchType === 'tag') {
+                return itinerary.selectedTags?.some(tag => tag.name.toLowerCase().includes(term)) ?? false;
+            }
+            return true; 
+        })
+        .sort((a, b) => {
+            const sortFactor = sortOrder === 'asc' ? 1 : -1;
+            if (sortType === 'price') {
+                const aPrice = a.price ?? 0;
+                const bPrice = b.price ?? 0;
+                return (aPrice - bPrice) * sortFactor;
+            } else if (sortType === 'rating') {
+                const aRating = a.rating ?? 0;
+                const bRating = b.rating ?? 0;
+                return (aRating - bRating) * sortFactor; 
+            }
+            return 0;
+        });
 
     return (
         <>
@@ -37,7 +53,6 @@ const MoreItineraries: React.FC = () => {
             <hr />
             <br />
 
-           
             <div className="mb-4 flex gap-2">
                 <FormControl variant="outlined" className="min-w-[120px]">
                     <InputLabel id="search-type-label">Search By</InputLabel>
@@ -53,11 +68,35 @@ const MoreItineraries: React.FC = () => {
                 </FormControl>
                 <input
                     type="text"
-                    placeholder={`Search by ${searchType}`}
+                    placeholder={`Search by ${searchType === 'name' ? 'Name' : 'Tag'}`}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="border p-2 rounded"
                 />
+                <FormControl variant="outlined" className="min-w-[120px]">
+                    <InputLabel id="sort-type-label">Sort By</InputLabel>
+                    <Select
+                        labelId="sort-type-label"
+                        value={sortType}
+                        onChange={(e) => setSortType(e.target.value as 'price' | 'rating')}
+                        label="Sort By"
+                    >
+                        <MenuItem value="price">Price</MenuItem>
+                        <MenuItem value="rating">Rating</MenuItem>
+                    </Select>
+                </FormControl>
+                <FormControl variant="outlined" className="min-w-[120px]">
+                    <InputLabel id="sort-order-label">Order</InputLabel>
+                    <Select
+                        labelId="sort-order-label"
+                        value={sortOrder}
+                        onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc')}
+                        label="Order"
+                    >
+                        <MenuItem value="asc">Ascending</MenuItem>
+                        <MenuItem value="desc">Descending</MenuItem>
+                    </Select>
+                </FormControl>
             </div>
 
             <hr />
@@ -87,6 +126,8 @@ const MoreItineraries: React.FC = () => {
                             }[];
                             booked_By: { user_id?: TouristProfileData }[];
                             accesibility: boolean;
+                            main_Picture?: string; 
+                            selectedTags?: { _id: string; name: string; __v: number; }[]; 
                         }) => (
                             <ItineraryCardToruist
                                 key={itinerary._id}
@@ -103,6 +144,8 @@ const MoreItineraries: React.FC = () => {
                                 pickup_location={itinerary.pickup_location}
                                 dropoff_location={itinerary.dropoff_location}
                                 plan={itinerary.plan}
+                                selectedTags={itinerary.selectedTags}
+                                main_Picture={itinerary.main_Picture}
                                 booked_By={itinerary.booked_By}
                                 accesibility={itinerary.accesibility}
                             />

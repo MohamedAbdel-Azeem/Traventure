@@ -72,7 +72,7 @@ const Itineraries = () => {
             plan={card.plan}
             selectedTags={card.selectedTags}
             onDelete={() => handleDelete(card._id)}
-            isDeleting={deletingId === card._id} // Pass the deleting state to the card
+            isDeleting={deletingId === card._id} 
             added_By={""}
             total={0}
             booked_By={[]}
