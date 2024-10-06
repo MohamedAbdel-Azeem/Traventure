@@ -99,12 +99,12 @@ const ItineraryDetails: React.FC = () => {
     setItinerary({ ...itinerary, plan: updatedPlan });
   };
 
-  const handleAddActivity = (placeIndex: number) => {
-    const newActivity: IActivity = { Title: "", DateAndTime: new Date(), Location: { latitude: 0, longitude: 0 }, Price: 0, SpecialDiscount: 0, Category: "", Tags: [], BookingIsOpen: true };
-    const updatedPlan = [...itinerary.plan];
-    updatedPlan[placeIndex].activities.push(newActivity);
-    setItinerary({ ...itinerary, plan: updatedPlan });
-  };
+  // const handleAddActivity = (placeIndex: number) => {
+  //   const newActivity: IActivity = { Title: "", DateAndTime: new Date(), Location: { latitude: 0, longitude: 0 }, Price: 0, SpecialDiscount: 0, Category: "", Tags: [], BookingIsOpen: true };
+  //   const updatedPlan = [...itinerary.plan];
+  //   updatedPlan[placeIndex].activities.push(newActivity);
+  //   setItinerary({ ...itinerary, plan: updatedPlan });
+  // };
 
   const handleRemoveActivity = (placeIndex: number, activityIndex: number) => {
     const updatedPlan = [...itinerary.plan];
@@ -194,10 +194,10 @@ const ItineraryDetails: React.FC = () => {
                   item.activities.map((activity, activityIndex) => (
                     <Box key={activityIndex} className="ml-4 mb-2">
                       <Typography variant="body1" className="text-gray-700">
-                        <span className="font-semibold">Activity:</span> {activity.Title}
+                        <span className="font-semibold">Activity:</span> {activity.activity_id.Title}
                       </Typography>
                       <Typography variant="body2" className="text-gray-600">
-                        <span className="font-semibold">Duration:</span> 
+                        <span className="font-semibold">Duration:</span> {activity.activity_duration} {activity.time_unit}
                       </Typography>
                     </Box>
                   ))}
