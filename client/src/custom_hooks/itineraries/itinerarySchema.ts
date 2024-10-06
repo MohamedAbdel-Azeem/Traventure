@@ -4,6 +4,7 @@ import { TouristProfileData } from "../../routes/_app/tourist_profile/tourist_pr
 
 interface Itinerary {
   map(arg0: (card: any) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
+  _id: string;
   main_Picture?: string;
   title: string;
   description: string;
@@ -14,6 +15,7 @@ interface Itinerary {
   rating: number;
   total: number;
   language: string;
+  selectedTags?: string[];
   pickup_location: string;
   dropoff_location: string;
   plan: {
