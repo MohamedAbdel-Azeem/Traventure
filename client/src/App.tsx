@@ -37,7 +37,9 @@ function App() {
           <Route path="/tourist/:id" element={<TouristPage />} />
           <Route path="/seller" element={<SellerPage />} />
           <Route path="/admin-users" element={<Accounts />} />
-          <Route path="/admin/shop" element={<ShopPage />} />
+          <Route path="/admin/shop" element={<ShopPage type="Admin"/>} />
+          <Route path="/tourist/shop" element={<ShopPage type="Tourist" />} />
+          <Route path="/seller/shop" element={<ShopPage type="Seller" />} />
           <Route path="/tourismgovernor/locations" element={<Locations />} />
           <Route path="/admin-locations" element={<Locations />} />
           <Route path="/advertiser/activities" element={<Activities />} />

@@ -112,6 +112,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 interface ImprovedSidebarProps {
   title: string;
+  className?: string;
 }
 
 const getSidebarItems = (title : string) => {
@@ -136,8 +137,8 @@ const getSidebarItems = (title : string) => {
   }
 };
 
-export default function ImprovedSidebar({ title = "" }: ImprovedSidebarProps) {
-    const [open, setOpen] = React.useState(false);
+export default function ImprovedSidebar({ title = "", className = "" }: ImprovedSidebarProps) {
+  const [open, setOpen] = React.useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -148,7 +149,7 @@ export default function ImprovedSidebar({ title = "" }: ImprovedSidebarProps) {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex' }} className={className}>
       <CssBaseline />
       <Drawer variant="permanent" open={open}>
         <DrawerHeader className="h-[74px]">

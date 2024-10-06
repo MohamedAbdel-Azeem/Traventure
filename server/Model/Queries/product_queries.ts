@@ -11,7 +11,7 @@ export async function addProduct(product: Object) {
 
 export async function getProducts() {
   try {
-    const products = await productModel.find();
+    const products = await productModel.find().populate("seller");
     return products;
   } catch (error) {
     throw error;

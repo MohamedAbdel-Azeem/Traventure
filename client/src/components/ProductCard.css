@@ -246,17 +246,17 @@
 
 .popup-description-box,
 .popup-reviews-box {
-    flex: 1; /* Allow boxes to take equal space */
-    margin-right: 10px; /* Space between boxes */
-    padding: 15px; /* Padding for content inside the box */
-    border-radius: 8px; /* Rounded corners */
-    background-color: #f9f9f9; /* Light background color */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    overflow: hidden; /* Prevent text overflow */
-    height: 150px; /* Fixed height for both boxes */
+    flex: 1;
+    margin-right: 10px;
+    padding: 15px;
+    border-radius: 8px; 
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    overflow: auto;
+    height: 150px;
 }
 
-/* Adjust description to allow scrolling */
+
 .popup-description {
     font-size: 14px;
     color: #333;
