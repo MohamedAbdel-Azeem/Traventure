@@ -11,6 +11,7 @@ export const useGetAllCategories = () => {
   const [data, setData] = React.useState<string[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
+  const [hardId, sethardId]=useState<string>('66f6e4f9fe182e23156d18d6');
 
   React.useEffect(() => {
     const fetchData = async () => {

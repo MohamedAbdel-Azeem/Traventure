@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+//import dayjs from 'dayjs';
 import Itinerary from "../Schemas/Itinerary";
 
 export async function getItinerary(tour_guide_id: String) {
@@ -7,7 +7,8 @@ export async function getItinerary(tour_guide_id: String) {
       added_By: tour_guide_id // Find all items with the given tour_guide_id
     }).populate('added_By')
     .populate('plan.place')
-    .populate('plan.place.activity_id')
+    .populate('plan.activities.activity_id')
+    .populate('selectedTags')
 
     return itineraries;
   } catch (error) {
@@ -36,6 +37,13 @@ export async function updateItinerary(itinerary_Id: string, new_Itinerary: Objec
 
 export async function deleteItinerary(itinerary_Id: string) {
   try {
+    const itinerary = await Itinerary.findById(itinerary_Id).lean();
+    if(itinerary) {
+      const { booked_By } = itinerary;
+    if (booked_By.length > 0) {
+      throw new Error("Cannot delete itinerary that has been booked.");
+    }
+  }
     const place = await Itinerary.findByIdAndDelete(itinerary_Id);
     return place;
   } catch (error) {

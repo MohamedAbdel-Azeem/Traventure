@@ -12,3 +12,8 @@ export const TourGuide_Profile = () => {
   if (!user) return <div>No user found</div>;
   return <TourGuideProfile tourGuide={user as ITourGuide}></TourGuideProfile>;
 };
+
+
+
+
+
