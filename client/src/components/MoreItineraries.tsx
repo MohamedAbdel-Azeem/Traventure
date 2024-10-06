@@ -16,6 +16,13 @@ const MoreItineraries: React.FC = () => {
     const [sortType, setSortType] = useState<'price' | 'rating'>('price');
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
+    // New states for filtering
+    const [filterType, setFilterType] = useState<'budget' | 'date' | 'tag' | 'language'>('budget');
+    const [budgetRange, setBudgetRange] = useState<[number, number]>([0, 1000]);
+    const [dateRange, setDateRange] = useState<[string, string]>(['', '']);
+    const [selectedTag, setSelectedTag] = useState<string>('');
+    const [selectedLanguage, setSelectedLanguage] = useState<string>('');
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -32,6 +39,22 @@ const MoreItineraries: React.FC = () => {
                 return itinerary.selectedTags?.some(tag => tag.name.toLowerCase().includes(term)) ?? false;
             }
             return true; 
+        })
+        .filter(itinerary => {
+            switch (filterType) {
+                case 'budget':
+                    return itinerary.price >= budgetRange[0] && itinerary.price <= budgetRange[1];
+                case 'date':
+                    const startingDate = new Date(itinerary.starting_Date);
+                    const endingDate = new Date(itinerary.ending_Date);
+                    return startingDate >= new Date(dateRange[0]) && endingDate <= new Date(dateRange[1]);
+                case 'tag':
+                    return itinerary.selectedTags?.some(tag => tag.name === selectedTag);
+                case 'language':
+                    return itinerary.language === selectedLanguage;
+                default:
+                    return true;
+            }
         })
         .sort((a, b) => {
             const sortFactor = sortOrder === 'asc' ? 1 : -1;
@@ -74,6 +97,86 @@ const MoreItineraries: React.FC = () => {
                     className="border p-2 rounded"
                 />
                 <FormControl variant="outlined" className="min-w-[120px]">
+                    <InputLabel id="filter-type-label">Filter By</InputLabel>
+                    <Select
+                        labelId="filter-type-label"
+                        value={filterType}
+                        onChange={(e) => setFilterType(e.target.value as 'budget' | 'date' | 'tag' | 'language')}
+                        label="Filter By"
+                    >
+                        <MenuItem value="budget">Budget</MenuItem>
+                        <MenuItem value="date">Date</MenuItem>
+                        <MenuItem value="tag">Tag</MenuItem>
+                        <MenuItem value="language">Language</MenuItem>
+                    </Select>
+                </FormControl>
+                {filterType === 'budget' && (
+                    <div>
+                        <input
+                            type="number"
+                            placeholder="Min Budget"
+                            value={budgetRange[0]}
+                            onChange={(e) => setBudgetRange([+e.target.value, budgetRange[1]])}
+                            className="border p-2 rounded"
+                        />
+                        <input
+                            type="number"
+                            placeholder="Max Budget"
+                            value={budgetRange[1]}
+                            onChange={(e) => setBudgetRange([budgetRange[0], +e.target.value])}
+                            className="border p-2 rounded"
+                        />
+                    </div>
+                )}
+                {filterType === 'date' && (
+                    <div>
+                        <input
+                            type="date"
+                            placeholder="Start Date"
+                            value={dateRange[0]}
+                            onChange={(e) => setDateRange([e.target.value, dateRange[1]])}
+                            className="border p-2 rounded"
+                        />
+                        <input
+                            type="date"
+                            placeholder="End Date"
+                            value={dateRange[1]}
+                            onChange={(e) => setDateRange([dateRange[0], e.target.value])}
+                            className="border p-2 rounded"
+                        />
+                    </div>
+                )}
+                {filterType === 'tag' && (
+                    <FormControl variant="outlined" className="min-w-[120px]">
+                        <InputLabel id="tag-label">Tag</InputLabel>
+                        <Select
+                            labelId="tag-label"
+                            value={selectedTag}
+                            onChange={(e) => setSelectedTag(e.target.value)}
+                            label="Tag"
+                        >
+                            {upcoming?.itineraries.flatMap(itinerary => itinerary.selectedTags).map(tag => (
+                                <MenuItem key={tag?._id} value={tag?.name}>{tag?.name}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                )}
+                {filterType === 'language' && (
+                    <FormControl variant="outlined" className="min-w-[120px]">
+                        <InputLabel id="language-label">Language</InputLabel>
+                        <Select
+                            labelId="language-label"
+                            value={selectedLanguage}
+                            onChange={(e) => setSelectedLanguage(e.target.value)}
+                            label="Language"
+                        >
+                            {[...new Set(upcoming?.itineraries.map(itinerary => itinerary.language))].map(language => (
+                                <MenuItem key={language} value={language}>{language}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                )}
+                <FormControl variant="outlined" className="min-w-[120px]">
                     <InputLabel id="sort-type-label">Sort By</InputLabel>
                     <Select
                         labelId="sort-type-label"
@@ -103,32 +206,7 @@ const MoreItineraries: React.FC = () => {
             <div className="overflow-x-auto">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                     {filteredItineraries?.length ?? 0 > 0 ? (
-                        (filteredItineraries ?? []).map((itinerary: {
-                            _id: React.Key | null | undefined;
-                            title: string;
-                            description: string;
-                            added_By: string;
-                            price: number;
-                            starting_Date: string;
-                            ending_Date: string;
-                            rating: number;
-                            total: number;
-                            language: string;
-                            pickup_location: string;
-                            dropoff_location: string;
-                            plan: {
-                                place?: Place;
-                                activities: {
-                                    activity_id?: IActivity;
-                                    activity_duration: number;
-                                    time_unit: string;
-                                }[];
-                            }[];
-                            booked_By: { user_id?: TouristProfileData }[];
-                            accesibility: boolean;
-                            main_Picture?: string; 
-                            selectedTags?: { _id: string; name: string; __v: number; }[]; 
-                        }) => (
+                        (filteredItineraries ?? []).map((itinerary) => (
                             <ItineraryCardToruist
                                 key={itinerary._id}
                                 _id={String(itinerary._id)}
