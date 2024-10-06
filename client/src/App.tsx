@@ -47,7 +47,7 @@ function App() {
           <Route path="/" element={<SignIn />} />
           <Route path="/register" element={<Register />} />
           <Route path="/landing" element={<LandingPage />} />
-          <Route path="/touristprofile" element={<Tourist_Profile />} />
+          <Route path="/touristprofile/:username" element={<Tourist_Profile />} />
           <Route path="/sellerprofile/:username" element={<Seller_Profile />} />
           <Route
             path="/tourguideprofile/:username"
