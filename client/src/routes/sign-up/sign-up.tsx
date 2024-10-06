@@ -41,7 +41,7 @@ const schema = z
     mobileNumber: z
       .string()
       .min(10, "Mobile number must be at least 10 digits")
-      .regex(/^\d+$/, "Mobile number must be numeric"),
+      .regex(/^\+?\d+$/, "Mobile number must be numeric"),
     nationality: z
       .string()
       .min(2, "Nationality must be at least 2 characters long"),
@@ -69,6 +69,23 @@ const schema = z
         code: z.ZodIssueCode.custom,
         path: ["Occupation"],
         message: "Job is required for tourists",
+      });
+    }
+    // Mobile number validation for tourists
+    if (role === "tourist" && !data.mobileNumber) {
+      ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["mobileNumber"],
+      message: "Mobile number is required for tourists",
+      });
+    }
+
+    // Nationality validation for tourists
+    if (role === "tourist" && !data.nationality) {
+      ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["nationality"],
+      message: "Nationality is required for tourists",
       });
     }
   });
