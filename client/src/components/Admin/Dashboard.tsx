@@ -7,6 +7,7 @@ import { TouristProfileData } from '../../routes/_app/tourist_profile/tourist_pr
 import { useNavigate } from 'react-router-dom';
 import LocationCardCRUD from '../LocationCardCRUD';
 import LocationCardTourist from '../LocationCardTourist';
+import ItineraryCardToruist from '../ItineraryCardToruist';
 
 const Dashboard = () => {
     const { upcoming, loading, error } = useGetUpcoming();
@@ -29,7 +30,7 @@ const Dashboard = () => {
                 <div className="flex gap-4 items-center">
                     {itineraries.length > 0 ? (
                         itineraries.map((itinerary: { _id: React.Key | null | undefined; title: string; description: string; added_By: string; price: number; starting_Date: string; ending_Date: string; rating: number; total: number; language: string; pickup_location: string; dropoff_location: string; plan: { place?: Place; activities: { activity_id?: IActivity; activity_duration: number; time_unit: string; }[]; }[]; booked_By: { user_id?: TouristProfileData; }[]; accesibility: boolean; }) => (
-                            <ItineraryCardCRUD
+                            <ItineraryCardToruist
                                 key={itinerary._id}
                                 _id={String(itinerary._id)}
                                 title={itinerary.title}
