@@ -9,8 +9,8 @@ interface Itinerary {
   description: string;
   added_By: string;
   price: number;
-  starting_Date: Date;
-  ending_Date: Date;
+  starting_Date: string;
+  ending_Date: string;
   rating: number;
   total: number;
   language: string;

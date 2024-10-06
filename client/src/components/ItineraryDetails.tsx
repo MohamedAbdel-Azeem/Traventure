@@ -27,19 +27,31 @@ interface Place {
 }
 
 interface Itinerary {
-  id: string;
+  map(arg0: (card: any) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
+  main_Picture?: string;
   title: string;
-  image: string;
-  startDate: string;
-  endDate: string;
-  price: string;
   description: string;
-  rating: string;
-  places: Place[];
+  added_By: string;
+  price: number;
+  starting_Date: string;
+  ending_Date: string;
+  rating: number;
+  total: number;
   language: string;
-  pickupLocation: string;
-  dropoffLocation: string;
-  selectedTags?: string[]; 
+  pickup_location: string;
+  dropoff_location: string;
+  plan: {
+    place?: Place;
+    activities: {
+      activity_id?: IActivity;
+      activity_duration: number;
+      time_unit: string;
+    }[];
+  }[];
+  booked_By: {
+    user_id?: TouristProfileData;
+  }[];
+  accesibility: boolean;
 }
 
 const ItineraryDetails: React.FC = () => {

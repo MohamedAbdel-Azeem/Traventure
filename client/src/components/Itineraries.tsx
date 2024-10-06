@@ -170,13 +170,13 @@ const Itineraries = () => {
         </div>
         {itinerary && itinerary.map((card: any) => (
           <ItineraryCardCRUD
-            key={card.id}
-            id={card.id}
+            key={card._id}
+            id={card._id}
             title={card.title}
             description={card.description}
             price={card.price}
-            startDate={card.startDate.toLocaleString()}
-            endDate={card.endDate.toLocaleString()}
+            startDate={card.startDate ? new Date(card.startDate).toLocaleString() : "N/A"}
+            endDate={card.endDate ? new Date(card.endDate).toLocaleString() : "N/A"}
             rating={card.rating}
             language={card.language}
             pickupLocation={card.pickupLocation}

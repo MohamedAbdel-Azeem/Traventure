@@ -5,6 +5,7 @@ import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import StarIcon from '@mui/icons-material/Star';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { parseISO, format } from 'date-fns';
 
 interface Activity {
     id: number; 
@@ -59,8 +60,12 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
     };
 
     const formatDate = (dateString: string) => {
-        const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
-        return new Date(dateString).toLocaleDateString(undefined, options);
+        try {
+            const date = new Date(dateString); 
+            return format(date, 'MM/dd/yyyy');
+        } catch (error) {
+            return "Invalid Date";
+        }
     };
 
     return (
@@ -76,10 +81,8 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
                     <p className="text-gray-600 text-center text-sm truncate">{description}</p>
                 </div>
 
-              
                 {Array.isArray(selectedTags) && selectedTags.length > 0 && (
                     <div className="mb-2">
-            
                         <div className="flex flex-wrap justify-center items-center">
                             {selectedTags.map((tag, index) => (
                                 <span key={index} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm mr-2 mb-2">
@@ -124,7 +127,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
                 <div className="mt-4 flex justify-between items-center">
                     <Link
                         to={`/itinerary/${id}`}
-                        state={{ title, description, price, startDate, endDate, rating, image, language, pickupLocation, dropoffLocation, places,selectedTags, }} 
+                        state={{ title, description, price, startDate, endDate, rating, image, language, pickupLocation, dropoffLocation, places, selectedTags }} 
                         className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center"
                     >
                         View Details
