@@ -10,6 +10,14 @@ import { TouristProfileData } from "../routes/_app/tourist_profile/tourist_profi
 import IActivity from "../custom_hooks/activities/activity_interface";
 import Place from "../custom_hooks/places/place_interface";
 
+
+interface TagStructure {
+    _id: string;
+    name: string;
+    __v: number;
+  }
+  
+
 interface ItineraryCardCRUDProps {
     _id: string;
     main_Picture?: string;
@@ -22,7 +30,7 @@ interface ItineraryCardCRUDProps {
     rating: number;
     total: number;
     language: string;
-    selectedTags?: string[];
+    selectedTags?: TagStructure[];
     pickup_location: string;
     dropoff_location: string;
     plan: {
@@ -84,16 +92,16 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
 
                 {Array.isArray(selectedTags) && selectedTags.length > 0 && (
                     <div className="mb-2">
-                        <div className="flex flex-wrap justify-center items-center">
-                            {selectedTags.map((tag, index) => (
-                                <span key={index} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm mr-2 mb-2">
-                                    {tag}
-                                </span>
-                            ))}
-                        </div>
+                    <div className="flex flex-wrap justify-center items-center">
+                    {selectedTags.map((tag) => (
+                    <span key={tag._id} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm mr-2 mb-2">
+                    {tag.name}
+                    </span>
+                    ))}
                     </div>
-                )}
-
+                    </div>
+                    )}
+                    
                 <div className="flex justify-center items-center mb-4">
                     <div className="flex flex-col items-center mx-2">
                         <div className="bg-green-500 text-white p-2 rounded-lg">

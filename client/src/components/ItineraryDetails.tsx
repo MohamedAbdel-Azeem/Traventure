@@ -18,6 +18,15 @@ import IActivity from "../custom_hooks/activities/activity_interface";
 import { TouristProfileData } from "../routes/_app/tourist_profile/tourist_profile_data";
 import Place from "../custom_hooks/places/place_interface";
 
+
+
+interface TagStructure {
+  _id: string;
+  name: string;
+  __v: number;
+}
+
+
 interface Itinerary {
   _id: string;
   main_Picture?: string;
@@ -30,7 +39,7 @@ interface Itinerary {
   rating: number;
   total: number;
   language: string;
-  selectedTags?: string[];
+  selectedTags?: TagStructure[];
   pickup_location: string;
   dropoff_location: string;
   plan: {
@@ -114,22 +123,22 @@ const ItineraryDetails: React.FC = () => {
     setItinerary({ ...itinerary, plan: updatedPlan });
   };
 
-  const handleAddTag = () => {
-    if (newTag && !itinerary.selectedTags?.includes(newTag)) {
-      setItinerary((prev) => ({
-        ...prev,
-        selectedTags: [...(prev.selectedTags || []), newTag],
-      }));
-      setNewTag("");
-    }
-  };
+  // const handleAddTag = () => {
+  //   if (newTag && !itinerary.selectedTags?.includes(newTag)) {
+  //     setItinerary((prev) => ({
+  //       ...prev,
+  //       selectedTags: [...(prev.selectedTags || []), newTag],
+  //     }));
+  //     setNewTag("");
+  //   }
+  // };
 
-  const handleRemoveTag = (tagToRemove: string) => {
-    setItinerary((prev) => ({
-      ...prev,
-      selectedTags: prev.selectedTags?.filter((tag) => tag !== tagToRemove),
-    }));
-  };
+  // const handleRemoveTag = (tagToRemove: string) => {
+  //   setItinerary((prev) => ({
+  //     ...prev,
+  //     selectedTags: prev.selectedTags?.filter((tag) => tag !== tagToRemove),
+  //   }));
+  // };
 
   return (
     <Box className="flex justify-center items-center h-auto py-12 bg-gray-100">
@@ -217,10 +226,10 @@ const ItineraryDetails: React.FC = () => {
                     key={index}
                     className="bg-blue-100 text-blue-600 py-1 px-2 rounded-full mr-2 mb-2 flex items-center justify-between"
                   >
-                    {tag}
-                    <Button onClick={() => handleRemoveTag(tag)} color="inherit">
+                    {tag.name}
+                    {/* <Button onClick={() => handleRemoveTag(tag)} color="inherit">
                       &times;
-                    </Button>
+                    </Button> */}
                   </Box>
                 ))}
               </Box>

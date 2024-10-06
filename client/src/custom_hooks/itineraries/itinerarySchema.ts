@@ -2,6 +2,14 @@ import IActivity from "../activities/activity_interface";
 import Place from "../places/place_interface";
 import { TouristProfileData } from "../../routes/_app/tourist_profile/tourist_profile_data";
 
+
+interface TagStructure {
+  _id: string;
+  name: string;
+  __v: number;
+}
+
+
 interface Itinerary {
   map(arg0: (card: any) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
   _id: string;
@@ -15,7 +23,7 @@ interface Itinerary {
   rating: number;
   total: number;
   language: string;
-  selectedTags?: string[];
+  selectedTags?: TagStructure[];
   pickup_location: string;
   dropoff_location: string;
   plan: {
