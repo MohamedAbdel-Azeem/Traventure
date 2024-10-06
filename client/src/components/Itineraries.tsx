@@ -1,153 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ImprovedSidebar from "./ImprovedSidebar";
 import ItineraryCardCRUD from "./ItineraryCardCRUD";
 import ItineraryModal from "./ItineraryModal";
+import useGetItinerary from "../custom_hooks/itineraries/useGetItinerary";
+import Itinerary from "../custom_hooks/itineraries/itinerarySchema";
+import useDeleteItinerary from "../custom_hooks/itineraries/useDeleteItinerary";
 
 const Itineraries = () => {
-  const [cards, setCards] = useState([
-    {
-      id: 1,
-      title: "Egyptian History Trip",
-      description: "Come visit Egypt!",
-      price: 1000,
-      startDate: new Date("2024-10-10T09:00:00"),
-      endDate: new Date("2024-10-10T17:00:00"),
-      rating: "4.5",
-      language: "English",
-      pickupLocation: "Cairo Airport",
-      dropoffLocation: "Giza",
-      image: "https://upload.wikimedia.org/wikipedia/commons/e/e3/Kheops-Pyramid.jpg",
-      places: [
-        {
-          name: "Pyramids of Giza",
-          activities: [
-            { name: "Guided Tour", duration: "2 hours" },
-            { name: "Camel Ride", duration: "1 hour" },
-          ],
-        },
-        {
-          name: "Luxor Temple",
-          activities: [
-            { name: "Historical Tour", duration: "1.5 hours" },
-            { name: "Photography", duration: "30 minutes" },
-          ],
-        },
-      ],
-      tags: ["history", "culture", "Egypt"], 
-    },
-    {
-      id: 2,
-      title: "Waterpark Adventure",
-      description: "Time to get wet.",
-      price: 100,
-      startDate: new Date("2024-10-15T09:00:00"),
-      endDate: new Date("2024-10-15T11:00:00"),
-      rating: "4.2",
-      language: "English",
-      pickupLocation: "Local Hotel",
-      dropoffLocation: "Waterpark",
-      image: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg",
-      places: [
-        {
-          name: "Splash Waterpark",
-          activities: [
-            { name: "Wave Pool Fun", duration: "1 hour" },
-            { name: "Water Slide Rides", duration: "1 hour" },
-          ],
-        },
-      ],
-      tags: ["fun", "adventure", "waterpark"],
-    },
-    {
-      id: 3,
-      title: "Tropical Escape",
-      description: "Have some fun on the beach!",
-      price: 50,
-      startDate: new Date("2024-10-20T08:00:00"),
-      endDate: new Date("2024-10-20T18:00:00"),
-      rating: "4.7",
-      language: "English",
-      pickupLocation: "Beach Resort",
-      dropoffLocation: "Tropical Beach",
-      image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/The_Great_Wall_of_China_at_Jinshanling-edit.jpg/1200px-The_Great_Wall_of_China_at_Jinshanling-edit.jpg",
-      places: [
-        {
-          name: "Tropical Beach Resort",
-          activities: [
-            { name: "Beach Volleyball", duration: "2 hours" },
-            { name: "Snorkeling", duration: "2 hours" },
-          ],
-        },
-      ],
-      tags: ["beach", "relaxation", "tropical"],
-    },
-    {
-      id: 4,
-      title: "Temple Visit",
-      description: "Come visit these ancient temples",
-      price: 50,
-      startDate: new Date("2024-10-25T08:30:00"),
-      endDate: new Date("2024-10-25T16:00:00"),
-      rating: "4.3",
-      language: "English",
-      pickupLocation: "Local Hotel",
-      dropoffLocation: "Temple of Karnak",
-      image: "https://upload.wikimedia.org/wikipedia/commons/a/a1/Statue_of_Liberty_7.jpg",
-      places: [
-        {
-          name: "Temple of Karnak",
-          activities: [
-            { name: "Temple Exploration", duration: "2 hours" },
-            { name: "Guided Tour", duration: "1 hour" },
-          ],
-        },
-      ],
-      tags: ["history", "temple", "culture"], 
-    },
-    {
-      id: 5,
-      title: "Mediterranean Cruise",
-      description: "Have fun on our boat",
-      price: 60,
-      startDate: new Date("2024-10-30T18:00:00"),
-      endDate: new Date("2024-10-30T19:00:00"),
-      rating: "4.8",
-      language: "English",
-      pickupLocation: "Dock",
-      dropoffLocation: "Luxury Yacht",
-      image: "https://upload.wikimedia.org/wikipedia/commons/d/da/Taj-Mahal.jpg",
-      places: [
-        {
-          name: "Luxury Yacht",
-          activities: [
-            { name: "Sunset Dinner Cruise", duration: "2 hours" },
-            { name: "Swimming", duration: "1 hour" },
-          ],
-        },
-      ],
-      tags: ["cruise", "luxury", "adventure"], 
-    },
-  ]);
-
+  const [cards, setCards] = useState<Itinerary[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null); // To track which card is being deleted
 
-  const handleDelete = (id: number) => {
-    setCards(cards.filter((card) => card.id !== id));
+  const { itinerary, loading, error } = useGetItinerary("66f6e4f9fe182e23156d18d6");
+  const { deleteItinerary, success } = useDeleteItinerary();
+
+  useEffect(() => {
+    if (itinerary) {
+      setCards(itinerary);
+    }
+  }, [itinerary]);
+
+  const handleDelete = async (id: string) => {
+    setDeletingId(id); // Mark the current itinerary as being deleted
+    await deleteItinerary(id);
+
+    if (success) {
+      const filteredCards = cards.filter((card: Itinerary) => card._id !== id);
+      setCards(filteredCards);
+    } else {
+      console.error("Error deleting itinerary");
+    }
+
+    setDeletingId(null); // Reset deletion state
   };
 
-  const handleCreate = (newCard: any) => {
-    const newItinerary = {
-      ...newCard,
-      id: cards.length + 1,
-      language: "English",
-      pickupLocation: newCard.pickupLocation || "Default Pickup Location",
-      dropoffLocation: newCard.dropoffLocation || "Default Dropoff Location",
-      startDate: new Date(newCard.startDate),
-      endDate: new Date(newCard.endDate),
-      tags: newCard.tags || [], 
-    };
-    setCards([...cards, newItinerary]);
+  const handleCreate = (newCard: Partial<Itinerary>) => {
+    // Handle the creation of a new itinerary
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="flex justify-center">
@@ -159,24 +55,28 @@ const Itineraries = () => {
         >
           <p className="m-auto text-[24px] text-center font-bold">Create New Itinerary</p>
         </div>
-        {cards.map((card) => (
+        {cards.map((card: Itinerary) => (
           <ItineraryCardCRUD
-            key={card.id}
-            id={card.id}
+            key={card._id}
+            _id={card._id}
             title={card.title}
             description={card.description}
             price={card.price}
-            startDate={card.startDate.toLocaleString()}
-            endDate={card.endDate.toLocaleString()}
+            starting_Date={card.starting_Date ? new Date(card.starting_Date).toLocaleDateString() : "N/A"}
+            ending_Date={card.ending_Date ? new Date(card.ending_Date).toLocaleDateString() : "N/A"}
             rating={card.rating}
             language={card.language}
-            pickupLocation={card.pickupLocation}
-            dropoffLocation={card.dropoffLocation}
-            image={card.image}
-            onDelete={handleDelete}
-            className="hover:bg-[#f0f0f0] transition duration-300 rounded-lg shadow-md overflow-hidden"
-            places={card.places}
-            selectedTags={card.tags}
+            pickup_location={card.pickup_location}
+            dropoff_location={card.dropoff_location}
+            main_Picture={card.main_Picture}
+            plan={card.plan}
+            selectedTags={card.selectedTags}
+            onDelete={() => handleDelete(card._id)}
+            isDeleting={deletingId === card._id} // Pass the deleting state to the card
+            added_By={""}
+            total={0}
+            booked_By={[]}
+            accesibility={false}
           />
         ))}
       </div>

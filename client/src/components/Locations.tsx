@@ -14,6 +14,7 @@ import useCreatePlace from "../custom_hooks/places/useCreatePlace";
 import { createPlace } from "../custom_hooks/places/placeService";
 
 const Locations = () => {
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -95,6 +96,7 @@ const handleDelete = (id: string) => {
     }
 };
 
+
     return ( 
     <div className="flex justify-center">
         <ImprovedSidebar title="Admin"/>
@@ -165,8 +167,7 @@ const handleDelete = (id: string) => {
                 </div>
                 </FormControl>
 
-
-                <FormControl fullWidth sx={{ marginY: 1 }}>
+              <FormControl fullWidth sx={{ marginY: 1 }}>
                 <InputLabel>Image</InputLabel>
                 <OutlinedInput
                 label="Image"
@@ -175,7 +176,7 @@ const handleDelete = (id: string) => {
                 onChange={(e) => {setImage(e.target.value)}}
               /></FormControl>
 
-<Button onClick={handleCreate}>Add</Button>
+          <Button onClick={handleCreate}>Add</Button>
               
               
         </Box>

@@ -10,7 +10,7 @@ function useLoginGuest(body: object | null) {
 
   useEffect(() => {
     if (body === null) return;
-    const url = `traventure/api/login`;
+    const url = `/traventure/api/login`;
     setLoading(true);
     setError(null);
     const fetchData = async () => {

@@ -8,9 +8,9 @@ const ProductSchema = new schema({
   description: { type: String, required: true },
   seller: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Seller",
-    required: true,
+    ref: "Seller"
   },
+  externalseller: { type: String },
   imageUrl: { type: String, required: true },
   quantity: { type: Number, required: true },
   feedback: [

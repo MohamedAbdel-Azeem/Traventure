@@ -51,8 +51,8 @@ router.patch(
     const newProduct = matchedData(req);
     try {
       const productId = req.params.id;
-      await updateProduct(productId, newProduct);
-      res.status(200).send("Product Updated Successfully !!");
+      const newnewProduct = await updateProduct(productId, newProduct);
+      res.status(200).send(newnewProduct);
     } catch (error) {
       res.status(400).send(error);
     }
