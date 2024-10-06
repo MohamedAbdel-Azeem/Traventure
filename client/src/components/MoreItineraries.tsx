@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Card, CardContent, Typography, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import useGetUpcoming from '../custom_hooks/itineraries/useGetupcoming';
@@ -16,12 +16,41 @@ const MoreItineraries: React.FC = () => {
     const [sortType, setSortType] = useState<'price' | 'rating'>('price');
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
-    // New states for filtering
     const [filterType, setFilterType] = useState<'budget' | 'date' | 'tag' | 'language'>('budget');
     const [budgetRange, setBudgetRange] = useState<[number, number]>([0, 1000]);
-    const [dateRange, setDateRange] = useState<[string, string]>(['', '']);
-    const [selectedTag, setSelectedTag] = useState<string>('');
+
+
+
+    //const currentDate = new Date().toISOString().split('T')[0];
+
+    const currentDate = new Date();
+    const previousYear = currentDate.getFullYear() - 1;
+    const nextYear = currentDate.getFullYear() + 1;
+
+
+    //const oneWeekFromNow = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+    const [dateRange, setDateRange] = useState<[string, string]>([
+        `${previousYear}-01-01`, 
+        `${nextYear}-12-31`, 
+    ]);
+    const [selectedTag, setSelectedTag] = useState<string>('All');
     const [selectedLanguage, setSelectedLanguage] = useState<string>('');
+
+    useEffect(() => {
+        if (upcoming && upcoming.itineraries && upcoming.itineraries.length > 0) {
+            const uniqueLanguages = [...new Set(upcoming.itineraries.map(itinerary => itinerary.language))];
+            if (uniqueLanguages.length > 0) {
+                setSelectedLanguage(uniqueLanguages[0]); 
+            }
+            const uniqueTags = [...new Set(upcoming.itineraries.flatMap(itinerary => itinerary.selectedTags?.map(tag => tag.name).filter(Boolean) || []))];
+        if (uniqueTags.length > 0) {
+            setSelectedTag(uniqueTags[0]); 
+        } else {
+            setSelectedTag('');
+        }
+    }
+    }, [upcoming]);
 
     if (loading) {
         return <div>Loading...</div>;
