@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Card, CardContent, Typography, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import { Box, Card, CardContent, Typography, MenuItem, Select, InputLabel, FormControl, Checkbox, ListItemText, SelectChangeEvent } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import useGetUpcoming from '../custom_hooks/itineraries/useGetupcoming';
 import ItineraryCardToruist from './ItineraryCardToruist';
-import { TouristProfileData } from '../routes/_app/tourist_profile/tourist_profile_data';
-import IActivity from '../custom_hooks/activities/activity_interface';
-import Place from '../custom_hooks/places/place_interface';
 
 const MoreItineraries: React.FC = () => {
     const { upcoming, loading, error } = useGetUpcoming();
@@ -15,26 +12,19 @@ const MoreItineraries: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortType, setSortType] = useState<'price' | 'rating'>('price');
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-
     const [filterType, setFilterType] = useState<'budget' | 'date' | 'tag' | 'language'>('budget');
     const [budgetRange, setBudgetRange] = useState<[number, number]>([0, 1000]);
-
-
-
-    //const currentDate = new Date().toISOString().split('T')[0];
 
     const currentDate = new Date();
     const previousYear = currentDate.getFullYear() - 1;
     const nextYear = currentDate.getFullYear() + 1;
 
-
-    //const oneWeekFromNow = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-
     const [dateRange, setDateRange] = useState<[string, string]>([
         `${previousYear}-01-01`, 
         `${nextYear}-12-31`, 
     ]);
-    const [selectedTag, setSelectedTag] = useState<string>('All');
+
+    const [selectedTags, setSelectedTags] = useState<string[]>([]); 
     const [selectedLanguage, setSelectedLanguage] = useState<string>('');
 
     useEffect(() => {
@@ -43,14 +33,17 @@ const MoreItineraries: React.FC = () => {
             if (uniqueLanguages.length > 0) {
                 setSelectedLanguage(uniqueLanguages[0]); 
             }
+
             const uniqueTags = [...new Set(upcoming.itineraries.flatMap(itinerary => itinerary.selectedTags?.map(tag => tag.name).filter(Boolean) || []))];
-        if (uniqueTags.length > 0) {
-            setSelectedTag(uniqueTags[0]); 
-        } else {
-            setSelectedTag('');
+            if (uniqueTags.length > 0) {
+                setSelectedTags([uniqueTags[0]]); 
+            }
         }
-    }
     }, [upcoming]);
+
+    const handleTagChange = (event: SelectChangeEvent<string[]>) => {
+        setSelectedTags(event.target.value as string[]);
+    };
 
     if (loading) {
         return <div>Loading...</div>;
@@ -78,7 +71,7 @@ const MoreItineraries: React.FC = () => {
                     const endingDate = new Date(itinerary.ending_Date);
                     return startingDate >= new Date(dateRange[0]) && endingDate <= new Date(dateRange[1]);
                 case 'tag':
-                    return itinerary.selectedTags?.some(tag => tag.name === selectedTag);
+                    return selectedTags.length === 0 || selectedTags.some(tag => itinerary.selectedTags?.map(t => t.name).includes(tag));
                 case 'language':
                     return itinerary.language === selectedLanguage;
                 default:
@@ -180,12 +173,17 @@ const MoreItineraries: React.FC = () => {
                         <InputLabel id="tag-label">Tag</InputLabel>
                         <Select
                             labelId="tag-label"
-                            value={selectedTag}
-                            onChange={(e) => setSelectedTag(e.target.value)}
+                            multiple
+                            value={selectedTags}
+                            onChange={handleTagChange}
+                            renderValue={(selected) => (selected as string[]).join(', ')}
                             label="Tag"
                         >
                             {upcoming?.itineraries.flatMap(itinerary => itinerary.selectedTags).map(tag => (
-                                <MenuItem key={tag?._id} value={tag?.name}>{tag?.name}</MenuItem>
+                                <MenuItem key={tag?._id} value={tag?.name}>
+                                    <Checkbox checked={selectedTags.indexOf(tag?.name || '') > -1} />
+                                    <ListItemText primary={tag?.name} />
+                                </MenuItem>
                             ))}
                         </Select>
                     </FormControl>
