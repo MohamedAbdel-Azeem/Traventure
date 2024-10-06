@@ -24,20 +24,19 @@ import { Advertiser_Profile } from "./routes/_app/advertiser_profile/advertiser_
 import LandingPage from "./pages/LandingPage";
 import { TourGuide_Profile } from "./routes/_app/tourguide_profile/tourguide-profile-main";
 
-
 function App() {
   return (
     <MantineProvider>
       <Router>
         <Routes>
           <Route path="/admin/:id" element={<AdminPage />} />
-          <Route path="/tourguide" element={<TourGuidePage />} />
+          <Route path="/tourguide/:username" element={<TourGuidePage />} />
           <Route path="/tourismgovernor" element={<TourismGovernorPage />} />
           <Route path="/advertiser" element={<AdvertiserPage />} />
           <Route path="/tourist/:id" element={<TouristPage />} />
           <Route path="/seller" element={<SellerPage />} />
           <Route path="/admin-users" element={<Accounts />} />
-          <Route path="/admin/shop" element={<ShopPage type="Admin"/>} />
+          <Route path="/admin/shop" element={<ShopPage type="Admin" />} />
           <Route path="/tourist/shop" element={<ShopPage type="Tourist" />} />
           <Route path="/seller/shop" element={<ShopPage type="Seller" />} />
           <Route path="/tourismgovernor/locations" element={<Locations />} />
@@ -53,9 +52,12 @@ function App() {
             path="/tourguideprofile/:username"
             element={<TourGuide_Profile />}
           />
-          <Route path="/advertiserprofile/:username" element={<Advertiser_Profile />} />
+          <Route
+            path="/advertiserprofile/:username"
+            element={<Advertiser_Profile />}
+          />
           <Route path="/CategoriesandTags" element={<CT />} />
-<Route path="/itinerary/:id" element={<ItineraryDetails />} />
+          <Route path="/itinerary/:id" element={<ItineraryDetails />} />
         </Routes>
       </Router>
     </MantineProvider>
