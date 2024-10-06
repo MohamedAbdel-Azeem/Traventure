@@ -41,6 +41,17 @@ export const itineraryAddValidator = [
     .withMessage("Rating must be a number between 0 and 5"),
   body("total").isNumeric().withMessage("Total must be a number"),
   body("language").isString().withMessage("Language is required"),
+  body('selectedTags')
+        .isArray({min: 1})
+        .withMessage('Selected tags must be an array')
+        .custom((selectedTags) => {
+      selectedTags.forEach((tag: any) => {
+        if (!mongoose.Types.ObjectId.isValid(tag)) {
+          throw new Error('Each selected tag must be a valid ObjectId');
+        }
+      });
+      return true;
+        }),
   body("pickup_location").isString().withMessage("Pickup location is required"),
   body("dropoff_location").isString().withMessage("Dropoff location is required"),
   body('plan')
@@ -95,6 +106,18 @@ export const itineraryUpdateValidator = [
     .isNumeric()
     .custom((value: number) => value >= 0)
     .withMessage("Price must be a positive number"),
+    body('selectedTags')
+        .optional()
+        .isArray({min: 1})
+        .withMessage('Selected tags must be an array')
+        .custom((selectedTags) => {
+      selectedTags.forEach((tag: any) => {
+        if (!mongoose.Types.ObjectId.isValid(tag)) {
+          throw new Error('Each selected tag must be a valid ObjectId');
+        }
+      });
+      return true;
+        }),
   body("starting_Date")
     .optional()
     .isISO8601()

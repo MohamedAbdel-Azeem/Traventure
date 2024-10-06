@@ -22,6 +22,8 @@ const itinerarychema = new schema({
     language: { type: String, required: true },
     pickup_location: { type: String, required: true },
     dropoff_location: { type: String, required: true },
+    selectedTags: [{ type: mongoose.Types.ObjectId, 
+        required: true, ref: 'PreferenceTags' }],
     plan:[
         {
             place: { type: mongoose.Types.ObjectId, ref: 'Place' },
