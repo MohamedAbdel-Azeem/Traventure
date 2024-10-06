@@ -432,7 +432,7 @@
     background-color: #0056b3; /* Darker shade of blue on hover */
   }
   
-  .bin-top {
+  .cancel-button {
     padding: 10px 20px;
     font-size: 16px;
     background-color: #ff0000; /* Red button */
@@ -597,6 +597,7 @@
     cursor: pointer;
     overflow: hidden;
     transition: all 0.3s;
+    position: relative;
   }
   .editBtn::before {
     content: "";

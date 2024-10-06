@@ -1,83 +1,99 @@
 import React, { useState } from "react";
 import LocationCardCRUD from "./LocationCardCRUD";
 import ImprovedSidebar from "./ImprovedSidebar";
-import useGetPlace from "../custom_hooks/places/useGetPlace"
-import  Place  from "../custom_hooks/places/place_interface";
-import {usedeletePlaces} from "../custom_hooks/places/useDeletePlace";
+import useGetPlace from "../custom_hooks/places/useGetPlace";
+import Place from "../custom_hooks/places/place_interface";
+import { useDeletePlaces } from "../custom_hooks/places/useDeletePlace";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import { FormControl, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
-import useCreatePlace from "../custom_hooks/places/useCreatePlace";
+import axios from "axios";
 import TheMAP from "./TheMAP";
-import ItineraryCardCRUD from "./ItineraryCardCRUD";
+import useCreatePlace from "../custom_hooks/places/useCreatePlace";
+import { createPlace } from "../custom_hooks/places/placeService";
 
 const Locations = () => {
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [nativePrice, setNativePrice] = useState(10);
-    const [foreignPrice, setForeignPrice] = useState(100);
-    const [studentPrice, setStudentPrice] = useState(5);
-    const [hours, setHours] = useState("9:00→5:00");
-    const [latitude, setLatitude] = useState(30.0);
-    const [longitude, setLongitude] = useState(31.2);
-    const [image, setImage] = useState<string>('');
-    const [images, setImages] = useState<string[]>([]);
-    const [apiBody, setApiBody] = useState<Place | null>(null);
-
-    useCreatePlace(apiBody);
-
-    const style = {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-      };
-    const { places } = useGetPlace();
-    const [newcards, setNewcards] = useState(places);
- 
-    const handleCreate = () => {
-      setImages([...images,image])
-        const newCard = {
-          id: Date.now().toString(),
-          name,
-          description,
-          ticket_price: {
-            native: nativePrice,
-            foreign: foreignPrice,
-            student: studentPrice,
-          },
-          opening_hrs:hours,
-          location: {
-            latitude,
-            longitude,
-          },
-          pictures: images,
-        };
-        
-        setApiBody(newCard);
-        setOpen(false);
-      };
-    console.log(newcards);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [nativePrice, setNativePrice] = useState(10);
+  const [foreignPrice, setForeignPrice] = useState(100);
+  const [studentPrice, setStudentPrice] = useState(5);
+  const [hours, setHours] = useState("9:00→5:00");
+  const [latitude, setLatitude] = useState(30.0);
+  const [longitude, setLongitude] = useState(31.2);
+  const [image, setImage] = useState<string>('');
+  const [images, setImages] = useState<string[]>([]);
+  const [apiBody, setApiBody] = useState<Place | null>(null);
+  const { places, loading, error, fetchPlaces } = useGetPlace();
+  const [newcards, setNewcards] = useState<Place[] | null>(null);
 
 
-      const handleDelete = (id: string) => {
-        usedeletePlaces(id);
-      };
-    
-    React.useEffect(() => {
-        if (places) {
-            setNewcards(places);
-        }
-      }, [places]);
+  const style = {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: 400,
+      bgcolor: 'background.paper',
+      border: '2px solid #000',
+      boxShadow: 24,
+      p: 4,
+  };
+
+  React.useEffect(() => {
+    if (places) {
+        setNewcards(places);
+    }
+}, [places]);
+
+const handleCreate = async () => {
+  const newCard = {
+      id: Date.now().toString(),
+      name,
+      description,
+      ticket_price: {
+          native: nativePrice,
+          foreign: foreignPrice,
+          student: studentPrice,
+      },
+      opening_hrs: hours,
+      location: {
+          latitude,
+          longitude,
+      },
+      pictures: [image],
+  };
+
+  try {
+      await createPlace(newCard);
+      await fetchPlaces();
+      setOpen(false);
+  } catch (error) {
+      console.error("Error creating place:", error);
+  }
+
+  setName('');
+  setDescription('');
+  setImage('');
+  setNativePrice(0);
+  setStudentPrice(0);
+  setForeignPrice(0);
+
+};
+
+const { deletePlace, error: deleteError, loading: deleteLoading } = useDeletePlaces();
+
+const handleDelete = (id: string) => {
+    deletePlace(id);
+    if (!deleteError && !deleteLoading) {
+        const updatedCards = newcards?.filter(card => card._id !== id) ?? [];
+        setNewcards(updatedCards);
+    }
+};
 
     return ( 
     <div className="flex justify-center">
