@@ -23,7 +23,7 @@ import { Seller_Profile } from "./routes/_app/seller_profile/seller-profile-main
 import { Advertiser_Profile } from "./routes/_app/advertiser_profile/advertiser_profile-main";
 import LandingPage from "./pages/LandingPage";
 import { TourGuide_Profile } from "./routes/_app/tourguide_profile/tourguide-profile-main";
-
+import ItineraryDetailsTourist from "./components/ItineraryDetailsTourist";
 
 function App() {
   return (
@@ -56,6 +56,7 @@ function App() {
           <Route path="/advertiserprofile/:username" element={<Advertiser_Profile />} />
           <Route path="/CategoriesandTags" element={<CT />} />
 <Route path="/itinerary/:id" element={<ItineraryDetails />} />
+<Route path="/tourist-itinerary/:id" element={<ItineraryDetailsTourist />} />
         </Routes>
       </Router>
     </MantineProvider>
