@@ -4,12 +4,15 @@ import ItineraryCardCRUD from "./ItineraryCardCRUD";
 import ItineraryModal from "./ItineraryModal";
 import useGetItinerary from "../custom_hooks/itineraries/useGetItinerary";
 import Itinerary from "../custom_hooks/itineraries/itinerarySchema";
+import useDeleteItinerary from "../custom_hooks/itineraries/useDeleteItinerary";
+ 
 
 const Itineraries = () => {
   const [cards, setCards] = useState<Itinerary[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { itinerary, loading, error } = useGetItinerary("66f6e4f9fe182e23156d18d6");
+  const { deleteItinerary, success } = useDeleteItinerary();  
 
   useEffect(() => {
     if (itinerary) {
@@ -17,9 +20,15 @@ const Itineraries = () => {
     }
   }, [itinerary]);
 
-  const handleDelete = (id: string) => {
-    const filteredCards = cards.filter((card: Itinerary) => card._id !== id);
-    setCards(filteredCards);
+  const handleDelete = async (id: string) => {
+    await deleteItinerary(id); 
+
+    if (success) {
+        const filteredCards = cards.filter((card: Itinerary) => card._id !== id);
+        setCards(filteredCards);
+    } else {
+        console.error("Error deleting itinerary");
+    }
   };
 
   const handleCreate = (newCard: Partial<Itinerary>) => {
@@ -78,7 +87,12 @@ const Itineraries = () => {
             main_Picture={card.main_Picture}
             plan={card.plan}
             selectedTags={card.selectedTags}
-            onDelete={handleDelete} added_By={""} total={0} booked_By={[]} accesibility={false}          />
+            onDelete={handleDelete} 
+            added_By={""} 
+            total={0} 
+            booked_By={[]} 
+            accesibility={false}
+          />
         ))}
       </div>
       <ItineraryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleCreate} />
