@@ -3,6 +3,7 @@ import { Box, Card, CardContent, Typography, MenuItem, Select, InputLabel, FormC
 import { useNavigate } from 'react-router-dom';
 import useGetUpcoming from '../custom_hooks/itineraries/useGetupcoming';
 import ItineraryCardToruist from './ItineraryCardToruist';
+import { useGetAllTags } from '../custom_hooks/categoryandTagCRUD';
 
 const MoreItineraries: React.FC = () => {
     const { upcoming, loading, error } = useGetUpcoming();
@@ -14,6 +15,10 @@ const MoreItineraries: React.FC = () => {
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
     const [filterType, setFilterType] = useState<'budget' | 'date' | 'tag' | 'language'>('budget');
     const [budgetRange, setBudgetRange] = useState<[number, number]>([0, 1000]);
+
+
+    const {data}=useGetAllTags();
+    
 
     const currentDate = new Date();
     const previousYear = currentDate.getFullYear() - 1;
