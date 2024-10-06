@@ -19,6 +19,7 @@ router.post(
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log(errors.array());
       return res.status(400).json({ errors: errors.array() });
     }
     const itinerary_Data = matchedData(req);
@@ -26,6 +27,7 @@ router.post(
       const itinerary = await addItinerary(itinerary_Data);
       res.status(200).send("itinerary Added Successfully !!");
     } catch (error) {
+      
       res.status(500).send(error);
     }
   }

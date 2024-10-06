@@ -1,4 +1,4 @@
-import React from "react";
+import React, { act, useState } from "react";
 import {
   Box,
   Button,
@@ -14,16 +14,26 @@ import {
   FormHelperText,
   Checkbox,
   ListItemText,
+  duration,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useGetAllTags } from "../custom_hooks/categoryandTagCRUD";
 import useGetPlace from "../custom_hooks/places/useGetPlace";
 import { useGetAllActivities } from "../custom_hooks/activities/useGetActivities";
+import IActivityTitleAndId from "../custom_hooks/activities/activity_title_id";
+import { useGetAllActivitiesTitleAndId } from "../custom_hooks/activities/useGetActivitiesTitlesAndID";
+import IActivityInItinerary from "../custom_hooks/activities/activity_in_itinary";
+import { add, set } from "date-fns";
+import useCreateItinerary from "../custom_hooks/itineraries/createItinerary";
+import { useParams } from "react-router-dom";
+import useGetTourGuideId from "../custom_hooks/itineraries/useGetTourGuideId";
 
 //TODO: Get Tags from API
 //TODO: Get Activities from API
 //TODO: Get Places from API
+
+
 
 interface Activity {
   id: string;
@@ -44,7 +54,7 @@ interface SelectedActivity {
 
 interface SelectedPlace {
   place: string;
-  activities: SelectedActivity[];
+  activities: IActivityInItinerary[];
 }
 
 interface ItineraryModalProps {
@@ -53,19 +63,22 @@ interface ItineraryModalProps {
   onSubmit: (data: any) => void;
 }
 
-const activities: Activity[] = [
-  {
-    id: "1",
-    name: "Hiking",
-    durationOptions: ["1 hour", "2 hours", "3 hours"],
-  },
-  {
-    id: "2",
-    name: "Sightseeing",
-    durationOptions: ["1 hour", "2 hours", "3 hours", "4 hours"],
-  },
-  { id: "3", name: "Beach", durationOptions: ["1 hour", "2 hours", "3 hours"] },
-];
+// const activities: Activity[] = [
+//   {
+//     id: "1",
+//     name: "Hiking",
+//     durationOptions: ["1 hour", "2 hours", "3 hours"],
+//   },
+//   {
+//     id: "2",
+//     name: "Sightseeing",
+//     durationOptions: ["1 hour", "2 hours", "3 hours", "4 hours"],
+//   },
+//   { id: "3", name: "Beach", durationOptions: ["1 hour", "2 hours", "3 hours"] },
+// ];
+
+const timeUnits: string[] = ["sec","hours","days","month","years","min"];
+
 
 const ItineraryModal: React.FC<ItineraryModalProps> = ({
   isOpen,
@@ -83,6 +96,10 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({
     iddata: tagsOptions,
   } = useGetAllTags();
 
+  const {activities: activities , loading : activityLoading , error : activityError}=useGetAllActivitiesTitleAndId();
+  const { username} = useParams<{ username: string }>();
+  const { tourGuideId, loading, error } = useGetTourGuideId(username || "");
+  console.log("tourGuideId",tourGuideId);
   const [formData, setFormData] = React.useState({
     title: "",
     description: "",
@@ -94,11 +111,19 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({
     language: "",
     pickup_location: "",
     dropoff_location: "",
+    accesibility: false, //TODO: Add this to the form
+    total:0,
+ 
+
   });
+
+  
 
   const [plans, setPlans] = React.useState<SelectedPlace[]>([]);
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
   const [errors, setErrors] = React.useState<string[]>([]);
+
+  const [newItinerary, setNewItinerary] = useState<any>();
 
   const handleChange = (index: number, e: SelectChangeEvent<string>) => {
     const value = e.target.value as string;
@@ -107,32 +132,56 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({
     setPlans(updatedPlans);
   };
 
-  const handleActivityChange = (
+  const handleActivityChangeID = (
     placeIndex: number,
     activityIndex: number,
     e: SelectChangeEvent<string>
   ) => {
     const updatedPlaces = [...plans];
-    updatedPlaces[placeIndex].activities[activityIndex].name = e.target
+    updatedPlaces[placeIndex].activities[activityIndex].activity_id = e.target
       .value as string;
-    updatedPlaces[placeIndex].activities[activityIndex].duration = "";
+    // updatedPlaces[placeIndex].activities[activityIndex].activity_duration = "";
     setPlans(updatedPlaces);
   };
 
-  const handleDurationChange = (
+  const handleActivityChangeDuration = (
     placeIndex: number,
     activityIndex: number,
-    e: SelectChangeEvent<string>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const updatedPlaces = [...plans];
-    updatedPlaces[placeIndex].activities[activityIndex].duration = e.target
-      .value as string;
+    // updatedPlaces[placeIndex].activities[activityIndex]._id = e.target
+    //   .value as string;
+    updatedPlaces[placeIndex].activities[activityIndex].activity_duration = parseInt(e.target.value);
     setPlans(updatedPlaces);
   };
+
+  const handleActivityChangetime_unit = (
+        placeIndex: number,
+        activityIndex: number,
+        e: SelectChangeEvent<any>
+      ) => {
+        const updatedPlaces = [...plans];
+        // updatedPlaces[placeIndex].activities[activityIndex]._id = e.target
+        //   .value as string;
+        updatedPlaces[placeIndex].activities[activityIndex].time_unit = e.target.value as string;
+        setPlans(updatedPlaces);
+      };
+
+  // const handleDurationChange = (
+  //   placeIndex: number,
+  //   activityIndex: number,
+  //   e: SelectChangeEvent<string>
+  // ) => {
+  //   const updatedPlaces = [...plans];
+  //   updatedPlaces[placeIndex].activities[activityIndex].activity_duration = e.target
+  //     .value as string;
+  //   setPlans(updatedPlaces);
+  // };
 
   const addAnotherActivity = (placeIndex: number) => {
     const updatedPlaces = [...plans];
-    updatedPlaces[placeIndex].activities.push({ name: "", duration: "" });
+    updatedPlaces[placeIndex].activities.push({ activity_id: "", activity_duration: 0 });
     setPlans(updatedPlaces);
   };
 
@@ -170,6 +219,7 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({
     const newErrors: string[] = [];
 
     if (!formData.title) newErrors.push("Title is required.");
+
     if (!formData.description) newErrors.push("Description is required.");
     if (formData.price <= 0) newErrors.push("Price must be greater than 0.");
     if (!formData.starting_Date) newErrors.push("Start date is required.");
@@ -182,14 +232,14 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({
         newErrors.push(`Place ${placeIndex + 1} is required.`);
       }
       place.activities.forEach((activity, activityIndex) => {
-        if (!activity.name) {
+        if (!activity.activity_id) {
           newErrors.push(
             `Activity ${activityIndex + 1} in place ${
               placeIndex + 1
             } is required.`
           );
         }
-        if (!activity.duration) {
+        if (!activity.activity_duration) {
           newErrors.push(
             `Duration for activity ${activityIndex + 1} in place ${
               placeIndex + 1
@@ -198,28 +248,34 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({
         }
       });
     });
-
+    console.log("newErrors",newErrors);
     setErrors(newErrors);
     return newErrors.length === 0;
   };
 
   const handleSubmit = () => {
+    console.log("hamda in handleSubmit");
+    // console.log("no of errors",validateForm());
+    
     if (!validateForm()) return;
     const itineraryData = {
       ...formData,
+      added_By: tourGuideId,
       selectedTags,
       plan: plans.map((place) => ({
         place: place.place,
         activities: place.activities,
       })),
     };
+    console.log("itineraryData",itineraryData);
+    setNewItinerary(itineraryData);
     onSubmit(itineraryData);
     onClose();
   };
-
-  if (placeLoading || tagsLoading) return <div>Loading...</div>;
-  if (placeError || tagsError)
-    return <div>Error: {placeError || tagsError}</div>;
+useCreateItinerary(newItinerary);
+  if (placeLoading || tagsLoading || activityLoading) return <div>Loading...</div>;
+  if (placeError || tagsError || activityError)
+    return <div>Error: {placeError || tagsError || activityError}</div>;
 
   return (
     <Modal open={isOpen} onClose={onClose}>
@@ -409,16 +465,16 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({
             sx={{ mb: 2 }}
           />
 
-          {plans.map((place, placeIndex) => (
-            <Box key={placeIndex} sx={{ mb: 3 }}>
+          {plans.map((plan, planIndex) => (
+            <Box key={planIndex} sx={{ mb: 3 }}>
               <FormControl fullWidth variant="outlined">
-                <InputLabel id={`place-label-${placeIndex}`}>
+                <InputLabel id={`place-label-${planIndex}`}>
                   Select Place
                 </InputLabel>
                 <Select
-                  labelId={`place-label-${placeIndex}`}
-                  value={place.place}
-                  onChange={(e) => handleChange(placeIndex, e)}
+                  labelId={`place-label-${planIndex}`}
+                  value={plan.place}
+                  onChange={(e) => handleChange(planIndex, e)}
                 >
                   {apiPlaces &&
                     apiPlaces.map((place) => (
@@ -427,67 +483,79 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({
                       </MenuItem>
                     ))}
                 </Select>
-                {place.place === "" && (
+                {plan.place === "" && (
                   <FormHelperText error>This field is required</FormHelperText>
                 )}
               </FormControl>
 
-              {place.activities.map((activity, activityIndex) => (
+              {plan.activities.map((activity, activityIndex) => (
                 <Box
                   key={activityIndex}
                   sx={{ display: "flex", alignItems: "center", gap: 2, mb: 1 }}
                 >
                   <FormControl fullWidth>
                     <InputLabel
-                      id={`activity-label-${placeIndex}-${activityIndex}`}
+                      id={`activity-label-${planIndex}-${activityIndex}`}
                     >
                       Select Activity
                     </InputLabel>
                     <Select
-                      labelId={`activity-label-${placeIndex}-${activityIndex}`}
-                      value={activity.name}
+                      labelId={`activity-label-${planIndex}-${activityIndex}`}
+                      value={activity.activity_id}
                       onChange={(e) =>
-                        handleActivityChange(placeIndex, activityIndex, e)
+                        handleActivityChangeID(planIndex, activityIndex, e)
                       }
                     >
-                      {apiPlaces &&
-                        apiPlaces
-                          .find((p) => p._id === place.place)
-                          ?.activities.map((activity) => (
-                            <MenuItem key={activity.id} value={activity.name}>
-                              {activity.name}
-                            </MenuItem>
-                          ))}
+                      {activities.map((activity) => (
+                        <MenuItem key={activity.Title} value={activity._id}>
+                          {activity.Title}
+                        </MenuItem>
+                      ))}
                     </Select>
-                    {activity.name === "" && (
+                    {activity.activity_id === "" && (
                       <FormHelperText error>
                         This field is required
                       </FormHelperText>
                     )}
                   </FormControl>
 
+                              <TextField
+            name="activity_duration"
+            placeholder="activity_duration"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            type="number"
+            sx={{ mb: 2 }}
+            value={activity.activity_duration}
+            onChange={(e) =>
+              handleActivityChangeDuration(planIndex, activityIndex, e)
+            }
+          />
+
                   <FormControl fullWidth>
                     <InputLabel
-                      id={`duration-label-${placeIndex}-${activityIndex}`}
+                      id={`timeUnit-label-${planIndex}-${activityIndex}`}
                     >
-                      Duration
+                      Time Unit
                     </InputLabel>
                     <Select
-                      labelId={`duration-label-${placeIndex}-${activityIndex}`}
-                      value={activity.duration}
-                      onChange={(e) =>
-                        handleDurationChange(placeIndex, activityIndex, e)
-                      }
+                        labelId={`activity-label-${planIndex}-${activityIndex}`}
+                        value={activity.time_unit}
+                        onChange={(e) =>
+                            handleActivityChangetime_unit(planIndex, activityIndex, e)
+                        }
                     >
-                      {activities
-                        .find((a) => a.name === activity.name)
-                        ?.durationOptions.map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
+                      {timeUnits.map((timeUnit) => (
+                        <MenuItem key={timeUnit} value={timeUnit}
+                       
+                        
+                        >
+                          {timeUnit}
+                        </MenuItem>
+                      ))}
                     </Select>
-                    {activity.duration === "" && (
+                    {activity.time_unit === "" && (
                       <FormHelperText error>
                         This field is required
                       </FormHelperText>
@@ -495,16 +563,16 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({
                   </FormControl>
 
                   <IconButton
-                    onClick={() => deleteActivity(placeIndex, activityIndex)}
+                    onClick={() => deleteActivity(planIndex, activityIndex)}
                   >
                     <CloseIcon />
                   </IconButton>
                 </Box>
               ))}
-              <Button onClick={() => addAnotherActivity(placeIndex)}>
+              <Button onClick={() => addAnotherActivity(planIndex)}>
                 Add Another Activity
               </Button>
-              <IconButton onClick={() => deletePlace(placeIndex)}>
+              <IconButton onClick={() => deletePlace(planIndex)}>
                 <CloseIcon />
               </IconButton>
             </Box>

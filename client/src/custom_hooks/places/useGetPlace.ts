@@ -15,7 +15,7 @@ const useGetPlace = () => {
       } else {
         setgError("Error fetching data");
       }
-    } catch (err) {
+    } catch (err: any) {
       setgError(err.message);
     } finally {
       setgLoading(false);
