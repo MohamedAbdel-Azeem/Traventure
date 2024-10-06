@@ -1,5 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Card, CardContent, Typography, MenuItem, Select, InputLabel, FormControl, Checkbox, ListItemText, SelectChangeEvent } from '@mui/material';
+import {
+    Box,
+    Card,
+    CardContent,
+    Typography,
+    MenuItem,
+    Select,
+    InputLabel,
+    FormControl,
+    Checkbox,
+    ListItemText,
+    SelectChangeEvent,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import useGetUpcoming from '../custom_hooks/itineraries/useGetupcoming';
 import ItineraryCardToruist from './ItineraryCardToruist';
@@ -16,32 +28,30 @@ const MoreItineraries: React.FC = () => {
     const [filterType, setFilterType] = useState<'budget' | 'date' | 'tag' | 'language'>('budget');
     const [budgetRange, setBudgetRange] = useState<[number, number]>([0, 1000]);
 
-
-    const {data}=useGetAllTags();
-    
+    const { data: tagsData } = useGetAllTags(); 
 
     const currentDate = new Date();
     const previousYear = currentDate.getFullYear() - 1;
     const nextYear = currentDate.getFullYear() + 1;
 
     const [dateRange, setDateRange] = useState<[string, string]>([
-        `${previousYear}-01-01`, 
-        `${nextYear}-12-31`, 
+        `${previousYear}-01-01`,
+        `${nextYear}-12-31`,
     ]);
 
-    const [selectedTags, setSelectedTags] = useState<string[]>([]); 
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [selectedLanguage, setSelectedLanguage] = useState<string>('');
 
     useEffect(() => {
         if (upcoming && upcoming.itineraries && upcoming.itineraries.length > 0) {
             const uniqueLanguages = [...new Set(upcoming.itineraries.map(itinerary => itinerary.language))];
             if (uniqueLanguages.length > 0) {
-                setSelectedLanguage(uniqueLanguages[0]); 
+                setSelectedLanguage(uniqueLanguages[0]);
             }
 
             const uniqueTags = [...new Set(upcoming.itineraries.flatMap(itinerary => itinerary.selectedTags?.map(tag => tag.name).filter(Boolean) || []))];
             if (uniqueTags.length > 0) {
-                setSelectedTags([uniqueTags[0]]); 
+                setSelectedTags([uniqueTags[0]]);
             }
         }
     }, [upcoming]);
@@ -57,6 +67,8 @@ const MoreItineraries: React.FC = () => {
         return <div>Error Fetching: {error}</div>;
     }
 
+    const uniqueTags = [...new Set(tagsData)];
+
     const filteredItineraries = upcoming?.itineraries
         .filter((itinerary) => {
             const term = searchTerm.toLowerCase();
@@ -65,7 +77,7 @@ const MoreItineraries: React.FC = () => {
             } else if (searchType === 'tag') {
                 return itinerary.selectedTags?.some(tag => tag.name.toLowerCase().includes(term)) ?? false;
             }
-            return true; 
+            return true;
         })
         .filter(itinerary => {
             switch (filterType) {
@@ -92,10 +104,11 @@ const MoreItineraries: React.FC = () => {
             } else if (sortType === 'rating') {
                 const aRating = a.rating ?? 0;
                 const bRating = b.rating ?? 0;
-                return (aRating - bRating) * sortFactor; 
+                return (aRating - bRating) * sortFactor;
             }
             return 0;
         });
+
 
     return (
         <>
@@ -184,10 +197,10 @@ const MoreItineraries: React.FC = () => {
                             renderValue={(selected) => (selected as string[]).join(', ')}
                             label="Tag"
                         >
-                            {upcoming?.itineraries.flatMap(itinerary => itinerary.selectedTags).map(tag => (
-                                <MenuItem key={tag?._id} value={tag?.name}>
-                                    <Checkbox checked={selectedTags.indexOf(tag?.name || '') > -1} />
-                                    <ListItemText primary={tag?.name} />
+                            {uniqueTags.map((tag) => (
+                                <MenuItem key={tag} value={tag}>
+                                    <Checkbox checked={selectedTags.indexOf(tag) > -1} />
+                                    <ListItemText primary={tag} />
                                 </MenuItem>
                             ))}
                         </Select>
