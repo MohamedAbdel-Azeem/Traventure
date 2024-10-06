@@ -64,6 +64,11 @@ const ItineraryDetailsTourist: React.FC = () => {
 
   if (!itinerary) return <p>No itinerary data found</p>;
 
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
   };
@@ -108,13 +113,6 @@ const ItineraryDetailsTourist: React.FC = () => {
     setItinerary({ ...itinerary, plan: updatedPlan });
   };
 
-  // const handleAddActivity = (placeIndex: number) => {
-  //   const newActivity: IActivity = { Title: "", DateAndTime: new Date(), Location: { latitude: 0, longitude: 0 }, Price: 0, SpecialDiscount: 0, Category: "", Tags: [], BookingIsOpen: true };
-  //   const updatedPlan = [...itinerary.plan];
-  //   updatedPlan[placeIndex].activities.push(newActivity);
-  //   setItinerary({ ...itinerary, plan: updatedPlan });
-  // };
-
   const handleRemoveActivity = (placeIndex: number, activityIndex: number) => {
     const updatedPlan = [...itinerary.plan];
     updatedPlan[placeIndex].activities = updatedPlan[placeIndex].activities.filter(
@@ -122,23 +120,6 @@ const ItineraryDetailsTourist: React.FC = () => {
     );
     setItinerary({ ...itinerary, plan: updatedPlan });
   };
-
-  // const handleAddTag = () => {
-  //   if (newTag && !itinerary.selectedTags?.includes(newTag)) {
-  //     setItinerary((prev) => ({
-  //       ...prev,
-  //       selectedTags: [...(prev.selectedTags || []), newTag],
-  //     }));
-  //     setNewTag("");
-  //   }
-  // };
-
-  // const handleRemoveTag = (tagToRemove: string) => {
-  //   setItinerary((prev) => ({
-  //     ...prev,
-  //     selectedTags: prev.selectedTags?.filter((tag) => tag !== tagToRemove),
-  //   }));
-  // };
 
   return (
     <Box className="flex justify-center items-center h-auto py-12 bg-gray-100">
@@ -158,10 +139,10 @@ const ItineraryDetailsTourist: React.FC = () => {
 
           <Box className="flex justify-between mb-4 text-gray-600">
             <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">Start Date:</span> {itinerary.starting_Date}
+              <span className="mr-2 font-semibold">Start Date:</span> {formatDate(itinerary.starting_Date)}
             </Typography>
             <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">End Date:</span> {itinerary.ending_Date}
+              <span className="mr-2 font-semibold">End Date:</span> {formatDate(itinerary.ending_Date)}
             </Typography>
           </Box>
 
@@ -227,16 +208,11 @@ const ItineraryDetailsTourist: React.FC = () => {
                     className="bg-blue-100 text-blue-600 py-1 px-2 rounded-full mr-2 mb-2 flex items-center justify-between"
                   >
                     {tag.name}
-                    {/* <Button onClick={() => handleRemoveTag(tag)} color="inherit">
-                      &times;
-                    </Button> */}
                   </Box>
                 ))}
               </Box>
             </Box>
           )}
-
-          
         </CardContent>
       </Card>
     </Box>
