@@ -69,8 +69,8 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   };
 
   return (
-    <div className="m-4 transition transform hover:scale-105 w-96">
-      <div className="relative w-full h-[200px]">
+<div className="m-4 transition transform hover:scale-105 w-96 bg-gray-200 rounded-lg"> 
+  <div className="relative w-full h-[200px]">
         <img src={main_Picture} alt={title} className="w-full h-full object-cover" />
       </div>
       <div className="p-4">
