@@ -29,7 +29,6 @@ const Locations = () => {
   const [image, setImage] = useState<string>('');
   const [images, setImages] = useState<string[]>([]);
   const [apiBody, setApiBody] = useState<Place | null>(null);
-  const { places, loading, error, fetchPlaces } = useGetPlace();
   const [newcards, setNewcards] = useState<Place[] | null>(null);
 
 
@@ -45,6 +44,7 @@ const Locations = () => {
       p: 4,
   };
 
+  const { places, loading, error, fetchPlaces } = useGetPlace();
   React.useEffect(() => {
     if (places) {
         setNewcards(places);
@@ -100,7 +100,8 @@ const handleDelete = (id: string) => {
     return ( 
     <div className="flex justify-center">
         <ImprovedSidebar title="Admin"/>
-    <div className="grid grid-cols-3 mt-10"><Modal
+    <div className="grid grid-cols-3 mt-10">
+      <Modal
         open={open}
         onClose={handleClose}
       >

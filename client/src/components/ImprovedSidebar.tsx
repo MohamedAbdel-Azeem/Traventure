@@ -118,19 +118,14 @@ interface ImprovedSidebarProps {
 const getSidebarItems = (title : string) => {
   switch (true) {
       case title.includes("Seller"):
-        console.log("Seller");
           return sellersidebaritems;
       case title.includes("Admin"):
-          console.log("Admin");
           return adminsidebaritems;
       case title.includes("Tourist"):
-          console.log("Tourist");
           return touristsidebaritems;
       case title.includes("Tourism Governor"):
-          console.log("Tourism Governor");
           return TGosidebaritems;
       case title.includes("Tour Guide"):
-          console.log("Tour Guide");
           return TGsidebaritems;
       default:
           return advertisersidebaritems;

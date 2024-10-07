@@ -52,7 +52,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
       const handleChange = () => {
         setCurrentProduct(editedProduct);
         setApiBody(editedProduct);
-        console.log(editedProduct);
     };
 
     useEditProduct(currentProduct._id,apiBody);

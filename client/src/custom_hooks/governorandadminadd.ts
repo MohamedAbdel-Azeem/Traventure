@@ -11,14 +11,12 @@ function useAddAdminandGovernor(body: object | null, role: string) {
   useEffect(() => {
     const fetchData = async () => {
       if (body === null) return;
-      console.log(body);
       setLoading(true);
       setError(null);
       try {
         const response = await axios.post(role.includes("Admin")?urla:urlg, body);
         if (response.status >= 200 && response.status < 300) {
           setData(response.data);
-          console.log(response.data);
         } else {
           throw new Error("Server can't be reached!");
         }
