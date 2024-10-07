@@ -11,12 +11,14 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { ActivityCardTourist } from './ActivityCardTourist';
-import {useGetAllActivitiesS} from '../custom_hooks/activities/useGetActivities';
+import useGetAllActivitiesS from '../custom_hooks/activities/useGetActivities';
 import IActivity from '../custom_hooks/activities/activity_interface';
 import { useGetAllCategories } from '../custom_hooks/categoryandTagCRUD';
 import Activity from '../custom_hooks/activities/activity_interface';
+import Navbar from './navbar';
+import ImprovedSidebar from './ImprovedSidebar';
 
-const MoreActivities: React.FC = () => {
+const GuestMoreActivities: React.FC = () => {
     const { sactivities, aloading, aerror } = useGetAllActivitiesS();
 
     const { data: catData } = useGetAllCategories(); 
@@ -113,7 +115,14 @@ const MoreActivities: React.FC = () => {
     }
 
     return (
+        <div>
+            <Navbar
+                sideBarFlag={true}
+            />
+            <div className="flex"></div>
         <div className="flex">
+        <ImprovedSidebar />
+        <Box p={3}/>
             <div className="w-full">
                 <h1 className="text-2xl font-bold mb-4 mx-auto">All Activities</h1>
                 <hr />
@@ -261,7 +270,8 @@ const MoreActivities: React.FC = () => {
                 </div>
             </div>
         </div>
+    </div>
     );
 };
 
-export default MoreActivities;
+export default GuestMoreActivities;

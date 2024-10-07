@@ -24,6 +24,7 @@ interface Activity {
     Tags: DataStructure[]; 
     BookingIsOpen: boolean;
     added_By: string; 
+    
 }
 
 export default Activity;

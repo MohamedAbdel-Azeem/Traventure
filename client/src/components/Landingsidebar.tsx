@@ -39,9 +39,8 @@ const touristsidebaritems =
 ];
 const guestsidebaritems =
 [
-  { text: 'Home', icon: <HomeIcon />, path: '/LandingPage' },
+  { text: 'Home', icon: <HomeIcon />, path: '/guest-page' },
   { text: 'Shop', icon: <ShopIcon />, path: '/guest/shop' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/guest/locations' },
 ];
 const advertisersidebaritems =
 [
@@ -54,6 +53,7 @@ const sellersidebaritems =
   { text: 'Home', icon: <HomeIcon />, path: '/seller' },
   { text: 'Shop', icon: <ShopIcon />, path: '/seller/shop' },
 ];
+
 
 
 

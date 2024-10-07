@@ -25,8 +25,13 @@ import MoreItineraries from "./components/MoreItineraries";
 import MorePlaces from "./components/MorePlaces";
 import Itineraries from "./components/Itineraries";
 import MoreActivities from "./components/MoreActivities";
-import HistoricalTags from "./components/HistoricalTags";
+import GuestPage from "./components/GuestPage";
+import GuestMoreItineraries from "./components/GuestMoreItineraries";
+import GuestMorePlaces from "./components/GuestMorePlaces";
+import GuestMoreActivities from "./components/GuestMoreActivities";
+import GuestShop from "./components/GuestShop";
 
+import HistoricalTags from "./components/HistoricalTags";
 function App() {
   return (
     <MantineProvider>
@@ -64,6 +69,13 @@ function App() {
           <Route path="/more-itineraries" element={<MoreItineraries />} />
           <Route path="/more-places" element={<MorePlaces />} />
           <Route path="/tourist/:id/activities" element={<MoreActivities />} />
+          <Route path="/guest-page" element={<GuestPage />} />
+          <Route path="/guest/more-itineraries" element={<GuestMoreItineraries />} />
+          <Route path="/guest/more-places" element={<GuestMorePlaces />} />
+          <Route path="/guest/more-activities" element={<GuestMoreActivities />} />  
+          <Route path="/guest/shop" element={<GuestShop type={"Tourist"} />} />
+      
+
         </Routes>
       </Router>
     </MantineProvider>
