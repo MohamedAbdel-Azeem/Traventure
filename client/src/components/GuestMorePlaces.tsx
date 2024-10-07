@@ -8,6 +8,7 @@ import IActivity from '../custom_hooks/activities/activity_interface';
 import Place from '../custom_hooks/places/place_interface';
 import LocationCardTourist from './LocationCardTourist';
 import ImprovedSidebar from './ImprovedSidebar';
+import Navbar from './navbar';
 
 const GuestMorePlaces: React.FC = () => {
     const { upcoming, loading, error } = useGetUpcoming();
@@ -34,8 +35,16 @@ const GuestMorePlaces: React.FC = () => {
             return true; 
         });
 
-    return (<div className="flex">
-        <ImprovedSidebar/>
+    return (
+    <div>
+        <Navbar
+       
+        sideBarFlag={true}
+    />
+        <div className="flex"></div>
+    <div className="flex">
+             
+        <ImprovedSidebar />
         <Box p={3}>
             <Typography variant="h4" component="h1" gutterBottom>
                 All Places
@@ -86,6 +95,7 @@ const GuestMorePlaces: React.FC = () => {
             </Box>
         </Box>
         </div>
+    </div>
     );
 };
 

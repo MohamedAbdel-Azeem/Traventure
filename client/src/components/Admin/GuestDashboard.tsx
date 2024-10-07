@@ -63,7 +63,7 @@ const GuestDashboard = () => {
                     )}
                     <button
                         className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                        onClick={() => navigate(`/guest-more-itineraries`)}
+                        onClick={() => navigate(`/guest/more-itineraries`)}
                     >
                         View More
                     </button>
@@ -88,7 +88,7 @@ const GuestDashboard = () => {
                     )}
                     <button
                         className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                        onClick={() => navigate(`/guest-more-places`)} 
+                        onClick={() => navigate(`/guest/more-places`)} 
                     >
                         View More
                     </button>
@@ -114,7 +114,7 @@ const GuestDashboard = () => {
                     )}
                     <button
                         className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                        onClick={() => navigate(`/guest-more-activities`)}
+                        onClick={() => navigate(`/guest/more-activities`)}
                     >
                         View More
                     </button>
