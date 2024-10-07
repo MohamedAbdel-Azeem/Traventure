@@ -62,7 +62,7 @@ const MoreActivities: React.FC = () => {
         } else if (searchType === 'tag') {
             return activity.Tags.some(tag => tag.name.toLowerCase().includes(term));
         } else if (searchType === 'category') {
-            return categoryTerms.length === 0 || categoryTerms.includes(activity.Category.name);
+        return activity.Category.name.toLowerCase().includes(term);
         }
 
         return true;
@@ -82,18 +82,16 @@ const MoreActivities: React.FC = () => {
         }
     });
 
-    // Sort the filtered activities based on the selected criteria
     const sortedActivities = [...(filteredActivities ?? [])].sort((a: IActivity, b: IActivity) => {
         let comparison = 0;
 
         if (sortBy === 'price') {
             comparison = a.Price - b.Price;
         } else if (sortBy === 'rating') {
-            // comparison = a.rating - b.rating;
             console.log('SORT RATING HERE')
         }
 
-        // Apply sorting order
+       
         return sortOrder === 'asc' ? comparison : -comparison;
     });
 
@@ -209,7 +207,6 @@ const MoreActivities: React.FC = () => {
                         )}
                     </div>
 
-                    {/* Sort Section */}
                     <div className="mb-4 flex gap-2">
                         <FormControl variant="outlined" className="min-w-[120px]">
                             <InputLabel id="sort-type-label">Sort By</InputLabel>
