@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Box,
     Card,
@@ -12,7 +12,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { ActivityCardTourist } from './ActivityCardTourist';
 import useGetAllActivitiesS from '../custom_hooks/activities/useGetActivities';
-import IActivity from '../custom_hooks/activities/activity_interface'; 
+import IActivity from '../custom_hooks/activities/activity_interface';
 
 const MoreActivities: React.FC = () => {
     const { sactivities, aloading, aerror } = useGetAllActivitiesS();
@@ -21,16 +21,69 @@ const MoreActivities: React.FC = () => {
     const [searchType, setSearchType] = useState<'name' | 'tag' | 'category'>('name');
     const [searchTerm, setSearchTerm] = useState('');
 
+    const [filterType, setFilterType] = useState<'budget' | 'date' | 'category' | 'rating'>('budget');
+    const [minPrice, setMinPrice] = useState<number>(0);
+    const [maxPrice, setMaxPrice] = useState<number>(1000);
+    const [startDate, setStartDate] = useState<string>('');
+    const [endDate, setEndDate] = useState<string>('');
+    const [categoryTerm, setCategoryTerm] = useState('');
+
+    const [sortBy, setSortBy] = useState<'price' | 'rating'>('price');
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+
+    useEffect(() => {
+        if (filterType === 'date') {
+            const today = new Date();
+            const start = new Date();
+            const end = new Date();
+            start.setFullYear(today.getFullYear() - 1);
+            end.setFullYear(today.getFullYear() + 1);
+            setStartDate(start.toISOString().split('T')[0]);
+            setEndDate(end.toISOString().split('T')[0]);
+        }
+    }, [filterType]);
+
     const filteredActivities = sactivities?.filter((activity: IActivity) => {
         const term = searchTerm.toLowerCase();
+
         if (searchType === 'name') {
             return activity.Title.toLowerCase().includes(term);
         } else if (searchType === 'tag') {
-            return activity.Tags.some(tag => tag.name.toLowerCase().includes(term));  
+            return activity.Tags.some(tag => tag.name.toLowerCase().includes(term));
         } else if (searchType === 'category') {
-            return activity.Category.name.toLowerCase().includes(term); 
+            return activity.Category.name.toLowerCase().includes(term);
         }
+
         return true;
+    }).filter((activity: IActivity) => {
+        switch (filterType) {
+            case 'budget':
+                return activity.Price >= minPrice && activity.Price <= maxPrice;
+            case 'date':
+                const activityDate = new Date(activity.DateAndTime);
+                return activityDate >= new Date(startDate) && activityDate <= new Date(endDate);
+            case 'category':
+                return activity.Category.name.toLowerCase().includes(categoryTerm.toLowerCase());
+            case 'rating':
+                return activity.rating >= 4;
+            default:
+                return true;
+        }
+    });
+
+    // Sort the filtered activities based on the selected criteria
+    const sortedActivities = [...(filteredActivities ?? [])].sort((a: IActivity, b: IActivity) => {
+        let comparison = 0;
+
+        if (sortBy === 'price') {
+            comparison = a.Price - b.Price;
+        } else if (sortBy === 'rating') {
+            // comparison = a.rating - b.rating;
+            console.log('SORT RATING HERE')
+        }
+
+        // Apply sorting order
+        return sortOrder === 'asc' ? comparison : -comparison;
     });
 
     if (aloading) {
@@ -71,9 +124,102 @@ const MoreActivities: React.FC = () => {
                         />
                     </div>
 
+                    <div className="mb-4 flex gap-2">
+                        <FormControl variant="outlined" className="min-w-[120px]">
+                            <InputLabel id="filter-type-label">Filter By</InputLabel>
+                            <Select
+                                labelId="filter-type-label"
+                                value={filterType}
+                                onChange={(e) => setFilterType(e.target.value as 'budget' | 'date' | 'category' | 'rating')}
+                                label="Filter By"
+                            >
+                                <MenuItem value="budget">Budget</MenuItem>
+                                <MenuItem value="date">Date</MenuItem>
+                                <MenuItem value="category">Category</MenuItem>
+                                <MenuItem value="rating">Rating</MenuItem>
+                            </Select>
+                        </FormControl>
+
+                        {filterType === 'budget' && (
+                            <div className="flex gap-2">
+                                <input
+                                    type="number"
+                                    placeholder="Min Price"
+                                    value={minPrice}
+                                    onChange={(e) => setMinPrice(Number(e.target.value))}
+                                    className="border p-2 rounded"
+                                />
+                                <input
+                                    type="number"
+                                    placeholder="Max Price"
+                                    value={maxPrice}
+                                    onChange={(e) => setMaxPrice(Number(e.target.value))}
+                                    className="border p-2 rounded"
+                                />
+                            </div>
+                        )}
+
+                        {filterType === 'date' && (
+                            <div className="flex gap-2">
+                                <input
+                                    type="date"
+                                    value={startDate}
+                                    onChange={(e) => setStartDate(e.target.value)}
+                                    className="border p-2 rounded"
+                                />
+                                <input
+                                    type="date"
+                                    value={endDate}
+                                    onChange={(e) => setEndDate(e.target.value)}
+                                    className="border p-2 rounded"
+                                />
+                            </div>
+                        )}
+
+                        {filterType === 'category' && (
+                            <div className="flex gap-2">
+                                <input
+                                    type="text"
+                                    placeholder="Category"
+                                    value={categoryTerm}
+                                    onChange={(e) => setCategoryTerm(e.target.value)}
+                                    className="border p-2 rounded"
+                                />
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Sort Section */}
+                    <div className="mb-4 flex gap-2">
+                        <FormControl variant="outlined" className="min-w-[120px]">
+                            <InputLabel id="sort-type-label">Sort By</InputLabel>
+                            <Select
+                                labelId="sort-type-label"
+                                value={sortBy}
+                                onChange={(e) => setSortBy(e.target.value as 'price' | 'rating')}
+                                label="Sort By"
+                            >
+                                <MenuItem value="price">Price</MenuItem>
+                                <MenuItem value="rating">Rating</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <FormControl variant="outlined" className="min-w-[120px]">
+                            <InputLabel id="sort-order-label">Order</InputLabel>
+                            <Select
+                                labelId="sort-order-label"
+                                value={sortOrder}
+                                onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc')}
+                                label="Order"
+                            >
+                                <MenuItem value="asc">Ascending</MenuItem>
+                                <MenuItem value="desc">Descending</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </div>
+
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {filteredActivities && filteredActivities.length > 0 ? (
-                            filteredActivities.map((activity: IActivity) => (
+                        {sortedActivities && sortedActivities.length > 0 ? (
+                            sortedActivities.map((activity: IActivity) => (
                                 <ActivityCardTourist
                                     key={activity._id}
                                     activity={activity}
