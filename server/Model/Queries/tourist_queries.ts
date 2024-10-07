@@ -17,7 +17,7 @@ export async function getAll() {
          const activities = await Activity.find({ DateAndTime: { $gte: new Date() } }).populate("Tags").populate("Category");
  
          // Fetch historical places/museums
-         const places = await Place.find();
+         const places = await Place.find().populate('historicalTags');
 
         return {itineraries, activities, places};
 
