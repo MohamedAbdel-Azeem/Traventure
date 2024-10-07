@@ -17,7 +17,7 @@ router.post("/add",addActivityValidator,async (req: Request, res: Response)=>{
         res.status(201).send("Activity added successfully");
     }
     catch(err){
-       
+       console.log(err);
         res.status(500).send("error creating activity");
     }
 });

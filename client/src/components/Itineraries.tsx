@@ -5,13 +5,15 @@ import ItineraryModal from "./ItineraryModal";
 import useGetItinerary from "../custom_hooks/itineraries/useGetItinerary";
 import Itinerary from "../custom_hooks/itineraries/itinerarySchema";
 import useDeleteItinerary from "../custom_hooks/itineraries/useDeleteItinerary";
+import { useParams } from "react-router-dom";
 
 const Itineraries = () => {
+  const currentuser=location.pathname.split(`/`)[2];
   const [cards, setCards] = useState<Itinerary[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null); // To track which card is being deleted
-
-  const { itinerary, loading, error } = useGetItinerary("66f6e4f9fe182e23156d18d6");
+ console.log("current user",currentuser);
+  const { itinerary, loading, error } = useGetItinerary("66fef41da8c345e4fdaa06e5");
   const { deleteItinerary, success } = useDeleteItinerary();
 
   useEffect(() => {

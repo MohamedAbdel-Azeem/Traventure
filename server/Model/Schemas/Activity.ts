@@ -16,6 +16,7 @@ SpecialDiscount: {type: Number, required: true},
 Category: { type: mongoose.Schema.Types.ObjectId, ref: "Category", required: true },
 Tags: [{ type: mongoose.Schema.Types.ObjectId, ref: "PreferenceTags", required: true }],
 BookingIsOpen: {type: Boolean, required: true},
+added_By: { type: mongoose.Types.ObjectId, required: true , ref:'Advertiser' }
 });
 
 //tags misssing

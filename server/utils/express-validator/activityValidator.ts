@@ -22,6 +22,7 @@ export const addActivityValidator = [
     body("Tags").exists().isArray().withMessage("Tags should be an array of strings"),
     body("Tags.*").isString().withMessage("Each tag should be a valid string"),
     body("BookingIsOpen").exists().isBoolean().withMessage("BookingIsOpen should be a boolean"),
+    body("added_By").exists().isString().withMessage("added_By should be a valid string"),
 ];
 
 export const updateActivityValidator = [

@@ -157,12 +157,13 @@ export const useGetAllTags = () => {
   const [data, setData] = React.useState<string[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
-
+  const [iddata, setidData] = React.useState<DataStructure[]>([]);
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("traventure/api/preferencetags");
+        const response = await axios.get("/traventure/api/preferencetags");
         const names = response.data.map((item: DataStructure) => item.name);
+        setidData(response.data);
         setData(names);
         setLoading(false);
         console.log(names);
@@ -177,7 +178,7 @@ export const useGetAllTags = () => {
     fetchData();
   }, []);
 
-  return { data, loading, error };
+  return { data,iddata, loading, error };
 };
 export const useGetTagsD = () => {
   const [data, setData] = React.useState<DataStructure[]>([]);

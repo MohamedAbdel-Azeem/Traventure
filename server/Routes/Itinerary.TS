@@ -46,14 +46,17 @@ router.patch(
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log(errors.array());
       return res.status(400).json({ errors: errors.array() });
     }
     const newItinerary = matchedData(req);
     try {
       const itineraryId = req.params.id;
       const updatedItinerary = await updateItinerary(itineraryId, newItinerary);
+      console.log(updatedItinerary);
       res.status(200).send("itinerary Updated Successfully !!");
     } catch (error) {
+     
       res.status(400).send(error);
     }
   }

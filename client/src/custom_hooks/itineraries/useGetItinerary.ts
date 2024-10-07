@@ -6,12 +6,12 @@ const useGetItinerary = (id: string) => {
     const [itinerary, setItinerary] = useState<Itinerary[] | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [hardId, sethardId]=useState<string>('66f6e4f9fe182e23156d18d6');
+    // const [hardId, sethardId]=useState<string>('66f6e4f9fe182e23156d18d6');
 
     useEffect(() => {
         async function fetchItinerary() {
             setLoading(true);
-            const response = await axios.get(`traventure/api/itinerary/${hardId}`)     //*${id}
+            const response = await axios.get(`/traventure/api/itinerary/${id}`)     //*${id}
             .catch((err) => {
                 setError(err.message);
             });
