@@ -9,6 +9,7 @@ import ShopIcon from '@mui/icons-material/Shop';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ActivityIcon from '@mui/icons-material/LocalActivity';
+import CategoryIcon from '@mui/icons-material/Category';
 const drawerWidth = 240;
 
 
@@ -83,6 +84,7 @@ const adminsidebaritems =
   { text: 'Shop', icon: <ShopIcon />, path: `/admin/${currentuser}/shop` },
   { text: 'Locations', icon: <LocationOnIcon />, path: `/admin/${currentuser}/locations` },
   { text: 'Account Management', icon: <AccountCircleIcon />, path: `/admin/${currentuser}/users` },
+  { text: 'Cats & Tags', icon: <CategoryIcon />, path: `/admin/${currentuser}/categoriesandtags` },
 ];
 const TGsidebaritems =
 [
