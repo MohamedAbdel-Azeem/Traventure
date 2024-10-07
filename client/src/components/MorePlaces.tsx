@@ -31,17 +31,16 @@ const MorePlaces: React.FC = () => {
                 return place.name.toLowerCase().includes(term);
             } 
             return true; 
-        })
-        
+        });
 
     return (
-        <>
-            <h1 className="text-2xl font-bold mb-4">All Places</h1>
+        <Box p={3}>
+            <Typography variant="h4" component="h1" gutterBottom>
+                All Places
+            </Typography>
             <hr />
-            <br />
-
-            <div className="mb-4 flex gap-2">
-                <FormControl variant="outlined" className="min-w-[120px]">
+            <Box my={3}>
+                <FormControl variant="outlined" className="min-w-[120px]" margin="normal">
                     <InputLabel id="search-type-label">Search By</InputLabel>
                     <Select
                         labelId="search-type-label"
@@ -53,21 +52,19 @@ const MorePlaces: React.FC = () => {
                         <MenuItem value="tag">Tag</MenuItem>
                     </Select>
                 </FormControl>
-                <input
-                    type="text"
-                    placeholder={`Search by ${searchType === 'name' ? 'Name' : 'Tag'}`}
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="border p-2 rounded"
-                />
-                
-            </div>
-
+                <Box mt={2}>
+                    <input
+                        type="text"
+                        placeholder={`Search by ${searchType === 'name' ? 'Name' : 'Tag'}`}
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="border p-2 rounded w-full"
+                    />
+                </Box>
+            </Box>
             <hr />
-            <div className="overflow-x-auto">
+            <Box mt={3}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                <div className="overflow-x-auto">
-                <div className="flex gap-4 items-center">
                     {filteredPlaces && filteredPlaces.length > 0 ? (
                         filteredPlaces.map((location: Place) => (
                             <LocationCardTourist
@@ -81,13 +78,11 @@ const MorePlaces: React.FC = () => {
                             />
                         ))
                     ) : (
-                        <div>No upcoming places available.</div>
+                        <Typography>No upcoming places available.</Typography>
                     )}
                 </div>
-            </div>
-            </div>
-            </div>
-        </>
+            </Box>
+        </Box>
     );
 };
 
