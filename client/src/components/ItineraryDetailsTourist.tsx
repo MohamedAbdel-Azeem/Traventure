@@ -160,6 +160,13 @@ const ItineraryDetailsTourist: React.FC = () => {
 
           <Box className="flex justify-between mb-4 text-gray-600">
             <Typography variant="body1" className="flex items-center">
+              <span className="mr-2 font-semibold">Accessibility:</span>{" "}
+              {itinerary.accesibility ? "Yes" : "No"}
+            </Typography>
+          </Box>
+
+          <Box className="flex justify-between mb-4 text-gray-600">
+            <Typography variant="body1" className="flex items-center">
               <span className="mr-2 font-semibold">Pickup Location:</span> {itinerary.pickup_location}
             </Typography>
             <Typography variant="body1" className="flex items-center">

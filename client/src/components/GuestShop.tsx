@@ -12,6 +12,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import { FormControl, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
+import Navbar from './navbar';
 const itemsPerPage = 8;
 interface ShopPageProps {
   type:string;
@@ -199,6 +200,9 @@ const {data, loading, error} = useGetAllProducts();
 
   return (
     <div className="flex">
+      
+      
+    
       <Modal
         open={open}
         onClose={handleClose}
