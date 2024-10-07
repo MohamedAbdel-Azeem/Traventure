@@ -27,6 +27,8 @@ import Itineraries from "./components/Itineraries";
 import MoreActivities from "./components/MoreActivities";
 import GuestPage from "./components/GuestPage";
 import GuestMoreItineraries from "./components/GuestMoreItineraries";
+import GuestMorePlaces from "./components/GuestMorePlaces";
+import GuestMoreActivities from "./components/GuestMoreActivities";
 
 
 function App() {
@@ -69,9 +71,9 @@ function App() {
           <Route path="/itinerary/:id" element={<ItineraryDetails />} /> 
           <Route path="/guest-page" element={<GuestPage />} />
           <Route path="/guest-more-itineraries" element={<GuestMoreItineraries />} />
-          {/* <Route path="/guest-more-places" element={<GuestMorePlaces />} />
-          <Route path="/guest-more-activities" element={<GuestMoreActivities />} /> */}
-
+           <Route path="/guest-more-places" element={<GuestMorePlaces />} />
+           <Route path="/guest-more-activities" element={<GuestMoreActivities />} />  
+      
 
 
 

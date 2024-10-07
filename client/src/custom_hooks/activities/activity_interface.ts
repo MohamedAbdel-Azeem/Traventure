@@ -13,12 +13,18 @@ interface Activity {
       latitude: number,
       longitude: number,
   },
+  feedback: {
+    name: string,
+    rating: string,
+    review: string,
+  }[],
     Price: number; 
     SpecialDiscount: number; 
     Category: DataStructure; 
     Tags: DataStructure[]; 
     BookingIsOpen: boolean;
     added_By: string; 
+    
 }
 
 export default Activity;

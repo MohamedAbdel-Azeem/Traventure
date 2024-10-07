@@ -1,9 +1,9 @@
 import Navbar from "../components/navbarlogin";
 import { useState } from "react";
-import Dashboard from "../components/Admin/Dashboard";
+import GuestDashboard from "../components/Admin/GuestDashboard";
 import ImprovedSidebar from "../components/Landingsidebar";
 const GuestPage = () => {
-   const [content, setContent] = useState(<Dashboard/>);
+   const [content, setContent] = useState(<GuestDashboard/>);
 
     return (
         <div>
