@@ -27,6 +27,7 @@ import ItineraryDetailsTourist from "./components/ItineraryDetailsTourist";
 import MoreItineraries from "./components/MoreItineraries";
 import MorePlaces from "./components/MorePlaces";
 import Itineraries from "./components/Itineraries";
+import MoreActivities from "./components/MoreActivities";
 
 
 function App() {
@@ -67,6 +68,7 @@ function App() {
           <Route path="/more-itineraries" element={<MoreItineraries />} />
           <Route path="/more-places" element={<MorePlaces />} />
           <Route path="/itinerary/:id" element={<ItineraryDetails />} />
+          <Route path="/tourist/:id/activities" element={<MoreActivities />} />
         </Routes>
       </Router>
     </MantineProvider>
