@@ -9,13 +9,7 @@ import ShopIcon from '@mui/icons-material/Shop';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ActivityIcon from '@mui/icons-material/LocalActivity';
-import Itineraries from './Itineraries';
-
 const drawerWidth = 240;
-
-
-
-
 
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -73,15 +67,15 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 interface ImprovedSidebarProps {
-  title: string;
   className?: string;
 }
 
 
-export default function ImprovedSidebar({ title = "", className = "" }: ImprovedSidebarProps) {
+export default function ImprovedSidebar({ className = "" }: ImprovedSidebarProps) {
   
 const location = useLocation();
 const currentuser=location.pathname.split(`/`)[2];
+const currentusertype=location.pathname.split(`/`)[1];
 
 const adminsidebaritems =
 [
@@ -92,7 +86,7 @@ const adminsidebaritems =
 ];
 const TGsidebaritems =
 [
-  { text: 'Home', icon: <HomeIcon />, path: `/tourguide` },
+  { text: 'Home', icon: <HomeIcon />, path: `/tourguide/${currentuser}` },
   { text: 'Locations', icon: <LocationOnIcon />, path: `/tourguide/${currentuser}/locations` },
   { text: 'Itinerary Management', icon: <ActivityIcon />, path: `/tourguide/${currentuser}/itineraries` },
 ];
@@ -121,17 +115,17 @@ const sellersidebaritems =
   { text: 'Shop', icon: <ShopIcon />, path: `/seller/${currentuser}/shop` },
 ];
 
-const getSidebarItems = (title : string) => {
+const getSidebarItems = (currentusertype : string) => {
   switch (true) {
-      case title.includes("Seller"):
+      case currentusertype.includes("seller"):
           return sellersidebaritems;
-      case title.includes("Admin"):
+      case currentusertype.includes("admin"):
           return adminsidebaritems;
-      case title.includes("Tourist"):
+      case currentusertype.includes("tourist"):
           return touristsidebaritems;
-      case title.includes("Tourism Governor"):
+      case currentusertype.includes("tourismgovernor"):
           return TGosidebaritems;
-      case title.includes("Tour Guide"):
+      case currentusertype.includes("tourguide"):
           return TGsidebaritems;
       default:
           return advertisersidebaritems;
@@ -142,12 +136,14 @@ const getSidebarItems = (title : string) => {
   const [open, setOpen] = React.useState(false);
     const navigate = useNavigate();
 
-  const whichoptions = getSidebarItems(title);
+  const whichoptions = getSidebarItems(currentusertype);
 
   const handleDrawer = () => {
     setOpen(!open);
   };
-
+  if(currentusertype==="seller"){
+    return;
+  }
   return (
     <Box sx={{ display: 'flex' }} className={className}>
       <CssBaseline />

@@ -113,7 +113,7 @@ const MoreItineraries: React.FC = () => {
 
     return (
         <div className="flex">
-            <ImprovedSidebar title="Tourist" />
+            <ImprovedSidebar/>
             <div className="w-full">
             <h1 className="text-2xl font-bold mb-4 mx-auto">All Itineraries</h1>
             <hr />

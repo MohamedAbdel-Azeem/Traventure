@@ -282,7 +282,7 @@ const style = {
         </Box>
         </Box>
       </Modal>
-      <ImprovedSidebar title="Advertiser"/>
+      <ImprovedSidebar/>
       <div className="grid lg:grid-cols-4 md:grid-cols-3 ml-8 mb-4">
       <div className="mt-12 mx-4 w-[400px] h-[475px] rounded-[19px] bg-slate-500 cursor-pointer" 
       onClick={handleOpen}>
