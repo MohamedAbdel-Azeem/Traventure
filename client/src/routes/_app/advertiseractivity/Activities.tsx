@@ -60,7 +60,7 @@ const handleDelete = (id: string) => {
 };
 
   const handleCreate = async () => {
-    if (!newCategory) {
+    if (!selectedCat) {
         console.error("Category is required");
         return;
     }
@@ -107,8 +107,6 @@ const handleDelete = (id: string) => {
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 };
 
-
-
 const {
   loading: tagsLoading,
   error: tagsError,
@@ -123,6 +121,7 @@ const handleTagsChange = (event: SelectChangeEvent<string[]>) => {
     target: { value },
   } = event;
   setSelectedTags(typeof value === "string" ? value.split(",") : value);
+  console.log(selectedTags);
 };
 
 
@@ -147,6 +146,7 @@ const handleCatChange = (event: SelectChangeEvent<string>) => {
   } = event;
 
   setSelectedCat(value);
+  console.log(value);
 
 };
 
