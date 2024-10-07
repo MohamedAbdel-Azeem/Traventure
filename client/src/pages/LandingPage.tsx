@@ -11,7 +11,7 @@ const LandingPage = () => {
                 sideBarFlag={true}
             />
                 <div className="flex">
-      <ImprovedSidebar title="Your Page Title" />
+      <ImprovedSidebar/>
       <div className="flex-1 p-4">
         {/* This is where you can place your main content */}
         <h1>Main Content Area</h1>

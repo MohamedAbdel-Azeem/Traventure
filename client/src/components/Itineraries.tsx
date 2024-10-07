@@ -47,7 +47,6 @@ const Itineraries = () => {
 
   return (
     <div className="flex justify-center">
-      <ImprovedSidebar title="Admin" />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 p-4">
         <div
           className="flex w-full h-[334px] bg-[#D9D9D9] rounded-[11px] m-4 hover:bg-[#c0c0c0] transition duration-300 cursor-pointer items-center justify-center shadow-lg"
@@ -72,7 +71,7 @@ const Itineraries = () => {
             plan={card.plan}
             selectedTags={card.selectedTags}
             onDelete={() => handleDelete(card._id)}
-            isDeleting={deletingId === card._id} // Pass the deleting state to the card
+            isDeleting={deletingId === card._id} 
             added_By={""}
             total={0}
             booked_By={[]}

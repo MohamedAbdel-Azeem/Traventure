@@ -10,7 +10,7 @@ const AdminPage = () => {
   return (
     <div>
       <Navbar sideBarFlag={true} />
-      <ImprovedSidebar title="Admin" />
+      <ImprovedSidebar/>
       <div
         style={{
           margin: `20px 20px 20px 100px`,
@@ -22,5 +22,4 @@ const AdminPage = () => {
     </div>
   );
 };
-
 export default AdminPage;

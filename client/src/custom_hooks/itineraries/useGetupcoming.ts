@@ -10,7 +10,7 @@ const useGetUpcoming = () => {
     useEffect(() => {
         async function fetchItinerary() {
             setLoading(true);
-            const response = await axios.get(`/traventure/api/tourist/getAll`)
+            const response = await axios.get(`/traventure/api/tourist/upcoming`)
             .catch((err) => {
                 setError(err.message);
             });
@@ -22,7 +22,7 @@ const useGetUpcoming = () => {
             setLoading(false);
         }
         fetchItinerary();
-    });
+    }, []); 
 
     return { upcoming, loading, error };
 };
