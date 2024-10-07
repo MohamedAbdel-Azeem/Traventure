@@ -29,7 +29,6 @@ const {data, loading, error} = useGetAllProducts();
   const [isRatingOptionsOpen, setIsRatingOptionsOpen] = useState(false);
   const [sortOrder, setSortOrder] = useState<string | null>(null);
   const [apiBody, setApiBody] = useState<NewProduct|null>(null);
-  const [uapiBody, setUApiBody] = useState<NewProduct|null>(null);
 
   useCreateProduct(apiBody);
   interface NewProduct {
@@ -41,6 +40,8 @@ const {data, loading, error} = useGetAllProducts();
     quantity: number;
     externalseller?: string;
   }
+
+  const currentuser=location.pathname.split(`/`)[2];
 
   React.useEffect(() => {
     if (data) {
@@ -161,7 +162,16 @@ const {data, loading, error} = useGetAllProducts();
 
   const [showFilters, setShowFilters] = useState(false);
   const handleCreate = () => {
-    const newProduct: NewProduct = {
+    const newProductSeller: NewProduct = {
+      name: name,
+      price: price,
+      description: description,
+      imageUrl: image,
+      seller: currentuser,
+      quantity: quantity
+    };
+    
+    const newProductAdmin: NewProduct = {
       name: name,
       price: price,
       description: description,
@@ -169,8 +179,9 @@ const {data, loading, error} = useGetAllProducts();
       externalseller: externalseller,
       quantity: quantity
     };
-      
-      setApiBody(newProduct);
+      if(type.includes("Admin")){
+      setApiBody(newProductAdmin);}else{
+      setApiBody(newProductSeller);}
       setOpen(false);
     };
 
