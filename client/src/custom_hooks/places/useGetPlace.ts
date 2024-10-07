@@ -10,7 +10,7 @@ const useGetPlace = () => {
   const fetchPlaces = useCallback(async () => {
       setgLoading(true);
       try {
-          const response = await axios.get("/traventure/api/place/");
+          const response = await axios.get("/traventure/api/place");
           if (response.status === 200) {
               setPlaces(response.data);
           } else {
@@ -23,11 +23,9 @@ const useGetPlace = () => {
       }
   }, []);
     useEffect(() => {
-
     fetchPlaces();
-    
-}, []);
-    return { places, gloading, gerror, fetchPlaces };
+  }, []);
+  return { places, gloading, gerror, fetchPlaces };
 };
 
 export default useGetPlace;

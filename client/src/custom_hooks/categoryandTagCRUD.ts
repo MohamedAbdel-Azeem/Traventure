@@ -32,6 +32,7 @@ export const useGetAllCategories = () => {
 
   return { data, loading, error };
 };
+
 export const useGetAllCategoriesD = () => {
   const [data, setData] = React.useState<DataStructure[]>([]);
   const [loading, setLoading] = React.useState(true);
@@ -62,21 +63,26 @@ export const deleteCategories = async (categoryName: string) => {
     const response = await axios.get("/traventure/api/category");
     const data: DataStructure[] = response.data;
 
-    const categoryToDelete = data.find(category => category.name === categoryName);
+    const categoryToDelete = data.find(
+      (category) => category.name === categoryName
+    );
 
     if (!categoryToDelete) {
       throw new Error(`Category with name ${categoryName} not found`);
     }
 
-    const responseDelete = await fetch(`/traventure/api/category/delete/${categoryToDelete._id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
+    const responseDelete = await fetch(
+      `/traventure/api/category/delete/${categoryToDelete._id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    });
+    );
 
     if (!responseDelete.ok) {
-      throw new Error('Failed to delete category');
+      throw new Error("Failed to delete category");
     }
 
     alert(`${categoryName} deleted successfully.`);
@@ -111,7 +117,7 @@ export function useAddCategory(body: object | null) {
     fetchData();
   }, [body]);
   return { data, loading, error };
-};
+}
 
 export function useUpdateCategory(categoryName: string, body: object | null) {
   const [data, setData] = useState(null);
@@ -120,16 +126,17 @@ export function useUpdateCategory(categoryName: string, body: object | null) {
 
   useEffect(() => {
     const fetchData = async () => {
-
       const response = await axios.get("/traventure/api/category");
+
       const qdata: DataStructure[] = response.data;
-      const id = qdata.find(category => category.name === categoryName)?._id;
-    
+      const id = qdata.find((category) => category.name === categoryName)?._id;
+
       if (body === null) return;
       setLoading(true);
       setError(null);
       try {
         const response = await axios.put(`/traventure/api/category/update/${id}`, body);
+
         if (response.status >= 200 && response.status < 300) {
           setData(response.data);
         } else {
@@ -157,6 +164,8 @@ export const useGetAllTags = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get("/traventure/api/preferencetags");
+        setidData(response.data);
+
         const names = response.data.map((item: DataStructure) => item.name);
         setData(names);
         setidData(response.data);
@@ -174,6 +183,7 @@ export const useGetAllTags = () => {
 
   return { data, iddata, loading, error };
 };
+
 export const useGetTagsD = () => {
   const [data, setData] = React.useState<DataStructure[]>([]);
   const [loading, setLoading] = React.useState(true);
@@ -204,21 +214,22 @@ export const deleteTags = async (tagName: string) => {
     const response = await axios.get("/traventure/api/preferencetags");
     const data: DataStructure[] = response.data;
 
-    const tagToDelete = data.find(tag => tag.name === tagName);
+    const tagToDelete = data.find((tag) => tag.name === tagName);
 
     if (!tagToDelete) {
       throw new Error(`Tag with name ${tagName} not found`);
     }
+
 
     const responseDelete = await fetch(`/traventure/api/preferencetags/delete/${tagToDelete._id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       }
-    });
+    );
 
     if (!responseDelete.ok) {
-      throw new Error('Failed to delete tag');
+      throw new Error("Failed to delete tag");
     }
 
     alert(`${tagName} deleted successfully.`);
@@ -239,6 +250,7 @@ export function useAddTag(body: object | null) {
       setError(null);
       try {
         const response = await axios.post("/traventure/api/preferencetags/add", body);
+
         if (response.status >= 200 && response.status < 300) {
           setData(response.data);
         } else {
@@ -253,7 +265,7 @@ export function useAddTag(body: object | null) {
     fetchData();
   }, [body]);
   return { data, loading, error };
-};
+}
 
 export function useUpdateTag(tagName: string, body: object | null) {
   const [data, setData] = useState(null);
@@ -265,13 +277,14 @@ export function useUpdateTag(tagName: string, body: object | null) {
 
       const response = await axios.get("/traventure/api/preferencetags");
       const qdata: DataStructure[] = response.data;
-      const id = qdata.find(tag => tag.name === tagName)?._id;
-    
+      const id = qdata.find((tag) => tag.name === tagName)?._id;
+
       if (body === null) return;
       setLoading(true);
       setError(null);
       try {
         const response = await axios.put(`/traventure/api/preferencetags/update/${id}`, body);
+
         if (response.status >= 200 && response.status < 300) {
           setData(response.data);
         } else {

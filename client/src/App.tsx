@@ -26,12 +26,25 @@ import MorePlaces from "./components/MorePlaces";
 import Itineraries from "./components/Itineraries";
 import MoreActivities from "./components/MoreActivities";
 
-
 function App() {
   return (
     <MantineProvider>
       <Router>
         <Routes>
+          <Route path="/admin/:id" element={<AdminPage />} />
+          <Route path="/tourguide/:username" element={<TourGuidePage />} />
+          <Route path="/tourismgovernor" element={<TourismGovernorPage />} />
+          <Route path="/advertiser" element={<AdvertiserPage />} />
+          <Route path="/tourist/:id" element={<TouristPage />} />
+          <Route path="/seller" element={<SellerPage />} />
+          <Route path="/admin-users" element={<Accounts />} />
+          <Route path="/admin/shop" element={<ShopPage type="Admin" />} />
+          <Route path="/tourist/shop" element={<ShopPage type="Tourist" />} />
+          <Route path="/seller/shop" element={<ShopPage type="Seller" />} />
+          <Route path="/tourismgovernor/locations" element={<Locations />} />
+          <Route path="/admin-locations" element={<Locations />} />
+          <Route path="/advertiser/activities" element={<Activities />} />
+          <Route path="/itineraries" element={<Accounts />} />
           <Route path="/" element={<SignIn />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin/:username" element={<AdminPage />} />
@@ -57,14 +70,20 @@ function App() {
           <Route path="/landing" element={<LandingPage />} />
           <Route path="/touristprofile/:username" element={<Tourist_Profile />} />
           <Route path="/sellerprofile/:username" element={<Seller_Profile />} />
-          <Route path="/tourguideprofile/:username" element={<TourGuide_Profile />} />
-          <Route path="/advertiserprofile/:username" element={<Advertiser_Profile />} />
-          <Route path="/itinerary/:username" element={<ItineraryDetails />} />
+            <Route
+            path="/tourguideprofile/:username"
+            element={<TourGuide_Profile />}
+          />
+            <Route
+            path="/advertiserprofile/:username"
+            element={<Advertiser_Profile />}
+          />
+            <Route path="/CategoriesandTags" element={<CT />} />
+            <Route path="/itinerary/:id" element={<ItineraryDetails />} />
           <Route path="/tourist-itinerary/:username" element={<ItineraryDetailsTourist />} />
           <Route path="/more-itineraries" element={<MoreItineraries />} />
           <Route path="/more-places" element={<MorePlaces />} />
           <Route path="/tourist/:id/activities" element={<MoreActivities />} />
-          <Route path="/itinerary/:id" element={<ItineraryDetails />} /> 
         </Routes>
       </Router>
     </MantineProvider>
