@@ -29,7 +29,8 @@ export const placeAddValidator = [
   body("ticket_price.student")
     .isNumeric()
     .withMessage("Student ticket price must be a number"),
-  body("added_By").exists().isString().withMessage("Added by must be a string"),
+    body("added_By").exists().isString().withMessage("Added by must be a string"),
+    body("historicalTags").optional(),
 ];
 
 export const placeUpdateValidator = [
@@ -73,6 +74,7 @@ export const placeUpdateValidator = [
     .optional()
     .isNumeric()
     .withMessage("Student ticket price must be a number"),
+    body("historicalTags").optional(),
 ];
 
 module.exports = { placeAddValidator, placeUpdateValidator };

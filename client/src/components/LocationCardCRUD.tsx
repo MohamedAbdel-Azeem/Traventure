@@ -75,7 +75,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
                 student: student,
             },
             added_By:currentuser,
-            historicalTags: [],
+            historicalTags: selectedTags||[],
         });
     };
     const handleDeleteClick = () => {
