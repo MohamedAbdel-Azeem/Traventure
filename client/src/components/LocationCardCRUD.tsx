@@ -40,8 +40,8 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
   const [longitude, setLongitude] = useState(details?.location.longitude ?? 0);
   const [images, setImages] = useState(details?.pictures || []);
   const [image, setImage] = useState("");
-  const [selectedTags, setSelectedTags] = useState<object[]>(
-    details?.historicalTags || []
+  const [selectedTags, setSelectedTags] = useState<string[]>(
+    details?.historicalTags?.map(tag => tag._id) || []
   );
   const [apiBody, setApiBody] = useState<Place | null>(details);
   useUpdatePlace(id, apiBody);
