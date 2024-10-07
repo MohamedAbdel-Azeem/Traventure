@@ -11,27 +11,17 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { ActivityCardTourist } from './ActivityCardTourist';
-import {useGetAllActivitiesS} from '../custom_hooks/activities/useGetActivities';
+import { useGetAllActivitiesS } from '../custom_hooks/activities/useGetActivities';
 import IActivity from '../custom_hooks/activities/activity_interface';
 import { useGetAllCategories } from '../custom_hooks/categoryandTagCRUD';
 import Activity from '../custom_hooks/activities/activity_interface';
-import Navbar from './navbar';
-import ImprovedSidebar from './ImprovedSidebar';
 
 const GuestMoreActivities: React.FC = () => {
     const { sactivities, aloading, aerror } = useGetAllActivitiesS();
-
     const { data: catData } = useGetAllCategories(); 
 
     const [categoryTerms, setCategoryTerms] = useState<string[]>([]); 
-
-
-    
-    
     const [selectedCat, setSelectedCats] = useState<string[]>([]);
-
-    const navigate = useNavigate();
-
     const [searchType, setSearchType] = useState<'name' | 'tag' | 'category'>('name');
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -41,9 +31,13 @@ const GuestMoreActivities: React.FC = () => {
     const [startDate, setStartDate] = useState<string>('');
     const [endDate, setEndDate] = useState<string>('');
     const [categoryTerm, setCategoryTerm] = useState('');
+    const [minRating, setMinRating] = useState<number>(0); 
+    const [maxRating, setMaxRating] = useState<number>(5); 
 
     const [sortBy, setSortBy] = useState<'price' | 'rating'>('price');
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (filterType === 'date') {
@@ -57,6 +51,12 @@ const GuestMoreActivities: React.FC = () => {
         }
     }, [filterType]);
 
+    const calculateAverageRating = (currentActivity: Activity): number => {
+        const allRatings = currentActivity.feedback?.map(fb => parseFloat(fb.rating));
+        const totalRating = allRatings?.reduce((acc, rating) => acc + rating, 0);
+        return allRatings?.length ? totalRating / allRatings?.length : 0;
+    };
+
     const filteredActivities = sactivities?.filter((activity: IActivity) => {
         const term = searchTerm.toLowerCase();
 
@@ -65,7 +65,7 @@ const GuestMoreActivities: React.FC = () => {
         } else if (searchType === 'tag') {
             return activity.Tags.some(tag => tag.name.toLowerCase().includes(term));
         } else if (searchType === 'category') {
-        return activity.Category.name.toLowerCase().includes(term);
+            return activity.Category.name.toLowerCase().includes(term);
         }
 
         return true;
@@ -78,31 +78,23 @@ const GuestMoreActivities: React.FC = () => {
                 return activityDate >= new Date(startDate) && activityDate <= new Date(endDate);
             case 'category':
                 return categoryTerms.length === 0 || categoryTerms.includes(activity.Category.name);
-            case 'rating':
-                return calculateAverageRating(activity) >= 4;
+            case 'rating': 
+                const avgRating = calculateAverageRating(activity);
+                return avgRating >= minRating && avgRating <= maxRating;
             default:
                 return true;
         }
     });
 
-    const calculateAverageRating = (currentActivity: Activity): number => {
-        const allRatings = currentActivity.feedback?.map(fb => parseFloat(fb.rating));
-        const totalRating = allRatings?.reduce((acc, rating) => acc + rating, 0);
-        return allRatings?.length ? totalRating / allRatings?.length : 0;
-      };
-    
-    
     const sortedActivities = [...(filteredActivities ?? [])].sort((a: IActivity, b: IActivity) => {
         let comparison = 0;
 
         if (sortBy === 'price') {
             comparison = a.Price - b.Price;
         } else if (sortBy === 'rating') {
-            console.log('SORT RATING HERE')
             comparison = calculateAverageRating(a) - calculateAverageRating(b);
         }
 
-       
         return sortOrder === 'asc' ? comparison : -comparison;
     });
 
@@ -115,14 +107,7 @@ const GuestMoreActivities: React.FC = () => {
     }
 
     return (
-        <div>
-            <Navbar
-                sideBarFlag={true}
-            />
-            <div className="flex"></div>
         <div className="flex">
-        <ImprovedSidebar />
-        <Box p={3}/>
             <div className="w-full">
                 <h1 className="text-2xl font-bold mb-4 mx-auto">All Activities</h1>
                 <hr />
@@ -223,7 +208,33 @@ const GuestMoreActivities: React.FC = () => {
                            </FormControl>
                        </div>
                         )}
+                         {filterType === 'rating' && (
+                            <div className="flex gap-2">
+                                <input
+                                    type="number"
+                                    placeholder="Min Rating"
+                                    value={minRating}
+                                    onChange={(e) => setMinRating(Number(e.target.value))}
+                                    className="border p-2 rounded"
+                                    min={0}
+                                    max={5}
+                                />
+                                <input
+                                    type="number"
+                                    placeholder="Max Rating"
+                                    value={maxRating}
+                                    onChange={(e) => setMaxRating(Number(e.target.value))}
+                                    className="border p-2 rounded"
+                                    min={0}
+                                    max={5}
+                                />
+                            </div>
+                        )}
+                    
+    
                     </div>
+
+                    
 
                     <div className="mb-4 flex gap-2">
                         <FormControl variant="outlined" className="min-w-[120px]">
@@ -270,7 +281,6 @@ const GuestMoreActivities: React.FC = () => {
                 </div>
             </div>
         </div>
-    </div>
     );
 };
 
