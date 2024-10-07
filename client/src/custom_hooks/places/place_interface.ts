@@ -3,8 +3,6 @@ interface Place {
     name: string;
     description: string;
     pictures: string[];
-    added_By:string;
-    historicalTags: string[];
     location: {
         latitude: number;
         longitude: number;

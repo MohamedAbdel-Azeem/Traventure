@@ -26,7 +26,7 @@ export const useGetHTags = () => {
     React.useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await axios.get("/traventure/api/historicalTags/");
+          const response = await axios.get("/traventure/api/historicalTags");
           setData(response.data);
           setLoading(false);
         } catch (error) {
@@ -36,7 +36,8 @@ export const useGetHTags = () => {
           setLoading(false);
         }
       };
-        fetchData();
+  
+      fetchData();
     }, []);
   
     return { data, loading, error };

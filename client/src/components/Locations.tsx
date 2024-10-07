@@ -27,8 +27,6 @@ const Locations = () => {
   const [latitude, setLatitude] = useState(30.0);
   const [longitude, setLongitude] = useState(31.2);
   const [image, setImage] = useState<string>('');
-  const [images, setImages] = useState<string[]>([]);
-  const [apiBody, setApiBody] = useState<Place | null>(null);
   const [newcards, setNewcards] = useState<Place[] | null>(null);
   const handleTagsChange = (event: SelectChangeEvent<string[]>) => {
     const {
@@ -72,14 +70,14 @@ const Locations = () => {
         setNewcards(idplaces);
     }
 }, [idplaces]);
-
+console.log(newcards);
 const handleCreate = async () => {
   const newCard = {
       id: Date.now().toString(),
       name,
       description,
       added_By: currentuser,
-      historicalTags: [],
+      historicalTags: selectedTags||[],
       ticket_price: {
           native: nativePrice,
           foreign: foreignPrice,
@@ -225,7 +223,6 @@ const handleDelete = (id: string) => {
                 </Select>
             </FormControl>
           <Button onClick={handleCreate}>Add</Button>
-              
               
         </Box>
         </Box>
