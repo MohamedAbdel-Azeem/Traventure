@@ -102,7 +102,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
                 <p className="product-description">{getTruncatedDescription(currentProduct.description)}</p>
                 <div className="flex flex-row justify-between items-center">
                     <span className="product-price">${currentProduct.price}</span>
-                        <Rating name="half-rating" value={averageRating} precision={0.1} />
+                        <Rating disabled name="rating" value={averageRating} precision={0.1} />
                     <button onClick={togglePopup} className="view-more-button w-[70px]">
                         View more
                     </button>

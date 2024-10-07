@@ -39,19 +39,20 @@ function App() {
           <Route path="/admin/:id" element={<AdminPage />} />
           <Route path="/admin/:id/users" element={<Accounts />} />
           <Route path="/admin/:id/shop" element={<ShopPage type="Admin"/>} />
-          <Route path="/admin/:id/locations" element={<Locations />} />
+          <Route path="/admin/:id/locations" element={<MorePlaces />} />
           <Route path="/tourist/:id" element={<TouristPage />} />
           <Route path="/tourist/:id/shop" element={<ShopPage type="Tourist" />} />
-          <Route path="/tourist/:id/locations" element={<Locations />} />
+          <Route path="/tourist/:id/locations" element={<MorePlaces />} />
+          <Route path="/tourist/:id/itineraries" element={<MoreItineraries />} />
           <Route path="/tourismgovernor/:id" element={<TourismGovernorPage />} />
           {/* <Route path="/tourismgovernor/:id/historicaltags" element={<HistoricalTags />} /> */}
           <Route path="/tourismgovernor/:id/locations" element={<Locations />} />
           <Route path="/tourismgovernor/:id/categoriesandtags" element={<CT />} />
           <Route path="/advertiser/:id" element={<AdvertiserPage />} />
-          <Route path="/advertiser/:id/locations" element={<Locations />} />
+          <Route path="/advertiser/:id/locations" element={<MorePlaces />} />
           <Route path="/advertiser/:id/activities" element={<Activities />} />
           <Route path="/tourguide/:id" element={<TourGuidePage />} />
-          <Route path="/tourguide/:id/locations" element={<TourGuidePage />} />
+          <Route path="/tourguide/:id/locations" element={<MorePlaces />} />
           <Route path="/tourguide/:id/itineraries" element={<TourGuidePage />} />
           <Route path="/seller/:id" element={<SellerPage />} />
           <Route path="/seller/:id/shop" element={<ShopPage type="Seller" />} />

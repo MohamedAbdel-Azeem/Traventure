@@ -7,6 +7,7 @@ import { TouristProfileData } from '../routes/_app/tourist_profile/tourist_profi
 import IActivity from '../custom_hooks/activities/activity_interface';
 import Place from '../custom_hooks/places/place_interface';
 import LocationCardTourist from './LocationCardTourist';
+import ImprovedSidebar from './ImprovedSidebar';
 
 const MorePlaces: React.FC = () => {
     const { upcoming, loading, error } = useGetUpcoming();
@@ -33,7 +34,8 @@ const MorePlaces: React.FC = () => {
             return true; 
         });
 
-    return (
+    return (<div className="flex">
+        <ImprovedSidebar title="Tourist" />
         <Box p={3}>
             <Typography variant="h4" component="h1" gutterBottom>
                 All Places
@@ -83,6 +85,7 @@ const MorePlaces: React.FC = () => {
                 </div>
             </Box>
         </Box>
+        </div>
     );
 };
 

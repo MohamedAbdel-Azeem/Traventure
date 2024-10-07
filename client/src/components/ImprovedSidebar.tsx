@@ -13,43 +13,6 @@ import Itineraries from './Itineraries';
 
 const drawerWidth = 240;
 
-const adminsidebaritems =
-[
-  { text: 'Home', icon: <HomeIcon />, path: '/admin/:id' },
-  { text: 'Shop', icon: <ShopIcon />, path: '/admin/:id/shop' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/admin/:id/locations' },
-  { text: 'Account Management', icon: <AccountCircleIcon />, path: '/admin/:id/users' },
-];
-const TGsidebaritems =
-[
-  { text: 'Home', icon: <HomeIcon />, path: '/tourguide' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/tourguide/:id/locations' },
-  { text: 'Itinerary Management', icon: <ActivityIcon />, path: '/tourguide/:id/itineraries' },
-];
-const TGosidebaritems =
-[
-  { text: 'Home', icon: <HomeIcon />, path: '/tourismgovernor/:id' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/tourismgovernor/:id/locations' },
-  { text: 'Historical Tags', icon: <ActivityIcon />, path: '/tourismgovernor/:id/historicaltags' },
-  { text: 'Cats & Tags', icon: <LocationOnIcon />, path: '/tourismgovernor/:id/categoriesandtags' },
-];
-const touristsidebaritems =
-[
-  { text: 'Home', icon: <HomeIcon />, path: '/tourist/:id' },
-  { text: 'Shop', icon: <ShopIcon />, path: '/tourist/:id/shop' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/tourist/:id/locations' },
-];
-const advertisersidebaritems =
-[
-  { text: 'Home', icon: <HomeIcon />, path: '/advertiser/:id' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/advertiser/:id/locations' },
-  { text: 'Activity Management', icon: <ActivityIcon />, path: '/advertiser/:id/activities' },
-];
-const sellersidebaritems =
-[
-  { text: 'Home', icon: <HomeIcon />, path: '/seller/:id' },
-  { text: 'Shop', icon: <ShopIcon />, path: '/seller/:id/shop' },
-];
 
 
 
@@ -114,6 +77,50 @@ interface ImprovedSidebarProps {
   className?: string;
 }
 
+
+export default function ImprovedSidebar({ title = "", className = "" }: ImprovedSidebarProps) {
+  
+const location = useLocation();
+const currentuser=location.pathname.split(`/`)[2];
+
+const adminsidebaritems =
+[
+  { text: 'Home', icon: <HomeIcon />, path: `/admin/${currentuser}` },
+  { text: 'Shop', icon: <ShopIcon />, path: `/admin/${currentuser}/shop` },
+  { text: 'Locations', icon: <LocationOnIcon />, path: `/admin/${currentuser}/locations` },
+  { text: 'Account Management', icon: <AccountCircleIcon />, path: `/admin/${currentuser}/users` },
+];
+const TGsidebaritems =
+[
+  { text: 'Home', icon: <HomeIcon />, path: `/tourguide` },
+  { text: 'Locations', icon: <LocationOnIcon />, path: `/tourguide/${currentuser}/locations` },
+  { text: 'Itinerary Management', icon: <ActivityIcon />, path: `/tourguide/${currentuser}/itineraries` },
+];
+const TGosidebaritems =
+[
+  { text: 'Home', icon: <HomeIcon />, path: `/tourismgovernor/${currentuser}` },
+  { text: 'Locations', icon: <LocationOnIcon />, path: `/tourismgovernor/${currentuser}/locations` },
+  { text: 'Historical Tags', icon: <ActivityIcon />, path: `/tourismgovernor/${currentuser}/historicaltags` },
+  { text: 'Cats & Tags', icon: <LocationOnIcon />, path: `/tourismgovernor/${currentuser}/categoriesandtags` },
+];
+const touristsidebaritems =
+[
+  { text: 'Home', icon: <HomeIcon />, path: `/tourist/${currentuser}` },
+  { text: 'Shop', icon: <ShopIcon />, path: `/tourist/${currentuser}/shop` },
+  { text: 'Locations', icon: <LocationOnIcon />, path: `/tourist/${currentuser}/locations` },
+];
+const advertisersidebaritems =
+[
+  { text: 'Home', icon: <HomeIcon />, path: `/advertiser/${currentuser}` },
+  { text: 'Locations', icon: <LocationOnIcon />, path: `/advertiser/${currentuser}/locations` },
+  { text: 'Activity Management', icon: <ActivityIcon />, path: `/advertiser/${currentuser}/activities` },
+];
+const sellersidebaritems =
+[
+  { text: 'Home', icon: <HomeIcon />, path: `/seller/${currentuser}` },
+  { text: 'Shop', icon: <ShopIcon />, path: `/seller/${currentuser}/shop` },
+];
+
 const getSidebarItems = (title : string) => {
   switch (true) {
       case title.includes("Seller"):
@@ -131,10 +138,9 @@ const getSidebarItems = (title : string) => {
   }
 };
 
-export default function ImprovedSidebar({ title = "", className = "" }: ImprovedSidebarProps) {
+
   const [open, setOpen] = React.useState(false);
     const navigate = useNavigate();
-    const location = useLocation();
 
   const whichoptions = getSidebarItems(title);
 

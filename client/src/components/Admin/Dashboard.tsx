@@ -4,7 +4,7 @@ import useGetUpcoming from '../../custom_hooks/itineraries/useGetupcoming';
 import IActivity from '../../custom_hooks/activities/activity_interface';
 import Place from '../../custom_hooks/places/place_interface';
 import { TouristProfileData } from '../../routes/_app/tourist_profile/tourist_profile_data';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import LocationCardCRUD from '../LocationCardCRUD';
 import LocationCardTourist from '../LocationCardTourist';
 import ItineraryCardToruist from '../ItineraryCardToruist';
@@ -12,7 +12,7 @@ import ItineraryCardToruist from '../ItineraryCardToruist';
 const Dashboard = () => {
     const { upcoming, loading, error } = useGetUpcoming();
     const navigate = useNavigate();
-
+    const currentuser=useLocation().pathname.split('/')[2];
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -83,7 +83,7 @@ const Dashboard = () => {
     )}
     <button
         className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-        onClick={() => navigate('/more-itineraries')}
+        onClick={() => navigate(`/tourist/${currentuser}/itineraries`)}
     >
         View More
     </button>
@@ -110,7 +110,7 @@ const Dashboard = () => {
                     )}
                     <button
                         className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                        onClick={() => navigate('/more-places')}
+                        onClick={() => navigate(`/tourist/${currentuser}/locations`)}
                     >
                         View More
                     </button>

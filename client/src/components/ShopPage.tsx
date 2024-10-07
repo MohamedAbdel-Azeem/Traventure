@@ -265,7 +265,7 @@ const {data, loading, error} = useGetAllProducts();
         </Box>
         </Box>
       </Modal>
-      <ImprovedSidebar title="Admin" className="flex-2"/>
+      <ImprovedSidebar title={type} className="flex-2"/>
       <div className="flex flex-col flex-1">
       <div className="search-bar">
         <input

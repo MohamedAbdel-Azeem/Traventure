@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import useGetUpcoming from '../custom_hooks/itineraries/useGetupcoming';
 import ItineraryCardToruist from './ItineraryCardToruist';
 import { useGetAllTags } from '../custom_hooks/categoryandTagCRUD';
+import ImprovedSidebar from './ImprovedSidebar';
 
 const MoreItineraries: React.FC = () => {
     const { upcoming, loading, error } = useGetUpcoming();
@@ -111,11 +112,13 @@ const MoreItineraries: React.FC = () => {
 
 
     return (
-        <>
-            <h1 className="text-2xl font-bold mb-4">All Itineraries</h1>
+        <div className="flex">
+            <ImprovedSidebar title="Tourist" />
+            <div className="w-full">
+            <h1 className="text-2xl font-bold mb-4 mx-auto">All Itineraries</h1>
             <hr />
             <br />
-
+            <div>
             <div className="mb-4 flex gap-2">
                 <FormControl variant="outlined" className="min-w-[120px]">
                     <InputLabel id="search-type-label">Search By</InputLabel>
@@ -278,7 +281,9 @@ const MoreItineraries: React.FC = () => {
                     )}
                 </div>
             </div>
-        </>
+            </div>
+            </div>
+        </div>
     );
 };
 

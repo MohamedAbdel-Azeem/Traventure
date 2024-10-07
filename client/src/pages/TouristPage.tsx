@@ -2,9 +2,11 @@ import Navbar from "../components/navbar";
 import { useState } from "react";
 import Dashboard from "../components/Admin/Dashboard";
 import ImprovedSidebar from "../components/ImprovedSidebar";
+import { useParams } from "react-router-dom";
 const TouristPage = () => {
-   const [content, setContent] = useState(<Dashboard/>);
 
+    
+  const { id } = useParams();
     return (
         <div>
             <Navbar
@@ -17,7 +19,7 @@ const TouristPage = () => {
                     transition: "200ms",
                 }}
             >
-                {content}
+                <Dashboard/>
             </div>
         </div>
     );
