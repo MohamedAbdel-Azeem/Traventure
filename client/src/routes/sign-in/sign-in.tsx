@@ -158,6 +158,14 @@ const SignIn: React.FC = () => {
               >
                 Forgot your password?
               </a>
+              <br></br>
+              <br></br>
+              <a
+                href="/guest-page"
+                className="text-purple-700 hover:text-purple-600 underline"
+              >
+                Enter as Guest
+              </a>
             </div>
           </form>
         </div>

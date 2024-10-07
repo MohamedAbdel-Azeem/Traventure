@@ -42,6 +42,7 @@ export const useGetPlace = () => {
 
 
   export const useGetPlaceID = (ausername:string) => {
+
     const [idplaces, setidPlaces] = useState<Place[] | null>(null);
     const [idgloading, setidgLoading] = useState(false);
     const [idgerror, setidgError] = useState<string | null>(null);
@@ -84,4 +85,4 @@ export const useGetPlace = () => {
   }, []);
       return { idplaces, idgloading, idgerror, fetchPlacesID };
   };
-    
+

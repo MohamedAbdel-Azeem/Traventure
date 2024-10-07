@@ -29,10 +29,11 @@ export async function getItinerary(tourGuide_username: String) {
 
 export async function getAllItinerary() {
   try {
-    const itineraries = await Itinerary.find().populate('added_By')
-    .populate('plan.place')
-    .populate('plan.activities.activity_id')
-    .populate('selectedTags')
+    const itineraries = await Itinerary.find()
+      .populate("added_By")
+      .populate("plan.place")
+      .populate("plan.activities.activity_id")
+      .populate("selectedTags");
     return itineraries;
   } catch (error) {
     throw error;

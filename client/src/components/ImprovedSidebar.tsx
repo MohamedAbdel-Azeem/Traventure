@@ -116,6 +116,13 @@ const sellersidebaritems =
   { text: 'Shop', icon: <ShopIcon />, path: `/seller/${currentuser}/shop` },
 ];
 
+const guestsidebaritems =
+[
+  { text: 'Home', icon: <HomeIcon />, path: `/guest-page` },
+
+  { text: 'Shop', icon: <ShopIcon />, path: `/guest/shop` },
+];
+
 const getSidebarItems = (currentusertype : string) => {
   switch (true) {
       case currentusertype.includes("seller"):
@@ -128,6 +135,9 @@ const getSidebarItems = (currentusertype : string) => {
           return TGosidebaritems;
       case currentusertype.includes("tourguide"):
           return TGsidebaritems;
+      case currentusertype.includes("guest"):
+          return guestsidebaritems;
+        
       default:
           return advertisersidebaritems;
   }

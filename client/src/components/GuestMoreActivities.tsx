@@ -16,7 +16,7 @@ import IActivity from '../custom_hooks/activities/activity_interface';
 import { useGetAllCategories } from '../custom_hooks/categoryandTagCRUD';
 import Activity from '../custom_hooks/activities/activity_interface';
 
-const MoreActivities: React.FC = () => {
+const GuestMoreActivities: React.FC = () => {
     const { sactivities, aloading, aerror } = useGetAllActivitiesS();
     const { data: catData } = useGetAllCategories(); 
 
@@ -284,4 +284,4 @@ const MoreActivities: React.FC = () => {
     );
 };
 
-export default MoreActivities;
+export default GuestMoreActivities;

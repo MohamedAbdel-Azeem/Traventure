@@ -349,4 +349,3 @@ console.log(currentActivity.feedback);
         </div>
     );
 };
-

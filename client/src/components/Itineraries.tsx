@@ -8,12 +8,11 @@ import useDeleteItinerary from "../custom_hooks/itineraries/useDeleteItinerary";
 import { useParams } from "react-router-dom";
 
 const Itineraries = () => {
+  const currentuser=location.pathname.split(`/`)[2];
   const [cards, setCards] = useState<Itinerary[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null); // To track which card is being deleted
-
   const { username } = useParams();
-
   const { itinerary, loading, error } = useGetItinerary(username);
   const { deleteItinerary, success } = useDeleteItinerary();
 
@@ -58,39 +57,30 @@ const Itineraries = () => {
             Create New Itinerary
           </p>
         </div>
-        {cards &&
-          cards.map((card: Itinerary) => (
-            <ItineraryCardCRUD
-              key={card._id}
-              _id={card._id}
-              title={card.title}
-              description={card.description}
-              price={card.price}
-              starting_Date={
-                card.starting_Date
-                  ? new Date(card.starting_Date).toLocaleDateString()
-                  : "N/A"
-              }
-              ending_Date={
-                card.ending_Date
-                  ? new Date(card.ending_Date).toLocaleDateString()
-                  : "N/A"
-              }
-              rating={card.rating}
-              language={card.language}
-              pickup_location={card.pickup_location}
-              dropoff_location={card.dropoff_location}
-              main_Picture={card.main_Picture}
-              plan={card.plan}
-              selectedTags={card.selectedTags}
-              onDelete={() => handleDelete(card._id)}
-              isDeleting={deletingId === card._id} // Pass the deleting state to the card
-              added_By={""}
-              total={0}
-              booked_By={[]}
-              accesibility={false}
-            />
-          ))}
+        {cards.map((card: Itinerary) => (
+          <ItineraryCardCRUD
+            key={card._id}
+            _id={card._id}
+            title={card.title}
+            description={card.description}
+            price={card.price}
+            starting_Date={card.starting_Date ? new Date(card.starting_Date).toISOString() : "N/A"}
+            ending_Date={card.ending_Date ? new Date(card.ending_Date).toISOString() : "N/A"}
+            rating={card.rating}
+            language={card.language}
+            pickup_location={card.pickup_location}
+            dropoff_location={card.dropoff_location}
+            main_Picture={card.main_Picture}
+            plan={card.plan}
+            selectedTags={card.selectedTags}
+            onDelete={() => handleDelete(card._id)}
+            isDeleting={deletingId === card._id} // Pass the deleting state to the card
+            added_By={""}
+            total={0}
+            booked_By={[]}
+            accesibility={false}
+          />
+        ))}
       </div>
       <ItineraryModal
         isOpen={isModalOpen}
