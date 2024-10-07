@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 
 const schema = mongoose.Schema;
 
-
 const placeSchema = new schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
@@ -17,7 +16,8 @@ const placeSchema = new schema({
     foreign: { type: Number, required: true },
     student: { type: Number, required: true },
   },
-  tags: [{ type: mongoose.Types.ObjectId, ref: "HistoricalTag" }],
-});
+  added_By: { type: mongoose.Types.ObjectId, required: true , ref:'Governer' },
+  historicalTags: [{ type: mongoose.Schema.Types.ObjectId, ref: "HistoricalTag"}],
+  });
 
 export default mongoose.model("Place", placeSchema);

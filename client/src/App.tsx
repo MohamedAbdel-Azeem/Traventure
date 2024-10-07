@@ -25,6 +25,7 @@ import MoreItineraries from "./components/MoreItineraries";
 import MorePlaces from "./components/MorePlaces";
 import Itineraries from "./components/Itineraries";
 import MoreActivities from "./components/MoreActivities";
+import HistoricalTags from "./components/HistoricalTags";
 
 function App() {
   return (
@@ -56,7 +57,7 @@ function App() {
           <Route path="/tourist/:username/locations" element={<MorePlaces />} />
           <Route path="/tourist/:username/itineraries" element={<MoreItineraries />} />
           <Route path="/tourismgovernor/:username" element={<TourismGovernorPage />} />
-          {/* <Route path="/tourismgovernor/:username/historicaltags" element={<HistoricalTags />} /> */}
+          <Route path="/tourismgovernor/:username/historicaltags" element={<HistoricalTags />} />
           <Route path="/tourismgovernor/:username/locations" element={<Locations />} />
           <Route path="/tourismgovernor/:username/categoriesandtags" element={<CT />} />
           <Route path="/advertiser/:username" element={<AdvertiserPage />} />

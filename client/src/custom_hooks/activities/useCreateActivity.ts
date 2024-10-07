@@ -10,66 +10,9 @@ interface Advertiser {
     websiteLink: string;
   }
   
-  // Seller interface
-  interface Seller {
-    _id: string;
-    username: string;
-    email: string;
-    password: string;
-    isAccepted: boolean;
-    __v: number;
-    description?: string;
-    name?: string;
-  }
-  
-  // Tour Guide interface
-  interface TourGuide {
-    _id: string;
-    username: string;
-    email: string;
-    password: string;
-    isAccepted: boolean;
-    previousWork: any[];
-    __v: number;
-    mobileNumber: string;
-    yearsOfExperience: number;
-  }
-  
-  // Tourist interface
-  interface Tourist {
-    _id: string;
-    username: string;
-    email: string;
-    password: string;
-    mobileNumber: string;
-    dateOfBirth: string;
-    nationality: string;
-    Occupation: string;
-    __v: number;
-  }
-  
-  // Admin interface
-  interface Admin {
-    _id: string;
-    username: string;
-    password: string;
-    __v: number;
-  }
-  
-  interface TourismGovernor {
-    _id: string;
-    username: string;
-    password: string;
-    __v: number;
-  }
   
   interface DataStructure {
     advertisers: Advertiser[];
-    sellers: Seller[];
-    tourGuides: TourGuide[];
-    tourists: Tourist[];
-    admins: Admin[];
-    governors: TourismGovernor[];
   }
 
 
