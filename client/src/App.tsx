@@ -32,26 +32,13 @@ function App() {
     <MantineProvider>
       <Router>
         <Routes>
-          <Route path="/admin/:id" element={<AdminPage />} />
-          <Route path="/tourguide/:username" element={<TourGuidePage />} />
-          <Route path="/tourismgovernor" element={<TourismGovernorPage />} />
-          <Route path="/advertiser" element={<AdvertiserPage />} />
-          <Route path="/tourist/:id" element={<TouristPage />} />
-          <Route path="/seller" element={<SellerPage />} />
-          <Route path="/admin-users" element={<Accounts />} />
-          <Route path="/admin/shop" element={<ShopPage type="Admin" />} />
-          <Route path="/tourist/shop" element={<ShopPage type="Tourist" />} />
-          <Route path="/seller/shop" element={<ShopPage type="Seller" />} />
-          <Route path="/tourismgovernor/locations" element={<Locations />} />
-          <Route path="/admin-locations" element={<Locations />} />
-          <Route path="/advertiser/activities" element={<Activities />} />
-          <Route path="/itineraries" element={<Accounts />} />
           <Route path="/" element={<SignIn />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin/:username" element={<AdminPage />} />
           <Route path="/admin/:username/users" element={<Accounts />} />
           <Route path="/admin/:username/shop" element={<ShopPage type="Admin"/>} />
           <Route path="/admin/:username/locations" element={<MorePlaces />} />
+          <Route path="/admin/:username/categoriesandtags" element={<CT />} />
           <Route path="/tourist/:username" element={<TouristPage />} />
           <Route path="/tourist/:username/shop" element={<ShopPage type="Tourist" />} />
           <Route path="/tourist/:username/locations" element={<MorePlaces />} />
@@ -59,7 +46,6 @@ function App() {
           <Route path="/tourismgovernor/:username" element={<TourismGovernorPage />} />
           <Route path="/tourismgovernor/:username/historicaltags" element={<HistoricalTags />} />
           <Route path="/tourismgovernor/:username/locations" element={<Locations />} />
-          <Route path="/tourismgovernor/:username/categoriesandtags" element={<CT />} />
           <Route path="/advertiser/:username" element={<AdvertiserPage />} />
           <Route path="/advertiser/:username/locations" element={<MorePlaces />} />
           <Route path="/advertiser/:username/activities" element={<Activities />} />
@@ -71,16 +57,9 @@ function App() {
           <Route path="/landing" element={<LandingPage />} />
           <Route path="/touristprofile/:username" element={<Tourist_Profile />} />
           <Route path="/sellerprofile/:username" element={<Seller_Profile />} />
-            <Route
-            path="/tourguideprofile/:username"
-            element={<TourGuide_Profile />}
-          />
-            <Route
-            path="/advertiserprofile/:username"
-            element={<Advertiser_Profile />}
-          />
-            <Route path="/CategoriesandTags" element={<CT />} />
-            <Route path="/itinerary/:id" element={<ItineraryDetails />} />
+          <Route path="/tourguideprofile/:username" element={<TourGuide_Profile />}/>
+          <Route path="/advertiserprofile/:username" element={<Advertiser_Profile />}/>
+          <Route path="/itinerary/:id" element={<ItineraryDetails />} />
           <Route path="/tourist-itinerary/:username" element={<ItineraryDetailsTourist />} />
           <Route path="/more-itineraries" element={<MoreItineraries />} />
           <Route path="/more-places" element={<MorePlaces />} />

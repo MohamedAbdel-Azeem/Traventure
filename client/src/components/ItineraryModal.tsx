@@ -19,7 +19,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useGetAllTags } from "../custom_hooks/categoryandTagCRUD";
-import useGetPlace from "../custom_hooks/places/useGetPlace";
+import {useGetPlace} from "../custom_hooks/places/useGetPlace";
 import { useGetAllActivities } from "../custom_hooks/activities/useGetActivities";
 import IActivityTitleAndId from "../custom_hooks/activities/activity_title_id";
 import { useGetAllActivitiesTitleAndId } from "../custom_hooks/activities/useGetActivitiesTitlesAndID";
