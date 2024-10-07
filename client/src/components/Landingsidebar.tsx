@@ -40,7 +40,7 @@ const touristsidebaritems =
 const guestsidebaritems =
 [
   { text: 'Home', icon: <HomeIcon />, path: '/guest-page' },
-  { text: 'Shop', icon: <ShopIcon />, path: '/GuestShop' },
+  { text: 'Shop', icon: <ShopIcon />, path: '/guest/shop' },
 ];
 const advertisersidebaritems =
 [

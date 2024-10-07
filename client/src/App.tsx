@@ -74,7 +74,7 @@ function App() {
           <Route path="/guest/more-itineraries" element={<GuestMoreItineraries />} />
            <Route path="/guest/more-places" element={<GuestMorePlaces />} />
            <Route path="/guest/more-activities" element={<GuestMoreActivities />} />  
-           <Route path="/GuestShop" element={<GuestShop type={"Tourist"} />} />
+           <Route path="/guest/shop" element={<GuestShop type={"Tourist"} />} />
       
 
 
