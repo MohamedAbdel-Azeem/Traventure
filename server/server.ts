@@ -16,6 +16,7 @@ import tourGuideRouter from "./Routes/TourGuide";
 import touristRouter from "./Routes/Tourist";
 import LoginRouter from "./Routes/Login";
 import preferenceTagsRouter from "./Routes/preferenceTags";
+import historicalTagsRouter from "./Routes/historicalTags";
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use("/api/tourist", touristRouter);
 app.use("/api/governer", governerRouter);
 app.use("/api/itinerary", itineraryRouter);
 app.use("/api/login", LoginRouter);
+app.use("/api/historicalTags", historicalTagsRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Traventure API");
