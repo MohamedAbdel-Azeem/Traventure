@@ -69,8 +69,8 @@ function App() {
           <Route path="/itinerary/:id" element={<ItineraryDetails />} /> 
           <Route path="/guest-page" element={<GuestPage />} />
           <Route path="/guest-more-itineraries" element={<GuestMoreItineraries />} />
-          <Route path="/guest-more-places" element={<GuestMorePlaces />} />
-          <Route path="/guest-more-activities" element={<GuestMoreActivities />} />
+          {/* <Route path="/guest-more-places" element={<GuestMorePlaces />} />
+          <Route path="/guest-more-activities" element={<GuestMoreActivities />} /> */}
 
 
 
