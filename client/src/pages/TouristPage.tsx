@@ -2,11 +2,9 @@ import Navbar from "../components/navbar";
 import { useState } from "react";
 import Dashboard from "../components/Admin/Dashboard";
 import ImprovedSidebar from "../components/ImprovedSidebar";
-import { useParams } from "react-router-dom";
 const TouristPage = () => {
 
     
-  const { id } = useParams();
     return (
         <div>
             <Navbar

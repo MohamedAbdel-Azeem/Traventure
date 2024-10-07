@@ -40,8 +40,9 @@ const schema = z
       ),
     mobileNumber: z
       .string()
-      .min(10, "Mobile number must be at least 10 digits")
-      .regex(/^\+?\d+$/, "Mobile number must be numeric"),
+      // .min(10, "Mobile number must be at least 10 digits")
+      // .regex(/^\+?\d+$/, "Mobile number must be numeric")
+      ,
     nationality: z
       .string()
       .min(2, "Nationality must be at least 2 characters long"),
