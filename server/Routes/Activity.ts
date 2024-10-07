@@ -1,7 +1,8 @@
-import { Request, Response, Router } from "express";
+import { Request, response, Response, Router } from "express";
 import {validationResult , matchedData} from "express-validator"
 import { addActivityValidator,updateActivityValidator } from "../utils/express-validator/activityValidator";
-import { addActivity, getActivities, deleteActivity,updateActivity } from "../Model/Queries/activity_queries";
+import { addActivity, getActivities, deleteActivity,updateActivity, getActivitiesid } from "../Model/Queries/activity_queries";
+import Advertiser from "../Model/Schemas/Advertiser";
 const router = Router();
 
 router.post("/add",addActivityValidator,async (req: Request, res: Response)=>{
@@ -10,14 +11,12 @@ router.post("/add",addActivityValidator,async (req: Request, res: Response)=>{
         return res.status(400).json({errors : errors.array()});
     }
     const activityData = matchedData(req);
-
     try{
         const newActivity = await addActivity(activityData);
-    
+        
         res.status(201).send("Activity added successfully");
     }
     catch(err){
-       console.log(err);
         res.status(500).send("error creating activity");
     }
 });
@@ -32,6 +31,33 @@ router.get("/",async (req: Request, res: Response)=>{
         res.status(500).send("error getting activities");
     }
 });
+
+// router.get("/:id",async (req: Request, res: Response)=>{
+//     const id = req.params.id;
+//     try{
+//         const activities = await getActivitiesid(id);
+//         res.status(200).send(activities);
+//     }
+//     catch(err){
+//         res.status(500).send("error getting activities");
+//     }
+// });
+
+
+router.get("/:username", async (req: Request, res: Response) => {
+    try {
+      const advertiser = await Advertiser.findOne({ username: req.params.username });
+      if (!advertiser) {
+        return res.status(400).send("Advertiser not found");
+      }
+      const advertiser_Id  = (advertiser._id as string);
+      const products = await getActivitiesid(advertiser_Id );
+      res.status(200).send(products);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  })
+  
 
 router.delete("/delete/:id",async (req: Request, res: Response)=>{
     try{

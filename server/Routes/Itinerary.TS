@@ -3,11 +3,15 @@ import { matchedData, validationResult } from "express-validator";
 import {
   addItinerary,
   deleteItinerary,
-  getItinerary, updateItinerary
+  getItinerary,
+  updateItinerary,
+  getAllItinerary,
 } from "..//Model//Queries//itinerary_queries";
 import {
-  itineraryAddValidator, itineraryUpdateValidator
+  itineraryAddValidator,
+  itineraryUpdateValidator,
 } from "..//utils//express-validator//itineraryValidator";
+import TourGuide from "../Model/Schemas/TourGuide";
 
 const router = Router();
 
@@ -17,6 +21,7 @@ router.post(
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log(errors.array());
       return res.status(400).json({ errors: errors.array() });
     }
     const itinerary_Data = matchedData(req);
@@ -29,16 +34,24 @@ router.post(
   }
 );
 
-router.get("/:id", async (req: Request, res: Response) => {
+router.get("/:username", async (req: Request, res: Response) => {
   try {
-    const tour_guide_Id = req.params.id;
-    const products = await getItinerary(tour_guide_Id);
+    const products = await getItinerary(req.params.username);
+    res.status(200).send(products);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
+router.get("/", async (req: Request, res: Response) => {
+  try {
+    const products = await getAllItinerary();
     res.status(200).send(products);
   } catch (error) {
     res.status(500).send(error);
   }
-})
-
+});
 
 router.patch(
   "/update/:id",

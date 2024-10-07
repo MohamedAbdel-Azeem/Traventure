@@ -3,8 +3,6 @@ import TouristTable from "./TouristTable"
 import Admin_TourismGovernorTable from "./Admin_TourismGovernorTable"
 import ImprovedSidebar from '../ImprovedSidebar';
 import TourGuide_Advertiser_SellerTable from './TourGuide_Advertiser_SellerTable';
-import axios, { AxiosError } from 'axios';
-import React from 'react';
 import { useGetAllUsers } from '../../custom_hooks/tourist_fetchandelete';
 
 const Accounts = () => {
@@ -12,7 +10,7 @@ const Accounts = () => {
     return (
     <div className="w-full flex items-center justify-center">
         <div className="w-[1500px]">
-        <ImprovedSidebar title="Admin"/>
+        <ImprovedSidebar/>
             <div className="my-8">
                 <TouristTable />
             </div>

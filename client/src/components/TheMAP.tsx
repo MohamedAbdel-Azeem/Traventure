@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 interface TheMAPProps {
   lat?: number;
   long?: number;
-  width?: string;
+  className?: string;
   setLatitude: (lat: number) => void;
   setLongitude: (long: number) => void;
 }
@@ -14,31 +14,25 @@ const TheMAP: React.FC<TheMAPProps> = (props) => {
   TheMAP.propTypes = {
     lat: PropTypes.number,
     long: PropTypes.number,
-    width: PropTypes.string,
+    className: PropTypes.string,
     setLatitude: PropTypes.func.isRequired,
     setLongitude: PropTypes.func.isRequired,
   };
   function handleMapChange(long:number, lat:number){
-    console.log("interimLAT",lat);
-    console.log("interimLONG",long);
     setLongitude(long);
     setLatitude(lat);
     props.setLongitude(long);
     props.setLatitude(lat);
-    }
-  const width = props.width;
-  const actual = width ? width : "311px";
+  }
+  const className = props.className;
   const lat = props.lat ?? 0;
-  console.log("LAT", lat);
   const long = props.long ?? 0;
-  console.log("LONG", long);
 
   const snapshotLatitude = lat;
   const snapshotLongitude = long;
 
   const [latitude, setLatitude] = useState<number>(snapshotLatitude);
   const [longitude, setLongitude] = useState<number>(snapshotLongitude);
-  console.log("COORDS", latitude, longitude);
 
 
 
@@ -61,16 +55,14 @@ const TheMAP: React.FC<TheMAPProps> = (props) => {
     draggableMarker.addListener("dragend", (event) => {
       const position = draggableMarker.position;
       handleMapChange(position.lng, position.lat);
-      console.log(latitude, longitude);
       });
   }
   initMap();
+  
+  return (<div> 
+   <div id="map" className={`z-1 ${className}`}/>
+   </div>
 
-
-  return (
-    <div>
-          <div id="map"  className="z-1" style={{height:"211px", width:actual}}></div>
-    </div>
   );
 };
 

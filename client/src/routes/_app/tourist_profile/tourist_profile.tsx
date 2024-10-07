@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useForm, Controller, set } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { TouristProfileData } from './tourist_profile_data';
-import {usePatchUserProfile} from '../../../custom_hooks/updateTouristProfile';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useForm, Controller, set } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { TouristProfileData } from "./tourist_profile_data";
+import { usePatchUserProfile } from "../../../custom_hooks/updateTouristProfile";
 
 // type TouristSchemaType = {
 //   username: string;
@@ -22,12 +22,11 @@ interface TouristProfileProps {
   tourist: TouristProfileData;
 }
 
-
 const schema = z.object({
-  username: z.string().min(1, 'Username is required'),
-  email: z.string().email('Invalid email address'),
-  mobileNumber: z.string().min(1, 'Mobile number is required'),
-  nationality: z.string().min(1, 'Nationality is required'),
+  username: z.string().min(1, "Username is required"),
+  email: z.string().email("Invalid email address"),
+  mobileNumber: z.string().min(1, "Mobile number is required"),
+  nationality: z.string().min(1, "Nationality is required"),
   dateOfBirth: z.string().refine((val) => {
     const today = new Date();
     const dob = new Date(val);
@@ -37,27 +36,30 @@ const schema = z.object({
       return age - 1 >= 18;
     }
     return age >= 18;
-  }, 'You must be 18 years or older'),
-  Occupation: z.string().min(1, 'Occupation is required'),
+  }, "You must be 18 years or older"),
+  Occupation: z.string().min(1, "Occupation is required"),
 });
-export type TouristProfileUpdate= z.infer<typeof schema>;
+export type TouristProfileUpdate = z.infer<typeof schema>;
 
 const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
-  const [currentTourist,setCurrentTourist ] = useState(tourist);
-  const[apiBody, setApiBody] = useState({});
-  const[apiUsername, setApiUsername] = useState('');
-  const response =usePatchUserProfile(apiBody, apiUsername);
-
+  const [currentTourist, setCurrentTourist] = useState(tourist);
+  const [apiBody, setApiBody] = useState({});
+  const [apiUsername, setApiUsername] = useState("");
+  const response = usePatchUserProfile(apiBody, apiUsername);
 
   //  tourist = usePatchUserProfile(tourist, tourist.username).response as TouristProfileData;
 
   // Define the Zod schema for form validation
   // Initialize useForm with default values from props
-  const { control, handleSubmit, formState: { errors } } = useForm<TouristProfileData>({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TouristProfileData>({
     resolver: zodResolver(schema),
-    defaultValues:{
+    defaultValues: {
       username: currentTourist.username,
       email: currentTourist.email,
       mobileNumber: currentTourist.mobileNumber,
@@ -69,18 +71,12 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
 
   // Handle form submission (save edited data)
   const onSubmit = (data: TouristProfileData) => {
-
-    
-    console.log('Saved data:', data);
+    console.log("Saved data:", data);
     setIsEditing(false);
     setApiBody(data);
     setApiUsername(data.username);
 
     setCurrentTourist(data);
-
-
-   
-    
   };
 
   const toggleEdit = () => {
@@ -88,18 +84,18 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
   };
 
   const handleLogout = () => {
-    navigate('/');
+    navigate("/");
   };
 
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-gray-900"
       style={{
-        backgroundImage: `url('src/assets/mtn.jpg')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundBlendMode: 'overlay',
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        backgroundImage: `url('/src/assets/mtn.jpg')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundBlendMode: "overlay",
+        backgroundColor: "rgba(0, 0, 0, 0.7)",
       }}
     >
       <div className="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl p-8 backdrop-blur-lg bg-opacity-90">
@@ -123,15 +119,21 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
                   )}
                 />
               ) : (
-                <h2 className="text-4xl font-extrabold text-purple-700">{currentTourist.username}</h2>
+                <h2 className="text-4xl font-extrabold text-purple-700">
+                  {currentTourist.username}
+                </h2>
               )}
-              {errors.username && <p className="text-red-600">{errors.username.message}</p>}
+              {errors.username && (
+                <p className="text-red-600">{errors.username.message}</p>
+              )}
             </div>
           </div>
 
           <div className="mt-8 grid grid-cols-2 gap-6">
             <div className="flex flex-col">
-              <label className="text-lg font-semibold text-gray-700">Email:</label>
+              <label className="text-lg font-semibold text-gray-700">
+                Email:
+              </label>
               {isEditing ? (
                 <Controller
                   name="email"
@@ -147,11 +149,15 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
               ) : (
                 <p className="text-gray-800 text-lg">{currentTourist.email}</p>
               )}
-              {errors.email && <p className="text-red-600">{errors.email.message}</p>}
+              {errors.email && (
+                <p className="text-red-600">{errors.email.message}</p>
+              )}
             </div>
 
             <div className="flex flex-col">
-              <label className="text-lg font-semibold text-gray-700">Mobile Number:</label>
+              <label className="text-lg font-semibold text-gray-700">
+                Mobile Number:
+              </label>
               {isEditing ? (
                 <Controller
                   name="mobileNumber"
@@ -164,13 +170,19 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
                   )}
                 />
               ) : (
-                <p className="text-gray-800 text-lg">{currentTourist.mobileNumber}</p>
+                <p className="text-gray-800 text-lg">
+                  {currentTourist.mobileNumber}
+                </p>
               )}
-              {errors.mobileNumber && <p className="text-red-600">{errors.mobileNumber.message}</p>}
+              {errors.mobileNumber && (
+                <p className="text-red-600">{errors.mobileNumber.message}</p>
+              )}
             </div>
 
             <div className="flex flex-col">
-              <label className="text-lg font-semibold text-gray-700">Nationality:</label>
+              <label className="text-lg font-semibold text-gray-700">
+                Nationality:
+              </label>
               {isEditing ? (
                 <Controller
                   name="nationality"
@@ -183,13 +195,19 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
                   )}
                 />
               ) : (
-                <p className="text-gray-800 text-lg">{currentTourist.nationality}</p>
+                <p className="text-gray-800 text-lg">
+                  {currentTourist.nationality}
+                </p>
               )}
-              {errors.nationality && <p className="text-red-600">{errors.nationality.message}</p>}
+              {errors.nationality && (
+                <p className="text-red-600">{errors.nationality.message}</p>
+              )}
             </div>
 
             <div className="flex flex-col">
-              <label className="text-lg font-semibold text-gray-700">Date of Birth:</label>
+              <label className="text-lg font-semibold text-gray-700">
+                Date of Birth:
+              </label>
               {isEditing ? (
                 <Controller
                   name="dateOfBirth"
@@ -203,13 +221,19 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
                   )}
                 />
               ) : (
-                <p className="text-gray-800 text-lg">{currentTourist.dateOfBirth.split("T00:00:00.000Z")}</p>
+                <p className="text-gray-800 text-lg">
+                  {currentTourist.dateOfBirth.split("T00:00:00.000Z")}
+                </p>
               )}
-              {errors.dateOfBirth && <p className="text-red-600">{errors.dateOfBirth.message}</p>}
+              {errors.dateOfBirth && (
+                <p className="text-red-600">{errors.dateOfBirth.message}</p>
+              )}
             </div>
 
             <div className="flex flex-col">
-              <label className="text-lg font-semibold text-gray-700">Occupation:</label>
+              <label className="text-lg font-semibold text-gray-700">
+                Occupation:
+              </label>
               {isEditing ? (
                 <Controller
                   name="Occupation"
@@ -222,17 +246,25 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
                   )}
                 />
               ) : (
-                <p className="text-gray-800 text-lg">{currentTourist.Occupation}</p>
+                <p className="text-gray-800 text-lg">
+                  {currentTourist.Occupation}
+                </p>
               )}
-              {errors.Occupation && <p className="text-red-600">{errors.Occupation.message}</p>}
+              {errors.Occupation && (
+                <p className="text-red-600">{errors.Occupation.message}</p>
+              )}
             </div>
           </div>
 
           <div className="mt-8 flex justify-center items-center bg-purple-50 py-3 px-4 rounded-lg shadow-md border border-purple-200 max-w-md mx-auto">
             <div className="flex items-center space-x-4">
               <div className="flex flex-col items-center">
-                <label className="text-xl font-semibold text-purple-700">Wallet Balance:</label>
-                <p className="text-4xl font-bold text-purple-900">${currentTourist.wallet}</p>
+                <label className="text-xl font-semibold text-purple-700">
+                  Wallet Balance:
+                </label>
+                <p className="text-4xl font-bold text-purple-900">
+                  ${currentTourist.wallet}
+                </p>
               </div>
             </div>
           </div>

@@ -39,9 +39,8 @@ const touristsidebaritems =
 ];
 const guestsidebaritems =
 [
-  { text: 'Home', icon: <HomeIcon />, path: '/LandingPage' },
+  { text: 'Home', icon: <HomeIcon />, path: '/guest-page' },
   { text: 'Shop', icon: <ShopIcon />, path: '/guest/shop' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/guest/locations' },
 ];
 const advertisersidebaritems =
 [
@@ -54,6 +53,7 @@ const sellersidebaritems =
   { text: 'Home', icon: <HomeIcon />, path: '/seller' },
   { text: 'Shop', icon: <ShopIcon />, path: '/seller/shop' },
 ];
+
 
 
 
@@ -121,25 +121,19 @@ interface ImprovedSidebarProps {
 const getSidebarItems = (title : string) => {
   switch (true) {
       case title.includes("Seller"):
-        console.log("Seller");
-          return sellersidebaritems;
+        return sellersidebaritems;
       case title.includes("Admin"):
-          console.log("Admin");
-          return adminsidebaritems;
+        return adminsidebaritems;
       case title.includes("Tourist"):
-          console.log("Tourist");
-          return touristsidebaritems;
+        return touristsidebaritems;
       case title.includes("Tourism Governor"):
-          console.log("Tourism Governor");
-          return TGosidebaritems;
+        return TGosidebaritems;
           case title.includes("Guest"):
-          console.log("Guest");
-          return guestsidebaritems;
+        return guestsidebaritems;
       case title.includes("Tour Guide"):
-          console.log("Tour Guide");
-          return TGsidebaritems;
+        return TGsidebaritems;
       default:
-          return advertisersidebaritems;
+        return advertisersidebaritems;
   }
 };
 

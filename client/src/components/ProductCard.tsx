@@ -3,16 +3,18 @@ import './ProductCard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faCartShopping, faPencil } from '@fortawesome/free-solid-svg-icons';
 import { ACTUALProduct } from './data/ProductData';
-import { TextField } from '@mui/material';
+import { Rating, TextField } from '@mui/material';
 import useEditProduct from "../custom_hooks/products/useeditProduct";
+import { useLocation } from 'react-router-dom';
 
 interface ProductCardProps {
     product: ACTUALProduct;
     productId: string;
     type:string;
 }
-
 const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
+    const currentuser = useLocation().pathname.split('/')[2];
+
     const [showPopup, setShowPopup] = useState(false);
     const [currentProduct, setCurrentProduct] = useState<ACTUALProduct>(product);
     const [editedProduct, setEditedProduct] = useState<ACTUALProduct>(currentProduct);
@@ -43,16 +45,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
       };
     
       const averageRating = calculateAverageRating(product);
+      
+      
       const [isEditMode, setIsEditMode] = useState(false);
-    const [apiBody, setApiBody] = useState<ACTUALProduct | null>(currentProduct);
-      const handleEditClick = () => {
+          const [apiBody, setApiBody] = useState<ACTUALProduct | null>(currentProduct);
+      
+    
+    const handleEditClick = () => {
         setIsEditMode(true);
       };
     
       const handleChange = () => {
         setCurrentProduct(editedProduct);
         setApiBody(editedProduct);
-        console.log(editedProduct);
     };
 
     useEditProduct(currentProduct._id,apiBody);
@@ -86,6 +91,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
             name: input,
           }));
       }
+      const changeUrl = (input : string) => {
+        setEditedProduct(prevProduct => ({
+            ...prevProduct,
+            imageUrl: input,
+          }));
+      }
 
 
 
@@ -101,19 +112,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
             <div className="card-body">
                 <h3 className="product-title">{currentProduct.name}</h3>
                 <p className="product-description">{getTruncatedDescription(currentProduct.description)}</p>
-                <div className="card-footer">
+                <div className="flex flex-row justify-between items-center">
                     <span className="product-price">${currentProduct.price}</span>
-                    <span className="product-rating">
-                        {Array.from({ length: 5 }, (v, i) => {
-                            if (i < Math.floor(averageRating)) {
-                                return '★'; // Full star
-                            } else if (i < averageRating) {
-                                return '☆'; // Half star (if rating is decimal)
-                            }
-                            return '☆'; // Empty star
-                        })}
-                    </span>
-                    <button onClick={togglePopup} className="view-more-button">
+                        <Rating disabled name="rating" value={averageRating} precision={0.1} />
+                    <button onClick={togglePopup} className="view-more-button w-[70px]">
                         View more
                     </button>
                 </div>
@@ -122,19 +124,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
             {showPopup && (
                 <div className="popup-overlay" onClick={togglePopup}>
                     <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-                        <div className="carousel">
-                            {currentProduct.imageUrl? (
-                                <>
-                                    <img
-                                        src={currentProduct.imageUrl}
-                                        alt="Product"
-                                        className="popup-image"
-                                    />
-                                </>
-                            ) : (
-                                <div className="no-image">No images</div>
-                            )}
-                        </div>
+                        {isEditMode?
+                            <TextField
+                                value={editedProduct.imageUrl}
+                                onChange={(e) => 
+                                changeUrl(e.target.value)}  
+                                sx={{'& .MuiInputBase-input': {
+                                    textAlign: 'center',
+                                    padding: '3.6px',
+                                }, width: '100%', height: '24px', marginBottom: '35px' }}  label="Name"/>: <img
+                                src={currentProduct.imageUrl}
+                                alt="Product"
+                                className="popup-image"
+                        />}
                         <div className="popup-flex flex flex-col">
                                 {isEditMode?<TextField
                                     multiline
@@ -178,7 +180,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
                                 :<p><strong>Price:</strong> ${currentProduct.price}</p>}
                                 
                                <p><strong>Seller:</strong> {
-                               currentProduct.externalseller?currentProduct.externalseller:currentProduct.seller.name
+                               currentProduct.externalseller?currentProduct.externalseller:currentProduct.seller.username
                                }</p>
                                 
                                 {isEditMode?<TextField 
@@ -191,7 +193,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
                             {type.includes("Tourist")?
                             <button className="add-to-cart-button">
                                 <FontAwesomeIcon icon={faCartShopping} /> Add to Cart
-                            </button>:
+                            </button>:(type.includes("Admin")||
+                            (type.includes("Seller") && currentProduct.seller && currentProduct.seller.username===currentuser)
+                        )?
+                            
                     <button title="edit" onClick={() => {
                         if (!isEditMode) { handleEditClick(); }
                          else { handleSaveClick(); }}} className="editBtn mr-[50px]">
@@ -200,7 +205,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
                         d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"
                         ></path>
                     </svg>
-                    </button>}
+                    </button>:<></>
+                    }
                         </div>
                         <button title="closepopup" onClick={togglePopup} className="close-popup">
                             <FontAwesomeIcon icon={faXmark} />

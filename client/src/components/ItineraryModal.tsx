@@ -19,7 +19,8 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useGetAllTags } from "../custom_hooks/categoryandTagCRUD";
-import useGetPlace from "../custom_hooks/places/useGetPlace";
+import {useGetPlace} from "../custom_hooks/places/useGetPlace";
+
 import { useGetAllActivities } from "../custom_hooks/activities/useGetActivities";
 import IActivityTitleAndId from "../custom_hooks/activities/activity_title_id";
 import { useGetAllActivitiesTitleAndId } from "../custom_hooks/activities/useGetActivitiesTitlesAndID";
@@ -78,6 +79,7 @@ interface ItineraryModalProps {
 // ];
 
 const timeUnits: string[] = ["sec","hours","days","month","years","min"];
+const accessibilities: string[] = ["true", "false"];
 
 
 const ItineraryModal: React.FC<ItineraryModalProps> = ({
@@ -111,10 +113,8 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({
     language: "",
     pickup_location: "",
     dropoff_location: "",
-    accesibility: false, //TODO: Add this to the form
+    accesibility: false, 
     total:0,
- 
-
   });
 
   
@@ -440,6 +440,32 @@ useCreateItinerary(newItinerary);
             }
             sx={{ mb: 2 }}
           />
+
+           <FormControl fullWidth>
+                    <InputLabel
+                      id={`accessibility-label`}
+                    >
+                      Accessibility
+                    </InputLabel>
+                    <Select
+                        labelId={`accessibility-label`}
+                        value={formData.accesibility}
+                        defaultValue={false}
+                        onChange={(e) =>
+                             setFormData({ ...formData, accesibility: e.target.value as boolean })    
+                        }
+                    >
+                      {accessibilities.map((accessibility) => (
+                        <MenuItem key={accessibility} value={accessibility}
+                       
+                        
+                        >
+                          {accessibility}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                      
+                  </FormControl>
 
           <TextField
             name="pickupLocation"

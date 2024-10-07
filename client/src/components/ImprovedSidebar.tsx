@@ -9,50 +9,8 @@ import ShopIcon from '@mui/icons-material/Shop';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ActivityIcon from '@mui/icons-material/LocalActivity';
-
+import CategoryIcon from '@mui/icons-material/Category';
 const drawerWidth = 240;
-
-const adminsidebaritems =
-[
-  { text: 'Home', icon: <HomeIcon />, path: '/admin' },
-  { text: 'Shop', icon: <ShopIcon />, path: '/admin/shop' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/admin/locations' },
-  { text: 'Account Management', icon: <AccountCircleIcon />, path: '/admin/users' },
-  { text: 'Activity Management', icon: <ActivityIcon />, path: '/activities' },
-];
-const TGsidebaritems =
-[
-  { text: 'Home', icon: <HomeIcon />, path: '/tourguide' },
-  { text: 'Shop', icon: <ShopIcon />, path: '/shop' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/locations' },
-  { text: 'Activity Management', icon: <ActivityIcon />, path: '/advertiser/activities' },
-];
-const TGosidebaritems =
-[
-  { text: 'Home', icon: <HomeIcon />, path: '/tourismgovernor' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/tourismgovernor/locations' },
-];
-const touristsidebaritems =
-[
-  { text: 'Home', icon: <HomeIcon />, path: '/tourist' },
-  { text: 'Shop', icon: <ShopIcon />, path: '/tourist/shop' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/tourist/locations' },
-  { text: 'Activity Management', icon: <ActivityIcon />, path: '/tourist/activities' },
-];
-const advertisersidebaritems =
-[
-  { text: 'Home', icon: <HomeIcon />, path: '/advertiser' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/advertiser/locations' },
-  { text: 'Activity Management', icon: <ActivityIcon />, path: '/advertiser/activities' },
-];
-const sellersidebaritems =
-[
-  { text: 'Home', icon: <HomeIcon />, path: '/seller' },
-  { text: 'Shop', icon: <ShopIcon />, path: '/seller/shop' },
-];
-
-
-
 
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -81,7 +39,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'flex-end',
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
@@ -111,43 +68,93 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 interface ImprovedSidebarProps {
-  title: string;
   className?: string;
 }
 
-const getSidebarItems = (title : string) => {
+
+export default function ImprovedSidebar({ className = "" }: ImprovedSidebarProps) {
+  
+const location = useLocation();
+const currentuser=location.pathname.split(`/`)[2];
+const currentusertype=location.pathname.split(`/`)[1];
+
+const adminsidebaritems =
+[
+  { text: 'Home', icon: <HomeIcon />, path: `/admin/${currentuser}` },
+  { text: 'Shop', icon: <ShopIcon />, path: `/admin/${currentuser}/shop` },
+  { text: 'Locations', icon: <LocationOnIcon />, path: `/admin/${currentuser}/locations` },
+  { text: 'Account Management', icon: <AccountCircleIcon />, path: `/admin/${currentuser}/users` },
+  { text: 'Cats & Tags', icon: <CategoryIcon />, path: `/admin/${currentuser}/categoriesandtags` },
+];
+const TGsidebaritems =
+[
+  { text: 'Home', icon: <HomeIcon />, path: `/tourguide/${currentuser}` },
+  { text: 'Locations', icon: <LocationOnIcon />, path: `/tourguide/${currentuser}/locations` },
+  { text: 'Itinerary Management', icon: <ActivityIcon />, path: `/tourguide/${currentuser}/itineraries` },
+];
+const TGosidebaritems =
+[
+  { text: 'Home', icon: <HomeIcon />, path: `/tourismgovernor/${currentuser}` },
+  { text: 'Locations', icon: <LocationOnIcon />, path: `/tourismgovernor/${currentuser}/locations` },
+  { text: 'Historical Tags', icon: <ActivityIcon />, path: `/tourismgovernor/${currentuser}/historicaltags` },
+];
+const touristsidebaritems =
+[
+  { text: 'Home', icon: <HomeIcon />, path: `/tourist/${currentuser}` },
+  { text: 'Shop', icon: <ShopIcon />, path: `/tourist/${currentuser}/shop` },
+  { text: 'Locations', icon: <LocationOnIcon />, path: `/tourist/${currentuser}/locations` },
+];
+const advertisersidebaritems =
+[
+  { text: 'Home', icon: <HomeIcon />, path: `/advertiser/${currentuser}` },
+  { text: 'Locations', icon: <LocationOnIcon />, path: `/advertiser/${currentuser}/locations` },
+  { text: 'Activity Management', icon: <ActivityIcon />, path: `/advertiser/${currentuser}/activities` },
+];
+const sellersidebaritems =
+[
+  { text: 'Home', icon: <HomeIcon />, path: `/seller/${currentuser}` },
+  { text: 'Shop', icon: <ShopIcon />, path: `/seller/${currentuser}/shop` },
+];
+
+const guestsidebaritems =
+[
+  { text: 'Home', icon: <HomeIcon />, path: `/guest-page` },
+
+  { text: 'Shop', icon: <ShopIcon />, path: `/guest/shop` },
+];
+
+const getSidebarItems = (currentusertype : string) => {
   switch (true) {
-      case title.includes("Seller"):
-        console.log("Seller");
+      case currentusertype.includes("seller"):
           return sellersidebaritems;
-      case title.includes("Admin"):
-          console.log("Admin");
+      case currentusertype.includes("admin"):
           return adminsidebaritems;
-      case title.includes("Tourist"):
-          console.log("Tourist");
+      case currentusertype.includes("tourist"):
           return touristsidebaritems;
-      case title.includes("Tourism Governor"):
-          console.log("Tourism Governor");
+      case currentusertype.includes("tourismgovernor"):
           return TGosidebaritems;
-      case title.includes("Tour Guide"):
-          console.log("Tour Guide");
+      case currentusertype.includes("tourguide"):
           return TGsidebaritems;
+      case currentusertype.includes("guest"):
+          return guestsidebaritems;
+        
       default:
           return advertisersidebaritems;
   }
 };
 
-export default function ImprovedSidebar({ title = "", className = "" }: ImprovedSidebarProps) {
+
   const [open, setOpen] = React.useState(false);
     const navigate = useNavigate();
-    const location = useLocation();
 
-  const whichoptions = getSidebarItems(title);
+  const whichoptions = getSidebarItems(currentusertype);
 
   const handleDrawer = () => {
     setOpen(!open);
   };
-
+  if(currentusertype==="seller"){
+    return;
+  }
   return (
     <Box sx={{ display: 'flex' }} className={className}>
       <CssBaseline />

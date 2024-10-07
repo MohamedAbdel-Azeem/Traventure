@@ -33,3 +33,4 @@ export const useGetAllActivitiesTitleAndId = () => {
 
   return { activities, loading, error };
 };
+

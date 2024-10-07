@@ -12,8 +12,8 @@ const Itineraries = () => {
   const [cards, setCards] = useState<Itinerary[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null); // To track which card is being deleted
- console.log("current user",currentuser);
-  const { itinerary, loading, error } = useGetItinerary("66fef41da8c345e4fdaa06e5");
+  const { username } = useParams();
+  const { itinerary, loading, error } = useGetItinerary(username);
   const { deleteItinerary, success } = useDeleteItinerary();
 
   useEffect(() => {
@@ -46,16 +46,16 @@ const Itineraries = () => {
   if (error) {
     return <div>Error: {error}</div>;
   }
-
   return (
     <div className="flex justify-center">
-      <ImprovedSidebar title="Admin" />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 p-4">
         <div
           className="flex w-full h-[334px] bg-[#D9D9D9] rounded-[11px] m-4 hover:bg-[#c0c0c0] transition duration-300 cursor-pointer items-center justify-center shadow-lg"
           onClick={() => setIsModalOpen(true)}
         >
-          <p className="m-auto text-[24px] text-center font-bold">Create New Itinerary</p>
+          <p className="m-auto text-[24px] text-center font-bold">
+            Create New Itinerary
+          </p>
         </div>
         {cards.map((card: Itinerary) => (
           <ItineraryCardCRUD
@@ -82,7 +82,11 @@ const Itineraries = () => {
           />
         ))}
       </div>
-      <ItineraryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSubmit={handleCreate} />
+      <ItineraryModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleCreate}
+      />
     </div>
   );
 };

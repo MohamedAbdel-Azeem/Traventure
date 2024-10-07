@@ -1,9 +1,7 @@
 import Navbar from "../components/navbar";
-import { useState } from "react";
 import ImprovedSidebar from "../components/ImprovedSidebar";
 import TGoDashboard from "../components/TourismGovernor/TGoDashboard";
 const TourismGovernorPage = () => {
-   const [content, setContent] = useState(<TGoDashboard/>);
 
 
     return (
@@ -11,14 +9,14 @@ const TourismGovernorPage = () => {
             <Navbar
                 sideBarFlag={true}
             />
-            <ImprovedSidebar title="Tourism Governor"/>
+            <ImprovedSidebar/>
             <div
                 style={{
                     margin: `20px 20px 20px 100px`,
                     transition: "200ms",
                 }}
             >
-                {content}
+                <TGoDashboard/>
             </div>
         </div>
     );

@@ -16,10 +16,15 @@ SpecialDiscount: {type: Number, required: true},
 Category: { type: mongoose.Schema.Types.ObjectId, ref: "Category", required: true },
 Tags: [{ type: mongoose.Schema.Types.ObjectId, ref: "PreferenceTags", required: true }],
 BookingIsOpen: {type: Boolean, required: true},
+feedback: [
+  {
+    name: String,
+    rating: String,
+    review: String,
+  },
+],
 added_By: { type: mongoose.Types.ObjectId, required: true , ref:'Advertiser' }
 });
-
-//tags misssing
 
 const Activity = mongoose.model("Activity", ActivitySchema);
 export default Activity;

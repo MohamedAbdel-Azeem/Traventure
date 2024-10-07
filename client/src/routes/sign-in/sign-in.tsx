@@ -34,7 +34,7 @@ const SignIn: React.FC = () => {
       }
     }
     // Assuming that data.type and data.user._id are valid
-    navigate(`/${data.type}/${data.user._id}`);
+    navigate(`/${data.type}/${data.user.username}`);
   }, [data]);
 
   useEffect(() => {
@@ -157,6 +157,14 @@ const SignIn: React.FC = () => {
                 className="text-purple-700 hover:text-purple-600 underline"
               >
                 Forgot your password?
+              </a>
+              <br></br>
+              <br></br>
+              <a
+                href="/guest-page"
+                className="text-purple-700 hover:text-purple-600 underline"
+              >
+                Enter as Guest
               </a>
             </div>
           </form>

@@ -40,7 +40,7 @@ router.post("/add", placeAddValidator, async (req: Request, res: Response) => {
     }
     const place = matchedData(req);
     const newPlace = await addPlace(place);
-    res.status(201).send("Place added successfully");
+    res.status(201).send(newPlace);
   } catch (error) {
     res.status(500).json({ error: error });
   }

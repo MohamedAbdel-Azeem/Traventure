@@ -5,22 +5,19 @@ import ImprovedSidebar from "../components/ImprovedSidebar";
 import { useParams } from "react-router-dom";
 
 const AdminPage = () => {
-  const [content, setContent] = useState(<Dashboard />);
-  const { id } = useParams();
   return (
     <div>
       <Navbar sideBarFlag={true} />
-      <ImprovedSidebar title="Admin" />
+      <ImprovedSidebar/>
       <div
         style={{
           margin: `20px 20px 20px 100px`,
           transition: "200ms",
         }}
       >
-        {content}
+        <Dashboard />
       </div>
     </div>
   );
 };
-
 export default AdminPage;

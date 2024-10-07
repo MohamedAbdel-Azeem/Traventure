@@ -17,6 +17,15 @@ export const getActivities = async () => {
     throw e;}
     }
 
+export const getActivitiesid = async(id: string)=>{
+    try {
+        return await Activity.find({ added_By: id })
+        .populate('Tags')
+        .populate('Category');
+    } catch (err) {
+        throw err;
+    }
+    }
 export const deleteActivity = async(id: string)=>{
     try{
         return await Activity.findByIdAndDelete(id);
@@ -34,4 +43,4 @@ export const updateActivity = async(id: string, updatedActivity: any)=>{
     }
 }
 
-module.exports = {addActivity, getActivities,deleteActivity,updateActivity};
+module.exports = {addActivity, getActivities, getActivitiesid,deleteActivity,updateActivity};
