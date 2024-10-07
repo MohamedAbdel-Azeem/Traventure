@@ -1,17 +1,15 @@
 import React, { useState } from "react";
 import LocationCardCRUD from "./LocationCardCRUD";
 import ImprovedSidebar from "./ImprovedSidebar";
-import useGetPlace from "../custom_hooks/places/useGetPlace";
+import {useGetPlace} from "../custom_hooks/places/useGetPlace";
 import Place from "../custom_hooks/places/place_interface";
 import { useDeletePlaces } from "../custom_hooks/places/useDeletePlace";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
-import { FormControl, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
-import axios from "axios";
+import { FormControl, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
 import TheMAP from "./TheMAP";
-import useCreatePlace from "../custom_hooks/places/useCreatePlace";
-import { createPlace } from "../custom_hooks/places/placeService";
+import { createPlaceID } from "../custom_hooks/places/placeService";
 
 const Locations = () => {
 
@@ -68,9 +66,9 @@ const handleCreate = async () => {
       },
       pictures: [image],
   };
-
+  const currentuser=location.pathname.split(`/`)[2];
   try {
-      await createPlace(newCard);
+      await createPlaceID(currentuser, newCard);
       await fetchPlaces();
       setOpen(false);
   } catch (error) {
