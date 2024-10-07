@@ -27,6 +27,7 @@
     "@tabler/icons-react": "^3.18.0",
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
+    "client": "file:",
     "cmdk": "^1.0.0",
     "date-fns": "^4.1.0",
     "radix-ui": "^1.0.1",
