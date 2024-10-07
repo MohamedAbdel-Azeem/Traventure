@@ -187,12 +187,15 @@ const ItineraryDetails: React.FC = () => {
     // setId(editedItinerary._id);
   };
   useUpdateItinerary(updatedItinerary,id);
+  
+  
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     field: string
   ) => {
     setEditedItinerary({ ...editedItinerary, [field]: e.target.value });
-    console.log("editing",editedItinerary);
+    console.log(field,e);
+
   };
 
   const handlePlaceChange = (index: number, field: string, value: string) => {
@@ -474,7 +477,7 @@ const handleActivityChangeDuration=(planindex: number, activityIndex: number, e:
             label="Start Date"
             type="date" 
             fullWidth
-            value={editedItinerary.starting_Date.split('/').reverse().join('-')}
+            value={editedItinerary.starting_Date}
             onChange={(e) => handleChange(e, "starting_Date")}
             margin="dense"
           />
@@ -482,7 +485,7 @@ const handleActivityChangeDuration=(planindex: number, activityIndex: number, e:
             label="End Date"
             type="date" 
             fullWidth
-            value={editedItinerary.ending_Date.split('/').reverse().join('-')}
+            value={editedItinerary.ending_Date}
             onChange={(e) => handleChange(e, "ending_Date")}
             margin="dense"
           />
@@ -505,14 +508,14 @@ const handleActivityChangeDuration=(planindex: number, activityIndex: number, e:
             label="Pickup Location"
             fullWidth
             value={editedItinerary.pickup_location}
-            onChange={(e) => handleChange(e, "pickupLocation")}
+            onChange={(e) => handleChange(e, "pickup_location")}
             margin="dense"
           />
           <TextField
             label="Dropoff Location"
             fullWidth
             value={editedItinerary.dropoff_location}
-            onChange={(e) => handleChange(e, "dropoffLocation")}
+            onChange={(e) => handleChange(e, "dropoff_location")}
             margin="dense"
           />
           
