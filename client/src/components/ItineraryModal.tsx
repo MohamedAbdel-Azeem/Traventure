@@ -20,6 +20,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useGetAllTags } from "../custom_hooks/categoryandTagCRUD";
 import {useGetPlace} from "../custom_hooks/places/useGetPlace";
+
 import { useGetAllActivities } from "../custom_hooks/activities/useGetActivities";
 import IActivityTitleAndId from "../custom_hooks/activities/activity_title_id";
 import { useGetAllActivitiesTitleAndId } from "../custom_hooks/activities/useGetActivitiesTitlesAndID";
@@ -80,6 +81,7 @@ interface ItineraryModalProps {
 const timeUnits: string[] = ["sec","hours","days","month","years","min"];
 const accessibilities: string[] = ["true", "false"];
 
+
 const ItineraryModal: React.FC<ItineraryModalProps> = ({
   isOpen,
   onClose,
@@ -113,8 +115,6 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({
     dropoff_location: "",
     accesibility: false, 
     total:0,
- 
-
   });
 
   
@@ -440,6 +440,7 @@ useCreateItinerary(newItinerary);
             }
             sx={{ mb: 2 }}
           />
+
            <FormControl fullWidth>
                     <InputLabel
                       id={`accessibility-label`}
@@ -466,7 +467,6 @@ useCreateItinerary(newItinerary);
                       
                   </FormControl>
 
-
           <TextField
             name="pickupLocation"
             placeholder="Pickup Location"
@@ -478,7 +478,6 @@ useCreateItinerary(newItinerary);
             }
             sx={{ mb: 2 }}
           />
-
 
           <TextField
             name="dropoffLocation"

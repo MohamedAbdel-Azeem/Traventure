@@ -74,7 +74,6 @@ function App() {
           <Route path="/guest/more-places" element={<GuestMorePlaces />} />
           <Route path="/guest/more-activities" element={<GuestMoreActivities />} />  
           <Route path="/guest/shop" element={<GuestShop type={"Tourist"} />} />
-      
 
         </Routes>
       </Router>

@@ -142,6 +142,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
           <Link
             to={`/itinerary/${_id}`}
             state={{
+              _id,
               title,
               description,
               price,
