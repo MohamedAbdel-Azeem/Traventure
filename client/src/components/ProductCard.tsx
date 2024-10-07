@@ -45,9 +45,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
       };
     
       const averageRating = calculateAverageRating(product);
+      
+      
       const [isEditMode, setIsEditMode] = useState(false);
-    const [apiBody, setApiBody] = useState<ACTUALProduct | null>(currentProduct);
-      const handleEditClick = () => {
+          const [apiBody, setApiBody] = useState<ACTUALProduct | null>(currentProduct);
+      
+    
+    const handleEditClick = () => {
         setIsEditMode(true);
       };
     
@@ -202,8 +206,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
                         ></path>
                     </svg>
                     </button>:<></>
-                    
-                    
                     }
                         </div>
                         <button title="closepopup" onClick={togglePopup} className="close-popup">

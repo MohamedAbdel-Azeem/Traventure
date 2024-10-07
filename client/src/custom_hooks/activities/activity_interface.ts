@@ -13,6 +13,11 @@ interface Activity {
       latitude: number,
       longitude: number,
   },
+  feedback: {
+    name: string,
+    rating: string,
+    review: string,
+  }[],
     Price: number; 
     SpecialDiscount: number; 
     Category: DataStructure; 
