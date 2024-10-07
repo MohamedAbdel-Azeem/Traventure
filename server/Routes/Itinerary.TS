@@ -5,7 +5,7 @@ import {
   deleteItinerary,
   getItinerary,
   updateItinerary,
-  getAllItinerary
+  getAllItinerary,
 } from "..//Model//Queries//itinerary_queries";
 import {
   itineraryAddValidator,
@@ -29,30 +29,22 @@ router.post(
       const itinerary = await addItinerary(itinerary_Data);
       res.status(200).send("itinerary Added Successfully !!");
     } catch (error) {
-      
       res.status(500).send(error);
     }
   }
 );
 
-
-
 router.get("/:username", async (req: Request, res: Response) => {
   try {
-    const tour_guide = await TourGuide.findOne({ username: req.params.username });
-    if (!tour_guide) {
-      return res.status(400).send("Tour Guide not found");
-    }
-    const tour_guide_Id  = (tour_guide._id as string);
-    const products = await getItinerary(tour_guide_Id );
+    const products = await getItinerary(req.params.username);
     res.status(200).send(products);
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 });
-    
-    
-  router.get("/", async (req: Request, res: Response) => {
+
+router.get("/", async (req: Request, res: Response) => {
   try {
     const products = await getAllItinerary();
     res.status(200).send(products);
