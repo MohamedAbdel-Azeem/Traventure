@@ -5,7 +5,7 @@ interface IActivity {
     time_unit?: ReactNode;
     activity_duration?: ReactNode;
     _id?: string;
-    Title?: string;
+    Title?: ReactNode;
     DateAndTime: Date;
     Location: {
         latitude: number;

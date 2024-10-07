@@ -64,8 +64,8 @@ const Itineraries = () => {
             title={card.title}
             description={card.description}
             price={card.price}
-            starting_Date={card.starting_Date ? new Date(card.starting_Date).toLocaleDateString() : "N/A"}
-            ending_Date={card.ending_Date ? new Date(card.ending_Date).toLocaleDateString() : "N/A"}
+            starting_Date={card.starting_Date ? new Date(card.starting_Date).toISOString() : "N/A"}
+            ending_Date={card.ending_Date ? new Date(card.ending_Date).toISOString() : "N/A"}
             rating={card.rating}
             language={card.language}
             pickup_location={card.pickup_location}

@@ -47,6 +47,7 @@ router.patch(
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.log(errors.array());
+      console.log(req.body.plan.activities);
       return res.status(400).json({ errors: errors.array() });
     }
     const newItinerary = matchedData(req);

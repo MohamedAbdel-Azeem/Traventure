@@ -174,8 +174,33 @@ const ItineraryDetails: React.FC = () => {
   const handleCloseModal = () => {
     setIsEditing(false);
   };
+  const [validationError, setValidationError] = useState({
+    tags: false,
+    activities: false,
+  });
   const handleSaveModal = () => {
-    
+    let isValid = true;
+
+  // Validate tags
+  if (editedItinerary.selectedTags?.length === 0) {
+    setValidationError((prev) => ({ ...prev, tags: true }));
+    isValid = false;
+  } else {
+    setValidationError((prev) => ({ ...prev, tags: false }));
+  }
+
+  // Validate activities (each place must have at least one activity)
+  const hasInvalidPlan = editedItinerary.plan.some((place) => {
+    return place.activities.length === 0;
+  });
+
+  if (hasInvalidPlan) {
+    setValidationError((prev) => ({ ...prev, activities: true }));
+    isValid = false;
+  } else {
+    setValidationError((prev) => ({ ...prev, activities: false }));
+  }
+    if(isValid){
     const updatedItineraryinline = { ...editedItinerary,starting_Date:editedItinerary.starting_Date.split("/").reverse().join("-"),ending_Date:editedItinerary.ending_Date.split("/").reverse().join("-"),selectedTags:editedItinerary.selectedTags?.map((tag)=>tag._id), plan: editedItinerary.plan.map((plan) => ({ place:plan.place._id, activities: plan.activities.map(transformActivity) })) };
     console.log("initial",itinerary);
     console.log("updating",updatedItinerary);
@@ -183,10 +208,13 @@ const ItineraryDetails: React.FC = () => {
     console.log("final",editedItinerary);
    setUpdatedItinerary(updatedItineraryinline);
     setIsEditing(false);
-    navigate(-1);
+    console.log("updated",updatedItinerary);
+    navigate(-1);}
+    
     // setId(editedItinerary._id);
   };
   useUpdateItinerary(updatedItinerary,id);
+  
   
   
   const handleChange = (
@@ -355,10 +383,10 @@ const handleActivityChangeDuration=(planindex: number, activityIndex: number, e:
 
           <Box className="flex justify-between mb-4 text-gray-600">
             <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">Start Date:</span> {itinerary.starting_Date}
+              <span className="mr-2 font-semibold">Start Date:</span> {itinerary.starting_Date.slice(0,10)}
             </Typography>
             <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">End Date:</span> {itinerary.ending_Date}
+              <span className="mr-2 font-semibold">End Date:</span> {itinerary.ending_Date.slice(0,10)}
             </Typography>
           </Box>
 
@@ -464,20 +492,20 @@ const handleActivityChangeDuration=(planindex: number, activityIndex: number, e:
                 value={editedItinerary.description}
                 onChange={(e) => handleChange(e, "description")}
               />
-              <TextField
+              {/* <TextField
                 margin="dense"
                 label="Price"
                 type="number"
                 fullWidth
                 value={editedItinerary.price}
                 onChange={(e) => handleChange(e, "price")}
-              />
+              /> */}
                 
                 <TextField
             label="Start Date"
             type="date" 
             fullWidth
-            value={editedItinerary.starting_Date}
+            value={editedItinerary.starting_Date ? new Date(editedItinerary.starting_Date).toISOString().slice(0, 10) : ""}
             onChange={(e) => handleChange(e, "starting_Date")}
             margin="dense"
           />
@@ -485,7 +513,7 @@ const handleActivityChangeDuration=(planindex: number, activityIndex: number, e:
             label="End Date"
             type="date" 
             fullWidth
-            value={editedItinerary.ending_Date}
+            value={editedItinerary.ending_Date ? new Date(editedItinerary.ending_Date).toISOString().slice(0,10) : ""}
             onChange={(e) => handleChange(e, "ending_Date")}
             margin="dense"
           />
@@ -558,6 +586,7 @@ const handleActivityChangeDuration=(planindex: number, activityIndex: number, e:
     {activities.map((activityItem) => (
       <MenuItem key={activityItem._id} value={activityItem._id}>
         {activityItem.Title}
+
       </MenuItem>
     ))}
   </Select>
@@ -616,6 +645,11 @@ const handleActivityChangeDuration=(planindex: number, activityIndex: number, e:
             </Button>
           </Box>
         ))}
+           {validationError.activities && plan.activities.length === 0 && (
+                <FormHelperText error>
+                  Each place must have at least one activity.
+                </FormHelperText>
+              )}
         <Button variant="outlined" onClick={() => handleAddActivity(planIndex)}>
           Add Activity
         </Button>
@@ -634,7 +668,7 @@ const handleActivityChangeDuration=(planindex: number, activityIndex: number, e:
   </Button>
 </Box>
 <Box>
-  <FormControl fullWidth margin="normal">
+  <FormControl fullWidth margin="normal" error={validationError.tags}>
   <InputLabel id="tags-select-label">Tags</InputLabel>
   <Select
     labelId="tags-select-label"
@@ -665,7 +699,12 @@ const handleActivityChangeDuration=(planindex: number, activityIndex: number, e:
       </MenuItem>
     ))}
   </Select>
-  <FormHelperText>Select multiple tags</FormHelperText>
+  {validationError.tags && (
+          <FormHelperText error>
+            At least one tag must be selected.
+          </FormHelperText>
+        )}
+  {/* <FormHelperText>Select multiple tags</FormHelperText> */}
 </FormControl>
 
   {/* <Button variant="outlined" onClick={handleAddTag}>
