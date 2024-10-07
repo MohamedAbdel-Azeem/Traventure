@@ -9,6 +9,7 @@ import ShopIcon from '@mui/icons-material/Shop';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ActivityIcon from '@mui/icons-material/LocalActivity';
+import CategoryIcon from '@mui/icons-material/Category';
 const drawerWidth = 240;
 
 
@@ -83,6 +84,7 @@ const adminsidebaritems =
   { text: 'Shop', icon: <ShopIcon />, path: `/admin/${currentuser}/shop` },
   { text: 'Locations', icon: <LocationOnIcon />, path: `/admin/${currentuser}/locations` },
   { text: 'Account Management', icon: <AccountCircleIcon />, path: `/admin/${currentuser}/users` },
+  { text: 'Cats & Tags', icon: <CategoryIcon />, path: `/admin/${currentuser}/categoriesandtags` },
 ];
 const TGsidebaritems =
 [
@@ -95,7 +97,6 @@ const TGosidebaritems =
   { text: 'Home', icon: <HomeIcon />, path: `/tourismgovernor/${currentuser}` },
   { text: 'Locations', icon: <LocationOnIcon />, path: `/tourismgovernor/${currentuser}/locations` },
   { text: 'Historical Tags', icon: <ActivityIcon />, path: `/tourismgovernor/${currentuser}/historicaltags` },
-  { text: 'Cats & Tags', icon: <LocationOnIcon />, path: `/tourismgovernor/${currentuser}/categoriesandtags` },
 ];
 const touristsidebaritems =
 [
@@ -115,6 +116,13 @@ const sellersidebaritems =
   { text: 'Shop', icon: <ShopIcon />, path: `/seller/${currentuser}/shop` },
 ];
 
+const guestsidebaritems =
+[
+  { text: 'Home', icon: <HomeIcon />, path: `/guest-page` },
+
+  { text: 'Shop', icon: <ShopIcon />, path: `/guest/shop` },
+];
+
 const getSidebarItems = (currentusertype : string) => {
   switch (true) {
       case currentusertype.includes("seller"):
@@ -127,6 +135,9 @@ const getSidebarItems = (currentusertype : string) => {
           return TGosidebaritems;
       case currentusertype.includes("tourguide"):
           return TGsidebaritems;
+      case currentusertype.includes("guest"):
+          return guestsidebaritems;
+        
       default:
           return advertisersidebaritems;
   }

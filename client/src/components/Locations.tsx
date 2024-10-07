@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import LocationCardCRUD from "./LocationCardCRUD";
 import ImprovedSidebar from "./ImprovedSidebar";
-import useGetPlace from "../custom_hooks/places/useGetPlace";
+import {useGetPlace, useGetPlaceID} from "../custom_hooks/places/useGetPlace";
 import Place from "../custom_hooks/places/place_interface";
 import { useDeletePlaces } from "../custom_hooks/places/useDeletePlace";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
-import { FormControl, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
-import axios from "axios";
+import { Checkbox, FormControl, InputAdornment, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, SelectChangeEvent } from "@mui/material";
 import TheMAP from "./TheMAP";
-import useCreatePlace from "../custom_hooks/places/useCreatePlace";
-import { createPlace } from "../custom_hooks/places/placeService";
+import { createPlaceID } from "../custom_hooks/places/placeService";
+import { useGetHTags } from "../custom_hooks/useCreateHistoricalTag";
 
 const Locations = () => {
-
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const currentuser=location.pathname.split(`/`)[2];
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -30,7 +30,21 @@ const Locations = () => {
   const [images, setImages] = useState<string[]>([]);
   const [apiBody, setApiBody] = useState<Place | null>(null);
   const [newcards, setNewcards] = useState<Place[] | null>(null);
-
+  const handleTagsChange = (event: SelectChangeEvent<string[]>) => {
+    const {
+      target: { value },
+    } = event;
+    setSelectedTags(typeof value === "string" ? value.split(",") : value);
+    console.log(selectedTags);
+  };
+  
+  
+  const handleTagsText = (value: string[]) => {
+    const valueNames = tagsData
+      .filter((tag) => value.includes(tag._id))
+      .map((tag) => tag.name);
+    return valueNames.join(", ");
+  };
 
   const style = {
       position: 'absolute',
@@ -44,18 +58,28 @@ const Locations = () => {
       p: 4,
   };
 
-  const { places, loading, error, fetchPlaces } = useGetPlace();
+  const {
+    loading: tagsLoading,
+    error: tagsError,
+    data: tagsData,
+  } = useGetHTags();
+
+
+
+  const { idplaces, idgloading, idgerror, fetchPlacesID } = useGetPlaceID(currentuser);
   React.useEffect(() => {
-    if (places) {
-        setNewcards(places);
+    if (idplaces) {
+        setNewcards(idplaces);
     }
-}, [places]);
+}, [idplaces]);
 
 const handleCreate = async () => {
   const newCard = {
       id: Date.now().toString(),
       name,
       description,
+      added_By: currentuser,
+      historicalTags: [],
       ticket_price: {
           native: nativePrice,
           foreign: foreignPrice,
@@ -68,10 +92,9 @@ const handleCreate = async () => {
       },
       pictures: [image],
   };
-
   try {
-      await createPlace(newCard);
-      await fetchPlaces();
+      await createPlaceID(currentuser, newCard);
+      await fetchPlacesID(currentuser);
       setOpen(false);
   } catch (error) {
       console.error("Error creating place:", error);
@@ -176,7 +199,31 @@ const handleDelete = (id: string) => {
                 value={image}
                 onChange={(e) => {setImage(e.target.value)}}
               /></FormControl>
-
+              
+              <FormControl fullWidth sx={{ marginY: 1 }}>
+                <Select
+                labelId="tags-select-label"
+                multiple
+                value={selectedTags}
+                onChange={handleTagsChange}
+                renderValue={handleTagsText}
+                MenuProps={{
+                    PaperProps: {
+                    style: {
+                        maxHeight: 200,
+                        width: 250,
+                    },
+                    },
+                }}
+                >
+                {tagsData.map((tag) => (
+                    <MenuItem key={tag._id} value={tag._id}>
+                    <Checkbox checked={selectedTags.indexOf(tag._id) > -1} />
+                    <ListItemText primary={tag.name} />
+                    </MenuItem>
+                ))}
+                </Select>
+            </FormControl>
           <Button onClick={handleCreate}>Add</Button>
               
               

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import HistoricalTagSchema from "../Model/Schemas/HistoricalTag";
 import Router from "express";
-import { addHistoricalTags } from "../Model/Queries/historicalTag_queries";
+import { addHistoricalTag } from "../Model/Queries/historicalTags_queries";
 import { body , validationResult, matchedData } from "express-validator";
 
 const router = Router();
@@ -18,7 +18,7 @@ router.post("/add/HistoricalTag",
         }
         const HistoricalTag = matchedData(req);
     try {
-        const newHistoricalTag = await addHistoricalTags(HistoricalTag);
+        const newHistoricalTag = await addHistoricalTag(HistoricalTag);
         if(newHistoricalTag)
         res.status(201).send(newHistoricalTag);
         else

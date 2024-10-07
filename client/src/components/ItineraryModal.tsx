@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act, useState } from "react";
 import {
   Box,
   Button,
@@ -14,9 +14,27 @@ import {
   FormHelperText,
   Checkbox,
   ListItemText,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import { SelectChangeEvent } from '@mui/material/Select';
+  duration,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { SelectChangeEvent } from "@mui/material/Select";
+import { useGetAllTags } from "../custom_hooks/categoryandTagCRUD";
+import {useGetPlace} from "../custom_hooks/places/useGetPlace";
+
+import { useGetAllActivities } from "../custom_hooks/activities/useGetActivities";
+import IActivityTitleAndId from "../custom_hooks/activities/activity_title_id";
+import { useGetAllActivitiesTitleAndId } from "../custom_hooks/activities/useGetActivitiesTitlesAndID";
+import IActivityInItinerary from "../custom_hooks/activities/activity_in_itinary";
+import { add, set } from "date-fns";
+import useCreateItinerary from "../custom_hooks/itineraries/createItinerary";
+import { useParams } from "react-router-dom";
+import useGetTourGuideId from "../custom_hooks/itineraries/useGetTourGuideId";
+
+//TODO: Get Tags from API
+//TODO: Get Activities from API
+//TODO: Get Places from API
+
+
 
 interface Activity {
   id: string;
@@ -37,7 +55,7 @@ interface SelectedActivity {
 
 interface SelectedPlace {
   place: string;
-  activities: SelectedActivity[];
+  activities: IActivityInItinerary[];
 }
 
 interface ItineraryModalProps {
@@ -46,180 +64,250 @@ interface ItineraryModalProps {
   onSubmit: (data: any) => void;
 }
 
-const tagsOptions = [
-  'Adventure',
-  'Relaxation',
-  'Culture',
-  'Nature',
-  'Food',
-  'History',
-  'Family',
-];
+// const activities: Activity[] = [
+//   {
+//     id: "1",
+//     name: "Hiking",
+//     durationOptions: ["1 hour", "2 hours", "3 hours"],
+//   },
+//   {
+//     id: "2",
+//     name: "Sightseeing",
+//     durationOptions: ["1 hour", "2 hours", "3 hours", "4 hours"],
+//   },
+//   { id: "3", name: "Beach", durationOptions: ["1 hour", "2 hours", "3 hours"] },
+// ];
 
-const activities: Activity[] = [
-  { id: '1', name: 'Hiking', durationOptions: ['1 hour', '2 hours', '3 hours'] },
-  { id: '2', name: 'Sightseeing', durationOptions: ['1 hour', '2 hours', '3 hours', '4 hours'] },
-  { id: '3', name: 'Beach', durationOptions: ['1 hour', '2 hours', '3 hours'] },
-];
+const timeUnits: string[] = ["sec","hours","days","month","years","min"];
+const accessibilities: string[] = ["true", "false"];
 
-const placesData: Place[] = [
-  { id: '1', name: 'Mountain', activities: [activities[0]] },
-  { id: '2', name: 'City', activities: [activities[1]] },
-  { id: '3', name: 'Beach Resort', activities: [activities[2]] },
-];
 
-const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubmit }) => {
+const ItineraryModal: React.FC<ItineraryModalProps> = ({
+  isOpen,
+  onClose,
+  onSubmit,
+}) => {
+  const {
+    places: apiPlaces,
+    gloading: placeLoading,
+    gerror: placeError,
+  } = useGetPlace();
+  const {
+    loading: tagsLoading,
+    error: tagsError,
+    iddata: tagsOptions,
+  } = useGetAllTags();
+
+  const {activities: activities , loading : activityLoading , error : activityError}=useGetAllActivitiesTitleAndId();
+  const { username} = useParams<{ username: string }>();
+  const { tourGuideId, loading, error } = useGetTourGuideId(username || "");
+  console.log("tourGuideId",tourGuideId);
   const [formData, setFormData] = React.useState({
-    title: '',
-    description: '',
+    title: "",
+    description: "",
     price: 0,
-    starting_Date: '', // renamed for consistency
-    ending_Date: '',   // renamed for consistency
+    starting_Date: "", // renamed for consistency
+    ending_Date: "", // renamed for consistency
     rating: 0,
-    main_Picture: '',
-    language: '',
-    pickup_location: '', 
-    dropoff_location: '', 
+    main_Picture: "",
+    language: "",
+    pickup_location: "",
+    dropoff_location: "",
+    accesibility: false, 
+    total:0,
   });
 
-  const [places, setPlaces] = React.useState<SelectedPlace[]>([{ place: '', activities: [] }]);
+  
+
+  const [plans, setPlans] = React.useState<SelectedPlace[]>([]);
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
   const [errors, setErrors] = React.useState<string[]>([]);
 
+  const [newItinerary, setNewItinerary] = useState<any>();
+
   const handleChange = (index: number, e: SelectChangeEvent<string>) => {
     const value = e.target.value as string;
-    const updatedPlaces = [...places];
-    updatedPlaces[index].place = value;
-    updatedPlaces[index].activities = [];
-    if (value) {
-      const selectedPlace = placesData.find((place) => place.name === value);
-      if (selectedPlace) {
-        updatedPlaces[index].activities = selectedPlace.activities.map((activity) => ({
-          name: activity.name,
-          duration: '',
-        }));
-      }
-    }
-    setPlaces(updatedPlaces);
+    const updatedPlans = [...plans];
+    updatedPlans[index].place = value;
+    setPlans(updatedPlans);
   };
 
-  const handleActivityChange = (placeIndex: number, activityIndex: number, e: SelectChangeEvent<string>) => {
-    const updatedPlaces = [...places];
-    updatedPlaces[placeIndex].activities[activityIndex].name = e.target.value as string;
-    updatedPlaces[placeIndex].activities[activityIndex].duration = '';
-    setPlaces(updatedPlaces);
+  const handleActivityChangeID = (
+    placeIndex: number,
+    activityIndex: number,
+    e: SelectChangeEvent<string>
+  ) => {
+    const updatedPlaces = [...plans];
+    updatedPlaces[placeIndex].activities[activityIndex].activity_id = e.target
+      .value as string;
+    // updatedPlaces[placeIndex].activities[activityIndex].activity_duration = "";
+    setPlans(updatedPlaces);
   };
 
-  const handleDurationChange = (placeIndex: number, activityIndex: number, e: SelectChangeEvent<string>) => {
-    const updatedPlaces = [...places];
-    updatedPlaces[placeIndex].activities[activityIndex].duration = e.target.value as string;
-    setPlaces(updatedPlaces);
+  const handleActivityChangeDuration = (
+    placeIndex: number,
+    activityIndex: number,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const updatedPlaces = [...plans];
+    // updatedPlaces[placeIndex].activities[activityIndex]._id = e.target
+    //   .value as string;
+    updatedPlaces[placeIndex].activities[activityIndex].activity_duration = parseInt(e.target.value);
+    setPlans(updatedPlaces);
   };
+
+  const handleActivityChangetime_unit = (
+        placeIndex: number,
+        activityIndex: number,
+        e: SelectChangeEvent<any>
+      ) => {
+        const updatedPlaces = [...plans];
+        // updatedPlaces[placeIndex].activities[activityIndex]._id = e.target
+        //   .value as string;
+        updatedPlaces[placeIndex].activities[activityIndex].time_unit = e.target.value as string;
+        setPlans(updatedPlaces);
+      };
+
+  // const handleDurationChange = (
+  //   placeIndex: number,
+  //   activityIndex: number,
+  //   e: SelectChangeEvent<string>
+  // ) => {
+  //   const updatedPlaces = [...plans];
+  //   updatedPlaces[placeIndex].activities[activityIndex].activity_duration = e.target
+  //     .value as string;
+  //   setPlans(updatedPlaces);
+  // };
 
   const addAnotherActivity = (placeIndex: number) => {
-    const updatedPlaces = [...places];
-    updatedPlaces[placeIndex].activities.push({ name: '', duration: '' });
-    setPlaces(updatedPlaces);
+    const updatedPlaces = [...plans];
+    updatedPlaces[placeIndex].activities.push({ activity_id: "", activity_duration: 0 });
+    setPlans(updatedPlaces);
   };
 
   const deleteActivity = (placeIndex: number, activityIndex: number) => {
-    const updatedPlaces = [...places];
+    const updatedPlaces = [...plans];
     updatedPlaces[placeIndex].activities.splice(activityIndex, 1);
-    setPlaces(updatedPlaces);
+    setPlans(updatedPlaces);
   };
 
   const addAnotherPlace = () => {
-    setPlaces([...places, { place: '', activities: [] }]);
+    setPlans([...plans, { place: "", activities: [] }]);
   };
 
   const deletePlace = (placeIndex: number) => {
-    const updatedPlaces = [...places];
+    const updatedPlaces = [...plans];
     updatedPlaces.splice(placeIndex, 1);
-    setPlaces(updatedPlaces);
+    setPlans(updatedPlaces);
   };
 
   const handleTagsChange = (event: SelectChangeEvent<string[]>) => {
     const {
       target: { value },
     } = event;
-    setSelectedTags(typeof value === 'string' ? value.split(',') : value);
+    setSelectedTags(typeof value === "string" ? value.split(",") : value);
+  };
+
+  const handleTagsText = (value: string[]) => {
+    const valueNames = tagsOptions
+      .filter((tag) => value.includes(tag._id))
+      .map((tag) => tag.name);
+    return valueNames.join(", ");
   };
 
   const validateForm = (): boolean => {
     const newErrors: string[] = [];
-    
-    if (!formData.title) newErrors.push('Title is required.');
-    if (!formData.description) newErrors.push('Description is required.');
-    if (formData.price <= 0) newErrors.push('Price must be greater than 0.');
-    if (!formData.starting_Date) newErrors.push('Start date is required.');
-    if (!formData.ending_Date) newErrors.push('End date is required.');
-    if (new Date(formData.starting_Date) >= new Date(formData.ending_Date)) 
-      newErrors.push('End date must be after start date.');
-    
-    places.forEach((place, placeIndex) => {
+
+    if (!formData.title) newErrors.push("Title is required.");
+
+    if (!formData.description) newErrors.push("Description is required.");
+    if (formData.price <= 0) newErrors.push("Price must be greater than 0.");
+    if (!formData.starting_Date) newErrors.push("Start date is required.");
+    if (!formData.ending_Date) newErrors.push("End date is required.");
+    if (new Date(formData.starting_Date) >= new Date(formData.ending_Date))
+      newErrors.push("End date must be after start date.");
+
+    plans.forEach((place, placeIndex) => {
       if (!place.place) {
         newErrors.push(`Place ${placeIndex + 1} is required.`);
       }
       place.activities.forEach((activity, activityIndex) => {
-        if (!activity.name) {
-          newErrors.push(`Activity ${activityIndex + 1} in place ${placeIndex + 1} is required.`);
+        if (!activity.activity_id) {
+          newErrors.push(
+            `Activity ${activityIndex + 1} in place ${
+              placeIndex + 1
+            } is required.`
+          );
         }
-        if (!activity.duration) {
-          newErrors.push(`Duration for activity ${activityIndex + 1} in place ${placeIndex + 1} is required.`);
+        if (!activity.activity_duration) {
+          newErrors.push(
+            `Duration for activity ${activityIndex + 1} in place ${
+              placeIndex + 1
+            } is required.`
+          );
         }
       });
     });
-
+    console.log("newErrors",newErrors);
     setErrors(newErrors);
     return newErrors.length === 0;
   };
 
   const handleSubmit = () => {
+    console.log("hamda in handleSubmit");
+    // console.log("no of errors",validateForm());
+    
     if (!validateForm()) return;
     const itineraryData = {
       ...formData,
+      added_By: tourGuideId,
       selectedTags,
-      plan: places.map((place) => ({
+      plan: plans.map((place) => ({
         place: place.place,
         activities: place.activities,
       })),
     };
-    onSubmit(itineraryData); 
+    console.log("itineraryData",itineraryData);
+    setNewItinerary(itineraryData);
+    onSubmit(itineraryData);
     onClose();
   };
-
+useCreateItinerary(newItinerary);
+  if (placeLoading || tagsLoading || activityLoading) return <div>Loading...</div>;
+  if (placeError || tagsError || activityError)
+    return <div>Error: {placeError || tagsError || activityError}</div>;
 
   return (
     <Modal open={isOpen} onClose={onClose}>
       <Box
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100vh',
-          backdropFilter: 'blur(5px)',
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+          backdropFilter: "blur(5px)",
         }}
       >
         <Box
           sx={{
-            width: '450px',
-            bgcolor: 'background.paper',
+            width: "450px",
+            bgcolor: "background.paper",
             borderRadius: 3,
             boxShadow: 4,
             p: 4,
-            maxHeight: '80vh',
-            overflowY: 'auto',
-            border: '2px solid #1976d2',
-            position: 'relative',
+            maxHeight: "80vh",
+            overflowY: "auto",
+            border: "2px solid #1976d2",
+            position: "relative",
           }}
         >
           <IconButton
             onClick={onClose}
             sx={{
-              position: 'absolute',
+              position: "absolute",
               top: 10,
               right: 10,
-              color: '#1976d2',
+              color: "#1976d2",
             }}
           >
             <CloseIcon />
@@ -229,9 +317,9 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
             Create New Itinerary
           </Typography>
           <Divider sx={{ mb: 2 }} />
-          
+
           {errors.length > 0 && (
-            <Box sx={{ mb: 2, color: 'red' }}>
+            <Box sx={{ mb: 2, color: "red" }}>
               {errors.map((error, index) => (
                 <Typography key={index}>{error}</Typography>
               ))}
@@ -244,7 +332,9 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
             variant="outlined"
             fullWidth
             margin="normal"
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, title: e.target.value })
+            }
             sx={{ mb: 2 }}
           />
           <TextField
@@ -253,37 +343,38 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
             variant="outlined"
             fullWidth
             margin="normal"
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
             sx={{ mb: 2 }}
           />
 
-<FormControl fullWidth margin="normal">
-      <InputLabel id="tags-select-label">Tags</InputLabel>
-      <Select
-        labelId="tags-select-label"
-        multiple
-        value={selectedTags}
-        onChange={handleTagsChange}
-        renderValue={(selected) => selected.join(', ')}
-        MenuProps={{
-          PaperProps: {
-            style: {
-              maxHeight: 200, 
-              width: 250,
-            },
-          },
-        }}
-      >
-        {tagsOptions.map((tag) => (
-          <MenuItem key={tag} value={tag}>
-            <Checkbox checked={selectedTags.indexOf(tag) > -1} />
-            <ListItemText primary={tag} />
-          </MenuItem>
-        ))}
-      </Select>
-      <FormHelperText>Select multiple tags</FormHelperText>
-    </FormControl>
-
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="tags-select-label">Tags</InputLabel>
+            <Select
+              labelId="tags-select-label"
+              multiple
+              value={selectedTags}
+              onChange={handleTagsChange}
+              renderValue={handleTagsText}
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    maxHeight: 200,
+                    width: 250,
+                  },
+                },
+              }}
+            >
+              {tagsOptions.map((tag) => (
+                <MenuItem key={tag._id} value={tag._id}>
+                  <Checkbox checked={selectedTags.indexOf(tag._id) > -1} />
+                  <ListItemText primary={tag.name} />
+                </MenuItem>
+              ))}
+            </Select>
+            <FormHelperText>Select multiple tags</FormHelperText>
+          </FormControl>
 
           <TextField
             name="price"
@@ -292,10 +383,15 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
             variant="outlined"
             fullWidth
             margin="normal"
-            onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                price: parseFloat(e.target.value) || 0,
+              })
+            }
             sx={{ mb: 2 }}
           />
-        
+
           <TextField
             name="startDate"
             placeholder="Start Date"
@@ -303,7 +399,9 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
             variant="outlined"
             fullWidth
             margin="normal"
-            onChange={(e) => setFormData({ ...formData, starting_Date: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, starting_Date: e.target.value })
+            }
             sx={{ mb: 2 }}
           />
           <TextField
@@ -313,118 +411,205 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({ isOpen, onClose, onSubm
             variant="outlined"
             fullWidth
             margin="normal"
-            onChange={(e) => setFormData({ ...formData, ending_Date: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, ending_Date: e.target.value })
+            }
             sx={{ mb: 2 }}
           />
 
-          
           <TextField
             name="image"
             placeholder="Image URL"
             variant="outlined"
             fullWidth
             margin="normal"
-            onChange={(e) => setFormData({ ...formData, main_Picture: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, main_Picture: e.target.value })
+            }
             sx={{ mb: 2 }}
           />
-          
+
           <TextField
             name="language"
             placeholder="Language"
             variant="outlined"
             fullWidth
             margin="normal"
-            onChange={(e) => setFormData({ ...formData, language: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, language: e.target.value })
+            }
             sx={{ mb: 2 }}
           />
-          
+
+           <FormControl fullWidth>
+                    <InputLabel
+                      id={`accessibility-label`}
+                    >
+                      Accessibility
+                    </InputLabel>
+                    <Select
+                        labelId={`accessibility-label`}
+                        value={formData.accesibility}
+                        defaultValue={false}
+                        onChange={(e) =>
+                             setFormData({ ...formData, accesibility: e.target.value as boolean })    
+                        }
+                    >
+                      {accessibilities.map((accessibility) => (
+                        <MenuItem key={accessibility} value={accessibility}
+                       
+                        
+                        >
+                          {accessibility}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                      
+                  </FormControl>
+
           <TextField
             name="pickupLocation"
             placeholder="Pickup Location"
             variant="outlined"
             fullWidth
             margin="normal"
-            onChange={(e) => setFormData({ ...formData, pickup_location: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, pickup_location: e.target.value })
+            }
             sx={{ mb: 2 }}
           />
-          
+
           <TextField
             name="dropoffLocation"
             placeholder="Dropoff Location"
             variant="outlined"
             fullWidth
             margin="normal"
-            onChange={(e) => setFormData({ ...formData, dropoff_location: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, dropoff_location: e.target.value })
+            }
             sx={{ mb: 2 }}
           />
 
-          {places.map((place, placeIndex) => (
-            <Box key={placeIndex} sx={{ mb: 3 }}>
+          {plans.map((plan, planIndex) => (
+            <Box key={planIndex} sx={{ mb: 3 }}>
               <FormControl fullWidth variant="outlined">
-                <InputLabel id={`place-label-${placeIndex}`}>Select Place</InputLabel>
+                <InputLabel id={`place-label-${planIndex}`}>
+                  Select Place
+                </InputLabel>
                 <Select
-                  labelId={`place-label-${placeIndex}`}
-                  value={place.place}
-                  onChange={(e) => handleChange(placeIndex, e)}
+                  labelId={`place-label-${planIndex}`}
+                  value={plan.place}
+                  onChange={(e) => handleChange(planIndex, e)}
                 >
-                  {placesData.map((place) => (
-                    <MenuItem key={place.id} value={place.name}>
-                      {place.name}
-                    </MenuItem>
-                  ))}
+                  {apiPlaces &&
+                    apiPlaces.map((place) => (
+                      <MenuItem key={place._id} value={place._id}>
+                        {place.name}
+                      </MenuItem>
+                    ))}
                 </Select>
-                {place.place === '' && <FormHelperText error>This field is required</FormHelperText>}
+                {plan.place === "" && (
+                  <FormHelperText error>This field is required</FormHelperText>
+                )}
               </FormControl>
 
-              {place.activities.map((activity, activityIndex) => (
-                <Box key={activityIndex} sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
+              {plan.activities.map((activity, activityIndex) => (
+                <Box
+                  key={activityIndex}
+                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 1 }}
+                >
                   <FormControl fullWidth>
-                    <InputLabel id={`activity-label-${placeIndex}-${activityIndex}`}>Select Activity</InputLabel>
-                    <Select
-                      labelId={`activity-label-${placeIndex}-${activityIndex}`}
-                      value={activity.name}
-                      onChange={(e) => handleActivityChange(placeIndex, activityIndex, e)}
+                    <InputLabel
+                      id={`activity-label-${planIndex}-${activityIndex}`}
                     >
-                      {placesData
-                        .find((p) => p.name === place.place)
-                        ?.activities.map((activity) => (
-                          <MenuItem key={activity.id} value={activity.name}>
-                            {activity.name}
-                          </MenuItem>
-                        ))}
-                    </Select>
-                    {activity.name === '' && <FormHelperText error>This field is required</FormHelperText>}
-                  </FormControl>
-
-                  <FormControl fullWidth>
-                    <InputLabel id={`duration-label-${placeIndex}-${activityIndex}`}>Duration</InputLabel>
+                      Select Activity
+                    </InputLabel>
                     <Select
-                      labelId={`duration-label-${placeIndex}-${activityIndex}`}
-                      value={activity.duration}
-                      onChange={(e) => handleDurationChange(placeIndex, activityIndex, e)}
+                      labelId={`activity-label-${planIndex}-${activityIndex}`}
+                      value={activity.activity_id}
+                      onChange={(e) =>
+                        handleActivityChangeID(planIndex, activityIndex, e)
+                      }
                     >
-                      {activities.find((a) => a.name === activity.name)?.durationOptions.map((option) => (
-                        <MenuItem key={option} value={option}>
-                          {option}
+                      {activities.map((activity) => (
+                        <MenuItem key={activity.Title} value={activity._id}>
+                          {activity.Title}
                         </MenuItem>
                       ))}
                     </Select>
-                    {activity.duration === '' && <FormHelperText error>This field is required</FormHelperText>}
+                    {activity.activity_id === "" && (
+                      <FormHelperText error>
+                        This field is required
+                      </FormHelperText>
+                    )}
                   </FormControl>
 
-                  <IconButton onClick={() => deleteActivity(placeIndex, activityIndex)}>
+                              <TextField
+            name="activity_duration"
+            placeholder="activity_duration"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            type="number"
+            sx={{ mb: 2 }}
+            value={activity.activity_duration}
+            onChange={(e) =>
+              handleActivityChangeDuration(planIndex, activityIndex, e)
+            }
+          />
+
+                  <FormControl fullWidth>
+                    <InputLabel
+                      id={`timeUnit-label-${planIndex}-${activityIndex}`}
+                    >
+                      Time Unit
+                    </InputLabel>
+                    <Select
+                        labelId={`activity-label-${planIndex}-${activityIndex}`}
+                        value={activity.time_unit}
+                        onChange={(e) =>
+                            handleActivityChangetime_unit(planIndex, activityIndex, e)
+                        }
+                    >
+                      {timeUnits.map((timeUnit) => (
+                        <MenuItem key={timeUnit} value={timeUnit}
+                       
+                        
+                        >
+                          {timeUnit}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {activity.time_unit === "" && (
+                      <FormHelperText error>
+                        This field is required
+                      </FormHelperText>
+                    )}
+                  </FormControl>
+
+                  <IconButton
+                    onClick={() => deleteActivity(planIndex, activityIndex)}
+                  >
                     <CloseIcon />
                   </IconButton>
                 </Box>
               ))}
-              <Button onClick={() => addAnotherActivity(placeIndex)}>Add Another Activity</Button>
-              <IconButton onClick={() => deletePlace(placeIndex)}>
+              <Button onClick={() => addAnotherActivity(planIndex)}>
+                Add Another Activity
+              </Button>
+              <IconButton onClick={() => deletePlace(planIndex)}>
                 <CloseIcon />
               </IconButton>
             </Box>
           ))}
           <Button onClick={addAnotherPlace}>Add Another Place</Button>
-          <Button onClick={handleSubmit} variant="contained" color="primary" sx={{ mt: 2 }}>
+          <Button
+            onClick={handleSubmit}
+            variant="contained"
+            color="primary"
+            sx={{ mt: 2 }}
+          >
             Submit Itinerary
           </Button>
         </Box>

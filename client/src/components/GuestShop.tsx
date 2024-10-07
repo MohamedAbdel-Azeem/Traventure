@@ -17,7 +17,7 @@ const itemsPerPage = 8;
 interface ShopPageProps {
   type:string;
 }
-const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
+const GuestShop: React.FC<ShopPageProps> = ({ type }) => {
 
 const {data, loading, error} = useGetAllProducts();
 
@@ -30,6 +30,7 @@ const {data, loading, error} = useGetAllProducts();
   const [isRatingOptionsOpen, setIsRatingOptionsOpen] = useState(false);
   const [sortOrder, setSortOrder] = useState<string | null>(null);
   const [apiBody, setApiBody] = useState<NewProduct|null>(null);
+  const [uapiBody, setUApiBody] = useState<NewProduct|null>(null);
 
   useCreateProduct(apiBody);
   interface NewProduct {
@@ -41,8 +42,6 @@ const {data, loading, error} = useGetAllProducts();
     quantity: number;
     externalseller?: string;
   }
-
-  const currentuser=location.pathname.split(`/`)[2];
 
   React.useEffect(() => {
     if (data) {
@@ -163,16 +162,7 @@ const {data, loading, error} = useGetAllProducts();
 
   const [showFilters, setShowFilters] = useState(false);
   const handleCreate = () => {
-    const newProductSeller: NewProduct = {
-      name: name,
-      price: price,
-      description: description,
-      imageUrl: image,
-      seller: currentuser,
-      quantity: quantity
-    };
-    
-    const newProductAdmin: NewProduct = {
+    const newProduct: NewProduct = {
       name: name,
       price: price,
       description: description,
@@ -180,9 +170,8 @@ const {data, loading, error} = useGetAllProducts();
       externalseller: externalseller,
       quantity: quantity
     };
-      if(type.includes("Admin")){
-      setApiBody(newProductAdmin);}else{
-      setApiBody(newProductSeller);}
+      
+      setApiBody(newProduct);
       setOpen(false);
     };
 
@@ -211,6 +200,9 @@ const {data, loading, error} = useGetAllProducts();
 
   return (
     <div className="flex">
+      
+      
+    
       <Modal
         open={open}
         onClose={handleClose}
@@ -382,4 +374,4 @@ const {data, loading, error} = useGetAllProducts();
   );
 };
 
-export default ShopPage;
+export default GuestShop;

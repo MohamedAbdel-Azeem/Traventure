@@ -7,7 +7,6 @@ export const placeAddValidator = [
     .withMessage("Name must be at least 3 characters long"),
   body("description")
     .isString()
-    .isLength({ min: 10 })
     .withMessage("Description must be at least 10 characters long"),
   body("pictures")
     .isArray()
@@ -30,6 +29,7 @@ export const placeAddValidator = [
   body("ticket_price.student")
     .isNumeric()
     .withMessage("Student ticket price must be a number"),
+  body("added_By").exists().isString().withMessage("Added by must be a string"),
 ];
 
 export const placeUpdateValidator = [

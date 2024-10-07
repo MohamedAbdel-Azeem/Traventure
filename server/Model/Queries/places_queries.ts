@@ -2,7 +2,7 @@ import placesModel from "../Schemas/Places";
 
 export async function getPlaces() {
   try {
-    const places = await placesModel.find();
+    const places = await placesModel.find().populate('historicalTags');
     return places;
   } catch (error) {
     throw error;
@@ -11,7 +11,7 @@ export async function getPlaces() {
 
 export async function getPlace(ObjectId: string) {
   try {
-    const place = await placesModel.findById(ObjectId);
+    const place = await placesModel.find({ added_By: ObjectId }).populate('historicalTags');
     return place;
   } catch (error) {
     throw error;

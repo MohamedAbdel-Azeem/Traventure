@@ -3,7 +3,6 @@ import { useState } from "react";
 import Dashboard from "../components/Admin/Dashboard";
 import ImprovedSidebar from "../components/ImprovedSidebar";
 const SellerPage = () => {
-   const [content, setContent] = useState(<Dashboard/>);
 
 
     return (
@@ -18,7 +17,7 @@ const SellerPage = () => {
                     transition: "200ms",
                 }}
             >
-                {content}
+                <Dashboard/>
             </div>
         </div>
     );

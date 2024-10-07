@@ -1,9 +1,9 @@
 import Navbar from "../components/navbarlogin";
 import { useState } from "react";
-import Dashboard from "../components/Admin/Dashboard";
+import GuestDashboard from "../components/Admin/GuestDashboard";
 import ImprovedSidebar from "../components/Landingsidebar";
-const LandingPage = () => {
-   const [content, setContent] = useState(<Dashboard/>);
+const GuestPage = () => {
+   const [content, setContent] = useState(<GuestDashboard/>);
 
     return (
         <div>
@@ -11,10 +11,10 @@ const LandingPage = () => {
                 sideBarFlag={true}
             />
                 <div className="flex">
-      <ImprovedSidebar/>
+      <ImprovedSidebar title={"Guest"}/>
       <div className="flex-1 p-4">
        
-        <h1>Main Content Area</h1>
+        
       </div>
     </div>
 
@@ -29,4 +29,4 @@ const LandingPage = () => {
         </div>
     );
 };
-export default LandingPage;
+export default GuestPage;

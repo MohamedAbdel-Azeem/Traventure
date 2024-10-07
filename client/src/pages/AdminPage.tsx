@@ -5,8 +5,6 @@ import ImprovedSidebar from "../components/ImprovedSidebar";
 import { useParams } from "react-router-dom";
 
 const AdminPage = () => {
-  const [content, setContent] = useState(<Dashboard />);
-  const { id } = useParams();
   return (
     <div>
       <Navbar sideBarFlag={true} />
@@ -17,7 +15,7 @@ const AdminPage = () => {
           transition: "200ms",
         }}
       >
-        {content}
+        <Dashboard />
       </div>
     </div>
   );
