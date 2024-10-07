@@ -3,7 +3,7 @@ import './ProductCard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faCartShopping, faPencil } from '@fortawesome/free-solid-svg-icons';
 import { ACTUALProduct } from './data/ProductData';
-import { TextField } from '@mui/material';
+import { Rating, TextField } from '@mui/material';
 import useEditProduct from "../custom_hooks/products/useeditProduct";
 
 interface ProductCardProps {
@@ -100,19 +100,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
             <div className="card-body">
                 <h3 className="product-title">{currentProduct.name}</h3>
                 <p className="product-description">{getTruncatedDescription(currentProduct.description)}</p>
-                <div className="card-footer">
+                <div className="flex flex-row justify-between items-center">
                     <span className="product-price">${currentProduct.price}</span>
-                    <span className="product-rating">
-                        {Array.from({ length: 5 }, (v, i) => {
-                            if (i < Math.floor(averageRating)) {
-                                return '★'; // Full star
-                            } else if (i < averageRating) {
-                                return '☆'; // Half star (if rating is decimal)
-                            }
-                            return '☆'; // Empty star
-                        })}
-                    </span>
-                    <button onClick={togglePopup} className="view-more-button">
+                        <Rating name="half-rating" value={averageRating} precision={0.1} />
+                    <button onClick={togglePopup} className="view-more-button w-[70px]">
                         View more
                     </button>
                 </div>

@@ -9,46 +9,46 @@ import ShopIcon from '@mui/icons-material/Shop';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ActivityIcon from '@mui/icons-material/LocalActivity';
+import Itineraries from './Itineraries';
 
 const drawerWidth = 240;
 
 const adminsidebaritems =
 [
-  { text: 'Home', icon: <HomeIcon />, path: '/admin' },
-  { text: 'Shop', icon: <ShopIcon />, path: '/admin/shop' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/admin/locations' },
-  { text: 'Account Management', icon: <AccountCircleIcon />, path: '/admin/users' },
-  { text: 'Activity Management', icon: <ActivityIcon />, path: '/activities' },
+  { text: 'Home', icon: <HomeIcon />, path: '/admin/:id' },
+  { text: 'Shop', icon: <ShopIcon />, path: '/admin/:id/shop' },
+  { text: 'Locations', icon: <LocationOnIcon />, path: '/admin/:id/locations' },
+  { text: 'Account Management', icon: <AccountCircleIcon />, path: '/admin/:id/users' },
 ];
 const TGsidebaritems =
 [
   { text: 'Home', icon: <HomeIcon />, path: '/tourguide' },
-  { text: 'Shop', icon: <ShopIcon />, path: '/shop' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/locations' },
-  { text: 'Activity Management', icon: <ActivityIcon />, path: '/advertiser/activities' },
+  { text: 'Locations', icon: <LocationOnIcon />, path: '/tourguide/:id/locations' },
+  { text: 'Itinerary Management', icon: <ActivityIcon />, path: '/tourguide/:id/itineraries' },
 ];
 const TGosidebaritems =
 [
-  { text: 'Home', icon: <HomeIcon />, path: '/tourismgovernor' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/tourismgovernor/locations' },
+  { text: 'Home', icon: <HomeIcon />, path: '/tourismgovernor/:id' },
+  { text: 'Locations', icon: <LocationOnIcon />, path: '/tourismgovernor/:id/locations' },
+  { text: 'Historical Tags', icon: <ActivityIcon />, path: '/tourismgovernor/:id/historicaltags' },
+  { text: 'Cats & Tags', icon: <LocationOnIcon />, path: '/tourismgovernor/:id/categoriesandtags' },
 ];
 const touristsidebaritems =
 [
-  { text: 'Home', icon: <HomeIcon />, path: '/tourist' },
-  { text: 'Shop', icon: <ShopIcon />, path: '/tourist/shop' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/tourist/locations' },
-  { text: 'Activity Management', icon: <ActivityIcon />, path: '/tourist/activities' },
+  { text: 'Home', icon: <HomeIcon />, path: '/tourist/:id' },
+  { text: 'Shop', icon: <ShopIcon />, path: '/tourist/:id/shop' },
+  { text: 'Locations', icon: <LocationOnIcon />, path: '/tourist/:id/locations' },
 ];
 const advertisersidebaritems =
 [
-  { text: 'Home', icon: <HomeIcon />, path: '/advertiser' },
-  { text: 'Locations', icon: <LocationOnIcon />, path: '/advertiser/locations' },
-  { text: 'Activity Management', icon: <ActivityIcon />, path: '/advertiser/activities' },
+  { text: 'Home', icon: <HomeIcon />, path: '/advertiser/:id' },
+  { text: 'Locations', icon: <LocationOnIcon />, path: '/advertiser/:id/locations' },
+  { text: 'Activity Management', icon: <ActivityIcon />, path: '/advertiser/:id/activities' },
 ];
 const sellersidebaritems =
 [
-  { text: 'Home', icon: <HomeIcon />, path: '/seller' },
-  { text: 'Shop', icon: <ShopIcon />, path: '/seller/shop' },
+  { text: 'Home', icon: <HomeIcon />, path: '/seller/:id' },
+  { text: 'Shop', icon: <ShopIcon />, path: '/seller/:id/shop' },
 ];
 
 
@@ -81,7 +81,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'flex-end',
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 

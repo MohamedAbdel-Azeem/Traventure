@@ -3,8 +3,6 @@ import TouristTable from "./TouristTable"
 import Admin_TourismGovernorTable from "./Admin_TourismGovernorTable"
 import ImprovedSidebar from '../ImprovedSidebar';
 import TourGuide_Advertiser_SellerTable from './TourGuide_Advertiser_SellerTable';
-import axios, { AxiosError } from 'axios';
-import React from 'react';
 import { useGetAllUsers } from '../../custom_hooks/tourist_fetchandelete';
 
 const Accounts = () => {

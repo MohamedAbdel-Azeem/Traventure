@@ -11,7 +11,7 @@ const useUpdatePlace = (id: string, body: any) => {
             if (!id) return;
             if (!body) return;
             setLoading(true);
-            const response = await axios.patch(`traventure/api/place/update/${id}`, body)
+            const response = await axios.patch(`/traventure/api/place/update/${id}`, body)
                 .catch((err) => {
                     setError(err);
                 });

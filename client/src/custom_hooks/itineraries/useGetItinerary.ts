@@ -11,7 +11,7 @@ const useGetItinerary = (id: string) => {
     useEffect(() => {
         async function fetchItinerary() {
             setLoading(true);
-            const response = await axios.get(`traventure/api/itinerary/${hardId}`)     //*${id}
+            const response = await axios.get(`/traventure/api/itinerary/${hardId}`)     //*${id}
             .catch((err) => {
                 setError(err.message);
             });
