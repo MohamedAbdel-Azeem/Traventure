@@ -4,8 +4,8 @@ import AddIcon from '@mui/icons-material/Add';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { styled } from '@mui/material/styles';
 import PublicIcon from '@mui/icons-material/Public';
-import { deleteUsers } from '../../custom_hooks/governorandadmin';
-import useAddAdminandGovernor from "../../custom_hooks/governorandadminadd";
+import { deleteUsers } from '../../custom_hooks/adminusers/governorandadmin';
+import useAddAdminandGovernor from "../../custom_hooks/adminusers/governorandadminadd";
 type AdminTourismGovernorTabletype = {
   username: string;
   password: string

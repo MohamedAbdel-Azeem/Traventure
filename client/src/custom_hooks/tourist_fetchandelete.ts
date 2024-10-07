@@ -4,7 +4,7 @@ interface Advertiser {
   _id: string;
   username: string;
   email: string;
-  password: string; // Note: It's best not to expose passwords in a real app
+  password: string;
   isAccepted: boolean;
   __v: number;
   hotline: string;
@@ -16,11 +16,11 @@ interface Seller {
   _id: string;
   username: string;
   email: string;
-  password: string; // Note: It's best not to expose passwords in a real app
+  password: string;
   isAccepted: boolean;
   __v: number;
-  description?: string; // Optional field
-  name?: string; // Optional field
+  description?: string;
+  name?: string;
 }
 
 // Tour Guide interface
@@ -28,9 +28,9 @@ interface TourGuide {
   _id: string;
   username: string;
   email: string;
-  password: string; // Note: It's best not to expose passwords in a real app
+  password: string;
   isAccepted: boolean;
-  previousWork: any[]; // Assuming this could be an array of any type
+  previousWork: any[];
   __v: number;
   mobileNumber: string;
   yearsOfExperience: number;
@@ -41,11 +41,11 @@ interface Tourist {
   _id: string;
   username: string;
   email: string;
-  password: string; // Note: It's best not to expose passwords in a real app
+  password: string;
   mobileNumber: string;
-  dateOfBirth: string; // ISO date string
+  dateOfBirth: string;
   nationality: string;
-  Occupation: string; // It's better to use camelCase for consistency
+  Occupation: string;
   __v: number;
 }
 
@@ -53,14 +53,14 @@ interface Tourist {
 interface Admin {
   _id: string;
   username: string;
-  password: string; // Note: It's best not to expose passwords in a real app
+  password: string;
   __v: number;
 }
 
 interface TourismGovernor {
   _id: string;
   username: string;
-  password: string; // Note: It's best not to expose passwords in a real app
+  password: string;
   __v: number;
 }
 
@@ -75,7 +75,7 @@ interface DataStructure {
 
 
 export const deleteUsers = async (username: string, type: string) => {
-  const response = await fetch(`traventure/api/admin/delete/user/${username}/tourist`, {
+  const response = await fetch(`/traventure/api/admin/delete/user/${username}/tourist`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -100,7 +100,7 @@ export const useGetAllUsers = () => {
     React.useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await axios.get("traventure/api/admin/all", {
+          const response = await axios.get("/traventure/api/admin/all", {
             params: {
               username: "SeifTarek",
             },
