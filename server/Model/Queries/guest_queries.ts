@@ -140,7 +140,6 @@ async function isUniqueMobileNumber(mobileNumber: string) {
 
 
 export async function handleRegisterErrors(err: any, res: any) {
-  console.log("djvbuasfae", err);
   if (err.message === 'Username already exists') {
     res.status(409).send({ error: err.message });
   } else if (err.message === 'Email already exists') {

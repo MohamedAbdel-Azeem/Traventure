@@ -6,7 +6,6 @@ const useGetItinerary = (username: string | undefined) => {
   const [itinerary, setItinerary] = useState<Itinerary[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  console.log(username);
   useEffect(() => {
     async function fetchItinerary() {
       if (!username) return;
@@ -25,7 +24,6 @@ const useGetItinerary = (username: string | undefined) => {
     }
     fetchItinerary();
   }, [username]);
-
   return { itinerary, loading, error };
 };
 

@@ -10,13 +10,11 @@ export const useGetAdvertiser = (username: string | undefined) => {
   useEffect(() => {
     if (!username) return;
     const url = `/traventure/api/advertiser/${username}`;
-    console.log(url);
     const fetchAdvertiser = async () => {
       setLoading(true);
       try {
         const { data } = await axios.get(url);
         setUser(data);
-        console.log(data);
       } catch (err) {
         setError("erro getting advertiser");
       } finally {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import TheMAP from './TheMAP';
-import { Box, Checkbox, FormControl, ListItemText, MenuItem, Modal, Rating, Select, SelectChangeEvent, TextField } from '@mui/material';
+import { Box, Checkbox, FormControl, FormHelperText, Input, InputLabel, ListItemText, MenuItem, Modal, Select, SelectChangeEvent, TextField } from '@mui/material';
 import { useGetAllCategories, useGetAllCategoriesD, useGetAllTags } from '../custom_hooks/categoryandTagCRUD';
 import { updateActivity } from '../custom_hooks/activities/updateActivity';
 type Activity = {
@@ -17,11 +17,6 @@ type Activity = {
     Tags: CatStructure[]; 
     BookingIsOpen: boolean; 
     added_By: string; 
-  feedback?: {
-    name: string,
-    rating: string,
-    review: string,
-  }[];
 };
 interface ActivityProp {
     activity: Activity;
@@ -35,7 +30,7 @@ type CatStructure = {
   }
   
 
-export const ActivityCard: React.FC<ActivityProp> = ({activity, onDelete }) => {
+export const ActivityCardTourist: React.FC<ActivityProp> = ({activity, onDelete }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [currentActivity, setCurrentActivity] = useState<Activity>(activity);
     const [newTitle, setNewTitle] = useState(currentActivity.Title);
@@ -46,22 +41,8 @@ export const ActivityCard: React.FC<ActivityProp> = ({activity, onDelete }) => {
     const [newSpecialDiscount, setNewSpecialDiscount] = useState(currentActivity.SpecialDiscount);
     const [newBIO, setNewBIO] = useState(currentActivity.BookingIsOpen);
     const [mopen, setmOpen] = useState(false);
-    
+  
 
-    const calculateAverageRating = (currentActivity: Activity): number => {
-        const allRatings = currentActivity.feedback?.map(fb => parseFloat(fb.rating));
-        const totalRating = allRatings?.reduce((acc, rating) => acc + rating, 0);
-        return allRatings?.length ? totalRating / allRatings?.length : 0;
-      };
-    
-      const averageRating = calculateAverageRating(currentActivity);
-
-
-
-
-
-
-console.log(currentActivity.feedback);
     const handleDeleteClick = () => {
         onDelete(activity._id);
     };
@@ -172,8 +153,13 @@ console.log(currentActivity.feedback);
         </Box>
       </Modal>
             <div className="rounded-[19px]">
-                <div className="w-[400px] h-[475px] bg-[#25b396] rounded-[19px] relative"
-                    >
+                <div className="w-[400px] h-[475px] bg-[#2a7306] rounded-[19px] relative"
+                    style={{
+                        background: `
+                            radial-gradient(ellipse at top right, #2a7306 0%, #63ea1f 76%, #00000000 100%),
+                            radial-gradient(ellipse at top left, #2a7306 0%, #63ea1f 76%, #00000000 100%)
+                        `,
+                    }}>
                     <div className="w-[400px] h-[69px] rounded-t-[19px]">
                         <div className="absolute text-center top-0 left-0 w-[71px] h-[30px] rounded-tl-[19px] bg-[#FF0000] border-black border-[1px] rounded-br-[19px]">
                             {isEditing ? (
@@ -191,7 +177,7 @@ console.log(currentActivity.feedback);
                                 newBIO ? 'Open' : 'Closed'
                             )}
                         </div>
-                        <div className="absolute top-[60px] right-[10px]">
+                        {/* <div className="absolute top-[60px] right-[10px]">
                         <button title="Edit" className="editBtn" onClick={handleEditClick}>
                         <svg height="1em" viewBox="0 0 512 512">
                         <path
@@ -199,8 +185,8 @@ console.log(currentActivity.feedback);
                         </path>
                         </svg>
                         </button> 
-                        </div>
-                        <button className="bin-button absolute top-[10px] right-[10px]" title="Delete" onClick={handleDeleteClick}
+                        </div> */}
+                        {/* <button className="bin-button absolute top-[10px] right-[10px]" title="Delete" onClick={handleDeleteClick}
                         >
                         <svg
                             className="bin-top"
@@ -235,8 +221,8 @@ console.log(currentActivity.feedback);
                             <path d="M12 6L12 29" stroke="white" stroke-width="4"></path>
                             <path d="M21 6V29" stroke="white" stroke-width="4"></path>
                         </svg>
-                        </button>
-                    </div><Rating disabled name="rating" value={averageRating} precision={0.1} />
+                        </button> */}
+                    </div>
                     {!isEditing?<div className="text-[38px] h-[45px] text-center leading-[43px]">{newTitle}</div>:
                      <TextField
                      size="small"
@@ -339,8 +325,8 @@ console.log(currentActivity.feedback);
                                 setLatitude={setLatitude}
                                 setLongitude={setLongitude}/>
                             ) : (
-                                <iframe title="map" className="rounded-b-[19px]" src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${longitude}!3d${latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
-                                width="400px" height="166px"></iframe>
+                                <iframe title="map" className="h-full rounded-b-[19px]" src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${longitude}!3d${latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
+                                width="400px" height="200px"></iframe>
                             )}
                         </div>
                     </div>

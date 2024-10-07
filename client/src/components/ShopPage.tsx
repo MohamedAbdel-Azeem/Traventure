@@ -48,7 +48,6 @@ const {data, loading, error} = useGetAllProducts();
     }
   }, [data]);
 
-  console.log(data);
 
   const [minPrice, setMinPrice] = useState<number | ''>('');
   const [maxPrice, setMaxPrice] = useState<number | ''>('');
@@ -266,7 +265,7 @@ const {data, loading, error} = useGetAllProducts();
         </Box>
         </Box>
       </Modal>
-      <ImprovedSidebar title="Admin" className="flex-2"/>
+      <ImprovedSidebar className="flex-2"/>
       <div className="flex flex-col flex-1">
       <div className="search-bar">
         <input

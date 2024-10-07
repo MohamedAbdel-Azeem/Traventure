@@ -1,16 +1,12 @@
 import Navbar from "../components/navbar";
-import { useState } from "react";
-import Dashboard from "../components/Admin/Dashboard";
 import ImprovedSidebar from "../components/ImprovedSidebar";
-import ItineraryCardCRUD from "../components/ItineraryCardCRUD";
 import Itineraries from "../components/Itineraries";
 
 const TourGuidePage = () => {
     return (
         <div>
             <Navbar sideBarFlag={true} />
-            <ImprovedSidebar title="Tour Guide" />
-        
+            <ImprovedSidebar/>
             <div
                 style={{
                     margin: `20px 20px 20px 100px`,
@@ -23,5 +19,4 @@ const TourGuidePage = () => {
         </div>
     );
 };
-
 export default TourGuidePage;

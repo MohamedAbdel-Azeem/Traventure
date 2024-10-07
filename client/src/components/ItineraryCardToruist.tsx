@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import StarIcon from '@mui/icons-material/Star';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CircularProgress from '@mui/material/CircularProgress';
 import { format } from 'date-fns';
 import { TouristProfileData } from "../routes/_app/tourist_profile/tourist_profile_data";
 import IActivity from "../custom_hooks/activities/activity_interface";
@@ -43,11 +41,9 @@ interface ItineraryCardCRUDProps {
     user_id?: TouristProfileData;
   }[];
   accesibility: boolean;
-  onDelete?: (id: string) => void; 
-  isDeleting?: boolean; 
 }
 
-const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
+const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   _id,
   title,
   description,
@@ -61,14 +57,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
   dropoff_location,
   selectedTags = [],
   plan,
-  onDelete,
-  isDeleting = false, 
 }) => {
-  const handleDeleteClick = () => {
-    if (onDelete) {
-      onDelete(_id);
-    }
-  };
 
   const formatDate = (dateString: string) => {
     try {
@@ -80,8 +69,8 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
   };
 
   return (
-    <div className="m-4 transition transform hover:scale-105 w-96 bg-gray-100 rounded-lg">  
-      <div className="relative w-full h-[200px]">
+<div className="m-4 transition transform hover:scale-105 w-96 bg-gray-200 rounded-lg"> 
+  <div className="relative w-full h-[200px]">
         <img src={main_Picture} alt={title} className="w-full h-full object-cover" />
       </div>
       <div className="p-4">
@@ -140,7 +129,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
 
         <div className="mt-4 flex justify-between items-center">
           <Link
-            to={`/itinerary/${_id}`}
+            to={`/tourist-itinerary/${_id}`}
             state={{
               title,
               description,
@@ -160,22 +149,10 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
             View Details
           </Link>
 
-          {onDelete && (
-            isDeleting ? (
-              <CircularProgress size={24} className="text-red-500" />
-            ) : (
-              <button
-                onClick={handleDeleteClick}
-                className="text-red-500 hover:text-red-700 transition"
-              >
-                <DeleteIcon />
-              </button>
-            )
-          )}
         </div>
       </div>
     </div>
   );
 };
 
-export default ItineraryCardCRUD;
+export default ItineraryCardCRUDTourist;
