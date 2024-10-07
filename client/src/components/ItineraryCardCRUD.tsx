@@ -59,6 +59,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
   language,
   pickup_location,
   dropoff_location,
+  accesibility,
   selectedTags = [],
   plan,
   onDelete,
@@ -155,6 +156,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
               dropoff_location,
               plan,
               selectedTags,
+              accesibility
             }}
             className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center"
           >

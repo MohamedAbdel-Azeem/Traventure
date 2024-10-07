@@ -78,7 +78,7 @@ const Itineraries = () => {
             added_By={""}
             total={0}
             booked_By={[]}
-            accesibility={false}
+            accesibility={card.accesibility}
           />
         ))}
       </div>
