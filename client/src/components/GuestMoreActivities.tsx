@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { ActivityCardTourist } from './ActivityCardTourist';
-import useGetAllActivitiesS from '../custom_hooks/activities/useGetActivities';
+import {useGetAllActivitiesS} from '../custom_hooks/activities/useGetActivities';
 import IActivity from '../custom_hooks/activities/activity_interface';
 import { useGetAllCategories } from '../custom_hooks/categoryandTagCRUD';
 import Activity from '../custom_hooks/activities/activity_interface';
