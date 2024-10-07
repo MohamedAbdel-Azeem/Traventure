@@ -13,9 +13,20 @@ import { useNavigate } from 'react-router-dom';
 import { ActivityCardTourist } from './ActivityCardTourist';
 import useGetAllActivitiesS from '../custom_hooks/activities/useGetActivities';
 import IActivity from '../custom_hooks/activities/activity_interface';
+import { useGetAllCategories } from '../custom_hooks/categoryandTagCRUD';
 
 const MoreActivities: React.FC = () => {
     const { sactivities, aloading, aerror } = useGetAllActivitiesS();
+
+    const { data: catData } = useGetAllCategories(); 
+
+    const [categoryTerms, setCategoryTerms] = useState<string[]>([]); 
+
+
+    
+    
+    const [selectedCat, setSelectedCats] = useState<string[]>([]);
+
     const navigate = useNavigate();
 
     const [searchType, setSearchType] = useState<'name' | 'tag' | 'category'>('name');
@@ -51,7 +62,7 @@ const MoreActivities: React.FC = () => {
         } else if (searchType === 'tag') {
             return activity.Tags.some(tag => tag.name.toLowerCase().includes(term));
         } else if (searchType === 'category') {
-            return activity.Category.name.toLowerCase().includes(term);
+            return categoryTerms.length === 0 || categoryTerms.includes(activity.Category.name);
         }
 
         return true;
@@ -63,7 +74,7 @@ const MoreActivities: React.FC = () => {
                 const activityDate = new Date(activity.DateAndTime);
                 return activityDate >= new Date(startDate) && activityDate <= new Date(endDate);
             case 'category':
-                return activity.Category.name.toLowerCase().includes(categoryTerm.toLowerCase());
+                return categoryTerms.length === 0 || categoryTerms.includes(activity.Category.name);
             case 'rating':
                 return activity.rating >= 4;
             default:
@@ -177,15 +188,24 @@ const MoreActivities: React.FC = () => {
                         )}
 
                         {filterType === 'category' && (
-                            <div className="flex gap-2">
-                                <input
-                                    type="text"
-                                    placeholder="Category"
-                                    value={categoryTerm}
-                                    onChange={(e) => setCategoryTerm(e.target.value)}
-                                    className="border p-2 rounded"
-                                />
-                            </div>
+                           <div className="flex gap-2">
+                           <FormControl variant="outlined" className="min-w-[120px]">
+                               <InputLabel id="category-select-label">Categories</InputLabel>
+                               <Select
+                                   labelId="category-select-label"
+                                   multiple
+                                   value={categoryTerms}
+                                   onChange={(e) => setCategoryTerms(e.target.value as string[])}
+                                   label="Categories"
+                               >
+                                   {catData.map((category) => (
+                                       <MenuItem key={category} value={category}>
+                                           {category}
+                                       </MenuItem>
+                                   ))}
+                               </Select>
+                           </FormControl>
+                       </div>
                         )}
                     </div>
 
