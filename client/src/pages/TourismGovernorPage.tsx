@@ -11,7 +11,7 @@ const TourismGovernorPage = () => {
             <Navbar
                 sideBarFlag={true}
             />
-            <ImprovedSidebar title="Tourism Governor"/>
+            <ImprovedSidebar/>
             <div
                 style={{
                     margin: `20px 20px 20px 100px`,

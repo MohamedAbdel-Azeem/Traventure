@@ -11,7 +11,7 @@ const SellerPage = () => {
             <Navbar
                 sideBarFlag={true}
             />
-            <ImprovedSidebar title="Seller"/>
+            <ImprovedSidebar/>
             <div
                 style={{
                     margin: `20px 20px 20px 100px`,

@@ -35,7 +35,7 @@ const MorePlaces: React.FC = () => {
         });
 
     return (<div className="flex">
-        <ImprovedSidebar title="Tourist" />
+        <ImprovedSidebar/>
         <Box p={3}>
             <Typography variant="h4" component="h1" gutterBottom>
                 All Places

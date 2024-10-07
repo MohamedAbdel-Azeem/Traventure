@@ -34,7 +34,7 @@ const SignIn: React.FC = () => {
       }
     }
     // Assuming that data.type and data.user._id are valid
-    navigate(`/${data.type}/${data.user._id}`);
+    navigate(`/${data.type}/${data.user.username}`);
   }, [data]);
 
   useEffect(() => {

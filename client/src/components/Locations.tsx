@@ -99,7 +99,7 @@ const handleDelete = (id: string) => {
 
     return ( 
     <div className="flex justify-center">
-        <ImprovedSidebar title="Admin"/>
+        <ImprovedSidebar/>
     <div className="grid grid-cols-3 mt-10">
       <Modal
         open={open}
