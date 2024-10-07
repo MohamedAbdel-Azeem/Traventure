@@ -42,7 +42,7 @@ function App() {
           <Route path="/tourist/:id/shop" element={<ShopPage type="Tourist" />} />
           <Route path="/tourist/:id/locations" element={<Locations />} />
           <Route path="/tourismgovernor/:id" element={<TourismGovernorPage />} />
-          <Route path="/tourismgovernor/:id/historicaltags" element={<HistoricalTags />} />
+          {/* <Route path="/tourismgovernor/:id/historicaltags" element={<HistoricalTags />} /> */}
           <Route path="/tourismgovernor/:id/locations" element={<Locations />} />
           <Route path="/tourismgovernor/:id/categoriesandtags" element={<CT />} />
           <Route path="/advertiser/:id" element={<AdvertiserPage />} />
