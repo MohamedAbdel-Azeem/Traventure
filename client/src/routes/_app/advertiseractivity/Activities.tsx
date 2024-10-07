@@ -3,7 +3,7 @@ import { Box, Button, Checkbox, FormControl, InputAdornment, InputLabel, ListIte
 import {ActivityCard} from "../../../components/ActivityCard";
 import ImprovedSidebar from "../../../components/ImprovedSidebar";
 import TheMAP from "../../../components/TheMAP";
-import useGetAllActivitiesS from "../../../custom_hooks/activities/useGetActivities";
+import {useGetAllActivitiesID} from "../../../custom_hooks/activities/useGetActivities";
 import { useGetAllTags, useGetAllCategoriesD } from "../../../custom_hooks/categoryandTagCRUD";
 import { createActivity } from "../../../custom_hooks/activities/useCreateActivity";
 import useDeleteActivity from "../../../custom_hooks/activities/deleteActivity";
@@ -16,7 +16,6 @@ export const Activities = ()=>{
   const [newDate, setnnewDate] = useState(new Date());
   const [newlatitude, setnLatitude] = useState(30.0);
   const [newlongitude, setnLongitude] = useState(31.2);
-  const [newCategory, setnnewCategory] = useState<DataStructure>();
   const [newBIO, setnnewBIO] = useState(false);
 
   interface Activity {
@@ -39,8 +38,8 @@ type DataStructure = {
   name: string;
   __v: number;
 }
-
-const {sactivities,aloading,aerror, fetchActivities} = useGetAllActivitiesS();
+const currentuser=location.pathname.split(`/`)[2];
+const {sactivities,aloading,aerror, fetchActivities} = useGetAllActivitiesID(currentuser);
 const [aactivities, setActivities] = useState<Activity[]|null>(null);
 
 useEffect(() => {
@@ -56,7 +55,6 @@ const handleDelete = (id: string) => {
       const pActivities = aactivities?.filter(act => act._id !== id) ?? [];
       setActivities(pActivities);
   }
-
 };
 
   const handleCreate = async () => {
@@ -77,11 +75,11 @@ const handleDelete = (id: string) => {
       Tags: selectedTags,
       Category: selectedCat,
       BookingIsOpen: newBIO, 
-      added_By: "670188e9098553f3d915f73c"
+      added_By: currentuser
   };
   
     try {
-        await createActivity(newActivity);
+        await createActivity(currentuser, newActivity);
         await fetchActivities();
         setOpen(false);
     } catch (error) {

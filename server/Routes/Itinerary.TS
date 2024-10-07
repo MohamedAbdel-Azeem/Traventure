@@ -3,11 +3,13 @@ import { matchedData, validationResult } from "express-validator";
 import {
   addItinerary,
   deleteItinerary,
-  getItinerary, updateItinerary
+  getItinerary, updateItinerary,
+  getAllItinerary
 } from "..//Model//Queries//itinerary_queries";
 import {
   itineraryAddValidator, itineraryUpdateValidator
 } from "..//utils//express-validator//itineraryValidator";
+import TourGuide from "../Model/Schemas/TourGuide";
 
 const router = Router();
 
@@ -29,10 +31,24 @@ router.post(
   }
 );
 
-router.get("/:id", async (req: Request, res: Response) => {
+router.get("/", async (req: Request, res: Response) => {
   try {
-    const tour_guide_Id = req.params.id;
-    const products = await getItinerary(tour_guide_Id);
+    const products = await getAllItinerary();
+    res.status(200).send(products);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+
+router.get("/:username", async (req: Request, res: Response) => {
+  try {
+    const tour_guide = await TourGuide.findOne({ username: req.params.username });
+    if (!tour_guide) {
+      return res.status(400).send("Tour Guide not found");
+    }
+    const tour_guide_Id  = (tour_guide._id as string);
+    const products = await getItinerary(tour_guide_Id );
     res.status(200).send(products);
   } catch (error) {
     res.status(500).send(error);

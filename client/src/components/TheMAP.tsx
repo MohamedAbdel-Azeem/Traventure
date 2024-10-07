@@ -58,7 +58,7 @@ const TheMAP: React.FC<TheMAPProps> = (props) => {
       });
   }
   initMap();
-
+  
   return (<div> 
    <div id="map" className={`z-1 ${className}`}/>
    </div>

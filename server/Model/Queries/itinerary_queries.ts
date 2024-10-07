@@ -16,6 +16,18 @@ export async function getItinerary(tour_guide_id: String) {
   }
 }
 
+export async function getAllItinerary() {
+  try {
+    const itineraries = await Itinerary.find().populate('added_By')
+    .populate('plan.place')
+    .populate('plan.activities.activity_id')
+    .populate('selectedTags')
+    return itineraries;
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 export async function addItinerary(itinerary: Object) {
   try {
