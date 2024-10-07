@@ -255,8 +255,7 @@ const style = {
                         width: 250,
                     },
                     },
-                }}
-                >
+                }}>
                 {tagsData.map((tag) => (
                     <MenuItem key={tag._id} value={tag._id}>
                     <Checkbox checked={selectedTags.indexOf(tag._id) > -1} />
@@ -272,10 +271,7 @@ const style = {
                   setLongitude={setnLongitude}/>
             </FormControl>
 
-
-
           <Button onClick={handleCreate} className="col-span-3">Add</Button>
-              
               
         </Box>
         </Box>

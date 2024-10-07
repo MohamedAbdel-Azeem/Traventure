@@ -1,6 +1,16 @@
 import { useState, useCallback, useEffect } from "react";
 import Place from "./place_interface";
 import axios from "axios";
+interface TourismGovernor {
+    _id: string;
+    username: string;
+    password: string;
+    __v: number;
+  }
+  
+  interface DataStructure {
+    governors: TourismGovernor[];
+  }
 
 
 export const useGetPlace = () => {
@@ -31,14 +41,31 @@ export const useGetPlace = () => {
   };
 
 
-  export const useGetPlaceID = (username:string) => {
+  export const useGetPlaceID = (ausername:string) => {
     const [idplaces, setidPlaces] = useState<Place[] | null>(null);
     const [idgloading, setidgLoading] = useState(false);
     const [idgerror, setidgError] = useState<string | null>(null);
     const fetchPlacesID = useCallback(async () => {
         setidgLoading(true);
         try {
-            const response = await axios.get(`/traventure/api/place/${username}`);
+
+
+            const tempresponse = await axios.get<DataStructure>("/traventure/api/admin/all", {
+                params: {
+                  username: "Ibra",
+                },
+              }) ;
+            const allUsers = tempresponse.data;
+    
+            const idtosearch = allUsers.governors.find(thing => thing.username === ausername);
+
+
+
+              const tosearch = idtosearch?._id as string
+
+
+
+            const response = await axios.get(`/traventure/api/place/${tosearch}`);
             if (response.status === 200) {
                 setidPlaces(response.data);
             } else {

@@ -62,7 +62,6 @@ function App() {
           <Route path="/itinerary/:id" element={<ItineraryDetails />} />
           <Route path="/tourist-itinerary/:username" element={<ItineraryDetailsTourist />} />
           <Route path="/more-itineraries" element={<MoreItineraries />} />
-          <Route path="/more-places" element={<MorePlaces />} />
           <Route path="/tourist/:id/activities" element={<MoreActivities />} />
         </Routes>
       </Router>

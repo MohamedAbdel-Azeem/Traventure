@@ -39,9 +39,9 @@ export const createPlaceID = async (ausername:string ,newPlace) => {
         const allUsers = tempresponse.data;
 
         const idtoAddby = allUsers.governors.find(thing => thing.username === ausername);
-
         newPlace.added_By = idtoAddby?._id as string;
 
+        console.log(newPlace);
         const response = await axios.post("/traventure/api/place/add", newPlace);
         if (response.status >= 200 && response.status < 300) {
             return response.data;

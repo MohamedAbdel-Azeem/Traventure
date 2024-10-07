@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
-import { Button, TextField } from "@mui/material";
+import { Button, Checkbox, FormControl, ListItemText, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import useUpdatePlace from "../custom_hooks/places/useUpdatePlace";
 import  Place  from "../custom_hooks/places/place_interface";
 import TheMAP from "./TheMAP";
+import { useGetHTags } from "../custom_hooks/useCreateHistoricalTag";
 interface LocationCardCRUDProps {
     id: string,
     onDelete: (id: string) => void;
@@ -12,6 +13,7 @@ interface LocationCardCRUDProps {
     wholeLocation:Place|null;
 }
 
+const currentuser=location.pathname.split(`/`)[2];
 const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
     { id, onDelete, className, wholeLocation:details }) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -25,9 +27,34 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
     const [longitude, setLongitude] = useState(details?.location.longitude ?? 0);
     const [images, setImages] = useState(details?.pictures || []);
     const [image, setImage] = useState('');
-    
+    console.log("+++++++++++++++++++++++++++++++++++++++++"+details?.historicalTags[0]);
+    const [selectedTags, setSelectedTags] = useState<string[]>(details?.historicalTags || []);
     const [apiBody, setApiBody] = useState<Place | null>(details);
     useUpdatePlace(id,apiBody);
+    const {
+        loading: tagsLoading,
+        error: tagsError,
+        data: tagsData,
+      } = useGetHTags();
+
+
+      const handleTagsChange = (event: SelectChangeEvent<string[]>) => {
+        const {
+          target: { value },
+        } = event;
+        setSelectedTags(typeof value === "string" ? value.split(",") : value);
+        console.log(selectedTags);
+      };
+      
+      
+      const handleTagsText = (value: string[]) => {
+        const valueNames = tagsData
+          .filter((tag) => value.includes(tag._id))
+          .map((tag) => tag.name);
+        return valueNames.join(", ");
+      };
+
+
 
     const handleEditClick = () => {
         const filteredImages = images.filter(image => image !== '');
@@ -47,6 +74,8 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
                 foreign: foreign,
                 student: student,
             },
+            added_By:currentuser,
+            historicalTags: [],
         });
     };
     const handleDeleteClick = () => {
@@ -273,7 +302,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
                 <div className="w-[110px] h-full bg-[#7CC7E7] rounded-br-[11px] grid">
                 
                 <div className="m-auto flex flex-row"><AccessTimeIcon/>{isEditing ? (
-                            <TextField
+                            <div><TextField
                                 value={hours}
                                 size="small"
                                 onChange={(e) => setHours(e.target.value)}
@@ -288,11 +317,40 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
                                     },
                                 }}
                             />
+
+
+
+                            </div>
                         ) : (
                             <p className="overflow-auto w-[100px]">
                             {hours}
-                        </p>
+                            </p>
                         )}</div>
+                                    <FormControl fullWidth sx={{ marginY: 1 }}>
+                <Select
+                labelId="tags-select-label"
+                multiple
+                disabled={!isEditing}
+                value={selectedTags}
+                onChange={handleTagsChange}
+                renderValue={handleTagsText}
+                MenuProps={{
+                    PaperProps: {
+                    style: {
+                        maxHeight: 200,
+                        width: 250,
+                    },
+                    },
+                }}
+                >
+                {tagsData.map((tag) => (
+                    <MenuItem key={tag._id} value={tag._id}>
+                    <Checkbox checked={selectedTags.indexOf(tag._id) > -1} />
+                    <ListItemText primary={tag.name} />
+                    </MenuItem>
+                ))}
+                </Select>
+            </FormControl>
                 </div>
                 </div>
                 

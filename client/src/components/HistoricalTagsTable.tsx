@@ -18,7 +18,6 @@ function Row(props: { row: string }) {
   const { row } = props;
 
 
-
   return (
     <React.Fragment>
       <StyledTableRow sx={{ '& > *': { borderBottom: 'unset' } }} >
