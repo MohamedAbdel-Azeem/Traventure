@@ -48,7 +48,6 @@ const {data, loading, error} = useGetAllProducts();
     }
   }, [data]);
 
-  console.log(data);
 
   const [minPrice, setMinPrice] = useState<number | ''>('');
   const [maxPrice, setMaxPrice] = useState<number | ''>('');

@@ -26,14 +26,8 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
     const [images, setImages] = useState(details?.pictures || []);
     const [image, setImage] = useState('');
     
-
-
-
     const [apiBody, setApiBody] = useState<Place | null>(details);
-    console.log();
     useUpdatePlace(id,apiBody);
-
-
 
     const handleEditClick = () => {
         const filteredImages = images.filter(image => image !== '');
@@ -54,7 +48,6 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
                 student: student,
             },
         });
-        console.log("LIFE IS PAIN, I HATE MYSELF"+latitude);
     };
     const handleDeleteClick = () => {
         onDelete(id);
@@ -211,7 +204,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = (
                         ) : ( 
                         <div className="text-[16px] h-full overflow-auto">
                             <iframe title="map" className="h-full rounded-bl-[11px]" src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${longitude}!3d${latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
-                            width="311px"
+                            width="311px" height="211px"
                             ></iframe>
                         </div>
                         )}
