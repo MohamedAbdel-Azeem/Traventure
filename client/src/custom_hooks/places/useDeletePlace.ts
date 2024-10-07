@@ -7,7 +7,7 @@ export const useDeletePlaces = () => {
   const deletePlace = async (id: string) => {
     setLoading(true);
     try {
-      const response = await fetch(`traventure/api/place/delete/${id}`, {
+      const response = await fetch(`/traventure/api/place/delete/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

@@ -23,6 +23,8 @@ import { Seller_Profile } from "./routes/_app/seller_profile/seller-profile-main
 import { Advertiser_Profile } from "./routes/_app/advertiser_profile/advertiser_profile-main";
 import LandingPage from "./pages/LandingPage";
 import { TourGuide_Profile } from "./routes/_app/tourguide_profile/tourguide-profile-main";
+import HistoricalTags from "./components/HistoricalTags";
+import Itineraries from "./components/Itineraries";
 
 
 function App() {
@@ -30,32 +32,34 @@ function App() {
     <MantineProvider>
       <Router>
         <Routes>
-          <Route path="/admin/:id" element={<AdminPage />} />
-          <Route path="/tourguide" element={<TourGuidePage />} />
-          <Route path="/tourismgovernor" element={<TourismGovernorPage />} />
-          <Route path="/advertiser" element={<AdvertiserPage />} />
-          <Route path="/tourist/:id" element={<TouristPage />} />
-          <Route path="/seller" element={<SellerPage />} />
-          <Route path="/admin-users" element={<Accounts />} />
-          <Route path="/admin/shop" element={<ShopPage type="Admin"/>} />
-          <Route path="/tourist/shop" element={<ShopPage type="Tourist" />} />
-          <Route path="/seller/shop" element={<ShopPage type="Seller" />} />
-          <Route path="/tourismgovernor/locations" element={<Locations />} />
-          <Route path="/admin-locations" element={<Locations />} />
-          <Route path="/advertiser/activities" element={<Activities />} />
-          <Route path="/itineraries" element={<Accounts />} />
           <Route path="/" element={<SignIn />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/admin/:id" element={<AdminPage />} />
+          <Route path="/admin/:id/users" element={<Accounts />} />
+          <Route path="/admin/:id/shop" element={<ShopPage type="Admin"/>} />
+          <Route path="/admin/:id/locations" element={<Locations />} />
+          <Route path="/tourist/:id" element={<TouristPage />} />
+          <Route path="/tourist/:id/shop" element={<ShopPage type="Tourist" />} />
+          <Route path="/tourist/:id/locations" element={<Locations />} />
+          <Route path="/tourismgovernor/:id" element={<TourismGovernorPage />} />
+          <Route path="/tourismgovernor/:id/historicaltags" element={<HistoricalTags />} />
+          <Route path="/tourismgovernor/:id/locations" element={<Locations />} />
+          <Route path="/tourismgovernor/:id/categoriesandtags" element={<CT />} />
+          <Route path="/advertiser/:id" element={<AdvertiserPage />} />
+          <Route path="/advertiser/:id/locations" element={<Locations />} />
+          <Route path="/advertiser/:id/activities" element={<Activities />} />
+          <Route path="/tourguide/:id" element={<TourGuidePage />} />
+          <Route path="/tourguide/:id/locations" element={<TourGuidePage />} />
+          <Route path="/tourguide/:id/itineraries" element={<TourGuidePage />} />
+          <Route path="/seller/:id" element={<SellerPage />} />
+          <Route path="/seller/:id/shop" element={<ShopPage type="Seller" />} />
+          <Route path="/itineraries" element={<Itineraries />} />
           <Route path="/landing" element={<LandingPage />} />
           <Route path="/touristprofile/:username" element={<Tourist_Profile />} />
           <Route path="/sellerprofile/:username" element={<Seller_Profile />} />
-          <Route
-            path="/tourguideprofile/:username"
-            element={<TourGuide_Profile />}
-          />
+          <Route path="/tourguideprofile/:username" element={<TourGuide_Profile />} />
           <Route path="/advertiserprofile/:username" element={<Advertiser_Profile />} />
-          <Route path="/CategoriesandTags" element={<CT />} />
-<Route path="/itinerary/:id" element={<ItineraryDetails />} />
+          <Route path="/itinerary/:id" element={<ItineraryDetails />} />
         </Routes>
       </Router>
     </MantineProvider>

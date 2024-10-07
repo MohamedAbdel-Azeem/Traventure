@@ -72,7 +72,7 @@ const fetch_testing = () => {
     React.useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("traventure/api/admin/all", {
+                const response = await axios.get("/traventure/api/admin/all", {
                     params: {
                         username: "SeifTarek",
                     }

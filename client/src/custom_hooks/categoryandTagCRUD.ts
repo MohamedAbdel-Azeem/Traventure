@@ -68,7 +68,7 @@ export const deleteCategories = async (categoryName: string) => {
       throw new Error(`Category with name ${categoryName} not found`);
     }
 
-    const responseDelete = await fetch(`traventure/api/category/delete/${categoryToDelete._id}`, {
+    const responseDelete = await fetch(`/traventure/api/category/delete/${categoryToDelete._id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -238,7 +238,7 @@ export function useAddTag(body: object | null) {
       setLoading(true);
       setError(null);
       try {
-        const response = await axios.post("traventure/api/preferencetags/add", body);
+        const response = await axios.post("/traventure/api/preferencetags/add", body);
         if (response.status >= 200 && response.status < 300) {
           setData(response.data);
         } else {
