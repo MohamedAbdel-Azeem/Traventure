@@ -95,7 +95,6 @@ const TGosidebaritems =
   { text: 'Home', icon: <HomeIcon />, path: `/tourismgovernor/${currentuser}` },
   { text: 'Locations', icon: <LocationOnIcon />, path: `/tourismgovernor/${currentuser}/locations` },
   { text: 'Historical Tags', icon: <ActivityIcon />, path: `/tourismgovernor/${currentuser}/historicaltags` },
-  { text: 'Cats & Tags', icon: <LocationOnIcon />, path: `/tourismgovernor/${currentuser}/categoriesandtags` },
 ];
 const touristsidebaritems =
 [

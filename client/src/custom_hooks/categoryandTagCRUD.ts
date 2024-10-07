@@ -32,6 +32,7 @@ export const useGetAllCategories = () => {
 
   return { data, loading, error };
 };
+
 export const useGetAllCategoriesD = () => {
   const [data, setData] = React.useState<DataStructure[]>([]);
   const [loading, setLoading] = React.useState(true);
