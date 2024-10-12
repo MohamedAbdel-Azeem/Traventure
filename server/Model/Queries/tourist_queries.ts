@@ -3,7 +3,20 @@ import touristModel from "../Schemas/Tourist";
 import Itinerary from '../Schemas/Itinerary';
 import Activity from '../Schemas/Activity';
 import Place from '../Schemas/Places';
+import { getprofileInfo } from "./user_queries";
+import mongoose from "mongoose";
 
+interface Tourist extends Document {
+  username: string;
+  email: string;
+  password: string;
+  mobileNumber: string;
+  dateOfBirth: Date;
+  nationality: string;
+  Occupation: string;
+  wallet: number;
+  bookings: mongoose.Types.ObjectId[] | null;
+}
 export async function getAll() {
     try {
          // Fetch upcoming itineraries
@@ -25,6 +38,26 @@ export async function getAll() {
       throw err;
     }
   }
+export async function getTouristBookings(username: string) {
+    try {
+ 
+        const tourist = await touristModel.findOne({ username: username })
+        .populate({
+            path: "bookings",
+            populate: {
+                path: "itinerary",
+                select: "title _id" // specify the fields you want to populate
+            }
+        });
 
-module.exports = {getAll}; 
+    if (!tourist) {
+        throw new Error("Tourist not found");
+    }
+    const {bookings} = tourist as unknown as Tourist;
+     return bookings;
+    } catch (error) {
+        throw error;
+    }
+}
+module.exports = {getAll, getTouristBookings}; 
 
