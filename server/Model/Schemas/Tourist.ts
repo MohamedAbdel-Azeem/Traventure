@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
-
+import Booking from "./itineraryBooking";
 const Schema = mongoose.Schema;
+
 
 const touristSchema = new Schema({
   username: { type: String, required: true, unique: true },
@@ -10,7 +11,8 @@ const touristSchema = new Schema({
   dateOfBirth: { type: Date, required: true , immuatable: true },
   nationality: { type: String, required: true },
   Occupation: { type: String, required: true},
-  wallet: { type: Number, required: true, default: 0 }
+  wallet: { type: Number, required: true, default: 0 },
+  bookings: [{type: mongoose.Types.ObjectId, ref: "Booking"}],
 });
 
 export default mongoose.model('Tourist', touristSchema);
