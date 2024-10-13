@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
-import Booking from "./booking";
+import Booking from "./itineraryBooking";
 const Schema = mongoose.Schema;
+
 
 const touristSchema = new Schema({
   username: { type: String, required: true, unique: true },

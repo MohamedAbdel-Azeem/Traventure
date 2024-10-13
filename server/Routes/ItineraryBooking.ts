@@ -1,16 +1,7 @@
 import { Router } from "express";
-import {getTouristBookings,addBooking} from "../Model/Queries/booking_queries";
+import {getTouristBookings,addBooking} from "../Model/Queries/itineraryBooking_queries";
 
 const router = Router();
-
-router.get("/:touristId", async (req, res) => {
-  try {
-    const bookings = await getTouristBookings(req.params.touristId);
-    res.status(200).json(bookings);
-  } catch (error) {
-    res.status(500).send("error getting bookings");
-  }
-});
 
 router.post("/add", async (req, res) => { 
     try {

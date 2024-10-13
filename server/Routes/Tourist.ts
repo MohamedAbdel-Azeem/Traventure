@@ -74,7 +74,7 @@ router.get('/:username', async (req: Request, res: Response) => {
     });
 
      
-router.get('/bookings/:username', async (req: Request, res: Response) => {
+router.get('/itinerarybookings/:username', async (req: Request, res: Response) => {
     try {
         const username = req.params.username;
         const bookings = await getTouristBookings(username);
