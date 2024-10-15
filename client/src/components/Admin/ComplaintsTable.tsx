@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Table, TableBody, TableContainer, TableHead, TableRow, TableCell, TableSortLabel, TablePagination, Paper, TextField } from '@mui/material';
+import { Box, Button, Modal, Table, TableBody, TableContainer, TableHead, TableRow, TableCell, TableSortLabel, TablePagination, Paper, TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import DoneIcon from '@mui/icons-material/Done';
 import PendingIcon from '@mui/icons-material/Pending';
 import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
-
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 type Complaint = {
     type: boolean;
     bookingID?: string;
@@ -27,19 +29,64 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 function Row(props: { row: Complaint }) {
   const { row } = props;
 
+  const [cstatus, setCstatus] = React.useState(row.status);
+  const [open, setOpen] = React.useState(false);
+  const [reply, setReply] = React.useState('');
 
+  const handleChange = (event: SelectChangeEvent) => {
+    setCstatus(event.target.value as string);
+  };
 
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const handleReplyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setReply(event.target.value);
+  };
+  const handleSendReply = () => {
+    // Logic to send the reply
+    console.log(reply);
+    handleClose();
+  };
   return (
     <React.Fragment>
+      <Modal open={open} onClose={handleClose}>
+        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, p: 4 }}>
+          <TextField
+            label="Write your reply"
+            multiline
+            rows={4}
+            fullWidth
+            value={reply}
+            onChange={handleReplyChange}
+          />
+          <Button variant="contained" color="primary" onClick={handleSendReply} sx={{ mt: 2 }}>
+            Send
+          </Button>
+        </Box>
+      </Modal>
       <StyledTableRow sx={{ '& > *': { borderBottom: 'unset' } }} >
         <TableCell className="max-w-[2px] break-words" component="th" scope="row">
           {!row.type?"General":row.bookingID}
         </TableCell>
         <TableCell className="max-w-[2px] break-words">{row.title}</TableCell>
         <TableCell className="max-w-[2px] break-words">{row.body}</TableCell>
-        <TableCell className="max-w-[2px] break-words">{row.date}</TableCell>
-        <TableCell className="max-w-[2px] break-words">{row.status}</TableCell>
         <TableCell className="max-w-[2px] break-words">{row.issued_by}</TableCell>
+        <TableCell className="max-w-[2px] break-words">{row.date}</TableCell>
+        <TableCell className="max-w-[2px] break-words">
+        <Select
+          id="demo-simple-select"
+          value={cstatus}
+          onChange={handleChange}
+        >
+          <MenuItem value={"Pending"}>Pending</MenuItem>
+          <MenuItem value={"Resolved"}>Resolved</MenuItem>
+        </Select>
+        </TableCell>
+        <TableCell className="max-w-[2px] break-words">
+          <Button variant="contained" color="primary" onClick={handleOpen}>
+            Reply
+          </Button>
+        </TableCell>
 
       </StyledTableRow>
     </React.Fragment>
@@ -199,7 +246,7 @@ export default function ComplaintsTable() {
                     Title
                   </TableSortLabel>
                 </TableCell>   
-                <TableCell className="w-[35%]">
+                <TableCell className="w-[30%]">
                   <TableSortLabel
                     active={orderBy === 'body'}
                     direction={orderBy === 'body' ? order : 'asc'}
@@ -207,7 +254,16 @@ export default function ComplaintsTable() {
                     Body
                   </TableSortLabel>
                 </TableCell>   
-                <TableCell className="w-[11%]">
+                
+                <TableCell className="w-[10%]">
+                  <TableSortLabel
+                    active={orderBy === 'issued_by'}
+                    direction={orderBy === 'issued_by' ? order : 'asc'}
+                    onClick={() => handleRequestSort('issued_by')}>
+                    Name
+                  </TableSortLabel>
+                </TableCell> 
+                <TableCell className="w-[9%]">
                   <TableSortLabel
                     active={orderBy === 'date'}
                     direction={orderBy === 'date' ? order : 'asc'}
@@ -224,13 +280,8 @@ export default function ComplaintsTable() {
                   </TableSortLabel>
                 </TableCell>   
                 <TableCell className="w-[10%]">
-                  <TableSortLabel
-                    active={orderBy === 'issued_by'}
-                    direction={orderBy === 'issued_by' ? order : 'asc'}
-                    onClick={() => handleRequestSort('issued_by')}>
-                    Name
-                  </TableSortLabel>
-                </TableCell> 
+                    Action
+                </TableCell>   
               </StyledTableRow>
             </TableHead>
             <TableBody>

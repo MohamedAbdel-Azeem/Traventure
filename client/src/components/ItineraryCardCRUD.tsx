@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
@@ -9,7 +9,7 @@ import { format } from 'date-fns';
 import { TouristProfileData } from "../routes/_app/tourist_profile/tourist_profile_data";
 import IActivity from "../custom_hooks/activities/activity_interface";
 import Place from "../custom_hooks/places/place_interface";
-
+import Button from "@mui/material/Button";
 interface TagStructure {
   _id: string;
   name: string;
@@ -79,6 +79,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
       return "Invalid Date";
     }
   };
+  const [active, setActive] = useState(false); 
 
   return (
     <div className="m-4 transition transform hover:scale-105 w-96 bg-gray-100 rounded-lg">  
@@ -162,7 +163,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
           >
             View Details
           </Link>
-
+            <Button onClick={()=>setActive(!active)}>{!active?"Activate":"Deactivate"}</Button>
           {onDelete && (
             isDeleting ? (
               <CircularProgress size={24} className="text-red-500" />

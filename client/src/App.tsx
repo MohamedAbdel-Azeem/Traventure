@@ -45,6 +45,8 @@ function App() {
           <Route path="/admin/:username/locations" element={<MorePlaces />} />
           <Route path="/admin/:username/categoriesandtags" element={<CT />} />
           <Route path="/admin/:username/complaints" element={<Complaints />} />
+          <Route path="/admin/:username/activities" element={<MoreActivities />} />
+          <Route path="/admin/:username/itineraries" element={<MoreItineraries />} />
           <Route path="/tourist/:username" element={<TouristPage />} />
           <Route path="/tourist/:username/shop" element={<ShopPage type="Tourist" />} />
           <Route path="/tourist/:username/locations" element={<MorePlaces />} />
