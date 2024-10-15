@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Booking from "./itineraryBooking";
+import Booking from "./Booking";
 const Schema = mongoose.Schema;
 
 
@@ -13,6 +13,7 @@ const touristSchema = new Schema({
   Occupation: { type: String, required: true},
   wallet: { type: Number, required: true, default: 0 },
   bookings: [{type: mongoose.Types.ObjectId, ref: "Booking"}],
+  purchases: [{type: mongoose.Types.ObjectId, ref: "Purchase"}]
 });
 
 export default mongoose.model('Tourist', touristSchema);

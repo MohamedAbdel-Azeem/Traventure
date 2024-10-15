@@ -3,8 +3,10 @@ import touristModel from "../Schemas/Tourist";
 import Itinerary from '../Schemas/Itinerary';
 import Activity from '../Schemas/Activity';
 import Place from '../Schemas/Places';
+import Complaint from '../Schemas/complaint';
 import { getprofileInfo } from "./user_queries";
 import mongoose from "mongoose";
+import complaint from "../Schemas/complaint";
 
 interface Tourist extends Document {
   username: string;
@@ -42,14 +44,21 @@ export async function getTouristBookings(username: string) {
     try {
  
         const tourist = await touristModel.findOne({ username: username })
-        .populate({
+    .populate([
+        {
             path: "bookings",
-            populate: {
-                path: "itinerary",
-                select: "title _id" // specify the fields you want to populate
-            }
-        });
-
+            populate: [
+                {
+                    path: "itinerary",
+                    select: "title _id" // specify the fields you want to populate
+                },
+                {
+                    path: "activity",
+                    select: "name _id" // specify the fields you want to populate
+                }
+            ]
+        }
+    ]);
     if (!tourist) {
         throw new Error("Tourist not found");
     }
@@ -59,5 +68,15 @@ export async function getTouristBookings(username: string) {
         throw error;
     }
 }
-module.exports = {getAll, getTouristBookings}; 
+
+export async function gettouristComplaints(username: string) {
+    try {
+        const Complaints = await complaint.find({ username: username });
+    return Complaints;}
+        catch (error) {
+            throw error;
+        }
+    }
+
+module.exports = {getAll, getTouristBookings, gettouristComplaints}; 
 
