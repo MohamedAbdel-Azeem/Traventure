@@ -6,7 +6,7 @@ import touristModel from "../Schemas/Tourist";
 import adminModel from "../Schemas/Admin";
 import governerModel from "../Schemas/Governer";
 import { get } from "http";
-import { comparePassword } from "../../utils/functions/bcrypt_functions";
+import { comparePassword, hashPassword } from "../../utils/functions/bcrypt_functions";
 import { compare } from "bcryptjs";
 
 export async function getprofileInfo(username: string, type: string) {
@@ -127,4 +127,54 @@ export async function loginUser(username: string, password: string) {
   }
 }
 
-module.exports = { getprofileInfo, getAllUsers, updateProfileInfo, loginUser };
+
+export async function changePassword(username:string,  oldpassword:string , newpassowrd:string){
+  try{
+    const results = await Promise.all([
+      sellerModel.findOne({ username }),
+      advertiserModel.findOne({ username }),
+      tourGuideModel.findOne({ username }),
+      adminModel.findOne({ username }),
+      touristModel.findOne({ username }),
+      governerModel.findOne({ username }),
+    ]);
+    console.log(results);
+    for (let i = 0; i < results.length; i++) {
+      if (results[i]) {
+        const user = results[i];
+        const passwordMatch = await comparePassword(
+          oldpassword,
+          (user as any).password
+        );
+       
+        if (!passwordMatch) {
+          throw new Error("Incorrect password");
+        }
+        const newpass = await hashPassword(newpassowrd);
+        if(i===0){
+          return await sellerModel.findOneAndUpdate({username}, {password: newpass}, {new: true});
+        }
+        else if(i===1){
+          return await advertiserModel.findOneAndUpdate({username}, {password: newpass}, {new: true});
+        }
+        else if(i===2){
+          return await tourGuideModel.findOneAndUpdate({username}, {password: newpass}, {new: true});
+        }
+        else if(i===3){
+          return await adminModel.findOneAndUpdate({username}, {password: newpass}, {new: true});
+        }
+        else if(i===4){
+          return await touristModel.findOneAndUpdate({ username }, { password: newpass}, { new: true });
+        }
+    
+      }
+    }
+  }
+  catch(err){
+    throw err;
+  }
+}
+
+module.exports = { getprofileInfo, getAllUsers, updateProfileInfo, loginUser, changePassword};
+
+
