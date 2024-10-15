@@ -5,6 +5,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TouristProfileData } from "./tourist_profile_data";
 import { usePatchUserProfile } from "../../../custom_hooks/updateTouristProfile";
+import ChangePasswordModal from "../../../components/ChangePasswordModal";
+
 
 // type TouristSchemaType = {
 //   username: string;
@@ -21,6 +23,18 @@ import { usePatchUserProfile } from "../../../custom_hooks/updateTouristProfile"
 interface TouristProfileProps {
   tourist: TouristProfileData;
 }
+
+interface ChangePasswordModalProps{
+  username: string;
+  onClose: () => void;
+  onSubmit: (data: ChangePasswordData) => void;
+  }
+  
+  interface ChangePasswordData{
+      oldPassword: string;
+      newPassword: string;
+  }
+
 
 const schema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -48,6 +62,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
   const [apiBody, setApiBody] = useState({});
   const [apiUsername, setApiUsername] = useState("");
   const response = usePatchUserProfile(apiBody, apiUsername);
+  const [isPasswordModalOpen,setPasswordModalOpen]=useState(false);
 
   //  tourist = usePatchUserProfile(tourist, tourist.username).response as TouristProfileData;
 
@@ -85,6 +100,13 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
 
   const handleLogout = () => {
     navigate("/");
+  };
+
+  const handlePasswordChangeSubmit = (data: ChangePasswordData) => {
+    console.log("Password change data:", data);
+    setPasswordModalOpen(false); 
+
+    // Integration Here
   };
 
   return (
@@ -299,6 +321,19 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
             >
               Log Out
             </button>
+
+            <button
+              onClick={()=>setPasswordModalOpen(true)}
+              className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
+            >
+              Change Password
+            </button>
+
+            {isPasswordModalOpen && (<ChangePasswordModal
+            username={currentTourist.username}
+            onClose={()=>setPasswordModalOpen(false)}
+            onSubmit={handlePasswordChangeSubmit}>
+            </ChangePasswordModal>)}
           </div>
         </form>
       </div>
