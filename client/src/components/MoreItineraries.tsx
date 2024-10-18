@@ -274,6 +274,7 @@ const MoreItineraries: React.FC = () => {
                                 main_Picture={itinerary.main_Picture}
                                 booked_By={itinerary.booked_By}
                                 accesibility={itinerary.accesibility}
+                                type="Tourist"
                             />
                         ))
                     ) : (

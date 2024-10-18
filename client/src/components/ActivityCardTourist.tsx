@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import TheMAP from './TheMAP';
 import { Box, Checkbox, FormControl, ListItemText, MenuItem, Modal, Rating, Select, SelectChangeEvent, TextField } from '@mui/material';
 import { useGetAllCategories, useGetAllCategoriesD, useGetAllTags } from '../custom_hooks/categoryandTagCRUD';
+import useBookActivity from '../custom_hooks/activities/bookActivity';
 import { updateActivity } from '../custom_hooks/activities/updateActivity';
+import { useParams } from 'react-router-dom';
 type Activity = {
     _id: string;
     Title: string;
@@ -26,6 +28,7 @@ type Activity = {
 interface ActivityProp {
     activity: Activity;
     onDelete: (_id: string) => void;
+    type?: string;
 }
 
 type CatStructure = {
@@ -35,7 +38,7 @@ type CatStructure = {
   }
   
 
-export const ActivityCardTourist: React.FC<ActivityProp> = ({activity, onDelete }) => {
+export const ActivityCardTourist: React.FC<ActivityProp> = ({type, activity, onDelete }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [currentActivity, setCurrentActivity] = useState<Activity>(activity);
     const [newTitle, setNewTitle] = useState(currentActivity.Title);
@@ -46,6 +49,8 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({activity, onDelete 
     const [newSpecialDiscount, setNewSpecialDiscount] = useState(currentActivity.SpecialDiscount);
     const [newBIO, setNewBIO] = useState(currentActivity.BookingIsOpen);
     const [mopen, setmOpen] = useState(false);
+    const {username}=useParams<{username:string}>();
+    const { bookActivity, data, loading, error } = useBookActivity();
     
 
     const calculateAverageRating = (currentActivity: Activity): number => {
@@ -56,7 +61,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({activity, onDelete 
     
       const averageRating = calculateAverageRating(currentActivity);
 
-
+      console.log(type);
 
 
 
@@ -125,6 +130,15 @@ console.log(currentActivity.feedback);
             console.error("Error updating activity:", error);
         }
     };
+
+    const handleBooking = async (activity_id:string) => {
+        try{
+        await bookActivity(activity_id,username);
+        }
+        catch(error){
+            console.error("Error booking activity:", error);
+        }
+    }
   
     const handleEditClick = () => {
         setIsEditing(!isEditing);
@@ -174,24 +188,34 @@ console.log(currentActivity.feedback);
             <div className="rounded-[19px]">
                 <div className="w-[400px] h-[475px] bg-[#25b396] rounded-[19px] relative"
                     >
-                    <div className="w-[400px] h-[69px] rounded-t-[19px]">
-                        <div className="absolute text-center top-0 left-0 w-[71px] h-[30px] rounded-tl-[19px] bg-[#FF0000] border-black border-[1px] rounded-br-[19px]">
-                            {isEditing ? (
-                                <select
-                                    title="status"
-                                    name="status"
-                                    value={newBIO ? 'true' : 'false'}
-                                    onChange={()=>setNewBIO(!newBIO)}
-                                    className="bg-transparent text-black border-none"
-                                >
-                                    <option value="true">Open</option>
-                                    <option value="false">Closed</option>
-                                </select>
-                            ) : (
-                                newBIO ? 'Open' : 'Closed'
-                            )}
-                        </div>
+                    <div className="w-full flex flex-row justify-between items-center h-[69px] rounded-t-[19px] pl-[60px] pr-[20px]">
+            <div className="absolute text-center top-0 left-0 w-[71px] h-[30px] rounded-tl-[19px] bg-[#FF0000] border-black border-[1px] rounded-br-[19px]">
+                {isEditing ? (
+                    <select
+                        title="status"
+                        name="status"
+                        value={newBIO ? 'true' : 'false'}
+                        onChange={() => setNewBIO(!newBIO)}
+                        className="bg-transparent text-black border-none"
+                    >
+                        <option value="true">Open</option>
+                        <option value="false">Closed</option>
+                    </select>
+                ) : (
+                    newBIO ? 'Open' : 'Closed'
+                )}
+            </div>
+            <div className="flex-grow"></div> 
+            {type==="Tourist" && currentActivity.BookingIsOpen && <button
+                        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 w-1/3"
+                        onClick={() => handleBooking(currentActivity._id)}
+                    >
+                        Book
+                    </button>}
+
                         <div className="absolute top-[60px] right-[10px]">
+
+                      
                         {/* <button title="Edit" className="editBtn" onClick={handleEditClick}>
                         <svg height="1em" viewBox="0 0 512 512">
                         <path

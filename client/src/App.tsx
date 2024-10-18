@@ -68,7 +68,7 @@ function App() {
           <Route path="/itinerary/:id" element={<ItineraryDetails />} />
           <Route path="/tourist-itinerary/:username" element={<ItineraryDetailsTourist />} />
           <Route path="/more-itineraries" element={<MoreItineraries />} />
-          <Route path="/tourist/:id/activities" element={<MoreActivities />} />
+          <Route path="/tourist/:username/activities" element={<MoreActivities />} />
           <Route path="/guest-page" element={<GuestPage />} />
           <Route path="/guest/more-itineraries" element={<GuestMoreItineraries />} />
           <Route path="/guest/more-places" element={<GuestMorePlaces />} />

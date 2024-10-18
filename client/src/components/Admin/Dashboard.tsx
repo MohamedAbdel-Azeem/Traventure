@@ -8,8 +8,11 @@ import Place from '../../custom_hooks/places/place_interface';
 import { TouristProfileData } from '../../routes/_app/tourist_profile/tourist_profile_data';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ActivityCardTourist } from '../ActivityCardTourist';
+interface DashboardProps {
+    type?:string;
+  }
 
-const Dashboard = () => {
+const Dashboard : React.FC<DashboardProps>= ({type}) => {
     const { upcoming, loading, error } = useGetUpcoming();
     const navigate = useNavigate();
     const currentuser = useLocation().pathname.split('/')[2];
@@ -56,6 +59,7 @@ const Dashboard = () => {
                                 main_Picture={itinerary.main_Picture}
                                 accesibility={itinerary.accesibility}
                                 booked_By={itinerary.booked_By}
+                                type={type}
                             />
                         ))
                     ) : (
@@ -103,7 +107,8 @@ const Dashboard = () => {
                         activities.map(activity => (
                             <ActivityCardTourist
                                 key={activity._id}
-                                activity={activity}   
+                                activity={activity}
+                                type={type}   
                                 onDelete={(_id) => {
                                     console.log(`Delete activity with id: ${_id}`);
                                 }}

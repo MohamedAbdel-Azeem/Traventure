@@ -7,6 +7,8 @@ import { format } from 'date-fns';
 import { TouristProfileData } from "../routes/_app/tourist_profile/tourist_profile_data";
 import IActivity from "../custom_hooks/activities/activity_interface";
 import Place from "../custom_hooks/places/place_interface";
+import useBookItinerary from "../custom_hooks/itineraries/bookItinerary";
+import { useParams } from "react-router-dom";
 
 interface TagStructure {
   _id: string;
@@ -41,6 +43,7 @@ interface ItineraryCardCRUDProps {
     user_id?: TouristProfileData;
   }[];
   accesibility: boolean;
+  type?: string;
 }
 
 const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
@@ -58,7 +61,11 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   dropoff_location,
   selectedTags = [],
   plan,
+  type
 }) => {
+
+  const { bookItinerary, data, loading, error } = useBookItinerary();
+  const {username}=useParams<{username:string}>();
 
   const formatDate = (dateString: string) => {
     try {
@@ -68,6 +75,19 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
       return "Invalid Date";
     }
   };
+
+  const handleBooking = async (id: string) => {
+    try{
+      await bookItinerary(id, username);
+    }
+
+    catch(error){
+      console.error("Error booking itinerary  :", error);
+
+    }
+
+  };
+
 
   return (
 <div className="m-4 transition transform hover:scale-105 w-96 bg-gray-200 rounded-lg"> 
@@ -116,7 +136,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
         </div>
 
         <div className="flex justify-center items-center mb-4 space-x-4">
-          <div className="bg-red-500 text-white p-2 rounded-lg flex flex-col items-center w-1/2">
+          <div className="bg-red-500 text-white p-2 rounded-lg flex fle x-col items-center w-1/2">
             <p className="text-sm flex items-center">
               <ConfirmationNumberIcon className="mr-1" /> {price.toFixed(2)}
             </p>
@@ -145,11 +165,20 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
               dropoff_location,
               plan,
               selectedTags,
+              type
             }}
             className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center"
           >
             View Details
           </Link>
+
+          {type==="Tourist" && <button
+                        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                        onClick={() => handleBooking(_id)}
+                    >
+                        Book
+                    </button>}
+
 
         </div>
       </div>
