@@ -18,6 +18,12 @@ const useBookItinerary = () => {
             itinerary:itinerary_id,
             tourist:tourist_id
         });
+        if (response.status === 201 ){
+            const getItinerary = await axios.get(`/traventure/api/itinerary/${itinerary_id}`);
+            const Bookings= getItinerary.data.booked_By;
+            Bookings.push({user_id:tourist_id});
+            await axios.patch(`/traventure/api/itinerary/update/${itinerary_id}`,{
+                booked_By:Bookings});}
       setData(response.data);
     } catch (error: any) {
       setError(error.message);

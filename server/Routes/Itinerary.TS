@@ -12,6 +12,7 @@ import {
   itineraryUpdateValidator,
 } from "..//utils//express-validator//itineraryValidator";
 import TourGuide from "../Model/Schemas/TourGuide";
+import ItineraryModel from "../Model/Schemas/Itinerary"
 
 const router = Router();
 
@@ -32,6 +33,15 @@ router.post(
       res.status(500).send(error);
     }
   }
+);
+router.get("/:itinerary_id", async (req: Request, res: Response) => {
+  try {
+    const itinerary = await ItineraryModel.findById(req.params.itinerary_id);
+    res.status(200).send(itinerary);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
 );
 
 router.get("/:username", async (req: Request, res: Response) => {
@@ -67,7 +77,6 @@ router.patch(
     try {
       const itineraryId = req.params.id;
       const updatedItinerary = await updateItinerary(itineraryId, newItinerary);
-      console.log(updatedItinerary);
       res.status(200).send("itinerary Updated Successfully !!");
     } catch (error) {
      

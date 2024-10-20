@@ -11,6 +11,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ActivityIcon from '@mui/icons-material/LocalActivity';
 import CategoryIcon from '@mui/icons-material/Category';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
+import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 const drawerWidth = 240;
 
 
@@ -105,6 +106,8 @@ const touristsidebaritems =
   { text: 'Home', icon: <HomeIcon />, path: `/tourist/${currentuser}` },
   { text: 'Shop', icon: <ShopIcon />, path: `/tourist/${currentuser}/shop` },
   { text: 'Locations', icon: <LocationOnIcon />, path: `/tourist/${currentuser}/locations` },
+  { text: 'Bookings', icon: <EditCalendarIcon />, path: `/tourist/${currentuser}/bookings` },
+
 ];
 const advertisersidebaritems =
 [
