@@ -52,7 +52,8 @@ const useEditProduct = (
 
           // Delete the old image from Firebase Storage (ignore errors if the file doesn't exist)
           try {
-            await deleteFileFromStorage(oldImageUrl);
+            console.log(oldImageUrl);
+            // await deleteFileFromStorage(oldImageUrl);
           } catch (err) {
             if (err.code === "storage/object-not-found") {
               console.warn(
