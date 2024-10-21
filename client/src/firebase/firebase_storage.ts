@@ -25,7 +25,7 @@ export const uploadFileToStorage = async (file: File) => {
 
     // Get the download URL after successful upload
     const downloadUrl = await getDownloadURL(snapshot.ref);
-
+    console.log("File uploaded successfully:", downloadUrl);
     return downloadUrl; // Return the download URL of the uploaded file
   } catch (error) {
     console.error("Error uploading file:", error);
@@ -53,5 +53,3 @@ export const deleteFileFromStorage = async (fileUrl: string) => {
     throw error;
   }
 };
-
-module.exports = { uploadFileToStorage, deleteFileFromStorage };

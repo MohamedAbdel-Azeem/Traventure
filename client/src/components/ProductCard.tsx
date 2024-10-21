@@ -78,8 +78,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
     setCurrentProduct(editedProduct);
     setApiBody(editedProduct);
   };
-
-  useEditProduct(currentProduct._id, apiBody);
+//   useEditProduct(currentProduct, apiBody, selectedImage);
   const handleSaveClick = () => {
     setIsEditMode(false);
     handleChange();
