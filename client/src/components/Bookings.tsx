@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Button from '@mui/material/Button';
+import { Modal, Typography } from '@mui/material';
 import Table from '@mui/material/Table';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';  
@@ -10,14 +11,15 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import {IActivity} from '../custom_hooks/activities/activity_interface';
+import {Activity} from './ActivityCardTourist';
 import Itinerary from '../custom_hooks/itineraries/itinerarySchema';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import  getBookings  from '../custom_hooks/getTouristBookings';
 import ImprovedSidebar from './ImprovedSidebar';
 import cancelBookings from '../custom_hooks/cancelBooking';
 import { set } from 'date-fns';
 import { get } from 'react-hook-form';
+import { ActivityCardTourist } from './ActivityCardTourist';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -33,7 +35,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     _id: string;
     type: string;
     itinerary: Itinerary;
-    activity: IActivity;
+    activity: Activity;
 }
 
 const Bookings: React.FC = () => {
@@ -42,6 +44,19 @@ const Bookings: React.FC = () => {
     const { cancelBooking } = cancelBookings();
     const [itineraryBookings, setItiBookings] = useState<IBooking[]>([]);
     const [activityBookings, setActivityBookings] = useState<IBooking[]>([]);
+    const navigate=useNavigate();
+    const [open, setOpen] = useState(false);
+    const [selectedActivity, setSelectedActivity] = useState(null);
+
+  const showActivity = (activity:any) => {
+    setSelectedActivity(activity);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedActivity(null);
+  };
 
     useEffect(() => {
         if (data) {
@@ -61,11 +76,23 @@ const Bookings: React.FC = () => {
         }
     };
     
-
+  
     return (
         <div>
             
-            
+             <Modal open={open} onClose={handleClose}>
+                <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 500, bgcolor: 'background.paper', boxShadow: 24, p: 4 }}>
+                <Typography variant="h6" component="h2">
+                    Activity Details
+                </Typography>
+                {selectedActivity && <ActivityCardTourist activity={selectedActivity} onDelete={()=>{}}/>}
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+            <Button variant="contained" onClick={handleClose}>
+              Close
+            </Button>
+          </Box>
+                </Box>
+            </Modal>
             <ImprovedSidebar />
            
             <div className="flex justify-center py-14">
@@ -91,7 +118,25 @@ const Bookings: React.FC = () => {
                                             <StyledTableCell align="left">{booking.itinerary.title}</StyledTableCell>
                                             <StyledTableCell align="center">{booking.itinerary.starting_Date.split("T00:00:00.000Z")}</StyledTableCell>
                                             <StyledTableCell align="center">{booking.itinerary.language}</StyledTableCell>
-                                            <StyledTableCell align="right" style={{ width: '150px' }}><Button color="primary" variant="outlined">More Info</Button></StyledTableCell>
+                                            <StyledTableCell align="right" style={{ width: '150px' }}><Button color="primary" variant="outlined" onClick={()=>navigate(`/tourist-itinerary/${booking.itinerary._id}`,
+                                                 { state:
+                                                    {
+                                                        title: booking.itinerary.title,
+                                                        description: booking.itinerary.description,
+                                                        price: booking.itinerary.price,
+                                                        starting_Date: booking.itinerary.starting_Date,
+                                                        ending_Date: booking.itinerary.ending_Date,
+                                                        rating: booking.itinerary.rating,
+                                                        main_Picture: booking.itinerary.main_Picture,
+                                                        language: booking.itinerary.language,
+                                                        pickup_location: booking.itinerary.pickup_location,
+                                                        accesibility: booking.itinerary.accesibility,
+                                                        dropoff_location: booking.itinerary.dropoff_location,
+                                                        plan: booking.itinerary.plan,
+                                                        selectedTags: booking.itinerary.selectedTags,
+                                            
+                                                    }
+                                                  })}>More Info</Button></StyledTableCell>
                                             <StyledTableCell align="right" style={{ width: '150px' }}><Button color="error" onClick={()=>handleCancel(booking._id)} variant="outlined">Cancel</Button></StyledTableCell>
                                         </TableRow>
                                     ))}
@@ -122,7 +167,7 @@ const Bookings: React.FC = () => {
                                             {new Date(booking.activity.DateAndTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                             </StyledTableCell>
 
-                                            <StyledTableCell align="right" style={{ width: '150px' }}><Button variant="outlined">More Info</Button></StyledTableCell>
+                                            <StyledTableCell align="right" style={{ width: '150px' }}><Button variant="outlined" onClick={()=> showActivity(booking.activity)}>More Info</Button></StyledTableCell>
                                             <StyledTableCell align="right" style={{ width: '150px' }}><Button color="error" onClick={()=>handleCancel(booking._id)} variant="outlined">Cancel</Button></StyledTableCell>
                                         </TableRow>
                                     ))}

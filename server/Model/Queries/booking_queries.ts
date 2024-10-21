@@ -18,7 +18,38 @@ export async function getBookingsByTourist(username: string) {
     if (!tourist) {
       throw new Error("Tourist not found");
     }
-    const bookings = await bookingModel.find({ tourist: (tourist as any)._id }).populate("itinerary").populate("activity");
+    const bookings = await bookingModel.find({ tourist: (tourist as any)._id })
+    .populate({
+        path:"activity",
+        populate: [
+          {
+            path: 'Tags',
+            model: 'PreferenceTags' 
+          },
+          {
+            path: 'Category',
+            model: 'Category' 
+          }
+        ]
+
+        })
+    .populate({
+        path: 'itinerary',
+        populate: [
+          {
+            path: 'selectedTags',
+            model: 'PreferenceTags' 
+          },
+          {
+            path: 'plan.place',
+            model: 'Place' 
+          },
+          {
+            path: 'plan.activities.activity_id',
+            model: 'Activity' 
+          }
+        ]
+      });
     return bookings;
   } catch (error) {
     throw error;

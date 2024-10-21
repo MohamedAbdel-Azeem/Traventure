@@ -17,6 +17,7 @@ export interface IActivity {
     Category: string;
     Tags: string[];
     BookingIsOpen: boolean;
+    added_By?: string;
 }
 
 

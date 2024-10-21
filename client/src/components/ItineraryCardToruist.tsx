@@ -164,8 +164,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
               accesibility,
               dropoff_location,
               plan,
-              selectedTags,
-              type
+              selectedTags
             }}
             className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center"
           >
