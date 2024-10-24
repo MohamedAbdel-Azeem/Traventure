@@ -1,5 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { uploadFileToStorage } from "../../firebase/firebase_storage";
+
+const defaultImageUrl =
+  "https://firebasestorage.googleapis.com/v0/b/traventure-17204.appspot.com/o/uploads%2Fmystery-box-collage.jpg?alt=media&token=e25c4b72-0bd0-463b-bffd-24f113a4d029";
 
 interface Seller {
   _id: string;
@@ -16,48 +20,50 @@ interface DataStructure {
   sellers: Seller[];
 }
 
-
-
-
-
 export function useCreateProduct(body: object | null) {
-    const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-  
-    useEffect(() => {
-      const fetchData = async () => {
-        if (body === null) return;
-        setLoading(true);
-        setError(null);
-        try {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-          const tempresponse = await axios.get<DataStructure>("/traventure/api/admin/all", {
+  useEffect(() => {
+    const fetchData = async () => {
+      if (body === null) return;
+      setLoading(true);
+      setError(null);
+      try {
+        const tempresponse = await axios.get<DataStructure>(
+          "/traventure/api/admin/all",
+          {
             params: {
               username: "Ibra",
             },
-          }) ;
+          }
+        );
         const allUsers = tempresponse.data;
 
-        const idtoAddby = allUsers.sellers.find(thing => thing.username === body.seller);
+        const idtoAddby = allUsers.sellers.find(
+          (thing) => thing.username === body.seller
+        );
         body.seller = idtoAddby?._id as string;
 
-
-
-
-          const response = await axios.post("/traventure/api/product/add", body);
-          if (response.status >= 200 && response.status < 300) {
-            setData(response.data);
-          } else {
-            throw new Error("Server can't be reached!");
-          }
-        } catch (error: any) {
-          setError(error.message);
-        } finally {
-          setLoading(false);
+        if (body.imageUrl) {
+          body.imageUrl = await uploadFileToStorage(body.imageUrl);
+        } else {
+          body.imageUrl = defaultImageUrl;
         }
-      };
-      fetchData();
-    }, [body]);
-    return { data, loading, error };
-  };
+        const response = await axios.post("/traventure/api/product/add", body);
+        if (response.status >= 200 && response.status < 300) {
+          setData(response.data);
+        } else {
+          throw new Error("Server can't be reached!");
+        }
+      } catch (error: any) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [body]);
+  return { data, loading, error };
+}
