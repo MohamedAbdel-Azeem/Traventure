@@ -12,6 +12,7 @@ const useEditProduct = (
   newImage: File | null
 ) => {
   const id = currentProduct._id;
+  const oldImageUrl = currentProduct.imageUrl;
   const [isLoading, setIsLoading] = useState(false);
   const [didSucceed, setDidSucceed] = useState<boolean | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -45,6 +46,7 @@ const useEditProduct = (
         setUpdatedProduct(response.data); // Store the updated product
 
         setDidSucceed(true); // Set success state to true
+        deleteFileFromStorage(oldImageUrl);
 
         // If a new image was uploaded, delete the old one
         if (newImage) {
@@ -65,10 +67,10 @@ const useEditProduct = (
           }
         }
       } else {
-        setError("Error updating product");
-        setDidSucceed(false); // Set success state to false
+        throw new Error("Failed to update product");
       }
     } catch (err: any) {
+      deleteFileFromStorage(body.imageUrl);
       setError(err.message || "Error updating product");
       setDidSucceed(false); // Set success state to false
     } finally {
