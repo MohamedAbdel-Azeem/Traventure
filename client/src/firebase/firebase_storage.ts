@@ -39,6 +39,10 @@ export const uploadFileToStorage = async (file: File) => {
  * @returns {Promise<void>}
  */
 export const deleteFileFromStorage = async (fileUrl: string) => {
+  const defaultImageUrl =
+    "https://firebasestorage.googleapis.com/v0/b/traventure-17204.appspot.com/o/uploads%2Fmystery-box-collage.jpg?alt=media&token=2595642a-c4c2-418d-b13d-099418d319bd";
+  if (fileUrl == defaultImageUrl) return;
+
   if (!fileUrl) throw new Error("No file URL provided");
 
   // If you have the full URL, extract the file path relative to the storage root

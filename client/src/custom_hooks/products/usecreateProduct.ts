@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { uploadFileToStorage } from "../../firebase/firebase_storage";
 
 const defaultImageUrl =
-  "https://firebasestorage.googleapis.com/v0/b/traventure-17204.appspot.com/o/uploads%2Fmystery-box-collage.jpg?alt=media&token=e25c4b72-0bd0-463b-bffd-24f113a4d029";
+  "https://firebasestorage.googleapis.com/v0/b/traventure-17204.appspot.com/o/uploads%2Fmystery-box-collage.jpg?alt=media&token=2595642a-c4c2-418d-b13d-099418d319bd";
 
 interface Seller {
   _id: string;
