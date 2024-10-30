@@ -4,7 +4,7 @@ import { touristAddValidator, touristUpdateValidator } from '../utils/express-va
 import { matchedData,validationResult} from 'express-validator';
 import { getprofileInfo , updateProfileInfo} from '../Model/Queries/user_queries';
 import { getActivities } from '../Model/Queries/activity_queries';
-import  {getAll,getTouristBookings}  from '../Model/Queries/tourist_queries';
+import  {getAll,getTouristBookings,gettouristComplaints}  from '../Model/Queries/tourist_queries';
 import { get } from 'http';
 
 const router = Router();
@@ -74,7 +74,7 @@ router.get('/:username', async (req: Request, res: Response) => {
     });
 
      
-router.get('/itinerarybookings/:username', async (req: Request, res: Response) => {
+router.get('/bookings/:username', async (req: Request, res: Response) => {
     try {
         const username = req.params.username;
         const bookings = await getTouristBookings(username);
@@ -85,4 +85,13 @@ router.get('/itinerarybookings/:username', async (req: Request, res: Response) =
     }
 });
 
+router.get('/complains/:username', async (req: Request, res: Response) => {
+    try {
+        const username = req.params.username;
+        const complaints = await gettouristComplaints(username);
+        res.status(200).send(complaints);
+    } catch (error) {
+        res.status(500).send("error getting complaints");
+    }
+});
 export default router;
