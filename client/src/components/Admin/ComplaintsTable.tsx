@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Modal, Table, TableBody, TableContainer, TableHead, TableRow, TableCell, TableSortLabel, TablePagination, Paper, TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import DoneIcon from '@mui/icons-material/Done';
@@ -8,14 +8,19 @@ import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { usegetallComplaints } from '../../custom_hooks/Complaints/useGetComplain';
+import {useUpdateComplain} from '../../custom_hooks/Complaints/useUpdateComplain';
+import { set } from 'date-fns';
 type Complaint = {
+    _id: string;
     type: boolean;
     bookingID?: string;
     title: string;
     body: string;
     date: string;
     status: string;
-    issued_by: string;
+    username: string;
+    reply:string;
   };
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
@@ -26,15 +31,23 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function Row(props: { row: Complaint }) {
-  const { row } = props;
-
+function Row(props: { row: Complaint}) {
+  const { row} = props;
+  const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [cstatus, setCstatus] = React.useState(row.status);
   const [open, setOpen] = React.useState(false);
-  const [reply, setReply] = React.useState('');
-
+  const [reply, setReply] = React.useState(row.reply);
+  console.log("replyyy",row.reply);
+  const { data, loading, error } = useUpdateComplain(row._id, { reply,status: cstatus }, triggerUpdate);
+  useEffect(() => {
+    if (triggerUpdate) {
+      setTriggerUpdate(false);
+    }
+  }, [triggerUpdate]);
   const handleChange = (event: SelectChangeEvent) => {
+    
     setCstatus(event.target.value as string);
+    setTriggerUpdate(true);
   };
 
   const handleOpen = () => setOpen(true);
@@ -42,9 +55,10 @@ function Row(props: { row: Complaint }) {
   const handleReplyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setReply(event.target.value);
   };
+  
   const handleSendReply = () => {
     // Logic to send the reply
-    console.log(reply);
+    setTriggerUpdate(true);
     handleClose();
   };
   return (
@@ -70,8 +84,8 @@ function Row(props: { row: Complaint }) {
         </TableCell>
         <TableCell className="max-w-[2px] break-words">{row.title}</TableCell>
         <TableCell className="max-w-[2px] break-words">{row.body}</TableCell>
-        <TableCell className="max-w-[2px] break-words">{row.issued_by}</TableCell>
-        <TableCell className="max-w-[2px] break-words">{row.date}</TableCell>
+        <TableCell className="max-w-[2px] break-words">{row.username}</TableCell>
+        <TableCell className="max-w-[2px] break-words">{row.date.slice(0, 10)}</TableCell>
         <TableCell className="max-w-[2px] break-words">
         <Select
           id="demo-simple-select"
@@ -94,7 +108,18 @@ function Row(props: { row: Complaint }) {
 }
 
 export default function ComplaintsTable() {
-    const rawdata = [
+  const {data, loading, error} = usegetallComplaints();
+  const [complaints,setComplaints] = useState([] as Complaint[]);
+  
+ 
+  useEffect(() => {
+    if (data) {
+      setComplaints(data as Complaint[]);
+      console.log("here", data);
+    }
+  }, [data]);
+
+  const rawdata = [
         { "_id": "1",
           "type": true,
           "bookingID": "B001",
@@ -102,7 +127,7 @@ export default function ComplaintsTable() {
           "body": "Incorrect billing amount for the month of September.",
           "date": "2023-10-01",
           "status": "Resolved",
-          "issued_by": "John Doe"
+          "username": "John Doe"
         },
         { "_id": "2",
           "type": false,
@@ -110,7 +135,7 @@ export default function ComplaintsTable() {
           "body": "Internet connection is unstable and frequently disconnects.",
           "date": "2023-10-02",
           "status": "Resolved",
-          "issued_by": "Jane Smith"
+          "username": "Jane Smith"
         },
         { "_id": "3",
           "type": true,
@@ -119,7 +144,7 @@ export default function ComplaintsTable() {
           "body": "Received a damaged product upon delivery.",
           "date": "2023-10-03",
           "status": "Resolved",
-          "issued_by": "Alice Johnson"
+          "username": "Alice Johnson"
         },
         { "_id": "4",
           "type": false,
@@ -127,7 +152,7 @@ export default function ComplaintsTable() {
           "body": "No response from customer support regarding my issue.",
           "date": "2023-10-04",
           "status": "Pending",
-          "issued_by": "Bob Brown"
+          "username": "Bob Brown"
         },
         { "_id": "5",
           "type": true,
@@ -136,7 +161,7 @@ export default function ComplaintsTable() {
           "body": "The product was delivered later than the expected date.",
           "date": "2023-10-05",
           "status": "Pending",
-          "issued_by": "Charlie Davis"
+          "username": "Charlie Davis"
         }
       ];
 
@@ -175,7 +200,7 @@ export default function ComplaintsTable() {
     }
   };
 
-  const filteredRows = rawdata.filter(complaint => {
+  const filteredRows = complaints.filter(complaint => {
     const matchesSearchQuery = Object.values(complaint).some(value =>
       value.toString().toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -257,10 +282,10 @@ export default function ComplaintsTable() {
                 
                 <TableCell className="w-[10%]">
                   <TableSortLabel
-                    active={orderBy === 'issued_by'}
-                    direction={orderBy === 'issued_by' ? order : 'asc'}
-                    onClick={() => handleRequestSort('issued_by')}>
-                    Name
+                    active={orderBy === 'username'}
+                    direction={orderBy === 'username' ? order : 'asc'}
+                    onClick={() => handleRequestSort('username')}>
+                    Username
                   </TableSortLabel>
                 </TableCell> 
                 <TableCell className="w-[9%]">
