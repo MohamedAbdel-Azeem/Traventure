@@ -46,7 +46,6 @@ const useEditProduct = (
         setUpdatedProduct(response.data); // Store the updated product
 
         setDidSucceed(true); // Set success state to true
-        deleteFileFromStorage(oldImageUrl);
 
         // If a new image was uploaded, delete the old one
         if (newImage) {
@@ -70,7 +69,6 @@ const useEditProduct = (
         throw new Error("Failed to update product");
       }
     } catch (err: any) {
-      deleteFileFromStorage(body.imageUrl);
       setError(err.message || "Error updating product");
       setDidSucceed(false); // Set success state to false
     } finally {
