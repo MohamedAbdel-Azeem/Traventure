@@ -5,7 +5,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TouristProfileData } from "./tourist_profile_data";
 import { usePatchUserProfile } from "../../../custom_hooks/updateTouristProfile";
-import ChangePasswordModal from "../../../components/ChangePasswordModal";
+import ChangePasswordModal, { AddContactLeadFormType } from "../../../components/ChangePasswordModal";
+import { ChangePassword, editpassword } from "../../../custom_hooks/changepassowrd";
 
 
 // type TouristSchemaType = {
@@ -34,7 +35,16 @@ interface ChangePasswordModalProps{
       oldPassword: string;
       newPassword: string;
   }
-
+  const FormleadSchema = z.object({
+    oldPassword: z.string(),
+    newPassword: z.string()
+    .min(8, "Password must be at least 8 characters long")
+    .regex(
+      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+      "Password must contain at least one letter and one number"
+    ),
+  
+  });
 
 const schema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -63,9 +73,10 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
   const [apiUsername, setApiUsername] = useState("");
   const response = usePatchUserProfile(apiBody, apiUsername);
   const [isPasswordModalOpen,setPasswordModalOpen]=useState(false);
-
+  // const [apiBodypass, setApiBodyPass]= useState("");
+  // const [apiBodynewpass, setApiBodynewPass]= useState("");
   //  tourist = usePatchUserProfile(tourist, tourist.username).response as TouristProfileData;
-
+  //const responsepass = ChangePassword(apiUsername, apiBodypass, apiBodynewpass);
   // Define the Zod schema for form validation
   // Initialize useForm with default values from props
   const {
@@ -86,6 +97,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
 
   // Handle form submission (save edited data)
   const onSubmit = (data: TouristProfileData) => {
+
     console.log("Saved data:", data);
     setIsEditing(false);
     setApiBody(data);
@@ -102,12 +114,13 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
     navigate("/");
   };
 
-  const handlePasswordChangeSubmit = (data: ChangePasswordData) => {
+  const handlePasswordChangeSubmit = ( data: AddContactLeadFormType) => {
     console.log("Password change data:", data);
-    setPasswordModalOpen(false); 
-
+    const{oldPassword, newPassword}=data;
+   // editpassword(currentTourist.username,oldPassword, newPassword);
+    //setPasswordModalOpen(false); 
     // Integration Here
-  };
+};
 
   return (
     <div
@@ -332,7 +345,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
             {isPasswordModalOpen && (<ChangePasswordModal
             username={currentTourist.username}
             onClose={()=>setPasswordModalOpen(false)}
-            onSubmit={handlePasswordChangeSubmit}>
+            onFormSubmit={handlePasswordChangeSubmit}>
             </ChangePasswordModal>)}
           </div>
         </form>
