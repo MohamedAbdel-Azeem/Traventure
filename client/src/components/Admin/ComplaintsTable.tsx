@@ -1,21 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Modal, Table, TableBody, TableContainer, TableHead, TableRow, TableCell, TableSortLabel, TablePagination, Paper, TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import DoneIcon from '@mui/icons-material/Done';
 import PendingIcon from '@mui/icons-material/Pending';
-import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { UseGetComplaints,UseGetComplaintsID } from '../../custom_hooks/Complaints/useGetComplain';
+import {useUpdateComplain} from '../../custom_hooks/Complaints/useUpdateComplain';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import { useLocation } from 'react-router-dom';
+import { UseCreateComplain } from '../../custom_hooks/Complaints/useCreateComplaint';
+import { useGetBookings } from '../../custom_hooks/useGetBookings';
 type Complaint = {
+    _id: string;
     type: boolean;
-    bookingID?: string;
+    booking_Id?: string;
     title: string;
     body: string;
     date: string;
     status: string;
-    issued_by: string;
+    username: string;
+    reply:string;
   };
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
@@ -26,27 +32,41 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function Row(props: { row: Complaint }) {
-  const { row } = props;
-
+function Row(props: { row: Complaint}) {
+  const {row} = props;
+  const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [cstatus, setCstatus] = React.useState(row.status);
   const [open, setOpen] = React.useState(false);
-  const [reply, setReply] = React.useState('');
+  const [reply, setReply] = React.useState(row.reply);
+  console.log("replyyy",row.reply);
+
+  const { data, loading, error } = useUpdateComplain(row._id, { reply,status: cstatus }, triggerUpdate);
+
+
+  useEffect(() => {
+    
+    if (triggerUpdate) {
+      setTriggerUpdate(false);
+    }
+  }, [triggerUpdate]);
 
   const handleChange = (event: SelectChangeEvent) => {
     setCstatus(event.target.value as string);
+    setTriggerUpdate(true);
   };
-
+  
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleReplyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setReply(event.target.value);
   };
+  
   const handleSendReply = () => {
-    // Logic to send the reply
-    console.log(reply);
+    setTriggerUpdate(true);
     handleClose();
   };
+  
+const currenttype = useLocation().pathname.split('/')[1];
   return (
     <React.Fragment>
       <Modal open={open} onClose={handleClose}>
@@ -66,18 +86,20 @@ function Row(props: { row: Complaint }) {
       </Modal>
       <StyledTableRow sx={{ '& > *': { borderBottom: 'unset' } }} >
         <TableCell className="max-w-[2px] break-words" component="th" scope="row">
-          {!row.type?"General":row.bookingID}
+          {row.type?"General":row.booking_Id?.type.includes("itinerary")?row.booking_Id?.itinerary.title:row.booking_Id?.activity.Title}
         </TableCell>
         <TableCell className="max-w-[2px] break-words">{row.title}</TableCell>
         <TableCell className="max-w-[2px] break-words">{row.body}</TableCell>
-        <TableCell className="max-w-[2px] break-words">{row.issued_by}</TableCell>
-        <TableCell className="max-w-[2px] break-words">{row.date}</TableCell>
+        {currenttype.includes("admin")?
+        <TableCell className="max-w-[2px] break-words">{row.username}</TableCell>
+        :<></>}
+        <TableCell className="max-w-[2px] break-words">{row.date.slice(0, 10)}</TableCell>
+        {currenttype.includes("admin")?<>
         <TableCell className="max-w-[2px] break-words">
         <Select
           id="demo-simple-select"
           value={cstatus}
-          onChange={handleChange}
-        >
+          onChange={handleChange}>
           <MenuItem value={"Pending"}>Pending</MenuItem>
           <MenuItem value={"Resolved"}>Resolved</MenuItem>
         </Select>
@@ -87,58 +109,86 @@ function Row(props: { row: Complaint }) {
             Reply
           </Button>
         </TableCell>
-
+        </>
+        :<>
+        <TableCell className="max-w-[2px] break-words"
+          >
+          {row.status.includes("Pending") ? 
+          <PendingIcon className='mx-10'/> : 
+          <CheckCircleOutlineIcon className='mx-10'/>}
+        </TableCell>
+        <TableCell className="max-w-[2px] break-words">{row.reply}</TableCell>
+        </>
+        }
+        
       </StyledTableRow>
     </React.Fragment>
   );
 }
-
+function getDate() {
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const year = today.getFullYear();
+  const date = today.getDate();
+  return `${year}-${month}-${date}T00:00:00.000+00:00`;
+}
 export default function ComplaintsTable() {
-    const rawdata = [
-        { "_id": "1",
-          "type": true,
-          "bookingID": "B001",
-          "title": "Billing Issue",
-          "body": "Incorrect billing amount for the month of September.",
-          "date": "2023-10-01",
-          "status": "Resolved",
-          "issued_by": "John Doe"
-        },
-        { "_id": "2",
-          "type": false,
-          "title": "Service Disruption",
-          "body": "Internet connection is unstable and frequently disconnects.",
-          "date": "2023-10-02",
-          "status": "Resolved",
-          "issued_by": "Jane Smith"
-        },
-        { "_id": "3",
-          "type": true,
-          "bookingID": "B003",
-          "title": "Damaged Product",
-          "body": "Received a damaged product upon delivery.",
-          "date": "2023-10-03",
-          "status": "Resolved",
-          "issued_by": "Alice Johnson"
-        },
-        { "_id": "4",
-          "type": false,
-          "title": "Support Issue",
-          "body": "No response from customer support regarding my issue.",
-          "date": "2023-10-04",
-          "status": "Pending",
-          "issued_by": "Bob Brown"
-        },
-        { "_id": "5",
-          "type": true,
-          "bookingID": "B005",
-          "title": "Late Delivery",
-          "body": "The product was delivered later than the expected date.",
-          "date": "2023-10-05",
-          "status": "Pending",
-          "issued_by": "Charlie Davis"
-        }
-      ];
+const currenttype = useLocation().pathname.split('/')[1];
+const currentuser = useLocation().pathname.split('/')[2];
+
+const { ccomplaints, cloading, cerror } = currenttype.includes("tourist")
+? UseGetComplaintsID(currentuser)
+: UseGetComplaints();
+  const [complaints,setComplaints] = useState([] as Complaint[]);
+  const [newComplaint, setNewComplaint] = useState({
+    title: '',
+    type: false,
+    body: '',
+    date: "2024-12-31T00:00:00.000+00:00",
+    status: "Pending",
+    username: currentuser,
+    reply: ''
+  });
+useEffect(() => {
+  if(ccomplaints){
+    setComplaints(ccomplaints);
+  }
+}
+,[ccomplaints]);
+
+  const [GStype, setGStype] = useState('Pending');
+  const [Stype, setStype] = useState('');
+  const handleGSChange = (event: SelectChangeEvent) => {
+    setGStype(event.target.value);
+    setNewComplaint({ ...newComplaint, type: event.target.value === "General", booking_Id: null });
+  };
+  const handleSChange = (event: SelectChangeEvent) => {
+    setStype(event.target.value);
+    setNewComplaint({ ...newComplaint, booking_Id: event.target.value });
+  };
+
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setNewComplaint({ ...newComplaint, [name]: value });
+  };
+  const handleSubmit = async () => {
+    console.log(newComplaint);
+    try {
+      await UseCreateComplain(newComplaint);
+      setComplaints([...complaints, newComplaint]);
+      handleClose();
+  } catch (error) {
+      console.error("Error creating place:", error);
+  }
+    handleClose();
+  };
+
+
 
   const [searchQuery, setSearchQuery] = useState('');
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
@@ -156,6 +206,7 @@ export default function ComplaintsTable() {
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value);
     setSearchQuery(event.target.value);
     setPage(0);
   };
@@ -175,13 +226,18 @@ export default function ComplaintsTable() {
     }
   };
 
-  const filteredRows = rawdata.filter(complaint => {
-    const matchesSearchQuery = Object.values(complaint).some(value =>
-      value.toString().toLowerCase().includes(searchQuery.toLowerCase())
-    );
+  const filteredRows = complaints.filter(complaint => {
+    const matchesSearchQuery = Object.values(complaint).some(value => {
+      if (value !== null && value !== undefined) {
+        return value.toString().toLowerCase().includes(searchQuery.toLowerCase());
+      }
+      return false;
+    });
+  
     const matchesStatusFilter = statusFilter === 'all' ||
       (statusFilter === 'pending' && complaint.status.toLowerCase() === 'pending') ||
       (statusFilter === 'resolved' && complaint.status.toLowerCase() === 'resolved');
+  
     return matchesSearchQuery && matchesStatusFilter;
   });
 
@@ -198,12 +254,31 @@ export default function ComplaintsTable() {
   const paginatedRows = sortedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const getStatusIcon = () => {
-    if (statusFilter === 'pending') return <PendingIcon fontSize=''/>;
-    if (statusFilter === 'resolved') return <DoneIcon fontSize=''/>;
+    if (statusFilter === 'pending') return <PendingIcon/>;
+    if (statusFilter === 'resolved') return <DoneIcon/>;
     return ;
   };
+  
+  const {bookingdata,bookingloading,bookingerror}=useGetBookings(currentuser);
+  
+  const inlineStyles = {
+    modal: {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: 400,
+      bgcolor: 'background.paper',
+      border: '2px solid #000',
+      boxShadow: 24,
+      p: 4,
+    },
+  };
+if(cloading){
+  return <div>Loading...</div>
+}
   return (
-    <div className="w-full flex items-center justify-center my-8">
+    <div className="w-full flex justify-center my-8">
       <Paper className="w-[1100px]">
         <TableContainer component={Paper}>
           <Table aria-label="collapsible table">
@@ -254,15 +329,16 @@ export default function ComplaintsTable() {
                     Body
                   </TableSortLabel>
                 </TableCell>   
-                
+                {currenttype.includes("admin")?
                 <TableCell className="w-[10%]">
                   <TableSortLabel
-                    active={orderBy === 'issued_by'}
-                    direction={orderBy === 'issued_by' ? order : 'asc'}
-                    onClick={() => handleRequestSort('issued_by')}>
-                    Name
+                    active={orderBy === 'username'}
+                    direction={orderBy === 'username' ? order : 'asc'}
+                    onClick={() => handleRequestSort('username')}>
+                    Username
                   </TableSortLabel>
                 </TableCell> 
+                :<></>}
                 <TableCell className="w-[9%]">
                   <TableSortLabel
                     active={orderBy === 'date'}
@@ -271,20 +347,41 @@ export default function ComplaintsTable() {
                     Date
                   </TableSortLabel>
                 </TableCell>   
-                <TableCell className="w-[10%]">
-                  <TableSortLabel
-                    IconComponent={getStatusIcon}
-                    active={orderBy === 'status'}
-                    onClick={() => handleRequestSort('status')}>
-                    Status
-                  </TableSortLabel>
-                </TableCell>   
+               <TableCell className="w-[10%] mx-auto" 
+               >
+                <TableSortLabel
+                  style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                  IconComponent={getStatusIcon}
+                  active={orderBy === 'status'}
+                  onClick={() => handleRequestSort('status')}
+                >
+                  Status
+                </TableSortLabel>
+              </TableCell>
+                {currenttype.includes("admin")?
                 <TableCell className="w-[10%]">
                     Action
                 </TableCell>   
+                :<TableCell className="w-[10%]">
+                <TableSortLabel
+                    active={orderBy === 'reply'}
+                    direction={orderBy === 'reply' ? order : 'asc'}
+                    onClick={() => handleRequestSort('reply')}>
+                    Reply
+                  </TableSortLabel>
+              </TableCell>  }   
+                 
               </StyledTableRow>
             </TableHead>
             <TableBody>
+            <TableRow>
+                {!currenttype.includes("admin")?
+                <TableCell colSpan={6} style={{ textAlign: 'center' }}>
+                  <Button onClick={handleOpen} className='w-full h-full'>
+                  Add a Complaint
+                  </Button>
+                </TableCell>:<></>}
+              </TableRow>
               {paginatedRows.map((row) => (
                 <Row key={row._id} row={row} />
               ))}
@@ -292,14 +389,77 @@ export default function ComplaintsTable() {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          classes={{
+            selectLabel: 'pagination-selectLabel',
+            displayedRows: 'pagination-selectLabel',
+          }}
           component="div"
           count={filteredRows.length}
-          rowsPerPage={rowsPerPage}
           page={page}
+          rowsPerPageOptions={[5, 10, 25]}
           onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
           onRowsPerPageChange={handleChangeRowsPerPage}/>
       </Paper>
+      <style>
+        {`.pagination-selectLabel {margin: 0;}`}
+      </style>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box 
+        sx={inlineStyles.modal}
+        >
+          <h2 id="modal-title">Add a Complaint</h2>
+          <Select
+            id="demo-simple-select"
+            fullWidth
+            value={GStype}
+            onChange={handleGSChange}>
+            <MenuItem value={"General"}>General</MenuItem>
+            <MenuItem value={"Specific"}>Specific</MenuItem>
+          </Select>
+          {
+            GStype === "Specific" ? (
+              <Select
+              id="demo-simple-select"
+              fullWidth
+              value={Stype}
+              onChange={handleSChange}>
+              {bookingdata && bookingdata.map((booking) => (
+              (booking.type.includes("itinerary"))?
+              <MenuItem value={booking._id}>{booking.itinerary?.title}</MenuItem>
+              :
+              <MenuItem value={booking._id}>{booking.activity?.Title}</MenuItem>
+              ))}
+            </Select>
+            ) : <></>
+          }
+                   
+          <TextField
+            label="Title"
+            name="title"
+            value={newComplaint.title}
+            onChange={handleInputChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Body"
+            name="body"
+            value={newComplaint.body}
+            onChange={handleInputChange}
+            fullWidth
+            margin="normal"
+          />
+          <Button variant="contained" color="primary" onClick={handleSubmit}>
+            Submit
+          </Button>
+        </Box>
+      </Modal>
     </div>
   );
 }
