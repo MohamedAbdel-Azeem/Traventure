@@ -14,6 +14,7 @@ router.patch("/update/:complaintId", async (req, res) => {
     try {
         const complaintId = req.params.complaintId;
         await updateComplaint(complaintId,req.body);
+        console.log(req.body);
         res.status(201).send("Complaint updated successfully");
     } catch (error) {
         res.status(500).send("error updating complaint");
