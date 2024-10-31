@@ -9,7 +9,7 @@ const Complaints = () => {
     return (
         <div>
         <ImprovedSidebar/>
-            <ComplaintsTable/>
+        <ComplaintsTable/>
         </div>);
 }
  

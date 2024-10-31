@@ -8,6 +8,7 @@ router.post("/add", async (req, res) => {
         res.status(201).send("Complaint added successfully");
     } catch (error) {
         res.status(500).send("error creating complaint");
+        console.log(error)
     }
 });
 router.patch("/update/:complaintId", async (req, res) => {
