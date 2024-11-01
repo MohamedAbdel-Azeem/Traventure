@@ -15,7 +15,9 @@ router.patch("/", async (req: Request, res: Response) => {
       res.status(404).send("Username or Password is incorrect");
     } else if (err.message === "Incorrect password") {
       res.status(401).send("Username or Password is incorrect");
-    } else {
+    } else if (err.message === "New password is same as old password") {
+      res.status(403).send("can't change to same old password");}
+    else {
       res.status(500).json(err);
     }
   }

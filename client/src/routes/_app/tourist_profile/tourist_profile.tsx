@@ -136,11 +136,13 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
             
         })
         .catch((error) => {
-            console.error("Error changing password:", error);
-
-              // Will also display if old password is incorrect
-            setSuccessMessage("Failed to change password.");  
-           
+          const errorMessage = error.message || "Failed to change password.";
+          Swal.fire({
+            title: "Error",
+            text: errorMessage,
+            icon: "error",
+          });
+            
         });
 };
 

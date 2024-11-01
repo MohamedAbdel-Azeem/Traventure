@@ -43,11 +43,7 @@ function  ChangePasswordModal ({
     newPassword: "",
    },
  });
- console.log(username);
- console.log(onClose);
-  console.log(onFormSubmit);
  function onSubmit(data: z.infer<typeof FormleadSchema>) {
-  console.log(data);
  onFormSubmit(data); 
  
 }

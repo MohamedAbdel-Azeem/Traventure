@@ -40,9 +40,22 @@ export const editpassword = async (username: string, oldPassword: string, newpas
       body: JSON.stringify(body),
     });
 
-    if (!response.ok){
-        const errorData = await response.json();
-        throw new Error(errorData.detail.msg);
+    if (!response.ok) {
+      let errorMessage;
+      switch (response.status) {
+        case 401:
+          errorMessage = "Invalid Password";
+          break;
+        case 403:
+          errorMessage ="Can't change to same old password";
+          break;
+        case 404:
+          errorMessage = "User not found";
+          break;
+        default:
+          errorMessage = "Something went wrong";
+      }
+      throw new Error(errorMessage); // Throw the specific error message
     }
     return response.json();
   };
