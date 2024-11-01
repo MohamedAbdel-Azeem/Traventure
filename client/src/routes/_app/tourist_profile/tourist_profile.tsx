@@ -114,13 +114,24 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
     navigate("/");
   };
 
-  const handlePasswordChangeSubmit = ( data: AddContactLeadFormType) => {
+  const [successMessage, setSuccessMessage] = useState("");
+
+
+  const handlePasswordChangeSubmit = (data: AddContactLeadFormType) => {
     console.log("Password change data:", data);
-    const{oldPassword, newPassword}=data;
-   editpassword(currentTourist.username,oldPassword, newPassword);
-    setPasswordModalOpen(false); 
-    // Integration Here
+    const { oldPassword, newPassword } = data;
+    editpassword(currentTourist.username, oldPassword, newPassword)
+        .then(() => {
+            setSuccessMessage("Password changed successfully!");
+            setPasswordModalOpen(false);
+        })
+        .catch((error) => {
+            console.error("Error changing password:", error);
+            setSuccessMessage("Failed to change password.");
+        });
 };
+
+
 
   return (
     <div
@@ -133,6 +144,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
         backgroundColor: "rgba(0, 0, 0, 0.7)",
       }}
     >
+      
       <div className="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl p-8 backdrop-blur-lg bg-opacity-90">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex items-center space-x-6">
@@ -341,7 +353,15 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
             >
               Change Password
             </button>
+
+            
            </div>
+           <center>
+           {successMessage && (
+    <div className="text-green-500 font-bold mt-4">
+        {successMessage}
+    </div>
+)} </center>
         </form>
        
 
