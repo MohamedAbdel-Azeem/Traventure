@@ -8,4 +8,20 @@ export async function addPurchase(purchaseData: object) {
   }
 }
 
-module.exports = { addPurchase };
+export async function getTouristPurchases(touristId: string) {
+  try {
+    return await purchase.find({ touristId }).populate("productId");
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getProductPurchases(productId: string) {
+  try {
+    return await purchase.find({ productId }).populate("touristId");
+  } catch (error) {
+    throw error;
+  }
+}
+
+module.exports = { addPurchase, getTouristPurchases };
