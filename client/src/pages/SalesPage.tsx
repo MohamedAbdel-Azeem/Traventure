@@ -28,8 +28,10 @@ export function SalesPage() {
   }
 
   return (
-    <div>
-      <h1>Sales Page for {username}</h1>
+    <div className="flex flex-col items-center gap-8 pt-6">
+      <h1 className="font-sans text-xl font-medium">
+        Sales Page for {username}
+      </h1>
       <SingleProductSalesChart data={sales} />
     </div>
   );
