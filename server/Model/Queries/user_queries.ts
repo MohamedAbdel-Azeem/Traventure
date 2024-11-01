@@ -146,10 +146,17 @@ export async function changePassword(username:string,  oldpassword:string , newp
           oldpassword,
           (user as any).password
         );
-       
+      
         if (!passwordMatch) {
           throw new Error("Incorrect password");
         }
+        const passwordMatch2 = await comparePassword(
+          newpassowrd,
+          (user as any).password
+        );
+        if (passwordMatch2) {
+          throw new Error("New password is same as old password"); 
+        };
         const newpass = await hashPassword(newpassowrd);
         if(i===0){
           return await sellerModel.findOneAndUpdate({username}, {password: newpass}, {new: true});
