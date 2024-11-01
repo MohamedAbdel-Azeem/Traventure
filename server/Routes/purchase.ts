@@ -2,7 +2,7 @@ import { Request, Response, Router } from "express";
 import {
   addPurchase,
   getTouristPurchases,
-  getProductPurchases,
+  getSellerSales,
 } from "../Model/Queries/purchase_queries";
 import {
   getProduct,
@@ -43,12 +43,13 @@ router.get("/tourist/:touristId", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/product/:productId", async (req: Request, res: Response) => {
+router.get("/seller/:sellerId", async (req: Request, res: Response) => {
   try {
-    const productId = req.params.productId;
-    const purchases = await getProductPurchases(productId);
+    const sellerId = req.params.sellerId;
+    const purchases = await getSellerSales(sellerId);
     res.status(200).send(purchases);
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 });
