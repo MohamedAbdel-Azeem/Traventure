@@ -24,4 +24,4 @@ export async function getProductPurchases(productId: string) {
   }
 }
 
-module.exports = { addPurchase, getTouristPurchases };
+module.exports = { addPurchase, getTouristPurchases, getProductPurchases };

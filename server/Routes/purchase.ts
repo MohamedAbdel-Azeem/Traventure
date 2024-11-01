@@ -2,6 +2,7 @@ import { Request, Response, Router } from "express";
 import {
   addPurchase,
   getTouristPurchases,
+  getProductPurchases,
 } from "../Model/Queries/purchase_queries";
 import {
   getProduct,
@@ -42,6 +43,14 @@ router.get("/tourist/:touristId", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/product/:productId", async (req: Request, res: Response) => {});
+router.get("/product/:productId", async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.productId;
+    const purchases = await getProductPurchases(productId);
+    res.status(200).send(purchases);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
 
 export default router;
