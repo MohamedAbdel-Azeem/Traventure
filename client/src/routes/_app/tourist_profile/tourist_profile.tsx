@@ -117,8 +117,8 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
   const handlePasswordChangeSubmit = ( data: AddContactLeadFormType) => {
     console.log("Password change data:", data);
     const{oldPassword, newPassword}=data;
-   // editpassword(currentTourist.username,oldPassword, newPassword);
-    //setPasswordModalOpen(false); 
+   editpassword(currentTourist.username,oldPassword, newPassword);
+    setPasswordModalOpen(false); 
     // Integration Here
 };
 
