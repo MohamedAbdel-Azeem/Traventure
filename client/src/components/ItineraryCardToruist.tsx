@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 import { TouristProfileData } from "../routes/_app/tourist_profile/tourist_profile_data";
 import IActivity from "../custom_hooks/activities/activity_interface";
 import Place from "../custom_hooks/places/place_interface";
-
+import { useLocation } from "react-router-dom";
 interface TagStructure {
   _id: string;
   name: string;
@@ -41,6 +41,7 @@ interface ItineraryCardCRUDProps {
     user_id?: TouristProfileData;
   }[];
   accesibility: boolean;
+  bookingActivated: boolean;
 }
 
 const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
@@ -58,6 +59,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   dropoff_location,
   selectedTags = [],
   plan,
+  bookingActivated,
 }) => {
 
   const formatDate = (dateString: string) => {
@@ -68,6 +70,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
       return "Invalid Date";
     }
   };
+  const currentType = useLocation().pathname.split('/')[1];
 
   return (
 <div className="m-4 transition transform hover:scale-105 w-96 bg-gray-200 rounded-lg"> 
@@ -145,12 +148,17 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
               dropoff_location,
               plan,
               selectedTags,
+              
             }}
             className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center"
           >
             View Details
           </Link>
-
+          {currentType==="admin"&&<div className="bg-yellow-500 text-white p-2 rounded-lg flex flex-col items-center w-1/2">
+            <p className="text-sm flex items-center">
+               {bookingActivated?"Booking Activated":"Booking Deactivated"}
+            </p>
+          </div>}
         </div>
       </div>
     </div>

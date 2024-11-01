@@ -17,11 +17,11 @@ import useGetUpcoming from '../custom_hooks/itineraries/useGetupcoming';
 import ItineraryCardToruist from './ItineraryCardToruist';
 import { useGetAllTags } from '../custom_hooks/categoryandTagCRUD';
 import ImprovedSidebar from './ImprovedSidebar';
-
+import { useLocation } from 'react-router-dom';
 const MoreItineraries: React.FC = () => {
     const { upcoming, loading, error } = useGetUpcoming();
     const navigate = useNavigate();
-
+    const currenttype = useLocation().pathname.split('/')[1];
     const [searchType, setSearchType] = useState<'name' | 'tag'>('name');
     const [searchTerm, setSearchTerm] = useState('');
     const [sortType, setSortType] = useState<'price' | 'rating'>('price');
@@ -95,6 +95,14 @@ const MoreItineraries: React.FC = () => {
                     return itinerary.language === selectedLanguage;
                 default:
                     return true;
+            }
+        })
+        .filter(itinerary => {
+            // Filter based on bookingActivated status depending on currentType
+            if (currenttype === 'admin') { // Example: check if user is an admin
+                return true; // Admins see all itineraries
+            } else {
+                return itinerary.bookingActivated; // Non-admins see only activated itineraries
             }
         })
         .sort((a, b) => {
