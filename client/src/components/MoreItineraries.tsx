@@ -27,7 +27,7 @@ const MoreItineraries: React.FC = () => {
     const [sortType, setSortType] = useState<'price' | 'rating'>('price');
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
     const [filterType, setFilterType] = useState<'budget' | 'date' | 'tag' | 'language'>('budget');
-    const [budgetRange, setBudgetRange] = useState<[number, number]>([0, 1000]);
+    const [budgetRange, setBudgetRange] = useState<[number, number]>([0, 100000000000000000]);
 
     const { data: tagsData } = useGetAllTags(); 
 
@@ -44,6 +44,7 @@ const MoreItineraries: React.FC = () => {
     const [selectedLanguage, setSelectedLanguage] = useState<string>('');
 
     useEffect(() => {
+        console.log("itinearies",upcoming?.itineraries);
         if (upcoming && upcoming.itineraries && upcoming.itineraries.length > 0) {
             const uniqueLanguages = [...new Set(upcoming.itineraries.map(itinerary => itinerary.language))];
             if (uniqueLanguages.length > 0) {

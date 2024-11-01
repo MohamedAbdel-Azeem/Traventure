@@ -1,6 +1,7 @@
 //import dayjs from 'dayjs';
 import Itinerary from "../Schemas/Itinerary";
 import TourGuide from "../Schemas/TourGuide";
+import { ItineraryDocument } from "../../Interfaces/IItinerary";
 
 export async function getItinerary(tourGuide_username: String) {
   try {
@@ -75,6 +76,29 @@ export async function deleteItinerary(itinerary_Id: string) {
     }
     const place = await Itinerary.findByIdAndDelete(itinerary_Id);
     return place;
+  } catch (error) {
+    throw error;
+  }
+}
+export async function toggleItineraryActivation(itinerary_Id: string) {
+  try {
+    const itinerary = await Itinerary.findById(itinerary_Id) as ItineraryDocument | null;
+    
+    if (!itinerary) throw new Error("Itinerary not found");
+
+     
+
+    const { bookingActivated = false, booked_By = [] } = itinerary;
+    if(booked_By.length == 0) return itinerary;
+    const newBookingActivated = !bookingActivated;
+
+    const updatedItinerary = await Itinerary.findByIdAndUpdate(
+      itinerary_Id,
+      { bookingActivated: newBookingActivated },
+      { new: true }
+    );
+    
+    return updatedItinerary;
   } catch (error) {
     throw error;
   }

@@ -22,7 +22,7 @@ interface Tourist extends Document {
 export async function getAll() {
     try {
          // Fetch upcoming itineraries
-         const itineraries = await Itinerary.find({ starting_Date: { $gte: new Date() } }).populate('added_By')
+         const itineraries = await Itinerary.find({ starting_Date: { $gte: new Date() } , bookingActivated:true}).populate('added_By')
          .populate('added_By')
     .populate('plan.place')
     .populate('plan.activities.activity_id')

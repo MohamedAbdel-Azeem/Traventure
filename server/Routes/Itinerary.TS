@@ -6,13 +6,14 @@ import {
   getItinerary,
   updateItinerary,
   getAllItinerary,
+  toggleItineraryActivation
 } from "../Model/Queries/itinerary_queries";
 import {
   itineraryAddValidator,
   itineraryUpdateValidator,
 } from "../utils/express-validator/itineraryValidator";
 import TourGuide from "../Model/Schemas/TourGuide";
-
+import { ItineraryDocument } from "../Interfaces/IItinerary";
 const router = Router();
 
 router.post(
@@ -84,4 +85,22 @@ router.delete("/delete/:id", async (req: Request, res: Response) => {
     res.status(500).json({ error: error });
   }
 });
+router.patch("/toggleActivation/:id", async (req: Request, res: Response) => {
+  try {
+    const itinerary = await toggleItineraryActivation(req.params.id) as ItineraryDocument;
+
+    if (!itinerary) {
+      return res.status(404).json({ message: "Itinerary not found" });
+    }
+
+    if (itinerary.booked_By.length === 0) {
+      return res.status(400).json({ message: "No bookings available to toggle activation" });
+    }
+
+    res.status(200).json({ message: "Itinerary activation toggled successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "An internal server error occurred" });
+  }
+});
+
 export default router;
