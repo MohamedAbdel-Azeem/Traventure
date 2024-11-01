@@ -10,13 +10,12 @@ export interface IProduct extends Document {
   externalseller: string;
   imageUrl: string;
   quantity: number;
-  feedback: [
-    {
-      name: string;
-      rating: string;
-      review: string;
-    }
-  ];
+  feedback: {
+    name: mongoose.Types.ObjectId;
+    rating: string;
+    review: string;
+  }[];
+  sales: mongoose.Types.ObjectId[];
   isArchived: boolean;
 }
 
@@ -31,6 +30,12 @@ const ProductSchema = new schema({
   externalseller: { type: String },
   imageUrl: { type: String, required: true },
   quantity: { type: Number, required: true },
+  sales: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Purchase",
+    },
+  ],
   feedback: [
     {
       name: String,
