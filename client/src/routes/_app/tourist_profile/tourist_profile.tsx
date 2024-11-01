@@ -357,18 +357,20 @@ const [walletBalance, setWalletBalance] = useState(currentTourist.wallet);
                 Edit Profile
               </button>
             )}
-             <button
-              onClick={handleLogout}
-              className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
-            >
-              Log Out
-            </button>
+            
 
             <button
               onClick={()=>setPasswordModalOpen(true)}
               className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
             >
               Change Password
+            </button>
+
+            <button
+              onClick={handleLogout}
+              className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
+            >
+              Log Out
             </button>
 
             
