@@ -1,18 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { min } from "date-fns";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
 const FormleadSchema = z.object({
-  oldPassword: z.string(),
+  oldPassword: z.string().min(8, { message: "Old Password is required" }),
   newPassword: z.string()
-  .min(8, "Password must be at least 8 characters long")
-  .regex(
-    /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-    "Password must contain at least one letter and one number"
-  ),
-
+    .min(8, { message: "Password must be at least 8 characters long" })
+    .regex(
+      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+      { message: "Password must contain at least one letter and one number" }
+    ),
 });
 
 export type AddContactLeadFormType = z.infer<typeof FormleadSchema>;
@@ -28,48 +27,68 @@ interface ChangePasswordData {
   newPassword: string;
 }
 
-const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
+function  ChangePasswordModal ({
   username,
   onClose,
   onFormSubmit,
-}) => {
-  const form = useForm<z.infer<typeof FormleadSchema>>({
+}:ChangePasswordModalProps)  {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<z.infer<typeof FormleadSchema>>({
    resolver: zodResolver(FormleadSchema),
    defaultValues: {
     oldPassword: "",
     newPassword: "",
    },
  });
+ console.log(username);
+ console.log(onClose);
+  console.log(onFormSubmit);
  function onSubmit(data: z.infer<typeof FormleadSchema>) {
+  console.log(data);
  onFormSubmit(data); 
- console.log(data);
+ 
 }
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96">
         <h2 className="text-2xl font-bold mb-4">Change Password</h2>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form onSubmit={ handleSubmit(onSubmit)}>
           <div className="mb-4">
             <label className="block text-lg font-semibold">Old Password</label>
-            <input
-              {...form.register("oldPassword", { required: "Old password is required" })}
-              type="password"
-              className="w-full p-2 border border-gray-300 rounded-md"
-            />
-            {form.formState.errors.oldPassword && (
-              <p className="text-red-600">{form.formState.errors.oldPassword.message}</p>
+            <Controller
+                  name="oldPassword"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                    {...field}
+                    type="password"
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                  />
+                  )}
+                />
+            {errors.oldPassword && (
+              <p className="text-red-600">{errors.oldPassword.message}</p>
             )}
           </div>
 
           <div className="mb-4">
             <label className="block text-lg font-semibold">New Password</label>
-            <input
-              {...form.register("newPassword", { required: "New password is required" })}
-              type="password"
-              className="w-full p-2 border border-gray-300 rounded-md"
-            />
-            {form.formState.errors.newPassword && (
-              <p className="text-red-600">{form.formState.errors.newPassword.message}</p>
+            <Controller
+                  name="newPassword"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                    {...field}
+                    type="password"
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                  />
+                  )}
+                />
+            {errors.newPassword && (
+              <p className="text-red-600">{errors.newPassword.message}</p>
             )}
           </div>
 

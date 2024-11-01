@@ -117,8 +117,8 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
   const handlePasswordChangeSubmit = ( data: AddContactLeadFormType) => {
     console.log("Password change data:", data);
     const{oldPassword, newPassword}=data;
-   // editpassword(currentTourist.username,oldPassword, newPassword);
-    //setPasswordModalOpen(false); 
+   editpassword(currentTourist.username,oldPassword, newPassword);
+    setPasswordModalOpen(false); 
     // Integration Here
 };
 
@@ -328,7 +328,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
                 Edit Profile
               </button>
             )}
-            <button
+             <button
               onClick={handleLogout}
               className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
             >
@@ -341,14 +341,15 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
             >
               Change Password
             </button>
+           </div>
+        </form>
+       
 
             {isPasswordModalOpen && (<ChangePasswordModal
             username={currentTourist.username}
             onClose={()=>setPasswordModalOpen(false)}
             onFormSubmit={handlePasswordChangeSubmit}>
             </ChangePasswordModal>)}
-          </div>
-        </form>
       </div>
     </div>
   );
