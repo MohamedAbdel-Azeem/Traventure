@@ -44,7 +44,7 @@ export const editpassword = async (username: string, oldPassword: string, newpas
       let errorMessage;
       switch (response.status) {
         case 401:
-          errorMessage = "Invalid Password";
+          errorMessage = "Incorrect old password";
           break;
         case 403:
           errorMessage ="Can't change to same old password";
