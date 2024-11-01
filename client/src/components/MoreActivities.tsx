@@ -86,7 +86,7 @@ const MoreActivities: React.FC = () => {
         }
     })
     .filter((activity: IActivity) => {
-        if(currenttype === 'tourist')
+        if(currenttype === 'tourist' || currenttype === 'guest')
         return !activity.inappropriate;
         return true;
     }   
