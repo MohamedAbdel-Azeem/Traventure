@@ -7,6 +7,8 @@ import { TouristProfileData } from "./tourist_profile_data";
 import { usePatchUserProfile } from "../../../custom_hooks/updateTouristProfile";
 import ChangePasswordModal, { AddContactLeadFormType } from "../../../components/ChangePasswordModal";
 import { ChangePassword, editpassword } from "../../../custom_hooks/changepassowrd";
+import Swal from "sweetalert2";
+
 
 
 // type TouristSchemaType = {
@@ -124,6 +126,14 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
         .then(() => {
             setSuccessMessage("Password changed successfully!");
             setPasswordModalOpen(false);
+
+          
+              Swal.fire({
+                title: "Password Changed Successfully",
+                text: "Password has been changed",
+                icon: "success",
+              });
+            
         })
         .catch((error) => {
             console.error("Error changing password:", error);
@@ -356,12 +366,12 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
 
             
            </div>
-           <center>
+           {/* <center>
            {successMessage && (
     <div className="text-green-500 font-bold mt-4">
         {successMessage}
     </div>
-)} </center>
+)} </center> */}
         </form>
        
 
