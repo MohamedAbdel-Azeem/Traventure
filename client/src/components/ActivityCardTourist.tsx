@@ -3,6 +3,7 @@ import TheMAP from './TheMAP';
 import { Box, Checkbox, FormControl, ListItemText, MenuItem, Modal, Rating, Select, SelectChangeEvent, TextField } from '@mui/material';
 import { useGetAllCategories, useGetAllCategoriesD, useGetAllTags } from '../custom_hooks/categoryandTagCRUD';
 import { updateActivity } from '../custom_hooks/activities/updateActivity';
+import { useLocation } from 'react-router-dom';
 type Activity = {
     _id: string;
     Title: string;
@@ -36,6 +37,8 @@ type CatStructure = {
   
 
 export const ActivityCardTourist: React.FC<ActivityProp> = ({activity, onDelete }) => {
+    const currentuser = useLocation().pathname.split('/')[2];
+    const currenttype = useLocation().pathname.split('/')[1];
     const [isEditing, setIsEditing] = useState(false);
     const [currentActivity, setCurrentActivity] = useState<Activity>(activity);
     const [newTitle, setNewTitle] = useState(currentActivity.Title);
@@ -57,15 +60,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({activity, onDelete 
       const averageRating = calculateAverageRating(currentActivity);
 
 
-
-
-
-
 console.log(currentActivity.feedback);
-    const handleDeleteClick = () => {
-        onDelete(activity._id);
-    };
-
 
     const {
         loading: tagsLoading,
@@ -101,36 +96,6 @@ console.log(currentActivity.feedback);
         setSelectedCat(value);
       };
 
-
-    const handleSave = async () => {
-        const updatedActivity = {
-            _id: currentActivity._id,
-            Title: newTitle,
-            DateAndTime: newDate,  
-            Location: {
-            latitude: newLatitude,
-            longitude: newLongitude,
-        },
-            Price: newPrice,
-            SpecialDiscount: newSpecialDiscount,
-            Tags: selectedTags,
-            Category: selectedCat,
-            BookingIsOpen: newBIO, 
-            added_By: currentActivity.added_By 
-        };
-        try {
-        await updateActivity(currentActivity._id,updatedActivity);
-        setIsEditing(false);
-        } catch (error) {
-            console.error("Error updating activity:", error);
-        }
-    };
-  
-    const handleEditClick = () => {
-        setIsEditing(!isEditing);
-        if(isEditing)
-            {handleSave();}
-    };
     const handleDateChange = (e) => {
         setNewDate(new Date(e.target.value));
     };
@@ -176,77 +141,13 @@ console.log(currentActivity.feedback);
                     >
                     <div className="w-[400px] h-[69px] rounded-t-[19px]">
                         <div className="absolute text-center top-0 left-0 w-[71px] h-[30px] rounded-tl-[19px] bg-[#FF0000] border-black border-[1px] rounded-br-[19px]">
-                            {isEditing ? (
-                                <select
-                                    title="status"
-                                    name="status"
-                                    value={newBIO ? 'true' : 'false'}
-                                    onChange={()=>setNewBIO(!newBIO)}
-                                    className="bg-transparent text-black border-none"
-                                >
-                                    <option value="true">Open</option>
-                                    <option value="false">Closed</option>
-                                </select>
-                            ) : (
-                                newBIO ? 'Open' : 'Closed'
-                            )}
+                                {newBIO ? 'Open' : 'Closed'}
                         </div>
                         <div className="absolute top-[60px] right-[10px]">
-                        {/* <button title="Edit" className="editBtn" onClick={handleEditClick}>
-                        <svg height="1em" viewBox="0 0 512 512">
-                        <path
-                        d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z">
-                        </path>
-                        </svg>
-                        </button>  */}
+                            flag
                         </div>
-                        {/* <button className="bin-button absolute top-[10px] right-[10px]" title="Delete" onClick={handleDeleteClick}
-                        >
-                        <svg
-                            className="bin-top"
-                            viewBox="0 0 39 7"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <line y1="5" x2="39" y2="5" stroke="white" stroke-width="4"></line>
-                            <line
-                            x1="12"
-                            y1="1.5"
-                            x2="26.0357"
-                            y2="1.5"
-                            stroke="white"
-                            stroke-width="3"
-                            ></line>
-                        </svg>
-                        <svg
-                            className="bin-bottom"
-                            viewBox="0 0 33 39"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <mask id="path-1-inside-1_8_19" fill="white">
-                            <path
-                                d="M0 0H33V35C33 37.2091 31.2091 39 29 39H4C1.79086 39 0 37.2091 0 35V0Z"
-                            ></path>
-                            </mask>
-                            <path
-                            d="M0 0H33H0ZM37 35C37 39.4183 33.4183 43 29 43H4C-0.418278 43 -4 39.4183 -4 35H4H29H37ZM4 43C-0.418278 43 -4 39.4183 -4 35V0H4V35V43ZM37 0V35C37 39.4183 33.4183 43 29 43V35V0H37Z"
-                            fill="white"
-                            mask="url(#path-1-inside-1_8_19)"
-                            ></path>
-                            <path d="M12 6L12 29" stroke="white" stroke-width="4"></path>
-                            <path d="M21 6V29" stroke="white" stroke-width="4"></path>
-                        </svg>
-                        </button> */}
                     </div><Rating disabled name="rating" value={averageRating} precision={0.1} />
-                    {!isEditing?<div className="text-[38px] h-[45px] text-center leading-[43px]">{newTitle}</div>:
-                     <TextField
-                     size="small"
-                         label="Title"
-                         name="Title"
-                         value={newTitle}
-                         onChange={(e)=>setNewTitle(e.target.value)}
-                         className="text-center border-none bg-transparent"
-                     />
-                    }
+                    <div className="text-[38px] h-[45px] text-center leading-[43px]">{newTitle}</div>
                     <div className='flex flex-row'>
                         <FormControl fullWidth>
                                 <Select
@@ -304,44 +205,18 @@ console.log(currentActivity.feedback);
                         />
                         </div>
                         <div className="flex flex-col items-center justify-center text-[13px] w-[160px] h-full">
-                            <div>{isEditing ? (
-                                <TextField
-                                size="small"
-                                    label="Price"
-                                    name="price"
-                                    value={newPrice}
-                                    onChange={(e)=>setNewPrice(Number(e.target.value))}
-                                    className="text-center border-none bg-transparent"
-                                />
-                            ) : (
+                            <div>
                                 <div>Price: {currentActivity.Price}</div>
-                            )}</div>
-                            <div>{isEditing ? (
-                                <TextField
-                                size="small"
-                                    label="Special Discount"
-                                    name="special Discount"
-                                    value={newSpecialDiscount}
-                                    onChange={(e)=>setNewSpecialDiscount(Number(e.target.value))}
-                                    className="text-center border-none bg-transparent"
-                                />
-                            ) : (<div>Special Discount: {currentActivity.SpecialDiscount}</div>
-                                
-                            )}</div>
+                            </div>
+                            <div>
+                                <div>Special Discount: {currentActivity.SpecialDiscount}</div>
+                                </div>
                         
                         </div>
                         </div>
                         <div className="flex flex-col items-center justify-center text-[13px] h-[236px]">
-                            {isEditing ? (
-                                <TheMAP 
-                                className="rounded-b-[19px] h-[209px] w-[400px]"
-                                lat={latitude} long={longitude}
-                                setLatitude={setLatitude}
-                                setLongitude={setLongitude}/>
-                            ) : (
                                 <iframe title="map" className="rounded-b-[19px]" src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${longitude}!3d${latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
                                 width="400px" height="166px"></iframe>
-                            )}
                         </div>
                     </div>
                 </div>

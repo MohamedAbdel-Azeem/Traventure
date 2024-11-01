@@ -1,4 +1,4 @@
-import bookingModel from "../Schemas/itineraryBooking";
+import bookingModel from "../Schemas/Booking";
 
 export async function getTouristBookings(touristId: string) {
   try {

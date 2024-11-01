@@ -10,6 +10,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ActivityIcon from '@mui/icons-material/LocalActivity';
 import CategoryIcon from '@mui/icons-material/Category';
+import HowToVoteIcon from '@mui/icons-material/HowToVote';
 const drawerWidth = 240;
 
 
@@ -85,6 +86,7 @@ const adminsidebaritems =
   { text: 'Locations', icon: <LocationOnIcon />, path: `/admin/${currentuser}/locations` },
   { text: 'Account Management', icon: <AccountCircleIcon />, path: `/admin/${currentuser}/users` },
   { text: 'Cats & Tags', icon: <CategoryIcon />, path: `/admin/${currentuser}/categoriesandtags` },
+  { text: 'Complaints', icon: <HowToVoteIcon />, path: `/admin/${currentuser}/complaints` }
 ];
 const TGsidebaritems =
 [
@@ -103,6 +105,7 @@ const touristsidebaritems =
   { text: 'Home', icon: <HomeIcon />, path: `/tourist/${currentuser}` },
   { text: 'Shop', icon: <ShopIcon />, path: `/tourist/${currentuser}/shop` },
   { text: 'Locations', icon: <LocationOnIcon />, path: `/tourist/${currentuser}/locations` },
+  { text: 'Complaints', icon: <HowToVoteIcon />, path: `/tourist/${currentuser}/complaints` }
 ];
 const advertisersidebaritems =
 [

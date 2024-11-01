@@ -5,11 +5,16 @@ import {
   getProducts,
   getProduct,
   updateProduct,
+  toggleProductArchive,
+  decrementProductQuantity,
 } from "../Model/Queries/product_queries";
+import { addPurchase } from "../Model/Queries/purchase_queries";
 import {
   productAddValidator,
   productUpdateValidator,
 } from "../utils/express-validator/productValidator";
+import { get } from "http";
+import { json } from "stream/consumers";
 
 const router = Router();
 
@@ -40,7 +45,6 @@ router.get("/", async (req: Request, res: Response) => {
   }
 });
 
-
 router.patch(
   "/update/:id",
   productUpdateValidator,
@@ -59,5 +63,21 @@ router.patch(
     }
   }
 );
+
+router.patch("/archive/:id", async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.id;
+    const newProduct = await toggleProductArchive(productId);
+    if (newProduct) {
+      res.status(200).send(newProduct);
+    } else {
+      res.status(404).send("Product not found");
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+
 
 export default router;

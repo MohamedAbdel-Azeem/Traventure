@@ -13,6 +13,7 @@ const Dashboard = () => {
     const { upcoming, loading, error } = useGetUpcoming();
     const navigate = useNavigate();
     const currentuser = useLocation().pathname.split('/')[2];
+    const currenttype = useLocation().pathname.split('/')[1];
 
     if (loading) {
         return <div>Loading...</div>;
@@ -63,7 +64,7 @@ const Dashboard = () => {
                     )}
                     <button
                         className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                        onClick={() => navigate(`/tourist/${currentuser}/itineraries`)}
+                        onClick={() => navigate(`/${currenttype}/${currentuser}/itineraries`)}
                     >
                         View More
                     </button>
@@ -88,7 +89,7 @@ const Dashboard = () => {
                     )}
                     <button
                         className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                        onClick={() => navigate(`/tourist/${currentuser}/locations`)}
+                        onClick={() => navigate(`/${currenttype}/${currentuser}/locations`)}
                     >
                         View More
                     </button>
@@ -114,7 +115,7 @@ const Dashboard = () => {
                     )}
                     <button
                         className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                        onClick={() => navigate(`/tourist/${currentuser}/activities`)}
+                        onClick={() => navigate(`/${currenttype}/${currentuser}/activities`)}
                     >
                         View More
                     </button>

@@ -245,6 +245,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
             {isEditing ? (
               <div>
                 <TheMAP
+                  className="h-[300px] w-[300px]"
                   lat={latitude}
                   long={longitude}
                   setLatitude={setLatitude}

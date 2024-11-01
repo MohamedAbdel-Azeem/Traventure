@@ -113,14 +113,11 @@ const Admin_TourismGovernorTable: React.FC<Admin_TourismGovernorTableProps> = ({
     }
   }, [dataG,dataA]);
 
-
-
   const [apiBody, setApiBody] = useState({});
 
   const { data, loading, error } = useAddAdminandGovernor(apiBody, name);
 
-  
-  const [page, setPage] = useState(0);
+    const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchQuery, setSearchQuery] = useState('');
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
@@ -128,7 +125,6 @@ const Admin_TourismGovernorTable: React.FC<Admin_TourismGovernorTableProps> = ({
   const [open, setOpen] = useState(false);
   const [newUsername, setNewUsername] = useState('');
   const [newPassword, setNewPassword] = useState('');
-
 
   const handleDelete = (username: string) => {
     if (window.confirm(`Are you sure you want to delete the user ${username}?`)) {

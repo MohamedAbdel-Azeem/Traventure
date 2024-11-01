@@ -1,18 +1,14 @@
-import e from "express";
 import mongoose from "mongoose";
-import { title } from "process";
-
 const schema = mongoose.Schema;
-
-const complaintSchema = new schema({
+const complainSchema = new schema({
+    type: { type: Boolean, required: true },//true for general and false for specific
+    booking_Id:{type:mongoose.Types.ObjectId,ref:"Booking"},
+    username: { type: String, required: true },
     title: { type: String, required: true },
     body: { type: String, required: true },
-    issued_By: { type: mongoose.Types.ObjectId, required: true, ref: "Tourist" },
-    status: { type: Boolean, required: true, default: false },
     date: { type: Date, required: true },
-    type: { type: Boolean, required: true, default: false },
-    booking_Id: { type: mongoose.Types.ObjectId, required: true, ref: "Booking" },
-
+    status: { type: String, required: true },
+    reply: { type: String},
 });
 
-export default mongoose.model("Complaint", complaintSchema);
+export default mongoose.model("Complaint", complainSchema);
