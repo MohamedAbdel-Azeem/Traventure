@@ -50,10 +50,29 @@ export async function toggleProductArchive(ObjectId: string) {
   }
 }
 
+export async function decrementProductQuantity(
+  ObjectId: string,
+  quantity: number
+) {
+  try {
+    const product = await productModel.findById(ObjectId);
+    if (product) {
+      const prodQuantity = product.quantity;
+      product.quantity = prodQuantity - quantity;
+      const newProduct = await product.save();
+      return newProduct;
+    }
+    return null;
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   addProduct,
   getProducts,
   getProduct,
   updateProduct,
   toggleProductArchive,
+  decrementProductQuantity,
 };
