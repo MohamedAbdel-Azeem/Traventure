@@ -9,7 +9,7 @@ import {
     InputLabel,
     FormControl,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ActivityCardTourist } from './ActivityCardTourist';
 import { useGetAllActivitiesS } from '../custom_hooks/activities/useGetActivities';
 import IActivity from '../custom_hooks/activities/activity_interface';
@@ -19,7 +19,7 @@ import Activity from '../custom_hooks/activities/activity_interface';
 const MoreActivities: React.FC = () => {
     const { sactivities, aloading, aerror } = useGetAllActivitiesS();
     const { data: catData } = useGetAllCategories(); 
-
+    const currenttype = useLocation().pathname.split('/')[1];
     const [categoryTerms, setCategoryTerms] = useState<string[]>([]); 
     const [selectedCat, setSelectedCats] = useState<string[]>([]);
     const [searchType, setSearchType] = useState<'name' | 'tag' | 'category'>('name');
@@ -84,7 +84,13 @@ const MoreActivities: React.FC = () => {
             default:
                 return true;
         }
-    });
+    })
+    .filter((activity: IActivity) => {
+        if(currenttype === 'tourist')
+        return !activity.inappropriate;
+        return true;
+    }   
+);
 
     const sortedActivities = [...(filteredActivities ?? [])].sort((a: IActivity, b: IActivity) => {
         let comparison = 0;

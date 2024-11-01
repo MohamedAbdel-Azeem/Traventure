@@ -102,7 +102,7 @@ const MoreItineraries: React.FC = () => {
             if (currenttype === 'admin') { // Example: check if user is an admin
                 return true; // Admins see all itineraries
             } else {
-                return itinerary.bookingActivated; // Non-admins see only activated itineraries
+                return itinerary.bookingActivated &&!itinerary.inappropriate; // Non-admins see only activated itineraries
             }
         })
         .sort((a, b) => {
