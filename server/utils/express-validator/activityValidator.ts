@@ -24,6 +24,7 @@ export const addActivityValidator = [
     body("added_By").exists().isString().withMessage("Please add added_by"),
     body("BookingIsOpen").exists().isBoolean().withMessage("BookingIsOpen should be a boolean"),
     body("added_By").exists().isString().withMessage("added_By should be a valid string"),
+    body("inappropriate").optional().isBoolean().withMessage("inappropriate should be a boolean"),
 ];
 
 export const updateActivityValidator = [
@@ -48,7 +49,7 @@ export const updateActivityValidator = [
     body("Tags").optional().isArray().withMessage("Tags should be an array of strings"),
     body("Tags.*").isString().withMessage("Each tag should be a valid string"),
     body("BookingIsOpen").optional().isBoolean().withMessage("BookingIsOpen should be a boolean"),
-
+    body("inappropriate").optional().isBoolean().withMessage("inappropriate should be a boolean"),
 ];
 
 module.exports = {addActivityValidator, updateActivityValidator}

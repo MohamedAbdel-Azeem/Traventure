@@ -39,6 +39,7 @@ interface Itinerary {
   }[];
   accesibility: boolean;
   bookingActivated: boolean;
+  inappropriate: boolean;
 }
 
 export default Itinerary;

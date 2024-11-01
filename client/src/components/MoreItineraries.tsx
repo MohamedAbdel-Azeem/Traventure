@@ -283,6 +283,8 @@ const MoreItineraries: React.FC = () => {
                                 main_Picture={itinerary.main_Picture}
                                 booked_By={itinerary.booked_By}
                                 accesibility={itinerary.accesibility}
+                                bookingActivated={itinerary.bookingActivated}
+                                inappropriate={itinerary.inappropriate}
                             />
                         ))
                     ) : (

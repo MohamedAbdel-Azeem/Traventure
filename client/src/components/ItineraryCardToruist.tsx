@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
@@ -8,6 +8,9 @@ import { TouristProfileData } from "../routes/_app/tourist_profile/tourist_profi
 import IActivity from "../custom_hooks/activities/activity_interface";
 import Place from "../custom_hooks/places/place_interface";
 import { useLocation } from "react-router-dom";
+import Button from "@mui/material/Button";
+import axios from "axios";
+import Swal from "sweetalert2";
 interface TagStructure {
   _id: string;
   name: string;
@@ -42,6 +45,7 @@ interface ItineraryCardCRUDProps {
   }[];
   accesibility: boolean;
   bookingActivated: boolean;
+  inappropriate: boolean;
 }
 
 const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
@@ -60,6 +64,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   selectedTags = [],
   plan,
   bookingActivated,
+  inappropriate
 }) => {
 
   const formatDate = (dateString: string) => {
@@ -71,7 +76,23 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
     }
   };
   const currentType = useLocation().pathname.split('/')[1];
-
+const handleInappropriate = async() => {
+  try{
+  const response=await axios.patch(`/traventure/api/itinerary/toggleInappropriate/${_id}`);
+  if(response.status === 200){
+    setActive(!inappropriateV);
+    if(!inappropriateV)
+    Swal.fire({title:"Success",text:"Itinerary Bookings have been deemed Inappropriate",icon:"success"});
+  else{
+    Swal.fire({title:"Success",text:"Itinerary Bookings have been undeemed Inappropriate",icon:"success"});
+  }
+  }}
+  catch(error: any){ if(error.response && error.response.status === 400){
+    Swal.fire({title:"Error",text:"Can not change inappropriate of item",icon:"error"});
+  }}
+ 
+};
+const [inappropriateV, setActive] = useState(inappropriate);
   return (
 <div className="m-4 transition transform hover:scale-105 w-96 bg-gray-200 rounded-lg"> 
   <div className="relative w-full h-[200px]">
@@ -159,9 +180,15 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
                {bookingActivated?"Booking Activated":"Booking Deactivated"}
             </p>
           </div>}
+            </div>
+          {currentType==="admin"&&<Button onClick={handleInappropriate}>
+               {inappropriateV?"Declare appropriate":" Declare InAppropriate"}
+            </Button>
+          
+          }
         </div>
       </div>
-    </div>
+    
   );
 };
 

@@ -51,20 +51,19 @@ interface Itinerary {
   }[];
   accesibility: boolean;
   onDelete: (id: string) => void;
-  bookingActivated: boolean;
 }
 
 const ItineraryDetailsTourist: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const initialItinerary = location.state as Itinerary;
-  const currentuser = useLocation().pathname.split('/')[2];
+
   const [itinerary, setItinerary] = useState(initialItinerary);
   const [isEditing, setIsEditing] = useState(false);
   const [newTag, setNewTag] = useState("");
 
   if (!itinerary) return <p>No itinerary data found</p>;
-  console.log(itinerary);
+
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
@@ -173,13 +172,8 @@ const ItineraryDetailsTourist: React.FC = () => {
             <Typography variant="body1" className="flex items-center">
               <span className="mr-2 font-semibold">Dropoff Location:</span> {itinerary.dropoff_location}
             </Typography>
-            
           </Box>
-          {currentuser=="admin"&&<Box className="flex justify-between mb-4 text-gray-600">
-          <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">Bookings:</span> {itinerary.bookingActivated ? "Activated" : "Dedddddactivated"}
-            </Typography>
-            </Box>}
+
           <Typography variant="body2" className="text-gray-700 text-justify leading-relaxed mb-4">
             {itinerary.description}
           </Typography>

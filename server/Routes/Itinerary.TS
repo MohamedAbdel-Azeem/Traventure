@@ -6,7 +6,8 @@ import {
   getItinerary,
   updateItinerary,
   getAllItinerary,
-  toggleItineraryActivation
+  toggleItineraryActivation,
+  toggleItineraryInappropriate
 } from "../Model/Queries/itinerary_queries";
 import {
   itineraryAddValidator,
@@ -87,7 +88,7 @@ router.delete("/delete/:id", async (req: Request, res: Response) => {
 });
 router.patch("/toggleActivation/:id", async (req: Request, res: Response) => {
   try {
-    const itinerary = await toggleItineraryActivation(req.params.id) as ItineraryDocument;
+    const itinerary = await toggleItineraryActivation(req.params.id) as ItineraryDocument | null;
 
     if (!itinerary) {
       return res.status(404).json({ message: "Itinerary not found" });
@@ -103,4 +104,17 @@ router.patch("/toggleActivation/:id", async (req: Request, res: Response) => {
   }
 });
 
+router.patch("/toggleInappropriate/:id", async (req: Request, res: Response) => {
+  try {
+    const itinerary = await toggleItineraryInappropriate(req.params.id) as ItineraryDocument | null;
+
+    if (!itinerary) {
+      return res.status(404).json({ message: "Itinerary not found" });
+    }
+
+    res.status(200).json({ message: "Itinerary inappropriate status toggled successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "An internal server error occurred" });
+  }
+});
 export default router;

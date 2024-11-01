@@ -103,3 +103,18 @@ export async function toggleItineraryActivation(itinerary_Id: string) {
     throw error;
   }
 }
+export async function toggleItineraryInappropriate(itinerary_Id: string){
+  try {
+    const itinerary = await Itinerary.findById(itinerary_Id) as ItineraryDocument | null;
+    if (!itinerary) throw new Error("Itinerary not found");
+    const { inappropriate = false } = itinerary;
+    const newInappropriate = !inappropriate;
+    const updatedItinerary = await Itinerary.findByIdAndUpdate(
+      itinerary_Id,
+      { inappropriate: newInappropriate },
+      { new: true }
+    );
+    return updatedItinerary;
+}
+catch (error) { throw error; }
+}

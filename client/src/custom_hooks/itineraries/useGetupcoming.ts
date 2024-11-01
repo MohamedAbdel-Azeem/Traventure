@@ -6,7 +6,7 @@ const useGetUpcoming = () => {
     const [upcoming, setItinerary] = useState<upcoming | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-
+    
     useEffect(() => {
         async function fetchItinerary() {
             setLoading(true);

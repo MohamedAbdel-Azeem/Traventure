@@ -26,4 +26,5 @@ export interface ItineraryDocument extends Document {
   }>;
   accesibility: boolean;
   bookingActivated: boolean;
+  inappropriate: boolean;
 }
