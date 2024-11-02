@@ -3,8 +3,9 @@ import axios from "axios";
 import Swal from "sweetalert2";
 // import { set } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { uploadFileToStorage } from "../firebase/firebase_storage";
 
-function useRegisterUser(body: object | null, role: string) {
+ function useRegisterUser(body: object | null, role: string) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -43,9 +44,14 @@ function useRegisterUser(body: object | null, role: string) {
       if (role === null) return;
       if (body === null) return;
       const url = `/traventure/api/${role}/add`;
+      if(role !== "tourist") {
+      const {documents} = body as any;
+      const firebaseurl = await uploadFileToStorage(documents);
+      (body as any).documents = firebaseurl;
       setLoading(true);
       setError(null);
-      console.log(body);
+      }
+
       try {
         const response = await axios.post(url, body);
         if (response.status >= 200 && response.status < 300) {

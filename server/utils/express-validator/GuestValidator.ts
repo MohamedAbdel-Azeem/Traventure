@@ -12,7 +12,10 @@ export const guestAddValidator = [
     body("password")
     .isString()
     .isLength({ min: 8 })
-    .withMessage("Password must be at least 8 characters long")
+    .withMessage("Password must be at least 8 characters long"),
+    body("documents")
+    .isString()
+    .withMessage("Documents must be uploaded"),
 ];
 
 
