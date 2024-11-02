@@ -5,7 +5,7 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { styled } from '@mui/material/styles';
 import PublicIcon from '@mui/icons-material/Public';
 import { deleteUsers } from '../../custom_hooks/adminusers/governorandadmin';
-import useAddAdminandGovernor from "../../custom_hooks/adminusers/governorandadminadd";
+import { UseAddAdmin, UseAddGovernor} from "../../custom_hooks/adminusers/governorandadminadd";
 type AdminTourismGovernorTabletype = {
   username: string;
   password: string
@@ -111,13 +111,10 @@ const Admin_TourismGovernorTable: React.FC<Admin_TourismGovernorTableProps> = ({
     if(dataG && name.includes("Tourism Governor")){
       setRows(dataG); 
     }
-  }, [dataG,dataA]);
+  }, [dataG, dataA, name]);
 
-  const [apiBody, setApiBody] = useState({});
 
-  const { data, loading, error } = useAddAdminandGovernor(apiBody, name);
-
-    const [page, setPage] = useState(0);
+  const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchQuery, setSearchQuery] = useState('');
   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
@@ -173,10 +170,17 @@ const Admin_TourismGovernorTable: React.FC<Admin_TourismGovernorTableProps> = ({
     setOpen(false);
   };
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     const body = {username:newUsername,password:newPassword};
-    setApiBody(body);
-
+    if(name.includes("Admin")){
+      await UseAddAdmin(body);
+    }
+    else{
+      await UseAddGovernor(body);
+    }
+    if (rows) {
+      setRows([...rows, {...body, _id: 'new', __v: 0}]);
+    }
     setNewUsername('');
     setNewPassword('');
     handleClose();

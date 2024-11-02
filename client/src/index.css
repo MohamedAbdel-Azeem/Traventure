@@ -651,3 +651,13 @@
   transition: all 0.3s;
   position: relative;
 }
+
+.lasttimeipromise::-webkit-scrollbar {
+  display: none;
+}
+
+.lasttimeipromise {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  -webkit-scrollbar-width: none;
+}

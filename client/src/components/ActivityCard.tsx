@@ -72,6 +72,7 @@ console.log(currentActivity.feedback);
         error: tagsError,
         iddata: tagsOptions,
       } = useGetAllTags();
+
       const [selectedTags, setSelectedTags] = useState<string[]>(activity.Tags.map((tag) => tag._id));
     const handleTagsChange = (event: SelectChangeEvent<string[]>) => {
         const {
@@ -86,7 +87,6 @@ console.log(currentActivity.feedback);
         return valueNames.join(", ");
       };
  const alltags = handleTagsText;
-
 
       const {
         loading: CatLoading,

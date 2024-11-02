@@ -33,12 +33,14 @@ import GuestShop from "./components/GuestShop";
 import HistoricalTags from "./components/HistoricalTags";
 import Complaints from "./components/Admin/Complaints";
 import TouristComplaints from "./components/TouristComplaints";
+import ImprovedCreateItinerary from "./components/ImprovedCreateItinerary";
 function App() {
   return (
     <MantineProvider>
       <Router>
         <Routes>
           <Route path="/" element={<SignIn/>}/>
+          <Route path="/test" element={<ImprovedCreateItinerary/>}/>
           <Route path="/register" element={<Register/>}/>
           <Route path="/admin/:username" element={<AdminPage/>}/>
           <Route path="/admin/:username/users" element={<Accounts/>}/>
