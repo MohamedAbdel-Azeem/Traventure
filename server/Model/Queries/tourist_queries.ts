@@ -54,7 +54,7 @@ export async function getTouristBookings(username: string) {
                 },
                 {
                     path: "activity",
-                    select: "name _id" // specify the fields you want to populate
+                    select: "Title _id" // specify the fields you want to populate
                 }
             ]
         }
@@ -71,7 +71,21 @@ export async function getTouristBookings(username: string) {
 
 export async function gettouristComplaints(username: string) {
     try {
-        const Complaints = await complaint.find({ username: username });
+        const Complaints = await complaint.find({ username: username }).populate([
+            {
+                path: "booking_Id",
+                populate: [
+                    {
+                        path: "itinerary",
+                        select: "title _id" // specify the fields you want to populate
+                    },
+                    {
+                        path: "activity",
+                        select: "Title _id" // specify the fields you want to populate
+                    }
+                ]
+            }
+        ]);
     return Complaints;}
         catch (error) {
             throw error;

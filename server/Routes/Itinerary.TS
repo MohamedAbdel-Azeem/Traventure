@@ -6,11 +6,11 @@ import {
   getItinerary,
   updateItinerary,
   getAllItinerary,
-} from "..//Model//Queries//itinerary_queries";
+} from "../Model/Queries/itinerary_queries";
 import {
   itineraryAddValidator,
   itineraryUpdateValidator,
-} from "..//utils//express-validator//itineraryValidator";
+} from "../utils/express-validator/itineraryValidator";
 import TourGuide from "../Model/Schemas/TourGuide";
 import ItineraryModel from "../Model/Schemas/Itinerary"
 

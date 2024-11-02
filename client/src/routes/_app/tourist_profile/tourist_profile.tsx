@@ -5,6 +5,11 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TouristProfileData } from "./tourist_profile_data";
 import { usePatchUserProfile } from "../../../custom_hooks/updateTouristProfile";
+import ChangePasswordModal, { AddContactLeadFormType } from "../../../components/ChangePasswordModal";
+import { ChangePassword, editpassword } from "../../../custom_hooks/changepassowrd";
+import Swal from "sweetalert2";
+
+
 
 // type TouristSchemaType = {
 //   username: string;
@@ -21,6 +26,27 @@ import { usePatchUserProfile } from "../../../custom_hooks/updateTouristProfile"
 interface TouristProfileProps {
   tourist: TouristProfileData;
 }
+
+interface ChangePasswordModalProps{
+  username: string;
+  onClose: () => void;
+  onSubmit: (data: ChangePasswordData) => void;
+  }
+  
+  interface ChangePasswordData{
+      oldPassword: string;
+      newPassword: string;
+  }
+  const FormleadSchema = z.object({
+    oldPassword: z.string(),
+    newPassword: z.string()
+    .min(8, "Password must be at least 8 characters long")
+    .regex(
+      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+      "Password must contain at least one letter and one number"
+    ),
+  
+  });
 
 const schema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -48,9 +74,11 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
   const [apiBody, setApiBody] = useState({});
   const [apiUsername, setApiUsername] = useState("");
   const response = usePatchUserProfile(apiBody, apiUsername);
-
+  const [isPasswordModalOpen,setPasswordModalOpen]=useState(false);
+  // const [apiBodypass, setApiBodyPass]= useState("");
+  // const [apiBodynewpass, setApiBodynewPass]= useState("");
   //  tourist = usePatchUserProfile(tourist, tourist.username).response as TouristProfileData;
-
+  //const responsepass = ChangePassword(apiUsername, apiBodypass, apiBodynewpass);
   // Define the Zod schema for form validation
   // Initialize useForm with default values from props
   const {
@@ -71,6 +99,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
 
   // Handle form submission (save edited data)
   const onSubmit = (data: TouristProfileData) => {
+
     console.log("Saved data:", data);
     setIsEditing(false);
     setApiBody(data);
@@ -87,6 +116,39 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
     navigate("/");
   };
 
+  const [successMessage, setSuccessMessage] = useState("");
+
+
+  const handlePasswordChangeSubmit = (data: AddContactLeadFormType) => {
+    console.log("Password change data:", data);
+    const { oldPassword, newPassword } = data;
+    editpassword(currentTourist.username, oldPassword, newPassword)
+        .then(() => {
+            setSuccessMessage("Password changed successfully!");
+            setPasswordModalOpen(false);
+
+          
+              Swal.fire({
+                title: "Password Changed Successfully",
+                text: "Password has been changed",
+                icon: "success",
+              });
+            
+        })
+        .catch((error) => {
+          const errorMessage = error.message || "Failed to change password.";
+          Swal.fire({
+            title: "Error",
+            text: errorMessage,
+            icon: "error",
+          });
+            
+        });
+};
+
+const [walletBalance, setWalletBalance] = useState(currentTourist.wallet);
+
+
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-gray-900"
@@ -98,6 +160,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
         backgroundColor: "rgba(0, 0, 0, 0.7)",
       }}
     >
+      
       <div className="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl p-8 backdrop-blur-lg bg-opacity-90">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex items-center space-x-6">
@@ -263,7 +326,8 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
                   Wallet Balance:
                 </label>
                 <p className="text-4xl font-bold text-purple-900">
-                  ${currentTourist.wallet}
+                  ${walletBalance}
+
                 </p>
               </div>
             </div>
@@ -293,14 +357,38 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
                 Edit Profile
               </button>
             )}
+            
+
+            <button
+              onClick={()=>setPasswordModalOpen(true)}
+              className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
+            >
+              Change Password
+            </button>
+
             <button
               onClick={handleLogout}
               className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
             >
               Log Out
             </button>
-          </div>
+
+            
+           </div>
+           {/* <center>
+           {successMessage && (
+    <div className="text-green-500 font-bold mt-4">
+        {successMessage}
+    </div>
+)} </center> */}
         </form>
+       
+
+            {isPasswordModalOpen && (<ChangePasswordModal
+            username={currentTourist.username}
+            onClose={()=>setPasswordModalOpen(false)}
+            onFormSubmit={handlePasswordChangeSubmit}>
+            </ChangePasswordModal>)}
       </div>
     </div>
   );

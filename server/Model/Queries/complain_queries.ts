@@ -20,7 +20,7 @@ export async function getComplaints() {
                     },
                     {
                         path: "activity",
-                        select: "name _id" // specify the fields you want to populate
+                        select: "Title _id" // specify the fields you want to populate
                     }
                 ]
             }
