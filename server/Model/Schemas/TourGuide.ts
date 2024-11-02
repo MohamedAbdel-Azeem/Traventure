@@ -21,6 +21,14 @@ const tourGuideSchema = new Schema({
     },
   ],
   isAccepted: { type: Boolean, default: false },
+  feedback: [
+    {
+      username: { type: mongoose.Types.ObjectId, required: true ,ref: "Tourist" },
+      review: String,
+      rating: String,
+      createdAt: { type: Date, default: Date.now },
+    },
+  ],
 });
 
 export default mongoose.model<ITourGuide>("TourGuide", tourGuideSchema);

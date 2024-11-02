@@ -49,6 +49,14 @@ const itinerarychema = new schema({
     },
   ],
   accesibility: { type: Boolean, required: true },
+  feedback: [
+    {
+      username: { type: mongoose.Types.ObjectId, required: true ,ref: "Tourist" },
+      review: String,
+      rating: String,
+      createdAt: { type: Date, default: Date.now },
+    },
+  ],
 });
 // ToDo: plan a way to do timeline
 export default mongoose.model("Itinerary", itinerarychema);

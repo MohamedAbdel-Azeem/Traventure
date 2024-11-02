@@ -18,11 +18,17 @@ Tags: [{ type: mongoose.Schema.Types.ObjectId, ref: "PreferenceTags", required: 
 BookingIsOpen: {type: Boolean, required: true},
 feedback: [
   {
-    name: String,
-    rating: String,
+    username: { type: mongoose.Types.ObjectId, required: true ,ref: "Tourist" },
     review: String,
+    rating: String,
+    createdAt: { type: Date, default: Date.now },
   },
 ],
+
+
+
+
+
 added_By: { type: mongoose.Types.ObjectId, required: true , ref:'Advertiser' }
 });
 
