@@ -3,6 +3,7 @@ import TheMAP from './TheMAP';
 import { Box, Checkbox, FormControl, ListItemText, MenuItem, Modal, Rating, Select, SelectChangeEvent, TextField } from '@mui/material';
 import { useGetAllCategories, useGetAllCategoriesD, useGetAllTags } from '../custom_hooks/categoryandTagCRUD';
 import { updateActivity } from '../custom_hooks/activities/updateActivity';
+import BestDeleteButton from './BestDeleteButton';
 type Activity = {
     _id: string;
     Title: string;
@@ -200,42 +201,10 @@ console.log(currentActivity.feedback);
                         </svg>
                         </button> 
                         </div>
-                        <button className="bin-button absolute top-[10px] right-[10px]" title="Delete" onClick={handleDeleteClick}
-                        >
-                        <svg
-                            className="bin-top"
-                            viewBox="0 0 39 7"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <line y1="5" x2="39" y2="5" stroke="white" stroke-width="4"></line>
-                            <line
-                            x1="12"
-                            y1="1.5"
-                            x2="26.0357"
-                            y2="1.5"
-                            stroke="white"
-                            stroke-width="3"
-                            ></line>
-                        </svg>
-                        <svg
-                            className="bin-bottom"
-                            viewBox="0 0 33 39"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <mask id="path-1-inside-1_8_19" fill="white">
-                            <path
-                                d="M0 0H33V35C33 37.2091 31.2091 39 29 39H4C1.79086 39 0 37.2091 0 35V0Z"
-                            ></path>
-                            </mask>
-                            <path
-                            d="M0 0H33H0ZM37 35C37 39.4183 33.4183 43 29 43H4C-0.418278 43 -4 39.4183 -4 35H4H29H37ZM4 43C-0.418278 43 -4 39.4183 -4 35V0H4V35V43ZM37 0V35C37 39.4183 33.4183 43 29 43V35V0H37Z"
-                            fill="white"
-                            mask="url(#path-1-inside-1_8_19)"
-                            ></path>
-                            <path d="M12 6L12 29" stroke="white" stroke-width="4"></path>
-                            <path d="M21 6V29" stroke="white" stroke-width="4"></path>
-                        </svg>
-                        </button>
+                        <BestDeleteButton
+                            className="absolute top-[10px] right-[10px]"
+                            onDelete={() => handleDeleteClick()}
+                        />
                     </div><Rating disabled name="rating" value={averageRating} precision={0.1} />
                     {!isEditing?<div className="text-[38px] h-[45px] text-center leading-[43px]">{newTitle}</div>:
                      <TextField
@@ -334,6 +303,7 @@ console.log(currentActivity.feedback);
                         <div className="flex flex-col items-center justify-center text-[13px] h-[236px]">
                             {isEditing ? (
                                 <TheMAP 
+                                id={"map"+activity._id}
                                 className="rounded-b-[19px] h-[209px] w-[400px]"
                                 lat={latitude} long={longitude}
                                 setLatitude={setLatitude}

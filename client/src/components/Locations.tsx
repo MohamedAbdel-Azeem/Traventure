@@ -183,7 +183,9 @@ const handleDelete = (id: string) => {
               /></FormControl>
               <FormControl fullWidth sx={{ marginY: 1 }}  className="col-span-2">
                 <div>
-                  <TheMAP lat={latitude} long={longitude}
+                  <TheMAP
+                  id="create map"
+                  lat={latitude} long={longitude}
                   setLatitude={setLatitude}
                   setLongitude={setLongitude}/>
                 </div>

@@ -1,17 +1,16 @@
 import TheMAP from "./TheMAP";
 import ImageUploader from "./ImageUploader";
 import { useEffect, useState } from "react";
-import { InputLabel, MenuItem, Select, TextField, FormControl, Input, ListItemText, Checkbox, FormLabel, Stack, Chip, Typography } from "@mui/material";
+import {  MenuItem, Select, TextField, Input, ListItemText, Checkbox, Stack, Chip } from "@mui/material";
 import Accordion from '@mui/material/Accordion';
-import AccordionActions from '@mui/material/AccordionActions';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Button from '@mui/material/Button';
-import { set } from "date-fns";
 import { useGetAllTags } from "../custom_hooks/categoryandTagCRUD";
-import DeleteIcon from '@mui/icons-material/Delete';
 import { SelectChangeEvent } from "@mui/material/Select";
+import BestDeleteButton from "./BestDeleteButton";
+import {useGetPlace} from "../custom_hooks/places/useGetPlace";
+import { useGetAllActivitiesTitleAndId } from "../custom_hooks/activities/useGetActivitiesTitlesAndID";
 const ImprovedCreateItinerary = () => {
     const [latitude, setLatitude] = useState(30);
     const [longitude, setLongitude] = useState(31);
@@ -23,12 +22,25 @@ const ImprovedCreateItinerary = () => {
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [language, setLanguage] = useState<string>('ar');
+    const [activity, setActivity] = useState<string[]>([]);
+
+    const {
+        places: apiPlaces,
+        gloading: placeLoading,
+        gerror: placeError,
+      } = useGetPlace();
+
+      const {activities: activities , loading : activityLoading , error : activityError}=useGetAllActivitiesTitleAndId();
 
     const {
         loading: tagsLoading,
         error: tagsError,
         iddata: tagsOptions,
       } = useGetAllTags();
+
+    const handleAChange = (event: SelectChangeEvent) => {
+        setActivity(event.target.value as string[]);
+        }
 
     const [selectedTags, setSelectedTags] = useState<string[]>(tagsOptions.map((tag) => tag._id));
     const handleTagsChange = (event: SelectChangeEvent<string[]>) => {
@@ -77,6 +89,27 @@ const ImprovedCreateItinerary = () => {
         setLanguage(event.target.value as string);
       };
     
+
+      const [expanded, setExpanded] = useState<string | false>(false);
+      const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+
+
+      const handleOChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+        if (!isDropdownOpen) {
+          setExpanded(isExpanded ? panel : false);
+        }
+      };
+    
+      const handleDropdownOpen = () => {
+        setIsDropdownOpen(true);
+      };
+    
+      const handleDropdownClose = () => {
+        setIsDropdownOpen(false);
+      };
+    
+
+
 
     return (
         <div className="w-full h-full">  
@@ -179,6 +212,7 @@ const ImprovedCreateItinerary = () => {
                                     <p className="text-[16px] text-black text-center">Pick up Location</p>
                                 </div>
                             <TheMAP
+                                id="map1"
                                 className="w-[259px] h-[232px] rounded-[9px]"
                                 lat={latitude}
                                 long={longitude}
@@ -192,6 +226,7 @@ const ImprovedCreateItinerary = () => {
                                     <p className="text-[16px] text-black text-center">Drop off Location</p>
                                 </div>
                             <TheMAP
+                                id="map2"
                                 className="w-[259px] h-[232px] rounded-[9px]"
                                 lat={dlatitude}
                                 long={dlongitude}
@@ -287,9 +322,6 @@ const ImprovedCreateItinerary = () => {
                                         onDelete={handleDelete(tag)} 
                                     />
                                     </Stack>
-                                    {/* <div key={tag} className="w-[150px] h-[44px] bg-[#D9D9D9] rounded-[65px]">
-                                        <p className="text-[24px] text-center">{tag}</p>
-                                    </div> */}
                                     </>
                                         ))}
                                     <div>
@@ -310,198 +342,126 @@ const ImprovedCreateItinerary = () => {
             </div>
 
             <div className="mx-auto my-[300px] w-[1156px] h-[717px] bg-[#1D1B1B] rounded-[26px] flex">
-                <div className="mx-auto my-auto w-[1042px] h-[613px] bg-[#D9D9D9] rounded-[26px]">
-                  <div className="w-[883px] h-[122px] bg-[#413B3B] rounded-[26px] mx-auto" >
-                    <Accordion
-                    sx={{ width: '883px', height: '122px', backgroundColor: '#413B3B00', borderRadius: '26px', borderColor: 'transparent', boxShadow: 'none' }}
-                    >
-                        <AccordionSummary>
-                        <div className="w-[883px] h-[122px] bg-[#413B3B00] rounded-[26px] flex">
-                            <p className="text-[24px] text-start ml-2 text-white my-auto">Place 1</p>
-                        </div>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <div className="flex flex-col gap-1">
-                                <div className="w-[867px] h-[58px] bg-[#413B3B] rounded-[15px] flex"><p className="text-[20px] text-start my-auto ml-2 mr-24 text-white">Activity 1</p>
-                            <TextField
-                                required
-                                type="number"
-                                className="w-[260px]"
-                                InputProps={{
-                                    style: { fontSize: '18px', borderRadius: '9px', height: '50px', marginTop: 'auto', marginBottom: 'auto', marginRight: '24px', color: 'white' }
-                                }}
-                                placeholder="Time"
-                                variant="outlined"  
-                            />
-                            <TextField
-                                required
-                                className="w-[260px]"
-                                InputProps={{
-                                    style: { fontSize: '18px', borderRadius: '9px', height: '50px', marginTop: 'auto', marginBottom: 'auto', color: 'white' }
-                                }}
-                                placeholder="Days? Really?"
-                                variant="outlined"  
-                            />
-                            <button className="bin-button ml-auto mr-2 my-auto" title="Delete">
-                                <svg
-                                    className="bin-top"
-                                    viewBox="0 0 39 7"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <line y1="5" x2="39" y2="5" stroke="white" stroke-width="4"></line>
-                                    <line
-                                    x1="12"
-                                    y1="1.5"
-                                    x2="26.0357"
-                                    y2="1.5"
-                                    stroke="white"
-                                    stroke-width="3"
-                                    ></line>
-                                </svg>
-                                <svg
-                                    className="bin-bottom"
-                                    viewBox="0 0 33 39"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <mask id="path-1-inside-1_8_19" fill="white">
-                                    <path
-                                        d="M0 0H33V35C33 37.2091 31.2091 39 29 39H4C1.79086 39 0 37.2091 0 35V0Z"
-                                    ></path>
-                                    </mask>
-                                    <path
-                                    d="M0 0H33H0ZM37 35C37 39.4183 33.4183 43 29 43H4C-0.418278 43 -4 39.4183 -4 35H4H29H37ZM4 43C-0.418278 43 -4 39.4183 -4 35V0H4V35V43ZM37 0V35C37 39.4183 33.4183 43 29 43V35V0H37Z"
-                                    fill="white"
-                                    mask="url(#path-1-inside-1_8_19)"
-                                    ></path>
-                                    <path d="M12 6L12 29" stroke="white" stroke-width="4"></path>
-                                    <path d="M21 6V29" stroke="white" stroke-width="4"></path>
-                                </svg>
-                                </button>
-                                </div>
-                                <div className="w-[867px] h-[58px] bg-[#413B3B] rounded-[15px] flex"><p className="text-[20px] text-start my-auto ml-2 mr-24 text-white">Activity 1</p>
-                            <TextField
-                                required
-                                type="number"
-                                className="w-[260px]"
-                                InputProps={{
-                                    style: { fontSize: '18px', borderRadius: '9px', height: '50px', marginTop: 'auto', marginBottom: 'auto', marginRight: '24px', color: 'white' }
-                                }}
-                                placeholder="Time"
-                                variant="outlined"  
-                            />
-                            <TextField
-                                required
-                                className="w-[260px]"
-                                InputProps={{
-                                    style: { fontSize: '18px', borderRadius: '9px', height: '50px', marginTop: 'auto', marginBottom: 'auto', color: 'white' }
-                                }}
-                                placeholder="Days? Really?"
-                                variant="outlined"  
-                            />
-                            <button className="bin-button ml-auto mr-2 my-auto" title="Delete">
-                                <svg
-                                    className="bin-top"
-                                    viewBox="0 0 39 7"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <line y1="5" x2="39" y2="5" stroke="white" stroke-width="4"></line>
-                                    <line
-                                    x1="12"
-                                    y1="1.5"
-                                    x2="26.0357"
-                                    y2="1.5"
-                                    stroke="white"
-                                    stroke-width="3"
-                                    ></line>
-                                </svg>
-                                <svg
-                                    className="bin-bottom"
-                                    viewBox="0 0 33 39"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <mask id="path-1-inside-1_8_19" fill="white">
-                                    <path
-                                        d="M0 0H33V35C33 37.2091 31.2091 39 29 39H4C1.79086 39 0 37.2091 0 35V0Z"
-                                    ></path>
-                                    </mask>
-                                    <path
-                                    d="M0 0H33H0ZM37 35C37 39.4183 33.4183 43 29 43H4C-0.418278 43 -4 39.4183 -4 35H4H29H37ZM4 43C-0.418278 43 -4 39.4183 -4 35V0H4V35V43ZM37 0V35C37 39.4183 33.4183 43 29 43V35V0H37Z"
-                                    fill="white"
-                                    mask="url(#path-1-inside-1_8_19)"
-                                    ></path>
-                                    <path d="M12 6L12 29" stroke="white" stroke-width="4"></path>
-                                    <path d="M21 6V29" stroke="white" stroke-width="4"></path>
-                                </svg>
-                                </button>
-                                </div>
-                                <div className="w-[867px] h-[58px] bg-[#413B3B] rounded-[15px] flex"><p className="text-[20px] text-start my-auto ml-2 mr-24 text-white">Activity 1</p>
-                            <TextField
-                                required
-                                type="number"
-                                className="w-[260px]"
-                                InputProps={{
-                                    style: { fontSize: '18px', borderRadius: '9px', height: '50px', marginTop: 'auto', marginBottom: 'auto', marginRight: '24px', color: 'white' }
-                                }}
-                                placeholder="Time"
-                                variant="outlined"  
-                            />
-                            <TextField
-                                required
-                                className="w-[260px]"
-                                InputProps={{
-                                    style: { fontSize: '18px', borderRadius: '9px', height: '50px', marginTop: 'auto', marginBottom: 'auto', color: 'white' }
-                                }}
-                                placeholder="Days? Really?"
-                                variant="outlined"  
-                            />
-                            <button className="bin-button ml-auto mr-2 my-auto" title="Delete">
-                                <svg
-                                    className="bin-top"
-                                    viewBox="0 0 39 7"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <line y1="5" x2="39" y2="5" stroke="white" stroke-width="4"></line>
-                                    <line
-                                    x1="12"
-                                    y1="1.5"
-                                    x2="26.0357"
-                                    y2="1.5"
-                                    stroke="white"
-                                    stroke-width="3"
-                                    ></line>
-                                </svg>
-                                <svg
-                                    className="bin-bottom"
-                                    viewBox="0 0 33 39"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <mask id="path-1-inside-1_8_19" fill="white">
-                                    <path
-                                        d="M0 0H33V35C33 37.2091 31.2091 39 29 39H4C1.79086 39 0 37.2091 0 35V0Z"
-                                    ></path>
-                                    </mask>
-                                    <path
-                                    d="M0 0H33H0ZM37 35C37 39.4183 33.4183 43 29 43H4C-0.418278 43 -4 39.4183 -4 35H4H29H37ZM4 43C-0.418278 43 -4 39.4183 -4 35V0H4V35V43ZM37 0V35C37 39.4183 33.4183 43 29 43V35V0H37Z"
-                                    fill="white"
-                                    mask="url(#path-1-inside-1_8_19)"
-                                    ></path>
-                                    <path d="M12 6L12 29" stroke="white" stroke-width="4"></path>
-                                    <path d="M21 6V29" stroke="white" stroke-width="4"></path>
-                                </svg>
-                                </button>
-                                </div>
-                            </div>
-
-                        </AccordionDetails>
-                    </Accordion>
-                  </div>
+                <div className="mx-auto my-auto w-[1042px] h-[613px] bg-[#D9D9D9] rounded-[9px] flex flex-col">
+                    <div className="
+                        w-[883px] 
+                        h-[66px] 
+                        bg-[#413B3B] 
+                        rounded-[15px] 
+                        my-4
+                        mx-auto
+                        flex
+                    ">
+                        <p className="text-[20px] text-start my-auto ml-2 mr-24 text-white">+ Add New Place</p>
+                    </div>
                     
+                    <Accordion
+                    disableGutters
+                    expanded={expanded === 'panel1'} 
+                    onChange={handleOChange('panel1')}
+                    sx={{ width: '883px', backgroundColor: 'transparent', borderRadius: '15px', borderColor: 'transparent', boxShadow: 'none', marginLeft: 'auto', marginRight: 'auto' }}
+                >
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    sx={{ minHeight: 'unset', backgroundColor:'#413B3B', borderRadius: '15px', '&.Mui-expanded': { minHeight: 'unset' } }}
+                >
+                    <Select
+                        value={activity[0]}
+                        label="Places"
+                        onChange={handleAChange}
+                        onOpen={handleDropdownOpen}
+                        onClose={handleDropdownClose}
+                        sx={{height: '58px', fontSize: '18px', borderRadius: '15px', width: '200px', color: 'white' }}
+                    >
+                        {apiPlaces && apiPlaces.map((place) => (
+                            <MenuItem key={place._id} value={place._id}>
+                                {place.name}
+                            </MenuItem>
+                    ))}
+                    </Select>
+                    
+                </AccordionSummary>
+                <AccordionDetails
+                    sx={{borderRadius: '15px', borderColor: 'transparent', boxShadow: 'none' }}
+                >
+                <div className="w-[867px] h-[58px] bg-[#413B3B] rounded-[15px] flex flex-row my-4">
+                    <p className="text-[20px] text-start my-auto ml-2 mr-24 text-white">+ Add Activity</p>
+                </div>
+                <div className="w-[867px] h-[58px] bg-[#413B3B] rounded-[15px] flex flex-row my-4">
+                    <Select
+                        value={activity[0]}
+                        label="Accessibility"
+                        onChange={handleAChange}
+                        sx={{height: '58px', fontSize: '18px', borderRadius: '15px', width: '200px', color: 'white' }}
+                    >
+                        {activities.map((activity) => (
+                            <MenuItem key={activity._id} value={activity._id}>
+                                {activity.Title}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                    <TextField
+                    required
+                    type="number"
+                    className="w-[200px]"
+                    InputProps={{
+                        style: { fontSize: '18px', borderRadius: '9px', height: '50px', marginTop: 'auto', marginBottom: 'auto', marginLeft : '24px', color: 'white' }
+                    }}
+                    placeholder="Time"
+                    variant="outlined"  
+                    />
+                    <TextField
+                    required
+                    className="w-[260px]"
+                    InputProps={{
+                        style: { fontSize: '18px', borderRadius: '9px', height: '50px', marginTop: 'auto', marginBottom: 'auto', marginLeft : '24px', color: 'white' }
+                    }}
+                    placeholder="Days? Really?"
+                    variant="outlined"  
+                    />
+                    <BestDeleteButton
+                        className="ml-auto mr-2 my-auto"
+                        onDelete={undefined}
+                    />
+                </div>
+                <div className="w-[867px] h-[58px] bg-[#413B3B] rounded-[15px] flex flex-row my-4">
+                    <Select
+                        value={activity[1]}
+                        label="Accessibility"
+                        onChange={handleAChange}
+                        sx={{height: '58px', fontSize: '18px', borderRadius: '15px', width: '200px', color: 'white' }}
+                    >
+                        <MenuItem value="Activity 1">Activity 1</MenuItem>
+                        <MenuItem value="Activity 2">Activity 2</MenuItem>
+                        <MenuItem value="Activity 3">Activity 3</MenuItem>
+                        <MenuItem value="Activity 4">Activity 4</MenuItem>
+                    </Select>
+                    <TextField
+                    required
+                    type="number"
+                    className="w-[200px]"
+                    InputProps={{
+                        style: { fontSize: '18px', borderRadius: '9px', height: '50px', marginTop: 'auto', marginBottom: 'auto', marginLeft : '24px', color: 'white' }
+                    }}
+                    placeholder="Time"
+                    variant="outlined"  
+                    />
+                    <TextField
+                    required
+                    className="w-[260px]"
+                    InputProps={{
+                        style: { fontSize: '18px', borderRadius: '9px', height: '50px', marginTop: 'auto', marginBottom: 'auto', marginLeft : '24px', color: 'white' }
+                    }}
+                    placeholder="Days? Really?"
+                    variant="outlined"  
+                    />
+                    <BestDeleteButton
+                        className="ml-auto mr-2 my-auto"
+                        onDelete={undefined}
+                    />
+                </div>
+                </AccordionDetails>
+                    </Accordion>
                 </div>
             </div>
         </div> 
