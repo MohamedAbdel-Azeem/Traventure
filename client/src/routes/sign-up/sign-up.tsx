@@ -9,7 +9,11 @@ import Swal from "sweetalert2";
 import { PhoneInput } from "../../components/PhoneInput/phone-input";
 import { E164Number } from "libphonenumber-js";
 import countryList from "react-select-country-list";
+import PDFUploader from "../../components/PDFUploader";
 // TODO: Use the Loading and error returning from the hook
+
+
+
 
 const getAge = (dob: string): number => {
   const todaysdate = new Date();
@@ -135,6 +139,11 @@ const Register: React.FC = () => {
     handleError();
   }, [error]);
 
+
+  const [selectedPDF, setSelectedPDF] = useState<File | null>(null);
+
+
+
   return (
     <div
       className="flex items-center justify-center min-h-screen"
@@ -144,6 +153,8 @@ const Register: React.FC = () => {
         backgroundPosition: "center",
       }}
     >
+
+
       <div className="bg-white rounded-lg shadow-2xl w-1/2 h-1/2 grid grid-cols-1 overflow-hidden backdrop-blur-md bg-opacity-70 my-8">
         <div className="flex flex-col justify-center items-center p-12 space-y-8">
           <div className="flex flex-col items-center">
@@ -380,6 +391,13 @@ const Register: React.FC = () => {
               </>
             )}
 
+            <div className="my-6">
+            <label className="block text-gray-700 font-semibold text-lg mb-4">
+            Please upload your document as a PDF
+            </label>
+            <PDFUploader selectedPDF={selectedPDF} setSelectedPDF={setSelectedPDF} />
+            </div>
+
             {/* Submit Button */}
             <div className="flex justify-center">
               <button
@@ -404,7 +422,9 @@ const Register: React.FC = () => {
             </a>
           </div>
         </div>
+        
       </div>
+      
     </div>
   );
 };
