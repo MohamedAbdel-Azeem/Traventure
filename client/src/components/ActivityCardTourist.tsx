@@ -4,6 +4,8 @@ import { Box, Checkbox, FormControl, ListItemText, MenuItem, Modal, Rating, Sele
 import { useGetAllCategories, useGetAllCategoriesD, useGetAllTags } from '../custom_hooks/categoryandTagCRUD';
 import { updateActivity } from '../custom_hooks/activities/updateActivity';
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
+import { set } from 'date-fns';
 type Activity = {
     _id: string;
     Title: string;
@@ -23,6 +25,7 @@ type Activity = {
     rating: string,
     review: string,
   }[];
+  inappropriate: boolean;
 };
 interface ActivityProp {
     activity: Activity;
@@ -48,8 +51,20 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({activity, onDelete 
     const [newPrice, setNewPrice] = useState(currentActivity.Price);
     const [newSpecialDiscount, setNewSpecialDiscount] = useState(currentActivity.SpecialDiscount);
     const [newBIO, setNewBIO] = useState(currentActivity.BookingIsOpen);
+    const [inappropriate, setInappropriate] = useState(currentActivity.inappropriate);
     const [mopen, setmOpen] = useState(false);
     
+  const handleInappropriate = async() => {
+  try{
+  const response=await axios.patch(`/traventure/api/activity/toggleInappropriate/${currentActivity._id}`);
+  if(response.status === 200){
+    setInappropriate(!inappropriate);
+  }}
+  catch(error: any){ if(error.response && error.response.status === 400){
+   
+  }}
+ 
+};
 
     const calculateAverageRating = (currentActivity: Activity): number => {
         const allRatings = currentActivity.feedback?.map(fb => parseFloat(fb.rating));
@@ -143,6 +158,18 @@ console.log(currentActivity.feedback);
                         <div className="absolute text-center top-0 left-0 w-[71px] h-[30px] rounded-tl-[19px] bg-[#FF0000] border-black border-[1px] rounded-br-[19px]">
                                 {newBIO ? 'Open' : 'Closed'}
                         </div>
+                        {currenttype==="admin"&&<div className="absolute text-center top-0 right-0 w-[171px] h-[30px] rounded-tl-[19px] bg-[#FF0000] border-black border-[1px] rounded-br-[19px]">
+                        <select
+                                    title="status"
+                                    name="status"
+                                    value={inappropriate ? 'true' : 'false'}
+                                    onChange={handleInappropriate}
+                                    className="bg-transparent text-black border-none"
+                                >
+                                    <option value="true">Inappropriate</option>
+                                    <option value="false">Appropriate</option>
+                                </select>
+                                </div>}
                         <div className="absolute top-[60px] right-[10px]">
                             flag
                         </div>

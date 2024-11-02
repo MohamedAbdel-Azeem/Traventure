@@ -17,17 +17,17 @@ import useGetUpcoming from '../custom_hooks/itineraries/useGetupcoming';
 import ItineraryCardToruist from './ItineraryCardToruist';
 import { useGetAllTags } from '../custom_hooks/categoryandTagCRUD';
 import ImprovedSidebar from './ImprovedSidebar';
-
+import { useLocation } from 'react-router-dom';
 const MoreItineraries: React.FC = () => {
     const { upcoming, loading, error } = useGetUpcoming();
     const navigate = useNavigate();
-
+    const currenttype = useLocation().pathname.split('/')[1];
     const [searchType, setSearchType] = useState<'name' | 'tag'>('name');
     const [searchTerm, setSearchTerm] = useState('');
     const [sortType, setSortType] = useState<'price' | 'rating'>('price');
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
     const [filterType, setFilterType] = useState<'budget' | 'date' | 'tag' | 'language'>('budget');
-    const [budgetRange, setBudgetRange] = useState<[number, number]>([0, 1000]);
+    const [budgetRange, setBudgetRange] = useState<[number, number]>([0, 100000000000000000]);
 
     const { data: tagsData } = useGetAllTags(); 
 
@@ -44,6 +44,7 @@ const MoreItineraries: React.FC = () => {
     const [selectedLanguage, setSelectedLanguage] = useState<string>('');
 
     useEffect(() => {
+        console.log("itinearies",upcoming?.itineraries);
         if (upcoming && upcoming.itineraries && upcoming.itineraries.length > 0) {
             const uniqueLanguages = [...new Set(upcoming.itineraries.map(itinerary => itinerary.language))];
             if (uniqueLanguages.length > 0) {
@@ -94,6 +95,14 @@ const MoreItineraries: React.FC = () => {
                     return itinerary.language === selectedLanguage;
                 default:
                     return true;
+            }
+        })
+        .filter(itinerary => {
+            // Filter based on bookingActivated status depending on currentType
+            if (currenttype === 'admin') { // Example: check if user is an admin
+                return true; // Admins see all itineraries
+            } else {
+                return itinerary.bookingActivated &&!itinerary.inappropriate; // Non-admins see only activated itineraries
             }
         })
         .sort((a, b) => {
@@ -274,6 +283,8 @@ const MoreItineraries: React.FC = () => {
                                 main_Picture={itinerary.main_Picture}
                                 booked_By={itinerary.booked_By}
                                 accesibility={itinerary.accesibility}
+                                bookingActivated={itinerary.bookingActivated}
+                                inappropriate={itinerary.inappropriate}
                             />
                         ))
                     ) : (

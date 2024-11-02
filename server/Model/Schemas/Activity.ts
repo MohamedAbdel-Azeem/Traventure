@@ -3,6 +3,30 @@ import Category from "./Category";
 import PreferenceTags from "./preferenceTags";
 
 const schema = mongoose.Schema;
+export interface INActivity extends mongoose.Document {
+
+Title: string;
+DateAndTime: Date;
+Location: {
+    latitude: number;
+    longitude: number;
+};
+Price: number;
+SpecialDiscount: number;
+Category: mongoose.Types.ObjectId;
+Tags: mongoose.Types.ObjectId[];
+BookingIsOpen: boolean;
+feedback: [
+  {
+    name: string;
+    rating: string;
+    review: string;
+  }
+];
+added_By: mongoose.Types.ObjectId;
+inappropriate: boolean;
+
+}
 
 const ActivitySchema = new schema({
 Title : {type: String, required: true},   
@@ -23,9 +47,10 @@ feedback: [
     review: String,
   },
 ],
-added_By: { type: mongoose.Types.ObjectId, required: true , ref:'Advertiser' }
+added_By: { type: mongoose.Types.ObjectId, required: true , ref:'Advertiser' },
+inappropriate: {type: Boolean,default: false},
 });
 
-const Activity = mongoose.model("Activity", ActivitySchema);
+const Activity = mongoose.model<INActivity>("Activity", ActivitySchema);
 export default Activity;
 

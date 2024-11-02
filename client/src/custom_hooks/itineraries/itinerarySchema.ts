@@ -38,6 +38,8 @@ interface Itinerary {
     user_id?: TouristProfileData;
   }[];
   accesibility: boolean;
+  bookingActivated: boolean;
+  inappropriate: boolean;
 }
 
 export default Itinerary;

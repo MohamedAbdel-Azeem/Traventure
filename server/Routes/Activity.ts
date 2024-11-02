@@ -1,7 +1,7 @@
 import { Request, response, Response, Router } from "express";
 import {validationResult , matchedData} from "express-validator"
 import { addActivityValidator,updateActivityValidator } from "../utils/express-validator/activityValidator";
-import { addActivity, getActivities, deleteActivity,updateActivity, getActivitiesid } from "../Model/Queries/activity_queries";
+import { addActivity, getActivities, deleteActivity,updateActivity, getActivitiesid, toggleInappropriate } from "../Model/Queries/activity_queries";
 import Advertiser from "../Model/Schemas/Advertiser";
 const router = Router();
 
@@ -85,5 +85,14 @@ router.put("/update/:id",updateActivityValidator,async (req: Request, res: Respo
     }
 });
 
-
+router.patch("/toggleInappropriate/:id",async (req: Request, res: Response)=>{
+    try{
+        const id = req.params.id;
+        const updatedActivity = await toggleInappropriate(id);
+        res.status(200).send(updatedActivity);
+    }
+    catch(err){
+        res.status(500).send("error updating activity");
+    }
+})
 export default router;
