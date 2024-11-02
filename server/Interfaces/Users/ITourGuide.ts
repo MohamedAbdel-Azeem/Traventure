@@ -15,6 +15,12 @@ export interface ITourGuide extends Document {
     description: string;
   }[];
   isAccepted: boolean;
+  feedback: {
+    username: string;
+    review?: string;
+    rating?: string;
+    createdAt?: Date;
+  }[];
 }
 
 export default ITourGuide;
