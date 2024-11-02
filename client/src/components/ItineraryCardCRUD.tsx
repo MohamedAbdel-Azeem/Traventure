@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
@@ -10,6 +10,8 @@ import { TouristProfileData } from "../routes/_app/tourist_profile/tourist_profi
 import IActivity from "../custom_hooks/activities/activity_interface";
 import Place from "../custom_hooks/places/place_interface";
 import Button from "@mui/material/Button";
+import axios from "axios";
+import Swal from "sweetalert2";
 interface TagStructure {
   _id: string;
   name: string;
@@ -45,6 +47,7 @@ interface ItineraryCardCRUDProps {
   accesibility: boolean;
   onDelete?: (id: string) => void; 
   isDeleting?: boolean; 
+  bookingActivated: boolean;
 }
 
 const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
@@ -64,6 +67,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
   plan,
   onDelete,
   isDeleting = false, 
+  bookingActivated,
 }) => {
   const handleDeleteClick = () => {
     if (onDelete) {
@@ -79,8 +83,23 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
       return "Invalid Date";
     }
   };
-  const [active, setActive] = useState(false); 
-
+  const [active, setActive] = useState(bookingActivated); 
+ const handleActivation = async() => {
+  try{
+  const response =await  axios.patch(`/traventure/api/itinerary/toggleActivation/${_id}`);
+  if(response.status === 200){
+    setActive(!active);
+    if(active)
+    Swal.fire({title:"Success",text:"Itinerary Bookings have been deactivated",icon:"success"});
+  else{
+    Swal.fire({title:"Success",text:"Itinerary Bookings have been activated",icon:"success"});
+  }
+  }}
+  catch(error: any){ if(error.response && error.response.status === 400){
+    Swal.fire({title:"Error",text:"Can not deactivate bookings as no bookings exist",icon:"error"});
+  }}
+  
+ } 
   return (
     <div className="m-4 transition transform hover:scale-105 w-96 bg-gray-100 rounded-lg">  
       <div className="relative w-full h-[200px]">
@@ -163,7 +182,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
           >
             View Details
           </Link>
-            <Button onClick={()=>setActive(!active)}>{!active?"Activate":"Deactivate"}</Button>
+            <Button onClick={handleActivation}>{!active?"Activate":"Deactivate"}</Button>
           {onDelete && (
             isDeleting ? (
               <CircularProgress size={24} className="text-red-500" />

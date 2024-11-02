@@ -57,6 +57,7 @@ const Dashboard = () => {
                                 main_Picture={itinerary.main_Picture}
                                 accesibility={itinerary.accesibility}
                                 booked_By={itinerary.booked_By}
+                                bookingActivated={itinerary.bookingActivated}
                             />
                         ))
                     ) : (

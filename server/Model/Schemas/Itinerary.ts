@@ -49,6 +49,8 @@ const itinerarychema = new schema({
     },
   ],
   accesibility: { type: Boolean, required: true },
+  bookingActivated: { type: Boolean, default: true },
+  inappropriate: {type: Boolean,default: false}
 });
 // ToDo: plan a way to do timeline
 export default mongoose.model("Itinerary", itinerarychema);

@@ -6,7 +6,9 @@ import {
   getProduct,
   updateProduct,
   toggleProductArchive,
+  decrementProductQuantity,
 } from "../Model/Queries/product_queries";
+import { addPurchase } from "../Model/Queries/purchase_queries";
 import {
   productAddValidator,
   productUpdateValidator,
@@ -75,5 +77,7 @@ router.patch("/archive/:id", async (req: Request, res: Response) => {
     res.status(500).send(error);
   }
 });
+
+
 
 export default router;

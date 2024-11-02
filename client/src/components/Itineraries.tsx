@@ -22,6 +22,7 @@ const Itineraries = () => {
     }
   }, [itinerary]);
 
+
   const handleDelete = async (id: string) => {
     setDeletingId(id); // Mark the current itinerary as being deleted
     await deleteItinerary(id);
@@ -79,6 +80,7 @@ const Itineraries = () => {
             total={0}
             booked_By={[]}
             accesibility={card.accesibility}
+            bookingActivated={card.bookingActivated}
           />
         ))}
       </div>

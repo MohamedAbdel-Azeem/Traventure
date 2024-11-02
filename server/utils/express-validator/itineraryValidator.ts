@@ -83,7 +83,12 @@ export const itineraryAddValidator = [
     .optional()
     .isArray(),
   body('accesibility')
+    .isBoolean(),
+  body('bookingActivated')
+    .optional()
     .isBoolean()
+    ,
+    body("inappropriate").optional().isBoolean().withMessage("inappropriate should be a boolean"),
 ];
 
 export const itineraryUpdateValidator = [
@@ -188,7 +193,11 @@ export const itineraryUpdateValidator = [
     .isArray(),
   body('accesibility')
     .optional()
-    .isBoolean()
+    .isBoolean(),
+  body('bookingActivated')
+    .optional()
+    .isBoolean()  ,
+    body("inappropriate").optional().isBoolean().withMessage("inappropriate should be a boolean"),
 ];
 
 module.exports = { itineraryAddValidator, itineraryUpdateValidator };
