@@ -1,4 +1,4 @@
-import { Document } from "mongoose";
+import { Document, ObjectId } from "mongoose";
 
 export interface ITourGuide extends Document {
   username: string;
@@ -16,9 +16,9 @@ export interface ITourGuide extends Document {
   }[];
   isAccepted: boolean;
   feedback: {
-    username: string;
+    user_id: string;
     review?: string;
-    rating?: string;
+    rating?: Number;
     createdAt?: Date;
   }[];
 }

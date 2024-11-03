@@ -23,9 +23,10 @@ const tourGuideSchema = new Schema({
   isAccepted: { type: Boolean, default: false },
   feedback: [
     {
-      username: { type: mongoose.Types.ObjectId, required: true ,ref: "Tourist" },
+
+      user_id: { type: mongoose.Types.ObjectId, required: true ,ref: "Tourist" },
       review: String,
-      rating: String,
+      rating: Number,
       createdAt: { type: Date, default: Date.now },
     },
   ],

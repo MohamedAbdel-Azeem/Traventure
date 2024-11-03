@@ -50,14 +50,15 @@ const itinerarychema = new schema({
     },
   ],
   accesibility: { type: Boolean, required: true },
-  feedback: [
+  feedback:{type: [
     {
-      username: { type: mongoose.Types.ObjectId, required: true ,ref: "Tourist" },
+      user_id: { type: mongoose.Types.ObjectId, required: true ,ref: "Tourist" },
       review: String,
       rating: String,
       createdAt: { type: Date, default: Date.now },
     },
-  ],
+  ],default: []},
+  
 });
 // ToDo: plan a way to do timeline
 export default mongoose.model<IItinerary>("Itinerary", itinerarychema);

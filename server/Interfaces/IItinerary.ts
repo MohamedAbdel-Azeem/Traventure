@@ -1,4 +1,4 @@
-import { Document } from "mongoose";
+import { Document, ObjectId } from "mongoose";
 
 export interface IItinerary extends Document {
   main_Picture: string;
@@ -28,9 +28,9 @@ export interface IItinerary extends Document {
     accesibility: boolean;
 
   feedback: {
-    username: string;
+    user_id: string;
     review?: string;
-    rating?: string;
+    rating?: Number;
     createdAt?: Date;
   }[];
 }
