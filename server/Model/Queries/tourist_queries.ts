@@ -3,10 +3,12 @@ import touristModel from "../Schemas/Tourist";
 import Itinerary from '../Schemas/Itinerary';
 import Activity from '../Schemas/Activity';
 import Place from '../Schemas/Places';
+import Booking from "../Schemas/Booking";
 import Complaint from '../Schemas/complaint';
 import { getprofileInfo } from "./user_queries";
 import mongoose from "mongoose";
 import complaint from "../Schemas/complaint";
+import { console } from "inspector";
 
 interface Tourist extends Document {
   username: string;
@@ -92,5 +94,33 @@ export async function gettouristComplaints(username: string) {
         }
     }
 
-module.exports = {getAll, getTouristBookings, gettouristComplaints}; 
+
+  export async function getTouristUpcoming(username:string){
+    try{
+        const tourist= await touristModel.findOne({username:username});
+        const bookings=await Booking.find( {tourist : (tourist as any)._id});
+        const{itineraries,places,activities}=await getAll();
+
+        const filteredItineraries = itineraries.filter(itinerary =>
+            !bookings.some(booking => (booking as any).itinerary && (booking as any).itinerary.equals((itinerary as any)._id))
+        );
+
+        // Filter out activities that are already in the bookings
+        const filteredActivities = activities.filter(activity =>
+            !bookings.some(booking => (booking as any).activity && (booking as any).activity.equals((activity as any)._id))
+        );
+
+
+    return { itineraries:filteredItineraries,places,activities:filteredActivities };
+    }
+    
+    catch (error) {
+        throw error;
+    }
+
+  }
+
+
+    
+module.exports = {getAll, getTouristBookings, gettouristComplaints,getTouristUpcoming}; 
 

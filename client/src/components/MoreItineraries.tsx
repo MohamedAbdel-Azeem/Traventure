@@ -14,6 +14,7 @@ import ItineraryCardToruist from "./ItineraryCardToruist";
 import { useGetAllTags } from "../custom_hooks/categoryandTagCRUD";
 import ImprovedSidebar from "./ImprovedSidebar";
 import { useLocation } from "react-router-dom";
+
 const MoreItineraries: React.FC = () => {
   const { upcoming, loading, error } = useGetUpcoming();
   const navigate = useNavigate();
@@ -125,9 +126,11 @@ const MoreItineraries: React.FC = () => {
     .filter((itinerary) => {
       // Filter based on bookingActivated status depending on currentType
       if (currenttype === "admin") {
+        console.log("hh");
         // Example: check if user is an admin
         return true; // Admins see all itineraries
       } else {
+        console.log(currenttype);
         return itinerary.bookingActivated && !itinerary.inappropriate; // Non-admins see only activated itineraries
       }
     })
@@ -305,44 +308,44 @@ const MoreItineraries: React.FC = () => {
               </Select>
             </FormControl>
           </div>
-
-          <hr />
-          <div className="overflow-x-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {filteredItineraries?.length ?? 0 > 0 ? (
-                (filteredItineraries ?? []).map((itinerary) => (
-                  <ItineraryCardToruist
-                    key={itinerary._id}
-                    _id={String(itinerary._id)}
-                    title={itinerary.title}
-                    description={itinerary.description}
-                    added_By={itinerary.added_By}
-                    price={itinerary.price}
-                    starting_Date={itinerary.starting_Date}
-                    ending_Date={itinerary.ending_Date}
-                    rating={itinerary.rating}
-                    total={itinerary.total}
-                    language={itinerary.language}
-                    pickup_location={itinerary.pickup_location}
-                    dropoff_location={itinerary.dropoff_location}
-                    plan={itinerary.plan}
-                    selectedTags={itinerary.selectedTags}
-                    main_Picture={itinerary.main_Picture}
-                    booked_By={itinerary.booked_By}
-                    accesibility={itinerary.accesibility}
-                    bookingActivated={itinerary.bookingActivated}
-                    inappropriate={itinerary.inappropriate}
-                  />
-                ))
-              ) : (
-                <div>No Itineraries Available</div>
-              )}
+            <hr />
+            <div className="overflow-x-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    {filteredItineraries?.length ?? 0 > 0 ? (
+                        (filteredItineraries ?? []).map((itinerary) => (
+                            <ItineraryCardToruist
+                                key={itinerary._id}
+                                _id={String(itinerary._id)}
+                                title={itinerary.title}
+                                description={itinerary.description}
+                                added_By={itinerary.added_By}
+                                price={itinerary.price}
+                                starting_Date={itinerary.starting_Date}
+                                ending_Date={itinerary.ending_Date}
+                                rating={itinerary.rating}
+                                total={itinerary.total}
+                                language={itinerary.language}
+                                pickup_location={itinerary.pickup_location}
+                                dropoff_location={itinerary.dropoff_location}
+                                plan={itinerary.plan}
+                                selectedTags={itinerary.selectedTags}
+                                main_Picture={itinerary.main_Picture}
+                                booked_By={itinerary.booked_By}
+                                accesibility={itinerary.accesibility}
+                                bookingActivated={itinerary.bookingActivated}
+                                inappropriate={itinerary.inappropriate}
+                            />
+                        ))
+                    ) : (
+                        <div>No Itineraries Available</div>
+                    )}
+                </div>
+            </div>
+            </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
   );
-};
+
+}
 
 export default MoreItineraries;

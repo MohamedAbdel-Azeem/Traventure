@@ -17,7 +17,7 @@ const TouristPage = () => {
                     transition: "200ms",
                 }}
             >
-                <Dashboard/>
+                <Dashboard type="Tourist"/>
             </div>
         </div>
     );
