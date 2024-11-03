@@ -8,6 +8,7 @@ import { useUpdateSeller } from "../../../custom_hooks/sellerGetUpdate";
 import ChangePasswordModal, { AddContactLeadFormType } from "../../../components/ChangePasswordModal";
 import { editpassword } from "../../../custom_hooks/changepassowrd";
 import Swal from "sweetalert2";
+import { FaEdit } from "react-icons/fa";
 
 interface SellerProfileProps {
   seller: ISeller;
@@ -99,25 +100,57 @@ const SellerProfile: React.FC<SellerProfileProps> = ({ seller }) => {
         });
 };
 
+const [profilePicture, setProfilePicture] = useState<string | null>(null); // Replace with actual profile picture URL if available
+
+const handleProfilePictureClick = () => {
+  document.getElementById('profilePictureInput')?.click();
+};
+
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-gray-900"
-      style={{
-        backgroundImage: `url('/src/assets/mtn.jpg')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundBlendMode: "overlay",
-        backgroundColor: "rgba(0, 0, 0, 0.7)",
-      }}
-    >
-      <div className="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl p-8 backdrop-blur-lg bg-opacity-90">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex items-center space-x-6">
-            <img
-              src="/src/assets/defaultavatar.png" // Hardcoded profile picture
-              alt="Profile"
-              className="w-32 h-32 rounded-full object-cover shadow-md border-4 border-purple-500"
-            />
+  className="min-h-screen flex items-center justify-center bg-gray-900"
+  style={{
+    backgroundImage: `url('/src/assets/mtn.jpg')`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundBlendMode: "overlay",
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+  }}
+>
+  <div className="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl p-8 backdrop-blur-lg bg-opacity-90">
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="flex items-center space-x-6">
+        <div className="relative w-32 h-32">
+          <img
+            src={profilePicture || "/src/assets/defaultavatar.png"} // Default avatar image
+            alt="Profile"
+            className={`w-full h-full rounded-full object-cover shadow-md border-4 border-purple-500 ${isEditing ? 'opacity-50' : ''}`}
+          />
+          {isEditing && (
+            <div
+              className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 rounded-full cursor-pointer"
+              onClick={handleProfilePictureClick}
+            >
+              <FaEdit className="text-purple-700 text-2xl" />
+            </div>
+          )}
+        </div>
+        <input
+          type="file"
+          id="profilePictureInput"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            const file = e.target.files ? e.target.files[0] : null;
+            if (file) {
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                setProfilePicture(reader.result as string);
+              };
+              reader.readAsDataURL(file);
+            }
+          }}
+        />
             <div className="text-left">
               <h2 className="text-4xl font-extrabold text-purple-700">
                 Email:
