@@ -114,7 +114,7 @@ const SellerProfile: React.FC<SellerProfileProps> = ({ seller }) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex items-center space-x-6">
             <img
-              src="/src/assets/t2.jpg" // Hardcoded profile picture
+              src="/src/assets/defaultavatar.png" // Hardcoded profile picture
               alt="Profile"
               className="w-32 h-32 rounded-full object-cover shadow-md border-4 border-purple-500"
             />
