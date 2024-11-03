@@ -41,7 +41,6 @@ const ImprovedCreateItinerary = () => {
 
 type PlacetoGo = {
     placeid: string;
-    place: string;
     placename: string;
     activities: ActivitytoGo[];
     };   
@@ -153,7 +152,7 @@ type ActivitytoGo = {
         );
         const handleAddPlace = () => {
             setPlacestogo([...placestogo, 
-                {placeid:uuidv4(),place:"", placename:"", activities:[]}]);
+                {placeid:uuidv4(), placename:"", activities:[]}]);
         }
 
             const handleAddActivity = (placeid: string) => () => {
@@ -219,13 +218,15 @@ type ActivitytoGo = {
                         prevPlacestogo.map((placetogonew) => 
                             placetogonew.placeid === placeidN
                                 ? {
-                                    ...placetogonew, placename: e, place: e
+                                    ...placetogonew, placename: e
                                 }
                                 : placetogonew
                         )
                     )
                     );
-        
+                const convertplacenametoactualname = (placename: string) => {
+                    return apiPlaces.find((place) => place._id === placename)?.name;
+                }
                     const itineraryData = {
                         added_By: "672354deb87528da028f398e",
                         title: title,
@@ -385,18 +386,18 @@ type ActivitytoGo = {
                                     selectedImage={image}
                                 />
                             </div>
-                            <div className="w-[542px] h-[183px] bg-[#D9D9D9] rounded-[9px] flex flex-col gap-2 col-span-3">
+                            <div className="w-[542px] h-[183px] bg-[#D9D9D9] rounded-[9px] flex flex-col gap-2 col-span-3 overflow-auto lasttimeipromise">
 
                                 <div className="w-[217px] h-[48px] bg-[#717171] rounded-[9px] ml-3 mt-2">
                                     <p className="text-[26px] text-center text-white">Manage Places</p>
                                 </div>
-
-                                <div className="w-[518px] h-[46px] bg-[#413B3b] rounded-[9px] mx-auto">
-                                    <p className="text-[18px] text-center text-white">The great place to place all of Luxembourg</p>
+                                {placestogo.map((placetogo) => (placetogo.placename !== ""?
+                                    <div className="w-[518px] h-[46px] bg-[#413B3b] rounded-[9px] mx-auto">
+                                    <p className="text-[18px] text-center text-white">{convertplacenametoactualname(placetogo.placename)}</p>
                                 </div>
-                                <div className="w-[518px] h-[46px] bg-[#413B3b] rounded-[9px] mx-auto">
-                                    <p className="text-[18px] text-center text-white">The great place to place all of Luxembourg</p>
-                                </div>
+                                :<></>
+                                ))}
+                                
                             </div>
                             <div className="w-[542px] h-[50px] grid grid-cols-2 rounded-[9px] col-span-w">
                                 <div className="w-[260px] h-[50px] bg-[#D9D9D9] rounded-[9px] relative">
@@ -486,15 +487,28 @@ type ActivitytoGo = {
                 <div className="mx-auto my-auto w-[1042px] h-[613px] bg-[#D9D9D9] rounded-[9px] flex flex-col overflow-auto lasttimeipromise">
                     <div className="
                         w-[883px] 
-                        h-[66px] 
+                        h-[82px] 
                         bg-[#413B3B] 
                         rounded-[15px] 
-                        my-4
+                        my-2
                         mx-auto
                         flex
                     ">
-                        <Button className="w-full"
+                        <Button className="w-full h-full"
                             onClick={handleAddPlace}
+                            sx={{
+                                width: '883px', // Fixed width
+                                height: '82px', // Fixed height
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: '15px',
+                                backgroundColor: '#413B3B',
+                                color: 'white',
+                                '&:hover': {
+                                  backgroundColor: '#5a5a5a',
+                                },
+                              }}
                         >
                             <p className="text-[20px] text-start my-auto ml-2 text-white mr-auto">+ Add New Place
                             </p>
