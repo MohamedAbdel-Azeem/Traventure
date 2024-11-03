@@ -101,8 +101,7 @@ const SellerProfile: React.FC<SellerProfileProps> = ({ seller }) => {
         });
 };
 
-const [profilePicture, setProfilePicture] = useState<string | null>(null); // Replace with actual profile picture URL if available
-
+const [profilePicture, setProfilePicture] = useState<File | null>(null);
 const handleProfilePictureClick = () => {
   document.getElementById('profilePictureInput')?.click();
 };
@@ -123,8 +122,8 @@ const handleProfilePictureClick = () => {
       <div className="flex items-center space-x-6">
       <ProfilePictureEdit
         profilePicture={profilePicture}
-        onChange={setProfilePicture}
-        isEditing={isEditing}
+        onChange={setProfilePicture} // Directly pass setProfilePicture
+        isEditing={isEditing} // Controls the edit overlay visibility
       />
             <div className="text-left">
               <h2 className="text-4xl font-extrabold text-purple-700">
