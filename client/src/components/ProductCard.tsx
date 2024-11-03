@@ -134,6 +134,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
     }));
   };
 
+  console.log("ProductCard", currentProduct);
+
   return (
     <div className="product-card">
       <div className="card-header">
@@ -231,7 +233,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
                   <div className="popup-reviews">
                     <ul>
                       {currentProduct.feedback.map((review, index) => (
-                        <li key={index}>{review.name + ":" + review.review}</li>
+                        <li key={index}>
+                          {(review.touristUsername ?? "Anonymous User") +
+                            " : " +
+                            review.review}
+                        </li>
                       ))}
                     </ul>
                   </div>

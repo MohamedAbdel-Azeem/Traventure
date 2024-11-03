@@ -29,4 +29,4 @@ const touristSchema = new Schema({
   purchases: [{ type: mongoose.Types.ObjectId, ref: "Purchase" }],
 });
 
-export default mongoose.model("Tourist", touristSchema);
+export default mongoose.model<ITourist>("Tourist", touristSchema);
