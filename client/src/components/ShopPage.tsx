@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ProductCard.css"; // Assuming styles are in this file
 import ProductCard from "./ProductCard";
 import { ACTUALProduct } from "./data/ProductData";

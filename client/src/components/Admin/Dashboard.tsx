@@ -9,30 +9,28 @@ import { TouristProfileData } from '../../routes/_app/tourist_profile/tourist_pr
 
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ActivityCardTourist } from '../ActivityCardTourist';
-interface DashboardProps {
-    type?:string;
-  }
 
-const Dashboard : React.FC<DashboardProps>= ({type}) => {
+
+const Dashboard : React.FC = () => {
     const { upcoming, loading, error } = useGetUpcoming();
     const navigate = useNavigate();
     const currentuser = useLocation().pathname.split('/')[2];
     const currenttype = useLocation().pathname.split('/')[1];
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-    if (error) {
-        return <div>Error Fetching: {error}</div>;
-    }
 
-    const itineraries = upcoming?.itineraries.slice(0,5) || [];
-    const locations = upcoming?.places.slice(0, 5) || [];
-    const activities = upcoming?.activities.slice(0, 5) || [];
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error Fetching: {error}</div>;
+  }
 
-    console.log('Itineraries:', itineraries);
-    console.log('Locations:', locations);
-    console.log('Activities:', activities);
+  const itineraries = upcoming?.itineraries.slice(0, 5) || [];
+  const locations = upcoming?.places.slice(0, 5) || [];
+  const activities = upcoming?.activities.slice(0, 5) || [];
+  console.log("Itineraries:", itineraries);
+  console.log("Locations:", locations);
+  console.log("Activities:", activities);
 
     return (
         <>
@@ -61,7 +59,9 @@ const Dashboard : React.FC<DashboardProps>= ({type}) => {
                                 main_Picture={itinerary.main_Picture}
                                 accesibility={itinerary.accesibility}
                                 booked_By={itinerary.booked_By}
-                                type={type}
+                                type={currenttype}
+                               bookingActivated={itinerary.bookingActivated}
+                              inappropriate={false}  
                             />
                         ))
                     ) : (
@@ -76,59 +76,61 @@ const Dashboard : React.FC<DashboardProps>= ({type}) => {
                 </div>
             </div>
 
-            {/* Upcoming Places */}
-            <h1 className="text-2xl font-bold mt-8 mb-4">Upcoming Places</h1>
-            <div className="overflow-x-auto">
-                <div className="flex gap-4 items-center">
-                    {locations.length > 0 ? (
-                        locations.map(location => (
-                            <LocationCardTourist
-                                key={location._id}
-                                id={String(location._id)}
-                                wholeLocation={location}
-                                onDelete={() => {}}
-                            />
-                        ))
-                    ) : (
-                        <div>No upcoming places available.</div>
-                    )}
-                    <button
-                        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                        onClick={() => navigate(`/${currenttype}/${currentuser}/locations`)}
-                    >
-                        View More
-                    </button>
-                </div>
-            </div>
 
-            {/* Upcoming Activities */}
-            <h1 className="text-2xl font-bold mt-8 mb-4">Upcoming Activities</h1>
-            <div className="overflow-x-auto">
-                <div className="flex gap-4 items-center">
-                    {activities.length > 0 ? (
-                        activities.map(activity => (
-                            <ActivityCardTourist
-                                key={activity._id}
-                                activity={activity}
-                                type={type}   
-                                onDelete={(_id) => {
-                                    console.log(`Delete activity with id: ${_id}`);
-                                }}
-                            />
-                        ))
-                    ) : (
-                        <div>No upcoming activities available.</div>
-                    )}
-                    <button
-                        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                        onClick={() => navigate(`/${currenttype}/${currentuser}/activities`)}
-                    >
-                        View More
-                    </button>
-                </div>
-            </div>
-        </>
-    );
+      {/* Upcoming Places */}
+      <h1 className="text-2xl font-bold mt-8 mb-4">Upcoming Places</h1>
+      <div className="overflow-x-auto">
+        <div className="flex gap-4 items-center">
+          {locations.length > 0 ? (
+            locations.map((location) => (
+              <LocationCardTourist
+                key={location._id}
+                id={String(location._id)}
+                wholeLocation={location}
+                onDelete={() => {}}
+              />
+            ))
+          ) : (
+            <div>No upcoming places available.</div>
+          )}
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+            onClick={() => navigate(`/${currenttype}/${currentuser}/locations`)}
+          >
+            View More
+          </button>
+        </div>
+      </div>
+
+      {/* Upcoming Activities */}
+      <h1 className="text-2xl font-bold mt-8 mb-4">Upcoming Activities</h1>
+      <div className="overflow-x-auto">
+        <div className="flex gap-4 items-center">
+          {activities.length > 0 ? (
+            activities.map((activity) => (
+              <ActivityCardTourist
+                key={activity._id}
+                activity={activity}
+                onDelete={(_id) => {
+                  console.log(`Delete activity with id: ${_id}`);
+                }}
+              />
+            ))
+          ) : (
+            <div>No upcoming activities available.</div>
+          )}
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+            onClick={() =>
+              navigate(`/${currenttype}/${currentuser}/activities`)
+            }
+          >
+            View More
+          </button>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default Dashboard;

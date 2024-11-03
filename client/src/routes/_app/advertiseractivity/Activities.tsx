@@ -265,7 +265,9 @@ const style = {
                 </Select>
             </FormControl>
             <FormControl fullWidth sx={{ marginY: 1 }} className="col-span-3">
-                  <TheMAP lat={newlatitude} long={newlongitude}
+                  <TheMAP
+                  id="create map"
+                  lat={newlatitude} long={newlongitude}
                   className="w-[100%] h-[300px]"
                   setLatitude={setnLatitude}
                   setLongitude={setnLongitude}/>

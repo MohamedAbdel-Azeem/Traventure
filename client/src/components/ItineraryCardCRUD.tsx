@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
-import StarIcon from '@mui/icons-material/Star';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CircularProgress from '@mui/material/CircularProgress';
-import { format } from 'date-fns';
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
+import StarIcon from "@mui/icons-material/Star";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CircularProgress from "@mui/material/CircularProgress";
+import { format } from "date-fns";
 import { TouristProfileData } from "../routes/_app/tourist_profile/tourist_profile_data";
 import IActivity from "../custom_hooks/activities/activity_interface";
 import Place from "../custom_hooks/places/place_interface";
 import Button from "@mui/material/Button";
+import axios from "axios";
+import Swal from "sweetalert2";
 interface TagStructure {
   _id: string;
   name: string;
@@ -43,8 +45,9 @@ interface ItineraryCardCRUDProps {
     user_id?: TouristProfileData;
   }[];
   accesibility: boolean;
-  onDelete?: (id: string) => void; 
-  isDeleting?: boolean; 
+  onDelete?: (id: string) => void;
+  isDeleting?: boolean;
+  bookingActivated: boolean;
 }
 
 const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
@@ -63,7 +66,8 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
   selectedTags = [],
   plan,
   onDelete,
-  isDeleting = false, 
+  isDeleting = false,
+  bookingActivated,
 }) => {
   const handleDeleteClick = () => {
     if (onDelete) {
@@ -74,24 +78,62 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
-      return format(date, 'MM/dd/yyyy');
+      return format(date, "MM/dd/yyyy");
     } catch (error) {
       return "Invalid Date";
     }
   };
-  const [active, setActive] = useState(false); 
-
+  const [active, setActive] = useState(bookingActivated);
+  const handleActivation = async () => {
+    try {
+      const response = await axios.patch(
+        `/traventure/api/itinerary/toggleActivation/${_id}`
+      );
+      if (response.status === 200) {
+        setActive(!active);
+        if (active)
+          Swal.fire({
+            title: "Success",
+            text: "Itinerary Bookings have been deactivated",
+            icon: "success",
+          });
+        else {
+          Swal.fire({
+            title: "Success",
+            text: "Itinerary Bookings have been activated",
+            icon: "success",
+          });
+        }
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status === 400) {
+        Swal.fire({
+          title: "Error",
+          text: "Can not deactivate bookings as no bookings exist",
+          icon: "error",
+        });
+      }
+    }
+  };
   return (
-    <div className="m-4 transition transform hover:scale-105 w-96 bg-gray-100 rounded-lg">  
+    <div className="m-4 transition transform hover:scale-105 w-96 bg-gray-100 rounded-lg">
       <div className="relative w-full h-[200px]">
-        <img src={main_Picture} alt={title} className="w-full h-full object-cover" />
+        <img
+          src={main_Picture}
+          alt={title}
+          className="w-full h-full object-cover"
+        />
       </div>
       <div className="p-4">
         <div className="mb-2">
-          <h2 className="text-2xl font-semibold text-gray-800 text-center truncate">{title}</h2>
+          <h2 className="text-2xl font-semibold text-gray-800 text-center truncate">
+            {title}
+          </h2>
         </div>
         <div className="mb-4">
-          <p className="text-gray-600 text-center text-sm truncate">{description}</p>
+          <p className="text-gray-600 text-center text-sm truncate">
+            {description}
+          </p>
         </div>
 
         {Array.isArray(selectedTags) && selectedTags.length > 0 && (
@@ -157,25 +199,27 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
               dropoff_location,
               plan,
               selectedTags,
-              accesibility
+              accesibility,
             }}
             className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center"
           >
             View Details
           </Link>
-            <Button onClick={()=>setActive(!active)}>{!active?"Activate":"Deactivate"}</Button>
-          {onDelete && (
-            isDeleting ? (
+          <Button onClick={handleActivation}>
+            {!active ? "Activate" : "Deactivate"}
+          </Button>
+          {onDelete &&
+            (isDeleting ? (
               <CircularProgress size={24} className="text-red-500" />
             ) : (
               <button
+                title="Delete Itinerary"
                 onClick={handleDeleteClick}
                 className="text-red-500 hover:text-red-700 transition"
               >
                 <DeleteIcon />
               </button>
-            )
-          )}
+            ))}
         </div>
       </div>
     </div>

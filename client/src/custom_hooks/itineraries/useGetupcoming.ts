@@ -30,10 +30,11 @@ const useGetUpcoming = () => {
             }}
 
             catch(err){
-                setError("Error fetching upcoming");}
-            
+                setError("Error fetching upcoming");
+            }
             finally{
                 setLoading(false);
+
             }
                 
         }

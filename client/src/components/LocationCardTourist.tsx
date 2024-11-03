@@ -25,49 +25,12 @@ const LocationCardTourist: React.FC<LocationCardTouristProps> = (
     const [longitude, setLongitude] = useState(details?.location.longitude ?? 0);
     const [images, setImages] = useState(details?.pictures || []);
     const [image, setImage] = useState('');
-    
-
-
-
     const [apiBody, setApiBody] = useState<Place | null>(details);
     console.log();
     useUpdatePlace(id,apiBody);
 
 
 
-    // const handleEditClick = () => {
-    //     const filteredImages = images.filter(image => image !== '');
-    //     setImages(filteredImages);
-    //     setIsEditing(!isEditing);
-    //     setApiBody({
-    //         name: locationName,
-    //         description: description,
-    //         pictures: images || [],
-    //         location: {
-    //             latitude: latitude,
-    //             longitude: longitude,
-    //         },
-    //         opening_hrs: hours,
-    //         ticket_price: {
-    //             native: native,
-    //             foreign: foreign,
-    //             student: student,
-    //         },
-    //     });
-    //     console.log("LIFE IS PAIN, I HATE MYSELF"+latitude);
-    // };
-    // const handleDeleteClick = () => {
-    //     onDelete(id);
-    // };
-    // const handleImageChange = (index:number, newValue:string) => {
-    //     if (newValue === '') {
-    //         const updatedImages = images.filter((_, i) => i !== index);
-    //         setImages(updatedImages);
-    //       }else {
-    //     const updatedImages = [...images];
-    //     updatedImages[index] = newValue;
-    //     setImages(updatedImages);}
-    //   };
     return ( 
     <div>
         <div className={`w-[422px] h-[422px] bg-[#D9D9D9] rounded-[11px] m-4 ${className}`}>

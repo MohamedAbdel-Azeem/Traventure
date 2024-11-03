@@ -6,6 +6,8 @@ import {
   getItinerary,
   updateItinerary,
   getAllItinerary,
+  toggleItineraryActivation,
+  toggleItineraryInappropriate
 } from "../Model/Queries/itinerary_queries";
 import {
   itineraryAddValidator,
@@ -13,6 +15,7 @@ import {
 } from "../utils/express-validator/itineraryValidator";
 import TourGuide from "../Model/Schemas/TourGuide";
 import ItineraryModel from "../Model/Schemas/Itinerary"
+import { ItineraryDocument } from "../Interfaces/IItinerary";
 
 const router = Router();
 
@@ -91,6 +94,37 @@ router.delete("/delete/:id", async (req: Request, res: Response) => {
     res.status(200).send("Itinerary deleted successfully");
   } catch (error) {
     res.status(500).json({ error: error });
+  }
+});
+router.patch("/toggleActivation/:id", async (req: Request, res: Response) => {
+  try {
+    const itinerary = await toggleItineraryActivation(req.params.id) as ItineraryDocument | null;
+
+    if (!itinerary) {
+      return res.status(404).json({ message: "Itinerary not found" });
+    }
+
+    if (itinerary.booked_By.length === 0) {
+      return res.status(400).json({ message: "No bookings available to toggle activation" });
+    }
+
+    res.status(200).json({ message: "Itinerary activation toggled successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "An internal server error occurred" });
+  }
+});
+
+router.patch("/toggleInappropriate/:id", async (req: Request, res: Response) => {
+  try {
+    const itinerary = await toggleItineraryInappropriate(req.params.id) as ItineraryDocument | null;
+
+    if (!itinerary) {
+      return res.status(404).json({ message: "Itinerary not found" });
+    }
+
+    res.status(200).json({ message: "Itinerary inappropriate status toggled successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "An internal server error occurred" });
   }
 });
 export default router;
