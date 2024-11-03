@@ -1,12 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { uploadFileToStorage } from '../../firebase/firebase_storage';
-interface Itinerary {
-    id: number;
-    name: string;
-    description: string;
-    // Add other fields as necessary
-}
 
 
 interface MyICCRUDP {

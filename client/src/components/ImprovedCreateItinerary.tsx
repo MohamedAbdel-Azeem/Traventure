@@ -38,30 +38,6 @@ const ImprovedCreateItinerary = () => {
                 time_unit: activity.time_unit,
                 }));
       }
-interface MyICCRUDP {
-    main_Picture?: File | null;
-    title: string;
-    description: string;
-    added_By: string;
-    price: number;
-    starting_Date: string;
-    ending_Date: string;
-    rating: number;
-    total: number;
-    language: string;
-    selectedTags?: string[];
-    pickup_location: string;
-    dropoff_location: string;
-    plan: {
-        place?: string;
-        activities: {
-        activity_id?: string;
-        activity_duration: number;
-        time_unit: string;
-        }[];
-    }[];
-    accesibility: boolean;
-}
 
 type PlacetoGo = {
     placeid: string;
@@ -77,16 +53,12 @@ type ActivitytoGo = {
     time_unit: string;
 }
     const {
-        places: apiPlaces,
-        gloading: placeLoading,
-        gerror: placeError,
+        places: apiPlaces
       } = useGetPlace();
 
-      const {activities: activities , loading : activityLoading , error : activityError}=useGetAllActivitiesTitleAndId();
+      const {activities: activities}=useGetAllActivitiesTitleAndId();
 
     const {
-        loading: tagsLoading,
-        error: tagsError,
         iddata: tagsOptions,
       } = useGetAllTags();
 
