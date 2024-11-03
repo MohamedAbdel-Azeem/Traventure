@@ -2,6 +2,7 @@ import { hashPassword } from "../../utils/functions/bcrypt_functions";
 import touristModel from "../Schemas/Tourist";
 import tourGuideModel from "../Schemas/TourGuide";
 import ItineraryModel from '../Schemas/Itinerary';
+import ActivityModel, { INActivity } from "../Schemas/Activity";
 
 import mongoose from "mongoose";
 import { ObjectId } from 'mongoose';
@@ -21,7 +22,7 @@ interface Tourist extends Document {
 interface IFeedback extends Document {
     user_id: string;
     review?: string;
-    rating?: Number;
+    rating?: number;
     createdAt?: Date;
 }
 
@@ -38,6 +39,18 @@ export async function isUserBookedInItineraryOFtourGuide(user_id: string, tourGu
       }
 }
 
+export async function isUserAttendedActivity(user_id: string, activity_id: string): Promise<boolean> {
+    try {
+        const itinerary = await ItineraryModel.findOne({
+         plan : {$elemMatch: {activities : { $elemMatch: { activity_id: activity_id } }}},
+          booked_By: { $elemMatch: { user_id: user_id } },
+        });
+    
+        return !!itinerary; // Returns true if itinerary is found, otherwise false
+      } catch (error) {
+        throw error;
+      }
+}
 
 
 export async function rateTourGuide(user_id: string , feedback: IFeedback) {
@@ -62,6 +75,29 @@ export async function rateTourGuide(user_id: string , feedback: IFeedback) {
     await tourGuide.save();
   }
 
+
+
+  export async function rateActivity(activity_id: string , feedback: IFeedback) {
+    const Activity  = await ActivityModel.findOne<INActivity>({_id: activity_id});
+    if (!Activity) {
+        throw new Error("TourGuide not found");
+    }
+    //check that i had at least one itinary with this tour guide
+    if(!(await isUserAttendedActivity(feedback.user_id, activity_id))){
+        throw new Error("You have not attended this activity");
+    }
+
+    for(let i = 0; i < Activity.feedback.length; i++){
+        if(Activity.feedback[i].user_id.toString() === feedback.user_id.toString()){
+            Activity.feedback.splice(i, 1);
+            break;
+        }
+    }
+
+    Activity.feedback.push({ user_id: feedback.user_id, review: feedback.review , rating: feedback.rating });    
+    await Activity.save();
+  }
+
   export async function rateItinerary(itineraryid: string , feedback: IFeedback) {
     const itinerary  = await ItineraryModel.findById<ItineraryDocument>(itineraryid);
 
@@ -69,12 +105,7 @@ export async function rateTourGuide(user_id: string , feedback: IFeedback) {
         throw new Error("Itinerary not found");
     }
     //check that i went to this itinerary
- 
-    // if(itinerary.booked_By.filter(booking => booking.user_id.toString() === feedback.user_id.toString()).length === 0){
-    //     throw new Error("You have not booked this itinerary");
-    // }
     let valid=false;
-
     for(let i = 0; i < itinerary.booked_By.length; i++){
         if(itinerary.booked_By[i].user_id.toString() === feedback.user_id.toString()){
             valid=true;
@@ -99,4 +130,4 @@ export async function rateTourGuide(user_id: string , feedback: IFeedback) {
 
 
 
-module.exports = {isUserBookedInItineraryOFtourGuide,rateTourGuide,rateItinerary}; 
+module.exports = {isUserBookedInItineraryOFtourGuide,rateTourGuide,rateItinerary,rateActivity}; 
