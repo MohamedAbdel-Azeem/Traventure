@@ -15,8 +15,14 @@ interface MyICCRUDP {
     total: number;
     language: string;
     selectedTags?: string[];
-    pickup_location: string;
-    dropoff_location: string;
+    pickup_location: {
+        latitude: number;
+        longitude: number;
+    };
+    dropoff_location: {
+        latitude: number;
+        longitude: number;
+    };
     plan: {
       place?: string;
       activities: {
