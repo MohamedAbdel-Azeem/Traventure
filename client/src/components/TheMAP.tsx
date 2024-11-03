@@ -30,7 +30,6 @@ const TheMAP: React.FC<TheMAPProps> = (props) => {
   const lat = props.lat ?? 0;
   const long = props.long ?? 0;
   const id = props.id ?? "map";
-  console.log(className);
   const snapshotLatitude = lat;
   const snapshotLongitude = long;
 
