@@ -5,7 +5,9 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { IAdvertiser } from './IAdvertiser';
 import { useUpdateAdvertiser } from '../../../custom_hooks/advertisercustomhooks';
-
+import ChangePasswordModal, { AddContactLeadFormType } from '../../../components/ChangePasswordModal';
+import { editpassword } from '../../../custom_hooks/changepassowrd';
+import Swal from "sweetalert2";
 // Define Zod schema for validation
 interface AdvertiserProfileProps {
   advertiser: IAdvertiser;
@@ -71,6 +73,32 @@ const AdvertiserProfile: React.FC<AdvertiserProfileProps> = ({ advertiser }) => 
     navigate('/');
   };
 
+  const [isPasswordModalOpen,setPasswordModalOpen]=useState(false);
+  const handlePasswordChangeSubmit = (data: AddContactLeadFormType) => {
+    console.log("Password change data:", data);
+    const { oldPassword, newPassword } = data;
+    editpassword(currentAdvertiser.username, oldPassword, newPassword)
+        .then(() => {
+            setPasswordModalOpen(false);
+
+          
+              Swal.fire({
+                title: "Password Changed Successfully",
+                text: "Password has been changed",
+                icon: "success",
+              });
+            
+        })
+        .catch((error) => {
+          const errorMessage = error.message || "Failed to change password.";
+          Swal.fire({
+            title: "Error",
+            text: errorMessage,
+            icon: "error",
+          });
+            
+        });
+};
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-gray-900"
@@ -305,6 +333,13 @@ const AdvertiserProfile: React.FC<AdvertiserProfileProps> = ({ advertiser }) => 
                 Edit Profile
               </button>
             )}
+
+            <button
+              onClick={()=>setPasswordModalOpen(true)}
+              className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
+            >
+              Change Password
+            </button>
             <button
               onClick={handleLogout}
               className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
@@ -314,6 +349,11 @@ const AdvertiserProfile: React.FC<AdvertiserProfileProps> = ({ advertiser }) => 
           </div>
         </form>
       </div>
+      {isPasswordModalOpen && (<ChangePasswordModal
+            username={currentAdvertiser.username}
+            onClose={()=>setPasswordModalOpen(false)}
+            onFormSubmit={handlePasswordChangeSubmit}>
+            </ChangePasswordModal>)}
     </div>
   );
 };

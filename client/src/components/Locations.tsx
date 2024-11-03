@@ -92,7 +92,7 @@ const handleCreate = async () => {
   };
   try {
       await createPlaceID(currentuser, newCard);
-      await fetchPlacesID(currentuser);
+      await fetchPlacesID();
       setOpen(false);
   } catch (error) {
       console.error("Error creating place:", error);
@@ -183,7 +183,9 @@ const handleDelete = (id: string) => {
               /></FormControl>
               <FormControl fullWidth sx={{ marginY: 1 }}  className="col-span-2">
                 <div>
-                  <TheMAP lat={latitude} long={longitude}
+                  <TheMAP
+                  id="create map"
+                  lat={latitude} long={longitude}
                   setLatitude={setLatitude}
                   setLongitude={setLongitude}/>
                 </div>
@@ -222,7 +224,7 @@ const handleDelete = (id: string) => {
                 ))}
                 </Select>
             </FormControl>
-          <Button onClick={handleCreate}>Add</Button>
+          <Button className="col-span-2" onClick={handleCreate}>Add</Button>
               
         </Box>
         </Box>

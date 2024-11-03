@@ -41,49 +41,81 @@ export const itineraryAddValidator = [
     .withMessage("Rating must be a number between 0 and 5"),
   body("total").isNumeric().withMessage("Total must be a number"),
   body("language").isString().withMessage("Language is required"),
-  body('selectedTags')
-        .isArray({min: 1})
-        .withMessage('Selected tags must be an array')
-        .custom((selectedTags) => {
+  body("selectedTags")
+    .isArray({ min: 1 })
+    .withMessage("Selected tags must be an array")
+    .custom((selectedTags) => {
       selectedTags.forEach((tag: any) => {
         if (!mongoose.Types.ObjectId.isValid(tag)) {
-          throw new Error('Each selected tag must be a valid ObjectId');
+          throw new Error("Each selected tag must be a valid ObjectId");
         }
       });
       return true;
-        }),
-  body("pickup_location").isString().withMessage("Pickup location is required"),
-  body("dropoff_location").isString().withMessage("Dropoff location is required"),
-  body('plan')
+    }),
+  body("pickup_location.latitude")
+    .isFloat({ min: -90, max: 90 })
+    .withMessage("Pickup location latitude must be a valid latitude value"),
+  body("pickup_location.longitude")
+    .isFloat({ min: -180, max: 180 })
+    .withMessage("Pickup location longitude must be a valid longitude value"),
+  body("dropoff_location.latitude")
+    .isFloat({ min: -90, max: 90 })
+    .withMessage("Dropoff location latitude must be a valid latitude value"),
+  body("dropoff_location.longitude")
+    .isFloat({ min: -180, max: 180 })
+    .withMessage("Dropoff location longitude must be a valid longitude value"),
+  body("plan")
     .isArray({ min: 1 })
-    .withMessage('Plan must be an array with at least one element')
+    .withMessage("Plan must be an array with at least one element")
     .custom((plan) => {
-      plan.forEach((item:any) => {
+      plan.forEach((item: any) => {
         if (!item.place || !mongoose.Types.ObjectId.isValid(item.place)) {
-          throw new Error('Each plan item must have a valid place ID');
+          throw new Error("Each plan item must have a valid place ID");
         }
         if (item.activities) {
           item.activities.forEach((activity: any) => {
-            if (!activity.activity_id || !mongoose.Types.ObjectId.isValid(activity.activity_id)) {
-              throw new Error('Each activity must have a valid activity ID');
+            if (
+              !activity.activity_id ||
+              !mongoose.Types.ObjectId.isValid(activity.activity_id)
+            ) {
+              throw new Error("Each activity must have a valid activity ID");
             }
-            if (typeof activity.activity_duration !== 'number' || activity.activity_duration <= 0) {
-              throw new Error('Each activity must have a positive activity duration');
+            if (
+              typeof activity.activity_duration !== "number" ||
+              activity.activity_duration <= 0
+            ) {
+              throw new Error(
+                "Each activity must have a positive activity duration"
+              );
             }
-            const validTimeUnits = ['sec', 'min', 'hours', 'days', 'month', 'years'];
-            if (typeof activity.time_unit !== 'string' || !validTimeUnits.includes(activity.time_unit.trim())) {
-              throw new Error('Each activity must have a valid time unit (sec, min, hours, days, month, years)');
+            const validTimeUnits = [
+              "sec",
+              "min",
+              "hours",
+              "days",
+              "month",
+              "years",
+            ];
+            if (
+              typeof activity.time_unit !== "string" ||
+              !validTimeUnits.includes(activity.time_unit.trim())
+            ) {
+              throw new Error(
+                "Each activity must have a valid time unit (sec, min, hours, days, month, years)"
+              );
             }
           });
         }
       });
       return true;
     }),
-  body('booked_By')
+  body("booked_By").optional().isArray(),
+  body("accesibility").isBoolean(),
+  body("bookingActivated").optional().isBoolean(),
+  body("inappropriate")
     .optional()
-    .isArray(),
-  body('accesibility')
     .isBoolean()
+    .withMessage("inappropriate should be a boolean"),
 ];
 
 export const itineraryUpdateValidator = [
@@ -188,7 +220,11 @@ export const itineraryUpdateValidator = [
     .isArray(),
   body('accesibility')
     .optional()
-    .isBoolean()
+    .isBoolean(),
+  body('bookingActivated')
+    .optional()
+    .isBoolean()  ,
+    body("inappropriate").optional().isBoolean().withMessage("inappropriate should be a boolean"),
 ];
 
 module.exports = { itineraryAddValidator, itineraryUpdateValidator };

@@ -20,10 +20,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useGetAllTags } from "../custom_hooks/categoryandTagCRUD";
 import {useGetPlace} from "../custom_hooks/places/useGetPlace";
-
+import { useGetAllActivitiesTitleAndId } from "../custom_hooks/activities/useGetActivitiesTitlesAndID";
 import { useGetAllActivities } from "../custom_hooks/activities/useGetActivities";
 import IActivityTitleAndId from "../custom_hooks/activities/activity_title_id";
-import { useGetAllActivitiesTitleAndId } from "../custom_hooks/activities/useGetActivitiesTitlesAndID";
+
 import IActivityInItinerary from "../custom_hooks/activities/activity_in_itinary";
 import { add, set } from "date-fns";
 import useCreateItinerary from "../custom_hooks/itineraries/createItinerary";
@@ -92,13 +92,14 @@ const ItineraryModal: React.FC<ItineraryModalProps> = ({
     gloading: placeLoading,
     gerror: placeError,
   } = useGetPlace();
+  const {activities: activities , loading : activityLoading , error : activityError}=useGetAllActivitiesTitleAndId();
   const {
     loading: tagsLoading,
     error: tagsError,
     iddata: tagsOptions,
   } = useGetAllTags();
 
-  const {activities: activities , loading : activityLoading , error : activityError}=useGetAllActivitiesTitleAndId();
+
   const { username} = useParams<{ username: string }>();
   const { tourGuideId, loading, error } = useGetTourGuideId(username || "");
   console.log("tourGuideId",tourGuideId);

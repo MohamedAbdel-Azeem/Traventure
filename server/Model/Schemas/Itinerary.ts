@@ -21,8 +21,14 @@ const itinerarychema = new schema({
   rating: { type: Number, required: true, default: 0 },
   total: { type: Number, required: true },
   language: { type: String, required: true },
-  pickup_location: { type: String, required: true },
-  dropoff_location: { type: String, required: true },
+  pickup_location: {
+    latitude: { type: Number, required: true },
+    longitude: { type: Number, required: true },
+  },
+  dropoff_location: {
+    latitude: { type: Number, required: true },
+    longitude: { type: Number, required: true },
+  },
   selectedTags: [
     { type: mongoose.Types.ObjectId, required: true, ref: "PreferenceTags" },
   ],
@@ -50,6 +56,7 @@ const itinerarychema = new schema({
     },
   ],
   accesibility: { type: Boolean, required: true },
+
   feedback:{type: [
     {
       user_id: { type: mongoose.Types.ObjectId, required: true ,ref: "Tourist" },
@@ -58,7 +65,10 @@ const itinerarychema = new schema({
       createdAt: { type: Date, default: Date.now },
     },
   ],default: []},
+  bookingActivated: { type: Boolean, default: true },
+  inappropriate: { type: Boolean, default: false },
   
 });
 // ToDo: plan a way to do timeline
-export default mongoose.model<IItinerary>("Itinerary", itinerarychema);
+export default mongoose.model("Itinerary", itinerarychema);
+

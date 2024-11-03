@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import { PhoneInput } from "../../components/PhoneInput/phone-input";
 import { E164Number } from "libphonenumber-js";
 import countryList from "react-select-country-list";
+import PDFUploader from "../../components/PDFUploader";
 // TODO: Use the Loading and error returning from the hook
 
 const getAge = (dob: string): number => {
@@ -38,16 +39,31 @@ const schema = z
         /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
         "Password must contain at least one letter and one number"
       ),
-    mobileNumber: z
-      .string()
-      // .min(10, "Mobile number must be at least 10 digits")
-      // .regex(/^\+?\d+$/, "Mobile number must be numeric")
-      ,
+    mobileNumber: z.string(),
+    // .min(10, "Mobile number must be at least 10 digits")
+    // .regex(/^\+?\d+$/, "Mobile number must be numeric")
     nationality: z
       .string()
       .min(2, "Nationality must be at least 2 characters long"),
     dateOfBirth: z.string(),
     Occupation: z.string(),
+    documents: z
+      .instanceof(File)
+      .optional()
+      .nullable()
+      .refine(
+        (file) => {
+          if (file) {
+            const allowedTypes = ["application/pdf"];
+            const maxSize = 5 * 1024 * 1024; // 5MB
+            return allowedTypes.includes(file.type) && file.size <= maxSize;
+          }
+          return true;
+        },
+        {
+          message: "Invalid file. Only PDF files under 5MB are allowed.",
+        }
+      ),
   })
   .superRefine((data, ctx) => {
     const { role, dateOfBirth, Occupation } = data;
@@ -75,18 +91,26 @@ const schema = z
     // Mobile number validation for tourists
     if (role === "tourist" && !data.mobileNumber) {
       ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      path: ["mobileNumber"],
-      message: "Mobile number is required for tourists",
+        code: z.ZodIssueCode.custom,
+        path: ["mobileNumber"],
+        message: "Mobile number is required for tourists",
       });
     }
 
     // Nationality validation for tourists
     if (role === "tourist" && !data.nationality) {
       ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      path: ["nationality"],
-      message: "Nationality is required for tourists",
+        code: z.ZodIssueCode.custom,
+        path: ["nationality"],
+        message: "Nationality is required for tourists",
+      });
+    }
+
+    if (role !== "tourist" && !data.documents) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["documents"],
+        message: "Document is required",
       });
     }
   });
@@ -96,9 +120,10 @@ const Register: React.FC = () => {
     register,
     handleSubmit,
     watch,
+    setValue,
     control,
     formState: { errors },
-  } = useForm({
+  } = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
       email: "",
@@ -109,6 +134,7 @@ const Register: React.FC = () => {
       nationality: "Egypt",
       Occupation: "",
       role: "tourist",
+      documents: null,
     },
   });
 
@@ -134,6 +160,13 @@ const Register: React.FC = () => {
     }
     handleError();
   }, [error]);
+
+  const [selectedPDF, setSelectedPDF] = useState<File | null>(null);
+
+  const handlePDFChange = (file: File | null) => {
+    setSelectedPDF(file);
+    setValue("documents", file); // Update the form state with the selected PDF
+  };
 
   return (
     <div
@@ -375,6 +408,19 @@ const Register: React.FC = () => {
                   />
                   {errors.password && (
                     <p className="text-red-500">{errors.password.message}</p>
+                  )}
+                </div>
+
+                <div className="my-6">
+                  <label className="block text-gray-700 font-semibold text-lg mb-4">
+                    Please upload your document as a PDF
+                  </label>
+                  <PDFUploader
+                    selectedPDF={selectedPDF}
+                    setSelectedPDF={handlePDFChange}
+                  />
+                  {errors.documents && (
+                    <p className="text-red-600">{errors.documents.message}</p>
                   )}
                 </div>
               </>

@@ -43,4 +43,21 @@ export const updateActivity = async(id: string, updatedActivity: any)=>{
     }
 }
 
-module.exports = {addActivity, getActivities, getActivitiesid,deleteActivity,updateActivity};
+export const toggleInappropriate = async (id: string) => {
+    try {
+        const activity = await Activity.findById(id);
+        if (activity) {
+            const newActivity=Activity.findByIdAndUpdate(id, { inappropriate: !activity.inappropriate },
+                { new: true }
+            );
+            
+            return newActivity;
+        }
+        else {
+            throw new Error("Activity not found");
+        }}
+        catch (err) {
+            throw err;
+        }
+};
+module.exports = {addActivity, getActivities, getActivitiesid,deleteActivity,updateActivity,toggleInappropriate};

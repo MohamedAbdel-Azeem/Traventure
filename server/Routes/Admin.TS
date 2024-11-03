@@ -10,8 +10,8 @@ import {
 import { governerValidator } from "../utils/express-validator/governerValidator";
 import GovernerSchema from "../Model/Schemas/Governer";
 
-import { addGoverner ,deleteUser} from "../Model/Queries/admin_queries";
-import{hashPassword} from "../utils/functions/bcrypt_functions"
+import { addGoverner, deleteUser } from "../Model/Queries/admin_queries";
+import { hashPassword } from "../utils/functions/bcrypt_functions";
 
 const router = Router();
 
@@ -54,8 +54,8 @@ router.get("/all", async (req: Request, res: Response) => {
   }
 });
 
-
-router.post("/add/governer",
+router.post(
+  "/add/governer",
   governerValidator,
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
@@ -63,48 +63,34 @@ router.post("/add/governer",
       return res.status(400).json({ errors: errors.array() });
     }
     const governerData = matchedData(req);
-    governerData.password= await hashPassword(governerData.password);
+    governerData.password = await hashPassword(governerData.password);
 
     try {
-      
-      const governer = await addGoverner(governerData,governerData.username);
-      if(!governer)
-      res.status(401).send("Usernme already exists");
-
-      else
-      res.status(201).json( governer );
-    
+      const governer = await addGoverner(governerData, governerData.username);
+      if (!governer) res.status(401).send("Usernme already exists");
+      else res.status(201).json(governer);
     } catch (error) {
       res.status(500).send("Error adding governer");
     }
   }
 );
 
-
-router.delete("/delete/user/:username/:type",
+router.delete(
+  "/delete/user/:username/:type",
   async (req: Request, res: Response) => {
     // const type=req.body.type;
     // const us=req.params.username;
-    const {username,type}=req.params;
-    
-    try{
-    const user = await deleteUser(username,type);
+    const { username, type } = req.params;
 
-    if(user==null)
-    res.status(404).send("User not found");
-    else
-    res.status(200).send("User deleted successfully");
-  }
-  catch (error)
-  {
-    res.status(500).send("Error deleting user");
-  }
-  }
-)
+    try {
+      const user = await deleteUser(username, type);
 
-
+      if (user == null) res.status(404).send("User not found");
+      else res.status(200).send("User deleted successfully");
+    } catch (error) {
+      res.status(500).send("Error deleting user");
+    }
+  }
+);
 
 export default router;
-
-
-
