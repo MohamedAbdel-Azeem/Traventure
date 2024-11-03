@@ -59,12 +59,22 @@ export async function getBookingsByTourist(username: string) {
 async function checkBooking(tourist_id:string,activity_id:string|undefined,itinerary_id:string|undefined){
   try {
     const query: any = { tourist: tourist_id };
+    const now = new Date();
     if (activity_id) {
       query.activity = activity_id;
-    }
-    if (itinerary_id) {
+      const activity = await ActivityModel.findById(activity_id);
+      if (activity && new Date((activity as any).DateAndTime) < now) {
+          throw new Error("The activity has already started or passed.");
+      }
+  }
+
+  if (itinerary_id) {
       query.itinerary = itinerary_id;
-    }
+      const itinerary = await ItineraryModel.findById(itinerary_id);
+      if (itinerary && new Date((itinerary as any).starting_Date) < now) {
+          throw new Error("The itinerary has already started or passed.");
+      }
+  }
     const existingBooking = await bookingModel.findOne(query);
     return existingBooking;
   } catch (error) {
@@ -112,7 +122,7 @@ async function checkCancel(booking_id:string){
  
 
         if (hoursDifference < 48) {
-          throw new Error('Cannot cancel activity within 48 hours of the start time');
+          throw new Error('Cannot cancel activity');
         }
       }
     }
@@ -128,7 +138,7 @@ async function checkCancel(booking_id:string){
         console.log(hoursDifference);
 
         if (hoursDifference < 48) {
-          throw new Error('Cannot cancel itinerary within 48 hours of the start time');
+          throw new Error('Cannot cancel itinerary');
         }
       }
     }

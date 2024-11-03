@@ -3,9 +3,10 @@ import ItineraryCardToruist from '../ItineraryCardToruist';
 import LocationCardTourist from '../LocationCardTourist';
 import { ActivityCard } from '../ActivityCard';
 import useGetUpcoming from '../../custom_hooks/itineraries/useGetupcoming';
-import IActivity from '../../custom_hooks/activities/activity_interface';
+import {IActivity} from '../../custom_hooks/activities/activity_interface';
 import Place from '../../custom_hooks/places/place_interface';
 import { TouristProfileData } from '../../routes/_app/tourist_profile/tourist_profile_data';
+
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ActivityCardTourist } from '../ActivityCardTourist';
 interface DashboardProps {
@@ -25,9 +26,9 @@ const Dashboard : React.FC<DashboardProps>= ({type}) => {
         return <div>Error Fetching: {error}</div>;
     }
 
-    const itineraries = upcoming?.itineraries.slice(0, 5) || [];
+    const itineraries = upcoming?.itineraries.slice(0,5) || [];
     const locations = upcoming?.places.slice(0, 5) || [];
-    const activities = upcoming?.activities.slice(0, 5)|| []; 
+    const activities = upcoming?.activities.slice(0, 5) || [];
 
     console.log('Itineraries:', itineraries);
     console.log('Locations:', locations);

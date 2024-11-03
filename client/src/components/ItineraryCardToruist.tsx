@@ -5,7 +5,7 @@ import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import StarIcon from '@mui/icons-material/Star';
 import { format } from 'date-fns';
 import { TouristProfileData } from "../routes/_app/tourist_profile/tourist_profile_data";
-import IActivity from "../custom_hooks/activities/activity_interface";
+import {IActivity} from "../custom_hooks/activities/activity_interface";
 import Place from "../custom_hooks/places/place_interface";
 import useBookItinerary from "../custom_hooks/itineraries/bookItinerary";
 import { useParams } from "react-router-dom";

@@ -17,7 +17,7 @@ import touristRouter from "./Routes/Tourist";
 import LoginRouter from "./Routes/Login";
 import preferenceTagsRouter from "./Routes/preferenceTags";
 import historicalTagsRouter from "./Routes/historicalTags";
-import itineraryBookingRouter from "./Routes/ItineraryBooking";
+import itineraryBookingRouter from "./Routes/booking";
 import changePasswordRouter from "./Routes/ChangePassword";
 import BookingRouter from "./Routes/booking";
 import purchaseRouter from "./Routes/purchase";

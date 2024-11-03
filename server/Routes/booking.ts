@@ -32,7 +32,7 @@ router.delete("/cancel/:booking_id", async (req, res) => {
         if ((error as any).message === "Cannot cancel activity within 48 hours of the start time") {
             res.status(403).json({ error: "Cannot cancel activity within 48 hours of the start time" });
         } else {
-            res.status(500).json({ error: "Error cancelling booking" });
+            res.status(500).json({ error: "Cannot cancel booking" });
         }
     }
     }

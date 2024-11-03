@@ -31,7 +31,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   }));
 
  
-  interface IBooking {
+  export interface IBooking {
     _id: string;
     type: string;
     itinerary: Itinerary;
@@ -75,6 +75,11 @@ const Bookings: React.FC = () => {
             console.error(error);
         }
     };
+
+    function hasStarted(startTime: Date): boolean {
+        const now = new Date();
+        return now > startTime;
+    }
     
   
     return (
@@ -116,7 +121,9 @@ const Bookings: React.FC = () => {
                                         <TableRow key={booking._id}>
 
                                             <StyledTableCell align="left">{booking.itinerary.title}</StyledTableCell>
-                                            <StyledTableCell align="center">{booking.itinerary.starting_Date.split("T00:00:00.000Z")}</StyledTableCell>
+                                            <StyledTableCell align="center">
+                                                {booking.itinerary.starting_Date.split("T")[0]}
+                                                            </StyledTableCell>
                                             <StyledTableCell align="center">{booking.itinerary.language}</StyledTableCell>
                                             <StyledTableCell align="right" style={{ width: '150px' }}><Button color="primary" variant="outlined" onClick={()=>navigate(`/tourist-itinerary/${booking.itinerary._id}`,
                                                  { state:
@@ -137,7 +144,10 @@ const Bookings: React.FC = () => {
                                             
                                                     }
                                                   })}>More Info</Button></StyledTableCell>
-                                            <StyledTableCell align="right" style={{ width: '150px' }}><Button color="error" onClick={()=>handleCancel(booking._id)} variant="outlined">Cancel</Button></StyledTableCell>
+                                            <StyledTableCell align="right" style={{ width: '150px' }}>
+                                                 {!hasStarted(new Date(booking.itinerary.starting_Date)) && (
+                                            <Button color="error" onClick={() => handleCancel(booking._id)} variant="outlined">Cancel</Button>
+                                        )}</StyledTableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -168,7 +178,10 @@ const Bookings: React.FC = () => {
                                             </StyledTableCell>
 
                                             <StyledTableCell align="right" style={{ width: '150px' }}><Button variant="outlined" onClick={()=> showActivity(booking.activity)}>More Info</Button></StyledTableCell>
-                                            <StyledTableCell align="right" style={{ width: '150px' }}><Button color="error" onClick={()=>handleCancel(booking._id)} variant="outlined">Cancel</Button></StyledTableCell>
+                                            <StyledTableCell align="right" style={{ width: '150px' }}> 
+                                                {!hasStarted(new Date(booking.activity.DateAndTime)) && (
+                                            <Button color="error" onClick={() => handleCancel(booking._id)} variant="outlined">Cancel</Button>
+                                        )}</StyledTableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>

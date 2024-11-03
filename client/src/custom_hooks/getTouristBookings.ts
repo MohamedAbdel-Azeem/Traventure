@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { useEffect, useState, useCallback } from 'react';
+import {IBooking} from '../components/Bookings';
+
 
 export const getBookings = (touristusername: string | undefined) => {
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<IBooking[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 

@@ -201,7 +201,7 @@ console.log(currentActivity.feedback);
                 )}
             </div>
             <div className="flex-grow"></div> 
-            {currenttype==="Tourist" && currentActivity.BookingIsOpen && <button
+            {currenttype==="tourist" && currentActivity.BookingIsOpen && <button
                         className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 w-1/3"
                         onClick={() => handleBooking(currentActivity._id)}
                     >
