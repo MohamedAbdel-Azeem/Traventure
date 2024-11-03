@@ -9,7 +9,7 @@ router.post("/rateItinerary/:itineraryId", async (req, res) => {
         await rateItinerary(itineraryId, feedback);
         res.status(201).send("Feedback added successfully");
     } catch (error) {
-        res.status(500).send("error adding feedback");
+        res.status(500).send("error adding feedback: "+error);
     }
 });
 router.post("/rateTourGuide/:tourGuideUserId", async (req, res) => {

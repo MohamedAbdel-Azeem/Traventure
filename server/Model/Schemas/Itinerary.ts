@@ -6,7 +6,7 @@
 //         endingDate: string;
 //         rating: string;
 import mongoose from "mongoose";
-import IItinerary from "../../Interfaces/IItinerary";
+// import IItinerary from "../../Interfaces/IItinerary";
 
 const schema = mongoose.Schema;
 

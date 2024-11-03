@@ -18,8 +18,9 @@ export interface INActivity extends mongoose.Document {
   feedback: [
     {
       name: string;
-      rating: string;
-      review: string;
+      rating?: string;
+      review?: number;
+      createdAt: Date;
     }
   ];
   added_By: mongoose.Types.ObjectId;
@@ -49,13 +50,7 @@ const ActivitySchema = new schema({
     },
   ],
   BookingIsOpen: { type: Boolean, required: true },
-  feedback: [
-    {
-      name: String,
-      rating: String,
-      review: String,
-    },
-  ],
+
   added_By: {
     type: mongoose.Types.ObjectId,
     required: true,
@@ -66,7 +61,7 @@ const ActivitySchema = new schema({
   {
     user_id: { type: mongoose.Types.ObjectId, required: true ,ref: "Tourist" },
     review: String,
-    rating: String,
+    rating: Number,
     createdAt: { type: Date, default: Date.now },
   },
 ],

@@ -11,9 +11,9 @@ export interface ItineraryDocument extends Document {
   rating: number;
   total: number;
   language: string;
-  pickup_location: string;
-  dropoff_location: string;
-  selectedTags: Types.ObjectId[];
+  pickup_location: {longitude: number, latitude: number};
+  dropoff_location: {longitude: number, latitude: number};
+  selectedTags: string[];
   plan: Array<{
     place?: Types.ObjectId;
     activities: Array<{

@@ -5,6 +5,7 @@ import ItineraryModel from '../Schemas/Itinerary';
 
 import mongoose from "mongoose";
 import { ObjectId } from 'mongoose';
+import { ItineraryDocument } from "../../Interfaces/IItinerary";
 
 interface Tourist extends Document {
   username: string;
@@ -62,16 +63,29 @@ export async function rateTourGuide(user_id: string , feedback: IFeedback) {
   }
 
   export async function rateItinerary(itineraryid: string , feedback: IFeedback) {
-    const itinerary  = await ItineraryModel.findById(itineraryid);
+    const itinerary  = await ItineraryModel.findById<ItineraryDocument>(itineraryid);
 
     if (!itinerary) {
         throw new Error("Itinerary not found");
     }
     //check that i went to this itinerary
  
-    if(itinerary.booked_By.filter(booking => booking.user_id.toString() === feedback.user_id.toString()).length === 0){
+    // if(itinerary.booked_By.filter(booking => booking.user_id.toString() === feedback.user_id.toString()).length === 0){
+    //     throw new Error("You have not booked this itinerary");
+    // }
+    let valid=false;
+
+    for(let i = 0; i < itinerary.booked_By.length; i++){
+        if(itinerary.booked_By[i].user_id.toString() === feedback.user_id.toString()){
+            valid=true;
+            break;
+        }
+    }
+    if(!valid){
         throw new Error("You have not booked this itinerary");
     }
+
+
 
     for(let i = 0; i < itinerary.feedback.length; i++){
         if(itinerary.feedback[i].user_id.toString() === feedback.user_id.toString()){
