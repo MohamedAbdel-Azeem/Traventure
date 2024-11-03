@@ -12,7 +12,7 @@ export interface IProduct extends Document {
   quantity: number;
   feedback: {
     name: mongoose.Types.ObjectId;
-    rating: string;
+    rating: Number;
     review: string;
   }[];
   sales: mongoose.Types.ObjectId[];
@@ -38,8 +38,8 @@ const ProductSchema = new schema({
   ],
   feedback: [
     {
-      name: String,
-      rating: String,
+      name: { type: mongoose.Schema.Types.ObjectId, ref: "Tourist" },
+      rating: { type: Number, min: 0, max: 5 },
       review: String,
     },
   ],
