@@ -22,11 +22,11 @@ const itinerarychema = new schema({
   language: { type: String, required: true },
   pickup_location: {
     latitude: { type: Number, required: true },
-    longitude: { type: Number, required: true }
+    longitude: { type: Number, required: true },
   },
   dropoff_location: {
     latitude: { type: Number, required: true },
-    longitude: { type: Number, required: true }
+    longitude: { type: Number, required: true },
   },
   selectedTags: [
     { type: mongoose.Types.ObjectId, required: true, ref: "PreferenceTags" },

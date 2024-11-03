@@ -1,6 +1,4 @@
-import TheMAP from "./TheMAP";
-import ImageUploader from "./ImageUploader";
-import { act, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MenuItem,
   Select,
@@ -11,23 +9,24 @@ import {
   Stack,
   Chip,
   Button,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@mui/material";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useGetAllTags } from "../custom_hooks/categoryandTagCRUD";
-import { SelectChangeEvent } from "@mui/material/Select";
+import { v4 as uuidv4 } from "uuid";
+
+import TheMAP from "./TheMAP";
+import ImageUploader from "./ImageUploader";
 import BestDeleteButton from "./BestDeleteButton";
+import { useGetAllTags } from "../custom_hooks/categoryandTagCRUD";
 import { useGetPlace } from "../custom_hooks/places/useGetPlace";
 import { useGetAllActivitiesTitleAndId } from "../custom_hooks/activities/useGetActivitiesTitlesAndID";
 import { UseCreateItineraryforME } from "../custom_hooks/itineraries/createItinerary";
-import { v4 as uuidv4 } from "uuid";
+import { SelectChangeEvent } from "@mui/material/Select";
 const ImprovedCreateItinerary = () => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [pickupLocation, setPickupLocation] = useState<string>("dsadsadad");
-  const [dropoffLocation, setDropoffLocation] = useState<string>("dsadsadad");
   const [latitude, setLatitude] = useState(30);
   const [longitude, setLongitude] = useState(31);
   const [dlatitude, setDLatitude] = useState(30);
@@ -236,7 +235,7 @@ const ImprovedCreateItinerary = () => {
     )
   );
   const convertplacenametoactualname = (placename: string) => {
-    return apiPlaces.find((place) => place._id === placename)?.name;
+    return apiPlaces?.find((place) => place._id === placename)?.name;
   };
   const itineraryData = {
     added_By: "672354deb87528da028f398e",

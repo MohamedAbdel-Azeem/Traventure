@@ -75,7 +75,7 @@ function Row(props: { row: string, onDelete: (name: string) => void, updateSingl
 }
 
 export default function TagTable() {
-  const { data, loading, error } = useGetAllTags();
+  const { data } = useGetAllTags();
   const [open, setOpen] = useState(false);
   const [newName, setNewName] = useState('');
   const [rows, setRows] = useState(data);

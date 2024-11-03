@@ -4,7 +4,7 @@ import EditIcon from "@mui/icons-material/Edit";
 function ImageUploader({
   selectedImage,
   setSelectedImage,
-  OutsideClassName
+  OutsideClassName,
 }: {
   setSelectedImage: (file: File) => void;
   selectedImage: File | null;
@@ -22,7 +22,7 @@ function ImageUploader({
   return (
     <div className="flex items-center justify-center w-full relative">
       {selectedImage ? (
-        <div className={`relative w-full h-64 ${OutsideClassName || ''}`}>
+        <div className={`relative w-full h-64 ${OutsideClassName || ""}`}>
           <img
             src={URL.createObjectURL(selectedImage)}
             alt="Selected"
@@ -44,7 +44,9 @@ function ImageUploader({
       ) : (
         <label
           htmlFor="dropzone-file"
-          className={`flex flex-col items-center justify-center w-full h-64 border-2 border-slate-300 border-dashed rounded-lg cursor-pointer bg-white hover:bg-slate-100 ${OutsideClassName || ''}`}
+          className={`flex flex-col items-center justify-center w-full h-64 border-2 border-slate-300 border-dashed rounded-lg cursor-pointer bg-white hover:bg-slate-100 ${
+            OutsideClassName || ""
+          }`}
         >
           <div className="flex flex-col items-center justify-center pt-5 pb-6">
             <svg
