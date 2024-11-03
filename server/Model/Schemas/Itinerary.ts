@@ -6,6 +6,7 @@
 //         endingDate: string;
 //         rating: string;
 import mongoose from "mongoose";
+// import IItinerary from "../../Interfaces/IItinerary";
 
 const schema = mongoose.Schema;
 
@@ -55,8 +56,19 @@ const itinerarychema = new schema({
     },
   ],
   accesibility: { type: Boolean, required: true },
+
+  feedback:{type: [
+    {
+      user_id: { type: mongoose.Types.ObjectId, required: true ,ref: "Tourist" },
+      review: String,
+      rating: String,
+      createdAt: { type: Date, default: Date.now },
+    },
+  ],default: []},
   bookingActivated: { type: Boolean, default: true },
   inappropriate: { type: Boolean, default: false },
+  
 });
-
+// ToDo: plan a way to do timeline
 export default mongoose.model("Itinerary", itinerarychema);
+
