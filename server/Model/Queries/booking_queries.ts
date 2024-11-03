@@ -157,10 +157,12 @@ export async function cancelBooking(booking_id:string) {
     booking=await checkCancel(booking_id);
     if(booking!==null){
       if((booking as any).type==="itinerary"){
-        const itinerary=await ItineraryModel.findById((booking as any).itinerary); 
+        const itinerary=await ItineraryModel.findById((booking as any).itinerary);
+        console.log("hh"); 
         if(itinerary){
           const index = (itinerary as any).booked_By.findIndex((entry: any) => entry.user_id.toString() === (booking as any).tourist.toString());
           if (index !== -1) {
+
             (itinerary as any).booked_By.splice(index, 1);
             await (itinerary as any).save(); // Save the updated itinerary
           }

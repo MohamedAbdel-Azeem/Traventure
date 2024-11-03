@@ -97,7 +97,6 @@ export async function gettouristComplaints(username: string) {
 
   export async function getTouristUpcoming(username:string){
     try{
-        console.log("hh");
         const tourist= await touristModel.findOne({username:username});
         const bookings=await Booking.find( {tourist : (tourist as any)._id});
         const{itineraries,places,activities}=await getAll();

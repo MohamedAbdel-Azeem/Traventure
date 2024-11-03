@@ -14,6 +14,7 @@ import ItineraryCardToruist from "./ItineraryCardToruist";
 import { useGetAllTags } from "../custom_hooks/categoryandTagCRUD";
 import ImprovedSidebar from "./ImprovedSidebar";
 import { useLocation } from "react-router-dom";
+
 const MoreItineraries: React.FC = () => {
   const { upcoming, loading, error } = useGetUpcoming();
   const navigate = useNavigate();
@@ -125,9 +126,11 @@ const MoreItineraries: React.FC = () => {
     .filter((itinerary) => {
       // Filter based on bookingActivated status depending on currentType
       if (currenttype === "admin") {
+        console.log("hh");
         // Example: check if user is an admin
         return true; // Admins see all itineraries
       } else {
+        console.log(currenttype);
         return itinerary.bookingActivated && !itinerary.inappropriate; // Non-admins see only activated itineraries
       }
     })
@@ -341,10 +344,8 @@ const MoreItineraries: React.FC = () => {
             </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
   );
-};
+
+}
 
 export default MoreItineraries;

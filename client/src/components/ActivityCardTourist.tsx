@@ -211,13 +211,17 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({activity, onDelete 
           <div className="w-[400px] h-[69px] rounded-t-[19px]">
             <div className="absolute text-center top-0 left-0 w-[71px] h-[30px] rounded-tl-[19px] bg-[#FF0000] border-black border-[1px] rounded-br-[19px]">
               {newBIO ? "Open" : "Closed"}
-                          {currenttype==="tourist" && currentActivity.BookingIsOpen && <button
-                        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 w-1/3"
-                        onClick={() => handleBooking(currentActivity._id)}
+              </div>
+                 {currenttype === "tourist" && currentActivity.BookingIsOpen && (
+                <div className=" flex justify-end items-center py-2 px-5">
+                    <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ml-2"
+                    onClick={() => handleBooking(currentActivity._id)}
                     >
-                        Book
-                    </button>}
-            </div>
+                    Book
+                    </button>
+                </div>
+                )}
             {currenttype === "admin" && (
               <div className="absolute text-center top-0 right-0 w-[171px] h-[30px] rounded-tl-[19px] bg-[#FF0000] border-black border-[1px] rounded-br-[19px]">
                 <select
@@ -232,7 +236,6 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({activity, onDelete 
                 </select>
               </div>
             )}
-            <div className="absolute top-[60px] right-[10px]">flag</div>
           </div>
           <Rating
             disabled

@@ -37,15 +37,16 @@ router.post(
     }
   }
 );
-router.get("/:itinerary_id", async (req: Request, res: Response) => {
+
+
+router.get("/", async (req: Request, res: Response) => {
   try {
-    const itinerary = await ItineraryModel.findById(req.params.itinerary_id);
-    res.status(200).send(itinerary);
+    const products = await getAllItinerary();
+    res.status(200).send(products);
   } catch (error) {
     res.status(500).send(error);
   }
-}
-);
+});
 
 router.get("/:username", async (req: Request, res: Response) => {
   try {
@@ -57,14 +58,16 @@ router.get("/:username", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/", async (req: Request, res: Response) => {
+router.get("/get/:itinerary_id", async (req: Request, res: Response) => {
   try {
-    const products = await getAllItinerary();
-    res.status(200).send(products);
+    const itinerary = await ItineraryModel.findById(req.params.itinerary_id);
+    res.status(200).send(itinerary);
   } catch (error) {
     res.status(500).send(error);
   }
-});
+}
+);
+
 
 router.patch(
   "/update/:id",

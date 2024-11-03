@@ -25,9 +25,30 @@ const Dashboard : React.FC = () => {
     return <div>Error Fetching: {error}</div>;
   }
 
-  const itineraries = upcoming?.itineraries.slice(0, 5) || [];
+  const itineraries = upcoming?.itineraries || [];
   const locations = upcoming?.places.slice(0, 5) || [];
-  const activities = upcoming?.activities.slice(0, 5) || [];
+  const activities = upcoming?.activities || [];
+  let tourist_itineraries=itineraries.filter((itinerary) => {
+    // Filter based on bookingActivated status depending on currentType
+    if (currenttype === "admin") {
+      console.log("hh");
+      // Example: check if user is an admin
+      return true; // Admins see all itineraries
+    } else {
+      console.log(currenttype);
+      return itinerary.bookingActivated && !itinerary.inappropriate; // Non-admins see only activated itineraries
+    }
+  })
+
+  let tourist_activities=activities.filter((activity) => {
+    if(currenttype === 'tourist' || currenttype === 'guest')
+    return !activity.inappropriate;
+    return true;
+
+  });  
+  tourist_activities=tourist_activities.slice(0, 5);
+  tourist_itineraries=tourist_itineraries.slice(0,5); 
+
   console.log("Itineraries:", itineraries);
   console.log("Locations:", locations);
   console.log("Activities:", activities);
@@ -38,8 +59,8 @@ const Dashboard : React.FC = () => {
             <h1 className="text-2xl font-bold mb-4">Upcoming Itineraries</h1>
             <div className="overflow-x-auto">
                 <div className="flex gap-4 items-center">
-                    {itineraries.length > 0 ? (
-                        itineraries.map(itinerary => (
+                    {tourist_itineraries.length > 0 ? (
+                        tourist_itineraries.map(itinerary => (
                             <ItineraryCardToruist
                                 key={itinerary._id}
                                 _id={String(itinerary._id)}
@@ -59,9 +80,8 @@ const Dashboard : React.FC = () => {
                                 main_Picture={itinerary.main_Picture}
                                 accesibility={itinerary.accesibility}
                                 booked_By={itinerary.booked_By}
-                                type={currenttype}
-                               bookingActivated={itinerary.bookingActivated}
-                              inappropriate={false}  
+                                bookingActivated={itinerary.bookingActivated}
+                                inappropriate={itinerary.inappropriate}  
                             />
                         ))
                     ) : (
@@ -106,8 +126,8 @@ const Dashboard : React.FC = () => {
       <h1 className="text-2xl font-bold mt-8 mb-4">Upcoming Activities</h1>
       <div className="overflow-x-auto">
         <div className="flex gap-4 items-center">
-          {activities.length > 0 ? (
-            activities.map((activity) => (
+          {tourist_activities.length > 0 ? (
+            tourist_activities.map((activity) => (
               <ActivityCardTourist
                 key={activity._id}
                 activity={activity}

@@ -66,10 +66,10 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   selectedTags = [],
   plan,
   bookingActivated,
-  inappropriate,
-  type
+  inappropriate
 }) => {
-
+  
+  console.log(title,bookingActivated,inappropriate);
   const { bookItinerary, data, loading, error } = useBookItinerary();
   const {username}=useParams<{username:string}>();
   const formatDate = (dateString: string) => {
