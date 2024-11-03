@@ -11,6 +11,8 @@ import { Textarea } from "@mantine/core";
 import ChangePasswordModal, { AddContactLeadFormType } from "../../../components/ChangePasswordModal";
 import { editpassword } from "../../../custom_hooks/changepassowrd";
 import Swal from "sweetalert2";
+import ProfilePictureEdit from "../../../components/ProfilePictureEdit";
+import { uploadFileToStorage } from "../../../firebase/firebase_storage";
 interface TourGuideProfileProps {
   tourGuide: ITourGuide;
 }
@@ -32,12 +34,12 @@ const TourGuideProfile: React.FC<TourGuideProfileProps> = ({ tourGuide }) => {
   const [location, setLocation] = useState<string>("");
 
   const [update, setUpdate] = useState(false);
-
+const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const {
     response,
     loading,
     error: updateError,
-  } = useUpdateTourGuide(currentData, userData.username, update);
+  } = useUpdateTourGuide(currentData, userData.username, update, profilePicture);
 
   const handleEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -52,7 +54,7 @@ const TourGuideProfile: React.FC<TourGuideProfileProps> = ({ tourGuide }) => {
     setIsEditing(!isEditing);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!error) {
       setUpdate(true);
       if (updateError) {
@@ -60,8 +62,10 @@ const TourGuideProfile: React.FC<TourGuideProfileProps> = ({ tourGuide }) => {
       }
       if (!loading && response) {
         console.log("Successfully updated");
-        setUserData(response);
         setIsEditing(false);
+        setUserData(response);
+        setProfilePicture(null);
+       // setIsEditing(false);
       }
     } else {
       console.log("Cannot save due to validation error");
@@ -223,11 +227,18 @@ const TourGuideProfile: React.FC<TourGuideProfileProps> = ({ tourGuide }) => {
       </Modal>
       <div className="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl p-8 backdrop-blur-lg bg-opacity-90">
         <div className="flex items-center space-x-6">
-          <img
-            src="/src/assets/t2.jpg"
-            alt="Profile"
-            className="w-32 h-32 rounded-full object-cover shadow-md border-4 border-purple-500"
-          />
+        {(isEditing ) ? (
+      <ProfilePictureEdit
+        profilePicture={profilePicture}
+        onChange={setProfilePicture} // Directly pass setProfilePicture
+        isEditing={isEditing} // Controls the edit overlay visibility
+      />) : (
+        <img
+              src={userData.profilepic }
+             
+              className="w-32 h-32 rounded-full object-cover shadow-md border-4 border-purple-500"
+            />
+      )}
           <div className="text-left">
             <h2 className="text-4xl font-extrabold text-purple-700">
               {userData.username}

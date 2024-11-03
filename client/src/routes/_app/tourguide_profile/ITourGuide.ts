@@ -3,6 +3,7 @@ export interface ITourGuide {
   username: string;
   email: string;
   password: string;
+  profilepic: string;
   mobileNumber?: string;
   yearsOfExperience?: number;
   previousWork?: {

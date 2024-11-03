@@ -8,6 +8,7 @@ const tourGuideSchema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   documents: { type: String, required: true },
+  profilepic: {type: String, default: null},
   mobileNumber: String,
   yearsOfExperience: Number,
   previousWork: [

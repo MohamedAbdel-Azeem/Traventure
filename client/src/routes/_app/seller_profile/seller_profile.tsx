@@ -10,6 +10,7 @@ import { editpassword } from "../../../custom_hooks/changepassowrd";
 import Swal from "sweetalert2";
 import { FaEdit } from "react-icons/fa";
 import ProfilePictureEdit from "../../../components/ProfilePictureEdit";
+import { uploadFileToStorage } from "../../../firebase/firebase_storage";
 
 interface SellerProfileProps {
   seller: ISeller;
@@ -61,10 +62,16 @@ const SellerProfile: React.FC<SellerProfileProps> = ({ seller }) => {
   };
 
   // Save the form
-  const onSubmit = (data: ISeller) => {
+  const onSubmit = async (data: ISeller) => {
     console.log("Saved data:", data);
+    data.profilepic = currentSeller.profilepic;
     setIsEditing(false);
     setApiBody(data);
+    if(profilePicture) {
+      const firebaseurl = await uploadFileToStorage(profilePicture);
+      console.log("Firebase URL:", firebaseurl);
+      data.profilepic = firebaseurl;
+    }
     setApiUsername(data.username);
     setCurrentSeller(data);
     // UPDATE INFO TO DATABASE HERE
@@ -120,11 +127,18 @@ const handleProfilePictureClick = () => {
   <div className="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl p-8 backdrop-blur-lg bg-opacity-90">
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex items-center space-x-6">
+      {(isEditing ) ? (
       <ProfilePictureEdit
         profilePicture={profilePicture}
         onChange={setProfilePicture} // Directly pass setProfilePicture
         isEditing={isEditing} // Controls the edit overlay visibility
-      />
+      />) : (
+        <img
+              src={currentSeller.profilepic }
+              alt="Profile"
+              className="w-32 h-32 rounded-full object-cover shadow-md border-4 border-purple-500"
+            />
+      )}
             <div className="text-left">
               <h2 className="text-4xl font-extrabold text-purple-700">
                 Email:
