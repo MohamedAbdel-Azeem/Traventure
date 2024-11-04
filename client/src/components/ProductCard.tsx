@@ -15,12 +15,13 @@ import ClipLoader from "react-spinners/ClipLoader";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import { ToggleArchive } from "../custom_hooks/products/useToggleArchive";
-
+import { Feedback } from "./purchases/FeedBack";
 interface ProductCardProps {
   product: ACTUALProduct;
   productId: string;
   type: string;
 }
+
 const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
   const currentuser = useLocation().pathname.split("/")[2];
   const [showPopup, setShowPopup] = useState(false);
@@ -33,7 +34,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
   const togglePopup = () => {
     setShowPopup((prev) => !prev);
   };
-
+  const getUserFeedback = (product: any, username: string) => {
+    const feedback = product.feedback.find(
+      (fb: { touristUsername: string }) => fb.touristUsername === currentuser
+    );
+    return (
+      feedback || {
+        touristId: null,
+        rating: null,
+        review: null,
+        touristUsername: null,
+      }
+    );
+  };
   const currentImageUrl = currentProduct.imageUrl;
   useEffect(() => {
     const fetchImage = async (url: string) => {
@@ -154,6 +167,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
         <p className="product-description">
           {getTruncatedDescription(currentProduct.description)}
         </p>
+        <Feedback
+          touristFeedback={getUserFeedback(currentProduct, currentuser)}
+          type="product"
+          id={currentProduct._id}
+          touristUsername={currentuser}
+        />
         <div className="flex flex-row justify-between items-center">
           <span className="product-price">${currentProduct.price}</span>
           <Rating

@@ -14,6 +14,7 @@ import {
   productUpdateValidator,
 } from "../utils/express-validator/productValidator";
 import { IFeedback } from "../Model/Schemas/Product";
+import Tourist from "../Model/Schemas/Tourist";
 
 const router = Router();
 
@@ -78,15 +79,20 @@ router.patch("/archive/:id", async (req: Request, res: Response) => {
 });
 
 router.patch("/feedback/:productId", async (req: Request, res: Response) => {
-  const { rating, review, touristId } = req.body;
+  const { rating, review, touristUsername } = req.body;
+  console.log(touristUsername);
+  try {
+    const tourist= await Tourist.findOne({ username: touristUsername }); 
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    const touristId = tourist._id;
   const productId = req.params.productId;
   const feedback = {
     rating,
     review,
     touristId,
   } as IFeedback;
-
-  try {
     const product = await addFeedback(productId, feedback);
     if (product) {
       res.status(200).send(product);
@@ -94,6 +100,7 @@ router.patch("/feedback/:productId", async (req: Request, res: Response) => {
       res.status(404).send("Product not found");
     }
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 });

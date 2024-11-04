@@ -95,6 +95,7 @@ export async function decrementProductQuantity(
 export async function addFeedback(ObjectId: string, feedback: IFeedback) {
   try {
     const product = await productModel.findById(ObjectId);
+    console.log(feedback);
     if (product) {
       const feedbackIndex = product.feedback.findIndex(
         (f) => f.touristId.toString() === feedback.touristId.toString()
@@ -104,11 +105,11 @@ export async function addFeedback(ObjectId: string, feedback: IFeedback) {
           ...product.feedback[feedbackIndex],
           touristId: feedback.touristId,
           rating:
-            feedback.rating !== undefined
+            feedback.rating !== undefined && feedback.rating !== null
               ? feedback.rating
               : product.feedback[feedbackIndex].rating,
           review:
-            feedback.review !== undefined
+            feedback.review !== undefined  && feedback.review !== null
               ? feedback.review
               : product.feedback[feedbackIndex].review,
         };
