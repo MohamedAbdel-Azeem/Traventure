@@ -3,7 +3,7 @@ import { changePassword } from "../Model/Queries/user_queries";
 
 const router = Router();
 
-router.patch("/", async (req: Request, res: Response) => {
+router.patch("changePassword", async (req: Request, res: Response) => {
   try {
     const user = await changePassword(req.body.username, req.body.oldPassword, req.body.newPassword);
     if (!user) res.status(404).send("user not found");
