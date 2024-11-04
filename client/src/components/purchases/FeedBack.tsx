@@ -33,6 +33,7 @@ export const Feedback: React.FC<FeedbackProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false); // Loading state
+  const [error, setError] = useState<string | null>(null); // Error state for validation
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [value, setValue] = useState<number | null>(touristFeedback.rating);
@@ -46,13 +47,18 @@ export const Feedback: React.FC<FeedbackProps> = ({
 
   const handleSendFeedback = async () => {
     if (type === "product") {
+      if (value === null) {
+        setError("Rating is required");
+        return;
+      }
       setLoading(true); // Set loading to true when submission starts
       try {
         const response = await useAddFeedbackProduct(
           id,
-          { rating: value ? value : 0, review: feedback },
+          { rating: value, review: feedback },
           touristUsername
         );
+        handleClose(); // Close the modal first
         if (response && response.status === 200) {
           Swal.fire(
             "Feedback submitted",
@@ -64,9 +70,9 @@ export const Feedback: React.FC<FeedbackProps> = ({
         }
       } catch (error) {
         console.error(error);
+        Swal.fire("Feedback not submitted", "Please try again", "error");
       } finally {
         setLoading(false); // Set loading to false when submission is complete
-        handleClose();
       }
     }
   };
@@ -82,9 +88,13 @@ export const Feedback: React.FC<FeedbackProps> = ({
             transform: "translate(-50%, -50%)",
             width: 400,
             bgcolor: "background.paper",
-            border: "2px solid #000",
+            borderRadius: 2,
             boxShadow: 24,
             p: 4,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 2,
           }}
         >
           <Rating
@@ -92,16 +102,24 @@ export const Feedback: React.FC<FeedbackProps> = ({
             value={value}
             onChange={(event, newValue) => {
               setValue(newValue);
+              setError(null); // Clear error when rating is set
             }}
           />
-          <TextField
-            label="Write your feedback here "
-            multiline
-            rows={4}
-            fullWidth
-            value={feedback}
-            onChange={handleFeedbackChange}
-          />
+          {error && (
+            <Typography color="error" variant="body2">
+              {error}
+            </Typography>
+          )}
+          {value !== null && (
+            <TextField
+              label="Write your feedback here "
+              multiline
+              rows={4}
+              fullWidth
+              value={feedback}
+              onChange={handleFeedbackChange}
+            />
+          )}
           <Button
             variant="contained"
             color="primary"
