@@ -43,12 +43,12 @@ import { uploadFileToStorage } from "../firebase/firebase_storage";
     const fetchData = async () => {
       if (role === null) return;
       if (body === null) return;
+      setLoading(true);
       const url = `/traventure/api/${role}/add`;
       if(role !== "tourist") {
       const {documents} = body as any;
       const firebaseurl = await uploadFileToStorage(documents);
       (body as any).documents = firebaseurl;
-      setLoading(true);
       setError(null);
       }
 

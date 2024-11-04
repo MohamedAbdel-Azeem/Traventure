@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 
-import { getAllPendingUsers, acceptUser } from "../Model/Queries/user_queries";
+import { getAllPendingUsers, acceptUser } from "../Model/Queries/admin_queries";
 
 const router = Router();
 
