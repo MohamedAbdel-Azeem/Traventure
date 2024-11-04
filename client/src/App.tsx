@@ -32,6 +32,7 @@ import GuestMoreActivities from "./components/GuestMoreActivities";
 import GuestShop from "./components/GuestShop";
 import HistoricalTags from "./components/HistoricalTags";
 import Complaints from "./components/Admin/Complaints";
+import Bookings from "./components/Bookings";
 import TouristComplaints from "./components/TouristComplaints";
 import ImprovedCreateItinerary from "./components/ImprovedCreateItinerary";
 import { SalesPage } from "./pages/SalesPage";
@@ -90,6 +91,7 @@ function App() {
           <Route path="/guest/more-activities" element={<GuestMoreActivities/>}/>  
           <Route path="/guest/shop" element={<GuestShop type={"Tourist"}/>}/>
           <Route path="/seller/sales/:username" element={<SalesPage />} />
+        <Route path="/tourist/:username/bookings" element={<Bookings />} />
         </Routes>
       </Router>
     </MantineProvider>

@@ -1,26 +1,14 @@
-import React, { useState } from "react";
-import TheMAP from "./TheMAP";
-import {
-  Box,
-  Checkbox,
-  FormControl,
-  ListItemText,
-  MenuItem,
-  Modal,
-  Rating,
-  Select,
-  SelectChangeEvent,
-  TextField,
-} from "@mui/material";
-import {
-  useGetAllCategories,
-  useGetAllCategoriesD,
-  useGetAllTags,
-} from "../custom_hooks/categoryandTagCRUD";
-import { updateActivity } from "../custom_hooks/activities/updateActivity";
-import { useLocation } from "react-router-dom";
+
+import React, { useState } from 'react';
+import TheMAP from './TheMAP';
+import { Box, Checkbox, FormControl, ListItemText, MenuItem, Modal, Rating, Select, SelectChangeEvent, TextField } from '@mui/material';
+import { useGetAllCategories, useGetAllCategoriesD, useGetAllTags } from '../custom_hooks/categoryandTagCRUD';
+import useBookActivity from '../custom_hooks/activities/bookActivity';
+import { updateActivity } from '../custom_hooks/activities/updateActivity';
+import { useParams , useLocation } from 'react-router-dom';
 import axios from "axios";
 import { set } from "date-fns";
+
 type Activity = {
   _id: string;
   Title: string;
@@ -43,29 +31,36 @@ type Activity = {
   inappropriate: boolean;
 };
 interface ActivityProp {
-  activity: Activity;
-  onDelete: (_id: string) => void;
+    activity: Activity;
+    onDelete: (_id: string) => void;
 }
 
 type CatStructure = {
-  _id: string;
-  name: string;
-  __v: number;
-};
+    _id: string;
+    name: string;
+    __v: number;
+  }
+  
 
-export const ActivityCardTourist: React.FC<ActivityProp> = ({
-  activity
-}) => {
-  const currentuser = useLocation().pathname.split("/")[2];
-  const currenttype = useLocation().pathname.split("/")[1];
-  const [currentActivity, setCurrentActivity] = useState<Activity>(activity);
-  const [newTitle, setNewTitle] = useState(currentActivity.Title);
-  const [newDate, setNewDate] = useState(new Date(currentActivity.DateAndTime));
-  const [newBIO, setNewBIO] = useState(currentActivity.BookingIsOpen);
-  const [inappropriate, setInappropriate] = useState(
+
+export const ActivityCardTourist: React.FC<ActivityProp> = ({activity, onDelete }) => {
+    const currentuser = useLocation().pathname.split('/')[2];
+    const currenttype = useLocation().pathname.split('/')[1];
+    const [isEditing, setIsEditing] = useState(false);
+    const [currentActivity, setCurrentActivity] = useState<Activity>(activity);
+    const [newTitle, setNewTitle] = useState(currentActivity.Title);
+    const [newDate, setNewDate] = useState(new Date(currentActivity.DateAndTime));
+    const [newLatitude, setNewLatitude] = useState(currentActivity.Location.latitude);
+    const [newLongitude, setNewLongitude] = useState(currentActivity.Location.longitude);
+    const [newPrice, setNewPrice] = useState(currentActivity.Price);
+    const [newSpecialDiscount, setNewSpecialDiscount] = useState(currentActivity.SpecialDiscount);
+    const [newBIO, setNewBIO] = useState(currentActivity.BookingIsOpen);
+    const [mopen, setmOpen] = useState(false);
+    const {username}=useParams<{username:string}>();
+    const { bookActivity, data, loading, error } = useBookActivity();
+ const [inappropriate, setInappropriate] = useState(
     currentActivity.inappropriate
   );
-  const [mopen, setmOpen] = useState(false);
 
   const handleInappropriate = async () => {
     try {
@@ -116,11 +111,56 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
   };
   const alltags = handleTagsText;
 
-  const {
+  
+   const handleSave = async () => {
+        const updatedActivity = {
+            _id: currentActivity._id,
+            Title: newTitle,
+            DateAndTime: newDate,  
+            Location: {
+            latitude: newLatitude,
+            longitude: newLongitude,
+        },
+            Price: newPrice,
+            SpecialDiscount: newSpecialDiscount,
+            Tags: selectedTags,
+            Category: selectedCat,
+            BookingIsOpen: newBIO, 
+            added_By: currentActivity.added_By 
+        };
+        try {
+        await updateActivity(currentActivity._id,updatedActivity);
+        setIsEditing(false);
+        } catch (error) {
+            console.error("Error updating activity:", error);
+        }
+    };
+  
+  const handleBooking = async (activity_id:string) => {
+        try{
+        await bookActivity(activity_id,username);
+        }
+        catch(error){
+            console.error("Error booking activity:", error);
+        }
+    }
+  
+  const handleEditClick = () => {
+        setIsEditing(!isEditing);
+        if(isEditing)
+            {handleSave();}
+    };
+  
+  const handleDateChange = (e) => {
+        setNewDate(new Date(e.target.value));
+    };
+  
+    const {
     loading: CatLoading,
     error: CatError,
     data: CatOptions,
   } = useGetAllCategoriesD();
+  
   const [selectedCat, setSelectedCat] = useState<string>(activity.Category._id);
   const handleCatChange = (event: SelectChangeEvent<string>) => {
     const {
@@ -128,10 +168,8 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
     } = event;
     setSelectedCat(value);
   };
+  
 
-  const handleDateChange = (e) => {
-    setNewDate(new Date(e.target.value));
-  };
 
   const formatDate = (date) => {
     const pad = (n) => (n < 10 ? "0" + n : n);
@@ -167,12 +205,23 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
           <div>{alltags(selectedTags)}</div>
         </Box>
       </Modal>
+
       <div className="rounded-[19px]">
         <div className="w-[400px] h-[475px] bg-[#25b396] rounded-[19px] relative">
           <div className="w-[400px] h-[69px] rounded-t-[19px]">
             <div className="absolute text-center top-0 left-0 w-[71px] h-[30px] rounded-tl-[19px] bg-[#FF0000] border-black border-[1px] rounded-br-[19px]">
               {newBIO ? "Open" : "Closed"}
-            </div>
+              </div>
+                 {currenttype === "tourist" && currentActivity.BookingIsOpen && (
+                <div className=" flex justify-end items-center py-2 px-5">
+                    <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ml-2"
+                    onClick={() => handleBooking(currentActivity._id)}
+                    >
+                    Book
+                    </button>
+                </div>
+                )}
             {currenttype === "admin" && (
               <div className="absolute text-center top-0 right-0 w-[171px] h-[30px] rounded-tl-[19px] bg-[#FF0000] border-black border-[1px] rounded-br-[19px]">
                 <select
@@ -187,7 +236,6 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
                 </select>
               </div>
             )}
-            <div className="absolute top-[60px] right-[10px]">flag</div>
           </div>
           <Rating
             disabled

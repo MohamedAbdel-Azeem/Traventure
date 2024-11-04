@@ -89,7 +89,7 @@ export async function toggleItineraryActivation(itinerary_Id: string) {
      
 
     const { bookingActivated = false, booked_By = [] } = itinerary;
-    if(booked_By.length == 0) return itinerary;
+    if(booked_By.length == 0 && bookingActivated) return itinerary;
     const newBookingActivated = !bookingActivated;
 
     const updatedItinerary = await Itinerary.findByIdAndUpdate(

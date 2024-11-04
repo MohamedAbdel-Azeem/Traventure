@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {rateItinerary,rateTourGuide,isUserBookedInItineraryOFtourGuide} from "../Model/Queries/feedback_queries";
+import {rateItinerary,rateTourGuide,isUserBookedInItineraryOFtourGuide,rateActivity} from "../Model/Queries/feedback_queries";
 const router = Router();
 
 router.post("/rateItinerary/:itineraryId", async (req, res) => { 
@@ -17,6 +17,17 @@ router.post("/rateTourGuide/:tourGuideUserId", async (req, res) => {
     const feedback = req.body;
     try {
         await rateTourGuide(tourGuideUserId, feedback);
+        res.status(201).send("Feedback added successfully");
+    } catch (error) {
+        res.status(500).send("error adding feedback: "+error);
+    }
+});
+
+router.post("/rateActivity/:ActivityId", async (req, res) => {
+    const { ActivityId } = req.params;
+    const feedback = req.body;
+    try {
+        await rateActivity(ActivityId, feedback);
         res.status(201).send("Feedback added successfully");
     } catch (error) {
         res.status(500).send("error adding feedback: "+error);

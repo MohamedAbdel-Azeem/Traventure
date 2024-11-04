@@ -275,6 +275,7 @@ const MoreActivities: React.FC = () => {
                                 <ActivityCardTourist
                                     key={activity._id}
                                     activity={activity}
+                                    type="Tourist"
                                     onDelete={(_id) => {
                                         console.log(`Delete activity with id: ${_id}`);
                                     }}
