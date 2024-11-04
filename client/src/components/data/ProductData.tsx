@@ -8,9 +8,10 @@ export interface ACTUALProduct {
   imageUrl: string;
   quantity: number;
   feedback: {
-    name: string;
+    touristId: string;
     rating: string;
     review: string;
+    touristUsername?: string;
   }[];
   isArchived: boolean;
 }
