@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import emailjs from "emailjs-com";
+
 import { useState } from "react";
 import {
   Table,
@@ -35,6 +37,29 @@ interface Applicant {
 function Row(props: { row: Applicant; onDelete: (username: string) => void; accounttype:string }) {
   const { row, onDelete, accounttype } = props;
 
+  function sendAcceptance() {
+    emailjs.send(
+      "service_ee1ryzf",
+      "template_jmemw38",
+      {
+        from_name: row.username,
+        to_email: row.email,
+      },
+      "UdOl1mlaGbsuxfXrd"
+    );
+  }
+  function sendRejection() {
+    emailjs.send(
+      "service_ee1ryzf",
+      "template_ffg6p8r",
+      {
+        from_name: row.username,
+        to_email: row.email,
+      },
+      "UdOl1mlaGbsuxfXrd"
+    );
+  }
+
   return (
     <React.Fragment>
       <StyledTableRow sx={{ "& > *": { borderBottom: "unset" } }}>
@@ -67,6 +92,7 @@ function Row(props: { row: Applicant; onDelete: (username: string) => void; acco
               className="acceptBtn ml-auto mr-8"
               onClick={() => (
                 updateuserstatus(row.username, accounttype, true),
+                sendAcceptance(),
                 onDelete(row.username)
               )}
             >
@@ -98,6 +124,7 @@ function Row(props: { row: Applicant; onDelete: (username: string) => void; acco
               className="rejectBtn mr-auto ml-8"
               onClick={() => (
                 updateuserstatus(row.username, accounttype, false),
+                sendRejection(),
                 onDelete(row.username)
               )}
             >
@@ -143,6 +170,15 @@ export const ApplicantTable = ({ type }: ApplicantTableProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+
+
+
+
+
+
+
+
 
   const { pendingdata, pendingerror, pendingloading } = GetAllPendingUsers();
   useEffect(() => {
@@ -257,12 +293,12 @@ export const ApplicantTable = ({ type }: ApplicantTableProps) => {
             </TableHead>
             <TableBody>
               {paginatedRows?.map((row) => (
-                <Row
-                  key={row.username}
-                  row={row}
-                  onDelete={handleDelete}
-                  accounttype={type}
-                />
+                  <Row
+                    key={row.username}
+                    row={row}
+                    onDelete={handleDelete}
+                    accounttype={type}
+                  />
               ))}
             </TableBody>
           </Table>
