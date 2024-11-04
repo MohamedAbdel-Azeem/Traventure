@@ -34,6 +34,7 @@ import EditItineraryModal from "./EditItineraryModal";
 import IActivityInItinerary from "../custom_hooks/activities/activity_in_itinary";
 import { useUpdateItinerary } from "../custom_hooks/itineraries/useUpdateItinerary";
 import { set } from "date-fns";
+import IItinerary from "../../../server/Interfaces/Itinerary";
 
 interface TagStructure {
   _id: string;
@@ -41,56 +42,28 @@ interface TagStructure {
   __v: number;
 }
 
-interface Itinerary {
-  _id: string;
-  main_Picture?: string;
-  title: string;
-  description: string;
-  added_By: string;
-  price: number;
-  starting_Date: string;
-  ending_Date: string;
-  rating: number;
-  total: number;
-  language: string;
-  selectedTags?: TagStructure[];
-  pickup_location: string;
-  dropoff_location: string;
-  plan: {
-    place: Place;
-    activities: IActivity[];
-  }[];
-  booked_By: {
-    user_id?: TouristProfileData;
-  }[];
-  accesibility: boolean;
-  onDelete: (id: string) => void;
-}
+
 
 const ItineraryDetails: React.FC = () => {
   // console.log("this is where the error is id",id);
   const navigate = useNavigate();
 
   const location = useLocation();
-  const initialItinerary = location.state as Itinerary;
+  const initialItinerary = location.state as IItinerary;
   const id = location.state._id as string;
   // const id=location.pathname.split(`/`)[2];
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
   const [itinerary, setItinerary] = useState(initialItinerary);
-  // console.log("this is where the error is id",id);
   const [isEditing, setIsEditing] = useState(false);
-  // const [id,setId]= useState<string>(itinerary._id);
   console.log("this is where the error is id", id);
-  //Not to reflect in the displayed itinerary until saved
   const deepCopy = (obj: any) => {
-    return JSON.parse(JSON.stringify(obj)) as Itinerary;
+    return JSON.parse(JSON.stringify(obj)) as IItinerary;
   };
 
   const [editedItinerary, setEditedItinerary] = useState(deepCopy(itinerary));
   const [newTag, setNewTag] = useState("");
   const timeUnits: string[] = ["sec", "hours", "days", "month", "years", "min"];
-  const [plans, setPlans] = React.useState<Itinerary["plan"]>(itinerary.plan);
-  //to be able to put in database
+  const [plans, setPlans] = React.useState<IItinerary["plan"]>(itinerary.plan);
   const transformActivity = (activity: IActivity): IActivityInItinerary => {
     return {
       activity_id: activity.activity_id,
@@ -460,11 +433,23 @@ const ItineraryDetails: React.FC = () => {
           <Box className="flex justify-between mb-4 text-gray-600">
             <Typography variant="body1" className="flex items-center">
               <span className="mr-2 font-semibold">Pickup Location:</span>{" "}
-              {itinerary.pickup_location}
+              <iframe
+                title="map"
+                className="rounded-b-[19px]"
+                src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${itinerary.pickup_location.longitude}!3d${itinerary.pickup_location.latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
+                width="400px"
+                height="166px"
+              ></iframe>
             </Typography>
             <Typography variant="body1" className="flex items-center">
               <span className="mr-2 font-semibold">Dropoff Location:</span>{" "}
-              {itinerary.dropoff_location}
+              <iframe
+                title="map"
+                className="rounded-b-[19px]"
+                src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${itinerary.dropoff_location.longitude}!3d${itinerary.dropoff_location.latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
+                width="400px"
+                height="166px"
+              ></iframe>
             </Typography>
           </Box>
 
