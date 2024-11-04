@@ -87,11 +87,12 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
   return (
     <Box sx={{ display: 'flex' }} className={className}>
       <CssBaseline />
-      <AppBar position="fixed" sx={{ width: '100%', height: drawerHeight, backgroundColor: '#1976d2' }}>
+      <AppBar position="fixed" sx={{ width: '100%', height: drawerHeight, backgroundColor: '#e8e4ec' }}>
         <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Navbar
-          </Typography>
+        <img 
+        src="/src/assets/logocolored.png" 
+        alt="Navbar Logo" 
+        style={{ height: '100%', width: 'auto', maxHeight: '35%', maxWidth: '30%', marginRight: '30%' }}/>
           <List sx={{ display: 'flex', flexDirection: 'row' }}>
             {whichoptions.map((item) => (
               <ListItem
