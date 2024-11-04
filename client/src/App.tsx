@@ -46,8 +46,6 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<SignIn/>}/>
-          <Route path="/email" element={<FormExample/>}/>
-          <Route path="/test" element={<PDFSolution pdftoview="example.pdf"/>}/>
           <Route path="/register" element={<Register/>}/>
           {/* Admin */}
           <Route path="/admin/:username" element={<AdminPage/>}/>

@@ -37,6 +37,29 @@ interface Applicant {
 function Row(props: { row: Applicant; onDelete: (username: string) => void; accounttype:string }) {
   const { row, onDelete, accounttype } = props;
 
+  function sendAcceptance() {
+    emailjs.send(
+      "service_ee1ryzf",
+      "template_jmemw38",
+      {
+        from_name: row.username,
+        to_email: row.email,
+      },
+      "UdOl1mlaGbsuxfXrd"
+    );
+  }
+  function sendRejection() {
+    emailjs.send(
+      "service_ee1ryzf",
+      "template_ffg6p8r",
+      {
+        from_name: row.username,
+        to_email: row.email,
+      },
+      "UdOl1mlaGbsuxfXrd"
+    );
+  }
+
   return (
     <React.Fragment>
       <StyledTableRow sx={{ "& > *": { borderBottom: "unset" } }}>
@@ -69,6 +92,7 @@ function Row(props: { row: Applicant; onDelete: (username: string) => void; acco
               className="acceptBtn ml-auto mr-8"
               onClick={() => (
                 updateuserstatus(row.username, accounttype, true),
+                sendAcceptance(),
                 onDelete(row.username)
               )}
             >
@@ -100,6 +124,7 @@ function Row(props: { row: Applicant; onDelete: (username: string) => void; acco
               className="rejectBtn mr-auto ml-8"
               onClick={() => (
                 updateuserstatus(row.username, accounttype, false),
+                sendRejection(),
                 onDelete(row.username)
               )}
             >
@@ -147,32 +172,6 @@ export const ApplicantTable = ({ type }: ApplicantTableProps) => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
 
-
-
-
- function sendAcceptance(e) {
-   e.preventDefault();
-   emailjs.sendForm(
-     "service_ee1ryzf",
-     "template_jmemw38",
-     e.target,
-     "UdOl1mlaGbsuxfXrd"
-   );
- }
- function sendRejection(e) {
-   e.preventDefault();
-
-   emailjs.sendForm(
-     "service_ee1ryzf",
-     "template_ffg6p8r",
-     e.target,
-     "UdOl1mlaGbsuxfXrd"
-   );
- }
- function sendEmail(e) {
-   e.preventDefault();
-   console.log(e.target);
- }
 
 
 
@@ -294,19 +293,12 @@ export const ApplicantTable = ({ type }: ApplicantTableProps) => {
             </TableHead>
             <TableBody>
               {paginatedRows?.map((row) => (
-                <>
                   <Row
                     key={row.username}
                     row={row}
                     onDelete={handleDelete}
                     accounttype={type}
                   />
-                  <form className="contact-form" onSubmit={sendEmail}>
-                    <input type="text" name="from_name" value={row.username} />
-                    <input type="email" name="to_email" value={row.email}/>
-                    <input type="submit" value="Send" />
-                  </form>
-                </>
               ))}
             </TableBody>
           </Table>
