@@ -38,6 +38,7 @@ import ImprovedCreateItinerary from "./components/ImprovedCreateItinerary";
 import { SalesPage } from "./pages/SalesPage";
 import PDFSolution from "./firebase/PDFSolution";
 import Applications from "./components/Admin/Applications";
+import FormExample from "./components/Admin/FormExample";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<SignIn/>}/>
+          <Route path="/email" element={<FormExample/>}/>
           <Route path="/test" element={<PDFSolution pdftoview="example.pdf"/>}/>
           <Route path="/register" element={<Register/>}/>
           {/* Admin */}

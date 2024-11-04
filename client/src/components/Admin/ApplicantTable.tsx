@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import emailjs from "emailjs-com";
+
 import { useState } from "react";
 import {
   Table,
@@ -144,6 +146,41 @@ export const ApplicantTable = ({ type }: ApplicantTableProps) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+
+
+
+
+ function sendAcceptance(e) {
+   e.preventDefault();
+   emailjs.sendForm(
+     "service_ee1ryzf",
+     "template_jmemw38",
+     e.target,
+     "UdOl1mlaGbsuxfXrd"
+   );
+ }
+ function sendRejection(e) {
+   e.preventDefault();
+
+   emailjs.sendForm(
+     "service_ee1ryzf",
+     "template_ffg6p8r",
+     e.target,
+     "UdOl1mlaGbsuxfXrd"
+   );
+ }
+ function sendEmail(e) {
+   e.preventDefault();
+   console.log(e.target);
+ }
+
+
+
+
+
+
+
+
   const { pendingdata, pendingerror, pendingloading } = GetAllPendingUsers();
   useEffect(() => {
     if (!pendingerror && !pendingloading) {
@@ -257,12 +294,19 @@ export const ApplicantTable = ({ type }: ApplicantTableProps) => {
             </TableHead>
             <TableBody>
               {paginatedRows?.map((row) => (
-                <Row
-                  key={row.username}
-                  row={row}
-                  onDelete={handleDelete}
-                  accounttype={type}
-                />
+                <>
+                  <Row
+                    key={row.username}
+                    row={row}
+                    onDelete={handleDelete}
+                    accounttype={type}
+                  />
+                  <form className="contact-form" onSubmit={sendEmail}>
+                    <input type="text" name="from_name" value={row.username} />
+                    <input type="email" name="to_email" value={row.email}/>
+                    <input type="submit" value="Send" />
+                  </form>
+                </>
               ))}
             </TableBody>
           </Table>
