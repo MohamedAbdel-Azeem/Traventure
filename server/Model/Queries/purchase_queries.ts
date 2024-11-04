@@ -1,6 +1,6 @@
 import path from "path";
 import purchase from "../../Model/Schemas/purchase";
-import { model } from "mongoose";
+import mongoose, { model } from "mongoose";
 
 export async function addPurchase(purchaseData: object) {
   try {
@@ -18,7 +18,9 @@ export async function getTouristPurchases(touristId: string) {
   }
 }
 
-export async function getSellerSales(sellerId: string) {
+export async function getSellerSales(
+  sellerId: string | mongoose.Types.ObjectId
+) {
   try {
     return await purchase
       .find()

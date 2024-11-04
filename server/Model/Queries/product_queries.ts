@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import productModel from "../Schemas/Product";
 
 export async function addProduct(product: Object) {
@@ -18,7 +19,7 @@ export async function getProducts() {
   }
 }
 
-export async function getProduct(ObjectId: string) {
+export async function getProduct(ObjectId: string | mongoose.Types.ObjectId) {
   try {
     const product = await productModel.findById(ObjectId);
     return product;
@@ -51,7 +52,7 @@ export async function toggleProductArchive(ObjectId: string) {
 }
 
 export async function decrementProductQuantity(
-  ObjectId: string,
+  ObjectId: string | mongoose.Types.ObjectId,
   quantity: number
 ) {
   try {

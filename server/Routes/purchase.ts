@@ -13,23 +13,31 @@ const router = Router();
 
 router.post("/buy", async (req: Request, res: Response) => {
   try {
-    const { productId, quantity, touristId } = req.body;
-    const now = new Date();
-    const purchaseData = {
-      productId,
-      quantity,
-      touristId,
-      timeStamp: now,
-    };
-    const product = await getProduct(productId);
-    if (product && product?.quantity - quantity < 0) {
-      res.status(400).send("Quantity not available");
+    const { touristId, cart } = req.body;
+
+    for (const singleProduct of cart) {
+      const product = await getProduct(singleProduct.productId);
+      if (!product) {
+        return res.status(400).send("Product not found");
+      }
+      if (product.quantity - singleProduct.quantity < 0) {
+        return res
+          .status(400)
+          .send("Product out of stock or not enough quantity");
+      }
     }
-    const purchase = await addPurchase(purchaseData);
-    await decrementProductQuantity(productId, quantity);
-    res.status(200).send(purchase);
+
+    for (const singleProduct of cart) {
+      await decrementProductQuantity(
+        singleProduct.productId,
+        singleProduct.quantity
+      );
+    }
+
+    const purchase = await addPurchase({ touristId, cart });
+    return res.status(200).send(purchase);
   } catch (error) {
-    res.status(500).send(error);
+    return res.status(500).send(error);
   }
 });
 
@@ -43,14 +51,16 @@ router.get("/tourist/:touristId", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/seller/:sellerId", async (req: Request, res: Response) => {
+router.get("/seller", async (req: Request, res: Response) => {
   try {
-    const sellerId = req.params.sellerId;
-    const purchases = await getSellerSales(sellerId);
-    res.status(200).send(purchases);
+    const { externalSeller, sellerId } = req.query;
+
+    if ((!externalSeller && !sellerId) || (externalSeller && sellerId)) {
+      return res.status(404).send("Invalid query parameters");
+    }
+
   } catch (error) {
-    console.log(error);
-    res.status(500).send(error);
+    return res.status(500).send(error);
   }
 });
 
