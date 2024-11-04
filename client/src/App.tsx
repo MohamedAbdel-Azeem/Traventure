@@ -84,7 +84,7 @@ function App() {
           <Route path="/tourguideprofile/:username" element={<TourGuide_Profile/>}/>
           <Route path="/advertiserprofile/:username" element={<Advertiser_Profile/>}/>
           <Route path="/itinerary/:id" element={<ItineraryDetails/>}/>
-          <Route path="/tourist-itinerary/:username" element={<ItineraryDetailsTourist/>}/>
+          <Route path="/tourist-itinerary/:id" element={<ItineraryDetailsTourist/>}/>
           <Route path="/more-itineraries" element={<MoreItineraries/>}/>
           <Route path="/tourist/:id/activities" element={<MoreActivities/>}/>
           {/* Guest */}
