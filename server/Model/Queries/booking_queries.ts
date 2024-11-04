@@ -41,6 +41,10 @@ export async function getBookingsByTourist(username: string) {
             model: 'PreferenceTags' 
           },
           {
+            path: 'added_By',
+            model: 'TourGuide' 
+          },
+          {
             path: 'plan.place',
             model: 'Place' 
           },
@@ -174,6 +178,7 @@ export async function cancelBooking(booking_id:string) {
       throw new Error("Booking not found");
     }
   } catch (error) {
+    console.log(error);
     throw error;
   }
 }
