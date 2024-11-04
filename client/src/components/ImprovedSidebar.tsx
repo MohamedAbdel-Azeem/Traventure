@@ -87,7 +87,9 @@ const adminsidebaritems =
   { text: 'Locations', icon: <LocationOnIcon />, path: `/admin/${currentuser}/locations` },
   { text: 'Account Management', icon: <AccountCircleIcon />, path: `/admin/${currentuser}/users` },
   { text: 'Cats & Tags', icon: <CategoryIcon />, path: `/admin/${currentuser}/categoriesandtags` },
-  { text: 'Complaints', icon: <HowToVoteIcon />, path: `/admin/${currentuser}/complaints` }
+  { text: 'Complaints', icon: <HowToVoteIcon />, path: `/admin/${currentuser}/complaints` },
+  { text: 'Applications', icon: <HowToVoteIcon />, path: `/admin/${currentuser}/applications` },
+
 ];
 const TGsidebaritems =
 [

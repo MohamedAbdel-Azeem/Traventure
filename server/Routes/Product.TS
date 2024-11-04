@@ -6,15 +6,15 @@ import {
   getProduct,
   updateProduct,
   toggleProductArchive,
-  decrementProductQuantity,
+  addFeedback,
 } from "../Model/Queries/product_queries";
 import { addPurchase } from "../Model/Queries/purchase_queries";
 import {
   productAddValidator,
   productUpdateValidator,
 } from "../utils/express-validator/productValidator";
-import { get } from "http";
-import { json } from "stream/consumers";
+import { IFeedback } from "../Model/Schemas/Product";
+import Tourist from "../Model/Schemas/Tourist";
 
 const router = Router();
 
@@ -78,6 +78,31 @@ router.patch("/archive/:id", async (req: Request, res: Response) => {
   }
 });
 
-
+router.patch("/feedback/:productId", async (req: Request, res: Response) => {
+  const { rating, review, touristUsername } = req.body;
+  console.log(touristUsername);
+  try {
+    const tourist= await Tourist.findOne({ username: touristUsername }); 
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    const touristId = tourist._id;
+  const productId = req.params.productId;
+  const feedback = {
+    rating,
+    review,
+    touristId,
+  } as IFeedback;
+    const product = await addFeedback(productId, feedback);
+    if (product) {
+      res.status(200).send(product);
+    } else {
+      res.status(404).send("Product not found");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
 
 export default router;

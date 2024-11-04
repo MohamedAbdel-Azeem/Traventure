@@ -4,10 +4,12 @@ import { useForm, Controller, set } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TouristProfileData } from "./tourist_profile_data";
-import { usePatchUserProfile } from "../../../custom_hooks/updateTouristProfile";
 import ChangePasswordModal, { AddContactLeadFormType } from "../../../components/ChangePasswordModal";
 import { ChangePassword, editpassword } from "../../../custom_hooks/changepassowrd";
 import Swal from "sweetalert2";
+import ProfilePictureEdit from "../../../components/ProfilePictureEdit";
+import { uploadFileToStorage } from "../../../firebase/firebase_storage";
+import { patchUserProfile } from "../../../custom_hooks/updateTouristProfile";
 
 
 
@@ -71,10 +73,9 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
   const [currentTourist, setCurrentTourist] = useState(tourist);
-  const [apiBody, setApiBody] = useState({});
-  const [apiUsername, setApiUsername] = useState("");
-  const response = usePatchUserProfile(apiBody, apiUsername);
+  const [update, setUpdate] = useState(false);
   const [isPasswordModalOpen,setPasswordModalOpen]=useState(false);
+  const [profilePicture, setProfilePicture] = useState<File | null>(null);
   // const [apiBodypass, setApiBodyPass]= useState("");
   // const [apiBodynewpass, setApiBodynewPass]= useState("");
   //  tourist = usePatchUserProfile(tourist, tourist.username).response as TouristProfileData;
@@ -98,14 +99,27 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
   });
 
   // Handle form submission (save edited data)
-  const onSubmit = (data: TouristProfileData) => {
-
-    console.log("Saved data:", data);
-    setIsEditing(false);
-    setApiBody(data);
-    setApiUsername(data.username);
-
-    setCurrentTourist(data);
+  const onSubmit = async (data: TouristProfileData) => {
+    data.profilepic = currentTourist.profilepic;
+    setUpdate(true);
+    if(profilePicture) {
+      const firebaseurl = await uploadFileToStorage(profilePicture);
+      console.log("Firebase URL:", firebaseurl);
+      data.profilepic = firebaseurl;
+    }
+    const response = await patchUserProfile(data, currentTourist.username);
+    if (response !== "Error updating user profile") {
+      setCurrentTourist(response);
+      setProfilePicture(null);
+      setIsEditing(false);
+    } else {
+      Swal.fire({
+        title: "Error",
+        text: response,
+        icon: "error",
+      });
+    }
+    setUpdate(false);
   };
 
   const toggleEdit = () => {
@@ -147,8 +161,6 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
 };
 
 const [walletBalance, setWalletBalance] = useState(currentTourist.wallet);
-
-
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-gray-900"
@@ -164,11 +176,18 @@ const [walletBalance, setWalletBalance] = useState(currentTourist.wallet);
       <div className="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl p-8 backdrop-blur-lg bg-opacity-90">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex items-center space-x-6">
-            <img
-              src={currentTourist.profilePicture}
+          {(isEditing ) ? (
+      <ProfilePictureEdit
+        profilePicture={profilePicture}
+        onChange={setProfilePicture} // Directly pass setProfilePicture
+        isEditing={isEditing} // Controls the edit overlay visibility
+      />) : (
+        <img
+              src={currentTourist.profilepic }
               alt="Profile"
               className="w-32 h-32 rounded-full object-cover shadow-md border-4 border-purple-500"
             />
+      )}
             <div className="text-left">
               {isEditing ? (
                 <Controller
@@ -340,7 +359,30 @@ const [walletBalance, setWalletBalance] = useState(currentTourist.wallet);
                   type="submit"
                   className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-700 transition duration-200"
                 >
-                  Save
+                   {update ? (
+                  <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                  </svg>
+                ) : (
+                  "Save"
+                )}
                 </button>
                 <button
                   onClick={toggleEdit}

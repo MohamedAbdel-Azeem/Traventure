@@ -412,9 +412,21 @@ const Register: React.FC = () => {
                 </div>
 
                 <div className="my-6">
-                  <label className="block text-gray-700 font-semibold text-lg mb-4">
-                    Please upload your document as a PDF
-                  </label>
+                    {role === "tourguide" && (
+                    <label className="block text-gray-700 font-semibold text-lg mb-4">
+                      Please upload your ID and certificates in one PDF
+                    </label>
+                    )}
+                    {role === "advertiser" && (
+                    <label className="block text-gray-700 font-semibold text-lg mb-4">
+                      Please upload your ID and taxation registry card in one PDF
+                    </label>
+                    )}
+                    {role === "seller" && (
+                    <label className="block text-gray-700 font-semibold text-lg mb-4">
+                      Please upload your ID and taxation registry card in one PDF
+                    </label>
+                    )}
                   <PDFUploader
                     selectedPDF={selectedPDF}
                     setSelectedPDF={handlePDFChange}
