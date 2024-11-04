@@ -10,8 +10,8 @@ type Pending = {
     advertisers: IAdvertiser[]
 }
 
-export function getAllPendingUsers() {
-    const [pendingdata, setpendingdata] = useState<Pending[]|null>(null);
+export function GetAllPendingUsers() {
+    const [pendingdata, setpendingdata] = useState<Pending|null>(null);
     const [pendingloading, setpendingLoading] = useState(true);
     const [pendingerror, setpendingError] = useState(null);
     useEffect(() => {

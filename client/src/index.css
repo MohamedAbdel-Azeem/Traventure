@@ -664,3 +664,47 @@
 .swal2-popup-custom-z-index {
   z-index: 9999 !important;
 }
+.rejectBtn {
+  width: 45px;
+  height: 45px;
+  border-radius: 13px;
+  border: none;
+  background-color: rgb(255, 95, 95);
+  border: 3px solid rgb(255, 201, 201);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.123);
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s;
+  position: relative;
+}
+.rejectBtn::before {
+  content: "";
+  width: 200%;
+  height: 200%;
+  position: absolute;
+  z-index: 1;
+  transform: scale(0);
+  transition: all 0.9s;
+  border-radius: 50%;
+  filter: blur(10px);
+}
+.rejectBtn:hover::before {
+  transform: scale(1);
+}
+.rejectBtn:hover {
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.336);
+  background-color: rgb(255, 0, 0);
+}
+.rejectBtn svg {
+  height: 17px;
+  fill: white;
+  z-index: 3;
+  transition: all 0.2s;
+  transform-origin: center;
+}
+.rejectBtn:hover svg {
+  transform: rotate(-90deg) scale(1.5) translateX(0px) ;
+}

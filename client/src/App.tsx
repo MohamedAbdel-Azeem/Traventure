@@ -36,6 +36,8 @@ import Bookings from "./components/Bookings";
 import TouristComplaints from "./components/TouristComplaints";
 import ImprovedCreateItinerary from "./components/ImprovedCreateItinerary";
 import { SalesPage } from "./pages/SalesPage";
+import PDFSolution from "./firebase/PDFSolution";
+import Applications from "./components/Admin/Applications";
 
 function App() {
   return (
@@ -43,7 +45,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<SignIn/>}/>
-          <Route path="/test" element={<ImprovedCreateItinerary/>}/>
+          <Route path="/test" element={<PDFSolution pdftoview="example.pdf"/>}/>
           <Route path="/register" element={<Register/>}/>
           {/* Admin */}
           <Route path="/admin/:username" element={<AdminPage/>}/>
@@ -54,6 +56,7 @@ function App() {
           <Route path="/admin/:username/complaints" element={<Complaints/>}/>
           <Route path="/admin/:username/activities" element={<MoreActivities/>}/>
           <Route path="/admin/:username/itineraries" element={<MoreItineraries/>}/>
+          <Route path="/admin/:username/applications" element={<Applications/>}/>
           {/* Tourist */}
           <Route path="/tourist/:username" element={<TouristPage/>}/>
           <Route path="/tourist/:username/shop" element={<ShopPage type="Tourist"/>}/>
