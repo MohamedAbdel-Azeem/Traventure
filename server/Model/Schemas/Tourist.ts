@@ -7,6 +7,7 @@ export interface ITourist extends Document {
   username: string;
   email: string;
   password: string;
+  profilepic: string;
   mobileNumber: string;
   dateOfBirth: Date;
   nationality: string;
@@ -20,6 +21,7 @@ const touristSchema = new Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  profilepic: {type: String, default: null},
   mobileNumber: { type: String, required: true, unique: true },
   dateOfBirth: { type: Date, required: true, immuatable: true },
   nationality: { type: String, required: true },

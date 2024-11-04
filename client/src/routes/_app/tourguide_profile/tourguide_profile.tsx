@@ -123,8 +123,6 @@ const [profilePicture, setProfilePicture] = useState<File | null>(null);
     editpassword(currentData.username, oldPassword, newPassword)
         .then(() => {
             setPasswordModalOpen(false);
-
-          
               Swal.fire({
                 title: "Password Changed Successfully",
                 text: "Password has been changed",

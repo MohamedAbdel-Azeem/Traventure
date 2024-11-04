@@ -30,10 +30,13 @@ import { uploadFileToStorage } from "../firebase/firebase_storage";
         default:
           title = "User created successfully!";
       }
-
+      let message = "You can now login";
+      if (role !== "tourist") {
+        message = "Your documents as been sent wait for 1-2 buisness days for approval";
+      }
       Swal.fire({
         title: title,
-        text: "You can now login",
+        text: message,
         icon: "success",
       }).then(() => {
         navigate("/");

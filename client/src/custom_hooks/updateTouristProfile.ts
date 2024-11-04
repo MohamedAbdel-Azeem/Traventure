@@ -4,35 +4,13 @@ import { TouristProfileData } from '../routes/_app/tourist_profile/tourist_profi
 
 
 
-export function usePatchUserProfile(body: object, username:string) {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [response, setResponse] = useState<TouristProfileData | null>(null);
 
-  useEffect(() => {
-  const patchUserProfile = async () => {
-    
-    setLoading(true);
-    setError(null);
-
+  export const patchUserProfile = async (body: object, username:string) => {
     try {
-      
-      const response = await axios.patch(`/traventure/api/tourist/update/${username}`, body);
-      console.log("data response: ", response.data);
-      setResponse(response.data);
+      const { data } = await axios.patch(`/traventure/api/tourist/update/${username}`, body);  
+      return data;
     } catch (err) {
-      setError('Error updating user profile');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-    
+      return 'Error updating user profile';
+    } 
   };
-  
-  if (username && body) {
-    patchUserProfile();
-  }
-}, [body, username]);
 
-  return { response, loading, error };
-};
