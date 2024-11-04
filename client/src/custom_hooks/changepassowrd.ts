@@ -9,7 +9,7 @@ export function ChangePassword(username: string, oldPassword: string, newpasswor
         oldPassword: oldPassword,
         newPassword: newpassword
     };
-    const url = `/traventure/api/user/changePassword/`;
+    const url = `/traventure/api/user/changePassword`;
     useEffect(() => {
       const updateSeller = async () => {
         try {
