@@ -27,6 +27,8 @@ const touristSchema = new Schema({
   wallet: { type: Number, required: true, default: 0 },
   bookings: [{ type: mongoose.Types.ObjectId, ref: "Booking" }],
   purchases: [{ type: mongoose.Types.ObjectId, ref: "Purchase" }],
+  currentLoyaltyPoints: { type: Number, required: true, default: 0 },
+  totalLoyaltyPoints: { type: Number, required: true, default: 0 },
 });
 
 export default mongoose.model("Tourist", touristSchema);
