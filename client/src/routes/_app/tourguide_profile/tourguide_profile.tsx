@@ -5,7 +5,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { set } from "react-hook-form";
 import { any, string } from "zod";
 import { ITourGuide } from "./ITourGuide";
-import { useUpdateTourGuide } from "../../../custom_hooks/tourGuideGetUpdate";
+import { UpdateTourGuide } from "../../../custom_hooks/tourGuideGetUpdate";
 import { Box, Button, Modal, TextField } from "@mui/material";
 import { Textarea } from "@mantine/core";
 import ChangePasswordModal, { AddContactLeadFormType } from "../../../components/ChangePasswordModal";
@@ -35,11 +35,7 @@ const TourGuideProfile: React.FC<TourGuideProfileProps> = ({ tourGuide }) => {
 
   const [update, setUpdate] = useState(false);
 const [profilePicture, setProfilePicture] = useState<File | null>(null);
-  const {
-    response,
-    loading,
-    error: updateError,
-  } = useUpdateTourGuide(currentData, userData.username, update, profilePicture);
+  
 
   const handleEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -55,22 +51,23 @@ const [profilePicture, setProfilePicture] = useState<File | null>(null);
   };
 
   const handleSave = async () => {
-    if (!error) {
-      setUpdate(true);
-      if (updateError) {
-        console.log("Error updating");
-      }
-      if (!loading && response) {
-        console.log("Successfully updated");
-        setIsEditing(false);
-        setUserData(response);
-        setProfilePicture(null);
-       // setIsEditing(false);
-      }
-    } else {
-      console.log("Cannot save due to validation error");
-    }
-  };
+    setUpdate(true);
+   const reponseUpdate = await UpdateTourGuide(currentData, userData.username, profilePicture);
+    if(reponseUpdate !== "error Updating Tour Guide"){
+    console.log("Successfully updated");
+    setIsEditing(false);
+    setUserData(currentData);
+    setProfilePicture(null);
+  }
+  else{
+    Swal.fire({
+      title: "Error",
+      text: reponseUpdate,
+      icon: "error",
+    });
+  }
+  setUpdate(false);
+  }
 
   const handleLogout = () => {
     navigate("/");
@@ -393,12 +390,36 @@ const [profilePicture, setProfilePicture] = useState<File | null>(null);
         <div className="mt-8 flex justify-end space-x-4">
           {isEditing ? (
             <>
-              <button
+                <button
                 onClick={handleSave}
-                className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-700 transition duration-200"
-              >
-                Save
-              </button>
+                className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-700 transition duration-200 flex items-center justify-center"
+                disabled={update}
+                >
+                {update ? (
+                  <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                  </svg>
+                ) : (
+                  "Save"
+                )}
+                </button>
               <button
                 onClick={toggleEdit}
                 className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
