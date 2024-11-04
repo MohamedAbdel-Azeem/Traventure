@@ -113,7 +113,7 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
           <img
             src="/src/assets/logowhite.png"
             alt="Navbar Logo"
-            style={{ height: '100%', width: 'auto', maxHeight: '35%', maxWidth: '30%', marginRight: '30%' }}
+            style={{ height: '100%', width: 'auto', maxHeight: '35%', maxWidth: '30%', marginRight: '50%' }}
           />
           <List sx={{ display: 'flex', flexDirection: 'row' }}>
             {whichoptions.map((item) => (
@@ -122,7 +122,7 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
                 disablePadding
                 sx={{
                   borderRadius: 1,
-                  mx: 0.5, // Reduced margin between items
+                  mx: 0.5,
                   transition: 'transform 0.3s',
                   '&:hover': {
                     transform: 'translateX(-5px)',
@@ -162,7 +162,7 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
                 throw new Error('Function not implemented.');
               }}
               isEditing={false}
-              size="5vw"
+              size="4.5vw"
             />
             {dropdownVisible && (
               <Box
