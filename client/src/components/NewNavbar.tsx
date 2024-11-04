@@ -1,9 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { styled, Theme, CSSObject } from '@mui/material/styles';
-import { AppBar, Box, CssBaseline, Divider, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar } from '@mui/material';
-import MuiDrawer from '@mui/material/Drawer';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { AppBar, Box, CssBaseline, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import ShopIcon from '@mui/icons-material/Shop';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -12,8 +9,10 @@ import ActivityIcon from '@mui/icons-material/LocalActivity';
 import CategoryIcon from '@mui/icons-material/Category';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import EditCalendarIcon from '@mui/icons-material/EditCalendar';
+import MenuIcon from '@mui/icons-material/Menu';
+import ProfilePictureEdit from './ProfilePictureEdit';
 
-const drawerHeight = 64; 
+const drawerHeight = 64;
 
 interface NewNavbarProps {
   className?: string;
@@ -46,7 +45,7 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
   const touristnavbaritems = [
     { text: 'Home', icon: <HomeIcon />, path: `/tourist/${currentuser}` },
     { text: 'Shop', icon: <ShopIcon />, path: `/tourist/${currentuser}/shop` },
-    { text: 'Locations', icon: <LocationOnIcon />, path: `/tourist/${currentuser}/locations` },
+    // { text: 'Locations', icon: <LocationOnIcon />, path: `/tourist/${currentuser}/locations` },
     { text: 'Bookings', icon: <EditCalendarIcon />, path: `/tourist/${currentuser}/bookings` },
     { text: 'Complaints', icon: <HowToVoteIcon />, path: `/tourist/${currentuser}/complaints` },
   ];
@@ -85,29 +84,35 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
 
   const whichoptions = getNavbarItems(currentusertype);
 
-
-
   return (
     <Box sx={{ display: 'flex' }} className={className}>
       <CssBaseline />
-      <AppBar position="fixed" sx={{ width: '100%', height: drawerHeight }}>
+      <AppBar position="fixed" sx={{ width: '100%', height: drawerHeight, backgroundColor: '#1976d2' }}>
         <Toolbar>
-          <List sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            Navbar
+          </Typography>
+          <List sx={{ display: 'flex', flexDirection: 'row' }}>
             {whichoptions.map((item) => (
               <ListItem
                 key={item.text}
                 disablePadding
                 sx={{
-                  backgroundColor: location.pathname === item.path ? 'grey.300' : 'inherit',
+                  backgroundColor: location.pathname === item.path ? 'rgba(255, 255, 255, 0.2)' : 'inherit',
+                  borderRadius: 1,
+                  mx: 1,
                 }}
               >
-                <ListItemButton onClick={() => navigate(item.path)}>
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText primary={item.text} />
+                <ListItemButton onClick={() => navigate(item.path)} sx={{ color: 'white' }}>
+                  <ListItemIcon sx={{ color: 'white', minWidth: '50px' }}>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.text} sx={{ marginLeft: '-15px' }} />
                 </ListItemButton>
               </ListItem>
             ))}
           </List>
+          <ProfilePictureEdit profilePicture={null} onChange={function (newPicture: File | null): void {
+                      throw new Error('Function not implemented.');
+                  } } isEditing={false}></ProfilePictureEdit>
         </Toolbar>
       </AppBar>
     </Box>
