@@ -32,4 +32,5 @@ export const tourGuideUpdateValidator = [
     .optional()
     .isString()
     .withMessage("Description must be a string"),
+  body("profilepic").optional().isString().withMessage("Profile picture must be a string"),
 ];

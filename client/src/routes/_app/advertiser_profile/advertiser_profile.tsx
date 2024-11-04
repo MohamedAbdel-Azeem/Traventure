@@ -4,10 +4,12 @@ import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { IAdvertiser } from './IAdvertiser';
-import { useUpdateAdvertiser } from '../../../custom_hooks/advertisercustomhooks';
 import ChangePasswordModal, { AddContactLeadFormType } from '../../../components/ChangePasswordModal';
 import { editpassword } from '../../../custom_hooks/changepassowrd';
 import Swal from "sweetalert2";
+import ProfilePictureEdit from '../../../components/ProfilePictureEdit';
+import { uploadFileToStorage } from '../../../firebase/firebase_storage';
+import { updateAdvertiser } from '../../../custom_hooks/advertisercustomhooks';
 // Define Zod schema for validation
 interface AdvertiserProfileProps {
   advertiser: IAdvertiser;
@@ -30,7 +32,7 @@ const AdvertiserProfile: React.FC<AdvertiserProfileProps> = ({ advertiser }) => 
   const [currentAdvertiser, setCurrentAdvertiser] = useState(advertiser);
   const [apiBody, setApiBody] = useState({});
   const [apiUsername, setApiUsername] = useState('');
-  const response = useUpdateAdvertiser(apiBody, apiUsername);
+  const [update, setUpdate] = useState(false);
   const navigate = useNavigate();
   console.log('Advertiser:', currentAdvertiser);
   console.log('Description',currentAdvertiser.description);
@@ -60,12 +62,29 @@ const AdvertiserProfile: React.FC<AdvertiserProfileProps> = ({ advertiser }) => 
   };
 
   // Save the form
-  const onSubmit = (data: IAdvertiser) => {
+  const onSubmit = async (data: IAdvertiser) => {
     console.log('Saved data:', data);
-    setIsEditing(false);
-    setApiBody(data);
-    setApiUsername(data.username);
-    setCurrentAdvertiser(data);
+    data.profilepic = currentAdvertiser.profilepic;
+    setUpdate(true);
+    if(profilePicture) {
+      const firebaseurl = await uploadFileToStorage(profilePicture);
+      data.profilepic = firebaseurl;
+    }
+    const updatedadvertiser = await updateAdvertiser(data, currentAdvertiser.username);
+    if(updatedadvertiser !== "error updating advertiser") {
+      setCurrentAdvertiser(data);
+      setIsEditing(false);
+      
+    }
+    else{
+      Swal.fire({
+        title: "Error",
+        text: "Failed to update advertiser",
+        icon: "error",
+      });
+    }
+    setUpdate(false);
+    
   };
 
   // Handle logout
@@ -99,6 +118,7 @@ const AdvertiserProfile: React.FC<AdvertiserProfileProps> = ({ advertiser }) => 
             
         });
 };
+const [profilePicture, setProfilePicture] = useState<File | null>(null);
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-gray-900"
@@ -113,11 +133,18 @@ const AdvertiserProfile: React.FC<AdvertiserProfileProps> = ({ advertiser }) => 
       <div className="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl p-8 backdrop-blur-lg bg-opacity-90">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex items-center space-x-6">
-            <img
-              src="/src/assets/t2.jpg"
+          {(isEditing ) ? (
+      <ProfilePictureEdit
+        profilePicture={profilePicture}
+        onChange={setProfilePicture} // Directly pass setProfilePicture
+        isEditing={isEditing} // Controls the edit overlay visibility
+      />) : (
+        <img
+              src={currentAdvertiser.profilepic }
               alt="Profile"
               className="w-32 h-32 rounded-full object-cover shadow-md border-4 border-purple-500"
             />
+      )}
             <div className="text-left">
               <h2 className="text-4xl font-extrabold text-purple-700">
                 {currentAdvertiser.username}
@@ -312,8 +339,32 @@ const AdvertiserProfile: React.FC<AdvertiserProfileProps> = ({ advertiser }) => 
                 <button
                   type="submit"
                   className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-700 transition duration-200"
+                  disabled={update}
                 >
-                  Save
+                  {update ? (
+                  <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                  </svg>
+                ) : (
+                  "Save"
+                )}
                 </button>
                 <button
                   onClick={() => {
