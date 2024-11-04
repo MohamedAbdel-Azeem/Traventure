@@ -45,6 +45,7 @@ function App() {
           <Route path="/" element={<SignIn/>}/>
           <Route path="/test" element={<ImprovedCreateItinerary/>}/>
           <Route path="/register" element={<Register/>}/>
+          {/* Admin */}
           <Route path="/admin/:username" element={<AdminPage/>}/>
           <Route path="/admin/:username/users" element={<Accounts/>}/>
           <Route path="/admin/:username/shop" element={<ShopPage type="Admin"/>}/>
@@ -53,20 +54,25 @@ function App() {
           <Route path="/admin/:username/complaints" element={<Complaints/>}/>
           <Route path="/admin/:username/activities" element={<MoreActivities/>}/>
           <Route path="/admin/:username/itineraries" element={<MoreItineraries/>}/>
+          {/* Tourist */}
           <Route path="/tourist/:username" element={<TouristPage/>}/>
           <Route path="/tourist/:username/shop" element={<ShopPage type="Tourist"/>}/>
           <Route path="/tourist/:username/locations" element={<MorePlaces/>}/>
           <Route path="/tourist/:username/itineraries" element={<MoreItineraries/>}/>
           <Route path="/tourist/:username/complaints" element={<TouristComplaints/>}/>
+          {/* Tourism Governor */}
           <Route path="/tourismgovernor/:username" element={<TourismGovernorPage/>}/>
           <Route path="/tourismgovernor/:username/historicaltags" element={<HistoricalTags/>}/>
           <Route path="/tourismgovernor/:username/locations" element={<Locations/>}/>
+          {/* Advertiser */}
           <Route path="/advertiser/:username" element={<AdvertiserPage/>}/>
           <Route path="/advertiser/:username/locations" element={<MorePlaces/>}/>
           <Route path="/advertiser/:username/activities" element={<Activities/>}/>
+          {/* Tour Guide */}
           <Route path="/tourguide/:username" element={<TourGuidePage />}/>
           <Route path="/tourguide/:username/locations" element={<MorePlaces />}/>
           <Route path="/tourguide/:username/itineraries" element={<TourGuidePage />}/>
+          {/* Seller */}
           <Route path="/seller/:username" element={<ShopPage type="Seller"/>}/>
           <Route path="/itineraries" element={<Itineraries/>} />
           <Route path="/landing" element={<LandingPage/>} />
@@ -78,6 +84,7 @@ function App() {
           <Route path="/tourist-itinerary/:username" element={<ItineraryDetailsTourist/>}/>
           <Route path="/more-itineraries" element={<MoreItineraries/>}/>
           <Route path="/tourist/:id/activities" element={<MoreActivities/>}/>
+          {/* Guest */}
           <Route path="/guest-page" element={<GuestPage/>}/>
           <Route path="/guest/more-itineraries" element={<GuestMoreItineraries/>}/>
           <Route path="/guest/more-places" element={<GuestMorePlaces/>}/>

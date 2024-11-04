@@ -65,18 +65,24 @@ const useCreateItinerary = (itineraryData: any) => {
 export default useCreateItinerary;
 
 export const UseCreateItineraryforME = async (itineraryData: MyICCRUDP) => {
-  itineraryData = {
-    ...itineraryData,
-    main_Picture: await uploadFileToStorage(itineraryData.main_Picture),
-  };
-  console.log(itineraryData);
+  try{
+ itineraryData = {
+   ...itineraryData,
+   main_Picture: await uploadFileToStorage(itineraryData.main_Picture),
+ };
+ console.log(itineraryData);
+  }
+  catch(err){
+    return "error"; 
+  }
+ 
   try {
     const res = await axios.post(
       "/traventure/api/itinerary/add",
       itineraryData
     );
-    return res.data;
+    return "success";
   } catch (err) {
-    return err;
+    return "error";
   }
 };

@@ -661,3 +661,6 @@
   scrollbar-width: none;
   -webkit-scrollbar-width: none;
 }
+.swal2-popup-custom-z-index {
+  z-index: 9999 !important;
+}
