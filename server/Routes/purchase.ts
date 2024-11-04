@@ -3,6 +3,7 @@ import {
   addPurchase,
   getTouristPurchases,
   getSellerSales,
+  getExternalSellerSales,
 } from "../Model/Queries/purchase_queries";
 import {
   getProduct,
@@ -66,6 +67,14 @@ router.get("/seller", async (req: Request, res: Response) => {
       console.log(sellerId);
       const sales = await getSellerSales(
         sellerId as string,
+        compactViewBoolean
+      );
+      return res.status(200).send(sales);
+    }
+
+    if (externalSeller) {
+      const sales = await getExternalSellerSales(
+        externalSeller as string,
         compactViewBoolean
       );
       return res.status(200).send(sales);

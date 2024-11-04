@@ -73,6 +73,65 @@ export async function getSellerSales(
   }
 }
 
-export async function getExternalSellerSales(externalSeller: string) {}
+export async function getExternalSellerSales(
+  externalSeller: string,
+  compactView: boolean
+) {
+  try {
+    const purchases: Array<{
+      cart: Array<{
+        productId: { _id: mongoose.Types.ObjectId; name?: string };
+        quantity: number;
+      }>;
+      timeStamp: Date;
+    }> = await purchase
+      .find()
+      .populate({
+        path: "cart.productId",
+        match: { externalseller: externalSeller },
+        select: "name",
+      })
+      .lean();
 
-module.exports = { addPurchase, getTouristPurchases, getSellerSales };
+    const sellerSales = purchases
+      .map((purchase) => {
+        return purchase.cart
+          .filter((item) => item.productId)
+          .map((item) => ({
+            productId: item.productId._id,
+            productName: item.productId.name,
+            quantity: item.quantity,
+            timestamp: purchase.timeStamp,
+          }));
+      })
+      .flat();
+
+    if (compactView) {
+      const compactSellerSales: { [key: string]: any } = {};
+      sellerSales.forEach((sale) => {
+        const index = sale.productId.toString();
+        if (compactSellerSales[index]) {
+          compactSellerSales[index].quantity += sale.quantity;
+        } else {
+          compactSellerSales[index] = {
+            productId: sale.productId,
+            quantity: sale.quantity,
+            productName: sale.productName,
+          };
+        }
+      });
+      return Object.values(compactSellerSales);
+    }
+
+    return sellerSales;
+  } catch (error) {
+    throw error;
+  }
+}
+
+module.exports = {
+  addPurchase,
+  getTouristPurchases,
+  getSellerSales,
+  getExternalSellerSales,
+};
