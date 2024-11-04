@@ -4,11 +4,16 @@ import { ISeller } from "../routes/_app/seller_profile/ISeller";
 import { IAdvertiser } from "../routes/_app/advertiser_profile/IAdvertiser";
 import { useEffect, useState } from "react";
 
-type Pending = {
-    tourGuides: ITourGuide[],
-    sellers: ISeller[],
-    advertisers: IAdvertiser[]
+interface Applicant {
+    username: string;
+    email: string;
+    documents: string;
 }
+type Pending = {
+  tourGuides: Applicant[];
+  sellers: Applicant[];
+  advertisers: Applicant[];
+};
 
 export function GetAllPendingUsers() {
     const [pendingdata, setpendingdata] = useState<Pending|null>(null);

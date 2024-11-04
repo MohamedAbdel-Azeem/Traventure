@@ -13,11 +13,12 @@ import {
   TablePagination,
   Paper,
 } from "@mui/material";
-import LuggageIcon from "@mui/icons-material/Luggage";
 import { styled } from "@mui/material/styles";
-import BestDeleteButton from "../BestDeleteButton";
 import { GetAllPendingUsers } from "../../custom_hooks/useGetPending";
 import { updateuserstatus } from "../../custom_hooks/useAcceptReject";
+import StoreIcon from "@mui/icons-material/Store";
+import TourIcon from "@mui/icons-material/Tour";
+import CampaignIcon from "@mui/icons-material/Campaign";
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
@@ -31,8 +32,8 @@ interface Applicant {
   email: string;
   documents: string;
 }
-function Row(props: { row: Applicant; onDelete: (username: string) => void }) {
-  const { row, onDelete } = props;
+function Row(props: { row: Applicant; onDelete: (username: string) => void; accounttype:string }) {
+  const { row, onDelete, accounttype } = props;
 
   return (
     <React.Fragment>
@@ -59,13 +60,13 @@ function Row(props: { row: Applicant; onDelete: (username: string) => void }) {
             View Document
           </Button>
         </TableCell>
-        <TableCell className="max-w-[2px]">
-          <div className="flex flex-row">
+        <TableCell className="max-w-[2px] flex">
+          <div className="flex flex-row w-[88%]">
             <button
               title="Accept"
-              className="rejectBtn"
+              className="acceptBtn ml-auto mr-8"
               onClick={() => (
-                updateuserstatus(row.username, "seller", true),
+                updateuserstatus(row.username, accounttype, true),
                 onDelete(row.username)
               )}
             >
@@ -94,9 +95,9 @@ function Row(props: { row: Applicant; onDelete: (username: string) => void }) {
             </button>
             <button
               title="Reject"
-              className="rejectBtn"
+              className="rejectBtn mr-auto ml-8"
               onClick={() => (
-                updateuserstatus(row.username, "seller", false),
+                updateuserstatus(row.username, accounttype, false),
                 onDelete(row.username)
               )}
             >
@@ -130,40 +131,39 @@ function Row(props: { row: Applicant; onDelete: (username: string) => void }) {
   );
 }
 
+interface ApplicantTableProps {
+  type: "tourGuide" | "seller" | "advertiser";
+}
 
-export const AdvertiserApplicants = () => {
+
+export const ApplicantTable = ({ type }: ApplicantTableProps) => {
   const [order, setOrder] = useState<"asc" | "desc">("asc");
-  const [orderBy, setOrderBy] = useState<keyof Applicant>("email");
+  const [orderBy, setOrderBy] = useState<keyof Applicant>("username");
   const [rows, setRows] = useState<Applicant[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const {
-    pendingdata,
-    pendingerror,
-    pendingloading
-  } = GetAllPendingUsers();
-useEffect(() => {
-  if (!pendingerror && !pendingloading) {
-    setRows(pendingdata?.sellers || []);
-  } else {
-    setRows([]);
-  }
-}, [pendingdata]);
+  const { pendingdata, pendingerror, pendingloading } = GetAllPendingUsers();
+  useEffect(() => {
+    if (!pendingerror && !pendingloading) {
+        const data = type === "tourGuide" ? pendingdata?.tourGuides : type === "seller" ? pendingdata?.sellers : pendingdata?.advertisers;
+      setRows(data??[]);
+    } else {
+      setRows([]);
+    }
+  }, [pendingdata]);
 
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
 
-    const handleChangePage = (event: unknown, newPage: number) => {
-      setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (
-      event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-      setRowsPerPage(parseInt(event.target.value, 10));
-      setPage(0);
-    };
-
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const handleRequestSort = (property: keyof Applicant) => {
     const isAsc = orderBy === property && order === "asc";
@@ -192,18 +192,33 @@ useEffect(() => {
   );
   const handleDelete = (username: string) => {
     setRows(rows.filter((row) => row.username !== username));
+  };
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+    setPage(0);
   }
+  
   return (
     <div className="w-full flex items-center justify-center">
       <Paper className="w-[1100px]">
         <TableContainer component={Paper}>
           <Table aria-label="collapsible table">
             <TableHead>
-              <TableCell colSpan={7}>
+              <TableCell colSpan={4}>
                 <div className="justify-center flex flex-row">
-                  <LuggageIcon sx={{ fontSize: 40 }} />
+                  {type === "tourGuide" ? (
+                    <TourIcon sx={{ fontSize: 40 }} />
+                  ) : type === "seller" ? (
+                    <StoreIcon sx={{ fontSize: 40 }} />
+                  ) : (
+                    <CampaignIcon sx={{ fontSize: 40 }} />
+                  )}
                   <p className="text-[22px] leading-[45px]">
-                    Advertisers
+                    {type === "tourGuide"
+                      ? "Tour Guides"
+                      : type === "seller"
+                      ? "Sellers"
+                      : "Advertisers"}
                   </p>
                 </div>
               </TableCell>
@@ -228,15 +243,26 @@ useEffect(() => {
                     Username
                   </TableSortLabel>
                 </TableCell>
-                <TableCell className="w-[35%]">
-                    PDF Link
+                <TableCell className="w-[25%]">PDF Link</TableCell>
+                <TableCell className="w-[25%]">
+                  <TextField
+                    variant="outlined"
+                    size="small"
+                    placeholder="Search"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                  />
                 </TableCell>
-                <TableCell className="w-[15%]"><div className="text-center">Actions</div></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {paginatedRows?.map((row) => (
-                <Row key={row.username} row={row} onDelete={handleDelete}/>
+                <Row
+                  key={row.username}
+                  row={row}
+                  onDelete={handleDelete}
+                  accounttype={type}
+                />
               ))}
             </TableBody>
           </Table>
