@@ -19,20 +19,60 @@ export async function getTouristPurchases(touristId: string) {
 }
 
 export async function getSellerSales(
-  sellerId: string | mongoose.Types.ObjectId
+  sellerId: string | mongoose.Types.ObjectId,
+  compactView: boolean
 ) {
   try {
-    return await purchase
+    const purchases: Array<{
+      cart: Array<{
+        productId: { _id: mongoose.Types.ObjectId; name?: string };
+        quantity: number;
+      }>;
+      timeStamp: Date;
+    }> = await purchase
       .find()
       .populate({
-        path: "productId",
-        match: { seller: sellerId }, // Match with the "seller" field in the Product schema
-        populate: { path: "seller", model: "Seller" }, // Populate the "seller" field, not "Seller"
+        path: "cart.productId",
+        match: { seller: sellerId },
+        select: "name",
       })
-      .exec();
+      .lean();
+
+    const sellerSales = purchases
+      .map((purchase) => {
+        return purchase.cart
+          .filter((item) => item.productId)
+          .map((item) => ({
+            productId: item.productId._id,
+            productName: item.productId.name,
+            quantity: item.quantity,
+            timestamp: purchase.timeStamp,
+          }));
+      })
+      .flat();
+
+    if (compactView) {
+      const compactSellerSales: { [key: string]: any } = {};
+      sellerSales.forEach((sale) => {
+        const index = sale.productId.toString();
+        if (compactSellerSales[index]) {
+          compactSellerSales[index].quantity += sale.quantity;
+        } else {
+          compactSellerSales[index] = {
+            productId: sale.productId,
+            quantity: sale.quantity,
+            productName: sale.productName,
+          };
+        }
+      });
+      return Object.values(compactSellerSales);
+    }
+    return sellerSales;
   } catch (error) {
     throw error;
   }
 }
+
+export async function getExternalSellerSales(externalSeller: string) {}
 
 module.exports = { addPurchase, getTouristPurchases, getSellerSales };

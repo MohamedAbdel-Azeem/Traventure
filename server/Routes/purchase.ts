@@ -53,12 +53,23 @@ router.get("/tourist/:touristId", async (req: Request, res: Response) => {
 
 router.get("/seller", async (req: Request, res: Response) => {
   try {
-    const { externalSeller, sellerId } = req.query;
+    // externalSeller and sellerId are mutually exclusive
+    // compactView is optional & makes the response more compact removing timestamps and getting all the similar products are in a single object with total quantity
+    const { externalSeller, sellerId, compactView } = req.query;
+    const compactViewBoolean = compactView === "true";
 
     if ((!externalSeller && !sellerId) || (externalSeller && sellerId)) {
       return res.status(404).send("Invalid query parameters");
     }
 
+    if (sellerId) {
+      console.log(sellerId);
+      const sales = await getSellerSales(
+        sellerId as string,
+        compactViewBoolean
+      );
+      return res.status(200).send(sales);
+    }
   } catch (error) {
     return res.status(500).send(error);
   }
