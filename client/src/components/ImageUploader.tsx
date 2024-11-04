@@ -5,10 +5,12 @@ function ImageUploader({
   selectedImage,
   setSelectedImage,
   OutsideClassName,
+  OutsideText,
 }: {
   setSelectedImage: (file: File) => void;
   selectedImage: File | null;
   OutsideClassName?: string;
+  OutsideText?: string;
 }) {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -65,8 +67,8 @@ function ImageUploader({
               />
             </svg>
             <p className="mb-2 text-sm text-slate-500">
-              <span className="font-semibold">Click to upload</span> or drag and
-              drop
+              <span className="font-semibold">{OutsideText?OutsideText:"Click to upload"}</span>{" "}
+              or drag and drop
             </p>
             <p className="text-xs text-slate-500">SVG, PNG, JPG or GIF</p>
           </div>
