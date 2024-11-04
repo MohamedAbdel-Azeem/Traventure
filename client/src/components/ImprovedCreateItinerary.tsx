@@ -28,7 +28,12 @@ import { UseCreateItineraryforME } from "../custom_hooks/itineraries/createItine
 import { SelectChangeEvent } from "@mui/material/Select";
 import CloseIcon from "@mui/icons-material/Close";
 
-const ImprovedCreateItinerary = ({ isOpen, onClose, onOpen }) => {
+const ImprovedCreateItinerary = ({
+  isOpen,
+  onClose,
+  onOpen,
+  handleCreateItinerary,
+}) => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [latitude, setLatitude] = useState(30);
@@ -288,6 +293,7 @@ const ImprovedCreateItinerary = ({ isOpen, onClose, onOpen }) => {
         text: "Itinerary has been created",
         icon: "success",
       });
+      handleCreateItinerary(itineraryData);
     } else {
       Swal.fire({
         title: "Error",

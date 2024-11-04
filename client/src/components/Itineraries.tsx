@@ -84,6 +84,7 @@ const Itineraries = () => {
         ))}
       </div>
       <ItineraryModal
+        handleCreateItinerary={handleCreateItinerary}
         isOpen={isModalOpen}
         onOpen={() => setIsModalOpen(true)}
         onClose={() => setIsModalOpen(false)}
