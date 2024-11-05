@@ -753,3 +753,32 @@
 .acceptBtn:hover svg {
   transform: scale(1.5) translateX(0px) ;
 }
+
+.pin-tag::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translate(-50%, -7%);
+  width: 0;
+  height: 0;
+  border-top: 0px;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid #22c55e;
+  margin: 0px;
+}
+.pin-end::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translate(-50%, -7%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;  
+  border-top: 8px solid #ef4444;
+  margin: 0px;
+  padding: 0px;
+}

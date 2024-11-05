@@ -27,7 +27,7 @@ const TheBIGMAP: React.FC<TheBIGMAPProps> = ({ arrayofmarkers, className, id }) 
   } 
   async function initMap() {
     const { Map } = await window.google.maps.importLibrary("maps");
-    const { AdvancedMarkerElement } = await window.google.maps.importLibrary(
+    const { AdvancedMarkerElement, PinElement  } = await window.google.maps.importLibrary(
       "marker"
     );
 
@@ -36,15 +36,43 @@ const TheBIGMAP: React.FC<TheBIGMAPProps> = ({ arrayofmarkers, className, id }) 
       zoom: 13,
       mapId: "4504f8b37365c3d0",
     });
-    
-  arrayofmarkers.map((marker) => {
-    const templong = marker.longitude;
-    const templat = marker.latitude;
-    const MarkerX = new AdvancedMarkerElement({
-      map,
-      position: { lat: templat, lng: templong }
-    });
+
+const pinStart = document.createElement('div');
+pinStart.className = 'pin-tag relative m-0 bg-green-500 rounded-lg text-white text-sm p-2.5 border-0';
+pinStart.textContent = 'Pick Up Here';
+
+  const MarkerStart = new AdvancedMarkerElement({
+    map,
+    position: { lat: arrayofmarkers[0].latitude, lng: arrayofmarkers[0].longitude },
+    content:pinStart
   });
+  
+  const pinEnd = document.createElement('div');
+  pinEnd.className = 'pin-end relative m-0 bg-red-500 rounded-lg text-white text-sm p-2.5 border-0';
+  pinEnd.textContent = 'Drop Off Here';
+  const MarkerEnd = new AdvancedMarkerElement({
+    map,
+    position: { lat: arrayofmarkers[1].latitude, lng: arrayofmarkers[1].longitude },
+    content:pinEnd
+  });
+
+
+  
+    arrayofmarkers.slice(2).map((marker) => {
+      const templong = marker.longitude;
+      const templat = marker.latitude;
+      const pinBackground = new PinElement({
+        background: '#FBBC04',
+        glyphColor: 'white',
+        borderColor: '#FBBC04'
+    });
+      const MarkerX = new AdvancedMarkerElement({
+        map,
+        position: { lat: templat, lng: templong },
+        content:pinBackground.element
+      });
+      
+    });
 
   }
   useEffect(() => {
