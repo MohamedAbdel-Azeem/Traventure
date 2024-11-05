@@ -35,7 +35,7 @@ import Complaints from "./components/Admin/Complaints";
 import Bookings from "./components/Bookings";
 import TouristComplaints from "./components/TouristComplaints";
 import ImprovedCreateItinerary from "./components/ImprovedCreateItinerary";
-import { SalesPage } from "./pages/SalesPage";
+import { SellerSalesPage } from "./pages/SalesPage";
 
 function App() {
   return (
@@ -116,7 +116,7 @@ function App() {
             path="/seller/:username"
             element={<ShopPage type="Seller" />}
           />
-          <Route path="/seller/sales/:username" element={<SalesPage />} />
+          <Route path="/seller/sales/:username" element={<SellerSalesPage />} />
           <Route path="/itineraries" element={<Itineraries />} />
           <Route path="/landing" element={<LandingPage />} />
           <Route

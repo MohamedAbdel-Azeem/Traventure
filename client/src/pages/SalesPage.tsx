@@ -3,7 +3,7 @@ import { useGetSeller } from "../custom_hooks/sellerGetUpdate";
 import { useGetSellerSales } from "../custom_hooks/products/useGetSellerSales";
 import { SingleProductSalesChart } from "../components/SalesCharts";
 
-export function SalesPage() {
+export function SellerSalesPage() {
   const { username } = useParams<{ username: string }>();
 
   const {
@@ -25,8 +25,6 @@ export function SalesPage() {
   if (sellerError || !seller || salesError) {
     return <div>Error: {sellerError || salesError}</div>;
   }
-
-  console.log(sales);
 
   return (
     <div className="flex flex-col items-center gap-8 pt-6">
