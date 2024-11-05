@@ -100,11 +100,13 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
   };
 
   const profileDropdownItems = [
-    { 
-      label: 'My Profile', 
-      onClick: () => navigate(`/${currentusertype}/${currentuser}/profile`), 
-      icon: AccountCircleIcon 
-    },
+    ...(!currentusertype.includes('tourismgovernor') && !currentusertype.includes('admin') && !currentusertype.includes('guest')
+      ? [{ 
+          label: 'My Profile', 
+          onClick: () => navigate(`/${currentusertype}/${currentuser}/profile`), 
+          icon: AccountCircleIcon 
+        }]
+      : []),
     ...(currentusertype.includes('tourist') || currentusertype.includes('admin')
       ? [{ 
           label: 'Complaints', 
