@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Box, List, ListItem, ListItemText } from '@mui/material';
 
 interface DropdownItem {
@@ -22,11 +22,12 @@ const NavbarDropdown: React.FC<NavbarDropdownProps> = ({ items, onMouseEnter, on
         top: '100%',
         right: 0,
         backgroundColor: 'white',
-        boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.15)',
+        boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
         borderRadius: '8px',
         overflow: 'hidden',
         zIndex: 1,
-        width: '200px',
+        width: '220px',
+        transition: 'all 0.2s ease-in-out', 
       }}
     >
       <List disablePadding>
@@ -37,17 +38,24 @@ const NavbarDropdown: React.FC<NavbarDropdownProps> = ({ items, onMouseEnter, on
             onClick={item.onClick}
             sx={{
               '&:hover': {
-                backgroundColor: '#f5f5f5',
+                backgroundColor: '#e8eaf6', 
+                transform: 'translateY(-2px)',
               },
               py: 1.5,
               px: 2,
+              transition: 'background-color 0.2s, transform 0.2s', 
             }}
           >
-            <ListItemText primary={item.label} primaryTypographyProps={{ color: 'black', 
-            fontWeight: '500',
-            textAlign: 'center',
-            width: '100%',
-            }} />
+            <ListItemText
+              primary={item.label}
+              primaryTypographyProps={{
+                color: 'black',
+                fontWeight: '500',
+                textAlign: 'center',
+                width: '100%',
+                fontSize: '0.9rem', 
+              }}
+            />
           </ListItem>
         ))}
       </List>

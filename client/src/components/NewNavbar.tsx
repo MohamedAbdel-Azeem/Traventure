@@ -181,7 +181,8 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
                 items={dropdownItems}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-                sx={{ position: 'absolute', top: '100%', right: 0 }} 
+                
+                
               />
             )}
           </Box>
