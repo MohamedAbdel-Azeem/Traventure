@@ -164,20 +164,21 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
               isEditing={false}
               size="4.5vw"
             />
-            {dropdownVisible && (
-              <Box
-                sx={{
-                  position: 'absolute',
-                  top: '100%',
-                  right: 0,
-                  backgroundColor: 'white',
-                  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
-                  borderRadius: '4px',
-                  overflow: 'hidden',
-                  zIndex: 1,
-                }}
-              >
-                <List>
+           {dropdownVisible && (
+  <Box
+    sx={{
+      position: 'absolute',
+      top: '100%',
+      right: 0,
+      backgroundColor: 'white',
+      boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.15)',
+      borderRadius: '8px',
+      overflow: 'hidden',
+      zIndex: 1,
+      width: '200px',  // Set a consistent width for better alignment
+    }}
+  >
+    <List disablePadding>
       <ListItem
         button
         onClick={() => {
@@ -206,9 +207,17 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
           }
           navigate(profileUrl);
         }}
+        sx={{
+          '&:hover': {
+            backgroundColor: '#f5f5f5',
+          },
+          py: 1.5,
+          px: 2,
+        }}
       >
-        <ListItemText primary="My Profile" style={{ color: 'black' }} />
+        <ListItemText primary="My Profile" primaryTypographyProps={{ color: 'black', fontWeight: '500' }} />
       </ListItem>
+
       {(currentusertype.includes('tourist') || currentusertype.includes('admin')) && (
         <ListItem
           button
@@ -221,19 +230,38 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
             }
             navigate(complaintsUrl);
           }}
+          sx={{
+            '&:hover': {
+              backgroundColor: '#f5f5f5',
+            },
+            py: 1.5,
+            px: 2,
+          }}
         >
-          <ListItemText primary="Complaints" style={{ color: 'black' }} />
+          <ListItemText primary="Complaints" primaryTypographyProps={{ color: 'black', fontWeight: '500' }} />
         </ListItem>
       )}
-      <ListItem button onClick={() => navigate('/')}>
-        <ListItemText primary="Log out" style={{ color: 'black' }} />
+
+      <ListItem
+        button
+        onClick={() => navigate('/')}
+        sx={{
+          '&:hover': {
+            backgroundColor: '#f5f5f5',
+          },
+          py: 1.5,
+          px: 2,
+        }}
+      >
+        <ListItemText primary="Log out" primaryTypographyProps={{ color: 'black', fontWeight: '500' }} />
       </ListItem>
     </List>
   </Box>
 )}
-          </Box>
-        </Toolbar>
-      </AppBar>
-    </Box>
+
+            </Box>
+            </Toolbar>
+        </AppBar>
+        </Box>
   );
 }
