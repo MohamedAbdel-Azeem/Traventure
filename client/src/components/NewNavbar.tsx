@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { AppBar, Box, CssBaseline, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar } from '@mui/material';
+import { AppBar, Box, CssBaseline, Fade, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import ShopIcon from '@mui/icons-material/Shop';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -99,33 +99,33 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
   };
 
   const handleMouseLeave = () => {
-    hideTimeoutRef.current = window.setTimeout(() => {
+    // hideTimeoutRef.current = window.setTimeout(() => {
       setDropdownVisible(false);
-    }, 200); 
+    // }, 200); 
   };
 
   const profileDropdownItems = [
   { 
     label: 'My Profile', 
     onClick: () => navigate(`/${currentusertype}profile/${currentuser}`), 
-    icon: AccountCircleIcon // Add the icon for 'My Profile'
+    icon: AccountCircleIcon 
   },
   ...(currentusertype.includes('tourist') || currentusertype.includes('admin')
     ? [{ 
         label: 'Complaints', 
         onClick: () => navigate(`/${currentusertype}/${currentuser}/complaints`),
-        icon: HowToVoteIcon // Add the icon for 'Complaints'
+        icon: HowToVoteIcon 
       }]
     : []),
   { 
     label: 'Log out', 
     onClick: () => navigate('/'), 
-    icon: Logout // Add the icon for 'Log out'
+    icon: Logout 
   },
 ];
 
 
-  return (
+return (
     <Box sx={{ display: 'flex' }} className={className}>
       <CssBaseline />
       <AppBar
@@ -136,52 +136,54 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
           background: 'linear-gradient(90deg, #a855f7, #6d28d9)',
         }}
       >
-        <Toolbar>
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <img
             src="/src/assets/logowhite.png"
             alt="Navbar Logo"
-            style={{ height: '100%', width: 'auto', maxHeight: '35%', maxWidth: '30%', marginRight: '50%' }}
+            style={{ height: '100%', width: 'auto', maxHeight: '35%', maxWidth: '30%' }}
           />
-          <List sx={{ display: 'flex', flexDirection: 'row' }}>
-            {whichoptions.map((item) => (
-              <ListItem
-                key={item.text}
-                disablePadding
-                sx={{
-                  borderRadius: 1,
-                  mx: 0.5,
-                  transition: 'transform 0.3s',
-                  '&:hover': {
-                    transform: 'translateX(-5px)',
-                    '& .MuiListItemText-root': {
-                      opacity: 1,
-                      transform: 'translateX(0)',
+          <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+            <List sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+              {whichoptions.map((item) => (
+                <ListItem
+                  key={item.text}
+                  disablePadding
+                  sx={{
+                    borderRadius: 1,
+                    mx: 0.5,
+                    transition: 'transform 0.3s',
+                    '&:hover': {
+                      transform: 'translateX(-5px)',
+                      '& .MuiListItemText-root': {
+                        opacity: 1,
+                        transform: 'translateX(0)',
+                      },
                     },
-                  },
-                }}
-              >
-                <ListItemButton
-                  onClick={() => navigate(item.path)}
-                  sx={{ color: 'white', display: 'flex', alignItems: 'center' }}
+                  }}
                 >
-                  <ListItemIcon sx={{ color: 'white', minWidth: '40px' }}>{item.icon}</ListItemIcon> 
-                  <ListItemText
-                    primary={item.text}
-                    sx={{
-                      marginLeft: '-10px', 
-                      opacity: 0,
-                      transform: 'translateX(-10px)',
-                      transition: 'opacity 0.3s, transform 0.3s',
-                    }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
+                  <ListItemButton
+                    onClick={() => navigate(item.path)}
+                    sx={{ color: 'white', display: 'flex', alignItems: 'center' }}
+                  >
+                    <ListItemIcon sx={{ color: 'white', minWidth: '40px' }}>{item.icon}</ListItemIcon>
+                    <ListItemText
+                      primary={item.text}
+                      sx={{
+                        marginLeft: '-10px',
+                        opacity: 0,
+                        transform: 'translateX(-10px)',
+                        transition: 'opacity 0.3s, transform 0.3s',
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
           <Box
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            sx={{ marginLeft: 'auto', position: 'relative' }} 
+            sx={{ position: 'relative' }}
           >
             <ProfilePictureEdit
               profilePicture={null}
@@ -189,18 +191,18 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
               isEditing={false}
               size="4.5vw"
             />
-            {dropdownVisible && (
-              <NavbarDropdown
-                items={profileDropdownItems}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-                
-                
-              />
-            )}
+            <Fade in={dropdownVisible} timeout={200}>
+              <div>
+                <NavbarDropdown
+                  items={profileDropdownItems}
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
+                />
+              </div>
+            </Fade>
           </Box>
-            </Toolbar>
-        </AppBar>
-        </Box>
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
 }
