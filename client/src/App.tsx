@@ -35,7 +35,8 @@ import Complaints from "./components/Admin/Complaints";
 import Bookings from "./components/Bookings";
 import TouristComplaints from "./components/TouristComplaints";
 import ImprovedCreateItinerary from "./components/ImprovedCreateItinerary";
-import { SellerSalesPage } from "./pages/SalesPage";
+import { SellerSalesPage } from "./pages/SellerSalesPage";
+import { AdminSalesPage } from "./pages/AdminSalesPage";
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
             path="/admin/:username/shop"
             element={<ShopPage type="Admin" />}
           />
+          <Route path="/admin/:username/sales" element={<AdminSalesPage />} />
           <Route path="/admin/:username/locations" element={<MorePlaces />} />
           <Route path="/admin/:username/categoriesandtags" element={<CT />} />
           <Route path="/admin/:username/complaints" element={<Complaints />} />

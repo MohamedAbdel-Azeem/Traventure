@@ -69,6 +69,24 @@ export async function decrementProductQuantity(
   }
 }
 
+export async function getExternalSellers() {
+  try {
+    const externalSellers = await productModel.find().select("externalseller");
+    const sellerNames = [
+      ...new Set(
+        externalSellers
+          .filter(
+            (product) => product.externalseller && product.externalseller !== ""
+          )
+          .map((product) => product.externalseller)
+      ),
+    ];
+    return sellerNames;
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   addProduct,
   getProducts,
@@ -76,4 +94,5 @@ module.exports = {
   updateProduct,
   toggleProductArchive,
   decrementProductQuantity,
+  getExternalSellers,
 };

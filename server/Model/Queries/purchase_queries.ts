@@ -61,7 +61,7 @@ export async function getSellerSales(
       sellerSales.forEach((sale) => {
         const index = sale.productId.toString();
         if (compactSellerSales[index]) {
-          compactSellerSales[index].quantity += sale.soldQuantity;
+          compactSellerSales[index].soldQuantity += sale.soldQuantity;
         } else {
           compactSellerSales[index] = {
             productId: sale.productId,
@@ -122,7 +122,7 @@ export async function getExternalSellerSales(
       sellerSales.forEach((sale) => {
         const index = sale.productId.toString();
         if (compactSellerSales[index]) {
-          compactSellerSales[index].quantity += sale.soldQuantity;
+          compactSellerSales[index].soldQuantity += sale.soldQuantity;
         } else {
           compactSellerSales[index] = {
             productId: sale.productId,

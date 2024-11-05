@@ -26,7 +26,7 @@ export function SingleProductSalesChart({ data }) {
     <BarChart width={730} height={250} data={data}>
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="productName" />
-      <YAxis />
+      <YAxis allowDecimals={false} />
       <Tooltip content={BarChartCustomTooltip} />
       <Bar dataKey="soldQuantity" fill="#8884d8" />
     </BarChart>
