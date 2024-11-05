@@ -8,10 +8,16 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ActivityIcon from '@mui/icons-material/LocalActivity';
 import CategoryIcon from '@mui/icons-material/Category';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
+import DescriptionIcon from '@mui/icons-material/Description';
 import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 import ProfilePictureEdit from './ProfilePictureEdit';
 import NavbarDropdown from './NavbarDropdown';
 import { Logout } from '@mui/icons-material';
+import ChangePasswordModal, { AddContactLeadFormType } from './ChangePasswordModal';
+import Swal from "sweetalert2";
+import { editpassword } from "../custom_hooks/changepassowrd";
+
+
 
 const drawerHeight = 64;
 
@@ -26,14 +32,44 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
   const currentusertype = location.pathname.split(`/`)[1];
 
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [isPasswordModalOpen, setPasswordModalOpen] = useState(false);
   const hideTimeoutRef = useRef<number | null>(null);
+
+  const handlePasswordChangeSubmit = (data: AddContactLeadFormType) => {
+    console.log("Password change data:", data);
+    const { oldPassword, newPassword } = data;
+    editpassword(currentuser, oldPassword, newPassword)
+        .then(() => {
+            setPasswordModalOpen(false);
+
+          
+              Swal.fire({
+                title: "Password Changed Successfully",
+                text: "Password has been changed",
+                icon: "success",
+              });
+            
+        })
+        .catch((error) => {
+          const errorMessage = error.message || "Failed to change password.";
+          Swal.fire({
+            title: "Error",
+            text: errorMessage,
+            icon: "error",
+          });
+            
+        });
+};
+
 
   const adminnavbaritems = [
     { text: 'Home', icon: <HomeIcon />, path: `/admin/${currentuser}` },
     { text: 'Shop', icon: <ShopIcon />, path: `/admin/${currentuser}/shop` },
-    { text: 'Locations', icon: <LocationOnIcon />, path: `/admin/${currentuser}/locations` },
+    // { text: 'Locations', icon: <LocationOnIcon />, path: `/admin/${currentuser}/locations` },
     { text: 'Account Management', icon: <AccountCircleIcon />, path: `/admin/${currentuser}/users` },
     { text: 'Cats & Tags', icon: <CategoryIcon />, path: `/admin/${currentuser}/categoriesandtags` },
+    { text: 'Applications', icon: <DescriptionIcon />, path: `/admin/${currentuser}/applications` },
+
   ];
 
   const TGnavbaritems = [
@@ -107,6 +143,13 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
           icon: AccountCircleIcon 
         }]
       : []),
+      ...(currentusertype === 'admin' || currentusertype === 'tourismgovernor'
+        ? [{ 
+            label: 'Change Password', 
+            onClick: () => setPasswordModalOpen(true),
+            icon: EditCalendarIcon 
+          }]
+        : []),
     ...(currentusertype.includes('tourist') || currentusertype.includes('admin')
       ? [{ 
           label: 'Complaints', 
@@ -162,7 +205,9 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
                 >
                   <ListItemButton
                     onClick={() => navigate(item.path)}
-                    sx={{ color: currentPath === item.path ? '#FFD700' : 'white', display: 'flex', alignItems: 'center' }} 
+                    sx={{ color: currentPath === item.path ? '#FFD700' : 'white', display: 'flex', alignItems: 'center',
+                       
+                     }} 
                   >
                     <ListItemIcon sx={{ color: currentPath === item.path ? '#FFD700' : 'white', minWidth: '40px' }}>{item.icon}</ListItemIcon>
                     <ListItemText
@@ -202,7 +247,14 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
           </Box>
         </Toolbar>
       </AppBar>
-      <Box sx={{ marginTop: `${drawerHeight}px}` }}/>
+      {isPasswordModalOpen && (
+        <ChangePasswordModal
+          username={currentuser}
+          onClose={() => setPasswordModalOpen(false)}
+          onFormSubmit={handlePasswordChangeSubmit}
+        />
+      )}
+       <Box sx={{ marginTop: `${drawerHeight}px` }}></Box>
     </Box>
   );
 }

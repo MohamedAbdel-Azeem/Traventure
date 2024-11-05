@@ -9,7 +9,6 @@ const TourismGovernorPage = () => {
         <div>
             
            <NewNavbar/>
-           <Navbar/>
             <div
                 style={{
                     margin: `20px 20px 20px 100px`,
