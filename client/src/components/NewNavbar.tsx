@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AppBar, Box, CssBaseline, Fade, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
@@ -26,8 +26,7 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
   const currentusertype = location.pathname.split(`/`)[1];
 
   const [dropdownVisible, setDropdownVisible] = useState(false);
-    const hideTimeoutRef = useRef<number | null>(null);
-
+  const hideTimeoutRef = useRef<number | null>(null);
 
   const adminnavbaritems = [
     { text: 'Home', icon: <HomeIcon />, path: `/admin/${currentuser}` },
@@ -35,7 +34,6 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
     { text: 'Locations', icon: <LocationOnIcon />, path: `/admin/${currentuser}/locations` },
     { text: 'Account Management', icon: <AccountCircleIcon />, path: `/admin/${currentuser}/users` },
     { text: 'Cats & Tags', icon: <CategoryIcon />, path: `/admin/${currentuser}/categoriesandtags` },
-    // { text: 'Complaints', icon: <HowToVoteIcon />, path: `/admin/${currentuser}/complaints` },
   ];
 
   const TGnavbaritems = [
@@ -54,7 +52,6 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
     { text: 'Home', icon: <HomeIcon />, path: `/tourist/${currentuser}` },
     { text: 'Shop', icon: <ShopIcon />, path: `/tourist/${currentuser}/shop` },
     { text: 'Bookings', icon: <EditCalendarIcon />, path: `/tourist/${currentuser}/bookings` },
-    // { text: 'Complaints', icon: <HowToVoteIcon />, path: `/tourist/${currentuser}/complaints` },
   ];
 
   const advertisernavbaritems = [
@@ -99,33 +96,33 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
   };
 
   const handleMouseLeave = () => {
-    // hideTimeoutRef.current = window.setTimeout(() => {
-      setDropdownVisible(false);
-    // }, 200); 
+    setDropdownVisible(false);
   };
 
   const profileDropdownItems = [
-  { 
-    label: 'My Profile', 
-    onClick: () => navigate(`/${currentusertype}profile/${currentuser}`), 
-    icon: AccountCircleIcon 
-  },
-  ...(currentusertype.includes('tourist') || currentusertype.includes('admin')
-    ? [{ 
-        label: 'Complaints', 
-        onClick: () => navigate(`/${currentusertype}/${currentuser}/complaints`),
-        icon: HowToVoteIcon 
-      }]
-    : []),
-  { 
-    label: 'Log out', 
-    onClick: () => navigate('/'), 
-    icon: Logout 
-  },
-];
+    { 
+      label: 'My Profile', 
+      onClick: () => navigate(`/${currentusertype}profile/${currentuser}`), 
+      icon: AccountCircleIcon 
+    },
+    ...(currentusertype.includes('tourist') || currentusertype.includes('admin')
+      ? [{ 
+          label: 'Complaints', 
+          onClick: () => navigate(`/${currentusertype}/${currentuser}/complaints`),
+          icon: HowToVoteIcon 
+        }]
+      : []),
+    { 
+      label: 'Log out', 
+      onClick: () => navigate('/'), 
+      icon: Logout 
+    },
+  ];
 
+  
+  const currentPath = location.pathname;
 
-return (
+  return (
     <Box sx={{ display: 'flex' }} className={className}>
       <CssBaseline />
       <AppBar
@@ -163,9 +160,9 @@ return (
                 >
                   <ListItemButton
                     onClick={() => navigate(item.path)}
-                    sx={{ color: 'white', display: 'flex', alignItems: 'center' }}
+                    sx={{ color: currentPath === item.path ? '#FFD700' : 'white', display: 'flex', alignItems: 'center' }} // Change color if selected
                   >
-                    <ListItemIcon sx={{ color: 'white', minWidth: '40px' }}>{item.icon}</ListItemIcon>
+                    <ListItemIcon sx={{ color: currentPath === item.path ? '#FFD700' : 'white', minWidth: '40px' }}>{item.icon}</ListItemIcon>
                     <ListItemText
                       primary={item.text}
                       sx={{
