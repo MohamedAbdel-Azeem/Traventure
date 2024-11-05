@@ -25,6 +25,7 @@ import {
 } from "@mui/material";
 import Navbar from "./navbar";
 import ImageUploader from "./ImageUploader";
+import NewNavbar from "./NewNavbar";
 
 const itemsPerPage = 8;
 interface ShopPageProps {
@@ -237,6 +238,9 @@ const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
     p: 4,
   };
 
+  
+
+
   return (
     <div className="flex">
       <Modal open={open} onClose={handleClose}>
@@ -310,9 +314,9 @@ const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
           </Box>
         </Box>
       </Modal>
-      <ImprovedSidebar className="flex-2" />
-      <div className="flex flex-col flex-1">
-        <div className="search-bar">
+      <NewNavbar/>
+      <div className="flex flex-col flex-1" style={{ marginTop: '64px' }}>
+      <div className="search-bar">
           <input
             type="text"
             placeholder="Search products by name..."

@@ -160,7 +160,7 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
                 >
                   <ListItemButton
                     onClick={() => navigate(item.path)}
-                    sx={{ color: currentPath === item.path ? '#FFD700' : 'white', display: 'flex', alignItems: 'center' }} // Change color if selected
+                    sx={{ color: currentPath === item.path ? '#FFD700' : 'white', display: 'flex', alignItems: 'center' }} 
                   >
                     <ListItemIcon sx={{ color: currentPath === item.path ? '#FFD700' : 'white', minWidth: '40px' }}>{item.icon}</ListItemIcon>
                     <ListItemText
@@ -200,6 +200,7 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
           </Box>
         </Toolbar>
       </AppBar>
+      <Box sx={{ marginTop: `${drawerHeight}px}` }}/>
     </Box>
   );
 }

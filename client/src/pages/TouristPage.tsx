@@ -4,11 +4,12 @@ import Dashboard from "../components/Admin/Dashboard";
 import ImprovedSidebar from "../components/ImprovedSidebar";
 import NewNavbar from "../components/NewNavbar";
 const TouristPage = () => {
+    const navbarHeight = 64;
 
     
     return (
         <div>
-            
+
               <NewNavbar />
            
             <div

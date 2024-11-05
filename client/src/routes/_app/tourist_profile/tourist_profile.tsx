@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import ProfilePictureEdit from "../../../components/ProfilePictureEdit";
 import { uploadFileToStorage } from "../../../firebase/firebase_storage";
 import { patchUserProfile } from "../../../custom_hooks/updateTouristProfile";
+import NewNavbar from "../../../components/NewNavbar";
 
 
 
@@ -162,6 +163,8 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
 
 const [walletBalance, setWalletBalance] = useState(currentTourist.wallet);
   return (
+    <>
+    <NewNavbar/>
     <div
       className="min-h-screen flex items-center justify-center bg-gray-900"
       style={{
@@ -172,7 +175,7 @@ const [walletBalance, setWalletBalance] = useState(currentTourist.wallet);
         backgroundColor: "rgba(0, 0, 0, 0.7)",
       }}
     >
-      
+     
       <div className="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl p-8 backdrop-blur-lg bg-opacity-90">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex items-center space-x-6">
@@ -433,6 +436,7 @@ const [walletBalance, setWalletBalance] = useState(currentTourist.wallet);
             </ChangePasswordModal>)}
       </div>
     </div>
+    </>
   );
 };
 

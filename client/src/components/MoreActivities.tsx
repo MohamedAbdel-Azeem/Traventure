@@ -15,6 +15,7 @@ import { useGetAllActivitiesS } from '../custom_hooks/activities/useGetActivitie
 import IActivity from '../custom_hooks/activities/activity_interface';
 import { useGetAllCategories } from '../custom_hooks/categoryandTagCRUD';
 import Activity from '../custom_hooks/activities/activity_interface';
+import NewNavbar from './NewNavbar';
 
 const MoreActivities: React.FC = () => {
     const { sactivities, aloading, aerror } = useGetAllActivitiesS();
@@ -114,7 +115,8 @@ const MoreActivities: React.FC = () => {
 
     return (
         <div className="flex">
-            <div className="w-full">
+            <NewNavbar/>
+            <div className="w-full" style={{ marginTop: '80px' }}>
                 <h1 className="text-2xl font-bold mb-4 mx-auto">All Activities</h1>
                 <hr />
                 <br />

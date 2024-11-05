@@ -20,6 +20,7 @@ import cancelBookings from '../custom_hooks/cancelBooking';
 import { set } from 'date-fns';
 import { get } from 'react-hook-form';
 import { ActivityCardTourist } from './ActivityCardTourist';
+import NewNavbar from './NewNavbar';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -98,8 +99,7 @@ const Bookings: React.FC = () => {
           </Box>
                 </Box>
             </Modal>
-            <ImprovedSidebar />
-           
+            <NewNavbar/>           
             <div className="flex justify-center py-14">
                 <div className="w-1/2 gap-10">
                     <div className="flex flex-col gap-12">
