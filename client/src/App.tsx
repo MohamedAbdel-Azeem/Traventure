@@ -63,6 +63,7 @@ function App() {
           <Route path="/tourist/:username/locations" element={<MorePlaces/>}/>
           <Route path="/tourist/:username/itineraries" element={<MoreItineraries/>}/>
           <Route path="/tourist/:username/complaints" element={<TouristComplaints/>}/>
+          <Route path="/tourist/:username/profile" element={<Tourist_Profile/>}/>
           {/* Tourism Governor */}
           <Route path="/tourismgovernor/:username" element={<TourismGovernorPage/>}/>
           <Route path="/tourismgovernor/:username/historicaltags" element={<HistoricalTags/>}/>
@@ -71,18 +72,17 @@ function App() {
           <Route path="/advertiser/:username" element={<AdvertiserPage/>}/>
           <Route path="/advertiser/:username/locations" element={<MorePlaces/>}/>
           <Route path="/advertiser/:username/activities" element={<Activities/>}/>
+          <Route path="/advertiser/:username/profile" element={<Advertiser_Profile/>}/>
           {/* Tour Guide */}
           <Route path="/tourguide/:username" element={<TourGuidePage />}/>
           <Route path="/tourguide/:username/locations" element={<MorePlaces />}/>
           <Route path="/tourguide/:username/itineraries" element={<TourGuidePage />}/>
+          <Route path="/tourguide/:username/profile" element={<TourGuide_Profile/>}/>
           {/* Seller */}
           <Route path="/seller/:username" element={<ShopPage type="Seller"/>}/>
           <Route path="/itineraries" element={<Itineraries/>} />
           <Route path="/landing" element={<LandingPage/>} />
-          <Route path="/touristprofile/:username" element={<Tourist_Profile/>}/>
-          <Route path="/sellerprofile/:username" element={<Seller_Profile/>}/>
-          <Route path="/tourguideprofile/:username" element={<TourGuide_Profile/>}/>
-          <Route path="/advertiserprofile/:username" element={<Advertiser_Profile/>}/>
+          <Route path="/seller/:username/profile" element={<Seller_Profile/>}/>
           <Route path="/itinerary/:id" element={<ItineraryDetails/>}/>
           <Route path="/tourist-itinerary/:username" element={<ItineraryDetailsTourist/>}/>
           <Route path="/more-itineraries" element={<MoreItineraries/>}/>

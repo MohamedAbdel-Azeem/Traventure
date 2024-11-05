@@ -102,7 +102,7 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
   const profileDropdownItems = [
     { 
       label: 'My Profile', 
-      onClick: () => navigate(`/${currentusertype}profile/${currentuser}`), 
+      onClick: () => navigate(`/${currentusertype}/${currentuser}/profile`), 
       icon: AccountCircleIcon 
     },
     ...(currentusertype.includes('tourist') || currentusertype.includes('admin')
