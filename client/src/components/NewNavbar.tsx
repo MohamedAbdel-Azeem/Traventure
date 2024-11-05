@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AppBar, Box, CssBaseline, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
@@ -10,6 +10,7 @@ import CategoryIcon from '@mui/icons-material/Category';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 import ProfilePictureEdit from './ProfilePictureEdit';
+import NavbarDropdown from './NavbarDropdown';
 
 const drawerHeight = 64;
 
@@ -24,6 +25,8 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
   const currentusertype = location.pathname.split(`/`)[1];
 
   const [dropdownVisible, setDropdownVisible] = useState(false);
+    const hideTimeoutRef = useRef<number | null>(null);
+
 
   const adminnavbaritems = [
     { text: 'Home', icon: <HomeIcon />, path: `/admin/${currentuser}` },
@@ -95,8 +98,19 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
   };
 
   const handleMouseLeave = () => {
-    setDropdownVisible(false);
+    hideTimeoutRef.current = window.setTimeout(() => {
+      setDropdownVisible(false);
+    }, 200); 
   };
+
+  const dropdownItems = [
+    { label: 'My Profile', onClick: () => navigate(`/${currentusertype}profile/${currentuser}`) },
+    ...(currentusertype.includes('tourist') || currentusertype.includes('admin')
+      ? [{ label: 'Complaints', onClick: () => navigate(`/${currentusertype}/${currentuser}/complaints`) }]
+      : []),
+    { label: 'Log out', onClick: () => navigate('/') },
+  ];
+
 
   return (
     <Box sx={{ display: 'flex' }} className={className}>
@@ -137,7 +151,7 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
                   onClick={() => navigate(item.path)}
                   sx={{ color: 'white', display: 'flex', alignItems: 'center' }}
                 >
-                  <ListItemIcon sx={{ color: 'white', minWidth: '40px' }}>{item.icon}</ListItemIcon> {/* Reduced minWidth */}
+                  <ListItemIcon sx={{ color: 'white', minWidth: '40px' }}>{item.icon}</ListItemIcon> 
                   <ListItemText
                     primary={item.text}
                     sx={{
@@ -154,112 +168,23 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
           <Box
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            sx={{ position: 'relative', marginLeft: 'auto' }}
+            sx={{ marginLeft: 'auto', position: 'relative' }} 
           >
             <ProfilePictureEdit
               profilePicture={null}
-              onChange={function (newPicture: File | null): void {
-                throw new Error('Function not implemented.');
-              }}
+              onChange={(newPicture) => {}}
               isEditing={false}
               size="4.5vw"
             />
-           {dropdownVisible && (
-  <Box
-    sx={{
-      position: 'absolute',
-      top: '100%',
-      right: 0,
-      backgroundColor: 'white',
-      boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.15)',
-      borderRadius: '8px',
-      overflow: 'hidden',
-      zIndex: 1,
-      width: '200px',  // Set a consistent width for better alignment
-    }}
-  >
-    <List disablePadding>
-      <ListItem
-        button
-        onClick={() => {
-          let profileUrl = '';
-          switch (true) {
-            case currentusertype.includes('seller'):
-              profileUrl = `/sellerprofile/${currentuser}`;
-              break;
-            case currentusertype.includes('admin'):
-              profileUrl = `/adminprofile/${currentuser}`;
-              break;
-            case currentusertype.includes('tourist'):
-              profileUrl = `/touristprofile/${currentuser}`;
-              break;
-            case currentusertype.includes('tourismgovernor'):
-              profileUrl = `/tourismgovernorprofile/${currentuser}`;
-              break;
-            case currentusertype.includes('tourguide'):
-              profileUrl = `/tourguideprofile/${currentuser}`;
-              break;
-            case currentusertype.includes('guest'):
-              profileUrl = `/guestprofile/${currentuser}`;
-              break;
-            default:
-              profileUrl = `/advertiserprofile/${currentuser}`;
-          }
-          navigate(profileUrl);
-        }}
-        sx={{
-          '&:hover': {
-            backgroundColor: '#f5f5f5',
-          },
-          py: 1.5,
-          px: 2,
-        }}
-      >
-        <ListItemText primary="My Profile" primaryTypographyProps={{ color: 'black', fontWeight: '500' }} />
-      </ListItem>
-
-      {(currentusertype.includes('tourist') || currentusertype.includes('admin')) && (
-        <ListItem
-          button
-          onClick={() => {
-            let complaintsUrl = '';
-            if (currentusertype.includes('admin')) {
-              complaintsUrl = `/admin/${currentuser}/complaints`;
-            } else if (currentusertype.includes('tourist')) {
-              complaintsUrl = `/tourist/${currentuser}/complaints`;
-            }
-            navigate(complaintsUrl);
-          }}
-          sx={{
-            '&:hover': {
-              backgroundColor: '#f5f5f5',
-            },
-            py: 1.5,
-            px: 2,
-          }}
-        >
-          <ListItemText primary="Complaints" primaryTypographyProps={{ color: 'black', fontWeight: '500' }} />
-        </ListItem>
-      )}
-
-      <ListItem
-        button
-        onClick={() => navigate('/')}
-        sx={{
-          '&:hover': {
-            backgroundColor: '#f5f5f5',
-          },
-          py: 1.5,
-          px: 2,
-        }}
-      >
-        <ListItemText primary="Log out" primaryTypographyProps={{ color: 'black', fontWeight: '500' }} />
-      </ListItem>
-    </List>
-  </Box>
-)}
-
-            </Box>
+            {dropdownVisible && (
+              <NavbarDropdown
+                items={dropdownItems}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                sx={{ position: 'absolute', top: '100%', right: 0 }} 
+              />
+            )}
+          </Box>
             </Toolbar>
         </AppBar>
         </Box>
