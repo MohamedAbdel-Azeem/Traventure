@@ -1,9 +1,11 @@
 import React from 'react';
-import { Box, List, ListItem, ListItemText } from '@mui/material';
+import { Box, List, ListItem, ListItemText, ListItemIcon } from '@mui/material';
+import { SvgIconComponent } from '@mui/icons-material'; // Import type for Material UI icons
 
 interface DropdownItem {
   label: string;
   onClick: () => void;
+  icon?: SvgIconComponent; // Change icon type to SvgIconComponent
 }
 
 interface NavbarDropdownProps {
@@ -27,7 +29,7 @@ const NavbarDropdown: React.FC<NavbarDropdownProps> = ({ items, onMouseEnter, on
         overflow: 'hidden',
         zIndex: 1,
         width: '220px',
-        transition: 'all 0.2s ease-in-out', 
+        transition: 'all 0.2s ease-in-out',
       }}
     >
       <List disablePadding>
@@ -38,22 +40,28 @@ const NavbarDropdown: React.FC<NavbarDropdownProps> = ({ items, onMouseEnter, on
             onClick={item.onClick}
             sx={{
               '&:hover': {
-                backgroundColor: '#e8eaf6', 
+                backgroundColor: '#e8eaf6',
                 transform: 'translateY(-2px)',
               },
               py: 1.5,
               px: 2,
-              transition: 'background-color 0.2s, transform 0.2s', 
+              transition: 'background-color 0.2s, transform 0.2s',
             }}
           >
+            {/* Render the Material UI icon if it exists */}
+            {item.icon && (
+              <ListItemIcon>
+                <item.icon /> {/* Render the icon component directly */}
+              </ListItemIcon>
+            )}
             <ListItemText
               primary={item.label}
               primaryTypographyProps={{
-                color: 'black',
+                color: item.label === 'Log Out' ? 'red' : 'black', 
                 fontWeight: '500',
                 textAlign: 'center',
                 width: '100%',
-                fontSize: '0.9rem', 
+                fontSize: '0.9rem',
               }}
             />
           </ListItem>

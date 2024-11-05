@@ -11,6 +11,7 @@ import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 import ProfilePictureEdit from './ProfilePictureEdit';
 import NavbarDropdown from './NavbarDropdown';
+import { Logout } from '@mui/icons-material';
 
 const drawerHeight = 64;
 
@@ -103,13 +104,25 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
     }, 200); 
   };
 
-  const dropdownItems = [
-    { label: 'My Profile', onClick: () => navigate(`/${currentusertype}profile/${currentuser}`) },
-    ...(currentusertype.includes('tourist') || currentusertype.includes('admin')
-      ? [{ label: 'Complaints', onClick: () => navigate(`/${currentusertype}/${currentuser}/complaints`) }]
-      : []),
-    { label: 'Log out', onClick: () => navigate('/') },
-  ];
+  const profileDropdownItems = [
+  { 
+    label: 'My Profile', 
+    onClick: () => navigate(`/${currentusertype}profile/${currentuser}`), 
+    icon: AccountCircleIcon // Add the icon for 'My Profile'
+  },
+  ...(currentusertype.includes('tourist') || currentusertype.includes('admin')
+    ? [{ 
+        label: 'Complaints', 
+        onClick: () => navigate(`/${currentusertype}/${currentuser}/complaints`),
+        icon: HowToVoteIcon // Add the icon for 'Complaints'
+      }]
+    : []),
+  { 
+    label: 'Log out', 
+    onClick: () => navigate('/'), 
+    icon: Logout // Add the icon for 'Log out'
+  },
+];
 
 
   return (
@@ -178,7 +191,7 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
             />
             {dropdownVisible && (
               <NavbarDropdown
-                items={dropdownItems}
+                items={profileDropdownItems}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 
