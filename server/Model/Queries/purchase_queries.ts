@@ -25,7 +25,11 @@ export async function getSellerSales(
   try {
     const purchases: Array<{
       cart: Array<{
-        productId: { _id: mongoose.Types.ObjectId; name?: string };
+        productId: {
+          _id: mongoose.Types.ObjectId;
+          name?: string;
+          quantity?: number;
+        };
         quantity: number;
       }>;
       timeStamp: Date;
@@ -34,7 +38,7 @@ export async function getSellerSales(
       .populate({
         path: "cart.productId",
         match: { seller: sellerId },
-        select: "name",
+        select: "name quantity",
       })
       .lean();
 
@@ -45,8 +49,9 @@ export async function getSellerSales(
           .map((item) => ({
             productId: item.productId._id,
             productName: item.productId.name,
-            quantity: item.quantity,
+            soldQuantity: item.quantity,
             timestamp: purchase.timeStamp,
+            remainingQuantity: item.productId.quantity,
           }));
       })
       .flat();
@@ -56,12 +61,13 @@ export async function getSellerSales(
       sellerSales.forEach((sale) => {
         const index = sale.productId.toString();
         if (compactSellerSales[index]) {
-          compactSellerSales[index].quantity += sale.quantity;
+          compactSellerSales[index].quantity += sale.soldQuantity;
         } else {
           compactSellerSales[index] = {
             productId: sale.productId,
-            quantity: sale.quantity,
+            soldQuantity: sale.soldQuantity,
             productName: sale.productName,
+            remainingQuantity: sale.remainingQuantity,
           };
         }
       });
@@ -80,7 +86,11 @@ export async function getExternalSellerSales(
   try {
     const purchases: Array<{
       cart: Array<{
-        productId: { _id: mongoose.Types.ObjectId; name?: string };
+        productId: {
+          _id: mongoose.Types.ObjectId;
+          name?: string;
+          quantity?: number;
+        };
         quantity: number;
       }>;
       timeStamp: Date;
@@ -89,7 +99,7 @@ export async function getExternalSellerSales(
       .populate({
         path: "cart.productId",
         match: { externalseller: externalSeller },
-        select: "name",
+        select: "name quantity",
       })
       .lean();
 
@@ -100,8 +110,9 @@ export async function getExternalSellerSales(
           .map((item) => ({
             productId: item.productId._id,
             productName: item.productId.name,
-            quantity: item.quantity,
+            soldQuantity: item.quantity,
             timestamp: purchase.timeStamp,
+            remainingQuantity: item.productId.quantity,
           }));
       })
       .flat();
@@ -111,12 +122,13 @@ export async function getExternalSellerSales(
       sellerSales.forEach((sale) => {
         const index = sale.productId.toString();
         if (compactSellerSales[index]) {
-          compactSellerSales[index].quantity += sale.quantity;
+          compactSellerSales[index].quantity += sale.soldQuantity;
         } else {
           compactSellerSales[index] = {
             productId: sale.productId,
-            quantity: sale.quantity,
+            soldQuantity: sale.soldQuantity,
             productName: sale.productName,
+            remainingQuantity: sale.remainingQuantity,
           };
         }
       });

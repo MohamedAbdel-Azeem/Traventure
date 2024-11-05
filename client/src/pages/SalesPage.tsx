@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useGetSeller } from "../custom_hooks/sellerGetUpdate";
 import { useGetSellerSales } from "../custom_hooks/products/useGetSellerSales";
@@ -17,7 +16,7 @@ export function SalesPage() {
     sales,
     loading: salesLoading,
     error: salesError,
-  } = useGetSellerSales(seller?._id);
+  } = useGetSellerSales(seller?._id, true);
 
   if (sellerLoading || salesLoading) {
     return <div>Loading...</div>;
@@ -26,6 +25,8 @@ export function SalesPage() {
   if (sellerError || !seller || salesError) {
     return <div>Error: {sellerError || salesError}</div>;
   }
+
+  console.log(sales);
 
   return (
     <div className="flex flex-col items-center gap-8 pt-6">
