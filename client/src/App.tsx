@@ -37,34 +37,29 @@ import TouristComplaints from "./components/TouristComplaints";
 import ImprovedCreateItinerary from "./components/ImprovedCreateItinerary";
 import { SellerSalesPage } from "./pages/SellerSalesPage";
 import { AdminSalesPage } from "./pages/AdminSalesPage";
+import PDFSolution from "./firebase/PDFSolution";
+import Applications from "./components/Admin/Applications";
+import FormExample from "./components/Admin/FormExample";
+
 
 function App() {
   return (
     <MantineProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<SignIn />} />
-          <Route path="/test" element={<ImprovedCreateItinerary />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/" element={<SignIn/>}/>
+          <Route path="/register" element={<Register/>}/>
           {/* Admin */}
-          <Route path="/admin/:username" element={<AdminPage />} />
-          <Route path="/admin/:username/users" element={<Accounts />} />
-          <Route
-            path="/admin/:username/shop"
-            element={<ShopPage type="Admin" />}
-          />
-          <Route path="/admin/:username/sales" element={<AdminSalesPage />} />
-          <Route path="/admin/:username/locations" element={<MorePlaces />} />
-          <Route path="/admin/:username/categoriesandtags" element={<CT />} />
-          <Route path="/admin/:username/complaints" element={<Complaints />} />
-          <Route
-            path="/admin/:username/activities"
-            element={<MoreActivities />}
-          />
-          <Route
-            path="/admin/:username/itineraries"
-            element={<MoreItineraries />}
-          />
+          <Route path="/admin/:username" element={<AdminPage/>}/>
+        <Route path="/admin/:username/sales" element={<AdminSalesPage />} />
+          <Route path="/admin/:username/users" element={<Accounts/>}/>
+          <Route path="/admin/:username/shop" element={<ShopPage type="Admin"/>}/>
+          <Route path="/admin/:username/locations" element={<MorePlaces/>}/>
+          <Route path="/admin/:username/categoriesandtags" element={<CT/>}/>
+          <Route path="/admin/:username/complaints" element={<Complaints/>}/>
+          <Route path="/admin/:username/activities" element={<MoreActivities/>}/>
+          <Route path="/admin/:username/itineraries" element={<MoreItineraries/>}/>
+          <Route path="/admin/:username/applications" element={<Applications/>}/>
           {/* Tourist */}
           <Route path="/tourist/:username" element={<TouristPage />} />
           <Route

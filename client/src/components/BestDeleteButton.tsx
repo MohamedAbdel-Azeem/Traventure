@@ -1,6 +1,6 @@
 import React from 'react';
 
-const BestDeleteButton = ({ onDelete, className
+const BestDeleteButton = ({ onDelete, className = ''
  }) => {
   return (
     <button className={`bin-button ${className}`} title="Delete" onClick={onDelete}>

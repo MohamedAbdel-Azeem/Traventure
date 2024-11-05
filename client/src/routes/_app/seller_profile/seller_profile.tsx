@@ -82,8 +82,8 @@ const SellerProfile: React.FC<SellerProfileProps> = ({ seller }) => {
         text: updateseller,
         icon: "error",
       });
-      setUpdate(false);
     }
+    setUpdate(false);
     // UPDATE INFO TO DATABASE HERE
   };
 
