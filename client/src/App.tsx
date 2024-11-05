@@ -39,6 +39,7 @@ import { SalesPage } from "./pages/SalesPage";
 import PDFSolution from "./firebase/PDFSolution";
 import Applications from "./components/Admin/Applications";
 import FormExample from "./components/Admin/FormExample";
+import TheBIGMAP from "./components/TheBIGMAP";
 
 function App() {
   return (

@@ -18,6 +18,7 @@ import IActivity from "../custom_hooks/activities/activity_interface";
 import { TouristProfileData } from "../routes/_app/tourist_profile/tourist_profile_data";
 import Place from "../custom_hooks/places/place_interface";
 import { useGetItineraryID } from "../custom_hooks/itineraries/useGetItinerary";
+import TheBIGMAP from "./TheBIGMAP";
 
 
 
@@ -51,7 +52,6 @@ interface Itinerary {
     user_id?: TouristProfileData;
   }[];
   accesibility: boolean;
-  onDelete: (id: string) => void;
 }
 
 const ItineraryDetailsTourist: React.FC = () => {
@@ -75,6 +75,15 @@ console.log(itinerary);
   };
 
 
+  const arrayofmarkers = [{latitude:31,longitude:30},{latitude:31.01,longitude:30},{latitude:31.01,longitude:30.01},{latitude:31,longitude:30.01}] ;
+  const locations = [];
+  locations.push(itinerary.pickup_location);
+  locations.push(itinerary.dropoff_location);
+  itinerary.plan.forEach((item) => {
+    if (item.place && item.place.location) {
+      locations.push(item.place.location);
+    }
+  });
   return (
     <Box className="flex justify-center items-center h-auto py-12 bg-gray-100">
       <Card className="w-[95%] sm:w-[600px] md:w-[800px] lg:w-[900px] rounded-lg shadow-lg overflow-hidden bg-white">
@@ -209,6 +218,7 @@ console.log(itinerary);
             )}
         </CardContent>
       </Card>
+      <TheBIGMAP id="bigmap" className="flex h-[1300px] w-[300px] ml-2" arrayofmarkers={locations}/> 
     </Box>
   );
 };
