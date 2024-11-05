@@ -13,6 +13,7 @@ import { editpassword } from "../../../custom_hooks/changepassowrd";
 import Swal from "sweetalert2";
 import ProfilePictureEdit from "../../../components/ProfilePictureEdit";
 import { uploadFileToStorage } from "../../../firebase/firebase_storage";
+import NewNavbar from "../../../components/NewNavbar";
 interface TourGuideProfileProps {
   tourGuide: ITourGuide;
 }
@@ -152,6 +153,7 @@ const [profilePicture, setProfilePicture] = useState<File | null>(null);
         backgroundColor: "rgba(0, 0, 0, 0.7)",
       }}
     >
+      <NewNavbar />
       <Modal open={open} onClose={() => setOpen(false)}>
         <Box sx={style}>
           <Box className="flex flex-col">

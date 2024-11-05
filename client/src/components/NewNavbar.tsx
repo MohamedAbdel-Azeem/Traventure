@@ -38,13 +38,13 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
 
   const TGnavbaritems = [
     { text: 'Home', icon: <HomeIcon />, path: `/tourguide/${currentuser}` },
-    { text: 'Locations', icon: <LocationOnIcon />, path: `/tourguide/${currentuser}/locations` },
+    // { text: 'Locations', icon: <LocationOnIcon />, path: `/tourguide/${currentuser}/locations` },
     { text: 'Itinerary Management', icon: <ActivityIcon />, path: `/tourguide/${currentuser}/itineraries` },
   ];
 
   const TGonavbaritems = [
     { text: 'Home', icon: <HomeIcon />, path: `/tourismgovernor/${currentuser}` },
-    { text: 'Locations', icon: <LocationOnIcon />, path: `/tourismgovernor/${currentuser}/locations` },
+    // { text: 'Locations', icon: <LocationOnIcon />, path: `/tourismgovernor/${currentuser}/locations` },
     { text: 'Historical Tags', icon: <ActivityIcon />, path: `/tourismgovernor/${currentuser}/historicaltags` },
   ];
 
@@ -56,7 +56,7 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
 
   const advertisernavbaritems = [
     { text: 'Home', icon: <HomeIcon />, path: `/advertiser/${currentuser}` },
-    { text: 'Locations', icon: <LocationOnIcon />, path: `/advertiser/${currentuser}/locations` },
+    // { text: 'Locations', icon: <LocationOnIcon />, path: `/advertiser/${currentuser}/locations` },
     { text: 'Activity Management', icon: <ActivityIcon />, path: `/advertiser/${currentuser}/activities` },
   ];
 

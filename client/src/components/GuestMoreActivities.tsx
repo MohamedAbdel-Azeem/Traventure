@@ -11,6 +11,7 @@ import { useGetAllActivitiesS } from '../custom_hooks/activities/useGetActivitie
 import IActivity from '../custom_hooks/activities/activity_interface';
 import { useGetAllCategories } from '../custom_hooks/categoryandTagCRUD';
 import Activity from '../custom_hooks/activities/activity_interface';
+import NewNavbar from './NewNavbar';
 
 const GuestMoreActivities: React.FC = () => {
     const { sactivities, aloading, aerror } = useGetAllActivitiesS();
@@ -109,6 +110,7 @@ const GuestMoreActivities: React.FC = () => {
                 <hr />
                 <br />
                 <div>
+                    <NewNavbar/>
                     <div className="mb-4 flex gap-2">
                         <FormControl variant="outlined" className="min-w-[120px]">
                             <InputLabel id="search-type-label">Search By</InputLabel>

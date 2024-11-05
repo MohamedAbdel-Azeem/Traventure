@@ -71,6 +71,7 @@ function App() {
           {/* Advertiser */}
           <Route path="/advertiser/:username" element={<AdvertiserPage/>}/>
           <Route path="/advertiser/:username/locations" element={<MorePlaces/>}/>
+          <Route path="/advertiser/:username/itineraries" element={<MoreItineraries/>}/>
           <Route path="/advertiser/:username/activities" element={<Activities/>}/>
           <Route path="/advertiser/:username/profile" element={<Advertiser_Profile/>}/>
           {/* Tour Guide */}
