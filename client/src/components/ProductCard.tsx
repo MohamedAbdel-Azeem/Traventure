@@ -16,6 +16,8 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import { ToggleArchive } from "../custom_hooks/products/useToggleArchive";
 import { Feedback } from "./purchases/FeedBack";
+import { useSelector, UseSelector } from "react-redux";
+
 interface ProductCardProps {
   product: ACTUALProduct;
   productId: string;
@@ -34,6 +36,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
   const togglePopup = () => {
     setShowPopup((prev) => !prev);
   };
+
+  const exchangeRate = useSelector(
+    (state: any) => state.exchangeRate.exchangeRate
+  );
+  const currentCurrency = useSelector(
+    (state: any) => state.exchangeRate.currentCurrency
+  );
+
   const getUserFeedback = (product: any, username: string) => {
     const feedback = product.feedback.find(
       (fb: { touristUsername: string }) => fb.touristUsername === currentuser
@@ -174,7 +184,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
           touristUsername={currentuser}
         />
         <div className="flex flex-row justify-between items-center">
-          <span className="product-price">${currentProduct.price}</span>
+          <span className="product-price">
+            {currentCurrency} {(currentProduct.price * exchangeRate).toFixed(2)}
+          </span>
           <Rating
             disabled
             name="rating"

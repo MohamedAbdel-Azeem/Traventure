@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { useGetCurrencies } from "../custom_hooks/useGetCurrencies";
 import { useGetExchangeRate } from "../custom_hooks/useGetExchangeRate";
+import { useDispatch } from "react-redux";
+import { setExchangeRate } from "../redux/exchangeRateSlice"; // Adjust the import path as necessary
 
 // Define the CurrencyDropdown component
 const CurrencyDropdown: React.FC = () => {
   const [selectedCurrency, setSelectedCurrency] = useState<string>("EGP"); // Default selected currency
+  const dispatch = useDispatch();
 
   const {
     currencies,
@@ -12,11 +15,15 @@ const CurrencyDropdown: React.FC = () => {
     error: currencyError,
   } = useGetCurrencies(); // Fetch currencies
 
-  const {
-    exchangeRate,
-    loading: rateLoading,
-    error: rateError,
-  } = useGetExchangeRate(selectedCurrency); // Fetch exchange rate
+  const { exchangeRate, error: rateError } =
+    useGetExchangeRate(selectedCurrency); // Fetch exchange rate
+
+  dispatch(
+    setExchangeRate({
+      rate: exchangeRate,
+      currency: selectedCurrency,
+    })
+  ); // Set exchange rate in redux store
 
   // Handle currency selection change
   const handleCurrencyChange = (
@@ -25,7 +32,7 @@ const CurrencyDropdown: React.FC = () => {
     setSelectedCurrency(event.target.value);
   };
 
-  if (currencyError) {
+  if (currencyError || rateError) {
     return <p>Error fetching currencies: ${currencyError}</p>;
   }
 
