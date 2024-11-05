@@ -3,10 +3,16 @@ import { useGetCurrencies } from "../custom_hooks/useGetCurrencies";
 import { useGetExchangeRate } from "../custom_hooks/useGetExchangeRate";
 import { useDispatch } from "react-redux";
 import { setExchangeRate } from "../redux/exchangeRateSlice"; // Adjust the import path as necessary
+import { useSelector } from "react-redux";
 
 // Define the CurrencyDropdown component
 const CurrencyDropdown: React.FC = () => {
-  const [selectedCurrency, setSelectedCurrency] = useState<string>("EGP"); // Default selected currency
+  const initialCurrency = useSelector(
+    (state) => state.exchangeRate.currentCurrency
+  );
+
+  const [selectedCurrency, setSelectedCurrency] =
+    useState<string>(initialCurrency); // Default selected currency
   const dispatch = useDispatch();
 
   const {

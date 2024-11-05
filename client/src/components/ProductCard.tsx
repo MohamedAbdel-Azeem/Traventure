@@ -16,7 +16,7 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import { ToggleArchive } from "../custom_hooks/products/useToggleArchive";
 import { Feedback } from "./purchases/FeedBack";
-import { useSelector, UseSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 interface ProductCardProps {
   product: ACTUALProduct;
