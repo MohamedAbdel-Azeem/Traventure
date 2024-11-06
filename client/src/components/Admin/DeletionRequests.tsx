@@ -51,10 +51,12 @@ interface DeleteRequest {
   wallet: number;
 }
 
-function Row(props: { row: DeleteRequest }
-  ,onDelete: (username: string) => void
-) {
-  const { row } = props;
+interface RowProps {
+  row: DeleteRequest;
+  onDelete: (username: string) => void;
+}
+
+function Row({ row, onDelete }: RowProps) {
   const currenttype = useLocation().pathname.split("/")[1];
   const { deleteDeleteRequest } = useDeleteDeleteRequest();
 
