@@ -18,6 +18,8 @@ import IActivity from "../custom_hooks/activities/activity_interface";
 import { TouristProfileData } from "../routes/_app/tourist_profile/tourist_profile_data";
 import Place from "../custom_hooks/places/place_interface";
 
+import { useSelector } from "react-redux";
+
 
 
 interface TagStructure {
@@ -68,6 +70,12 @@ const ItineraryDetailsTourist: React.FC = () => {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
+  const exchangeRate = useSelector(
+    (state: any) => state.exchangeRate.exchangeRate
+  );
+  const currentCurrency = useSelector(
+    (state: any) => state.exchangeRate.currentCurrency
+  );
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
@@ -123,6 +131,8 @@ const ItineraryDetailsTourist: React.FC = () => {
 
   return (
     <Box className="flex justify-center items-center h-auto py-12 bg-gray-100">
+
+
       <Card className="w-[95%] sm:w-[600px] md:w-[800px] lg:w-[900px] rounded-lg shadow-lg overflow-hidden bg-white">
         <CardMedia
           component="img"
@@ -148,7 +158,7 @@ const ItineraryDetailsTourist: React.FC = () => {
 
           <Box className="flex justify-between mb-4 text-gray-600">
             <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">Price:</span> ${itinerary.price}
+              <span className="mr-2 font-semibold">Price:</span>   {currentCurrency} {(itinerary.price * exchangeRate).toFixed(2)}
             </Typography>
           </Box>
 
