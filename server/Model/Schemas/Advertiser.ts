@@ -12,6 +12,7 @@ const AdvertiserSchema = new Schema({
   company: { type: String },
   isAccepted: { type: Boolean, default: false },
   profilepic: {type: String, default: null},
+  wallet: { type: Number, required: true, default: 0 },
   websiteLink: { type: String },
   hotline: { type: String},
   founded: { type: Number },
