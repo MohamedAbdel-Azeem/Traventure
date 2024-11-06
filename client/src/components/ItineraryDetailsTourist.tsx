@@ -121,7 +121,7 @@ const ItineraryDetailsTourist: React.FC = () => {
           </p>
         </div>
         <p className="w-[263px] h-[41px] text-[20px]">
-          {currentCurrency+" "+(itinerary.price * exchangeRate).toFixed(2)}
+          {currentCurrency+" "+(itinerary.price*exchangeRate).toFixed(2)}
         </p>
         <p className="w-[827px] h-[115px] text-[34px]">
           {itinerary.description}
