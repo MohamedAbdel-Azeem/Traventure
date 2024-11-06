@@ -34,6 +34,7 @@ interface TourGuide {
   __v: number;
   mobileNumber: string;
   yearsOfExperience: number;
+  feedback: any[];
 }
 
 // Tourist interface
