@@ -92,17 +92,19 @@ function Row(props: { row: Complaint }) {
         <TableCell className="max-w-[2px] break-words">
           {row.username}
         </TableCell>
+        <TableCell className="max-w-[2px] break-words">
+          {row.username}
+        </TableCell>
         <TableCell className="max-w-[2px] break-words">{row.body}</TableCell>
         {currenttype.includes("admin") ? (
           <TableCell className="max-w-[2px] break-words">
             <div className="flex flex-row w-[88%]">
               <button title="Accept" className="acceptBtn ml-auto mr-8">
                 <svg
-                  height="1em"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
-                  stroke="currentColor"
+                  stroke="white"
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -327,7 +329,7 @@ export default function DeletionRequests() {
             </TableHead>
             <TableHead>
               <StyledTableRow>
-                <TableCell className="w-[30%]">
+                <TableCell className="w-[10%]">
                   <TableSortLabel
                     active={orderBy === "username"}
                     direction={orderBy === "username" ? order : "asc"}
@@ -336,7 +338,16 @@ export default function DeletionRequests() {
                     Username
                   </TableSortLabel>
                 </TableCell>
-                <TableCell className="w-[30%]">
+                <TableCell className="w-[20%]">
+                  <TableSortLabel
+                    active={orderBy === "username"}
+                    direction={orderBy === "username" ? order : "asc"}
+                    onClick={() => handleRequestSort("username")}
+                  >
+                    Type
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell className="w-[50%]">
                   <TableSortLabel
                     active={orderBy === "type"}
                     direction={orderBy === "type" ? order : "asc"}
@@ -345,7 +356,10 @@ export default function DeletionRequests() {
                     Wallet
                   </TableSortLabel>
                 </TableCell>
-                <TableCell className="w-[30%]">
+                <TableCell
+                  className="w-[20%]"
+                  style={{ textAlign: "center", paddingRight: "30px" }}
+                >
                   <TableSortLabel
                     active={orderBy === "title"}
                     direction={orderBy === "title" ? order : "asc"}

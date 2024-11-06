@@ -97,26 +97,15 @@ function Row(props: { row: Applicant; onDelete: (username: string) => void; acco
               )}
             >
               <svg
-                height="1em"
-                viewBox="0 0 512 512"
+                viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                <line
-                  x1="0"
-                  y1="256"
-                  x2="180"
-                  y2="500"
-                  stroke="white"
-                  strokeWidth="80"
-                />
-                <line
-                  x1="500"
-                  y1="0"
-                  x2="180"
-                  y2="500"
-                  stroke="white"
-                  strokeWidth="80"
-                />
+                <path d="M20 6L9 17L4 12" />
               </svg>
             </button>
             <button
