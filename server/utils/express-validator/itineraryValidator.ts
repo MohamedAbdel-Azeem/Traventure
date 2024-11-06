@@ -182,13 +182,9 @@ export const itineraryUpdateValidator = [
     .notEmpty()
     .withMessage("Language is required"),
   body("pickup_location")
-    .optional()
-    .isString()
-    .withMessage("Pickup location is required"),
+    .optional(),
   body("dropoff_location")
-    .optional()
-    .isString()
-    .withMessage("Dropoff location is required"),
+    .optional(),
   body('plan')
     .optional()
     .isArray({ min: 1 })

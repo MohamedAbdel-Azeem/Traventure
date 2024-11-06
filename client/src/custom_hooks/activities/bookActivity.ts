@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const useBookActivity = () => {
   const [data, setData] = useState(null);
@@ -19,8 +20,19 @@ const useBookActivity = () => {
         tourist:tourist_id
       });
       setData(response.data);
+      Swal.fire({
+        title: "Booking Successful",
+        text: "Your booking has been added successfully",
+        icon: "success",
+      })
+    
     } catch (error: any) {
       setError(error.message);
+      Swal.fire({
+        title: "Booking Failed",
+        text: error.response?.data?.message || "An error occurred",
+        icon: "error",
+    });
     } finally {
       setLoading(false);
     }

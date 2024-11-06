@@ -9,6 +9,7 @@ import {
   getProduct,
   decrementProductQuantity,
 } from "../Model/Queries/product_queries";
+import Tourist from "../Model/Schemas/Tourist";
 
 const router = Router();
 
@@ -42,9 +43,12 @@ router.post("/buy", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/tourist/:touristId", async (req: Request, res: Response) => {
+router.get("/tourist/:touristUsername", async (req: Request, res: Response) => {
   try {
-    const touristId = req.params.touristId;
+    const { touristUsername } = req.params;
+    const tourist = await Tourist.findOne({ username: touristUsername });
+    if (!tourist) return res.status(404).send("Tourist not found");
+    const touristId = tourist._id;
     const purchases = await getTouristPurchases(touristId);
     res.status(200).send(purchases);
   } catch (error) {
