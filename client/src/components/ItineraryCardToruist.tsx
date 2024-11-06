@@ -32,8 +32,8 @@ interface ItineraryCardCRUDProps {
   total: number;
   language: string;
   selectedTags?: TagStructure[];
-  pickup_location: string;
-  dropoff_location: string;
+  pickup_location: { longitude: number; latitude: number };
+  dropoff_location: { longitude: number; latitude: number };
   plan: {
     place?: Place;
     activities: {

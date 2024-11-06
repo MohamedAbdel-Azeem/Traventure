@@ -1,5 +1,11 @@
 
 import mongoose, { Document, Types } from "mongoose";
+interface TagStructure {
+  _id: string;
+  name: string;
+  __v: number;
+}
+
 export interface ItineraryDocument extends Document {
   main_Picture?: string;
   title: string;
@@ -13,7 +19,8 @@ export interface ItineraryDocument extends Document {
   language: string;
   pickup_location: {longitude: number, latitude: number};
   dropoff_location: {longitude: number, latitude: number};
-  selectedTags: string[];
+  //change this ↓ back to string[] if it causes issues
+  selectedTags: TagStructure[];
   plan: Array<{
     place?: Types.ObjectId;
     activities: Array<{
