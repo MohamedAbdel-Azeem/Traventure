@@ -33,6 +33,7 @@ type Activity = {
 interface ActivityProp {
     activity: Activity;
     onDelete: (_id: string) => void;
+    type?:string;
 }
 
 type CatStructure = {
@@ -43,7 +44,7 @@ type CatStructure = {
   
 
 
-export const ActivityCardTourist: React.FC<ActivityProp> = ({activity, onDelete }) => {
+export const ActivityCardTourist: React.FC<ActivityProp> = ({type,activity, onDelete }) => {
     const currentuser = useLocation().pathname.split('/')[2];
     const currenttype = useLocation().pathname.split('/')[1];
     const [isEditing, setIsEditing] = useState(false);
@@ -212,7 +213,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({activity, onDelete 
             <div className="absolute text-center top-0 left-0 w-[71px] h-[30px] rounded-tl-[19px] bg-[#FF0000] border-black border-[1px] rounded-br-[19px]">
               {newBIO ? "Open" : "Closed"}
               </div>
-                 {currenttype === "tourist" && currentActivity.BookingIsOpen && (
+                 {type === "tourist" && currentActivity.BookingIsOpen && (
                 <div className=" flex justify-end items-center py-2 px-5">
                     <button
                     className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ml-2"

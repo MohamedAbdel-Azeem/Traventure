@@ -12,6 +12,7 @@ router.post("/add", async (req, res) => {
             res.status(403).send("Booking already exists");
         }
         else{
+            console.log("hh");
         res.status(500).send("error creating booking");}
     }
 }); 
