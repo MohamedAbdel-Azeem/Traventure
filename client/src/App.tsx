@@ -42,14 +42,13 @@ import Applications from "./components/Admin/Applications";
 import TheBIGMAP from "./components/TheBIGMAP";
 import TermsAndConditions from "./routes/_app/terms_and_conditions/terms_and_conditions";
 
-
 function App() {
   return (
     <MantineProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<SignIn/>}/>
-          <Route path="/register" element={<Register/>}/>
+          <Route path="/" element={<SignIn />} />
+          <Route path="/register" element={<Register />} />
           {/* Admin */}
           <Route path="/admin/:username" element={<AdminPage/>}/>
           <Route path="/admin/:username/sales" element={<AdminSalesPage/>}/>

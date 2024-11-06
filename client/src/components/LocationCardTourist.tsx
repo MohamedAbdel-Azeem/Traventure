@@ -5,6 +5,7 @@ import { Button, TextField } from "@mui/material";
 import useUpdatePlace from "../custom_hooks/places/useUpdatePlace";
 import  Place  from "../custom_hooks/places/place_interface";
 import TheMAP from "./TheMAP";
+import { useSelector } from "react-redux";
 interface LocationCardTouristProps {
     id: string,
     onDelete: (id: string) => void;
@@ -28,7 +29,12 @@ const LocationCardTourist: React.FC<LocationCardTouristProps> = (
     const [apiBody, setApiBody] = useState<Place | null>(details);
     console.log();
     useUpdatePlace(id,apiBody);
-
+    const exchangeRate = useSelector(
+        (state: any) => state.exchangeRate.exchangeRate
+      );
+      const currentCurrency = useSelector(
+        (state: any) => state.exchangeRate.currentCurrency
+      );
 
 
     return ( 
@@ -234,9 +240,9 @@ const LocationCardTourist: React.FC<LocationCardTouristProps> = (
                     </div>
                         ) : (
                             <p className="overflow-auto w-[100px]">
-                                <div>Native:{native}</div>
-                                <div>Foreign:{foreign}</div>
-                                <div>Student:{student}</div>
+                                <div>Native: {currentCurrency} {(native * exchangeRate).toFixed(2)}</div>
+                                <div>Foreign: {currentCurrency} {(foreign * exchangeRate).toFixed(2)}</div>
+                                <div>Student: {currentCurrency} {(student * exchangeRate).toFixed(2)}</div>
                         </p>
                         )}</div>
                 </div>

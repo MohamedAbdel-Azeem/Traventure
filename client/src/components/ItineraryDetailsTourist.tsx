@@ -20,6 +20,8 @@ import Place from "../custom_hooks/places/place_interface";
 import { useGetItineraryID } from "../custom_hooks/itineraries/useGetItinerary";
 import TheBIGMAP from "./TheBIGMAP";
 
+import { useSelector } from "react-redux";
+
 
 
 interface TagStructure {
@@ -73,6 +75,12 @@ console.log(itinerary);
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
+  const exchangeRate = useSelector(
+    (state: any) => state.exchangeRate.exchangeRate
+  );
+  const currentCurrency = useSelector(
+    (state: any) => state.exchangeRate.currentCurrency
+  );
 
 
   const arrayofmarkers = [{latitude:31,longitude:30},{latitude:31.01,longitude:30},{latitude:31.01,longitude:30.01},{latitude:31,longitude:30.01}] ;
@@ -86,6 +94,8 @@ console.log(itinerary);
   });
   return (
     <Box className="flex justify-center items-center h-auto py-12 bg-gray-100">
+
+
       <Card className="w-[95%] sm:w-[600px] md:w-[800px] lg:w-[900px] rounded-lg shadow-lg overflow-hidden bg-white">
         <CardMedia
           component="img"
@@ -116,8 +126,10 @@ console.log(itinerary);
 
           <Box className="flex justify-between mb-4 text-gray-600">
             <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">Price:</span> $
-              {itinerary.price}
+
+              <span className="mr-2 font-semibold">Price:</span>   {currentCurrency} {(itinerary.price * exchangeRate).toFixed(2)}
+
+<!--               <span className="mr-2 font-semibold">Price:</span> $ {itinerary.price} -->
             </Typography>
           </Box>
 

@@ -5,7 +5,9 @@ const GuestMoreItineraries = () => {
 
     return (
         <>
+        
         <MoreItineraries/>
+        
         </>
     );
 };

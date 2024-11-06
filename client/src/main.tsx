@@ -1,10 +1,21 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App.tsx";
+import "./index.css";
+import { configureStore } from "@reduxjs/toolkit";
+import { Provider } from "react-redux";
+import exchangeRateReducer from "./redux/exchangeRateSlice.ts";
 
-createRoot(document.getElementById('root')!).render(
+const store = configureStore({
+  reducer: {
+    exchangeRate: exchangeRateReducer,
+  },
+});
+
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
-  </StrictMode>,
-)
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </StrictMode>
+);
