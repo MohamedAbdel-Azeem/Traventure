@@ -17,6 +17,7 @@ export interface ITourist extends Document {
   purchases: mongoose.Types.ObjectId[];
   currentLoyaltyPoints: number;
   totalLoyaltyPoints: number;
+  loyaltyLevel: number;
 }
 
 const touristSchema = new Schema({
