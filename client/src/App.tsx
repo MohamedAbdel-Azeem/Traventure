@@ -39,8 +39,8 @@ import { SellerSalesPage } from "./pages/SellerSalesPage";
 import { AdminSalesPage } from "./pages/AdminSalesPage";
 import PDFSolution from "./firebase/PDFSolution";
 import Applications from "./components/Admin/Applications";
-import FormExample from "./components/Admin/FormExample";
 import TheBIGMAP from "./components/TheBIGMAP";
+import TermsAndConditions from "./routes/_app/terms_and_conditions/terms_and_conditions";
 
 
 function App() {
@@ -99,6 +99,7 @@ function App() {
           <Route path="/guest/more-activities" element={<GuestMoreActivities />}/>
           <Route path="/guest/shop" element={<GuestShop type={"Tourist"} />}/>
           <Route path="/tourist/:username/bookings" element={<Bookings />}/>
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />}/>
         </Routes>
       </Router>
     </MantineProvider>
