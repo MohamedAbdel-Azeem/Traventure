@@ -15,6 +15,8 @@ export interface ITourist extends Document {
   wallet: number;
   bookings: mongoose.Types.ObjectId[];
   purchases: mongoose.Types.ObjectId[];
+  currentLoyaltyPoints: number;
+  totalLoyaltyPoints: number;
 }
 
 const touristSchema = new Schema({
@@ -31,6 +33,7 @@ const touristSchema = new Schema({
   purchases: [{ type: mongoose.Types.ObjectId, ref: "Purchase" }],
   currentLoyaltyPoints: { type: Number, required: true, default: 0 },
   totalLoyaltyPoints: { type: Number, required: true, default: 0 },
+  loyaltyLevel: { type: Number, default: 1 },
 });
 
 export default mongoose.model<ITourist>("Tourist", touristSchema);

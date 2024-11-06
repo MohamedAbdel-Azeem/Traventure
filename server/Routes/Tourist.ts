@@ -6,6 +6,7 @@ import { getprofileInfo , updateProfileInfo} from '../Model/Queries/user_queries
 import { getActivities } from '../Model/Queries/activity_queries';
 import  {getAll,getTouristBookings,gettouristComplaints, getTouristUpcoming}  from '../Model/Queries/tourist_queries';
 import { get } from 'http';
+import {redeemPoints} from "../Model/Queries/points_queries";
 
 const router = Router();
 
@@ -106,5 +107,16 @@ router.get('/complains/:username', async (req: Request, res: Response) => {
         res.status(500).send("error getting complaints");
     }
 });
+
+router.patch('/redeemPoints', async (req: Request, res: Response) => {
+    try {
+        const username = req.body.username;
+        const amount = req.body.amount;
+        await redeemPoints(username, amount);
+        res.status(200).send("points redeemed successfully");
+    } catch (error:any) {
+        res.status(500).send(error.message);
+    }
+  });
 
 export default router;
