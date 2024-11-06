@@ -83,7 +83,7 @@ router.post("/rateActivity/:ActivityId", async (req, res) => {
 });
 
 router.get("/canfeedback", async (req, res) => {
-    const { touristUsername,tourGuideUser_id } = req.body;
+    const { touristUsername,tourGuideUserId } = req.body;
     try{
         const tourist= await Tourist.findOne({ username: touristUsername }); 
         if (!tourist) {
@@ -91,7 +91,7 @@ router.get("/canfeedback", async (req, res) => {
         }
     
         const touristId = tourist._id.toString();
-        const canProvideFeedback = await isUserBookedInItineraryOFtourGuide(touristId,tourGuideUser_id);
+        const canProvideFeedback = await isUserBookedInItineraryOFtourGuide(touristId,tourGuideUserId);
         res.status(201).json({ canProvideFeedback });
     } catch (error) {
         res.status(500).send(" getting feedback: "+error);
