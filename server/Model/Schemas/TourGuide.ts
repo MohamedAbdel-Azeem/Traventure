@@ -29,7 +29,9 @@ const tourGuideSchema = new Schema({
       user_id: { type: mongoose.Types.ObjectId, required: true ,ref: "Tourist" },
       review: String,
       rating: Number,
+      username: String,
       createdAt: { type: Date, default: Date.now },
+
     },
   ],
 });

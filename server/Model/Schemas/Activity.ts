@@ -20,6 +20,7 @@ export interface INActivity extends mongoose.Document {
       user_id: string;
       review?: string;
       rating?: number;
+      username?: string;
       createdAt?: Date;
     }
   ];
@@ -62,6 +63,7 @@ const ActivitySchema = new schema({
       user_id: { type: mongoose.Types.ObjectId, required: true ,ref: "Tourist" },
       review: String,
       rating: String,
+      username: String,
       createdAt: { type: Date, default: Date.now },
     },
   ],default: []},
