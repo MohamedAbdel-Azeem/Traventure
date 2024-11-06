@@ -10,9 +10,11 @@ export async function addPurchase(purchaseData: object) {
   }
 }
 
-export async function getTouristPurchases(touristId: string) {
+export async function getTouristPurchases(
+  touristId: string | mongoose.Types.ObjectId
+) {
   try {
-    return await purchase.find({ touristId }).populate("productId");
+    return await purchase.find({ touristId }).populate("cart.productId").lean();
   } catch (error) {
     throw error;
   }
