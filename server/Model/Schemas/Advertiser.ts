@@ -11,6 +11,7 @@ const AdvertiserSchema = new Schema({
   documents: { type: String, required: true },
   company: { type: String },
   isAccepted: { type: Boolean, default: false },
+  profilepic: {type: String, default: null},
   websiteLink: { type: String },
   hotline: { type: String},
   founded: { type: Number },

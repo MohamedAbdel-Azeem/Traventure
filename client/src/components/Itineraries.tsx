@@ -8,7 +8,6 @@ import useDeleteItinerary from "../custom_hooks/itineraries/useDeleteItinerary";
 import { useParams } from "react-router-dom";
 
 const Itineraries = () => {
-  const currentuser=location.pathname.split(`/`)[2];
   const [cards, setCards] = useState<Itinerary[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null); // To track which card is being deleted
@@ -22,6 +21,9 @@ const Itineraries = () => {
     }
   }, [itinerary]);
 
+  const handleCreateItinerary = (itineraryData: Itinerary) => {
+    setCards([...cards, itineraryData]);
+  };
 
   const handleDelete = async (id: string) => {
     setDeletingId(id); // Mark the current itinerary as being deleted
@@ -37,9 +39,6 @@ const Itineraries = () => {
     setDeletingId(null); // Reset deletion state
   };
 
-  const handleCreate = (newCard: Partial<Itinerary>) => {
-    // Handle the creation of a new itinerary
-  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -75,19 +74,20 @@ const Itineraries = () => {
             plan={card.plan}
             selectedTags={card.selectedTags}
             onDelete={() => handleDelete(card._id)}
-            isDeleting={deletingId === card._id} // Pass the deleting state to the card
-            added_By={""}
-            total={0}
-            booked_By={[]}
+            isDeleting={deletingId === card._id} 
+            added_By={card.added_By}
+            total={card.total}
+            booked_By={card.booked_By}
             accesibility={card.accesibility}
             bookingActivated={card.bookingActivated}
           />
         ))}
       </div>
       <ItineraryModal
+        handleCreateItinerary={handleCreateItinerary}
         isOpen={isModalOpen}
+        onOpen={() => setIsModalOpen(true)}
         onClose={() => setIsModalOpen(false)}
-        onSubmit={handleCreate}
       />
     </div>
   );

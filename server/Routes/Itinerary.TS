@@ -14,7 +14,9 @@ import {
   itineraryUpdateValidator,
 } from "../utils/express-validator/itineraryValidator";
 import TourGuide from "../Model/Schemas/TourGuide";
+import ItineraryModel from "../Model/Schemas/Itinerary"
 import { ItineraryDocument } from "../Interfaces/IItinerary";
+
 const router = Router();
 
 router.post(
@@ -36,6 +38,16 @@ router.post(
   }
 );
 
+
+router.get("/", async (req: Request, res: Response) => {
+  try {
+    const products = await getAllItinerary();
+    res.status(200).send(products);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 router.get("/:username", async (req: Request, res: Response) => {
   try {
     const products = await getItinerary(req.params.username);
@@ -46,14 +58,23 @@ router.get("/:username", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/", async (req: Request, res: Response) => {
+router.get("/get/:itinerary_id", async (req: Request, res: Response) => {
   try {
-    const products = await getAllItinerary();
-    res.status(200).send(products);
+    const itinerary = await ItineraryModel.findById(req.params.itinerary_id)
+    .populate("plan.place")
+    .populate("plan.activities.activity_id")
+    .populate("selectedTags")
+    .populate("added_By")
+    .populate("booked_By")
+    
+    ;
+    res.status(200).send(itinerary);
   } catch (error) {
     res.status(500).send(error);
   }
-});
+}
+);
+
 
 router.patch(
   "/update/:id",
@@ -69,7 +90,6 @@ router.patch(
     try {
       const itineraryId = req.params.id;
       const updatedItinerary = await updateItinerary(itineraryId, newItinerary);
-      console.log(updatedItinerary);
       res.status(200).send("itinerary Updated Successfully !!");
     } catch (error) {
      

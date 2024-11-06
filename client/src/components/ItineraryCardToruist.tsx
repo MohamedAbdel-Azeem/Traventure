@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
-import StarIcon from '@mui/icons-material/Star';
-import { format } from 'date-fns';
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
+import StarIcon from "@mui/icons-material/Star";
+import { format } from "date-fns";
 import { TouristProfileData } from "../routes/_app/tourist_profile/tourist_profile_data";
-import IActivity from "../custom_hooks/activities/activity_interface";
+import {IActivity} from "../custom_hooks/activities/activity_interface";
 import Place from "../custom_hooks/places/place_interface";
-import { useLocation } from "react-router-dom";
+import useBookItinerary from "../custom_hooks/itineraries/bookItinerary";
+import { useParams,useLocation } from "react-router-dom";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import Swal from "sweetalert2";
+
 interface TagStructure {
   _id: string;
   name: string;
@@ -30,8 +32,8 @@ interface ItineraryCardCRUDProps {
   total: number;
   language: string;
   selectedTags?: TagStructure[];
-  pickup_location: string;
-  dropoff_location: string;
+  pickup_location: { longitude: number; latitude: number };
+  dropoff_location: { longitude: number; latitude: number };
   plan: {
     place?: Place;
     activities: {
@@ -66,44 +68,84 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   bookingActivated,
   inappropriate
 }) => {
-
+  
+  console.log(title,bookingActivated,inappropriate);
+  const { bookItinerary, data, loading, error } = useBookItinerary();
+  const {username}=useParams<{username:string}>();
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
-      return format(date, 'MM/dd/yyyy');
+      return format(date, "MM/dd/yyyy");
     } catch (error) {
       return "Invalid Date";
     }
   };
-  const currentType = useLocation().pathname.split('/')[1];
-const handleInappropriate = async() => {
-  try{
-  const response=await axios.patch(`/traventure/api/itinerary/toggleInappropriate/${_id}`);
-  if(response.status === 200){
-    setActive(!inappropriateV);
-    if(!inappropriateV)
-    Swal.fire({title:"Success",text:"Itinerary Bookings have been deemed Inappropriate",icon:"success"});
-  else{
-    Swal.fire({title:"Success",text:"Itinerary Bookings have been undeemed Inappropriate",icon:"success"});
-  }
-  }}
-  catch(error: any){ if(error.response && error.response.status === 400){
-    Swal.fire({title:"Error",text:"Can not change inappropriate of item",icon:"error"});
-  }}
- 
-};
-const [inappropriateV, setActive] = useState(inappropriate);
+
+  const handleBooking = async (id: string) => {
+    try{
+      await bookItinerary(id, username);
+    }
+
+    catch(error){
+      console.error("Error booking itinerary  :", error);
+
+    }
+
+  };
+
+  const currentType = useLocation().pathname.split("/")[1];
+  const handleInappropriate = async () => {
+    try {
+      const response = await axios.patch(
+        `/traventure/api/itinerary/toggleInappropriate/${_id}`
+      );
+      if (response.status === 200) {
+        setActive(!inappropriateV);
+        if (!inappropriateV)
+          Swal.fire({
+            title: "Success",
+            text: "Itinerary Bookings have been deemed Inappropriate",
+            icon: "success",
+          });
+        else {
+          Swal.fire({
+            title: "Success",
+            text: "Itinerary Bookings have been undeemed Inappropriate",
+            icon: "success",
+          });
+        }
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status === 400) {
+        Swal.fire({
+          title: "Error",
+          text: "Can not change inappropriate of item",
+          icon: "error",
+        });
+      }
+    }
+  };
+  const [inappropriateV, setActive] = useState(inappropriate);
+
   return (
-<div className="m-4 transition transform hover:scale-105 w-96 bg-gray-200 rounded-lg"> 
-  <div className="relative w-full h-[200px]">
-        <img src={main_Picture} alt={title} className="w-full h-full object-cover" />
+    <div className="m-4 transition transform hover:scale-105 w-96 bg-gray-200 rounded-lg">
+      <div className="relative w-full h-[200px]">
+        <img
+          src={main_Picture}
+          alt={title}
+          className="w-full h-full object-cover"
+        />
       </div>
       <div className="p-4">
         <div className="mb-2">
-          <h2 className="text-2xl font-semibold text-gray-800 text-center truncate">{title}</h2>
+          <h2 className="text-2xl font-semibold text-gray-800 text-center truncate">
+            {title}
+          </h2>
         </div>
         <div className="mb-4">
-          <p className="text-gray-600 text-center text-sm truncate">{description}</p>
+          <p className="text-gray-600 text-center text-sm truncate">
+            {description}
+          </p>
         </div>
 
         {Array.isArray(selectedTags) && selectedTags.length > 0 && (
@@ -140,7 +182,7 @@ const [inappropriateV, setActive] = useState(inappropriate);
         </div>
 
         <div className="flex justify-center items-center mb-4 space-x-4">
-          <div className="bg-red-500 text-white p-2 rounded-lg flex flex-col items-center w-1/2">
+          <div className="bg-red-500 text-white p-2 rounded-lg flex fle x-col items-center w-1/2">
             <p className="text-sm flex items-center">
               <ConfirmationNumberIcon className="mr-1" /> {price.toFixed(2)}
             </p>
@@ -168,27 +210,36 @@ const [inappropriateV, setActive] = useState(inappropriate);
               accesibility,
               dropoff_location,
               plan,
-              selectedTags,
-              
+              selectedTags
             }}
             className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center"
           >
             View Details
           </Link>
-          {currentType==="admin"&&<div className="bg-yellow-500 text-white p-2 rounded-lg flex flex-col items-center w-1/2">
-            <p className="text-sm flex items-center">
-               {bookingActivated?"Booking Activated":"Booking Deactivated"}
-            </p>
-          </div>}
+          {currentType==="tourist" && <button
+                        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                        onClick={() => handleBooking(_id)}
+                    >
+                        Book
+                    </button>}
+
+
+          {currentType === "admin" && (
+            <div className="bg-yellow-500 text-white p-2 rounded-lg flex flex-col items-center w-1/2">
+              <p className="text-sm flex items-center">
+                {bookingActivated ? "Booking Activated" : "Booking Deactivated"}
+              </p>
             </div>
-          {currentType==="admin"&&<Button onClick={handleInappropriate}>
-               {inappropriateV?"Declare appropriate":" Declare InAppropriate"}
-            </Button>
-          
-          }
+          )}
+
         </div>
+        {currentType === "admin" && (
+          <Button onClick={handleInappropriate}>
+            {inappropriateV ? "Declare appropriate" : " Declare InAppropriate"}
+          </Button>
+        )}
       </div>
-    
+    </div>
   );
 };
 

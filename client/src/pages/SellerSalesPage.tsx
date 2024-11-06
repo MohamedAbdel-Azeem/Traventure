@@ -1,10 +1,9 @@
-import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useGetSeller } from "../custom_hooks/sellerGetUpdate";
 import { useGetSellerSales } from "../custom_hooks/products/useGetSellerSales";
 import { SingleProductSalesChart } from "../components/SalesCharts";
 
-export function SalesPage() {
+export function SellerSalesPage() {
   const { username } = useParams<{ username: string }>();
 
   const {
@@ -17,7 +16,7 @@ export function SalesPage() {
     sales,
     loading: salesLoading,
     error: salesError,
-  } = useGetSellerSales(seller?._id);
+  } = useGetSellerSales(seller?._id, true);
 
   if (sellerLoading || salesLoading) {
     return <div>Loading...</div>;

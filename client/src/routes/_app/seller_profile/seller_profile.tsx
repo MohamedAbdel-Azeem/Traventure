@@ -4,10 +4,13 @@ import { useForm, Controller, set } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ISeller } from "./ISeller";
-import { useUpdateSeller } from "../../../custom_hooks/sellerGetUpdate";
+import { updateSeller, useUpdateSeller } from "../../../custom_hooks/sellerGetUpdate";
 import ChangePasswordModal, { AddContactLeadFormType } from "../../../components/ChangePasswordModal";
 import { editpassword } from "../../../custom_hooks/changepassowrd";
 import Swal from "sweetalert2";
+import { FaEdit } from "react-icons/fa";
+import ProfilePictureEdit from "../../../components/ProfilePictureEdit";
+import { uploadFileToStorage } from "../../../firebase/firebase_storage";
 
 interface SellerProfileProps {
   seller: ISeller;
@@ -36,7 +39,7 @@ const SellerProfile: React.FC<SellerProfileProps> = ({ seller }) => {
   const [currentSeller, setCurrentSeller] = useState(seller);
   const [apiBody, setApiBody] = useState({});
   const [apiUsername, setApiUsername] = useState("");
-  const response = useUpdateSeller(apiBody, apiUsername);
+  const [update, setUpdate] = useState(false);
   // React Hook Form setup with Zod validation
   const {
     control,
@@ -59,12 +62,28 @@ const SellerProfile: React.FC<SellerProfileProps> = ({ seller }) => {
   };
 
   // Save the form
-  const onSubmit = (data: ISeller) => {
+  const onSubmit = async (data: ISeller) => {
     console.log("Saved data:", data);
-    setIsEditing(false);
-    setApiBody(data);
-    setApiUsername(data.username);
+    data.profilepic = currentSeller.profilepic;
+    setUpdate(true);
+    if(profilePicture) {
+      const firebaseurl = await uploadFileToStorage(profilePicture);
+      console.log("Firebase URL:", firebaseurl);
+      data.profilepic = firebaseurl;
+    }
+    const updateseller = await updateSeller(data, currentSeller.username);
+    if(updateseller !== "error Updating seller") {
     setCurrentSeller(data);
+    setIsEditing(false);
+    }
+    else{
+      Swal.fire({
+        title: "Error",
+        text: updateseller,
+        icon: "error",
+      });
+    }
+    setUpdate(false);
     // UPDATE INFO TO DATABASE HERE
   };
 
@@ -99,25 +118,37 @@ const SellerProfile: React.FC<SellerProfileProps> = ({ seller }) => {
         });
 };
 
+const [profilePicture, setProfilePicture] = useState<File | null>(null);
+const handleProfilePictureClick = () => {
+  document.getElementById('profilePictureInput')?.click();
+};
+
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-gray-900"
-      style={{
-        backgroundImage: `url('/src/assets/mtn.jpg')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundBlendMode: "overlay",
-        backgroundColor: "rgba(0, 0, 0, 0.7)",
-      }}
-    >
-      <div className="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl p-8 backdrop-blur-lg bg-opacity-90">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex items-center space-x-6">
-            <img
-              src="/src/assets/t2.jpg" // Hardcoded profile picture
+  className="min-h-screen flex items-center justify-center bg-gray-900"
+  style={{
+    backgroundImage: `url('/src/assets/mtn.jpg')`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundBlendMode: "overlay",
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+  }}
+>
+  <div className="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl p-8 backdrop-blur-lg bg-opacity-90">
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="flex items-center space-x-6">
+      {(isEditing ) ? (
+      <ProfilePictureEdit
+        profilePicture={profilePicture}
+        onChange={setProfilePicture} // Directly pass setProfilePicture
+        isEditing={isEditing} // Controls the edit overlay visibility
+      />) : (
+        <img
+              src={currentSeller.profilepic }
               alt="Profile"
               className="w-32 h-32 rounded-full object-cover shadow-md border-4 border-purple-500"
             />
+      )}
             <div className="text-left">
               <h2 className="text-4xl font-extrabold text-purple-700">
                 Email:
@@ -203,8 +234,32 @@ const SellerProfile: React.FC<SellerProfileProps> = ({ seller }) => {
                 <button
                   type="submit"
                   className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-700 transition duration-200"
+                  disabled={update}
                 >
-                  Save
+                  {update ? (
+                  <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                  </svg>
+                ) : (
+                  "Save"
+                )}
                 </button>
                 <button
                   onClick={() => {

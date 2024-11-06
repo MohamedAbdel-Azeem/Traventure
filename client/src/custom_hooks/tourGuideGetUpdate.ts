@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { ITourGuide } from "../routes/_app/tourguide_profile/ITourGuide";
+import { uploadFileToStorage } from "../firebase/firebase_storage";
 
 export const useGetTourGuide = (username: string | undefined) => {
   const [user, setUser] = useState<ITourGuide | null>(null);
@@ -26,27 +27,20 @@ export const useGetTourGuide = (username: string | undefined) => {
   return { user, loading, error };
 };
 
-export function useUpdateTourGuide(
-  body: object,
-  username: string | undefined,
-  isUpdate: boolean
-) {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [response, setresponse] = useState<ITourGuide | null>(null);
-  const url = `/traventure/api/tourGuide/update/${username}`;
-  useEffect(() => {
-    const updateTourGuide = async () => {
+
+   export  const UpdateTourGuide = async (  body: object,
+      username: string | undefined,
+      file: File | null) => {
+      const url = `/traventure/api/tourGuide/update/${username}`;
       try {
+        if(file) {
+          const firebaseurl = await uploadFileToStorage(file);
+          (body as any).profilepic = firebaseurl;
+        }
         const { data } = await axios.patch(url, body);
-        setresponse(data);
+        return data;
       } catch (err) {
-        setError("error Updating Tour Guide");
-      } finally {
-        setLoading(false);
-      }
+       return "error Updating Tour Guide" ;
+      } 
     };
-    if (username && body && isUpdate) updateTourGuide();
-  }, [body, username, isUpdate]);
-  return { response, loading, error };
-}
+

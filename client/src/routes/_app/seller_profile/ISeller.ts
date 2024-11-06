@@ -3,6 +3,7 @@ export interface ISeller {
   username: string;
   email: string;
   password: string;
+  profilepic: string;
   name: string;
   description: string;
   isAccepted: boolean;

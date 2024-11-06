@@ -26,23 +26,14 @@ export const useGetSeller = (username: string | undefined) => {
   return { user, loading, error };
 };
 
-export function useUpdateSeller(body: object, username: string) {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [response, setresponse] = useState<ISeller | null>(null);
-  const url = `/traventure/api/seller/update/${username}`;
-  useEffect(() => {
-    const updateSeller = async () => {
+
+    export const updateSeller = async (body: object, username: string) => {
+      const url = `/traventure/api/seller/update/${username}`;
       try {
         const { data } = await axios.patch(url, body);
-        setresponse(data);
+        return data;
       } catch (err) {
-        setError("error Updating seller");
-      } finally {
-        setLoading(false);
+        return "error Updating seller";
       }
     };
-    if (username && body) updateSeller();
-  }, [body, username]);
-  return { response, loading, error };
-}
+   

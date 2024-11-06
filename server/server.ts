@@ -21,6 +21,8 @@ import changePasswordRouter from "./Routes/ChangePassword";
 import BookingRouter from "./Routes/booking";
 import purchaseRouter from "./Routes/purchase";
 import complaintRouter from "./Routes/Complaint";
+import feedbackRouter from "./Routes/Feedback";
+import reviewdocsRouter from "./Routes/ReviewDoc";
 const app = express();
 
 app.use(express.json());
@@ -43,10 +45,12 @@ app.use("/api/governer", governerRouter);
 app.use("/api/itinerary", itineraryRouter);
 app.use("/api/login", LoginRouter);
 app.use("/api/historicalTags", historicalTagsRouter);
-app.use("/api/user/changePassword", changePasswordRouter);
+app.use("/api/user/", changePasswordRouter);
 app.use("/api/bookings",BookingRouter );
 app.use("/api/purchase",purchaseRouter);
 app.use("/api/complaint",complaintRouter);
+app.use("/api/feedBack",feedbackRouter);
+app.use("/api/admin/", reviewdocsRouter);
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Traventure API");
 });

@@ -2,6 +2,7 @@ export interface IAdvertiser {
     username: string;
     email: string;
     password: string;
+    profilepic: string;
     websiteLink: string;
     hotline: string;
     company: string;

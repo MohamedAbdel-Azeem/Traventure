@@ -28,3 +28,36 @@ const useGetItinerary = (username: string | undefined) => {
 };
 
 export default useGetItinerary;
+
+export const useGetItineraryID = (id: string | undefined) => {
+  const [itinerary, setItinerary] = useState<Itinerary | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    
+          console.log("sadasasasdasdasdasdasdsad");
+    async function fetchItinerary() {
+      if (!id) return;
+      setLoading(true);
+      try {
+        const response = await axios.get(`/traventure/api/itinerary/get/${id}`);
+        if (response.status === 200) {
+          console.log("sadasasasdasdasdasdasdsad",response.data);
+          setItinerary(response.data);
+        } else {
+          
+          console.log("sadasasasdasdasdasdasdsad" );
+          setError("Error fetching data");
+        }
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchItinerary();
+  }, [id]);
+
+  return { itinerary, loading, error };
+};

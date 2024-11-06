@@ -3,39 +3,52 @@ import {
   addPurchase,
   getTouristPurchases,
   getSellerSales,
+  getExternalSellerSales,
 } from "../Model/Queries/purchase_queries";
 import {
   getProduct,
   decrementProductQuantity,
 } from "../Model/Queries/product_queries";
+import Tourist from "../Model/Schemas/Tourist";
 
 const router = Router();
 
 router.post("/buy", async (req: Request, res: Response) => {
   try {
-    const { productId, quantity, touristId } = req.body;
-    const now = new Date();
-    const purchaseData = {
-      productId,
-      quantity,
-      touristId,
-      timeStamp: now,
-    };
-    const product = await getProduct(productId);
-    if (product && product?.quantity - quantity < 0) {
-      res.status(400).send("Quantity not available");
+    const { touristId, cart } = req.body;
+
+    for (const singleProduct of cart) {
+      const product = await getProduct(singleProduct.productId);
+      if (!product) {
+        return res.status(400).send("Product not found");
+      }
+      if (product.quantity - singleProduct.quantity < 0) {
+        return res
+          .status(400)
+          .send("Product out of stock or not enough quantity");
+      }
     }
-    const purchase = await addPurchase(purchaseData);
-    await decrementProductQuantity(productId, quantity);
-    res.status(200).send(purchase);
+
+    for (const singleProduct of cart) {
+      await decrementProductQuantity(
+        singleProduct.productId,
+        singleProduct.quantity
+      );
+    }
+
+    const purchase = await addPurchase({ touristId, cart });
+    return res.status(200).send(purchase);
   } catch (error) {
-    res.status(500).send(error);
+    return res.status(500).send(error);
   }
 });
 
-router.get("/tourist/:touristId", async (req: Request, res: Response) => {
+router.get("/tourist/:touristUsername", async (req: Request, res: Response) => {
   try {
-    const touristId = req.params.touristId;
+    const { touristUsername } = req.params;
+    const tourist = await Tourist.findOne({ username: touristUsername });
+    if (!tourist) return res.status(404).send("Tourist not found");
+    const touristId = tourist._id;
     const purchases = await getTouristPurchases(touristId);
     res.status(200).send(purchases);
   } catch (error) {
@@ -43,14 +56,35 @@ router.get("/tourist/:touristId", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/seller/:sellerId", async (req: Request, res: Response) => {
+router.get("/seller", async (req: Request, res: Response) => {
   try {
-    const sellerId = req.params.sellerId;
-    const purchases = await getSellerSales(sellerId);
-    res.status(200).send(purchases);
+    // externalSeller and sellerId are mutually exclusive
+    // compactView is optional & makes the response more compact removing timestamps and getting all the similar products are in a single object with total quantity
+    const { externalSeller, sellerId, compactView } = req.query;
+    const compactViewBoolean = compactView === "true";
+
+    if ((!externalSeller && !sellerId) || (externalSeller && sellerId)) {
+      return res.status(404).send("Invalid query parameters");
+    }
+
+    if (sellerId) {
+      console.log(sellerId);
+      const sales = await getSellerSales(
+        sellerId as string,
+        compactViewBoolean
+      );
+      return res.status(200).send(sales);
+    }
+
+    if (externalSeller) {
+      const sales = await getExternalSellerSales(
+        externalSeller as string,
+        compactViewBoolean
+      );
+      return res.status(200).send(sales);
+    }
   } catch (error) {
-    console.log(error);
-    res.status(500).send(error);
+    return res.status(500).send(error);
   }
 });
 

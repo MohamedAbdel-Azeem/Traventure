@@ -180,18 +180,12 @@ function Row(props: { row: Complaint }) {
     </React.Fragment>
   );
 }
-function getDate() {
-  const today = new Date().toISOString();
-  const month = today.getMonth() + 1;
-  const year = today.getFullYear();
-  const date = today.getDate();
-  return `${year}-${month}-${date}T00:00:00.000+00:00`;
-}
+
 export default function ComplaintsTable() {
   const currenttype = useLocation().pathname.split("/")[1];
   const currentuser = useLocation().pathname.split("/")[2];
 
-  const { ccomplaints, cloading, cerror } = currenttype.includes("tourist")
+  const { ccomplaints, cloading } = currenttype.includes("tourist")
     ? UseGetComplaintsID(currentuser)
     : UseGetComplaints();
   const [complaints, setComplaints] = useState([] as Complaint[]);
