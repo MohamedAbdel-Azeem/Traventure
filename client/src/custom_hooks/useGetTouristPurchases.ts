@@ -19,6 +19,7 @@ export function useGetTouristPurchases(username: string | undefined) {
         setError(err);
       })
       .finally(() => {
+        console.log("purchases", purchases);
         setLoading(false);
       });
   }, [username]);

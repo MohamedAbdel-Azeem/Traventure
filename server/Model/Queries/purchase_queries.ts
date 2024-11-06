@@ -14,7 +14,16 @@ export async function getTouristPurchases(
   touristId: string | mongoose.Types.ObjectId
 ) {
   try {
-    return await purchase.find({ touristId }).populate("cart.productId").lean();
+    return await purchase
+      .find({ touristId })
+      .populate({
+        path: "cart.productId",
+        populate: {
+          path: "feedback.touristId",
+          select: "username",
+        },
+      })
+      .lean();
   } catch (error) {
     throw error;
   }

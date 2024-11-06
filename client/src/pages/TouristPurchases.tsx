@@ -25,7 +25,7 @@ export function TouristPurchases() {
   const { username } = useParams();
 
   const { purchases, loading, error } = useGetTouristPurchases(username);
-
+  console.log(purchases);
   if (loading) {
     return <ClipLoader />;
   }

@@ -6,7 +6,8 @@ import { styled } from "@mui/material/styles";
 import { TableRow } from "@mui/material";
 import { useState } from "react";
 import { Feedback } from "./purchases/FeedBack";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
+import { get } from "react-hook-form";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -16,12 +17,19 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontSize: 16,
   },
 }));
-
+interface IFeedback {
+  rating: number | null;
+  review: string | null;
+  touristId: {
+    username: string;
+  };
+}
 interface IProduct {
   _id: string;
   name: string;
   imageUrl: string;
   price: number;
+  feedback: IFeedback[];
 }
 
 interface ICartElement {
@@ -39,7 +47,22 @@ export function TouristPreviousPurchaseRow(purchase: IPurchase) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const { username } = useParams();
-
+  const currentuser = useLocation().pathname.split("/")[2];
+  const getUserFeedback = (product: any, username: string | undefined) => {
+    const feedback = product.feedback.find(
+      (fb: { touristId: { username: string } }) =>
+        fb.touristId.username === username
+    );
+    return (
+      feedback || {
+        touristId: null,
+        rating: null,
+        review: null,
+        touristUsername: null,
+      }
+    );
+  };
+  console.log("feedback", purchase.cart[0].productId.feedback);
   return (
     <>
       <TableRow key={purchase._id}>
@@ -103,15 +126,13 @@ export function TouristPreviousPurchaseRow(purchase: IPurchase) {
                   </StyledTableCell>
                   <StyledTableCell style={{ borderBottom: "none" }}>
                     <Feedback
-                      touristFeedback={{
-                        touristUsername: username!,
-                        rating: null,
-                        review: null,
-                      }}
+                      touristFeedback={getUserFeedback(
+                        item.productId,
+                        username
+                      )}
                       type="product"
                       id={item.productId._id}
-                      key={item.productId._id}
-                      touristUsername={username!}
+                      touristUsername={currentuser}
                     />
                   </StyledTableCell>
                 </TableRow>
