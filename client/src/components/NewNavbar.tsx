@@ -10,6 +10,8 @@ import CategoryIcon from '@mui/icons-material/Category';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import DescriptionIcon from '@mui/icons-material/Description';
 import EditCalendarIcon from '@mui/icons-material/EditCalendar';
+import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
+import StadiumIcon from '@mui/icons-material/Stadium';
 import ProfilePictureEdit from './ProfilePictureEdit';
 import NavbarDropdown from './NavbarDropdown';
 import { Logout } from '@mui/icons-material';
@@ -88,12 +90,22 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
     { text: 'Home', icon: <HomeIcon />, path: `/tourist/${currentuser}` },
     { text: 'Shop', icon: <ShopIcon />, path: `/tourist/${currentuser}/shop` },
     { text: 'Bookings', icon: <EditCalendarIcon />, path: `/tourist/${currentuser}/bookings` },
+
+    { text: 'Itineraries', icon: <FlightTakeoffIcon />, path: `/tourist/${currentuser}/itineraries` },
+    { text: 'Locations', icon: <LocationOnIcon />, path: `/tourist/${currentuser}/locations` },
+    { text: 'Activities', icon: <StadiumIcon />, path: `/tourist/${currentuser}/activities` },
+
+
+
   ];
 
   const advertisernavbaritems = [
     { text: 'Home', icon: <HomeIcon />, path: `/advertiser/${currentuser}` },
     // { text: 'Locations', icon: <LocationOnIcon />, path: `/advertiser/${currentuser}/locations` },
     { text: 'Activity Management', icon: <ActivityIcon />, path: `/advertiser/${currentuser}/activities` },
+
+    { text: 'Itineraries', icon: <FlightTakeoffIcon />, path: `/advertiser/${currentuser}/itineraries` },
+    { text: 'Locations', icon: <LocationOnIcon />, path: `/advertiser/${currentuser}/locations` },
   ];
 
   const sellernavbaritems = [
@@ -104,6 +116,10 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
   const guestnavbaritems = [
     { text: 'Home', icon: <HomeIcon />, path: `/guest-page` },
     { text: 'Shop', icon: <ShopIcon />, path: `/guest/shop` },
+
+    { text: 'Itineraries', icon: <FlightTakeoffIcon />, path: `/guest/more-itineraries` },
+    { text: 'Locations', icon: <LocationOnIcon />, path: `/guest/more-places` },
+    { text: 'Activities', icon: <StadiumIcon />, path: `/guest/more-activities` },
   ];
 
   const getNavbarItems = (currentusertype: string) => {
