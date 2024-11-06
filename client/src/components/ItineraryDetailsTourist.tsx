@@ -129,7 +129,6 @@ console.log(itinerary);
 
               <span className="mr-2 font-semibold">Price:</span>   {currentCurrency} {(itinerary.price * exchangeRate).toFixed(2)}
 
-<!--               <span className="mr-2 font-semibold">Price:</span> $ {itinerary.price} -->
             </Typography>
           </Box>
 
