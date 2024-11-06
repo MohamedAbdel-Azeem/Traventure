@@ -1,5 +1,5 @@
 import { Document, ObjectId } from "mongoose";
-
+import mongoose from "mongoose";
 export interface ITourGuide extends Document {
   username: string;
   email: string;
@@ -19,6 +19,7 @@ export interface ITourGuide extends Document {
     user_id: string;
     review?: string;
     rating?: Number;
+    username?: string;
     createdAt?: Date;
   }[];
 }
