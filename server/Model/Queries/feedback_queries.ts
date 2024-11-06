@@ -1,5 +1,4 @@
-import { hashPassword } from "../../utils/functions/bcrypt_functions";
-import touristModel from "../Schemas/Tourist";
+
 import tourGuideModel from "../Schemas/TourGuide";
 import ItineraryModel from '../Schemas/Itinerary';
 import ActivityModel, { INActivity } from "../Schemas/Activity";
