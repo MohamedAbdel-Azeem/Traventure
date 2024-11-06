@@ -1,5 +1,7 @@
+import mongoose from "mongoose";
 import productModel, { IFeedback } from "../Schemas/Product";
 import Tourist from "../Schemas/Tourist";
+
 
 export async function addProduct(product: Object) {
   try {
@@ -42,7 +44,7 @@ export async function getProducts() {
   }
 }
 
-export async function getProduct(ObjectId: string) {
+export async function getProduct(ObjectId: string | mongoose.Types.ObjectId) {
   try {
     const product = await productModel.findById(ObjectId);
     return product;
@@ -75,7 +77,7 @@ export async function toggleProductArchive(ObjectId: string) {
 }
 
 export async function decrementProductQuantity(
-  ObjectId: string,
+  ObjectId: string | mongoose.Types.ObjectId,
   quantity: number
 ) {
   try {
@@ -88,6 +90,24 @@ export async function decrementProductQuantity(
     }
     return null;
   } catch (error) {
+    throw error;
+  }
+}
+
+export async function getExternalSellers() {
+  try {
+    const externalSellers = await productModel.find().select("externalseller");
+    const sellerNames = [
+      ...new Set(
+        externalSellers
+          .filter(
+            (product) => product.externalseller && product.externalseller !== ""
+          )
+          .map((product) => product.externalseller)
+      ),
+    ];
+    return sellerNames;
+      } catch (error) {
     throw error;
   }
 }
@@ -131,5 +151,6 @@ module.exports = {
   updateProduct,
   toggleProductArchive,
   decrementProductQuantity,
+  getExternalSellers,
   addFeedback,
 };

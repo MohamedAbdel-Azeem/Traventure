@@ -1,9 +1,8 @@
 import { BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Bar } from "recharts";
-import { formatDataBarChart } from "../utils/formatDataBarChart";
 
 const BarChartCustomTooltip: React.FC = ({ active, payload }) => {
   if (active && payload && payload.length) {
-    const { name, sold, remaining } = payload[0].payload;
+    const { productName, soldQuantity, remainingQuantity } = payload[0].payload;
     return (
       <div
         className="custom-tooltip"
@@ -13,9 +12,9 @@ const BarChartCustomTooltip: React.FC = ({ active, payload }) => {
           border: "1px solid #ccc",
         }}
       >
-        <p className="label">{`Name: ${name}`}</p>
-        <p>{`Sold: ${sold}`}</p>
-        <p>{`Remaining: ${remaining}`}</p>
+        <p className="label">{`Product Name: ${productName}`}</p>
+        <p>{`Sold: ${soldQuantity}`}</p>
+        <p>{`Remaining: ${remainingQuantity}`}</p>
       </div>
     );
   }
@@ -23,15 +22,13 @@ const BarChartCustomTooltip: React.FC = ({ active, payload }) => {
 };
 
 export function SingleProductSalesChart({ data }) {
-  const formattedData = formatDataBarChart(data);
-  console.log(formattedData);
   return (
-    <BarChart width={730} height={250} data={formattedData}>
+    <BarChart width={730} height={250} data={data}>
       <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="name" />
-      <YAxis />
+      <XAxis dataKey="productName" />
+      <YAxis allowDecimals={false} />
       <Tooltip content={BarChartCustomTooltip} />
-      <Bar dataKey="sold" fill="#8884d8" />
+      <Bar dataKey="soldQuantity" fill="#8884d8" />
     </BarChart>
   );
 }

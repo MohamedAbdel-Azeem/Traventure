@@ -1,11 +1,31 @@
 import mongoose from "mongoose";
 
 const schema = mongoose.Schema;
+
+export interface IPurchasedProduct {
+  productId: mongoose.Types.ObjectId;
+  quantity: number;
+}
+
+interface IPurchase {
+  touristId: mongoose.Types.ObjectId;
+  cart: IPurchasedProduct[];
+  timeStamp: Date;
+}
+
 const purchaseSchema = new schema({
   touristId: { type: mongoose.Types.ObjectId, required: true, ref: "Tourist" },
-  productId: { type: mongoose.Types.ObjectId, required: true, ref: "Product" },
+  cart: [
+    {
+      productId: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: "Product",
+      },
+      quantity: { type: Number, default: 1 },
+    },
+  ],
   timeStamp: { type: Date, required: true, default: Date.now },
-  quantity: { type: Number, required: true },
 });
 
-export default mongoose.model("Purchase", purchaseSchema);
+export default mongoose.model<IPurchase>("Purchase", purchaseSchema);

@@ -9,7 +9,7 @@ import {
 } from "../Model/Queries/guest_queries";
 import { governerValidator } from "../utils/express-validator/governerValidator";
 import GovernerSchema from "../Model/Schemas/Governer";
-
+import { getExternalSellers } from "../Model/Queries/product_queries";
 import { addGoverner, deleteUser } from "../Model/Queries/admin_queries";
 import { hashPassword } from "../utils/functions/bcrypt_functions";
 
@@ -92,5 +92,14 @@ router.delete(
     }
   }
 );
+
+router.get("/externalSellers", async (req: Request, res: Response) => {
+  try {
+    const sellers = await getExternalSellers();
+    res.status(200).send(sellers);
+  } catch (err) {
+    res.status(500).send("error getting external sellers");
+  }
+});
 
 export default router;
