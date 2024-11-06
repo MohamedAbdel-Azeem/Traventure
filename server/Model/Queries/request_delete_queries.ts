@@ -16,8 +16,9 @@ export const getRequestDelete = async () => {
 };
 
 export const deleteRequestDelete = async (username: string, isAccepted: boolean) => {
+    const requestDelete = await RequestDelete.findOneAndDelete({name: username});
     if(isAccepted){
-        const requestDelete = await RequestDelete.findOneAndDelete({name: username});
+       
         if (!requestDelete) {
             throw new Error('RequestDelete not found');
         }
