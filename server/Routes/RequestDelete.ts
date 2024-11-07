@@ -11,7 +11,7 @@ router.delete("/deleterequestdelete", async (req: Request, res: Response) => {
         const {user_id, username, type, wallet} = req.body;
         
         const isAccepted = await requestdeleteMiddleware(user_id, username, wallet, type);
-        const requestDelete = await deleteRequestDelete(username, type, isAccepted);
+        const requestDelete = await deleteRequestDelete(user_id, type, isAccepted);
         res.status(200).send(requestDelete);
     } catch (error) {
         res.status(500).send(error);

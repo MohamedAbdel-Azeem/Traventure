@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const handleDeleteAccount = async (user_id:string,username:string,type:string,wallet:number) => {
+export const handleDeleteAccount = async (user_id:string|undefined,username:string,type:string,wallet:number) => {
     try {
         const response = await axios.delete("/traventure/api/requestdelete/deleterequestdelete", {
             data: {
@@ -11,6 +11,7 @@ export const handleDeleteAccount = async (user_id:string,username:string,type:st
             }
         });
         console.log(response.data);
+        return "success";
     } catch (error) {
         console.error("Error deleting account:", error);
     }
