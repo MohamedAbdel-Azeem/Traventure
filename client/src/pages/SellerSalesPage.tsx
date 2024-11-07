@@ -1,10 +1,16 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useGetSeller } from "../custom_hooks/sellerGetUpdate";
 import { useGetSellerSales } from "../custom_hooks/products/useGetSellerSales";
-import { SingleProductSalesChart } from "../components/SalesCharts";
+import { SalesChart } from "../components/SalesChart";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import ClipLoader from "react-spinners/ClipLoader";
 
 export function SellerSalesPage() {
   const { username } = useParams<{ username: string }>();
+
+  const [compactView, setCompactView] = useState(true);
 
   const {
     user: seller,
@@ -16,9 +22,16 @@ export function SellerSalesPage() {
     sales,
     loading: salesLoading,
     error: salesError,
-  } = useGetSellerSales(seller?._id, true);
+  } = useGetSellerSales(seller?._id, compactView);
 
-  if (sellerLoading || salesLoading) {
+  const handleChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newCompactView: boolean
+  ) => {
+    setCompactView(newCompactView);
+  };
+
+  if (sellerLoading) {
     return <div>Loading...</div>;
   }
 
@@ -31,7 +44,21 @@ export function SellerSalesPage() {
       <h1 className="font-sans text-xl font-medium">
         Sales Page for {username}
       </h1>
-      <SingleProductSalesChart data={sales} />
+      <ToggleButtonGroup
+        color="primary"
+        value={compactView}
+        exclusive
+        onChange={handleChange}
+        aria-label="Platform"
+      >
+        <ToggleButton value={true}>Simplified View</ToggleButton>
+        <ToggleButton value={false}>Detailed View</ToggleButton>
+      </ToggleButtonGroup>
+      {salesLoading ? (
+        <ClipLoader />
+      ) : (
+        <SalesChart data={sales} compactView={compactView} />
+      )}
     </div>
   );
 }
