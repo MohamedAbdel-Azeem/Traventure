@@ -15,9 +15,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import { ToggleArchive } from "../custom_hooks/products/useToggleArchive";
-import { Feedback } from "./purchases/FeedBack";
 import { useSelector } from "react-redux";
-
 interface ProductCardProps {
   product: ACTUALProduct;
   productId: string;
@@ -44,19 +42,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
     (state: any) => state.exchangeRate.currentCurrency
   );
 
-  const getUserFeedback = (product: any, username: string) => {
-    const feedback = product.feedback.find(
-      (fb: { touristUsername: string }) => fb.touristUsername === currentuser
-    );
-    return (
-      feedback || {
-        touristId: null,
-        rating: null,
-        review: null,
-        touristUsername: null,
-      }
-    );
-  };
+ 
   const currentImageUrl = currentProduct.imageUrl;
   useEffect(() => {
     const fetchImage = async (url: string) => {
@@ -177,12 +163,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
         <p className="product-description">
           {getTruncatedDescription(currentProduct.description)}
         </p>
-        <Feedback
-          touristFeedback={getUserFeedback(currentProduct, currentuser)}
-          type="product"
-          id={currentProduct._id}
-          touristUsername={currentuser}
-        />
+
         <div className="flex flex-row justify-between items-center">
           <span className="product-price">
             {currentCurrency} {(currentProduct.price * exchangeRate).toFixed(2)}
