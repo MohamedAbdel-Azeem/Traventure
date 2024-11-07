@@ -12,7 +12,7 @@ const requestdeleteMiddleware = async (user_id:string, name:string, wallet:numbe
         throw new Error("You have money in the wallet still");
     }
     if(type === "Advertiser"){
-    const activities = await Activity.find({ DateAndTime: { $gte: new Date() }, added_By: user_id }).populate("Tags").populate("Category");
+    const activities = await Activity.find({ DateAndTime: { $gte: new Date() }, added_By: user_id });
     if(activities.length > 0){
         throw new Error("You have activities still");
     }
@@ -23,10 +23,6 @@ const requestdeleteMiddleware = async (user_id:string, name:string, wallet:numbe
         }
     }else if(type === "TourGuide"){
         const itineraries = await Itinerary.find({ starting_Date: { $gte: new Date() }, added_By: user_id, booked_By: { $exists: true, $not: { $size: 0 } } })
-            .populate('added_By')
-            .populate('plan.place')
-            .populate('plan.activities.activity_id')
-            .populate('selectedTags');
     if(itineraries.length > 0){
         throw new Error("You have booked itineraries still");
     }

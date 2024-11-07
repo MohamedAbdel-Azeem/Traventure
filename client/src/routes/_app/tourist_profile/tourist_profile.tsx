@@ -13,18 +13,6 @@ import { patchUserProfile } from "../../../custom_hooks/updateTouristProfile";
 
 
 
-// type TouristSchemaType = {
-//   username: string;
-//   email: string;
-//   password: string;
-//   mobileNumber: string;
-//   dob: string; // Adjusted to string for easier handling of dates
-//   nationality: string;
-//   occupation: string;
-//   profilePicture: string;
-//   wallet: number;
-// };
-
 interface TouristProfileProps {
   tourist: TouristProfileData;
 }

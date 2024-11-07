@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 import { FaEdit } from "react-icons/fa";
 import ProfilePictureEdit from "../../../components/ProfilePictureEdit";
 import { uploadFileToStorage } from "../../../firebase/firebase_storage";
+import {handleDeleteAccount} from "../../../custom_hooks/usedeleterequest";
 
 interface SellerProfileProps {
   seller: ISeller;
@@ -229,6 +230,30 @@ const handleProfilePictureClick = () => {
           </div>
 
           <div className="mt-8 flex justify-end space-x-4">
+            
+          <button
+              onClick={
+                Swal.fire({
+                  title: "Are you sure?",
+                  text: "You will not be able to recover this account!",
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonText: "Yes, delete it!",
+                  cancelButtonText: "No, keep it",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    handleDeleteAccount();
+                    navigate("http://localhost:5173/");
+                    Swal.fire("Deleted!", "Your account has been deleted.", "success");
+                  } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire("Cancelled", "Your account is safe :)", "error");
+                  }
+                })
+              }
+              className="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-600 transition duration-200 mr-auto"
+            >
+              Delete Account
+            </button>
             {isEditing ? (
               <>
                 <button
