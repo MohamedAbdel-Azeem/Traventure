@@ -18,8 +18,22 @@ export async function getItinerary(tourGuide_username: String) {
       added_By: tour_guide_id, // Find all items with the given tour_guide_id
     })
       .populate("added_By")
-      .populate("plan.place")
       .populate("plan.activities.activity_id")
+      .populate({
+        path: "plan.activities.activity_id",
+        populate: {
+          path: "Category",
+          model: "Category",
+        },
+      })
+      .populate({
+        path: "plan.activities.activity_id",
+        populate: {
+          path: "Tags",
+          model: "Tags",
+        },
+      })
+      .populate("plan.place")
       .populate("selectedTags");
 
     return itineraries;
