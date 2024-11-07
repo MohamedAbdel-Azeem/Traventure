@@ -23,6 +23,7 @@ import purchaseRouter from "./Routes/purchase";
 import complaintRouter from "./Routes/Complaint";
 import feedbackRouter from "./Routes/Feedback";
 import reviewdocsRouter from "./Routes/ReviewDoc";
+import requestdeleteRouter from "./Routes/RequestDelete";
 const app = express();
 
 app.use(express.json());
@@ -51,6 +52,7 @@ app.use("/api/purchase",purchaseRouter);
 app.use("/api/complaint",complaintRouter);
 app.use("/api/feedBack",feedbackRouter);
 app.use("/api/admin/", reviewdocsRouter);
+app.use("/api/requestdelete", requestdeleteRouter);
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Traventure API");
 });

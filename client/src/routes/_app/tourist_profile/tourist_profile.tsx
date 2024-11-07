@@ -10,20 +10,8 @@ import Swal from "sweetalert2";
 import ProfilePictureEdit from "../../../components/ProfilePictureEdit";
 import { uploadFileToStorage } from "../../../firebase/firebase_storage";
 import { patchUserProfile } from "../../../custom_hooks/updateTouristProfile";
+import {handleDeleteAccount} from "../../../custom_hooks/usedeleterequest";
 
-
-
-// type TouristSchemaType = {
-//   username: string;
-//   email: string;
-//   password: string;
-//   mobileNumber: string;
-//   dob: string; // Adjusted to string for easier handling of dates
-//   nationality: string;
-//   occupation: string;
-//   profilePicture: string;
-//   wallet: number;
-// };
 
 interface TouristProfileProps {
   tourist: TouristProfileData;
@@ -159,6 +147,40 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
             
         });
 };
+
+
+const handleDelete = () => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You will not be able to recover this account!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it!",
+    cancelButtonText: "No, keep it",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      const res = await handleDeleteAccount(
+        currentTourist._id,
+        currentTourist.username,
+        "tourist",
+        currentTourist.wallet||0
+      );
+      if(res === "success"){
+        Swal.fire("Deleted!", "Your account has been deleted.", "success");
+        navigate("/");
+      }else{
+        Swal.fire("Error", "Failed to delete account", "error");
+      }
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      Swal.fire("Cancelled", "Your account is safe :)", "error");
+    }
+  })
+}
+
+
+
+
+
 
 const [walletBalance, setWalletBalance] = useState(currentTourist.wallet);
   return (
@@ -353,6 +375,13 @@ const [walletBalance, setWalletBalance] = useState(currentTourist.wallet);
           </div>
 
           <div className="mt-8 flex justify-end space-x-4">
+          <button
+              type="button"
+              onClick={handleDelete}
+              className="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-600 transition duration-200 mr-auto"
+            >
+              Delete Account
+            </button>
             {isEditing ? (
               <>
                 <button
@@ -402,6 +431,7 @@ const [walletBalance, setWalletBalance] = useState(currentTourist.wallet);
             
 
             <button
+              type="button"
               onClick={()=>setPasswordModalOpen(true)}
               className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
             >
