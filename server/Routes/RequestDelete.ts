@@ -1,32 +1,17 @@
 import { Request, Response, Router } from "express";
-import { createRequestDelete, getRequestDelete, deleteRequestDelete } from "../Model/Queries/request_delete_queries";
+import  {deleteRequestDelete} from "../Model/Queries/request_delete_queries";
+import requestdeleteMiddleware from "../Middleware/DeleteRequestMIddleware";
 
 const router = Router();
 
-router.post("/createrequestdelete", async (req: Request, res: Response) => {
-    try {
-        const { user_id, name, type, wallet } = req.body;
 
-        const requestDelete = await createRequestDelete(user_id, name, type, wallet);
-        return res.status(200).send(requestDelete);
-    } catch (error) {
-        return res.status(500).send(error);
-    }
-});
-
-router.get("/getrequestdelete", async (req: Request, res: Response) => {
-    try {
-        const requestDelete = await getRequestDelete();
-        res.status(200).send(requestDelete);
-    } catch (error) {
-        res.status(500).send(error);
-    }
-});
 
 router.delete("/deleterequestdelete", async (req: Request, res: Response) => {
     try {
-        const { username, isAccepted } = req.body;
-        const requestDelete = await deleteRequestDelete(username, isAccepted);
+        const {user_id, name, type, wallet} = req.body;
+        
+        const isAccepted = await requestdeleteMiddleware(user_id, name, wallet, type);
+        const requestDelete = await deleteRequestDelete(name, type, isAccepted);
         res.status(200).send(requestDelete);
     } catch (error) {
         res.status(500).send(error);
