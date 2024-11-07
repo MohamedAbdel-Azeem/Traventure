@@ -4,13 +4,11 @@ import { useForm, Controller, set } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TouristProfileData } from "./tourist_profile_data";
-import ChangePasswordModal, { AddContactLeadFormType } from "../../../components/ChangePasswordModal";
-import { ChangePassword, editpassword } from "../../../custom_hooks/changepassowrd";
-import Swal from "sweetalert2";
-import ProfilePictureEdit from "../../../components/ProfilePictureEdit";
-import { uploadFileToStorage } from "../../../firebase/firebase_storage";
 import { patchUserProfile } from "../../../custom_hooks/updateTouristProfile";
-
+import RedeemPopup from '../../../components/RedeemPopup';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAward } from '@fortawesome/free-solid-svg-icons';
+import BadgePopup from '../../../components/BadgePopup';
 
 
 // type TouristSchemaType = {
@@ -28,27 +26,6 @@ import { patchUserProfile } from "../../../custom_hooks/updateTouristProfile";
 interface TouristProfileProps {
   tourist: TouristProfileData;
 }
-
-interface ChangePasswordModalProps{
-  username: string;
-  onClose: () => void;
-  onSubmit: (data: ChangePasswordData) => void;
-  }
-  
-  interface ChangePasswordData{
-      oldPassword: string;
-      newPassword: string;
-  }
-  const FormleadSchema = z.object({
-    oldPassword: z.string(),
-    newPassword: z.string()
-    .min(8, "Password must be at least 8 characters long")
-    .regex(
-      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-      "Password must contain at least one letter and one number"
-    ),
-  
-  });
 
 const schema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -73,13 +50,34 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
   const [currentTourist, setCurrentTourist] = useState(tourist);
-  const [update, setUpdate] = useState(false);
-  const [isPasswordModalOpen,setPasswordModalOpen]=useState(false);
-  const [profilePicture, setProfilePicture] = useState<File | null>(null);
-  // const [apiBodypass, setApiBodyPass]= useState("");
-  // const [apiBodynewpass, setApiBodynewPass]= useState("");
-  //  tourist = usePatchUserProfile(tourist, tourist.username).response as TouristProfileData;
-  //const responsepass = ChangePassword(apiUsername, apiBodypass, apiBodynewpass);
+  const [apiBody, setApiBody] = useState({});
+  const [apiUsername, setApiUsername] = useState("");
+  const response = patchUserProfile(apiBody, apiUsername);
+  const [isRedeemPopupOpen, setIsRedeemPopupOpen] = useState(false);
+  const [isBadgePopupOpen, setIsBadgePopupOpen] = useState(false);
+
+  // Function to open the popup
+  const handleRedeemClick = () => {
+    setIsRedeemPopupOpen(true);
+  };
+
+  // Function to close the popup
+  const handleCloseRedeemPopup = () => {
+    setIsRedeemPopupOpen(false);
+  };
+
+
+  const handleBadgeClick = () => {
+    setIsBadgePopupOpen(true);
+  };
+
+  // Function to close the badge popup
+  const handleCloseBadgePopup = () => {
+    setIsBadgePopupOpen(false);
+  };
+
+  //  tourist = patchUserProfile(tourist, tourist.username).response as TouristProfileData;
+
   // Define the Zod schema for form validation
   // Initialize useForm with default values from props
   const {
@@ -99,27 +97,13 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
   });
 
   // Handle form submission (save edited data)
-  const onSubmit = async (data: TouristProfileData) => {
-    data.profilepic = currentTourist.profilepic;
-    setUpdate(true);
-    if(profilePicture) {
-      const firebaseurl = await uploadFileToStorage(profilePicture);
-      console.log("Firebase URL:", firebaseurl);
-      data.profilepic = firebaseurl;
-    }
-    const response = await patchUserProfile(data, currentTourist.username);
-    if (response !== "Error updating user profile") {
-      setCurrentTourist(response);
-      setProfilePicture(null);
-      setIsEditing(false);
-    } else {
-      Swal.fire({
-        title: "Error",
-        text: response,
-        icon: "error",
-      });
-    }
-    setUpdate(false);
+  const onSubmit = (data: TouristProfileData) => {
+    console.log("Saved data:", data);
+    setIsEditing(false);
+    setApiBody(data);
+    setApiUsername(data.username);
+
+    setCurrentTourist(data);
   };
 
   const toggleEdit = () => {
@@ -130,37 +114,6 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
     navigate("/");
   };
 
-  const [successMessage, setSuccessMessage] = useState("");
-
-
-  const handlePasswordChangeSubmit = (data: AddContactLeadFormType) => {
-    console.log("Password change data:", data);
-    const { oldPassword, newPassword } = data;
-    editpassword(currentTourist.username, oldPassword, newPassword)
-        .then(() => {
-            setSuccessMessage("Password changed successfully!");
-            setPasswordModalOpen(false);
-
-          
-              Swal.fire({
-                title: "Password Changed Successfully",
-                text: "Password has been changed",
-                icon: "success",
-              });
-            
-        })
-        .catch((error) => {
-          const errorMessage = error.message || "Failed to change password.";
-          Swal.fire({
-            title: "Error",
-            text: errorMessage,
-            icon: "error",
-          });
-            
-        });
-};
-
-const [walletBalance, setWalletBalance] = useState(currentTourist.wallet);
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-gray-900"
@@ -172,43 +125,46 @@ const [walletBalance, setWalletBalance] = useState(currentTourist.wallet);
         backgroundColor: "rgba(0, 0, 0, 0.7)",
       }}
     >
-      
       <div className="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl p-8 backdrop-blur-lg bg-opacity-90">
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex items-center space-x-6">
-          {(isEditing ) ? (
-      <ProfilePictureEdit
-        profilePicture={profilePicture}
-        onChange={setProfilePicture} // Directly pass setProfilePicture
-        isEditing={isEditing} // Controls the edit overlay visibility
-      />) : (
-        <img
-              src={currentTourist.profilepic }
-              alt="Profile"
-              className="w-32 h-32 rounded-full object-cover shadow-md border-4 border-purple-500"
-            />
-      )}
-            <div className="text-left">
-              {isEditing ? (
-                <Controller
-                  name="username"
-                  control={control}
-                  render={({ field }) => (
-                    <input
-                      {...field}
-                      className="mt-1 text-lg text-gray-600 p-3 border border-gray-300 rounded-md w-full"
-                    />
-                  )}
-                />
-              ) : (
-                <h2 className="text-4xl font-extrabold text-purple-700">
-                  {currentTourist.username}
-                </h2>
-              )}
-              {errors.username && (
-                <p className="text-red-600">{errors.username.message}</p>
-              )}
+          <div className="flex items-center justify-between mt-4">
+            <div className="flex items-center space-x-6">
+              <img
+                src={currentTourist.profilePicture}
+                alt="Profile"
+                className="w-32 h-32 rounded-full object-cover shadow-md border-4 border-purple-500"
+              />
+              <div className="text-left">
+                {isEditing ? (
+                  <Controller
+                    name="username"
+                    control={control}
+                    render={({ field }) => (
+                      <input
+                        {...field}
+                        className="mt-1 text-lg text-gray-600 p-3 border border-gray-300 rounded-md w-full"
+                      />
+                    )}
+                  />
+                ) : (
+                  <h2 className="text-4xl font-extrabold text-purple-700">
+                    {currentTourist.username}
+                  </h2>
+                )}
+                {errors.username && (
+                  <p className="text-red-600">{errors.username.message}</p>
+                )}
+              </div>
             </div>
+            <button
+              className="flex items-center justify-center bg-yellow-500 p-6 rounded-full shadow-lg hover:bg-yellow-600 transition duration-200"
+              onClick={handleBadgeClick}
+            >
+              <FontAwesomeIcon icon={faAward} className="text-white text-5xl" />
+            </button>
+            {isBadgePopupOpen && (
+              <BadgePopup points={currentTourist.points} onClose={handleCloseBadgePopup} />
+            )}
           </div>
 
           <div className="mt-8 grid grid-cols-2 gap-6">
@@ -336,6 +292,29 @@ const [walletBalance, setWalletBalance] = useState(currentTourist.wallet);
                 <p className="text-red-600">{errors.Occupation.message}</p>
               )}
             </div>
+
+
+
+            <div className="flex flex-col">
+              <label className="text-lg font-semibold text-gray-700">Points:</label>
+              <div className="flex flex-row items-center mt-1 space-x-20">
+                {/* <p className="text-gray-800 text-lg">{currentTourist.points}</p>             lma t7ot fel database uncomment this line!!!*/}
+                <p className="text-gray-800 text-lg">1000</p>
+                <button
+                  onClick={handleRedeemClick}
+                  className="bg-green-500 text-white text-sm py-1 px-2 rounded hover:bg-green-600 transition duration-200 -mt-2"
+                >
+                  Redeem
+                </button>
+              </div>
+
+              {isRedeemPopupOpen && <RedeemPopup points={currentTourist.points} onClose={handleCloseRedeemPopup} />}
+              
+            </div>
+
+
+
+
           </div>
 
           <div className="mt-8 flex justify-center items-center bg-purple-50 py-3 px-4 rounded-lg shadow-md border border-purple-200 max-w-md mx-auto">
@@ -345,8 +324,7 @@ const [walletBalance, setWalletBalance] = useState(currentTourist.wallet);
                   Wallet Balance:
                 </label>
                 <p className="text-4xl font-bold text-purple-900">
-                  ${walletBalance}
-
+                  ${currentTourist.wallet}
                 </p>
               </div>
             </div>
@@ -359,30 +337,7 @@ const [walletBalance, setWalletBalance] = useState(currentTourist.wallet);
                   type="submit"
                   className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-700 transition duration-200"
                 >
-                   {update ? (
-                  <svg
-                  className="animate-spin h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                  </svg>
-                ) : (
-                  "Save"
-                )}
+                  Save
                 </button>
                 <button
                   onClick={toggleEdit}
@@ -399,38 +354,14 @@ const [walletBalance, setWalletBalance] = useState(currentTourist.wallet);
                 Edit Profile
               </button>
             )}
-            
-
-            <button
-              onClick={()=>setPasswordModalOpen(true)}
-              className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
-            >
-              Change Password
-            </button>
-
             <button
               onClick={handleLogout}
               className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
             >
               Log Out
             </button>
-
-            
-           </div>
-           {/* <center>
-           {successMessage && (
-    <div className="text-green-500 font-bold mt-4">
-        {successMessage}
-    </div>
-)} </center> */}
+          </div>
         </form>
-       
-
-            {isPasswordModalOpen && (<ChangePasswordModal
-            username={currentTourist.username}
-            onClose={()=>setPasswordModalOpen(false)}
-            onFormSubmit={handlePasswordChangeSubmit}>
-            </ChangePasswordModal>)}
       </div>
     </div>
   );

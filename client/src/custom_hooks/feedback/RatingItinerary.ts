@@ -9,7 +9,7 @@ export const rateItinerary = async (itineraryId:string ,feedback:IFeedbackk) => 
 
         const response = await axios.post(`/traventure/api/feedback/rateItinerary/${itineraryId}`, feedback);
         if (response.status >= 200 && response.status < 300) {
-            return response.data;
+            return response;
         } else {
             throw new Error("Error adding feedback");
         }

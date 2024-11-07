@@ -12,7 +12,7 @@ export const UseGetTourGuideReviews = (tourGuideId: string) => {
 
   
         const response = await axios.get(`/traventure/api/feedBack/showTourGuideReviews/${tourGuideId}`);
-        if (response.status === 200) {
+        if (response.status >= 200 && response.status < 300) {
             setTourGuideReviews(response.data);
         } else {
             setcError("Error fetching data");

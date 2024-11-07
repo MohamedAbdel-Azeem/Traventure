@@ -11,4 +11,5 @@ export interface TouristProfileData {
     Occupation: string;
     profilePicture: string;
     wallet: number;
+    points: number;
 }

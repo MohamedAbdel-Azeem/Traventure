@@ -8,12 +8,15 @@ export const UseGetItineraryReviews = (ItineraryId: string) => {
     const [cerror, setcError] = useState<string | null>(null);
     const fetchItineraryReviews = useCallback(async () => {
         setcLoading(true);
+        
       try {
 
   
         const response = await axios.get(`/traventure/api/feedBack/showItineraryReviews/${ItineraryId}`);
-        if (response.status === 200) {
+        
+        if (response.status >= 200 && response.status < 300) {
             setItineraryReviews(response.data);
+            
         } else {
             setcError("Error fetching data");
         }

@@ -222,12 +222,12 @@ const Bookings: React.FC = () => {
 
 
                                                 )}
-                                                {showITFeedback && <FeedbackDisplay id={booking.itinerary._id}feedbacks={sampleITFeedback} onClose={handleShowITFeedback} />}
+                                                {showITFeedback && <FeedbackDisplay id={booking.itinerary._id} type="Itinerary" onClose={handleShowITFeedback} />}
 
                                             </StyledTableCell>
                                             <StyledTableCell align="right" >
                                                 <Button variant="outlined" color="success" sx={{ fontSize: '9px' }} onClick={handleShowTourFeedback}>Rate tour Guide</Button>
-                                                {showFeedback && <FeedbackDisplay id={booking.itinerary.added_By} feedbacks={sampleFeedback} onClose={handleShowTourFeedback} />}
+                                                {showFeedback && <FeedbackDisplay id={booking.itinerary.added_By._id} type="Tour_guide" onClose={handleShowTourFeedback} />}
                                             </StyledTableCell>
                                         </TableRow>
                                     ))}
@@ -270,7 +270,7 @@ const Bookings: React.FC = () => {
 
 
                                                 )}
-                                                {showActivityFeedback && <FeedbackDisplay  feedbacks={sampleActivityFeedback} onClose={handleShowActivityFeedback} />}
+                                                {showActivityFeedback && <FeedbackDisplay   onClose={handleShowActivityFeedback} />}
                                             </StyledTableCell>
                                         </TableRow>
                                     ))}
