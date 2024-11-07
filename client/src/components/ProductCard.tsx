@@ -15,6 +15,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import { ToggleArchive } from "../custom_hooks/products/useToggleArchive";
+import { useSelector } from "react-redux";
 interface ProductCardProps {
   product: ACTUALProduct;
   productId: string;
@@ -34,6 +35,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
     setShowPopup((prev) => !prev);
   };
 
+  const exchangeRate = useSelector(
+    (state: any) => state.exchangeRate.exchangeRate
+  );
+  const currentCurrency = useSelector(
+    (state: any) => state.exchangeRate.currentCurrency
+  );
+
+ 
   const currentImageUrl = currentProduct.imageUrl;
   useEffect(() => {
     const fetchImage = async (url: string) => {
@@ -156,7 +165,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
         </p>
 
         <div className="flex flex-row justify-between items-center">
-          <span className="product-price">${currentProduct.price}</span>
+          <span className="product-price">
+            {currentCurrency} {(currentProduct.price * exchangeRate).toFixed(2)}
+          </span>
           <Rating
             disabled
             name="rating"

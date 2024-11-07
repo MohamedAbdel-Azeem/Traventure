@@ -4,6 +4,7 @@ import Admin_TourismGovernorTable from "./Admin_TourismGovernorTable"
 import ImprovedSidebar from '../ImprovedSidebar';
 import TourGuide_Advertiser_SellerTable from './TourGuide_Advertiser_SellerTable';
 import { useGetAllUsers } from '../../custom_hooks/tourist_fetchandelete';
+import DeletionRequests from './DeletionRequests';
 
 const Accounts = () => {
     const { data } = useGetAllUsers();
@@ -28,6 +29,9 @@ const Accounts = () => {
             </div>
             <div className="my-8">
                 <TourGuide_Advertiser_SellerTable dataT={data?.tourGuides} dataS={data?.sellers} dataA={data?.advertisers} name="Seller"/>
+            </div>
+            <div className="my-8">
+                <DeletionRequests/>
             </div>
         </div>
     </div>

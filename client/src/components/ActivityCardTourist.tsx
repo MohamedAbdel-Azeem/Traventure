@@ -8,6 +8,7 @@ import { updateActivity } from '../custom_hooks/activities/updateActivity';
 import { useParams , useLocation } from 'react-router-dom';
 import axios from "axios";
 import { set } from "date-fns";
+import { useSelector } from "react-redux";
 
 type Activity = {
   _id: string;
@@ -41,7 +42,8 @@ type CatStructure = {
     name: string;
     __v: number;
   }
-  
+
+
 
 
 export const ActivityCardTourist: React.FC<ActivityProp> = ({type,activity, onDelete }) => {
@@ -77,6 +79,13 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({type,activity, onDe
       }
     }
   };
+
+  const exchangeRate = useSelector(
+    (state: any) => state.exchangeRate.exchangeRate
+  );
+  const currentCurrency = useSelector(
+    (state: any) => state.exchangeRate.currentCurrency
+  );
 
   const calculateAverageRating = (currentActivity: Activity): number => {
     const allRatings = currentActivity.feedback?.map((fb) =>
@@ -307,10 +316,10 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({type,activity, onDe
               </div>
               <div className="flex flex-col items-center justify-center text-[13px] w-[160px] h-full">
                 <div>
-                  <div>Price: {currentActivity.Price}</div>
+                  <div>Price:  {currentCurrency} {(currentActivity.Price * exchangeRate).toFixed(2)}</div>
                 </div>
                 <div>
-                  <div>Special Discount: {currentActivity.SpecialDiscount}</div>
+                  <div>Special Discount: {currentCurrency} {(currentActivity.SpecialDiscount * exchangeRate).toFixed(2)}</div>
                 </div>
               </div>
             </div>

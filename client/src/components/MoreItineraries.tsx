@@ -14,6 +14,7 @@ import ItineraryCardToruist from "./ItineraryCardToruist";
 import { useGetAllTags } from "../custom_hooks/categoryandTagCRUD";
 import ImprovedSidebar from "./ImprovedSidebar";
 import { useLocation } from "react-router-dom";
+import CurrencyDropdown from "./currencyDrop";
 
 const MoreItineraries: React.FC = () => {
   const { upcoming, loading, error } = useGetUpcoming();
@@ -154,6 +155,7 @@ const MoreItineraries: React.FC = () => {
       <div className="w-full">
         <h1 className="text-2xl font-bold mb-4 mx-auto">All Itineraries</h1>
         <hr />
+        <CurrencyDropdown />
         <br />
         <div>
           <div className="mb-4 flex gap-2">

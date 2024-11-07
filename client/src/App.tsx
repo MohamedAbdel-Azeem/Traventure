@@ -39,9 +39,10 @@ import { SellerSalesPage } from "./pages/SellerSalesPage";
 import { AdminSalesPage } from "./pages/AdminSalesPage";
 import PDFSolution from "./firebase/PDFSolution";
 import Applications from "./components/Admin/Applications";
-import FormExample from "./components/Admin/FormExample";
 import TheBIGMAP from "./components/TheBIGMAP";
 import { TouristPurchases } from "./pages/TouristPurchases";
+import TermsAndConditions from "./routes/_app/terms_and_conditions/terms_and_conditions";
+
 
 function App() {
   return (
@@ -158,17 +159,12 @@ function App() {
           />
           {/* Guest */}
           <Route path="/guest-page" element={<GuestPage />} />
-          <Route
-            path="/guest/more-itineraries"
-            element={<GuestMoreItineraries />}
-          />
-          <Route path="/guest/more-places" element={<GuestMorePlaces />} />
-          <Route
-            path="/guest/more-activities"
-            element={<GuestMoreActivities />}
-          />
-          <Route path="/guest/shop" element={<GuestShop type={"Tourist"} />} />
-          <Route path="/tourist/:username/bookings" element={<Bookings />} />
+          <Route path="/guest/more-itineraries" element={<GuestMoreItineraries />}/>
+          <Route path="/guest/more-places" element={<GuestMorePlaces />}/>
+          <Route path="/guest/more-activities" element={<GuestMoreActivities />}/>
+          <Route path="/guest/shop" element={<GuestShop type={"Tourist"} />}/>
+          <Route path="/tourist/:username/bookings" element={<Bookings />}/>
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />}/>
         </Routes>
       </Router>
     </MantineProvider>

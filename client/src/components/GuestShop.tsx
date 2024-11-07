@@ -24,6 +24,7 @@ import {
   TextField,
 } from "@mui/material";
 import Navbar from "./navbar";
+import CurrencyDropdown from "./currencyDrop";
 const itemsPerPage = 8;
 interface ShopPageProps {
   type: string;
@@ -226,8 +227,11 @@ const GuestShop: React.FC<ShopPageProps> = ({ type }) => {
 
   return (
     <div className="flex">
+<CurrencyDropdown />
       <Modal open={open} onClose={handleClose}>
+        
         <Box sx={style}>
+          
           <Box className="grid grid-cols-2">
             <FormControl fullWidth sx={{ marginY: 1 }}>
               <InputLabel>Name</InputLabel>
