@@ -18,6 +18,8 @@ import { Logout } from '@mui/icons-material';
 import ChangePasswordModal, { AddContactLeadFormType } from './ChangePasswordModal';
 import Swal from "sweetalert2";
 import { editpassword } from "../custom_hooks/changepassowrd";
+import { GetCurrentUser } from "../custom_hooks/currentuser";
+
 
 
 
@@ -33,6 +35,7 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
   const currentuser = location.pathname.split(`/`)[2];
   const currentusertype = location.pathname.split(`/`)[1];
 
+  const { cuserdata, userloading, usererror } = GetCurrentUser(currentuser);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [isPasswordModalOpen, setPasswordModalOpen] = useState(false);
   const hideTimeoutRef = useRef<number | null>(null);
@@ -90,7 +93,6 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
     { text: 'Home', icon: <HomeIcon />, path: `/tourist/${currentuser}` },
     { text: 'Shop', icon: <ShopIcon />, path: `/tourist/${currentuser}/shop` },
     { text: 'Bookings', icon: <EditCalendarIcon />, path: `/tourist/${currentuser}/bookings` },
-
     { text: 'Itineraries', icon: <FlightTakeoffIcon />, path: `/tourist/${currentuser}/itineraries` },
     { text: 'Locations', icon: <LocationOnIcon />, path: `/tourist/${currentuser}/locations` },
     { text: 'Activities', icon: <StadiumIcon />, path: `/tourist/${currentuser}/activities` },
@@ -103,7 +105,6 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
     { text: 'Home', icon: <HomeIcon />, path: `/advertiser/${currentuser}` },
     // { text: 'Locations', icon: <LocationOnIcon />, path: `/advertiser/${currentuser}/locations` },
     { text: 'Activity Management', icon: <ActivityIcon />, path: `/advertiser/${currentuser}/activities` },
-
     { text: 'Itineraries', icon: <FlightTakeoffIcon />, path: `/advertiser/${currentuser}/itineraries` },
     { text: 'Locations', icon: <LocationOnIcon />, path: `/advertiser/${currentuser}/locations` },
   ];
@@ -180,6 +181,16 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
     },
   ];
 
+  interface Currentuserdata {
+    profilepic: string;
+  }
+  
+  const [userdata, setUserdata] = useState<Currentuserdata|null>(null);
+
+  useEffect(() => {
+    console.log("SECOND TIME"+cuserdata);
+    setUserdata(cuserdata);
+  }, [cuserdata]);
   
   const currentPath = location.pathname;
 
@@ -245,12 +256,19 @@ export default function NewNavbar({ className = '' }: NewNavbarProps) {
             onMouseLeave={handleMouseLeave}
             sx={{ position: 'relative' }}
           >
-            <ProfilePictureEdit
-              profilePicture={null}
-              onChange={(newPicture) => {}}
-              isEditing={false}
-              size="4.5vw"
+            {userdata?.profilepic ? (
+            <img
+              src={userdata.profilepic}
+              alt="Profile Picture"
+              className="w-12 h-12 rounded-full object-cover shadow-md border-2 border-purple-500 cursor-pointer"
             />
+          ) : (
+            <img
+              src="/src/assets/defaultavatar.png"
+              alt="Default Avatar"
+              className="w-12 h-12 rounded-full object-cover shadow-md border-2 border-purple-500 cursor-pointer"
+            />
+          )}
             <Fade in={dropdownVisible} timeout={200}>
               <div>
                 <NavbarDropdown

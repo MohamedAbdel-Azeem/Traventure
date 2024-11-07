@@ -46,6 +46,7 @@ const NavbarDropdown: React.FC<NavbarDropdownProps> = ({ items, onMouseEnter, on
               },
               py: 1.5,
               px: 2,
+              cursor : 'pointer',
               transition: 'background-color 0.2s, transform 0.2s',
               display: 'flex',
               alignItems: 'center', 

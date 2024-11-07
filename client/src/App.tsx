@@ -64,6 +64,7 @@ function App() {
           <Route path="/tourist/:username/itineraries" element={<MoreItineraries/>}/>
           <Route path="/tourist/:username/complaints" element={<TouristComplaints/>}/>
           <Route path="/tourist/:username/profile" element={<Tourist_Profile/>}/>
+          <Route path="/tourist/:username/bookings" element={<Bookings />} />
           {/* Tourism Governor */}
           <Route path="/tourismgovernor/:username" element={<TourismGovernorPage/>}/>
           <Route path="/tourismgovernor/:username/historicaltags" element={<HistoricalTags/>}/>
@@ -95,7 +96,6 @@ function App() {
           <Route path="/guest/more-activities" element={<GuestMoreActivities/>}/>  
           <Route path="/guest/shop" element={<GuestShop type={"Tourist"}/>}/>
           <Route path="/seller/sales/:username" element={<SalesPage />} />
-        <Route path="/tourist/:username/bookings" element={<Bookings />} />
         </Routes>
       </Router>
     </MantineProvider>
