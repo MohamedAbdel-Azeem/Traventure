@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import IFeedback from "../IFeedback";
+import IFeedbackk from "../IFeedback";
 
-export const rateTourGuide = async (tourGuideId:string ,feedback: IFeedback) => {
+export const rateTourGuide = async (tourGuideId:string ,feedback: IFeedbackk) => {
     try {
 
         

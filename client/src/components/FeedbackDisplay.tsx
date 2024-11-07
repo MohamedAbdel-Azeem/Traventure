@@ -11,6 +11,7 @@ interface Feedback {
 
 interface FeedbackDisplayProps {
   feedbacks: Feedback[];
+  id: string;
   onClose: () => void;
 }
 
@@ -51,7 +52,7 @@ const FeedbackDisplay: React.FC<FeedbackDisplayProps> = ({ feedbacks, onClose })
       <div className="feedback-popup-footer">
         
          <Feedback
-          type="product" // Or the type you're passing
+          type="tourGuide" // Or the type you're passing
           id="some_id" // Pass an actual ID or some other identifier
           touristUsername="tourist123" // Pass the actual username here
           touristFeedback={{ rating: null, review: null, touristUsername: "tourist123" }} // Or initial feedback data

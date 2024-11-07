@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import IFeedback from "../IFeedback";
+import IFeedbackk from "../IFeedback";
 
 export const redeemPoints = async (touristUsername:string ,amount:number) => {
     try {

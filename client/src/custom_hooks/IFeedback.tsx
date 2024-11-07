@@ -1,7 +1,7 @@
-interface IFeedback {
+interface IFeedbackk {
     touristUsername: string;
     rating?: number;
     review?: string;
 }
 
-export default IFeedback;
+export default IFeedbackk;
