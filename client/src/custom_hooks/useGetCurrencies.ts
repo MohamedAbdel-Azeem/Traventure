@@ -21,7 +21,7 @@ export const useGetCurrencies = () => {
         const response = await axios.get<{
           available_currencies: { [key: string]: string };
         }>(
-          `https://marketdata.tradermade.com/api/v1/live_currencies_list?api_key=X_RHfZSRwHh5WVp3Tzug`
+          `https://marketdata.tradermade.com/api/v1/live_currencies_list?api_key=${apiKey}`
         );
 
         console.log(apiKey);
