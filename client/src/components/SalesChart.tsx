@@ -43,11 +43,24 @@ function SingleProductSalesChart({ data }) {
 }
 
 function DetailedViewSalesChart({ data }) {
+  const newdata = data.map((sale) => ({
+    ...sale,
+    timestamp:
+      new Date(sale.timestamp).toISOString().split("T")[0] +
+      " " +
+      new Date(sale.timestamp)
+        .toISOString()
+        .split("T")[1]
+        .split(":")
+        .slice(0, 2)
+        .join(":"),
+  }));
+
   return (
     <LineChart
       width={730}
       height={250}
-      data={data}
+      data={newdata}
       margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
     >
       <CartesianGrid strokeDasharray="3 3" />

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useGetSeller } from "../custom_hooks/sellerGetUpdate";
 import { useGetSellerSales } from "../custom_hooks/products/useGetSellerSales";
@@ -11,6 +11,7 @@ export function SellerSalesPage() {
   const { username } = useParams<{ username: string }>();
 
   const [compactView, setCompactView] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState("");
 
   const {
     user: seller,
@@ -24,11 +25,28 @@ export function SellerSalesPage() {
     error: salesError,
   } = useGetSellerSales(seller?._id, compactView);
 
-  const handleChange = (
+  const [filteredSales, setFilteredSales] = useState(sales);
+
+  const handleCompactViewChange = (
     event: React.MouseEvent<HTMLElement>,
     newCompactView: boolean
   ) => {
     setCompactView(newCompactView);
+    if (newCompactView) {
+      setFilteredSales(sales);
+    }
+  };
+
+  const handleSelectProductChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setSelectedProduct(event.target.value);
+    setFilteredSales(
+      sales.filter(
+        (sale: { productName: string }) =>
+          sale.productName === event.target.value
+      )
+    );
   };
 
   if (sellerLoading) {
@@ -39,6 +57,14 @@ export function SellerSalesPage() {
     return <div>Error: {sellerError || salesError}</div>;
   }
 
+  const productsSet: { [key: string]: boolean } = {};
+
+  sales.forEach((sale: { productName: string }) => {
+    productsSet[sale.productName] = true;
+  });
+
+  const productNames = Object.keys(productsSet);
+
   return (
     <div className="flex flex-col items-center gap-8 pt-6">
       <h1 className="font-sans text-xl font-medium">
@@ -48,7 +74,7 @@ export function SellerSalesPage() {
         color="primary"
         value={compactView}
         exclusive
-        onChange={handleChange}
+        onChange={handleCompactViewChange}
         aria-label="Platform"
       >
         <ToggleButton value={true}>Simplified View</ToggleButton>
@@ -57,7 +83,35 @@ export function SellerSalesPage() {
       {salesLoading ? (
         <ClipLoader />
       ) : (
-        <SalesChart data={sales} compactView={compactView} />
+        <>
+          {!compactView && (
+            <div>
+              <label htmlFor="product-select" className="mr-2">
+                Filter by Product:{" "}
+              </label>
+              <select
+                id="product-select"
+                className="px-4 py-3 border border-gray-300 rounded-lg"
+                onChange={handleSelectProductChange}
+              >
+                <option value="" selected disabled>
+                  Select a Product
+                </option>
+                {productNames.map((productName) => (
+                  <option key={productName} value={productName}>
+                    {productName}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+          {(compactView || (!compactView && selectedProduct !== "")) && (
+            <SalesChart
+              data={compactView ? sales : filteredSales}
+              compactView={compactView}
+            />
+          )}
+        </>
       )}
     </div>
   );
