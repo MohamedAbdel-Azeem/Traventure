@@ -77,23 +77,21 @@ export const Feedback: React.FC<FeedbackProps> = ({
       } finally {
         setLoading(false); // Set loading to false when submission is complete
       }
-    }
-    else if (type === "Tour_guide") {
-
+    } else if (type === "Tour_guide") {
       if (value === null) {
         setError("Rating is required");
         return;
       }
       setLoading(true); // Set loading to true when submission starts
       try {
-        const body = { rating: value, review: feedback, touristUsername: touristUsername } as IFeedbackk;
-        const response = await rateTourGuide(
-          id,
-          body
-
-        );
+        const body = {
+          rating: value,
+          review: feedback,
+          touristUsername: touristUsername,
+        } as IFeedbackk;
+        const response = await rateTourGuide(id, body);
         handleClose(); // Close the modal first
-        if (response && response.status === 200) {
+        if (response && response.status >= 200 && response.status < 300) {
           Swal.fire(
             "Feedback submitted",
             "Thank you for your feedback",
@@ -108,43 +106,36 @@ export const Feedback: React.FC<FeedbackProps> = ({
       } finally {
         setLoading(false); // Set loading to false when submission is complete
       }
-
-    }
-    else
-
-      if (type === "Itinerary") {
-        if (value === null) {
-          setError("Rating is required");
-          return;
-        }
-        setLoading(true); // Set loading to true when submission starts
-        try {
-          const body = { rating: value, review: feedback, touristUsername: touristUsername } as IFeedbackk;
-          const response = await rateItinerary(
-            id,
-            body
-
-          );
-          handleClose(); // Close the modal first
-          if (response && response.status >= 200 && response.status < 300) {
-            Swal.fire(
-              "Feedback submitted",
-              "Thank you for your feedback",
-              "success"
-            );
-          } else {
-            Swal.fire("Feedback not submitted", "Please try again", "error");
-          }
-        } catch (error) {
-          console.error(error);
-          Swal.fire("Feedback not submitted", "Please try again", "error");
-        } finally {
-          setLoading(false); // Set loading to false when submission is complete
-        }
-
-
+    } else if (type === "Itinerary") {
+      if (value === null) {
+        setError("Rating is required");
+        return;
       }
-
+      setLoading(true); // Set loading to true when submission starts
+      try {
+        const body = {
+          rating: value,
+          review: feedback,
+          touristUsername: touristUsername,
+        } as IFeedbackk;
+        const response = await rateItinerary(id, body);
+        handleClose(); // Close the modal first
+        if (response && response.status >= 200 && response.status < 300) {
+          Swal.fire(
+            "Feedback submitted",
+            "Thank you for your feedback",
+            "success"
+          );
+        } else {
+          Swal.fire("Feedback not submitted", "Please try again", "error");
+        }
+      } catch (error) {
+        console.error(error);
+        Swal.fire("Feedback not submitted", "Please try again", "error");
+      } finally {
+        setLoading(false); // Set loading to false when submission is complete
+      }
+    }
   };
 
   return (
