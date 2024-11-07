@@ -66,6 +66,20 @@ router.get("/get/:itinerary_id", async (req: Request, res: Response) => {
     .populate("selectedTags")
     .populate("added_By")
     .populate("booked_By")
+    .populate({
+      path: "plan.activities.activity_id",
+      populate: {
+        path: "Category",
+        model: "Category",
+      },
+    })
+    .populate({
+      path: "plan.activities.activity_id",
+      populate: {
+        path: "Tags",
+        model: "PreferenceTags",
+      },
+    })
     
     ;
     res.status(200).send(itinerary);
