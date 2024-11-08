@@ -60,4 +60,6 @@ app.get("/", (req: Request, res: Response) => {
 app.listen(3000, () => {
   connectDB();
   console.log(`Server started on http://localhost:3000`);
+  
 });
+

@@ -10,9 +10,14 @@ interface FlightCardProps {
   currentCurrency: string;
 }
 
+
 const FlightCard: React.FC<FlightCardProps> = ({ flight, exchangeRate, currentCurrency }) => {
   const averageRating = 4.5; 
 
+  const price = flight.price.grandTotal ;
+  const currency=flight.price.currency;
+  console.log("price",price);
+  console.log("currency",currency);
   return (
     <div className="flight-card">
       <div className="card-header">
