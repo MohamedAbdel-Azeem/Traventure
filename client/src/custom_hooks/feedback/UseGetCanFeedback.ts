@@ -3,7 +3,7 @@ import axios from "axios";
 
 
 export const UseGetCanFeedback = (touristUsername: string,tourGuideUserId:string) => {
-    const [CanFeedback, setCanFeedback] = useState<boolean>(true);
+    const [CanFeedback, setCanFeedback] = useState<boolean>(false);
     const [cloading, setcLoading] = useState(false);
     const [cerror, setcError] = useState<string | null>(null);
     const fetchCanFeedback = useCallback(async () => {
@@ -31,5 +31,5 @@ export const UseGetCanFeedback = (touristUsername: string,tourGuideUserId:string
     useEffect(() => {
         fetchCanFeedback();
     }, []);
-    return { CanFeedback, cloading, cerror, fetchCanFeedback };
+    return { CanFeedback, cloading, cerror};
   };

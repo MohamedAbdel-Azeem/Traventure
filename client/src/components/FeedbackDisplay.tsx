@@ -20,12 +20,9 @@ interface FeedbackDisplayProps {
 }
 
 const FeedbackDisplay: React.FC<FeedbackDisplayProps> = ({ id, type, onClose }) => {
-  const [openFeedback, setOpenFeedback] = useState(false);
-
   const { username } = useParams<{ username: string }>();
 
   const { ItineraryReviews, cloading, cerror, fetchItineraryReviews, fetchTourGuideReviews, TourGuideReviews,fetchCanFeedback } = {} as any;
-  const [CanFeedback, SetCanFeedback] = useState(true);
   
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
 
@@ -73,8 +70,9 @@ const FeedbackDisplay: React.FC<FeedbackDisplayProps> = ({ id, type, onClose }) 
       }, [TourGuideReviews]);
 
 
-      const { CanFeedback,  fetchCanFeedback } = UseGetCanFeedback(username!, id);
-      console.log("CanFeedback",CanFeedback);
+      
+
+      // console.log("CanFeedback",CanFeedback);
 
 
 
@@ -82,16 +80,9 @@ const FeedbackDisplay: React.FC<FeedbackDisplayProps> = ({ id, type, onClose }) 
 
     }
 
+    const { CanFeedback } = UseGetCanFeedback(username!, id);
 
 
-
-  const handleAddRateClick = () => {
-    setOpenFeedback(true);
-  };
-
-  const handleCloseFeedback = () => {
-    setOpenFeedback(false);
-  };
 
   return (
     <div className="feedback-popup">
