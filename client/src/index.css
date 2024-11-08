@@ -744,12 +744,149 @@
   background-color: rgb(37, 100, 61);
 }
 .acceptBtn svg {
-  height: 17px;
-  fill: white;
+  height: 27px;
   z-index: 3;
   transition: all 0.2s;
   transform-origin: center;
 }
 .acceptBtn:hover svg {
   transform: scale(1.5) translateX(0px) ;
+}
+
+.pin-tag::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translate(-50%, -7%);
+  width: 0;
+  height: 0;
+  border-top: 0px;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid #22c55e;
+  margin: 0px;
+}
+.pin-end::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translate(-50%, -7%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;  
+  border-top: 8px solid #ef4444;
+  margin: 0px;
+  padding: 0px;
+}
+.shareBtn svg {
+  height: 25px;
+}
+
+.shareBtn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e7e7e7;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
+  height: 50px;
+  width: 80px;
+}
+
+.shareBtn::before, .shareBtn::after {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  width: 50%;
+  height: 100%;
+  transition: 0.25s linear;
+  z-index: 1;
+}
+
+.shareBtn::before {
+  content: "";
+  left: 0;
+  justify-content: flex-end;
+  background-color: #4d60b6;
+}
+
+.shareBtn::after {
+  content: "";
+  right: 0;
+  justify-content: flex-start;
+  background-color: #4453a6;
+}
+
+.shareBtn:hover {
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+.shareBtn:hover span {
+  opacity: 0;
+  z-index: -3;
+}
+
+.shareBtn:hover::before {
+  opacity: 0.5;
+  transform: translateY(-100%);
+}
+
+.shareBtn:hover::after {
+  opacity: 0.5;
+  transform: translateY(100%);
+}
+
+.shareBtn span {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: whitesmoke;
+  font-family: 'Fira Mono', monospace;
+  font-size: 24px;
+  font-weight: 700;
+  opacity: 1;
+  transition: opacity 0.25s;
+  z-index: 2;
+}
+
+.shareBtn .social-link {
+  display: inline-block;
+  margin: 0 5px; /* Add some spacing between icons */
+}
+
+.shareBtn .social-link svg {
+  text-shadow: 1px 1px rgba(31, 74, 121, 0.7);
+  transform: scale(1);
+  transition: transform 0.4s linear; /* Add transition for smooth scaling */
+}
+
+.shareBtn .social-link:hover svg {
+  background-color: rgba(249, 244, 255, 0.774);
+  animation: bounce_613 0.4s linear;
+}
+
+@keyframes bounce_613 {
+  40% {
+    transform: scale(1.4);
+  }
+
+  60% {
+    transform: scale(0.8);
+  }
+
+  80% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }

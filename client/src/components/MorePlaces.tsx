@@ -14,6 +14,7 @@ import LocationCardTourist from "./LocationCardTourist";
 import ImprovedSidebar from "./ImprovedSidebar";
 import { useGetHTags } from "../custom_hooks/useCreateHistoricalTag";
 import NewNavbar from "./NewNavbar";
+import CurrencyDropdown from "./currencyDrop";
 
 const MorePlaces: React.FC = () => {
   const {
@@ -57,6 +58,7 @@ const MorePlaces: React.FC = () => {
           All Places
         </Typography>
         <hr />
+        <CurrencyDropdown />
         <Box my={3}>
           <FormControl
             variant="outlined"

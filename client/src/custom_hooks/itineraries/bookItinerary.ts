@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const useBookItinerary = () => {
   const [data, setData] = useState(null);
@@ -25,8 +26,18 @@ const useBookItinerary = () => {
             await axios.patch(`/traventure/api/itinerary/update/${itinerary_id}`,{
                 booked_By:Bookings});}
       setData(response.data);
+      Swal.fire({
+        title: "Booking Successful",
+        text: "Your booking has been added successfully",
+        icon: "success",
+      })
     } catch (error: any) {
       setError(error.message);
+      Swal.fire({
+        title: "Booking Failed",
+        text: error.response?.data?.message || "An error occurred",
+        icon: "error",
+    });
     } finally {
       setLoading(false);
     }

@@ -12,6 +12,7 @@ import { useParams,useLocation } from "react-router-dom";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useSelector } from "react-redux";
 
 interface TagStructure {
   _id: string;
@@ -32,8 +33,8 @@ interface ItineraryCardCRUDProps {
   total: number;
   language: string;
   selectedTags?: TagStructure[];
-  pickup_location: string;
-  dropoff_location: string;
+  pickup_location: { longitude: number; latitude: number };
+  dropoff_location: { longitude: number; latitude: number };
   plan: {
     place?: Place;
     activities: {
@@ -92,6 +93,14 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
     }
 
   };
+
+  const exchangeRate = useSelector(
+    (state: any) => state.exchangeRate.exchangeRate
+  );
+  const currentCurrency = useSelector(
+    (state: any) => state.exchangeRate.currentCurrency
+  );
+
 
   const currentType = useLocation().pathname.split("/")[1];
   const handleInappropriate = async () => {
@@ -184,7 +193,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
         <div className="flex justify-center items-center mb-4 space-x-4">
           <div className="bg-red-500 text-white p-2 rounded-lg flex fle x-col items-center w-1/2">
             <p className="text-sm flex items-center">
-              <ConfirmationNumberIcon className="mr-1" /> {price.toFixed(2)}
+              <ConfirmationNumberIcon className="mr-1" /> {currentCurrency} {(price * exchangeRate).toFixed(2)}
             </p>
           </div>
           <div className="bg-yellow-500 text-white p-2 rounded-lg flex flex-col items-center w-1/2">

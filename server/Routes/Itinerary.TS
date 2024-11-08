@@ -60,7 +60,28 @@ router.get("/:username", async (req: Request, res: Response) => {
 
 router.get("/get/:itinerary_id", async (req: Request, res: Response) => {
   try {
-    const itinerary = await ItineraryModel.findById(req.params.itinerary_id);
+    const itinerary = await ItineraryModel.findById(req.params.itinerary_id)
+    .populate("plan.place")
+    .populate("plan.activities.activity_id")
+    .populate("selectedTags")
+    .populate("added_By")
+    .populate("booked_By")
+    .populate({
+      path: "plan.activities.activity_id",
+      populate: {
+        path: "Category",
+        model: "Category",
+      },
+    })
+    .populate({
+      path: "plan.activities.activity_id",
+      populate: {
+        path: "Tags",
+        model: "PreferenceTags",
+      },
+    })
+    
+    ;
     res.status(200).send(itinerary);
   } catch (error) {
     res.status(500).send(error);

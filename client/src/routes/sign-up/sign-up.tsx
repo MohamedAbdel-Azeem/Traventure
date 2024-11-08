@@ -10,7 +10,6 @@ import { PhoneInput } from "../../components/PhoneInput/phone-input";
 import { E164Number } from "libphonenumber-js";
 import countryList from "react-select-country-list";
 import PDFUploader from "../../components/PDFUploader";
-// TODO: Use the Loading and error returning from the hook
 
 const getAge = (dob: string): number => {
   const todaysdate = new Date();
@@ -64,6 +63,7 @@ const schema = z
           message: "Invalid file. Only PDF files under 5MB are allowed.",
         }
       ),
+      terms: z.boolean()
   })
   .superRefine((data, ctx) => {
     const { role, dateOfBirth, Occupation } = data;
@@ -113,6 +113,13 @@ const schema = z
         message: "Document is required",
       });
     }
+    if(role !== "tourist" && !data.terms) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["terms"],
+        message: "You must agree to the terms and conditions",
+      });
+    }
   });
 
 const Register: React.FC = () => {
@@ -135,6 +142,7 @@ const Register: React.FC = () => {
       Occupation: "",
       role: "tourist",
       documents: null,
+      terms: false,
     },
   });
 
@@ -412,21 +420,23 @@ const Register: React.FC = () => {
                 </div>
 
                 <div className="my-6">
-                    {role === "tourguide" && (
+                  {role === "tourguide" && (
                     <label className="block text-gray-700 font-semibold text-lg mb-4">
                       Please upload your ID and certificates in one PDF
                     </label>
-                    )}
-                    {role === "advertiser" && (
+                  )}
+                  {role === "advertiser" && (
                     <label className="block text-gray-700 font-semibold text-lg mb-4">
-                      Please upload your ID and taxation registry card in one PDF
+                      Please upload your ID and taxation registry card in one
+                      PDF
                     </label>
-                    )}
-                    {role === "seller" && (
+                  )}
+                  {role === "seller" && (
                     <label className="block text-gray-700 font-semibold text-lg mb-4">
-                      Please upload your ID and taxation registry card in one PDF
+                      Please upload your ID and taxation registry card in one
+                      PDF
                     </label>
-                    )}
+                  )}
                   <PDFUploader
                     selectedPDF={selectedPDF}
                     setSelectedPDF={handlePDFChange}
@@ -435,9 +445,32 @@ const Register: React.FC = () => {
                     <p className="text-red-600">{errors.documents.message}</p>
                   )}
                 </div>
+                 {/* Terms and Conditions Checkbox */}
+            <div>
+              <label className="inline-flex items-center">
+                <input
+                  type="checkbox"
+                  {...register("terms", { required: "You must agree to the terms" })}
+                  className="form-checkbox h-5 w-5 text-purple-600"
+                />
+                <span className="ml-2 text-gray-700 font-semibold text-lg">
+                  I hereby agree to Traventure's{" "}
+                  <a
+                  href="/terms-and-conditions"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-purple-700 hover:text-purple-600 underline"
+                  >
+                  Terms and Conditions
+                  </a>
+                </span>
+              </label>
+              {errors.terms && (
+                <p className="text-red-500">{errors.terms.message}</p>
+              )}
+            </div>
               </>
             )}
-
             {/* Submit Button */}
             <div className="flex justify-center">
               <button

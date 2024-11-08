@@ -5,7 +5,6 @@ import ImprovedSidebar from '../ImprovedSidebar';
 import TourGuide_Advertiser_SellerTable from './TourGuide_Advertiser_SellerTable';
 import { useGetAllUsers } from '../../custom_hooks/tourist_fetchandelete';
 import NewNavbar from '../NewNavbar';
-
 const Accounts = () => {
     const { data } = useGetAllUsers();
     return (

@@ -16,6 +16,7 @@ import IActivity from '../custom_hooks/activities/activity_interface';
 import { useGetAllCategories } from '../custom_hooks/categoryandTagCRUD';
 import Activity from '../custom_hooks/activities/activity_interface';
 import NewNavbar from './NewNavbar';
+import CurrencyDropdown from './currencyDrop';
 
 const MoreActivities: React.FC = () => {
     const { sactivities, aloading, aerror } = useGetAllActivitiesS();
@@ -130,6 +131,7 @@ const MoreActivities: React.FC = () => {
             <NewNavbar/>
             <div className="w-full" style={{ marginTop: '80px' }}>
                 <h1 className="text-2xl font-bold mb-4 mx-auto">All Activities</h1>
+                <CurrencyDropdown />
                 <hr />
                 <br />
                 <div>
@@ -289,7 +291,7 @@ const MoreActivities: React.FC = () => {
                                 <ActivityCardTourist
                                     key={activity._id}
                                     activity={activity}
-                                    type="Tourist"
+                                    {...(currenttype==="tourist" && { type: "tourist" })}
                                     onDelete={(_id) => {
                                         console.log(`Delete activity with id: ${_id}`);
                                     }}

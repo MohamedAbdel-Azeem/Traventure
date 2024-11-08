@@ -9,7 +9,7 @@ export const UseCreateComplain = async (body: any) => {
         } else {
             throw new Error("Error creating place");
         }
-    } catch (error) {
+    } catch (error:any) {
         
         throw new Error(error.message || "Error creating place");
     }

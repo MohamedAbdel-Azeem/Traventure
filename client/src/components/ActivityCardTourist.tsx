@@ -8,6 +8,7 @@ import { updateActivity } from '../custom_hooks/activities/updateActivity';
 import { useParams , useLocation } from 'react-router-dom';
 import axios from "axios";
 import { set } from "date-fns";
+import { useSelector } from "react-redux";
 
 type Activity = {
   _id: string;
@@ -33,6 +34,7 @@ type Activity = {
 interface ActivityProp {
     activity: Activity;
     onDelete: (_id: string) => void;
+    type?:string;
 }
 
 type CatStructure = {
@@ -40,10 +42,11 @@ type CatStructure = {
     name: string;
     __v: number;
   }
-  
 
 
-export const ActivityCardTourist: React.FC<ActivityProp> = ({activity, onDelete }) => {
+
+
+export const ActivityCardTourist: React.FC<ActivityProp> = ({type,activity, onDelete }) => {
     const currentuser = useLocation().pathname.split('/')[2];
     const currenttype = useLocation().pathname.split('/')[1];
     const [isEditing, setIsEditing] = useState(false);
@@ -76,6 +79,13 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({activity, onDelete 
       }
     }
   };
+
+  const exchangeRate = useSelector(
+    (state: any) => state.exchangeRate.exchangeRate
+  );
+  const currentCurrency = useSelector(
+    (state: any) => state.exchangeRate.currentCurrency
+  );
 
   const calculateAverageRating = (currentActivity: Activity): number => {
     const allRatings = currentActivity.feedback?.map((fb) =>
@@ -212,7 +222,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({activity, onDelete 
             <div className="absolute text-center top-0 left-0 w-[71px] h-[30px] rounded-tl-[19px] bg-[#FF0000] border-black border-[1px] rounded-br-[19px]">
               {newBIO ? "Open" : "Closed"}
               </div>
-                 {currenttype === "tourist" && currentActivity.BookingIsOpen && (
+                 {type === "tourist" && currentActivity.BookingIsOpen && (
                 <div className=" flex justify-end items-center py-2 px-5">
                     <button
                     className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ml-2"
@@ -306,10 +316,10 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({activity, onDelete 
               </div>
               <div className="flex flex-col items-center justify-center text-[13px] w-[160px] h-full">
                 <div>
-                  <div>Price: {currentActivity.Price}</div>
+                  <div>Price:  {currentCurrency} {(currentActivity.Price * exchangeRate).toFixed(2)}</div>
                 </div>
                 <div>
-                  <div>Special Discount: {currentActivity.SpecialDiscount}</div>
+                  <div>Special Discount: {currentCurrency} {(currentActivity.SpecialDiscount * exchangeRate).toFixed(2)}</div>
                 </div>
               </div>
             </div>

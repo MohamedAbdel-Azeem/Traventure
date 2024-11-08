@@ -229,29 +229,7 @@ const ItineraryDetails: React.FC = () => {
     console.log(editedItinerary);
   };
 
-  // const handleActivityChange = (
-  //   placeIndex: number,
-  //   activityIndex: number,
-  //   field: string,
-  //   value: string
-  // ) => {
-  //   const updatedPlan = [...editedItinerary.plan];
-  //   if (field === "Title") {
-  //     // Handle the nested activity_id.Title field
-  //     updatedPlan[placeIndex].activities[activityIndex].activity_id = {
-  //       ...updatedPlan[placeIndex].activities[activityIndex].activity_id,
-  //       Title: value,
-  //     };
-  //   } else {
-  //     // Handle other fields
-  //     updatedPlan[placeIndex].activities[activityIndex] = {
-  //       ...updatedPlan[placeIndex].activities[activityIndex],
-  //       [field]: value,
-  //     };
-  //   }
 
-  //   setEditedItinerary({ ...editedItinerary, plan: updatedPlan });
-  // };
 
   const handleAddPlace = () => {
     const newPlace: Place = {

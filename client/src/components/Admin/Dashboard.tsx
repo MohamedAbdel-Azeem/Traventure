@@ -134,6 +134,7 @@ const Dashboard : React.FC = () => {
                 onDelete={(_id) => {
                   console.log(`Delete activity with id: ${_id}`);
                 }}
+                {...(currenttype==="tourist" && { type: "tourist" })}
               />
             ))
           ) : (

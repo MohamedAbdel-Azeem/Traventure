@@ -12,6 +12,7 @@ import IActivity from '../custom_hooks/activities/activity_interface';
 import { useGetAllCategories } from '../custom_hooks/categoryandTagCRUD';
 import Activity from '../custom_hooks/activities/activity_interface';
 import NewNavbar from './NewNavbar';
+import CurrencyDropdown from './currencyDrop';
 
 const GuestMoreActivities: React.FC = () => {
     const { sactivities, aloading, aerror } = useGetAllActivitiesS();
@@ -106,8 +107,10 @@ const GuestMoreActivities: React.FC = () => {
     return (
         <div className="flex">
             <div className="w-full">
+                
                 <h1 className="text-2xl font-bold mb-4 mx-auto">All Activities</h1>
                 <hr />
+                <CurrencyDropdown />
                 <br />
                 <div>
                     <NewNavbar/>

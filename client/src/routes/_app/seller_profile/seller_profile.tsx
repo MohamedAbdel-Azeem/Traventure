@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 import { FaEdit } from "react-icons/fa";
 import ProfilePictureEdit from "../../../components/ProfilePictureEdit";
 import { uploadFileToStorage } from "../../../firebase/firebase_storage";
+import {handleDeleteAccount} from "../../../custom_hooks/usedeleterequest";
 
 interface SellerProfileProps {
   seller: ISeller;
@@ -116,12 +117,45 @@ const SellerProfile: React.FC<SellerProfileProps> = ({ seller }) => {
           });
             
         });
+
 };
+
 
 const [profilePicture, setProfilePicture] = useState<File | null>(null);
 const handleProfilePictureClick = () => {
   document.getElementById('profilePictureInput')?.click();
 };
+
+
+
+const handleDelete = () => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You will not be able to recover this account!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it!",
+    cancelButtonText: "No, keep it",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      const res = await handleDeleteAccount(
+        currentSeller._id,
+        currentSeller.username,
+        "seller",
+        currentSeller.wallet||0
+      );
+      if(res === "success"){
+        Swal.fire("Deleted!", "Your account has been deleted.", "success");
+        navigate("/");
+      }else{
+        Swal.fire("Error", "Failed to delete account", "error");
+      }
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      Swal.fire("Cancelled", "Your account is safe :)", "error");
+    }
+  })
+}
+
 
   return (
     
@@ -230,6 +264,14 @@ const handleProfilePictureClick = () => {
           </div>
 
           <div className="mt-8 flex justify-end space-x-4">
+            
+          <button
+              type="button"
+              onClick={handleDelete}
+              className="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-600 transition duration-200 mr-auto"
+            >
+              Delete Account
+            </button>
             {isEditing ? (
               <>
                 <button
@@ -282,6 +324,7 @@ const handleProfilePictureClick = () => {
             )}
 
             <button
+            type="button"
               onClick={()=>setPasswordModalOpen(true)}
               className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
             >

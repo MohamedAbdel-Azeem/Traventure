@@ -29,7 +29,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
     },
-  }));
+}));
 
  
   export interface IBooking {
@@ -101,7 +101,7 @@ const Bookings: React.FC = () => {
             </Modal>
             <NewNavbar/>           
             <div className="flex justify-center py-14">
-                <div className="w-1/2 gap-10">
+                <div className="w-7/12 gap-10">
                     <div className="flex flex-col gap-12">
                 
                         <TableContainer component={Paper} className="border-2 border-black rounded-none">
@@ -112,8 +112,10 @@ const Bookings: React.FC = () => {
                                         <StyledTableCell align="left">Title</StyledTableCell>
                                         <StyledTableCell align="center">Starting Date</StyledTableCell>
                                         <StyledTableCell align="center">Language</StyledTableCell>
+                                        <StyledTableCell align="right">Tour Guide</StyledTableCell>
                                         <StyledTableCell align="right"></StyledTableCell>
-                                        <StyledTableCell align="right"></StyledTableCell>
+                                        <StyledTableCell align="center"></StyledTableCell>
+                                        <StyledTableCell align="right" ></StyledTableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -125,6 +127,7 @@ const Bookings: React.FC = () => {
                                                 {booking.itinerary.starting_Date.split("T")[0]}
                                                             </StyledTableCell>
                                             <StyledTableCell align="center">{booking.itinerary.language}</StyledTableCell>
+                                            <StyledTableCell align="right">{(booking.itinerary.added_By as any).username}</StyledTableCell>
                                             <StyledTableCell align="right" style={{ width: '150px' }}><Button color="primary" variant="outlined" onClick={()=>navigate(`/tourist-itinerary/${booking.itinerary._id}`,
                                                  { state:
                                                     {
@@ -144,17 +147,22 @@ const Bookings: React.FC = () => {
                                             
                                                     }
                                                   })}>More Info</Button></StyledTableCell>
-                                            <StyledTableCell align="right" style={{ width: '150px' }}>
-                                                 {!hasStarted(new Date(booking.itinerary.starting_Date)) && (
+                                          <StyledTableCell align="center">
+                                        {!hasStarted(new Date(booking.itinerary.starting_Date)) && (
                                             <Button color="error" onClick={() => handleCancel(booking._id)} variant="outlined">Cancel</Button>
-                                        )}</StyledTableCell>
+                                        )}
+                                        {hasStarted(new Date(booking.itinerary.starting_Date)) && (
+                                            <Button variant="outlined" color="success">Rate</Button>
+                                        )}
+                                    </StyledTableCell>
+                                          <StyledTableCell align="right" ><Button variant="contained" color="primary">Review</Button></StyledTableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
                             </Table>
                         </TableContainer>
 
-                 
+                                    
                         <TableContainer component={Paper} className="border-2 border-black rounded-none">
                         <h4 className="flex justify-center text-2xl pt-4 font-bold">Activities</h4>
                             <Table aria-label="simple table">

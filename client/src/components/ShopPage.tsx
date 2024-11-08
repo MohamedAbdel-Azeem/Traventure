@@ -26,6 +26,7 @@ import {
 import Navbar from "./navbar";
 import ImageUploader from "./ImageUploader";
 import NewNavbar from "./NewNavbar";
+import CurrencyDropdown from "./currencyDrop";
 
 const itemsPerPage = 8;
 interface ShopPageProps {
@@ -390,6 +391,7 @@ const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
               </div>
             )}
           </div>
+          <CurrencyDropdown />
         </div>
         <div className="product-list">
           {sortedProducts.length > 0 ? (
