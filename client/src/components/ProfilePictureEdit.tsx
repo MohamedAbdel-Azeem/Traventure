@@ -6,13 +6,15 @@ interface ProfilePictureEditProps {
   onChange: (newPicture: File | null) => void; 
   isEditing: boolean; 
   OutsideClassName?: string; 
+  size?: string; // Size in responsive units, e.g., "5rem", "10vw"
 }
 
 const ProfilePictureEdit: React.FC<ProfilePictureEditProps> = ({
   profilePicture,
   onChange,
   isEditing,
-  OutsideClassName
+  OutsideClassName,
+  size = "5rem" // Default to a responsive size like 5rem
 }) => {
   const handleProfilePictureClick = () => {
     document.getElementById("profilePictureInput")?.click();
@@ -26,8 +28,10 @@ const ProfilePictureEdit: React.FC<ProfilePictureEditProps> = ({
   };
 
   return (
-    <div className={`relative w-32 h-32 ${OutsideClassName || ""}`}>
-     
+    <div
+      className={`relative ${OutsideClassName || ""}`}
+      style={{ width: size, height: size }}
+    >
       {profilePicture ? (
         <img
           src={URL.createObjectURL(profilePicture)}

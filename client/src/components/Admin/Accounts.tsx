@@ -4,12 +4,13 @@ import Admin_TourismGovernorTable from "./Admin_TourismGovernorTable"
 import ImprovedSidebar from '../ImprovedSidebar';
 import TourGuide_Advertiser_SellerTable from './TourGuide_Advertiser_SellerTable';
 import { useGetAllUsers } from '../../custom_hooks/tourist_fetchandelete';
+import NewNavbar from '../NewNavbar';
 const Accounts = () => {
     const { data } = useGetAllUsers();
     return (
     <div className="w-full flex items-center justify-center">
         <div className="w-[1500px]">
-        <ImprovedSidebar/>
+        <NewNavbar/>
             <div className="my-8">
                 <TouristTable />
             </div>

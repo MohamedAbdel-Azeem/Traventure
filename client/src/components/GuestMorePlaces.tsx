@@ -6,6 +6,7 @@ import Place from '../custom_hooks/places/place_interface';
 import LocationCardTourist from './LocationCardTourist';
 import ImprovedSidebar from './ImprovedSidebar';
 import { useGetHTags } from '../custom_hooks/useCreateHistoricalTag';
+import NewNavbar from './NewNavbar';
 import CurrencyDropdown from './currencyDrop';
 
 const GuestMorePlaces: React.FC = () => {
@@ -43,9 +44,8 @@ const GuestMorePlaces: React.FC = () => {
 
     return (
         <div className="flex">
-            <ImprovedSidebar />
-        
-            <Box p={3}>
+            <NewNavbar/>
+            <Box p={3} mt={7}>
                 <Typography variant="h4" component="h1" gutterBottom>
                     All Places
                     

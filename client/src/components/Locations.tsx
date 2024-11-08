@@ -11,6 +11,7 @@ import { Checkbox, FormControl, InputAdornment, InputLabel, ListItemText, MenuIt
 import TheMAP from "./TheMAP";
 import { createPlaceID } from "../custom_hooks/places/placeService";
 import { useGetHTags } from "../custom_hooks/useCreateHistoricalTag";
+import NewNavbar from "./NewNavbar";
 
 const Locations = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -120,8 +121,8 @@ const handleDelete = (id: string) => {
 
     return ( 
     <div className="flex justify-center">
-        <ImprovedSidebar/>
-    <div className="grid grid-cols-3 mt-10">
+        <NewNavbar/>
+    <div className="grid grid-cols-3 mt-20">
       <Modal
         open={open}
         onClose={handleClose}
