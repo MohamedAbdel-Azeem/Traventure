@@ -12,4 +12,5 @@ export interface TouristProfileData {
     profilePicture: string;
     wallet: number;
     currentLoyaltyPoints: number;
+    totalLoyaltyPoints: number;
 }

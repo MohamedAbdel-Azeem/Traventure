@@ -78,7 +78,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
   const handleCloseBadgePopup = () => {
     setIsBadgePopupOpen(false);
   };
-
+  console.log("tourist", tourist);
   //  tourist = patchUserProfile(tourist, tourist.username).response as TouristProfileData;
 
   // Define the Zod schema for form validation
@@ -166,7 +166,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
               <FontAwesomeIcon icon={faAward} className="text-white text-5xl" />
             </button>
             {isBadgePopupOpen && (
-              <BadgePopup points={currentTourist.currentLoyaltyPoints} onClose={handleCloseBadgePopup} />
+              <BadgePopup points={tourist.totalLoyaltyPoints} onClose={handleCloseBadgePopup} />
             )}
           </div>
 

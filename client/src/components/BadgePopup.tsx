@@ -17,8 +17,8 @@ interface BadgePopupProps {
 
 
 const BadgePopup: React.FC<BadgePopupProps> = ({ points, onClose }) => {
-     points=0;
     
+  console.log("points: "+points);
   return (
     <div className="popup-overlay">
       <div className="popup-container">
