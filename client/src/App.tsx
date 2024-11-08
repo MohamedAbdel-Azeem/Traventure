@@ -42,6 +42,7 @@ import Applications from "./components/Admin/Applications";
 import TheBIGMAP from "./components/TheBIGMAP";
 import { TouristPurchases } from "./pages/TouristPurchases";
 import TermsAndConditions from "./routes/_app/terms_and_conditions/terms_and_conditions";
+import FlightsPage from "./components/flightsPage";
 
 
 function App() {
@@ -97,6 +98,7 @@ function App() {
             path="/tourist/:username/purchases"
             element={<TouristPurchases />}
           />
+          <Route path="/tourist/:username/flights" element={<FlightsPage />} />
           {/* Tourism Governor */}
           <Route
             path="/tourismgovernor/:username"
