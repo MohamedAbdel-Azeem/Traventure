@@ -319,7 +319,7 @@ const Bookings: React.FC = () => {
           {selectedActivity && (
             <ActivityCardTourist
               activity={selectedActivity}
-              onDelete={() => {}}
+              onDelete={() => { }}
             />
           )}
           <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
@@ -408,24 +408,42 @@ const Bookings: React.FC = () => {
                         {!hasStarted(
                           new Date(booking.itinerary.starting_Date)
                         ) && (
-                          <Button
-                            color="error"
-                            sx={{ fontSize: "9px" }}
-                            onClick={() => handleCancel(booking._id)}
-                            variant="outlined"
-                          >
-                            Cancel
-                          </Button>
-                        )}
+                            <Button
+                              color="error"
+                              sx={{ fontSize: "9px" }}
+                              onClick={() => handleCancel(booking._id)}
+                              variant="outlined"
+                            >
+                              Cancel
+                            </Button>
+                          )}
+                        {hasStarted(
+                          new Date(booking.itinerary.ending_Date)
+                        ) && (
+                            <Reviews
+                              id={booking.itinerary._id}
+                              type="Itinerary"
+                              text="Reviews"
+                            />
+                          )}
+
+
                         {hasStarted(
                           new Date(booking.itinerary.starting_Date)
-                        ) && (
-                          <Reviews
-                            id={booking.itinerary._id}
-                            type="Itinerary"
-                            text="Reviews"
-                          />
-                        )}
+                        ) && ! hasStarted(
+                          new Date(booking.itinerary.ending_Date)) && (
+                            
+                            <Button
+                              variant="contained"
+                              sx={{ fontSize: "8px" }}
+                              color="primary"
+                            
+                            >
+                              In Progress
+                            </Button>
+                            
+                          )}
+
                       </StyledTableCell>
                       <StyledTableCell align="right">
                         <Reviews
@@ -490,15 +508,15 @@ const Bookings: React.FC = () => {
                         {!hasStarted(
                           new Date(booking.activity.DateAndTime)
                         ) && (
-                          <Button
-                            color="error"
-                            sx={{ fontSize: "9px" }}
-                            onClick={() => handleCancel(booking._id)}
-                            variant="outlined"
-                          >
-                            Cancel
-                          </Button>
-                        )}
+                            <Button
+                              color="error"
+                              sx={{ fontSize: "9px" }}
+                              onClick={() => handleCancel(booking._id)}
+                              variant="outlined"
+                            >
+                              Cancel
+                            </Button>
+                          )}
 
                         {hasStarted(new Date(booking.activity.DateAndTime)) && (
                           <Button

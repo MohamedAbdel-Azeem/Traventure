@@ -52,7 +52,9 @@ router.post("/rateTourGuide/:tourGuideUserId", async (req, res) => {
         await rateTourGuide(tourGuideUserId, feedback);
         res.status(201).send("Feedback added successfully");
     } catch (error) {
+        console.log("aaaaaaaaaaaa",error);
         res.status(500).send("error adding feedback: "+error);
+        
     }
 });
 
@@ -94,6 +96,7 @@ router.get("/canfeedback", async (req, res) => {
         const canProvideFeedback = await isUserBookedInItineraryOFtourGuide(touristId,tourGuideUserId);
         res.status(201).json({ canProvideFeedback });
     } catch (error) {
+        console.log("aaaaaaaaaaaaaaaaaaaa",error);
         res.status(500).send(" getting feedback: "+error);
     }
 });

@@ -2,12 +2,13 @@ import { useCallback, useEffect, useState } from 'react';
 import axios from "axios";
 
 
-export const UseGetItineraryReviews = (touristUsername: string,tourGuideUserId:string) => {
+export const UseGetCanFeedback = (touristUsername: string,tourGuideUserId:string) => {
     const [CanFeedback, setCanFeedback] = useState(null);
     const [cloading, setcLoading] = useState(false);
     const [cerror, setcError] = useState<string | null>(null);
     const fetchCanFeedback = useCallback(async () => {
         setcLoading(true);
+        
       try {
         const body= {touristUsername,tourGuideUserId};
   

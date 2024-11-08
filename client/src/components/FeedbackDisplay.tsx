@@ -4,6 +4,7 @@ import { Feedback as FeedbackComponent } from './purchases/FeedBack';
 import { UseGetItineraryReviews } from '../custom_hooks/feedback/UseGetItineraryReviews';
 import { useParams } from 'react-router-dom';
 import { UseGetTourGuideReviews } from '../custom_hooks/feedback/UseGetTourGuideReviews';
+import { UseGetCanFeedback } from '../custom_hooks/feedback/UseGetCanFeedback';
 
 interface Feedback {
   username: string;
@@ -20,17 +21,19 @@ interface FeedbackDisplayProps {
 
 const FeedbackDisplay: React.FC<FeedbackDisplayProps> = ({ id, type, onClose }) => {
   const [openFeedback, setOpenFeedback] = useState(false);
-  
+
   const { username } = useParams<{ username: string }>();
 
-  const { ItineraryReviews, cloading, cerror, fetchItineraryReviews,fetchTourGuideReviews,TourGuideReviews } = {} as any;
+  const { ItineraryReviews, cloading, cerror, fetchItineraryReviews, fetchTourGuideReviews, TourGuideReviews,fetchCanFeedback } = {} as any;
+  const [CanFeedback, SetCanFeedback] = useState(true);
+  
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
- 
+
 
   // Initialize feedbacks as an empty array
   if (type === "Itinerary") {
     const { ItineraryReviews, cloading, cerror, fetchItineraryReviews } = UseGetItineraryReviews(id);
-    
+
 
     useEffect(() => {
       fetchItineraryReviews(); // Trigger the fetching function on mount
@@ -50,9 +53,9 @@ const FeedbackDisplay: React.FC<FeedbackDisplayProps> = ({ id, type, onClose }) 
   }
   else
     if (type === "Tour_guide") {
-      
+
       const { TourGuideReviews, cloading, cerror, fetchTourGuideReviews } = UseGetTourGuideReviews(id);
-     
+
 
       useEffect(() => {
         fetchTourGuideReviews(); // Trigger the fetching function on mount
@@ -69,7 +72,11 @@ const FeedbackDisplay: React.FC<FeedbackDisplayProps> = ({ id, type, onClose }) 
         }
       }, [TourGuideReviews]);
 
-      
+
+      const { CanFeedback,  fetchCanFeedback } = UseGetCanFeedback(username !, id);
+      console.log("CanFeedback",CanFeedback);
+
+
 
 
 
@@ -114,13 +121,17 @@ const FeedbackDisplay: React.FC<FeedbackDisplayProps> = ({ id, type, onClose }) 
       </div>
 
       <div className="feedback-popup-footer">
-        <FeedbackComponent
-          type={type}
-          id={id}
-          touristUsername={username!}
-          touristFeedback={{ rating: null, review: null, touristUsername: username! }}
-        />
+        {
+          CanFeedback &&
+          <FeedbackComponent
+            type={type}
+            id={id}
+            touristUsername={username!}
+            touristFeedback={{ rating: null, review: null, touristUsername: username! }}
+          />
+        }
       </div>
+
     </div>
   );
 };
