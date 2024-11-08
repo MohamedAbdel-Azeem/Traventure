@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Box, Typography, Button, TextField, MenuItem, Autocomplete, Grid, FormControlLabel, Switch } from '@mui/material';
 import ImprovedSidebar from './ImprovedSidebar';
 import getFlights from "../custom_hooks/getFlights";
-import flightCard from "./flightCard";
 import FlightCard from './flightCard';
 
 
@@ -280,6 +279,7 @@ const AvailableFlights = () => {
                       flight={flight}
                       exchangeRate={1}  // Adjust according to your requirements (e.g., currency conversion)
                       currentCurrency="USD"  // Example currency
+                      includeTransportation={includeTransportation}
                     />
                   </Grid>
                 ))}

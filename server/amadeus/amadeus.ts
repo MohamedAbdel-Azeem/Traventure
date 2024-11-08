@@ -29,7 +29,7 @@ async function getFlightOffers(
       children,
       travelClass,
       nonStop:true,
-      max:50
+      max:10
     });
 
     return response.data;
