@@ -10,8 +10,6 @@ import Swal from "sweetalert2";
 import ProfilePictureEdit from "../../../components/ProfilePictureEdit";
 import { uploadFileToStorage } from "../../../firebase/firebase_storage";
 import { patchUserProfile } from "../../../custom_hooks/updateTouristProfile";
-import NewNavbar from "../../../components/NewNavbar";
-
 
 
 // type TouristSchemaType = {

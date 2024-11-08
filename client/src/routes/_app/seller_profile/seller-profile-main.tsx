@@ -29,15 +29,14 @@ export const Seller_Profile = () => {
       </div>
     );
   }
-  
-    if (!user)
-      return (
-        <>
-          <NewNavbar />
-          <div>No user found</div>
-        </>
-      );
 
+  if (!user)
+    return (
+      <>
+        <NewNavbar />
+        <div>No user found</div>
+      </>
+    );
 
   return (
     <>
@@ -45,8 +44,4 @@ export const Seller_Profile = () => {
       <SellerProfile seller={user as ISeller}></SellerProfile>;
     </>
   );
-
-
-
-
 };

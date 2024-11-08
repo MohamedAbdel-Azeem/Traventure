@@ -1,4 +1,3 @@
-import { useState } from "react";
 import TourGuideProfile from "./tourguide_profile";
 import { useParams } from "react-router-dom";
 import { ITourGuide } from "./ITourGuide";
@@ -9,13 +8,13 @@ export const TourGuide_Profile = () => {
   const { username } = useParams();
   const { user, loading, error } = useGetTourGuide(username);
 
-
-  if (!user) return (
-    <>
-      <NewNavbar />
-      <div>No user found</div>
-    </>
-  );
+  if (!user)
+    return (
+      <>
+        <NewNavbar />
+        <div>No user found</div>
+      </>
+    );
 
   if (loading) {
     return (
@@ -36,16 +35,10 @@ export const TourGuide_Profile = () => {
       </div>
     );
   }
-return (
-  <>
-    <NewNavbar />
-    <TourGuideProfile tourist={user as TouristProfileData}></TourGuideProfile>;
-  </>
-);
-  return <TourGuideProfile tourGuide={user as ITourGuide}></TourGuideProfile>;
+  return (
+    <>
+      <NewNavbar />
+      <TourGuideProfile tourGuide={user as ITourGuide}></TourGuideProfile>;
+    </>
+  );
 };
-
-
-
-
-

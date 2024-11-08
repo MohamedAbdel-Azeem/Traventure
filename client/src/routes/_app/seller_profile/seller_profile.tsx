@@ -11,7 +11,6 @@ import Swal from "sweetalert2";
 import { FaEdit } from "react-icons/fa";
 import ProfilePictureEdit from "../../../components/ProfilePictureEdit";
 import { uploadFileToStorage } from "../../../firebase/firebase_storage";
-import NewNavbar from "../../../components/NewNavbar";
 
 interface SellerProfileProps {
   seller: ISeller;
@@ -136,7 +135,6 @@ const handleProfilePictureClick = () => {
     backgroundColor: "rgba(0, 0, 0, 0.7)",
   }}
 >
-<NewNavbar/>
   <div className="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl p-8 backdrop-blur-lg bg-opacity-90">
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex items-center space-x-6">

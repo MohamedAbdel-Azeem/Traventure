@@ -10,7 +10,6 @@ import Swal from "sweetalert2";
 import ProfilePictureEdit from '../../../components/ProfilePictureEdit';
 import { uploadFileToStorage } from '../../../firebase/firebase_storage';
 import { updateAdvertiser } from '../../../custom_hooks/advertisercustomhooks';
-import NewNavbar from '../../../components/NewNavbar';
 // Define Zod schema for validation
 interface AdvertiserProfileProps {
   advertiser: IAdvertiser;

@@ -7,13 +7,13 @@ import { any, string } from "zod";
 import { ITourGuide } from "./ITourGuide";
 import { UpdateTourGuide } from "../../../custom_hooks/tourGuideGetUpdate";
 import { Box, Button, Modal, TextField } from "@mui/material";
-import { Textarea } from "@mantine/core";
-import ChangePasswordModal, { AddContactLeadFormType } from "../../../components/ChangePasswordModal";
+import ChangePasswordModal, {
+  AddContactLeadFormType,
+} from "../../../components/ChangePasswordModal";
 import { editpassword } from "../../../custom_hooks/changepassowrd";
 import Swal from "sweetalert2";
 import ProfilePictureEdit from "../../../components/ProfilePictureEdit";
 import { uploadFileToStorage } from "../../../firebase/firebase_storage";
-import NewNavbar from "../../../components/NewNavbar";
 interface TourGuideProfileProps {
   tourGuide: ITourGuide;
 }
@@ -35,8 +35,7 @@ const TourGuideProfile: React.FC<TourGuideProfileProps> = ({ tourGuide }) => {
   const [location, setLocation] = useState<string>("");
 
   const [update, setUpdate] = useState(false);
-const [profilePicture, setProfilePicture] = useState<File | null>(null);
-  
+  const [profilePicture, setProfilePicture] = useState<File | null>(null);
 
   const handleEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -53,22 +52,25 @@ const [profilePicture, setProfilePicture] = useState<File | null>(null);
 
   const handleSave = async () => {
     setUpdate(true);
-   const reponseUpdate = await UpdateTourGuide(currentData, userData.username, profilePicture);
-    if(reponseUpdate !== "error Updating Tour Guide"){
-    console.log("Successfully updated");
-    setIsEditing(false);
-    setUserData(currentData);
-    setProfilePicture(null);
-  }
-  else{
-    Swal.fire({
-      title: "Error",
-      text: reponseUpdate,
-      icon: "error",
-    });
-  }
-  setUpdate(false);
-  }
+    const reponseUpdate = await UpdateTourGuide(
+      currentData,
+      userData.username,
+      profilePicture
+    );
+    if (reponseUpdate !== "error Updating Tour Guide") {
+      console.log("Successfully updated");
+      setIsEditing(false);
+      setUserData(currentData);
+      setProfilePicture(null);
+    } else {
+      Swal.fire({
+        title: "Error",
+        text: reponseUpdate,
+        icon: "error",
+      });
+    }
+    setUpdate(false);
+  };
 
   const handleLogout = () => {
     navigate("/");
@@ -117,30 +119,28 @@ const [profilePicture, setProfilePicture] = useState<File | null>(null);
     boxShadow: 24,
     p: 4,
   };
-  const [isPasswordModalOpen,setPasswordModalOpen]=useState(false);
+  const [isPasswordModalOpen, setPasswordModalOpen] = useState(false);
   const handlePasswordChangeSubmit = (data: AddContactLeadFormType) => {
     console.log("Password change data:", data);
     const { oldPassword, newPassword } = data;
     editpassword(currentData.username, oldPassword, newPassword)
-        .then(() => {
-            setPasswordModalOpen(false);
-              Swal.fire({
-                title: "Password Changed Successfully",
-                text: "Password has been changed",
-                icon: "success",
-              });
-            
-        })
-        .catch((error) => {
-          const errorMessage = error.message || "Failed to change password.";
-          Swal.fire({
-            title: "Error",
-            text: errorMessage,
-            icon: "error",
-          });
-            
+      .then(() => {
+        setPasswordModalOpen(false);
+        Swal.fire({
+          title: "Password Changed Successfully",
+          text: "Password has been changed",
+          icon: "success",
         });
-};
+      })
+      .catch((error) => {
+        const errorMessage = error.message || "Failed to change password.";
+        Swal.fire({
+          title: "Error",
+          text: errorMessage,
+          icon: "error",
+        });
+      });
+  };
 
   return (
     <div
@@ -153,7 +153,6 @@ const [profilePicture, setProfilePicture] = useState<File | null>(null);
         backgroundColor: "rgba(0, 0, 0, 0.7)",
       }}
     >
-      <NewNavbar />
       <Modal open={open} onClose={() => setOpen(false)}>
         <Box sx={style}>
           <Box className="flex flex-col">
@@ -224,18 +223,18 @@ const [profilePicture, setProfilePicture] = useState<File | null>(null);
       </Modal>
       <div className="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl p-8 backdrop-blur-lg bg-opacity-90">
         <div className="flex items-center space-x-6">
-        {(isEditing ) ? (
-      <ProfilePictureEdit
-        profilePicture={profilePicture}
-        onChange={setProfilePicture} // Directly pass setProfilePicture
-        isEditing={isEditing} // Controls the edit overlay visibility
-      />) : (
-        <img
-              src={userData.profilepic }
-             
+          {isEditing ? (
+            <ProfilePictureEdit
+              profilePicture={profilePicture}
+              onChange={setProfilePicture} // Directly pass setProfilePicture
+              isEditing={isEditing} // Controls the edit overlay visibility
+            />
+          ) : (
+            <img
+              src={userData.profilepic}
               className="w-32 h-32 rounded-full object-cover shadow-md border-4 border-purple-500"
             />
-      )}
+          )}
           <div className="text-left">
             <h2 className="text-4xl font-extrabold text-purple-700">
               {userData.username}
@@ -390,36 +389,36 @@ const [profilePicture, setProfilePicture] = useState<File | null>(null);
         <div className="mt-8 flex justify-end space-x-4">
           {isEditing ? (
             <>
-                <button
+              <button
                 onClick={handleSave}
                 className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-700 transition duration-200 flex items-center justify-center"
                 disabled={update}
-                >
+              >
                 {update ? (
                   <svg
-                  className="animate-spin h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
                   >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
                   </svg>
                 ) : (
                   "Save"
                 )}
-                </button>
+              </button>
               <button
                 onClick={toggleEdit}
                 className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
@@ -435,12 +434,12 @@ const [profilePicture, setProfilePicture] = useState<File | null>(null);
               Edit Profile
             </button>
           )}
-            <button
-              onClick={()=>setPasswordModalOpen(true)}
-              className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
-            >
-              Change Password
-            </button>
+          <button
+            onClick={() => setPasswordModalOpen(true)}
+            className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
+          >
+            Change Password
+          </button>
           <button
             onClick={handleLogout}
             className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
@@ -449,11 +448,13 @@ const [profilePicture, setProfilePicture] = useState<File | null>(null);
           </button>
         </div>
       </div>
-      {isPasswordModalOpen && (<ChangePasswordModal
-            username={currentData.username}
-            onClose={()=>setPasswordModalOpen(false)}
-            onFormSubmit={handlePasswordChangeSubmit}>
-            </ChangePasswordModal>)}
+      {isPasswordModalOpen && (
+        <ChangePasswordModal
+          username={currentData.username}
+          onClose={() => setPasswordModalOpen(false)}
+          onFormSubmit={handlePasswordChangeSubmit}
+        ></ChangePasswordModal>
+      )}
     </div>
   );
 };

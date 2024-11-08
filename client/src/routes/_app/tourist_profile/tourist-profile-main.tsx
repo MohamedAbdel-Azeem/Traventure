@@ -1,4 +1,3 @@
-import { useState } from "react";
 import TouristProfile from "./tourist_profile";
 import readTouristProfile from "../../../custom_hooks/readTouristProfile";
 import { TouristProfileData } from "./tourist_profile_data";

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import AdvertiserProfile from "./advertiser_profile";
 import { useParams } from "react-router-dom";
 import { useGetAdvertiser } from "../../../custom_hooks/advertisercustomhooks";
@@ -32,7 +31,7 @@ export const Advertiser_Profile = () => {
   if (!user)
     return (
       <>
-        <NewNavbar/>
+        <NewNavbar />
         <div>No user found</div>
       </>
     );
