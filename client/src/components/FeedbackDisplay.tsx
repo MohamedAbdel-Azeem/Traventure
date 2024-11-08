@@ -73,7 +73,7 @@ const FeedbackDisplay: React.FC<FeedbackDisplayProps> = ({ id, type, onClose }) 
       }, [TourGuideReviews]);
 
 
-      const { CanFeedback,  fetchCanFeedback } = UseGetCanFeedback(username !, id);
+      const { CanFeedback,  fetchCanFeedback } = UseGetCanFeedback(username!, id);
       console.log("CanFeedback",CanFeedback);
 
 

@@ -3,6 +3,8 @@ import touristModel from "../Schemas/Tourist";
 
   export async function redeemPoints(touristUsername: string , amount:number){
     try{
+     
+
       const tourist = await touristModel.findOne({username:touristUsername});
       if(!tourist){
         throw new Error("Tourist not found");
@@ -17,7 +19,8 @@ import touristModel from "../Schemas/Tourist";
       tourist.wallet+=amount/100;
       await tourist.save();
     }
-    catch(err){
+    catch(err:any){
+      console.log("error queries"+err.message);
       throw err;
     }
     

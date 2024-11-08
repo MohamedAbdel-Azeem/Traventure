@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import WaitingResponse from './WaitingResponse';
 import ShowingResponse from './ShowingResponse';
+import { redeemPoints } from '../custom_hooks/touristpoints/redeemPoints';
+
 
 interface RedeemPopupProps {
   points: number;
+  username: string;
   onClose: () => void;
 }
 
-const RedeemPopup: React.FC<RedeemPopupProps> = ({  points,onClose }) => {
-  points=1000;
+const RedeemPopup: React.FC<RedeemPopupProps> = ({  points, username,onClose }) => {
   const [redeemAmount, setRedeemAmount] = useState("");
   const [showWaitingResponse, setShowWaitingResponse] = useState(false);
   const [showingMessage, setShowingMessage] = useState('');
@@ -19,7 +21,7 @@ const RedeemPopup: React.FC<RedeemPopupProps> = ({  points,onClose }) => {
     setErrorMessage(''); // Clear error message on input change
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     const amountToRedeem = Number(redeemAmount);
 
     // Validate redeem amount
@@ -32,9 +34,27 @@ const RedeemPopup: React.FC<RedeemPopupProps> = ({  points,onClose }) => {
       return; // Exit the function if the input is invalid
     }
 
+
+
     // If the redeem amount is valid, show the waiting response
     setShowWaitingResponse(true);
+
+
+
+    try {
+
+      // Call the redeemPoints function
+      const response = await redeemPoints(username, amountToRedeem); // Replace "touristUsername" with the actual username
+
+      // Handle the response
+      setShowingMessage(`Successfully redeemed ${redeemAmount} points!`); // Set success message
+    } catch (error) {
+      setErrorMessage(error.message || 'Error redeeming points'); // Set error message
+    } finally {
+      setShowWaitingResponse(false); // Close the waiting response dialog
+    }
   };
+  
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

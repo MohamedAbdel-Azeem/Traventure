@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 import { ITourGuide } from "../../Interfaces/Users/ITourGuide";
-
 const Schema = mongoose.Schema;
-
 const tourGuideSchema = new Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },

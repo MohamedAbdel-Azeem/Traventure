@@ -9,6 +9,7 @@ import RedeemPopup from '../../../components/RedeemPopup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAward } from '@fortawesome/free-solid-svg-icons';
 import BadgePopup from '../../../components/BadgePopup';
+import { redeemPoints } from "../../../custom_hooks/touristpoints/redeemPoints";
 
 
 // type TouristSchemaType = {
@@ -55,6 +56,8 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
   const response = patchUserProfile(apiBody, apiUsername);
   const [isRedeemPopupOpen, setIsRedeemPopupOpen] = useState(false);
   const [isBadgePopupOpen, setIsBadgePopupOpen] = useState(false);
+
+
 
   // Function to open the popup
   const handleRedeemClick = () => {
@@ -163,7 +166,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
               <FontAwesomeIcon icon={faAward} className="text-white text-5xl" />
             </button>
             {isBadgePopupOpen && (
-              <BadgePopup points={currentTourist.points} onClose={handleCloseBadgePopup} />
+              <BadgePopup points={currentTourist.currentLoyaltyPoints} onClose={handleCloseBadgePopup} />
             )}
           </div>
 
@@ -299,7 +302,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
               <label className="text-lg font-semibold text-gray-700">Points:</label>
               <div className="flex flex-row items-center mt-1 space-x-20">
                 {/* <p className="text-gray-800 text-lg">{currentTourist.points}</p>             lma t7ot fel database uncomment this line!!!*/}
-                <p className="text-gray-800 text-lg">1000</p>
+                <p className="text-gray-800 text-lg">{currentTourist.currentLoyaltyPoints}</p>
                 <button
                   onClick={handleRedeemClick}
                   className="bg-green-500 text-white text-sm py-1 px-2 rounded hover:bg-green-600 transition duration-200 -mt-2"
@@ -308,7 +311,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
                 </button>
               </div>
 
-              {isRedeemPopupOpen && <RedeemPopup points={currentTourist.points} onClose={handleCloseRedeemPopup} />}
+              {isRedeemPopupOpen && <RedeemPopup points={currentTourist.currentLoyaltyPoints} username={currentTourist.username} onClose={handleCloseRedeemPopup} />}
               
             </div>
 

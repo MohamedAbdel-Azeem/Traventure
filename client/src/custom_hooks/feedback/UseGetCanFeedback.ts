@@ -3,7 +3,7 @@ import axios from "axios";
 
 
 export const UseGetCanFeedback = (touristUsername: string,tourGuideUserId:string) => {
-    const [CanFeedback, setCanFeedback] = useState(null);
+    const [CanFeedback, setCanFeedback] = useState<boolean>(true);
     const [cloading, setcLoading] = useState(false);
     const [cerror, setcError] = useState<string | null>(null);
     const fetchCanFeedback = useCallback(async () => {
@@ -11,10 +11,14 @@ export const UseGetCanFeedback = (touristUsername: string,tourGuideUserId:string
         
       try {
         const body= {touristUsername,tourGuideUserId};
-  
-        const response = await axios.get(`/traventure/api/feedBack/canfeedback`, {data:body});
-        if (response.status === 200) {
-            setCanFeedback(response.data);
+        console.log("bodytouristUsername",touristUsername);
+        console.log("bodytourGuideUserId",tourGuideUserId);
+        const response = await axios.get(`/traventure/api/feedBack/canfeedback?touristUsername=${touristUsername}&tourGuideUserId=${tourGuideUserId}`);
+        console.log("responsedata",response.data.canProvideFeedback);
+
+        if (response.status >= 200 && response.status < 300) {
+            setCanFeedback(response.data.canProvideFeedback);
+            console.log("CanFeedbackafterresponse",CanFeedback);
         } else {
             setcError("Error fetching data");
         }
