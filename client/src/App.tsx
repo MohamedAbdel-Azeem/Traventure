@@ -64,7 +64,7 @@ function App() {
           <Route path="/tourist/:username/itineraries" element={<MoreItineraries/>}/>
           <Route path="/tourist/:username/complaints" element={<TouristComplaints/>}/>
           <Route path="/tourist/:username/profile" element={<Tourist_Profile/>}/>
-          <Route path="/tourist/:username/bookings" element={<Bookings />} />
+          <Route path="/tourist/:username/bookings" element={<Bookings/>}/>
           {/* Tourism Governor */}
           <Route path="/tourismgovernor/:username" element={<TourismGovernorPage/>}/>
           <Route path="/tourismgovernor/:username/historicaltags" element={<HistoricalTags/>}/>
@@ -76,9 +76,9 @@ function App() {
           <Route path="/advertiser/:username/activities" element={<Activities/>}/>
           <Route path="/advertiser/:username/profile" element={<Advertiser_Profile/>}/>
           {/* Tour Guide */}
-          <Route path="/tourguide/:username" element={<TourGuidePage />}/>
-          <Route path="/tourguide/:username/locations" element={<MorePlaces />}/>
-          <Route path="/tourguide/:username/itineraries" element={<TourGuidePage />}/>
+          <Route path="/tourguide/:username" element={<TourGuidePage/>}/>
+          <Route path="/tourguide/:username/locations" element={<MorePlaces/>}/>
+          <Route path="/tourguide/:username/itineraries" element={<TourGuidePage/>}/>
           <Route path="/tourguide/:username/profile" element={<TourGuide_Profile/>}/>
           {/* Seller */}
           <Route path="/seller/:username" element={<ShopPage type="Seller"/>}/>
@@ -89,13 +89,13 @@ function App() {
           <Route path="/tourist-itinerary/:username" element={<ItineraryDetailsTourist/>}/>
           <Route path="/more-itineraries" element={<MoreItineraries/>}/>
           <Route path="/tourist/:id/activities" element={<MoreActivities/>}/>
+          <Route path="/seller/:username/sales" element={<SalesPage />}/>
           {/* Guest */}
           <Route path="/guest-page" element={<GuestPage/>}/>
           <Route path="/guest/more-itineraries" element={<GuestMoreItineraries/>}/>
           <Route path="/guest/more-places" element={<GuestMorePlaces/>}/>
           <Route path="/guest/more-activities" element={<GuestMoreActivities/>}/>  
           <Route path="/guest/shop" element={<GuestShop type={"Tourist"}/>}/>
-          <Route path="/seller/sales/:username" element={<SalesPage />} />
         </Routes>
       </Router>
     </MantineProvider>

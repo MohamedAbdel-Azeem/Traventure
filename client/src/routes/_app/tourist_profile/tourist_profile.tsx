@@ -164,7 +164,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
 const [walletBalance, setWalletBalance] = useState(currentTourist.wallet);
   return (
     <>
-    <NewNavbar/>
+    
     <div
       className="min-h-screen flex items-center justify-center bg-gray-900"
       style={{

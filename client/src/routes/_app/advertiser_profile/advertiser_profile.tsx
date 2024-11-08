@@ -131,7 +131,6 @@ const [profilePicture, setProfilePicture] = useState<File | null>(null);
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
       }}
     >
-      <NewNavbar/>
       <div className="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl p-8 backdrop-blur-lg bg-opacity-90">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex items-center space-x-6">

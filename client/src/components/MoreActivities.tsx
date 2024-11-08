@@ -105,14 +105,26 @@ const MoreActivities: React.FC = () => {
         return sortOrder === 'asc' ? comparison : -comparison;
     });
 
-    if (aloading) {
-        return <div>Loading...</div>;
-    }
 
-    if (aerror) {
-        return <div>Error Fetching Activities: {aerror}</div>;
-    }
+  if (aloading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <NewNavbar />
+        <div className="text-lg font-semibold text-blue-600">Loading...</div>
+      </div>
+    );
+  }
 
+  if (aerror) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <NewNavbar />
+        <div className="text-lg font-semibold text-red-600">
+          Error Fetching: {aerror}
+        </div>
+      </div>
+    );
+  }
     return (
         <div className="flex">
             <NewNavbar/>
