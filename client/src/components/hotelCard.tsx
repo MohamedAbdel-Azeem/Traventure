@@ -5,7 +5,7 @@ import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import "./ProductCard.css";
 import Swal from "sweetalert2";
 import { useLocation } from "react-router-dom";
-import useBookHotel  from "../custom_hooks/useBookHotel";
+import useBookHotel from "../custom_hooks/useBookHotel";
 
 interface HotelCardProps {
   hotel: any;
@@ -13,7 +13,11 @@ interface HotelCardProps {
   currentCurrency: string;
 }
 
-const HotelCard: React.FC<HotelCardProps> = ({ hotel, exchangeRate, currentCurrency }) => {
+const HotelCard: React.FC<HotelCardProps> = ({
+  hotel,
+  exchangeRate,
+  currentCurrency,
+}) => {
   const averageRating = hotel.rating || 4.5;
 
   // Get hotel and room details
@@ -22,26 +26,27 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel, exchangeRate, currentCurre
   const bedType = hotel.offers?.[0]?.room?.typeEstimated?.bedType || "N/A";
   const numberOfBeds = hotel.offers?.[0]?.room?.typeEstimated?.beds || "N/A";
   // console.log(hotel.offers?.[0]?.price?.total);
-  const totalPrice = hotel.offers?.[0]?.price?.total ? (parseFloat(hotel.offers[0].price.total) * 50).toFixed(2) : "N/A";
-  const currency = hotel.offers?.[0]?.price?.total ? hotel.offers[0].price.currency : "N/A";
+  const totalPrice = hotel.offers?.[0]?.price?.total
+    ? (parseFloat(hotel.offers[0].price.total) * 50).toFixed(2)
+    : "N/A";
+  const currency = hotel.offers?.[0]?.price?.total
+    ? hotel.offers[0].price.currency
+    : "N/A";
   const checkInDate = hotel.offers?.[0]?.checkInDate || "N/A";
   const checkOutDate = hotel.offers?.[0]?.checkOutDate || "N/A";
-  const currentuser = useLocation().pathname.split('/')[2];
-  const {bookHotel} = useBookHotel();
+  const currentuser = useLocation().pathname.split("/")[2];
+  const { bookHotel } = useBookHotel();
 
   const handleBookHotel = async (hotel: any) => {
-
     // Call the bookHotel function from the custom hook
-    try{
+    try {
       await bookHotel(hotel, currentuser);
       Swal.fire({
         icon: "success",
         title: "Hotel Booked Successfully!",
         text: "You have successfully booked the hotel.",
       });
-    }
-
-    catch(error){
+    } catch (error) {
       console.log(error);
       Swal.fire({
         icon: "error",
@@ -49,22 +54,20 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel, exchangeRate, currentCurre
         text: "An error occurred while booking the hotel.",
       });
     }
-    
-  }
+  };
 
   return (
     <div className="hotel-card">
- <div className="card-header">
-            <h3 className="hotel-name  w-3/4">{hotelName}</h3>
+      <div className="card-header">
+        <h3 className="hotel-name  w-3/4">{hotelName}</h3>
       </div>
       <div className="card-body">
         <div className="hotel-details">
-
-
-            <div>
-            <strong>Check-in Date: </strong> {checkInDate} <br /> <strong>Check-out Date: </strong>{checkOutDate}
-
-            </div>
+          <div>
+            <strong>Check-in Date: </strong> {checkInDate} <br />{" "}
+            <strong>Check-out Date: </strong>
+            {checkOutDate}
+          </div>
           {/* Room Type Information */}
           <div className="room-type">
             <strong>Room Type:</strong> {roomType}
@@ -79,14 +82,23 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel, exchangeRate, currentCurre
 
           {/* Total Price Information */}
           <div className="hotel-price">
-            <strong>Total Price:</strong> {totalPrice}
+            <strong>Total Price:</strong> {currentCurrency}{" "}
+            {parseFloat(totalPrice) * exchangeRate}
           </div>
         </div>
 
         {/* Book and Rating Section */}
         <div className="flex flex-row justify-between items-center">
-          <Rating disabled name="rating" value={averageRating} precision={0.1} />
-          <button className="book-button" onClick={()=>handleBookHotel(hotel)}>
+          <Rating
+            disabled
+            name="rating"
+            value={averageRating}
+            precision={0.1}
+          />
+          <button
+            className="book-button"
+            onClick={() => handleBookHotel(hotel)}
+          >
             <FontAwesomeIcon icon={faCartShopping} /> Book
           </button>
         </div>
