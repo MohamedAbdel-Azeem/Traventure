@@ -48,6 +48,7 @@ interface ItineraryCardCRUDProps {
   onDelete?: (id: string) => void;
   isDeleting?: boolean;
   bookingActivated: boolean;
+  inappropriate: boolean;
 }
 
 const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
@@ -68,6 +69,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
   onDelete,
   isDeleting = false,
   bookingActivated,
+  inappropriate,
 }) => {
   const handleDeleteClick = () => {
     if (onDelete) {
@@ -181,7 +183,14 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
             </p>
           </div>
         </div>
-
+        {inappropriate && (
+          <div className="bg-red-500 text-white p-2 rounded-lg flex flex-col items-center w-full">
+            <h1 className="text-sm flex items-center">Inappropriate</h1>
+            <p className="text-sm flex items-center  text-white">
+              please modify the itinerary
+            </p>
+          </div>
+        )}
         <div className="mt-4 flex justify-between items-center">
           <Link
             to={`/itinerary/${_id}`}
