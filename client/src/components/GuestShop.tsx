@@ -24,6 +24,7 @@ import {
   TextField,
 } from "@mui/material";
 import Navbar from "./navbar";
+import NewNavbar from "./NewNavbar";
 import CurrencyDropdown from "./currencyDrop";
 const itemsPerPage = 8;
 interface ShopPageProps {
@@ -306,8 +307,8 @@ const GuestShop: React.FC<ShopPageProps> = ({ type }) => {
           </Box>
         </Box>
       </Modal>
-      <ImprovedSidebar className="flex-2" />
-      <div className="flex flex-col flex-1">
+    <NewNavbar/>
+        <div className="flex flex-col flex-1" style={{ marginTop: '60px' }}>
         <div className="search-bar">
           <input
             type="text"

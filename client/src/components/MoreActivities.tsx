@@ -15,6 +15,7 @@ import { useGetAllActivitiesS } from '../custom_hooks/activities/useGetActivitie
 import IActivity from '../custom_hooks/activities/activity_interface';
 import { useGetAllCategories } from '../custom_hooks/categoryandTagCRUD';
 import Activity from '../custom_hooks/activities/activity_interface';
+import NewNavbar from './NewNavbar';
 import CurrencyDropdown from './currencyDrop';
 
 const MoreActivities: React.FC = () => {
@@ -105,17 +106,30 @@ const MoreActivities: React.FC = () => {
         return sortOrder === 'asc' ? comparison : -comparison;
     });
 
-    if (aloading) {
-        return <div>Loading...</div>;
-    }
 
-    if (aerror) {
-        return <div>Error Fetching Activities: {aerror}</div>;
-    }
+  if (aloading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <NewNavbar />
+        <div className="text-lg font-semibold text-blue-600">Loading...</div>
+      </div>
+    );
+  }
 
+  if (aerror) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <NewNavbar />
+        <div className="text-lg font-semibold text-red-600">
+          Error Fetching: {aerror}
+        </div>
+      </div>
+    );
+  }
     return (
         <div className="flex">
-            <div className="w-full">
+            <NewNavbar/>
+            <div className="w-full" style={{ marginTop: '80px' }}>
                 <h1 className="text-2xl font-bold mb-4 mx-auto">All Activities</h1>
                 <CurrencyDropdown />
                 <hr />

@@ -1,11 +1,12 @@
 import HistoricalTagsTable from "./HistoricalTagsTable";
 import ImprovedSidebar from "./ImprovedSidebar";
+import NewNavbar from "./NewNavbar";
 
 
 const HistoricalTags = () => {
     return ( 
         <div>
-            <ImprovedSidebar/>
+            <NewNavbar/>
             <HistoricalTagsTable/>
         </div>
      );

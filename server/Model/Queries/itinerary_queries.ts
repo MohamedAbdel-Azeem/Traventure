@@ -2,6 +2,8 @@
 import Itinerary from "../Schemas/Itinerary";
 import TourGuide from "../Schemas/TourGuide";
 import { ItineraryDocument } from "../../Interfaces/IItinerary";
+import Booking from "../Schemas/Booking";
+import Tourist from "../Schemas/Tourist";
 
 export async function getItinerary(tourGuide_username: String) {
   try {
@@ -18,8 +20,22 @@ export async function getItinerary(tourGuide_username: String) {
       added_By: tour_guide_id, // Find all items with the given tour_guide_id
     })
       .populate("added_By")
-      .populate("plan.place")
       .populate("plan.activities.activity_id")
+      .populate({
+        path: "plan.activities.activity_id",
+        populate: {
+          path: "Category",
+          model: "Category",
+        },
+      })
+      .populate({
+        path: "plan.activities.activity_id",
+        populate: {
+          path: "Tags",
+          model: "Tags",
+        },
+      })
+      .populate("plan.place")
       .populate("selectedTags");
 
     return itineraries;
@@ -82,14 +98,14 @@ export async function deleteItinerary(itinerary_Id: string) {
 }
 export async function toggleItineraryActivation(itinerary_Id: string) {
   try {
-    const itinerary = await Itinerary.findById(itinerary_Id) as ItineraryDocument | null;
-    
+    const itinerary = (await Itinerary.findById(
+      itinerary_Id
+    )) as ItineraryDocument | null;
+
     if (!itinerary) throw new Error("Itinerary not found");
 
-     
-
     const { bookingActivated = false, booked_By = [] } = itinerary;
-    if(booked_By.length == 0 && bookingActivated) return itinerary;
+    if (booked_By.length == 0 && bookingActivated) return itinerary;
     const newBookingActivated = !bookingActivated;
 
     const updatedItinerary = await Itinerary.findByIdAndUpdate(
@@ -97,24 +113,45 @@ export async function toggleItineraryActivation(itinerary_Id: string) {
       { bookingActivated: newBookingActivated },
       { new: true }
     );
-    
+
     return updatedItinerary;
   } catch (error) {
     throw error;
   }
 }
-export async function toggleItineraryInappropriate(itinerary_Id: string){
+export async function toggleItineraryInappropriate(itinerary_Id: string) {
   try {
-    const itinerary = await Itinerary.findById(itinerary_Id) as ItineraryDocument | null;
+    const itinerary = (await Itinerary.findById(
+      itinerary_Id
+    )) as ItineraryDocument | null;
     if (!itinerary) throw new Error("Itinerary not found");
+
+    // Toggle the inappropriate flag
     const { inappropriate = false } = itinerary;
     const newInappropriate = !inappropriate;
+
+    // Find and remove bookings associated with the itinerary
+    if (newInappropriate) {
+      const bookings = await Booking.find({ itinerary: itinerary_Id });
+      for (const booking of bookings) {
+        // Add funds to the user who booked the itinerary
+        await Tourist.findByIdAndUpdate(booking.tourist, {
+          $inc: { wallet: itinerary.price },
+        });
+
+        // Remove the booking
+        await Booking.findByIdAndDelete(booking._id);
+      }
+    }
+    // Update the itinerary
     const updatedItinerary = await Itinerary.findByIdAndUpdate(
       itinerary_Id,
       { inappropriate: newInappropriate },
       { new: true }
     );
+
     return updatedItinerary;
-}
-catch (error) { throw error; }
+  } catch (error) {
+    throw error;
+  }
 }

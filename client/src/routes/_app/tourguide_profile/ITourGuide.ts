@@ -1,6 +1,7 @@
 export interface ITourGuide {
   _id?: string;
   username: string;
+  wallet?: number;
   email: string;
   password: string;
   profilepic: string;

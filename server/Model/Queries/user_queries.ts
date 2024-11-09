@@ -182,6 +182,39 @@ export async function changePassword(username:string,  oldpassword:string , newp
   }
 }
 
-module.exports = { getprofileInfo, getAllUsers, updateProfileInfo, loginUser, changePassword};
+export async function getcurrentuser(username:string){
+  try{
+    const results = await Promise.all([
+      sellerModel.findOne({ username }),
+      advertiserModel.findOne({ username }),
+      tourGuideModel.findOne({ username }),
+      touristModel.findOne({ username }),
+    ]);
+    console.log(results);
+    for (let i = 0; i < results.length; i++) {
+      if (results[i]) {
+      
+        if(i===0){
+          return await sellerModel.findOne({username: username});
+        }
+        else if(i===1){
+          return await advertiserModel.findOne({username: username});
+        }
+        else if(i===2){
+          return await tourGuideModel.findOne({username: username});
+        }
+        else if(i===3){
+          return await touristModel.findOne({username: username});
+        }
+    
+      }
+    }
+  }
+  catch(err){
+    throw err;
+  }
+}
+
+module.exports = { getprofileInfo, getAllUsers, updateProfileInfo, loginUser, changePassword, getcurrentuser};
 
 

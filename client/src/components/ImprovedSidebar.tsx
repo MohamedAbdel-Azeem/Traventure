@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import { Box, CssBaseline, Divider, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
@@ -77,9 +77,9 @@ interface ImprovedSidebarProps {
 export default function ImprovedSidebar({ className = "" }: ImprovedSidebarProps) {
   
 const location = useLocation();
-const currentuser=location.pathname.split(`/`)[2];
 const currentusertype=location.pathname.split(`/`)[1];
-
+ const { username } = useParams<{ username: string }>();
+ const currentuser = username as string;
 const adminsidebaritems =
 [
   { text: 'Home', icon: <HomeIcon />, path: `/admin/${currentuser}` },

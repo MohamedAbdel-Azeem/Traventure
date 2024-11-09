@@ -23,6 +23,7 @@ import {
 } from "../../../custom_hooks/categoryandTagCRUD";
 import { createActivity } from "../../../custom_hooks/activities/useCreateActivity";
 import useDeleteActivity from "../../../custom_hooks/activities/deleteActivity";
+import NewNavbar from "../../../components/NewNavbar";
 
 export const Activities = () => {
   const [newname, setnName] = useState("");
@@ -304,15 +305,11 @@ export const Activities = () => {
           </Box>
         </Box>
       </Modal>
-      <ImprovedSidebar />
-      <div className="grid lg:grid-cols-4 md:grid-cols-3 ml-8 mb-4">
-        <div
-          className="mt-12 mx-4 w-[400px] h-[475px] rounded-[19px] bg-slate-500 cursor-pointer"
-          onClick={handleOpen}
-        >
-          <p className="text-[46px] mt-[40%] text-center">
-            Create New Activity
-          </p>
+      <NewNavbar/>
+      <div className="grid lg:grid-cols-4 md:grid-cols-3 ml-8 mb-4 mt-14">
+      <div className="mt-12 mx-4 w-[400px] h-[475px] rounded-[19px] bg-slate-500 cursor-pointer" 
+      onClick={handleOpen}>
+        <p className="text-[46px] mt-[40%] text-center">Create New Activity</p>
         </div>
         {aactivities &&
           aactivities.map((cactivity) => (

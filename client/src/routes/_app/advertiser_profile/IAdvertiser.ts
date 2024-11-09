@@ -10,4 +10,6 @@ export interface IAdvertiser {
     founded: number;
     description: string;   
     location: string;
+    wallet?: number;
+    _id?: string;
 }

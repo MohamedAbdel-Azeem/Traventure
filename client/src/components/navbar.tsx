@@ -3,15 +3,16 @@ import AccountButton from "./AccountButton"; // <-- Add this import
 import ChangePasswordModal, { AddContactLeadFormType } from "./ChangePasswordModal";
 import { editpassword } from "../custom_hooks/changepassowrd";
 import Swal from "sweetalert2";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 const Navbar = ({
   sideBarFlag = false,
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [content, setContent] = useState('dashboard'); // Placeholder content state
 
-  const location = useLocation();
-  const currentuser=location.pathname.split(`/`)[2];
+  const location = useLocation(); 
+  const { username } = useParams<{ username: string }>();
+  const currentuser = username as string;
   const currentusertype=location.pathname.split(`/`)[1];
 
   useEffect(() => {
