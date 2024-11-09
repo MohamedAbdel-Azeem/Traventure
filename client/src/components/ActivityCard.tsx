@@ -37,7 +37,7 @@ type Activity = {
     rating: string;
     review: string;
   }[];
-  inappropiate: boolean;
+  inappropriate: boolean;
 };
 interface ActivityProp {
   activity: Activity;
@@ -83,7 +83,7 @@ export const ActivityCard: React.FC<ActivityProp> = ({
   };
 
   const averageRating = calculateAverageRating(currentActivity);
-  console.log("testtt", currentActivity.inappropiate);
+  console.log("testtt", currentActivity.inappropriate);
   console.log(currentActivity.feedback);
   const handleDeleteClick = () => {
     onDelete(activity._id);
