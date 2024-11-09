@@ -32,7 +32,7 @@ export const editpassword = async (username: string, oldPassword: string, newpas
         oldPassword: oldPassword,
         newPassword: newpassword
     };
-    const response = await fetch(`/traventure/api/user/changePassword/`,{
+    const response = await fetch(`/traventure/api/user/changePassword`,{
         method: "PATCH",
         headers: {
           'Content-Type': 'application/json',

@@ -1,10 +1,11 @@
 import ImprovedSidebar from "../ImprovedSidebar";
+import NewNavbar from "../NewNavbar";
 import ComplaintsTable from "./ComplaintsTable";
 
 const Complaints = () => {
   return (
     <div>
-      <ImprovedSidebar />
+      <NewNavbar/>
       <ComplaintsTable />
     </div>
   );

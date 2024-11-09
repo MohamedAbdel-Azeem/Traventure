@@ -45,7 +45,6 @@ import TermsAndConditions from "./routes/_app/terms_and_conditions/terms_and_con
 import FlightsPage from "./components/flightsPage";
 import HotelsPage from "./components/hotelsPage"; 
 
-
 function App() {
   return (
     <MantineProvider>
@@ -95,6 +94,7 @@ function App() {
             path="/tourist/:username/profile"
             element={<Tourist_Profile />}
           />
+          <Route path="/tourist/:username/bookings" element={<Bookings />} />
           <Route
             path="/tourist/:username/purchases"
             element={<TouristPurchases />}
@@ -121,6 +121,10 @@ function App() {
             element={<MorePlaces />}
           />
           <Route
+            path="/advertiser/:username/itineraries"
+            element={<MoreItineraries />}
+          />
+          <Route
             path="/advertiser/:username/activities"
             element={<Activities />}
           />
@@ -143,12 +147,8 @@ function App() {
             element={<TourGuide_Profile />}
           />
           {/* Seller */}
-          <Route
-            path="/seller/:username"
-            element={<ShopPage type="Seller" />}
-          />
+          <Route path="/seller/:username" element={<ShopPage type="Seller" />}/>
           <Route path="/itineraries" element={<Itineraries />} />
-          <Route path="/landing" element={<LandingPage />} />
           <Route path="/itinerary/:id" element={<ItineraryDetails />} />
           <Route
             path="/tourist-itinerary/:id"
@@ -156,7 +156,7 @@ function App() {
           />
           <Route path="/more-itineraries" element={<MoreItineraries />} />
           <Route path="/tourist/:id/activities" element={<MoreActivities />} />
-          <Route path="/seller/sales/:username" element={<SellerSalesPage />} />
+          <Route path="/seller/:username/sales" element={<SellerSalesPage />} />
           <Route
             path="/seller/:username/profile"
             element={<Seller_Profile />}
@@ -164,11 +164,12 @@ function App() {
           {/* Guest */}
           <Route path="/guest-page" element={<GuestPage />} />
           <Route path="/guest/more-itineraries" element={<GuestMoreItineraries />}/>
-          <Route path="/guest/more-places" element={<GuestMorePlaces />}/>
+          <Route path="/guest/more-places" element={<GuestMorePlaces />} />
           <Route path="/guest/more-activities" element={<GuestMoreActivities />}/>
           <Route path="/guest/shop" element={<GuestShop type={"Tourist"} />}/>
           <Route path="/tourist/:username/bookings" element={<Bookings />}/>
           <Route path="/terms-and-conditions" element={<TermsAndConditions />}/>
+          <Route path="/landing" element={<LandingPage />} />
         </Routes>
       </Router>
     </MantineProvider>

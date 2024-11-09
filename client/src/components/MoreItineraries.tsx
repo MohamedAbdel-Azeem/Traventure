@@ -14,6 +14,7 @@ import ItineraryCardToruist from "./ItineraryCardToruist";
 import { useGetAllTags } from "../custom_hooks/categoryandTagCRUD";
 import ImprovedSidebar from "./ImprovedSidebar";
 import { useLocation } from "react-router-dom";
+import NewNavbar from "./NewNavbar";
 import CurrencyDropdown from "./currencyDrop";
 
 const MoreItineraries: React.FC = () => {
@@ -75,10 +76,23 @@ const MoreItineraries: React.FC = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <NewNavbar />
+        <div className="text-lg font-semibold text-blue-600">Loading...</div>
+      </div>
+    );
   }
+
   if (error) {
-    return <div>Error Fetching: {error}</div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <NewNavbar />
+        <div className="text-lg font-semibold text-red-600">
+          Error Fetching: {error}
+        </div>
+      </div>
+    );
   }
 
   const uniqueTags = [...new Set(tagsData)];
@@ -151,8 +165,9 @@ const MoreItineraries: React.FC = () => {
 
   return (
     <div className="flex">
-      <ImprovedSidebar />
-      <div className="w-full">
+      <NewNavbar />
+
+      <div className="w-full" style={{ marginTop: "80px" }}>
         <h1 className="text-2xl font-bold mb-4 mx-auto">All Itineraries</h1>
         <hr />
         <CurrencyDropdown />
@@ -310,44 +325,43 @@ const MoreItineraries: React.FC = () => {
               </Select>
             </FormControl>
           </div>
-            <hr />
-            <div className="overflow-x-auto">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    {filteredItineraries?.length ?? 0 > 0 ? (
-                        (filteredItineraries ?? []).map((itinerary) => (
-                            <ItineraryCardToruist
-                                key={itinerary._id}
-                                _id={String(itinerary._id)}
-                                title={itinerary.title}
-                                description={itinerary.description}
-                                added_By={itinerary.added_By}
-                                price={itinerary.price}
-                                starting_Date={itinerary.starting_Date}
-                                ending_Date={itinerary.ending_Date}
-                                rating={itinerary.rating}
-                                total={itinerary.total}
-                                language={itinerary.language}
-                                pickup_location={itinerary.pickup_location}
-                                dropoff_location={itinerary.dropoff_location}
-                                plan={itinerary.plan}
-                                selectedTags={itinerary.selectedTags}
-                                main_Picture={itinerary.main_Picture}
-                                booked_By={itinerary.booked_By}
-                                accesibility={itinerary.accesibility}
-                                bookingActivated={itinerary.bookingActivated}
-                                inappropriate={itinerary.inappropriate}
-                            />
-                        ))
-                    ) : (
-                        <div>No Itineraries Available</div>
-                    )}
-                </div>
-            </div>
-            </div>
+          <hr />
+          <div className="overflow-x-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {filteredItineraries?.length ?? 0 > 0 ? (
+                (filteredItineraries ?? []).map((itinerary) => (
+                  <ItineraryCardToruist
+                    key={itinerary._id}
+                    _id={String(itinerary._id)}
+                    title={itinerary.title}
+                    description={itinerary.description}
+                    added_By={itinerary.added_By}
+                    price={itinerary.price}
+                    starting_Date={itinerary.starting_Date}
+                    ending_Date={itinerary.ending_Date}
+                    rating={itinerary.rating}
+                    total={itinerary.total}
+                    language={itinerary.language}
+                    pickup_location={itinerary.pickup_location}
+                    dropoff_location={itinerary.dropoff_location}
+                    plan={itinerary.plan}
+                    selectedTags={itinerary.selectedTags}
+                    main_Picture={itinerary.main_Picture}
+                    booked_By={itinerary.booked_By}
+                    accesibility={itinerary.accesibility}
+                    bookingActivated={itinerary.bookingActivated}
+                    inappropriate={itinerary.inappropriate}
+                  />
+                ))
+              ) : (
+                <div>No Itineraries Available</div>
+              )}
             </div>
           </div>
+        </div>
+      </div>
+    </div>
   );
-
-}
+};
 
 export default MoreItineraries;

@@ -7,4 +7,5 @@ export interface ISeller {
   name: string;
   description: string;
   isAccepted: boolean;
+  wallet?: number;
 }
