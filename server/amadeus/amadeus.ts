@@ -74,7 +74,8 @@ async function getHotelByInfo(
                     hotelIds: hotelList.join(','),
                     adults,
                     checkInDate,
-                    checkOutDate
+                    checkOutDate,
+                    currencyCode: 'USD'
                    });
                 console.log(response.data);
             

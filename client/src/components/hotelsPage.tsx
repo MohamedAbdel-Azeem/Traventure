@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Box, Typography, Button, TextField, MenuItem, Autocomplete, Grid } from '@mui/material';
 import ImprovedSidebar from './ImprovedSidebar';
 import HotelCard from './hotelCard';
+import { parse } from 'date-fns';
 
 const cityOptions = [
     { city: 'Atlanta', code: 'ATL' },
@@ -136,7 +137,9 @@ const AvailableHotels = () => {
     
     try {
       const response = await axios.post('/traventure/amadeus/getHotels', hotelDetails);
-      
+      console.log(response.data);
+      const maxPriceNumber = parseFloat(maxPrice) / 50;
+
       const filteredHotels = response.data.filter((hotel: any) => {
         const minAverageBasePrice = hotel.offers
           .map((offer: { price: { variations: { average: { base: any; }; }; }; }) => {
@@ -144,8 +147,10 @@ const AvailableHotels = () => {
             return basePrice ? parseFloat(basePrice) : Infinity; // Use Infinity if no price exists
           })
           .reduce((min: number, current: number) => (current < min ? current : min), Infinity);
-  
-        return minAverageBasePrice <= maxPrice;
+      
+        console.log(`Hotel: ${hotel.name}, Min Average Base Price: ${minAverageBasePrice}, Max Price: ${maxPriceNumber}`);
+        
+        return minAverageBasePrice <= maxPriceNumber;
       });
   
       setHotels(filteredHotels);
@@ -254,7 +259,7 @@ const AvailableHotels = () => {
                   <HotelCard
                     hotel={hotel}
                     exchangeRate={1}  // Adjust according to your requirements (e.g., currency conversion)
-                    currentCurrency="USD"  // Example currency
+                    currentCurrency="EGP"  // Example currency
                   />
                 </Grid>
               ))}

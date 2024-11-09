@@ -3,6 +3,7 @@ import ActivityModel from "../Schemas/Activity";
 import ItineraryModel from "../Schemas/Itinerary";
 import touristModel from "../Schemas/Tourist";
 import flightBooking from "../Schemas/flightBooking";
+import hotelBooking from "../Schemas/hotelBooking";
 
 export async function getTouristBookings(tourist_id: string) {
   try {
@@ -187,7 +188,6 @@ export async function cancelBooking(booking_id:string) {
 
 export async function addFlightBooking(bookingData: any) {
   try {
-    console.log(bookingData);
     const response=await flightBooking.create(bookingData); 
     return response;
   } catch (error) {
@@ -196,5 +196,17 @@ export async function addFlightBooking(bookingData: any) {
   }
 }
 
+export async function addHotelBooking(bookingData: any) {
+  try {
+    const response=await hotelBooking.create(bookingData); 
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
 
-module.exports ={getTouristBookings,addBooking,cancelBooking, getBookingsByTourist,addFlightBooking};
+
+
+
+module.exports ={getTouristBookings,addBooking,cancelBooking, getBookingsByTourist,addFlightBooking,addHotelBooking};

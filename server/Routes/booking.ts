@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {getTouristBookings,addBooking,cancelBooking, getBookingsByTourist , addFlightBooking} from "../Model/Queries/booking_queries";
+import {getTouristBookings,addBooking,cancelBooking, getBookingsByTourist , addFlightBooking,addHotelBooking} from "../Model/Queries/booking_queries";
 
 const router = Router();
 
@@ -41,17 +41,24 @@ router.delete("/cancel/:booking_id", async (req, res) => {
 router.post("/addFlight/:username", async (req, res) => {
     
     try {
-        await addFlightBooking(req.body);
-        res.status(201).send("Booking added successfully");
+        const response=await addFlightBooking(req.body);
+        res.status(201).send(response);
     } catch (error ) {
-        if((error as any).message==="Booking already exists"){
-            res.status(403).send("Booking already exists");
-        }
-        else{
+        
         res.status(500).send("error creating booking");}
     }
 
-});
+);
+
+router.post("/addHotel/:username", async (req, res) => {
+    
+    try {
+        const response=await addHotelBooking(req.body);
+        res.status(201).send(response);
+    } catch (error ) {
+        res.status(500).send("error creating booking");}
+    }
+);
 
 
 export default router;
