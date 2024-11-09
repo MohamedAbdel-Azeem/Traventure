@@ -14,7 +14,9 @@ interface FlightCardProps {
 }
 
 
+
 const FlightCard: React.FC<FlightCardProps> = ({ flight, exchangeRate, currentCurrency,includeTransportation }) => {
+
   const averageRating = 4.5; 
   const currentuser = useLocation().pathname.split('/')[2];
   const {bookFlight} = useBookFlight();
@@ -32,6 +34,10 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, exchangeRate, currentCu
 
   }
 
+  const price = flight.price.grandTotal ;
+  const currency=flight.price.currency;
+  console.log("price",price);
+  console.log("currency",currency);
   return (
     <div className="flight-card">
       <div className="card-header">
