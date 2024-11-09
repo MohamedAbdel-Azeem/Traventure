@@ -6,6 +6,7 @@ import { SalesChart } from "../components/SalesChart";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import ClipLoader from "react-spinners/ClipLoader";
+import NewNavbar from "../components/NewNavbar";
 
 export function SellerSalesPage() {
   const { username } = useParams<{ username: string }>();
@@ -50,11 +51,21 @@ export function SellerSalesPage() {
   };
 
   if (sellerLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <NewNavbar />
+        Loading...
+      </div>
+    );
   }
 
   if (sellerError || !seller || salesError) {
-    return <div>Error: {sellerError || salesError}</div>;
+    return (
+      <div>
+        <NewNavbar />
+        Error: {sellerError || salesError}
+      </div>
+    );
   }
 
   const productsSet: { [key: string]: boolean } = {};
@@ -67,6 +78,7 @@ export function SellerSalesPage() {
 
   return (
     <div className="flex flex-col items-center gap-8 pt-6">
+      <NewNavbar />
       <h1 className="font-sans text-xl font-medium">
         Sales Page for {username}
       </h1>

@@ -12,10 +12,12 @@ import TheMAP from "./TheMAP";
 import { createPlaceID } from "../custom_hooks/places/placeService";
 import { useGetHTags } from "../custom_hooks/useCreateHistoricalTag";
 import NewNavbar from "./NewNavbar";
+import { useParams } from "react-router-dom";
 
 const Locations = () => {
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const currentuser=location.pathname.split(`/`)[2];
+  const [selectedTags, setSelectedTags] = useState<string[]>([]); 
+  const { username } = useParams<{ username: string }>();
+  const currentuser = username as string;
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

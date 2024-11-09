@@ -143,10 +143,7 @@ function App() {
             element={<TourGuide_Profile />}
           />
           {/* Seller */}
-          <Route
-            path="/seller/:username"
-            element={<ShopPage type="Seller" />}
-          />
+          <Route path="/seller/:username" element={<ShopPage type="Seller" />}/>
           <Route path="/itineraries" element={<Itineraries />} />
           <Route path="/itinerary/:id" element={<ItineraryDetails />} />
           <Route
@@ -162,21 +159,12 @@ function App() {
           />
           {/* Guest */}
           <Route path="/guest-page" element={<GuestPage />} />
-          <Route
-            path="/guest/more-itineraries"
-            element={<GuestMoreItineraries />}
-          />
+          <Route path="/guest/more-itineraries" element={<GuestMoreItineraries />}/>
           <Route path="/guest/more-places" element={<GuestMorePlaces />} />
-          <Route
-            path="/guest/more-activities"
-            element={<GuestMoreActivities />}
-          />
-          <Route path="/guest/shop" element={<GuestShop type={"Tourist"} />} />
-          <Route path="/tourist/:username/bookings" element={<Bookings />} />
-          <Route
-            path="/terms-and-conditions"
-            element={<TermsAndConditions />}
-          />
+          <Route path="/guest/more-activities" element={<GuestMoreActivities />}/>
+          <Route path="/guest/shop" element={<GuestShop type={"Tourist"} />}/>
+          <Route path="/tourist/:username/bookings" element={<Bookings />}/>
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />}/>
           <Route path="/landing" element={<LandingPage />} />
         </Routes>
       </Router>
