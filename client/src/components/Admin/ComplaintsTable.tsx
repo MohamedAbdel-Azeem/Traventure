@@ -26,7 +26,7 @@ import {
 } from "../../custom_hooks/Complaints/useGetComplain";
 import { useUpdateComplain } from "../../custom_hooks/Complaints/useUpdateComplain";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { UseCreateComplain } from "../../custom_hooks/Complaints/useCreateComplaint";
 import { useGetBookings } from "../../custom_hooks/useGetBookings";
 type Complaint = {
@@ -183,8 +183,8 @@ function Row(props: { row: Complaint }) {
 
 export default function ComplaintsTable() {
   const currenttype = useLocation().pathname.split("/")[1];
-  const currentuser = useLocation().pathname.split("/")[2];
-
+  const { username } = useParams<{ username: string }>();
+  const currentuser = username as string;
   const { ccomplaints, cloading } = currenttype.includes("tourist")
     ? UseGetComplaintsID(currentuser)
     : UseGetComplaints();
