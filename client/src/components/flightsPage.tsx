@@ -141,6 +141,7 @@ const AvailableFlights = () => {
         .then((response) => {
           // Parse flight data here before setting it
           setFlights(response.data);
+          console.log(response.data);
         })
         .catch((error) => {
           setError(error);

@@ -137,9 +137,7 @@ const AvailableHotels = () => {
     
     try {
       const response = await axios.post('/traventure/amadeus/getHotels', hotelDetails);
-      console.log(response.data);
-      const maxPriceNumber = parseFloat(maxPrice) / 50;
-
+      
       const filteredHotels = response.data.filter((hotel: any) => {
         const minAverageBasePrice = hotel.offers
           .map((offer: { price: { variations: { average: { base: any; }; }; }; }) => {
@@ -147,10 +145,9 @@ const AvailableHotels = () => {
             return basePrice ? parseFloat(basePrice) : Infinity; // Use Infinity if no price exists
           })
           .reduce((min: number, current: number) => (current < min ? current : min), Infinity);
-      
-        console.log(`Hotel: ${hotel.name}, Min Average Base Price: ${minAverageBasePrice}, Max Price: ${maxPriceNumber}`);
-        
-        return minAverageBasePrice <= maxPriceNumber;
+          // console.log(maxPrice);
+          // console.log(parseFloat(maxPrice)/50);
+        return minAverageBasePrice <= (parseFloat(maxPrice)/50);
       });
   
       setHotels(filteredHotels);

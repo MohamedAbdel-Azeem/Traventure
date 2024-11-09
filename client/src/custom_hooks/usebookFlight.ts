@@ -34,7 +34,7 @@ function removePTPrefix(duration: string): string {
             arrivalCity:flight.itineraries[0].segments[0].arrival.iataCode,
             carrierName:flight.itineraries[0].segments[0].carrierCode,
             flightDuration:removePTPrefix(flight.itineraries[0].segments[0].duration),
-            totalPrice:parseFloat(flight.price.total),
+            totalPrice:parseFloat(flight.price.total)*50,
             bagsWeight:flight.travelerPricings[0].fareDetailsBySegment[0]?.includedCheckedBags?.weight || null,
             flightClass:flight.travelerPricings[0].fareDetailsBySegment[0].cabin,
             flightNumber:parseFloat(flight.itineraries[0].segments[0].number),

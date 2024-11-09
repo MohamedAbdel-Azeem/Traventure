@@ -22,11 +22,12 @@ const useBookHotel = () => {
           ...(hotel.offers?.[0]?.room?.typeEstimated?.category && { bedType: hotel.offers?.[0]?.room?.typeEstimated?.category }),
             ...(hotel.offers?.[0]?.room?.typeEstimated?.roomType && { roomType: hotel.offers?.[0]?.room?.typeEstimated?.roomType }),
             ...(hotel.offers?.[0]?.room?.typeEstimated?.beds && { numberOfBeds: hotel.offers?.[0]?.room?.typeEstimated?.beds }),
-          totalPrice : hotel.offers?.[0]?.price?.total ? parseFloat(hotel.offers[0].price.total).toFixed(2): null,
+          totalPrice : hotel.offers?.[0]?.price?.total ? (parseFloat(hotel.offers[0].price.total)*50).toFixed(2): null,
           booked_by:tourist_id,
         });
         
       setData(response.data);
+      console.log(response.data);
       return response.data;
    
     } catch (error: any) {

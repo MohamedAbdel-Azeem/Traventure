@@ -34,9 +34,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, exchangeRate, currentCu
 
   }
 
-  const price = flight.price.grandTotal ;
   const currency=flight.price.currency;
-  console.log("price",price);
   console.log("currency",currency);
   return (
     <div className="flight-card">
@@ -70,7 +68,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, exchangeRate, currentCu
 
         <div className="flex flex-row justify-between items-center">
           <span className="flight-price">
-            {currentCurrency} {(flight.price.grandTotal * exchangeRate).toFixed(2)}
+            {(flight.price.grandTotal * 50).toFixed(2)}
           </span>
           <Rating disabled name="rating" value={averageRating} precision={0.1} />
           <button className="book-button" onClick={()=>handleFlightBooking(flight)}>

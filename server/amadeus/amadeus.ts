@@ -29,7 +29,8 @@ async function getFlightOffers(
       children,
       travelClass,
       nonStop:true,
-      max:10
+      max:10,
+      currencyCode: 'USD'
     });
 
     return response.data;
