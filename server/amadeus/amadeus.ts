@@ -28,8 +28,8 @@ async function getFlightOffers(
       adults,
       children,
       travelClass,
-      nonStop:false,
-      max:50
+      nonStop:true,
+      max:10
     });
 
     return response.data;

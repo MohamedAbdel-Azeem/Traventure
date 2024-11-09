@@ -3,16 +3,36 @@ import { Rating } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import "./ProductCard.css";
+import  useBookFlight  from "../custom_hooks/usebookFlight";
+import { useLocation } from "react-router-dom";
 
 interface FlightCardProps {
   flight:any
   exchangeRate: number;
   currentCurrency: string;
+  includeTransportation: boolean;
 }
 
 
-const FlightCard: React.FC<FlightCardProps> = ({ flight, exchangeRate, currentCurrency }) => {
+
+const FlightCard: React.FC<FlightCardProps> = ({ flight, exchangeRate, currentCurrency,includeTransportation }) => {
+
   const averageRating = 4.5; 
+  const currentuser = useLocation().pathname.split('/')[2];
+  const {bookFlight} = useBookFlight();
+
+  const handleFlightBooking = async (flight:any) => {
+      
+    try{
+      const response=await bookFlight(flight,includeTransportation,currentuser);
+      console.log(response);
+    }
+    catch(error){
+      console.log(error)
+    }
+
+
+  }
 
   const price = flight.price.grandTotal ;
   const currency=flight.price.currency;
@@ -53,7 +73,7 @@ const FlightCard: React.FC<FlightCardProps> = ({ flight, exchangeRate, currentCu
             {currentCurrency} {(flight.price.grandTotal * exchangeRate).toFixed(2)}
           </span>
           <Rating disabled name="rating" value={averageRating} precision={0.1} />
-          <button className="book-button">
+          <button className="book-button" onClick={()=>handleFlightBooking(flight)}>
             <FontAwesomeIcon icon={faCartShopping} /> Book
           </button>
         </div>
