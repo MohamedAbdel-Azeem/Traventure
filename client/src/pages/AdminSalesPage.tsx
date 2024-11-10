@@ -1,7 +1,7 @@
 import { useGetExternalSellers } from "../custom_hooks/useGetExternalSellers";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { SingleProductSalesChart } from "../components/SalesCharts";
+import { SalesChart } from "../components/SalesChart";
 
 interface ISales {
   productId: string;
@@ -67,7 +67,7 @@ export function AdminSalesPage() {
           );
         })}
       </select>
-      {sales.length > 0 && <SingleProductSalesChart data={sales} />}
+      {sales.length > 0 && <SalesChart data={sales} compactView={true} />}
     </div>
   );
 }

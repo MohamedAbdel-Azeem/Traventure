@@ -5,24 +5,16 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TouristProfileData } from "./tourist_profile_data";
 import { patchUserProfile } from "../../../custom_hooks/updateTouristProfile";
+
 import RedeemPopup from '../../../components/RedeemPopup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAward } from '@fortawesome/free-solid-svg-icons';
 import BadgePopup from '../../../components/BadgePopup';
 import { redeemPoints } from "../../../custom_hooks/touristpoints/redeemPoints";
 
+import {handleDeleteAccount} from "../../../custom_hooks/usedeleterequest";
 
-// type TouristSchemaType = {
-//   username: string;
-//   email: string;
-//   password: string;
-//   mobileNumber: string;
-//   dob: string; // Adjusted to string for easier handling of dates
-//   nationality: string;
-//   occupation: string;
-//   profilePicture: string;
-//   wallet: number;
-// };
+
 
 interface TouristProfileProps {
   tourist: TouristProfileData;
@@ -117,7 +109,75 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
     navigate("/");
   };
 
+
+  const [successMessage, setSuccessMessage] = useState("");
+
+
+  const handlePasswordChangeSubmit = (data: AddContactLeadFormType) => {
+    console.log("Password change data:", data);
+    const { oldPassword, newPassword } = data;
+    editpassword(currentTourist.username, oldPassword, newPassword)
+        .then(() => {
+            setSuccessMessage("Password changed successfully!");
+            setPasswordModalOpen(false);
+
+          
+              Swal.fire({
+                title: "Password Changed Successfully",
+                text: "Password has been changed",
+                icon: "success",
+              });
+            
+        })
+        .catch((error) => {
+          const errorMessage = error.message || "Failed to change password.";
+          Swal.fire({
+            title: "Error",
+            text: errorMessage,
+            icon: "error",
+          });
+            
+        });
+};
+
+
+const handleDelete = () => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You will not be able to recover this account!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it!",
+    cancelButtonText: "No, keep it",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      const res = await handleDeleteAccount(
+        currentTourist._id,
+        currentTourist.username,
+        "tourist",
+        currentTourist.wallet||0
+      );
+      if(res === "success"){
+        Swal.fire("Deleted!", "Your account has been deleted.", "success");
+        navigate("/");
+      }else{
+        Swal.fire("Error", "Failed to delete account", "error");
+      }
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      Swal.fire("Cancelled", "Your account is safe :)", "error");
+    }
+  })
+}
+
+
+
+
+
+
+const [walletBalance, setWalletBalance] = useState(currentTourist.wallet);
   return (
+    <>
+    
     <div
       className="min-h-screen flex items-center justify-center bg-gray-900"
       style={{
@@ -334,6 +394,13 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
           </div>
 
           <div className="mt-8 flex justify-end space-x-4">
+          <button
+              type="button"
+              onClick={handleDelete}
+              className="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-600 transition duration-200 mr-auto"
+            >
+              Delete Account
+            </button>
             {isEditing ? (
               <>
                 <button
@@ -357,6 +424,15 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
                 Edit Profile
               </button>
             )}
+
+            <button
+              type="button"
+              onClick={()=>setPasswordModalOpen(true)}
+              className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
+            >
+              Change Password
+            </button>
+
             <button
               onClick={handleLogout}
               className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
@@ -367,6 +443,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 

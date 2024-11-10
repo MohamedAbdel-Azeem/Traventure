@@ -2,6 +2,8 @@ import bookingModel from "../Schemas/Booking";
 import ActivityModel from "../Schemas/Activity";
 import ItineraryModel from "../Schemas/Itinerary";
 import touristModel from "../Schemas/Tourist";
+import flightBooking from "../Schemas/flightBooking";
+import hotelBooking from "../Schemas/hotelBooking";
 
 export async function getTouristBookings(tourist_id: string) {
   try {
@@ -184,4 +186,56 @@ export async function cancelBooking(booking_id:string) {
 }
 
 
-module.exports ={getTouristBookings,addBooking,cancelBooking, getBookingsByTourist};
+export async function addFlightBooking(bookingData: any) {
+  try {
+    const response=await flightBooking.create(bookingData); 
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function addHotelBooking(bookingData: any) {
+  try {
+    const response=await hotelBooking.create(bookingData); 
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getFlightBookings(username: string) {
+  try {
+    const tourist = await touristModel.findOne({username: username});
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    const bookings = await flightBooking.find({ booked_by: (tourist as any)._id });
+    return bookings;
+  }
+  catch (error) {
+    throw error;
+  }
+}
+
+export async function getHotelBookings(username: string) {
+  try {
+    const tourist = await touristModel.findOne({username: username});
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    const bookings = await hotelBooking.find({ booked_by: (tourist as any)._id });
+    return bookings;
+  }
+  catch (error) {
+    throw error;
+  }
+}
+
+
+
+
+
+module.exports ={getTouristBookings,addBooking,cancelBooking, getBookingsByTourist,addFlightBooking,addHotelBooking,getFlightBookings,getHotelBookings};

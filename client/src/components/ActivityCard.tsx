@@ -37,6 +37,7 @@ type Activity = {
     rating: string;
     review: string;
   }[];
+  inappropriate: boolean;
 };
 interface ActivityProp {
   activity: Activity;
@@ -68,6 +69,9 @@ export const ActivityCard: React.FC<ActivityProp> = ({
     currentActivity.SpecialDiscount
   );
   const [newBIO, setNewBIO] = useState(currentActivity.BookingIsOpen);
+  const [inappropriate, setinappropriate] = useState(
+    currentActivity.inappropriate
+  );
   const [mopen, setmOpen] = useState(false);
 
   const calculateAverageRating = (currentActivity: Activity): number => {
@@ -79,7 +83,7 @@ export const ActivityCard: React.FC<ActivityProp> = ({
   };
 
   const averageRating = calculateAverageRating(currentActivity);
-
+  console.log("testtt", currentActivity.inappropriate);
   console.log(currentActivity.feedback);
   const handleDeleteClick = () => {
     onDelete(activity._id);
@@ -192,22 +196,32 @@ export const ActivityCard: React.FC<ActivityProp> = ({
       <div className="rounded-[19px]">
         <div className="w-[400px] h-[475px] bg-[#25b396] rounded-[19px] relative">
           <div className="w-[400px] h-[69px] rounded-t-[19px]">
-            <div className="absolute text-center top-0 left-0 w-[71px] h-[30px] rounded-tl-[19px] bg-[#FF0000] border-black border-[1px] rounded-br-[19px]">
-              {isEditing ? (
-                <select
-                  title="status"
-                  name="status"
-                  value={newBIO ? "true" : "false"}
-                  onChange={() => setNewBIO(!newBIO)}
-                  className="bg-transparent text-black border-none"
-                >
-                  <option value="true">Open</option>
-                  <option value="false">Closed</option>
-                </select>
-              ) : newBIO ? (
-                "Open"
-              ) : (
-                "Closed"
+            <div className="flex-row space-x-24">
+              <div className="absolute text-center top-0 left-0 w-[71px] h-[30px] rounded-tl-[19px] bg-[#FF0000] border-black border-[1px] rounded-br-[19px]">
+                {isEditing ? (
+                  <select
+                    title="status"
+                    name="status"
+                    value={newBIO ? "true" : "false"}
+                    onChange={() => setNewBIO(!newBIO)}
+                    className="bg-transparent text-black border-none"
+                  >
+                    <option value="true">Open</option>
+                    <option value="false">Closed</option>
+                  </select>
+                ) : newBIO ? (
+                  "Open"
+                ) : (
+                  "Closed"
+                )}
+              </div>
+              {inappropriate && (
+                <div className="bg-red-500 text-white  rounded-lg flex flex-col items-center h-[50%] w-1/2 space-x-2 ">
+                  <h1 className="text-sm flex items-center">Inappropiate</h1>
+                  <p className="text-sm flex items-center  text-white">
+                    please modify the Acitvity
+                  </p>
+                </div>
               )}
             </div>
             <div className="absolute top-[60px] right-[10px]">

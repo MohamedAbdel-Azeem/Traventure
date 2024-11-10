@@ -44,7 +44,7 @@ export const Feedback: React.FC<FeedbackProps> = ({
   const [feedback, setFeedback] = useState<string | null>(
     touristFeedback.review
   );
-
+  console.log("feedback", touristFeedback);
   const handleFeedbackChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFeedback(event.target.value);
   };

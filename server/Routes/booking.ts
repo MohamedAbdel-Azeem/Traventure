@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {getTouristBookings,addBooking,cancelBooking, getBookingsByTourist } from "../Model/Queries/booking_queries";
+import {getTouristBookings,addBooking,cancelBooking, getBookingsByTourist , addFlightBooking,addHotelBooking,getFlightBookings,getHotelBookings} from "../Model/Queries/booking_queries";
 
 const router = Router();
 
@@ -23,6 +23,24 @@ router.get("/:username", async (req, res) => {
         res.status(500).send("error getting bookings");
     }
 });
+router.get("/getFlights/:username", async (req, res) => {
+    try {
+        const bookings = await getFlightBookings(req.params.username);
+        res.status(200).send(bookings);
+    } catch (error) {
+        res.status(500).send("error getting bookings");
+    }
+});
+
+router.get("/getHotels/:username", async (req, res) => {
+    try {
+        const bookings = await getHotelBookings(req.params.username);
+        res.status(200).send(bookings);
+    } catch (error) {
+        res.status(500).send("error getting bookings");
+    }
+});
+
 
 router.delete("/cancel/:booking_id", async (req, res) => { 
     try {
@@ -36,7 +54,29 @@ router.delete("/cancel/:booking_id", async (req, res) => {
         }
     }
     }
-);  
+); 
+
+router.post("/addFlight/:username", async (req, res) => {
+    
+    try {
+        const response=await addFlightBooking(req.body);
+        res.status(201).send(response);
+    } catch (error ) {
+        
+        res.status(500).send("error creating booking");}
+    }
+
+);
+
+router.post("/addHotel/:username", async (req, res) => {
+    
+    try {
+        const response=await addHotelBooking(req.body);
+        res.status(201).send(response);
+    } catch (error ) {
+        res.status(500).send("error creating booking");}
+    }
+);
 
 
 export default router;

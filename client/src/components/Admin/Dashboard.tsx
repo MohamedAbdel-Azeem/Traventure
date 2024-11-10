@@ -7,16 +7,16 @@ import {IActivity} from '../../custom_hooks/activities/activity_interface';
 import Place from '../../custom_hooks/places/place_interface';
 import { TouristProfileData } from '../../routes/_app/tourist_profile/tourist_profile_data';
 
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ActivityCardTourist } from '../ActivityCardTourist';
 
 
 const Dashboard : React.FC = () => {
     const { upcoming, loading, error } = useGetUpcoming();
     const navigate = useNavigate();
-    const currentuser = useLocation().pathname.split('/')[2];
     const currenttype = useLocation().pathname.split('/')[1];
-
+    const { username } = useParams<{ username: string }>();
+    const currentuser = username as string;
 
   if (loading) {
     return <div>Loading...</div>;
