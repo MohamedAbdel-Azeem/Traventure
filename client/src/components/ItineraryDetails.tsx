@@ -42,10 +42,8 @@ interface TagStructure {
   __v: number;
 }
 
-
-
 const ItineraryDetails: React.FC = () => {
-  // console.log("this is where the error is id",id);
+  //
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -55,7 +53,7 @@ const ItineraryDetails: React.FC = () => {
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
   const [itinerary, setItinerary] = useState(initialItinerary);
   const [isEditing, setIsEditing] = useState(false);
-  console.log("this is where the error is id", id);
+
   const deepCopy = (obj: any) => {
     return JSON.parse(JSON.stringify(obj)) as IItinerary;
   };
@@ -112,7 +110,7 @@ const ItineraryDetails: React.FC = () => {
     gloading: placeLoading,
     gerror: placeError,
   } = useGetPlace();
-  console.log("api places", apiPlaces);
+
   const handleTagsText = (value: string[]) => {
     const valueNames =
       editedItinerary.selectedTags
@@ -146,7 +144,6 @@ const ItineraryDetails: React.FC = () => {
     }));
   };
 
-  console.log(itinerary.plan);
   if (!itinerary) return <p>No itinerary data found</p>;
 
   const handleEditToggle = () => {
@@ -200,13 +197,12 @@ const ItineraryDetails: React.FC = () => {
           activities: plan.activities.map(transformActivity),
         })),
       };
-      console.log("initial", itinerary);
-      console.log("updating", updatedItinerary);
+
       setItinerary(editedItinerary);
-      console.log("final", editedItinerary);
+
       setUpdatedItinerary(updatedItineraryinline);
       setIsEditing(false);
-      console.log("updated", updatedItinerary);
+
       navigate(-1);
     }
 
@@ -219,17 +215,13 @@ const ItineraryDetails: React.FC = () => {
     field: string
   ) => {
     setEditedItinerary({ ...editedItinerary, [field]: e.target.value });
-    console.log(field, e);
   };
 
   const handlePlaceChange = (index: number, field: string, value: string) => {
     const updatedPlan = [...editedItinerary.plan];
     updatedPlan[index].place = { ...updatedPlan[index].place, [field]: value };
     setEditedItinerary({ ...editedItinerary, plan: updatedPlan });
-    console.log(editedItinerary);
   };
-
-
 
   const handleAddPlace = () => {
     const newPlace: Place = {
@@ -263,7 +255,6 @@ const ItineraryDetails: React.FC = () => {
     updatedPlaces[placeIndex].activities[activityIndex].time_unit =
       e.target.value;
     setEditedItinerary({ ...editedItinerary, plan: updatedPlaces });
-    console.log("editing", editedItinerary);
   };
   const handleActivityChangeDuration = (
     planindex: number,
@@ -274,7 +265,6 @@ const ItineraryDetails: React.FC = () => {
     updatedPlaces[planindex].activities[activityIndex].activity_duration =
       e.target.value;
     setEditedItinerary({ ...editedItinerary, plan: updatedPlaces });
-    console.log("editing", editedItinerary);
   };
 
   // const handleAddActivity = (placeIndex: number) => {
@@ -518,7 +508,6 @@ const ItineraryDetails: React.FC = () => {
                     ...editedItinerary,
                     title: e.target.value,
                   });
-                  console.log("editing", editedItinerary);
                 }}
               />
               <TextField

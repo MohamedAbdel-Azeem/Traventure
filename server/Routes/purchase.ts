@@ -37,10 +37,10 @@ router.post("/buy", async (req: Request, res: Response) => {
         singleProduct.quantity
       );
     }
-    const body={touristId,cart} as IPurchase;
+    const body = { touristId, cart } as IPurchase;
     const purchase = await addPurchase({ touristId, cart });
     const totalAmount = await getPurchaseTotalAmount(body);
-    console.log("total amount is: "+totalAmount);
+
     await updateLoyaltyPoints(touristId, totalAmount);
     return res.status(200).send(purchase);
   } catch (error) {
@@ -73,7 +73,6 @@ router.get("/seller", async (req: Request, res: Response) => {
     }
 
     if (sellerId) {
-      console.log(sellerId);
       const sales = await getSellerSales(
         sellerId as string,
         compactViewBoolean

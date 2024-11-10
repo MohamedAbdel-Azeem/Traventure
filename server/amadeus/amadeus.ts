@@ -31,7 +31,6 @@ async function getFlightOffers(
 
     return response.data;
   } catch (error: unknown) {
-    console.log(error);
     if (error instanceof ResponseError) {
       throw new Error(
         `Error code: ${error.code}, Message: ${error.description}`
@@ -49,7 +48,6 @@ async function getHotelsInCity(cityCode: string) {
 
     return response.data;
   } catch (error: unknown) {
-    console.log(error);
     if (error instanceof ResponseError) {
       throw new Error(
         `Error code: ${error.code}, Message: ${error.description}`
@@ -74,7 +72,6 @@ async function getHotelByInfo(
       checkOutDate,
       currencyCode: "USD",
     });
-    console.log(response.data);
 
     return response.data;
   } catch (error: unknown) {

@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
   MenuItem,
   Select,
   InputLabel,
@@ -11,12 +7,9 @@ import {
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ActivityCardTourist } from "./ActivityCardTourist";
-import { useGetAllActivitiesS } from "../custom_hooks/activities/useGetActivities";
 import IActivity from "../custom_hooks/activities/activity_interface";
 import { useGetAllCategories } from "../custom_hooks/categoryandTagCRUD";
 import Activity from "../custom_hooks/activities/activity_interface";
-import NewNavbar from "./NewNavbar";
-import CurrencyDropdown from "./currencyDrop";
 import useGetUpcoming from "../custom_hooks/itineraries/useGetupcoming";
 
 const MoreActivities: React.FC = () => {
@@ -25,7 +18,6 @@ const MoreActivities: React.FC = () => {
   const { data: catData } = useGetAllCategories();
   const currenttype = useLocation().pathname.split("/")[1];
   const [categoryTerms, setCategoryTerms] = useState<string[]>([]);
-  const [selectedCat, setSelectedCats] = useState<string[]>([]);
   const [searchType, setSearchType] = useState<"name" | "tag" | "category">(
     "name"
   );
@@ -38,14 +30,11 @@ const MoreActivities: React.FC = () => {
   const [maxPrice, setMaxPrice] = useState<number>(1000);
   const [startDate, setStartDate] = useState<string>(new Date().toISOString());
   const [endDate, setEndDate] = useState<string>(new Date().toISOString());
-  const [categoryTerm, setCategoryTerm] = useState("");
   const [minRating, setMinRating] = useState<number>(0);
   const [maxRating, setMaxRating] = useState<number>(5);
-
   const [sortBy, setSortBy] = useState<"price" | "rating">("price");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (filterType === "date") {
@@ -56,7 +45,6 @@ const MoreActivities: React.FC = () => {
       end.setFullYear(today.getFullYear() + 1);
       setStartDate(start.toISOString().split("T")[0]);
       setEndDate(end.toISOString().split("T")[0]);
-      console.log(startDate, endDate);
     }
   }, [filterType]);
 
@@ -129,7 +117,6 @@ const MoreActivities: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <NewNavbar />
         <div className="text-lg font-semibold text-blue-600">Loading...</div>
       </div>
     );
@@ -138,7 +125,6 @@ const MoreActivities: React.FC = () => {
   if (error) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <NewNavbar />
         <div className="text-lg font-semibold text-red-600">
           Error Fetching: {error}
         </div>
@@ -147,10 +133,8 @@ const MoreActivities: React.FC = () => {
   }
   return (
     <div className="flex">
-      <NewNavbar />
       <div className="w-full" style={{ marginTop: "80px" }}>
         <h1 className="text-2xl font-bold mb-4 mx-auto">All Activities</h1>
-        <CurrencyDropdown />
         <hr />
         <br />
         <div>
@@ -319,9 +303,7 @@ const MoreActivities: React.FC = () => {
                   key={activity._id}
                   activity={activity}
                   {...(currenttype === "tourist" && { type: "tourist" })}
-                  onDelete={(_id) => {
-                    console.log(`Delete activity with id: ${_id}`);
-                  }}
+                  onDelete={(_id) => {}}
                 />
               ))
             ) : (

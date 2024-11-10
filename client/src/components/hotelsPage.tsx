@@ -9,7 +9,6 @@ import {
   Autocomplete,
   Grid,
 } from "@mui/material";
-import ImprovedSidebar from "./ImprovedSidebar";
 import HotelCard from "./hotelCard";
 import { useSelector } from "react-redux";
 import NewNavbar from "./NewNavbar";
@@ -146,7 +145,6 @@ const AvailableHotels = () => {
       // maxPrice,
     };
 
-    console.log(hotelDetails);
     setError(null); // Reset error state at the start of a new search
     setIsLoading(true);
 
@@ -156,28 +154,24 @@ const AvailableHotels = () => {
         hotelDetails
       );
 
-      if (maxPrice === "")
-        return setHotels(response.data); // Return all hotels if no max price is specified
+      if (maxPrice === "") return setHotels(response.data); // Return all hotels if no max price is specified
 
       const filteredHotels = response.data.filter((hotel: any) => {
         const minAverageBasePrice = hotel.offers
-          .map(
-            (offer: { price:  { total: any }  }) => {
-              const basePrice = offer?.price?.total;
-              return basePrice ? parseFloat(basePrice) : Infinity; // Use Infinity if no price exists
-            }
-          )
+          .map((offer: { price: { total: any } }) => {
+            const basePrice = offer?.price?.total;
+            return basePrice ? parseFloat(basePrice) : Infinity; // Use Infinity if no price exists
+          })
           .reduce(
             (min: number, current: number) => (current < min ? current : min),
             Infinity
           );
-        // console.log(maxPrice);
+        //
         // console.log(parseFloat(maxPrice)/50);
         return minAverageBasePrice <= parseFloat(maxPrice) / 50;
       });
 
       setHotels(filteredHotels);
-      console.log(filteredHotels);
     } catch (error) {
       setError(error);
     } finally {
@@ -187,7 +181,6 @@ const AvailableHotels = () => {
 
   return (
     <div className="flex">
-      <NewNavbar/>
       <Box p={3}>
         <Typography variant="h4" component="h1" gutterBottom>
           Available Hotels

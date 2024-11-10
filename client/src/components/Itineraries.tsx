@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import ImprovedSidebar from "./ImprovedSidebar";
 import ItineraryCardCRUD from "./ItineraryCardCRUD";
 import ItineraryModal from "./ItineraryModal";
 import useGetItinerary from "../custom_hooks/itineraries/useGetItinerary";

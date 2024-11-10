@@ -41,7 +41,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
   const [images, setImages] = useState(details?.pictures || []);
   const [image, setImage] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>(
-    details?.historicalTags?.map(tag => tag._id) || []
+    details?.historicalTags?.map((tag) => tag._id) || []
   );
   const [apiBody, setApiBody] = useState<Place | null>(details);
   useUpdatePlace(id, apiBody);
@@ -51,14 +51,11 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
     data: tagsData,
   } = useGetHTags();
 
-  console.log("my Place", details);
-
   const handleTagsChange = (event: SelectChangeEvent<string[]>) => {
     const {
       target: { value },
     } = event;
     setSelectedTags(typeof value === "string" ? value.split(",") : value);
-    console.log(selectedTags);
   };
 
   const handleTagsText = (value: string[]) => {
@@ -245,7 +242,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
             {isEditing ? (
               <div>
                 <TheMAP
-                  id={"map"+id}
+                  id={"map" + id}
                   className="h-[300px] w-[300px]"
                   lat={latitude}
                   long={longitude}

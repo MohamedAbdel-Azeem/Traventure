@@ -62,7 +62,7 @@ export function TouristPreviousPurchaseRow(purchase: IPurchase) {
       }
     );
   };
-  console.log("feedback", purchase.cart[0].productId.feedback);
+
   return (
     <>
       <TableRow key={purchase._id}>

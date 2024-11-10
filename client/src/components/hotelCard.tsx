@@ -25,7 +25,7 @@ const HotelCard: React.FC<HotelCardProps> = ({
   const roomType = hotel.offers?.[0]?.room?.typeEstimated?.category || "N/A";
   const bedType = hotel.offers?.[0]?.room?.typeEstimated?.bedType || "N/A";
   const numberOfBeds = hotel.offers?.[0]?.room?.typeEstimated?.beds || "N/A";
-  // console.log(hotel.offers?.[0]?.price?.total);
+  //
   const totalPrice = hotel.offers?.[0]?.price?.total
     ? (parseFloat(hotel.offers[0].price.total) * 50).toFixed(2)
     : "N/A";
@@ -47,7 +47,6 @@ const HotelCard: React.FC<HotelCardProps> = ({
         text: "You have successfully booked the hotel.",
       });
     } catch (error) {
-      console.log(error);
       Swal.fire({
         icon: "error",
         title: "Booking Failed!",

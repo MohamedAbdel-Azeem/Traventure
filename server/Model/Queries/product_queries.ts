@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import productModel, { IFeedback } from "../Schemas/Product";
 import Tourist from "../Schemas/Tourist";
 
-
 export async function addProduct(product: Object) {
   try {
     const newProduct = await productModel.create(product);
@@ -107,7 +106,7 @@ export async function getExternalSellers() {
       ),
     ];
     return sellerNames;
-      } catch (error) {
+  } catch (error) {
     throw error;
   }
 }
@@ -115,7 +114,7 @@ export async function getExternalSellers() {
 export async function addFeedback(ObjectId: string, feedback: IFeedback) {
   try {
     const product = await productModel.findById(ObjectId);
-    console.log(feedback);
+
     if (product) {
       const feedbackIndex = product.feedback.findIndex(
         (f) => f.touristId.toString() === feedback.touristId.toString()
@@ -129,7 +128,7 @@ export async function addFeedback(ObjectId: string, feedback: IFeedback) {
               ? feedback.rating
               : product.feedback[feedbackIndex].rating,
           review:
-            feedback.review !== undefined  && feedback.review !== null
+            feedback.review !== undefined && feedback.review !== null
               ? feedback.review
               : product.feedback[feedbackIndex].review,
         };

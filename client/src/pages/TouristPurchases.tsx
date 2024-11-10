@@ -25,9 +25,13 @@ export function TouristPurchases() {
   const { username } = useParams();
 
   const { purchases, loading, error } = useGetTouristPurchases(username);
-  console.log(purchases);
+
   if (loading) {
-    return <ClipLoader />;
+    return (
+      <div className="flex item-center justify-center h-screen">
+        <ClipLoader loading={loading} color="#2263A2" size={150} />
+      </div>
+    );
   }
 
   if (error) {

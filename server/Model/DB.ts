@@ -9,8 +9,5 @@ export default async function connectDB() {
       throw new Error("MongoDB URI is missing or Invalid");
     }
     await mongoose.connect(mongoDB);
-    console.log("Connected to MongoDB");
-  } catch (error) {
-    console.log("Error connecting to MongoDB", error);
-  }
+  } catch (error) {}
 }

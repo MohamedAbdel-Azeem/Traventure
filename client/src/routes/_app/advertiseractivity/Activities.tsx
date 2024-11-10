@@ -139,7 +139,6 @@ export const Activities = () => {
       target: { value },
     } = event;
     setSelectedTags(typeof value === "string" ? value.split(",") : value);
-    console.log(selectedTags);
   };
 
   const handleTagsText = (value: string[]) => {
@@ -163,7 +162,6 @@ export const Activities = () => {
     } = event;
 
     setSelectedCat(value);
-    console.log(value);
   };
 
   const [open, setOpen] = useState(false);

@@ -21,10 +21,6 @@ const GuestDashboard = () => {
   const locations = upcoming?.places.slice(0, 5) || [];
   const activities = upcoming?.activities.slice(0, 5) || [];
 
-  console.log("Itineraries:", itineraries);
-  console.log("Locations:", locations);
-  console.log("Activities:", activities);
-
   return (
     <>
       {/* Upcoming Itineraries */}
@@ -102,9 +98,7 @@ const GuestDashboard = () => {
               <ActivityCardTourist
                 key={activity._id}
                 activity={activity}
-                onDelete={(_id) => {
-                  console.log(`Delete activity with id: ${_id}`);
-                }}
+                onDelete={(_id) => {}}
               />
             ))
           ) : (

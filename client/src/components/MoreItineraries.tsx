@@ -12,14 +12,10 @@ import { useNavigate } from "react-router-dom";
 import useGetUpcoming from "../custom_hooks/itineraries/useGetupcoming";
 import ItineraryCardToruist from "./ItineraryCardToruist";
 import { useGetAllTags } from "../custom_hooks/categoryandTagCRUD";
-import ImprovedSidebar from "./ImprovedSidebar";
 import { useLocation } from "react-router-dom";
-import NewNavbar from "./NewNavbar";
-import CurrencyDropdown from "./currencyDrop";
 
 const MoreItineraries: React.FC = () => {
   const { upcoming, loading, error } = useGetUpcoming();
-  const navigate = useNavigate();
   const currenttype = useLocation().pathname.split("/")[1];
   const [searchType, setSearchType] = useState<"name" | "tag">("name");
   const [searchTerm, setSearchTerm] = useState("");
@@ -47,7 +43,6 @@ const MoreItineraries: React.FC = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<string>("");
 
   useEffect(() => {
-    console.log("itinearies", upcoming?.itineraries);
     if (upcoming && upcoming.itineraries && upcoming.itineraries.length > 0) {
       const uniqueLanguages = [
         ...new Set(upcoming.itineraries.map((itinerary) => itinerary.language)),
@@ -78,7 +73,6 @@ const MoreItineraries: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <NewNavbar />
         <div className="text-lg font-semibold text-blue-600">Loading...</div>
       </div>
     );
@@ -87,7 +81,6 @@ const MoreItineraries: React.FC = () => {
   if (error) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <NewNavbar />
         <div className="text-lg font-semibold text-red-600">
           Error Fetching: {error}
         </div>
@@ -141,11 +134,9 @@ const MoreItineraries: React.FC = () => {
     .filter((itinerary) => {
       // Filter based on bookingActivated status depending on currentType
       if (currenttype === "admin") {
-        console.log("hh");
         // Example: check if user is an admin
         return true; // Admins see all itineraries
       } else {
-        console.log(currenttype);
         return itinerary.bookingActivated && !itinerary.inappropriate; // Non-admins see only activated itineraries
       }
     })
@@ -165,12 +156,9 @@ const MoreItineraries: React.FC = () => {
 
   return (
     <div className="flex">
-      <NewNavbar />
-
-      <div className="w-full" style={{ marginTop: "80px" }}>
+      <div className="w-full mt-[80px]">
         <h1 className="text-2xl font-bold mb-4 mx-auto">All Itineraries</h1>
         <hr />
-        <CurrencyDropdown />
         <br />
         <div>
           <div className="mb-4 flex gap-2">

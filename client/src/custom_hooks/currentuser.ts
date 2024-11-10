@@ -9,7 +9,7 @@ export function GetCurrentUser(username: string) {
   const [cuserdata, setUserdata] = useState<Currentuserdata | null>(null);
   const [userloading, setUserLoading] = useState(true);
   const [usererror, setUserError] = useState<string | null>(null);
- console.log("ibra gay");
+
   useEffect(() => {
     const fetchData = async (username: string) => {
       setUserLoading(true);

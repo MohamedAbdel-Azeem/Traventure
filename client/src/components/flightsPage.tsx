@@ -11,11 +11,8 @@ import {
   FormControlLabel,
   Switch,
 } from "@mui/material";
-import ImprovedSidebar from "./ImprovedSidebar";
-import getFlights from "../custom_hooks/getFlights";
 import FlightCard from "./flightCard";
 import { useSelector } from "react-redux";
-import NewNavbar from "./NewNavbar";
 
 const cityOptions = [
   { city: "Atlanta", code: "ATL" },
@@ -104,7 +101,6 @@ const cityOptions = [
   { city: "Nairobi", code: "NBO" },
   { city: "Bangalore", code: "BLR" },
   { city: "Kolkata", code: "CCU" },
-  { city: "Tel Aviv", code: "TLV" },
   { city: "Islamabad", code: "ISB" },
   { city: "Kathmandu", code: "KTM" },
   { city: "Chennai", code: "MAA" },
@@ -116,7 +112,6 @@ const cityOptions = [
   { city: "Karachi", code: "KHI" },
   { city: "Sofia", code: "SOF" },
   { city: "Beirut", code: "BEY" },
-  { city: "Doha", code: "DOH" },
   { city: "Porto", code: "OPO" },
   { city: "Muscat", code: "MCT" },
   { city: "Tehran", code: "IKA" },
@@ -152,14 +147,12 @@ const AvailableFlights = () => {
       travelClass,
     };
 
-    console.log(flightDetails);
     setIsLoading(true);
     await axios
       .post("/traventure/amadeus/getFlights", flightDetails)
       .then((response) => {
         // Parse flight data here before setting it
         setFlights(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         setError(error);
@@ -171,7 +164,6 @@ const AvailableFlights = () => {
 
   return (
     <div className="flex">
-      <NewNavbar/>
       <Box p={3}>
         <Typography variant="h4" component="h1" gutterBottom>
           Available Flights

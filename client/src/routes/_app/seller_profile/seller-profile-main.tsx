@@ -41,7 +41,7 @@ export const Seller_Profile = () => {
   return (
     <>
       <NewNavbar />
-      <SellerProfile seller={user as ISeller}></SellerProfile>;
+      <SellerProfile seller={user as ISeller}></SellerProfile>
     </>
   );
 };
