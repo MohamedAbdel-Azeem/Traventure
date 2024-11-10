@@ -206,7 +206,36 @@ export async function addHotelBooking(bookingData: any) {
   }
 }
 
+export async function getFlightBookings(username: string) {
+  try {
+    const tourist = await touristModel.findOne({username: username});
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    const bookings = await flightBooking.find({ booked_by: (tourist as any)._id });
+    return bookings;
+  }
+  catch (error) {
+    throw error;
+  }
+}
+
+export async function getHotelBookings(username: string) {
+  try {
+    const tourist = await touristModel.findOne({username: username});
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    const bookings = await hotelBooking.find({ booked_by: (tourist as any)._id });
+    return bookings;
+  }
+  catch (error) {
+    throw error;
+  }
+}
 
 
 
-module.exports ={getTouristBookings,addBooking,cancelBooking, getBookingsByTourist,addFlightBooking,addHotelBooking};
+
+
+module.exports ={getTouristBookings,addBooking,cancelBooking, getBookingsByTourist,addFlightBooking,addHotelBooking,getFlightBookings,getHotelBookings};
