@@ -21,6 +21,8 @@ import { set } from 'date-fns';
 import { get } from 'react-hook-form';
 import { ActivityCardTourist } from './ActivityCardTourist';
 import NewNavbar from './NewNavbar';
+import getFlights from '../custom_hooks/getTouristFlights';
+import getHotels from '../custom_hooks/getTouristHotels';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -39,12 +41,44 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     activity: Activity;
 }
 
+export interface IFlightBooking {
+    _id: string;
+    departureCity: string;
+    departureTime: Date;
+    arrivalCity: string;
+    carrierName: string;
+    flightDuration: string;
+    totalPrice: number;
+    bagsWeight?: number; // Optional field
+    flightClass: string;
+    flightNumber: string;
+    booked_by: string; // Assuming this is a string ID
+    transportation: boolean;
+}
+
+export interface IHotelBooking {
+    _id: string;
+    hotelName: string;
+    checkInDate: Date;
+    checkOutDate: Date;
+    roomType?: string; // Optional field
+    bedType?: string; // Optional field
+    numberOfBeds?: number; // Optional field
+    totalPrice: number;
+    booked_by: string; // Assuming this is a string ID
+}
+
+
 const Bookings: React.FC = () => {
     const { username } = useParams<{ username: string }>();
     const { data,refetch} = getBookings(username); // Get the loading state
+    const { flightsdata, flightsget } = getFlights(username);
+    const { hotelsdata, hotelsget } = getHotels(username);
     const { cancelBooking } = cancelBookings();
     const [itineraryBookings, setItiBookings] = useState<IBooking[]>([]);
     const [activityBookings, setActivityBookings] = useState<IBooking[]>([]);
+    const [flights, setFlights] = useState<IFlightBooking[]>([]);
+    const [hotels, setHotels] = useState<IHotelBooking[]>([]);
     const navigate=useNavigate();
     const [open, setOpen] = useState(false);
     const [selectedActivity, setSelectedActivity] = useState(null);
@@ -66,12 +100,21 @@ const Bookings: React.FC = () => {
             setActivityBookings(data.filter(booking => booking.type === 'activity'));
            
         }
-    }, [data]);
+
+        if(flightsdata){
+            setFlights(flightsdata);
+        }
+        if(hotelsdata){
+            setHotels(hotelsdata);
+        }
+    }, [data,flightsdata]);
 
     const handleCancel = async (booking_id: string) => {
         try {
             await cancelBooking(booking_id);
             await refetch();
+            await flightsget();
+            await hotelsget();
         } catch (error: any) {
             console.error(error);
         }
@@ -104,7 +147,7 @@ const Bookings: React.FC = () => {
                 <div className="w-7/12 gap-10">
                     <div className="flex flex-col gap-12">
                 
-                        <TableContainer component={Paper} className="border-2 border-black rounded-none">
+                        {itineraryBookings.length>0 && <TableContainer component={Paper} className="border-2 border-black rounded-none">
                         <h4 className="flex justify-center text-2xl pt-4 font-bold">Itineraries</h4>
                             <Table aria-label="simple table">
                                 <TableHead sx={{ backgroundColor: '#2263A2' }}>
@@ -160,10 +203,10 @@ const Bookings: React.FC = () => {
                                     ))}
                                 </TableBody>
                             </Table>
-                        </TableContainer>
+                        </TableContainer>}
 
                                     
-                        <TableContainer component={Paper} className="border-2 border-black rounded-none">
+                        {activityBookings.length>0 && <TableContainer component={Paper} className="border-2 border-black rounded-none">
                         <h4 className="flex justify-center text-2xl pt-4 font-bold">Activities</h4>
                             <Table aria-label="simple table">
                                 <TableHead sx={{ backgroundColor: '#2263A2' }}>
@@ -194,7 +237,68 @@ const Bookings: React.FC = () => {
                                     ))}
                                 </TableBody>
                             </Table>
-                        </TableContainer>
+                        </TableContainer>}
+
+                       {flights.length>0 && <TableContainer component={Paper} className="border-2 border-black rounded-none">
+                        <h4 className="flex justify-center text-2xl pt-4 font-bold">Flights</h4>
+                            <Table aria-label="simple table">
+                                <TableHead sx={{ backgroundColor: '#2263A2' }}>
+                                    <TableRow>
+                                        <StyledTableCell align="left">Departure City</StyledTableCell>
+                                        <StyledTableCell align="center">Arrival City</StyledTableCell>
+                                        <StyledTableCell align="center">Flight Number</StyledTableCell>
+                                        <StyledTableCell align="center">Total Price</StyledTableCell>
+                                        <StyledTableCell align="center">Transportation</StyledTableCell>
+                                        
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {flights.map((flight) => (
+                                        <TableRow key={flight._id}>
+                                            <StyledTableCell align="left">{flight.departureCity}</StyledTableCell>
+                                            <StyledTableCell align="center">{flight.arrivalCity}</StyledTableCell>
+                                            <StyledTableCell align="center">
+                                            {flight.flightNumber}
+                                            </StyledTableCell>
+
+                                            <StyledTableCell align="center" >{flight.totalPrice.toFixed(2)}</StyledTableCell>
+                                            <StyledTableCell align="center"> 
+                                                {flight.transportation? "Yes" : "No"}
+                                        </StyledTableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>}
+
+                        {hotels.length>0 && <TableContainer component={Paper} className="border-2 border-black rounded-none">
+                        <h4 className="flex justify-center text-2xl pt-4 font-bold">Hotels</h4>
+                            <Table aria-label="simple table">
+                                <TableHead sx={{ backgroundColor: '#2263A2' }}>
+                                    <TableRow>
+                                        <StyledTableCell align="left">Hotel Name</StyledTableCell>
+                                        <StyledTableCell align="left">Check In Date</StyledTableCell>
+                                        <StyledTableCell align="center">Check Out Date</StyledTableCell>
+                                        <StyledTableCell align="center">Total Price</StyledTableCell>
+                                        
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                {hotels.map((hotel) => {
+                                    const checkInDate = new Date(hotel.checkInDate);
+                                    const checkOutDate = new Date(hotel.checkOutDate);
+                                    return (
+                                        <TableRow key={hotel._id}>
+                                            <StyledTableCell align="left">{hotel.hotelName}</StyledTableCell>
+                                            <StyledTableCell align="left">{checkInDate.toDateString()}</StyledTableCell>
+                                            <StyledTableCell align="center">{checkOutDate.toDateString()}</StyledTableCell>
+                                            <StyledTableCell align="center">{hotel.totalPrice.toFixed(2)}</StyledTableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>}
                     </div>
                 </div>
             </div>

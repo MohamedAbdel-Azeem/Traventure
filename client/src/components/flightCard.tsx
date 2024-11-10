@@ -3,6 +3,7 @@ import { Rating } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import "./ProductCard.css";
+import Swal from "sweetalert2";
 import useBookFlight from "../custom_hooks/usebookFlight";
 import { useLocation } from "react-router-dom";
 
@@ -30,9 +31,18 @@ const FlightCard: React.FC<FlightCardProps> = ({
         includeTransportation,
         currentuser
       );
-      console.log(response);
+      Swal.fire({
+        icon: "success",
+        title: "Flight Booked Successfully!",
+        text: "You have successfully booked the flight.",
+      });
     } catch (error) {
       console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Booking Failed!",
+        text: "An error occurred while booking the flight.",
+      });
     }
   };
 

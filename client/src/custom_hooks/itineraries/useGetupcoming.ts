@@ -25,6 +25,7 @@ const useGetUpcoming = () => {
             }
             if (response && response.status === 200) {
                 let newdata = response.data;
+                console.log("newdata: ",newdata);
                 setItinerary(newdata);
                 
             }}

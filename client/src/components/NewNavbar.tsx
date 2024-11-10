@@ -32,6 +32,8 @@ import ChangePasswordModal, {
 import Swal from "sweetalert2";
 import { editpassword } from "../custom_hooks/changepassowrd";
 import { GetCurrentUser } from "../custom_hooks/currentuser";
+import HotelIcon from '@mui/icons-material/Hotel';
+import FlightIcon from '@mui/icons-material/Flight';
 
 const drawerHeight = 64;
 
@@ -92,6 +94,7 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
       icon: <DescriptionIcon />,
       path: `/admin/${currentuser}/applications`,
     },
+    
   ];
 
   const TGnavbaritems = [
@@ -140,6 +143,16 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
       text: "Activities",
       icon: <StadiumIcon />,
       path: `/tourist/${currentuser}/activities`,
+    },
+    {
+      text: "Hotels",
+      icon: <HotelIcon />,
+      path: `/tourist/${currentuser}/hotels`,
+    },
+    {
+      text: "Flights",
+      icon: <FlightIcon />,
+      path: `/tourist/${currentuser}/flights`,
     },
   ];
 
