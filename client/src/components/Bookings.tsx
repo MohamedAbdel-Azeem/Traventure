@@ -430,18 +430,18 @@ const Bookings: React.FC = () => {
 
                         {hasStarted(
                           new Date(booking.itinerary.starting_Date)
-                        ) && ! hasStarted(
+                        ) && !hasStarted(
                           new Date(booking.itinerary.ending_Date)) && (
-                            
+
                             <Button
                               variant="contained"
                               sx={{ fontSize: "8px" }}
                               color="primary"
-                            
+
                             >
                               In Progress
                             </Button>
-                            
+
                           )}
 
                       </StyledTableCell>
@@ -519,20 +519,17 @@ const Bookings: React.FC = () => {
                           )}
 
                         {hasStarted(new Date(booking.activity.DateAndTime)) && (
-                          <Button
-                            variant="contained"
-                            sx={{ fontSize: "9px" }}
-                            color="primary"
-                            onClick={handleShowActivityFeedback}
-                          >
-                            Reviews
-                          </Button>
-                        )}
-                        {showActivityFeedback && (
-                          <FeedbackDisplay
-                            onClose={handleShowActivityFeedback}
+                          <Reviews
+                            id={booking.activity._id}
+                            type="Activity"
+                            text="Reviews"
                           />
+
+
                         )}
+
+                      
+
                       </StyledTableCell>
                     </TableRow>
                   ))}

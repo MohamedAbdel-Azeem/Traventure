@@ -5,6 +5,7 @@ import { UseGetItineraryReviews } from '../custom_hooks/feedback/UseGetItinerary
 import { useParams } from 'react-router-dom';
 import { UseGetTourGuideReviews } from '../custom_hooks/feedback/UseGetTourGuideReviews';
 import { UseGetCanFeedback } from '../custom_hooks/feedback/UseGetCanFeedback';
+import { UseGetActivityReviews } from '../custom_hooks/feedback/UseGetActivityReviews';
 
 interface Feedback {
   username: string;
@@ -22,8 +23,8 @@ interface FeedbackDisplayProps {
 const FeedbackDisplay: React.FC<FeedbackDisplayProps> = ({ id, type, onClose }) => {
   const { username } = useParams<{ username: string }>();
 
-  const { ItineraryReviews, cloading, cerror, fetchItineraryReviews, fetchTourGuideReviews, TourGuideReviews,fetchCanFeedback } = {} as any;
-  
+  const { ItineraryReviews, cloading, cerror, fetchItineraryReviews, fetchTourGuideReviews, TourGuideReviews, fetchCanFeedback } = {} as any;
+
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
 
 
@@ -70,7 +71,7 @@ const FeedbackDisplay: React.FC<FeedbackDisplayProps> = ({ id, type, onClose }) 
       }, [TourGuideReviews]);
 
 
-      
+
 
       // console.log("CanFeedback",CanFeedback);
 
@@ -79,10 +80,38 @@ const FeedbackDisplay: React.FC<FeedbackDisplayProps> = ({ id, type, onClose }) 
 
 
     }
+    else
+      if (type === "Activity") {
 
-    const { CanFeedback } = UseGetCanFeedback(username!, id);
+        const { ActivityReviews, cloading, cerror, fetchActivityReviews } = UseGetActivityReviews(id);
 
 
+        useEffect(() => {
+          fetchActivityReviews(); // Trigger the fetching function on mount
+        }, []);
+
+        useEffect(() => {
+          if (ActivityReviews && ActivityReviews.reviews) {
+            // Access the 'reviews' key and map over them, ensuring rating is a number
+            const formattedReviews = ActivityReviews.reviews.map((review: any) => ({
+              ...review,
+              rating: Number(review.rating), // Convert rating to a number
+            }));
+            setFeedbacks(formattedReviews);
+          }
+        }, [ActivityReviews]);
+
+
+
+      }
+
+
+  let { CanFeedback } = UseGetCanFeedback(username!, id);
+  if (type !== "Tour_guide") {
+    CanFeedback = true;
+  }
+
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   return (
     <div className="feedback-popup">

@@ -14,6 +14,7 @@ import Swal from "sweetalert2";
 import { rateTourGuide } from "../../custom_hooks/feedback/RatingTourGuide";
 import IFeedbackk from "../../custom_hooks/IFeedback";
 import { rateItinerary } from "../../custom_hooks/feedback/RatingItinerary";
+import { rateActivity } from "../../custom_hooks/feedback/RatingActivity";
 
 interface IFeedback {
   rating: number | null;
@@ -136,6 +137,36 @@ export const Feedback: React.FC<FeedbackProps> = ({
         setLoading(false); // Set loading to false when submission is complete
       }
     }
+    if(type==="Activity"){
+      if (value === null) {
+        setError("Rating is required");
+        return;
+      }
+      setLoading(true); // Set loading to true when submission starts
+      try {
+        const body = {
+          rating: value,
+          review: feedback,
+          touristUsername: touristUsername,
+        } as IFeedbackk;
+        const response = await rateActivity(id, body);
+        handleClose(); // Close the modal first
+        if (response && response.status >= 200 && response.status < 300) {
+          Swal.fire(
+            "Feedback submitted",
+            "Thank you for your feedback",
+            "success"
+          );
+        } else {
+          Swal.fire("Feedback not submitted", "Please try again", "error");
+        }
+      } catch (error) {
+        console.error(error);
+        Swal.fire("Feedback not submitted", "Please try again", "error");
+      } finally {
+        setLoading(false); // Set loading to false when submission is complete
+      }}
+      
   };
 
   return (
