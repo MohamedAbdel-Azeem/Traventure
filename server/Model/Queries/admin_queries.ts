@@ -68,4 +68,51 @@ catch (error) {
   throw error;}
 }
 
-  module.exports = {addGoverner, deleteUser}
+export async function getAllPendingUsers() {
+  try{
+  const advertisers = await advertiserModel.find({isAccepted: false});
+
+  const sellers = await sellerModel.find({isAccepted: false});
+
+  const tourGuides = await tourGuideModel.find({isAccepted: false});
+
+  return {advertisers, sellers, tourGuides};
+  }catch(err){
+    throw err;
+  }
+}
+
+export async function acceptUser(username: string, type: string, isaccepted: boolean) {
+  let model: mongoose.Model<any>;
+  switch (type) {
+    case "advertiser":
+      model = advertiserModel;
+      break;
+    case "seller":
+      model = sellerModel;
+      break;
+    case "tourGuide":
+      model = tourGuideModel;
+      break;
+    default:
+      throw new Error("Invalid user type");
+  }
+  try {
+    if(isaccepted){
+    const user = await model.findOneAndUpdate(
+      { username: username },
+      { isAccepted: isaccepted },
+      { new: true }
+    ); 
+    return user;
+  }
+  else {
+    const user = await model.findOneAndDelete({ username: username });
+    return user;
+  }
+  } catch (err) {
+    throw err;
+  }  
+}
+
+  module.exports = {addGoverner, deleteUser, getAllPendingUsers, acceptUser};

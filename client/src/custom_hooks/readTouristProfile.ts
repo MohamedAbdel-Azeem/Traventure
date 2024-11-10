@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { TouristProfileData } from "../routes/_app/tourist_profile/tourist_profile_data";
 
+
+
 // interface UserProfileInfo {
 //   username: string;
 //   email: string;
@@ -12,6 +14,8 @@ import { TouristProfileData } from "../routes/_app/tourist_profile/tourist_profi
 //   Occupation: String,
 //   wallet: Number
 // }
+
+
 
 const readTouristProfile = (username: string | undefined) => {
   console.log("username: ", username);

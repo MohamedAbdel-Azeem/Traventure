@@ -1,0 +1,107 @@
+/* FeedbackPopup.css */
+
+.feedback-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 600px;
+    max-height: 80%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    z-index: 1000;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    opacity: 1;
+  }
+  
+  .feedback-popup.hidden {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+  }
+  
+  .feedback-popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #f0f0f0;
+  }
+  
+  .feedback-popup-header h3 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .feedback-popup-close {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  
+  .feedback-popup-close:hover {
+    color: #e74c3c;
+  }
+  
+  .feedback-list {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-top: 16px;
+  }
+  
+  .feedback-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .feedback-item:last-child {
+    border-bottom: none;
+  }
+  
+  .feedback-item p {
+    margin: 0;
+  }
+  
+  .feedback-item .rate {
+    font-weight: bold;
+    color: #f39c12;
+  }
+  
+  .feedback-item .user-id {
+    font-size: 14px;
+    color: #7f8c8d;
+  }
+  
+  .feedback-item .feedback {
+    font-size: 16px;
+    color: #34495e;
+  }
+  
+  .feedback-popup-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 20px;
+  }
+  
+  .feedback-popup-footer button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .feedback-popup-footer button:hover {
+    background-color: #2980b9;
+  }
+  

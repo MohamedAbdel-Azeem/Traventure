@@ -34,6 +34,9 @@ export const touristUpdateValidator = [
     .optional(),
   body("Occupation").isString().withMessage("Invalid Occupation").optional(),
   body("nationality").isString().withMessage("Invalid Nationality").optional(),
+  body("bookings").isArray().optional(),
+  body("purchases").isArray().optional(),
+  body("profilepic").optional().isString(),
 ];
 
 module.exports = { touristAddValidator, touristUpdateValidator };

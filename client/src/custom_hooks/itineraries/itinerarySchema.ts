@@ -11,7 +11,9 @@ interface TagStructure {
 
 
 interface Itinerary {
-  map(arg0: (card: any) => import("react/jsx-runtime").JSX.Element): import("react").ReactNode;
+  map(
+    arg0: (card: any) => import("react/jsx-runtime").JSX.Element
+  ): import("react").ReactNode;
   _id: string;
   main_Picture?: string;
   title: string;
@@ -24,8 +26,8 @@ interface Itinerary {
   total: number;
   language: string;
   selectedTags?: TagStructure[];
-  pickup_location: string;
-  dropoff_location: string;
+  pickup_location: { longitude: number; latitude: number };
+  dropoff_location: { longitude: number; latitude: number };
   plan: {
     place?: Place;
     activities: {
@@ -38,6 +40,8 @@ interface Itinerary {
     user_id?: TouristProfileData;
   }[];
   accesibility: boolean;
+  bookingActivated: boolean;
+  inappropriate: boolean;
 }
 
 export default Itinerary;

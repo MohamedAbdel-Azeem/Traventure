@@ -26,23 +26,15 @@ export const useGetAdvertiser = (username: string | undefined) => {
   return { user, loading, error };
 };
 
-export function useUpdateAdvertiser(body: object, username: string) {
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [response, setresponse] = useState<IAdvertiser | null>(null);
-    const url = `/traventure/api/advertiser/update/${username}`;
-    useEffect(() => {
-        const updateAdvertiser = async () => {
+
+  
+        export const updateAdvertiser = async (body: object, username: string) => {
+          const url = `/traventure/api/advertiser/update/${username}`;
         try {
             const { data } = await axios.patch(url, body);
-            setresponse(data);
+            return data;
         } catch (err) {
-            setError("erro getting advertiser");
-        } finally {
-            setLoading(false);
-        }
+            return "error updating advertiser";
+        } 
         };
-        if (username && body) updateAdvertiser();
-    }, [body, username]);
-    return { response, loading, error };
-}
+     

@@ -1,4 +1,4 @@
-import React, { useState } from "react"; 
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Card,
@@ -12,20 +12,29 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  AccordionDetails,
+  Select,
+  MenuItem,
+  AccordionSummary,
+  Chip,
+  Rating,
 } from "@mui/material";
 import { useParams, useLocation } from "react-router-dom";
 import IActivity from "../custom_hooks/activities/activity_interface";
 import { TouristProfileData } from "../routes/_app/tourist_profile/tourist_profile_data";
 import Place from "../custom_hooks/places/place_interface";
+import { useGetItineraryID } from "../custom_hooks/itineraries/useGetItinerary";
+import TheBIGMAP from "./TheBIGMAP";
 
-
+import { useSelector } from "react-redux";
+import { Accordion } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 interface TagStructure {
   _id: string;
   name: string;
   __v: number;
 }
-
 
 interface Itinerary {
   _id: string;
@@ -40,188 +49,249 @@ interface Itinerary {
   total: number;
   language: string;
   selectedTags?: TagStructure[];
-  pickup_location: string;
-  dropoff_location: string;
+  pickup_location: { longitude: number; latitude: number };
+  dropoff_location: { longitude: number; latitude: number };
   plan: {
-      place: Place; 
-      activities: IActivity[];  
+    place: Place;
+    activities: IActivity[];
   }[];
   booked_By: {
-      user_id?: TouristProfileData;
+    user_id?: TouristProfileData;
   }[];
   accesibility: boolean;
-  onDelete: (id: string) => void;
 }
 
 const ItineraryDetailsTourist: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
   const location = useLocation();
-  const initialItinerary = location.state as Itinerary;
+  const id = location.pathname.split(`/`)[2];
+  const { itinerary: initialItinerary } = useGetItineraryID(id);
+  const [itinerary, setItinerary] = useState<Itinerary | null>(
+    initialItinerary
+  );
 
-  const [itinerary, setItinerary] = useState(initialItinerary);
-  const [isEditing, setIsEditing] = useState(false);
-  const [newTag, setNewTag] = useState("");
-
-  if (!itinerary) return <p>No itinerary data found</p>;
+  useEffect(() => {
+    if (initialItinerary) {
+      setItinerary(initialItinerary);
+    }
+  }, [initialItinerary]);
+  console.log(itinerary);
 
   const formatDate = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
-
-  const handleEditToggle = () => {
-    setIsEditing(!isEditing);
-  };
-
-  const handleOpenModal = () => {
-    setIsEditing(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsEditing(false);
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    field: string
-  ) => {
-    setItinerary({ ...itinerary, [field]: e.target.value });
-  };
-
-  const handlePlaceChange = (index: number, field: string, value: string) => {
-    const updatedPlan = [...itinerary.plan];
-    updatedPlan[index].place = { ...updatedPlan[index].place, [field]: value };
-    setItinerary({ ...itinerary, plan: updatedPlan });
-  };
-
-  const handleActivityChange = (placeIndex: number, activityIndex: number, field: string, value: string) => {
-    const updatedPlan = [...itinerary.plan];
-    updatedPlan[placeIndex].activities[activityIndex] = {
-      ...updatedPlan[placeIndex].activities[activityIndex],
-      [field]: value,
+    const date = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     };
-    setItinerary({ ...itinerary, plan: updatedPlan });
+    return date.toLocaleDateString(undefined, options);
   };
 
-  const handleAddPlace = () => {
-    const newPlace: Place = { name: "", description: "", pictures: [], location: { latitude: 0, longitude: 0 }, opening_hrs: "", ticket_price: { native: 0, foreign: 0, student: 0 } };
-    setItinerary({ ...itinerary, plan: [...itinerary.plan, { place: newPlace, activities: [] }] });
-  };
+  const exchangeRate = useSelector(
+    (state: any) => state.exchangeRate.exchangeRate
+  );
 
-  const handleRemovePlace = (placeIndex: number) => {
-    const updatedPlan = itinerary.plan.filter((_, index) => index !== placeIndex);
-    setItinerary({ ...itinerary, plan: updatedPlan });
-  };
-
-  const handleRemoveActivity = (placeIndex: number, activityIndex: number) => {
-    const updatedPlan = [...itinerary.plan];
-    updatedPlan[placeIndex].activities = updatedPlan[placeIndex].activities.filter(
-      (_, index) => index !== activityIndex
-    );
-    setItinerary({ ...itinerary, plan: updatedPlan });
-  };
+  const currentCurrency = useSelector(
+    (state: any) => state.exchangeRate.currentCurrency
+  );
+  if (!itinerary) return <p>No itinerary data found</p>;
+  const locations = [];
+  locations.push(itinerary.pickup_location);
+  locations.push(itinerary.dropoff_location);
+  itinerary.plan.forEach((item) => {
+    if (item.place && item.place.location) {
+      locations.push(item.place.location);
+    }
+  });
 
   return (
-    <Box className="flex justify-center items-center h-auto py-12 bg-gray-100">
-      <Card className="w-[95%] sm:w-[600px] md:w-[800px] lg:w-[900px] rounded-lg shadow-lg overflow-hidden bg-white">
-        <CardMedia
-          component="img"
-          image={itinerary.main_Picture} 
-          alt={itinerary.title}
-          className="h-[400px] w-full object-cover"
-        />
-        <CardContent>
-          <Typography variant="h4" className="text-center font-bold mb-4 text-blue-600">
+    <Box className="flex justify-center items-center h-auto py-8 bg-gray-100">
+      <div className="flex flex-col">
+      <div
+          className="relative w-[700px] h-[200px] rounded-[20px] bg-cover bg-center"
+          style={{ backgroundImage: `url(${itinerary.main_Picture})` }}
+        >
+          
+          <p
+            className="w-[690px] h-[50px] text-[30px] text-white
+             from-neutral-500 absolute bottom-[30px] left-[10px]"
+            style={{ textShadow: "0 4px 4px rgba(0, 0, 0, 0.25)" }}
+          >
             {itinerary.title}
-          </Typography>
+          </p>
+          <img
+            src={itinerary.added_By.profilepic}
+            alt="Profile Picture"
+            className="w-[25px] h-[25px] rounded-[25px] absolute bottom-[20px] left-[30px]"
+          />
 
-          <Divider className="my-4" />
-
-          <Box className="flex justify-between mb-4 text-gray-600">
-            <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">Start Date:</span> {formatDate(itinerary.starting_Date)}
-            </Typography>
-            <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">End Date:</span> {formatDate(itinerary.ending_Date)}
-            </Typography>
-          </Box>
-
-          <Box className="flex justify-between mb-4 text-gray-600">
-            <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">Price:</span> ${itinerary.price}
-            </Typography>
-          </Box>
-
-          <Box className="flex justify-between mb-4 text-gray-600">
-            <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">Language:</span> {itinerary.language}
-            </Typography>
-          </Box>
-
-          <Box className="flex justify-between mb-4 text-gray-600">
-            <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">Accessibility:</span>{" "}
-              {itinerary.accesibility ? "Yes" : "No"}
-            </Typography>
-          </Box>
-
-          <Box className="flex justify-between mb-4 text-gray-600">
-            <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">Pickup Location:</span> {itinerary.pickup_location}
-            </Typography>
-            <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">Dropoff Location:</span> {itinerary.dropoff_location}
-            </Typography>
-          </Box>
-
-          <Typography variant="body2" className="text-gray-700 text-justify leading-relaxed mb-4">
-            {itinerary.description}
-          </Typography>
-
-          <Divider className="my-4" />
-
-          {itinerary.plan &&
-            itinerary.plan.map((item, placeIndex) => (
-              <Box key={placeIndex} className="mb-4">
-                <Typography variant="h6" className="font-semibold mb-2 text-gray-800">
-                  {item.place.name}
-                </Typography>
-
-                {item.activities &&
-                  item.activities.map((activity, activityIndex) => (
-                    <Box key={activityIndex} className="ml-4 mb-2">
-                      <Typography variant="body1" className="text-gray-700">
-                        <span className="font-semibold">Activity:</span> {activity.activity_id.Title}
-                      </Typography>
-                      <Typography variant="body2" className="text-gray-600">
-                        <span className="font-semibold">Duration:</span> {activity.activity_duration} {activity.time_unit}
-                      </Typography>
-                    </Box>
-                  ))}
-              </Box>
-            ))}
-
-          <Divider className="my-4" />
-
-          {Array.isArray(itinerary.selectedTags) && itinerary.selectedTags.length > 0 && (
-            <Box>
-              <Typography variant="h6" className="font-semibold mb-2 text-gray-800">
-                Tags:
-              </Typography>
-              <Box className="flex flex-wrap mb-4">
-                {itinerary.selectedTags.map((tag, index) => (
-                  <Box
-                    key={index}
-                    className="bg-blue-100 text-blue-600 py-1 px-2 rounded-full mr-2 mb-2 flex items-center justify-between"
+          <p
+            className="w-[690px] h-[50px] text-[20px] text-white
+             from-neutral-500 absolute top-[151px] left-[60px]"
+            style={{ textShadow: "0 4px 4px rgba(0, 0, 0, 0.25)" }}
+          >
+            {itinerary.added_By.username}
+          </p>
+        </div>
+        
+        <p>
+          {formatDate(itinerary.starting_Date) + " → " + formatDate(itinerary.ending_Date)}
+        </p>
+        <p className="w-[200px] h-[30px] text-[16px]">
+          {currentCurrency + " " + (itinerary.price * exchangeRate).toFixed(2)}
+        </p>
+        <p className="w-[700px] h-[90px] text-[28px]">
+          {itinerary.description}
+        </p>
+        {itinerary.plan.map((plan) => (
+          <Accordion
+            key={itinerary._id}
+            disableGutters
+            sx={{
+              width: "700px",
+              backgroundColor: "transparent",
+              borderRadius: "10px",
+              borderColor: "transparent",
+              boxShadow: "none",
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
+            <AccordionSummary
+              expandIcon={
+                <ExpandMoreIcon fontSize="large" sx={{ color: "black" }} />
+              }
+              sx={{
+                backgroundImage: `url(${plan.place.pictures[0]})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                minHeight: "unset",
+                backgroundColor: "#413B3B",
+                borderRadius: "20px",
+                marginBottom: "8px",
+              }}
+            >
+              <div className="relative w-[600px] h-[130px] rounded-[20px]">
+                <p
+                  className="w-[150px] h-[60px] text-[35px] text-white absolute bottom-[10px] left-[10px]"
+                  style={{ textShadow: "0 4px 4px rgba(0, 0, 0, 0.25)" }}
+                >
+                  {plan.place.name}
+                </p>
+              </div>
+            </AccordionSummary>
+            <AccordionDetails
+              sx={{
+                borderRadius: "10px",
+                borderColor: "transparent",
+                boxShadow: "none",
+                marginBottom: "16px",
+              }}
+            >
+              <div className="flex flex-col w-[700px]">
+                <div className="flex flex-col relative h-[170px] w-[650px]">
+                  <span className="w-[10px] h-[170px] bg-black m-[30px] rounded-b-[3px] absolute rounded-t-[10px] top-[-30px] left-[-20px]" />
+                  <line
+                    className={`w-[1px] h-[250px] bg-black m-[30px] absolute top-[-46px] left-[-15px]`}
+                    style={{ borderLeft: "1px solid black" }}
                   >
-                    {tag.name}
-                  </Box>
+                  </line>
+                  <p className="text-[18px] ml-12 mt-0 mb-auto text-black">
+                    {"Native: " + currentCurrency + " " + (plan.place.ticket_price.native * exchangeRate).toFixed(2) + " "}
+                    {"Foreign: " + currentCurrency + " " + (plan.place.ticket_price.foreign * exchangeRate).toFixed(2) + " "}
+                    {"Student: " + currentCurrency + " " + (plan.place.ticket_price.student * exchangeRate).toFixed(2)}
+                  </p>
+                  <p className="text-[18px] h-[100px] mt-auto ml-12 text-black overflow-auto">
+                    {plan.place.description}
+                  </p>
+                </div>
+                {plan.activities.map((activity) => (
+                  <div className="flex flex-row relative mt-[35px] w-[650px]">
+                    <span className="w-[30px] h-[30px] bg-black m-[30px] rounded-[30px] absolute top-[-30px] left-[-30px]" />
+                    <line
+                      className={`w-[1px] h-[150px] bg-black m-[30px] absolute top-[0px] left-[-15px]`}
+                      style={{ borderLeft: "1px solid black" }}
+                    >
+                    </line>
+                    <div className="w-[600px] h-[140px] rounded-[15px] bg-[#D9D9D9] ml-[60px] flex flex-row">
+                      <div className="flex flex-col w-[250px]">
+                        <p className="w-[250px] h-[35px] text-[26px] ml-2 mr-auto mt-0 mb-auto text-black">
+                          {activity.activity_id.Title}
+                        </p>
+                        <p className="w-[250px] h-[30px] text-[16px] ml-2 mr-auto mt-0 mb-auto text-black">
+                          {activity.activity_id.Category.name}
+                        </p>
+                        {activity.activity_id.SpecialDiscount >
+                        activity.activity_id.Price || activity.activity_id.SpecialDiscount ===
+                        activity.activity_id.Price ? (
+                          <p className="w-[100px] h-[16px] text-[16px] ml-2 mr-auto mt-2 mb-4 text-black">
+                            {currentCurrency + " " + (activity.activity_id.Price * exchangeRate).toFixed(2)}
+                          </p>
+                        ) : (
+                          <div className="relative h-[35px]">
+                            <p className="w-[100px] h-[13px] text-[13px] ml-2 mr-auto mt-2 mb-1 text-red-500 line-through">
+                            {currentCurrency + " " + (activity.activity_id.Price * exchangeRate).toFixed(2)}
+                            </p>
+                            <p className="w-[100px] h-[16px] text-[16px] absolute bottom-[10px] left-[70px] text-black">
+                              {currentCurrency + " " + (activity.activity_id.SpecialDiscount * exchangeRate).toFixed(2)}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex flex-col w-[130px] h-[140px]">
+                        <p className="text-[12px] w-[130px] h-[24px] mt-2 mb-0 text-center">
+                          {formatDate(
+                            activity.activity_id.DateAndTime.split("T")[0]
+                          )}
+                        </p>
+                        <Rating
+                          name="read-only"
+                          value={activity.activity_id.rating}
+                          readOnly
+                          sx={{
+                            marginTop: "2px",
+                            marginBottom: "5px",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                          }}
+                        />
+                        <div className="flex flex-col w-[130px] h-[80px] overflow-auto lasttimeipromise">
+                          {activity.activity_id.Tags.map((tag: TagStructure) => (
+                            <Chip
+                              key={tag._id}
+                              label={tag.name}
+                              color="info"
+                              size="small"
+                              sx={{
+                                width: "80px",
+                                marginLeft: "auto",
+                                marginRight: "auto",
+                                marginTop: "3.5px",
+                              }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      <iframe
+                        title="map"
+                        className="rounded-r-[15px] mt-0 mb-auto mr-0 ml-auto w-[220px] h-[140px]"
+                        src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${activity.activity_id.Location.longitude}!3d${activity.activity_id.Location.latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
+                        width="220px"
+                        height="140px"
+                      ></iframe>
+                    </div>
+                  </div>
                 ))}
-              </Box>
-            </Box>
-          )}
-        </CardContent>
-      </Card>
+              </div>
+            </AccordionDetails>
+          </Accordion>
+        ))}
+      </div>
+
+      <TheBIGMAP
+        id="bigmap"
+        className="flex h-[800px] w-[500px] ml-2 mb-0 mt-auto"
+        arrayofmarkers={locations}
+      />
     </Box>
   );
 };

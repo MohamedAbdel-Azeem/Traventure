@@ -3,7 +3,24 @@ import touristModel from "../Schemas/Tourist";
 import Itinerary from '../Schemas/Itinerary';
 import Activity from '../Schemas/Activity';
 import Place from '../Schemas/Places';
+import Booking from "../Schemas/Booking";
+import Complaint from '../Schemas/complaint';
+import { getprofileInfo } from "./user_queries";
+import mongoose from "mongoose";
+import complaint from "../Schemas/complaint";
+import { console } from "inspector";
 
+interface Tourist extends Document {
+  username: string;
+  email: string;
+  password: string;
+  mobileNumber: string;
+  dateOfBirth: Date;
+  nationality: string;
+  Occupation: string;
+  wallet: number;
+  bookings: mongoose.Types.ObjectId[] | null;
+}
 export async function getAll() {
     try {
          // Fetch upcoming itineraries
@@ -25,6 +42,85 @@ export async function getAll() {
       throw err;
     }
   }
+export async function getTouristBookings(username: string) {
+    try {
+ 
+        const tourist = await touristModel.findOne({ username: username })
+    .populate([
+        {
+            path: "bookings",
+            populate: [
+                {
+                    path: "itinerary",
+                    select: "title _id" // specify the fields you want to populate
+                },
+                {
+                    path: "activity",
+                    select: "Title _id" // specify the fields you want to populate
+                }
+            ]
+        }
+    ]);
+    if (!tourist) {
+        throw new Error("Tourist not found");
+    }
+    const {bookings} = tourist as unknown as Tourist;
+     return bookings;
+    } catch (error) {
+        throw error;
+    }
+}
 
-module.exports = {getAll}; 
+export async function gettouristComplaints(username: string) {
+    try {
+        const Complaints = await complaint.find({ username: username }).populate([
+            {
+                path: "booking_Id",
+                populate: [
+                    {
+                        path: "itinerary",
+                        select: "title _id" // specify the fields you want to populate
+                    },
+                    {
+                        path: "activity",
+                        select: "Title _id" // specify the fields you want to populate
+                    }
+                ]
+            }
+        ]);
+    return Complaints;}
+        catch (error) {
+            throw error;
+        }
+    }
+
+
+  export async function getTouristUpcoming(username:string){
+    try{
+        const tourist= await touristModel.findOne({username:username});
+        const bookings=await Booking.find( {tourist : (tourist as any)._id});
+        const{itineraries,places,activities}=await getAll();
+
+        const filteredItineraries = itineraries.filter(itinerary =>
+            !bookings.some(booking => (booking as any).itinerary && (booking as any).itinerary.equals((itinerary as any)._id))
+        );
+
+        // Filter out activities that are already in the bookings
+        const filteredActivities = activities.filter(activity =>
+            !bookings.some(booking => (booking as any).activity && (booking as any).activity.equals((activity as any)._id))
+        );
+
+
+    return { itineraries:filteredItineraries,places,activities:filteredActivities };
+    }
+    
+    catch (error) {
+        throw error;
+    }
+
+  }
+
+
+    
+module.exports = {getAll, getTouristBookings, gettouristComplaints,getTouristUpcoming}; 
 

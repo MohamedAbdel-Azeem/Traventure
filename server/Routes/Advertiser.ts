@@ -1,7 +1,4 @@
-import {
-  createUser,
-  handleRegisterErrors,
-} from "../Model/Queries/guest_queries";
+import { createUser, handleRegisterErrors } from "../Model/Queries/guest_queries";
 import { Request, Response, Router } from "express";
 import { guestAddValidator } from "../utils/express-validator/GuestValidator";
 import { matchedData, validationResult } from "express-validator";

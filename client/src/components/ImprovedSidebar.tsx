@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import { Box, CssBaseline, Divider, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
@@ -10,6 +10,8 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ActivityIcon from '@mui/icons-material/LocalActivity';
 import CategoryIcon from '@mui/icons-material/Category';
+import HowToVoteIcon from '@mui/icons-material/HowToVote';
+import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 const drawerWidth = 240;
 
 
@@ -75,9 +77,9 @@ interface ImprovedSidebarProps {
 export default function ImprovedSidebar({ className = "" }: ImprovedSidebarProps) {
   
 const location = useLocation();
-const currentuser=location.pathname.split(`/`)[2];
 const currentusertype=location.pathname.split(`/`)[1];
-
+ const { username } = useParams<{ username: string }>();
+ const currentuser = username as string;
 const adminsidebaritems =
 [
   { text: 'Home', icon: <HomeIcon />, path: `/admin/${currentuser}` },
@@ -85,6 +87,9 @@ const adminsidebaritems =
   { text: 'Locations', icon: <LocationOnIcon />, path: `/admin/${currentuser}/locations` },
   { text: 'Account Management', icon: <AccountCircleIcon />, path: `/admin/${currentuser}/users` },
   { text: 'Cats & Tags', icon: <CategoryIcon />, path: `/admin/${currentuser}/categoriesandtags` },
+  { text: 'Complaints', icon: <HowToVoteIcon />, path: `/admin/${currentuser}/complaints` },
+  { text: 'Applications', icon: <HowToVoteIcon />, path: `/admin/${currentuser}/applications` },
+
 ];
 const TGsidebaritems =
 [
@@ -103,6 +108,8 @@ const touristsidebaritems =
   { text: 'Home', icon: <HomeIcon />, path: `/tourist/${currentuser}` },
   { text: 'Shop', icon: <ShopIcon />, path: `/tourist/${currentuser}/shop` },
   { text: 'Locations', icon: <LocationOnIcon />, path: `/tourist/${currentuser}/locations` },
+  { text: 'Bookings', icon: <EditCalendarIcon />, path: `/tourist/${currentuser}/bookings` },
+  { text: 'Complaints', icon: <HowToVoteIcon />, path: `/tourist/${currentuser}/complaints` }
 ];
 const advertisersidebaritems =
 [
