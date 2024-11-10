@@ -55,7 +55,6 @@ function Row(props: { row: Complaint }) {
   const [cstatus, setCstatus] = React.useState(row.status);
   const [open, setOpen] = React.useState(false);
   const [reply, setReply] = React.useState(row.reply);
-  console.log("replyyy", row);
 
   const { data, loading, error } = useUpdateComplain(
     row._id,
@@ -229,7 +228,6 @@ export default function ComplaintsTable() {
     setNewComplaint({ ...newComplaint, [name]: value });
   };
   const handleSubmit = async () => {
-    console.log(newComplaint);
     try {
       await UseCreateComplain(newComplaint);
       setComplaints([...complaints, newComplaint]);
@@ -258,7 +256,6 @@ export default function ComplaintsTable() {
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
     setSearchQuery(event.target.value);
     setPage(0);
   };

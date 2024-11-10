@@ -24,8 +24,6 @@ export const useGetCurrencies = () => {
           `https://marketdata.tradermade.com/api/v1/live_currencies_list?api_key=${apiKey}`
         );
 
-        console.log(apiKey);
-
         const currencyList: Currency[] = Object.entries(
           response.data.available_currencies
         ).map(([code, name]) => ({

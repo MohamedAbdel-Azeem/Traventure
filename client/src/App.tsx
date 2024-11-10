@@ -1,49 +1,21 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AdminPage from "./pages/AdminPage";
-import Accounts from "./components/Admin/Accounts";
 import "@mantine/core/styles.css";
 import { MantineProvider } from "@mantine/core";
 import "./index.css";
-import TourismGovernorPage from "./pages/TourismGovernorPage";
-import TourGuidePage from "./pages/TourGuidePage";
-import AdvertiserPage from "./pages/AdvertiserPage";
-import Locations from "./components/Locations";
-import TouristPage from "./pages/TouristPage";
 import SignIn from "./routes/sign-in/sign-in";
 import Register from "./routes/sign-up/sign-up";
-import ShopPage from "./components/ShopPage";
-import { Activities } from "./routes/_app/advertiseractivity/Activities";
-import CT from "./components/Activity/CT";
 import ItineraryDetails from "./components/ItineraryDetails";
-import { Tourist_Profile } from "./routes/_app/tourist_profile/tourist-profile-main";
-import { Seller_Profile } from "./routes/_app/seller_profile/seller-profile-main";
-import { Advertiser_Profile } from "./routes/_app/advertiser_profile/advertiser_profile-main";
 import LandingPage from "./pages/LandingPage";
-import { TourGuide_Profile } from "./routes/_app/tourguide_profile/tourguide-profile-main";
 import ItineraryDetailsTourist from "./components/ItineraryDetailsTourist";
 import MoreItineraries from "./components/MoreItineraries";
-import MorePlaces from "./components/MorePlaces";
-import Itineraries from "./components/Itineraries";
-import MoreActivities from "./components/MoreActivities";
-import GuestPage from "./components/GuestPage";
-import GuestMoreItineraries from "./components/GuestMoreItineraries";
-import GuestMorePlaces from "./components/GuestMorePlaces";
-import GuestMoreActivities from "./components/GuestMoreActivities";
-import GuestShop from "./components/GuestShop";
-import HistoricalTags from "./components/HistoricalTags";
-import Complaints from "./components/Admin/Complaints";
-import Bookings from "./components/Bookings";
-import TouristComplaints from "./components/TouristComplaints";
-import ImprovedCreateItinerary from "./components/ImprovedCreateItinerary";
-import { SellerSalesPage } from "./pages/SellerSalesPage";
-import { AdminSalesPage } from "./pages/AdminSalesPage";
-import PDFSolution from "./firebase/PDFSolution";
-import Applications from "./components/Admin/Applications";
-import TheBIGMAP from "./components/TheBIGMAP";
-import { TouristPurchases } from "./pages/TouristPurchases";
 import TermsAndConditions from "./routes/_app/terms_and_conditions/terms_and_conditions";
-import FlightsPage from "./components/flightsPage";
-import HotelsPage from "./components/hotelsPage"; 
+import AdminRouter from "./Routers/AdminRouter";
+import TouristRouter from "./Routers/TouristRouter";
+import TourismGovernorRouter from "./Routers/TourismGovernorRouter";
+import AdvertiserRouter from "./Routers/AdvertiserRouter";
+import TourGuideRouter from "./Routers/TourGuideRouter";
+import SellerRouter from "./Routers/SellerRouter";
+import GuestRouter from "./Routers/GuestRouter";
 
 function App() {
   return (
@@ -53,121 +25,23 @@ function App() {
           <Route path="/" element={<SignIn />} />
           <Route path="/register" element={<Register />} />
           {/* Admin */}
-          <Route path="/admin/:username" element={<AdminPage />} />
-          <Route path="/admin/:username/sales" element={<AdminSalesPage />} />
-          <Route path="/admin/:username/users" element={<Accounts />} />
-          <Route
-            path="/admin/:username/shop"
-            element={<ShopPage type="Admin" />}
-          />
-          <Route path="/admin/:username/locations" element={<MorePlaces />} />
-          <Route path="/admin/:username/categoriesandtags" element={<CT />} />
-          <Route path="/admin/:username/complaints" element={<Complaints />} />
-          <Route
-            path="/admin/:username/activities"
-            element={<MoreActivities />}
-          />
-          <Route
-            path="/admin/:username/itineraries"
-            element={<MoreItineraries />}
-          />
-          <Route
-            path="/admin/:username/applications"
-            element={<Applications />}
-          />
+          <Route path="/admin/*" element={<AdminRouter />} />
           {/* Tourist */}
-          <Route path="/tourist/:username" element={<TouristPage />} />
-          <Route
-            path="/tourist/:username/shop"
-            element={<ShopPage type="Tourist" />}
-          />
-          <Route path="/tourist/:username/locations" element={<MorePlaces />} />
-          <Route
-            path="/tourist/:username/itineraries"
-            element={<MoreItineraries />}
-          />
-          <Route
-            path="/tourist/:username/complaints"
-            element={<TouristComplaints />}
-          />
-          <Route
-            path="/tourist/:username/profile"
-            element={<Tourist_Profile />}
-          />
-          <Route path="/tourist/:username/bookings" element={<Bookings />} />
-          <Route
-            path="/tourist/:username/purchases"
-            element={<TouristPurchases />}
-          />
-          <Route path="/tourist/:username/flights" element={<FlightsPage />} />
-          <Route path="/tourist/:username/hotels" element={<HotelsPage />} />
+          <Route path="/tourist/*" element={<TouristRouter />} />
           {/* Tourism Governor */}
-          <Route
-            path="/tourismgovernor/:username"
-            element={<TourismGovernorPage />}
-          />
-          <Route
-            path="/tourismgovernor/:username/historicaltags"
-            element={<HistoricalTags />}
-          />
-          <Route
-            path="/tourismgovernor/:username/locations"
-            element={<Locations />}
-          />
+          <Route path="/tourismgovernor/*" element={<TourismGovernorRouter />} />
           {/* Advertiser */}
-          <Route path="/advertiser/:username" element={<AdvertiserPage />} />
-          <Route
-            path="/advertiser/:username/locations"
-            element={<MorePlaces />}
-          />
-          <Route
-            path="/advertiser/:username/itineraries"
-            element={<MoreItineraries />}
-          />
-          <Route
-            path="/advertiser/:username/activities"
-            element={<Activities />}
-          />
-          <Route
-            path="/advertiser/:username/profile"
-            element={<Advertiser_Profile />}
-          />
+          <Route path="/advertiser/*" element={<AdvertiserRouter />} />
           {/* Tour Guide */}
-          <Route path="/tourguide/:username" element={<TourGuidePage />} />
-          <Route
-            path="/tourguide/:username/locations"
-            element={<MorePlaces />}
-          />
-          <Route
-            path="/tourguide/:username/itineraries"
-            element={<TourGuidePage />}
-          />
-          <Route
-            path="/tourguide/:username/profile"
-            element={<TourGuide_Profile />}
-          />
+          <Route path="/tourguide/*" element={<TourGuideRouter />} />
           {/* Seller */}
-          <Route path="/seller/:username" element={<ShopPage type="Seller" />}/>
-          <Route path="/itineraries" element={<Itineraries />} />
-          <Route path="/itinerary/:id" element={<ItineraryDetails />} />
-          <Route
-            path="/tourist-itinerary/:id"
-            element={<ItineraryDetailsTourist />}
-          />
-          <Route path="/more-itineraries" element={<MoreItineraries />} />
-          <Route path="/tourist/:id/activities" element={<MoreActivities />} />
-          <Route path="/seller/:username/sales" element={<SellerSalesPage />} />
-          <Route
-            path="/seller/:username/profile"
-            element={<Seller_Profile />}
-          />
+          <Route path="/seller/*" element={<SellerRouter/>} />
           {/* Guest */}
-          <Route path="/guest-page" element={<GuestPage />} />
-          <Route path="/guest/more-itineraries" element={<GuestMoreItineraries />}/>
-          <Route path="/guest/more-places" element={<GuestMorePlaces />} />
-          <Route path="/guest/more-activities" element={<GuestMoreActivities />}/>
-          <Route path="/guest/shop" element={<GuestShop type={"Tourist"} />}/>
-          <Route path="/tourist/:username/bookings" element={<Bookings />}/>
+          <Route path="/guest/*" element={<GuestRouter/>}/>
+          {/* Extra */}
+          <Route path="/itinerary/:id" element={<ItineraryDetails />} />
+          <Route path="/tourist-itinerary/:id" element={<ItineraryDetailsTourist />} />
+          <Route path="/more-itineraries" element={<MoreItineraries />} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions />}/>
           <Route path="/landing" element={<LandingPage />} />
         </Routes>

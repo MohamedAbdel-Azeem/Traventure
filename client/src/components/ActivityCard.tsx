@@ -83,8 +83,7 @@ export const ActivityCard: React.FC<ActivityProp> = ({
   };
 
   const averageRating = calculateAverageRating(currentActivity);
-  console.log("testtt", currentActivity.inappropriate);
-  console.log(currentActivity.feedback);
+
   const handleDeleteClick = () => {
     onDelete(activity._id);
   };

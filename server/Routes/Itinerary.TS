@@ -7,14 +7,14 @@ import {
   updateItinerary,
   getAllItinerary,
   toggleItineraryActivation,
-  toggleItineraryInappropriate
+  toggleItineraryInappropriate,
 } from "../Model/Queries/itinerary_queries";
 import {
   itineraryAddValidator,
   itineraryUpdateValidator,
 } from "../utils/express-validator/itineraryValidator";
 import TourGuide from "../Model/Schemas/TourGuide";
-import ItineraryModel from "../Model/Schemas/Itinerary"
+import ItineraryModel from "../Model/Schemas/Itinerary";
 import { ItineraryDocument } from "../Interfaces/IItinerary";
 
 const router = Router();
@@ -38,7 +38,6 @@ router.post(
   }
 );
 
-
 router.get("/", async (req: Request, res: Response) => {
   try {
     const products = await getAllItinerary();
@@ -53,7 +52,6 @@ router.get("/:username", async (req: Request, res: Response) => {
     const products = await getItinerary(req.params.username);
     res.status(200).send(products);
   } catch (error) {
-    console.log(error);
     res.status(500).send(error);
   }
 });
@@ -61,34 +59,31 @@ router.get("/:username", async (req: Request, res: Response) => {
 router.get("/get/:itinerary_id", async (req: Request, res: Response) => {
   try {
     const itinerary = await ItineraryModel.findById(req.params.itinerary_id)
-    .populate("plan.place")
-    .populate("plan.activities.activity_id")
-    .populate("selectedTags")
-    .populate("added_By")
-    .populate("booked_By")
-    .populate({
-      path: "plan.activities.activity_id",
-      populate: {
-        path: "Category",
-        model: "Category",
-      },
-    })
-    .populate({
-      path: "plan.activities.activity_id",
-      populate: {
-        path: "Tags",
-        model: "PreferenceTags",
-      },
-    })
-    
-    ;
+      .populate("plan.place")
+      .populate("plan.activities.activity_id")
+      .populate("selectedTags")
+      .populate("added_By")
+      .populate("booked_By")
+      .populate({
+        path: "plan.activities.activity_id",
+        populate: {
+          path: "Category",
+          model: "Category",
+        },
+      })
+      .populate({
+        path: "plan.activities.activity_id",
+        populate: {
+          path: "Tags",
+          model: "PreferenceTags",
+        },
+      });
+
     res.status(200).send(itinerary);
   } catch (error) {
     res.status(500).send(error);
   }
-}
-);
-
+});
 
 router.patch(
   "/update/:id",
@@ -97,7 +92,7 @@ router.patch(
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.log(errors.array());
-      console.log(req.body.plan.activities);
+
       return res.status(400).json({ errors: errors.array() });
     }
     const newItinerary = matchedData(req);
@@ -106,7 +101,6 @@ router.patch(
       const updatedItinerary = await updateItinerary(itineraryId, newItinerary);
       res.status(200).send("itinerary Updated Successfully !!");
     } catch (error) {
-     
       res.status(400).send(error);
     }
   }
@@ -122,33 +116,48 @@ router.delete("/delete/:id", async (req: Request, res: Response) => {
 });
 router.patch("/toggleActivation/:id", async (req: Request, res: Response) => {
   try {
-    const itinerary = await toggleItineraryActivation(req.params.id) as ItineraryDocument | null;
+    const itinerary = (await toggleItineraryActivation(
+      req.params.id
+    )) as ItineraryDocument | null;
 
     if (!itinerary) {
       return res.status(404).json({ message: "Itinerary not found" });
     }
 
     if (itinerary.booked_By.length === 0) {
-      return res.status(400).json({ message: "No bookings available to toggle activation" });
+      return res
+        .status(400)
+        .json({ message: "No bookings available to toggle activation" });
     }
 
-    res.status(200).json({ message: "Itinerary activation toggled successfully" });
+    res
+      .status(200)
+      .json({ message: "Itinerary activation toggled successfully" });
   } catch (error) {
     res.status(500).json({ error: "An internal server error occurred" });
   }
 });
 
-router.patch("/toggleInappropriate/:id", async (req: Request, res: Response) => {
-  try {
-    const itinerary = await toggleItineraryInappropriate(req.params.id) as ItineraryDocument | null;
+router.patch(
+  "/toggleInappropriate/:id",
+  async (req: Request, res: Response) => {
+    try {
+      const itinerary = (await toggleItineraryInappropriate(
+        req.params.id
+      )) as ItineraryDocument | null;
 
-    if (!itinerary) {
-      return res.status(404).json({ message: "Itinerary not found" });
+      if (!itinerary) {
+        return res.status(404).json({ message: "Itinerary not found" });
+      }
+
+      res
+        .status(200)
+        .json({
+          message: "Itinerary inappropriate status toggled successfully",
+        });
+    } catch (error) {
+      res.status(500).json({ error: "An internal server error occurred" });
     }
-
-    res.status(200).json({ message: "Itinerary inappropriate status toggled successfully" });
-  } catch (error) {
-    res.status(500).json({ error: "An internal server error occurred" });
   }
-});
+);
 export default router;

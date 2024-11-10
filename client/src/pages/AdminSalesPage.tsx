@@ -32,9 +32,8 @@ export function AdminSalesPage() {
           },
         });
         setSales(data);
-        console.log(data);
-      } catch (err) {
-        console.log("error getting seller sales");
+      } catch (error) {
+        console.error(error);
       }
     };
     fetchSales();

@@ -37,7 +37,6 @@ const FlightCard: React.FC<FlightCardProps> = ({
         text: "You have successfully booked the flight.",
       });
     } catch (error) {
-      console.log(error);
       Swal.fire({
         icon: "error",
         title: "Booking Failed!",
@@ -47,7 +46,7 @@ const FlightCard: React.FC<FlightCardProps> = ({
   };
 
   const currency = flight.price.currency;
-  console.log("currency", currency);
+
   return (
     <div className="flight-card">
       <div className="card-header">

@@ -57,11 +57,9 @@ const ImprovedCreateItinerary = ({
     }));
   }
   const handleOpen = () => {
-    console.log(open);
     setOpen(true);
   };
   const handleClose = () => {
-    console.log(open);
     setOpen(false);
   };
 
@@ -100,9 +98,7 @@ const ImprovedCreateItinerary = ({
     return valueNames.join(", ");
   };
 
-  useEffect(() => {
-    console.log("Selected Tags:", selectedTags);
-  }, [selectedTags]);
+  useEffect(() => {}, [selectedTags]);
 
   const alltags = (value: string[]) => {
     const valueNames = tagsOptions

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import './FeedbackDisplay.css';
-import { Feedback as FeedbackComponent } from './purchases/FeedBack';
-import { UseGetItineraryReviews } from '../custom_hooks/feedback/UseGetItineraryReviews';
-import { useParams } from 'react-router-dom';
-import { UseGetTourGuideReviews } from '../custom_hooks/feedback/UseGetTourGuideReviews';
-import { UseGetCanFeedback } from '../custom_hooks/feedback/UseGetCanFeedback';
-import { UseGetActivityReviews } from '../custom_hooks/feedback/UseGetActivityReviews';
+import React, { useState, useEffect } from "react";
+import "./FeedbackDisplay.css";
+import { Feedback as FeedbackComponent } from "./purchases/FeedBack";
+import { UseGetItineraryReviews } from "../custom_hooks/feedback/UseGetItineraryReviews";
+import { useParams } from "react-router-dom";
+import { UseGetTourGuideReviews } from "../custom_hooks/feedback/UseGetTourGuideReviews";
+import { UseGetCanFeedback } from "../custom_hooks/feedback/UseGetCanFeedback";
+import { UseGetActivityReviews } from "../custom_hooks/feedback/UseGetActivityReviews";
 
 interface Feedback {
   username: string;
@@ -20,18 +20,29 @@ interface FeedbackDisplayProps {
   onClose: () => void;
 }
 
-const FeedbackDisplay: React.FC<FeedbackDisplayProps> = ({ id, type, onClose }) => {
+const FeedbackDisplay: React.FC<FeedbackDisplayProps> = ({
+  id,
+  type,
+  onClose,
+}) => {
   const { username } = useParams<{ username: string }>();
 
-  const { ItineraryReviews, cloading, cerror, fetchItineraryReviews, fetchTourGuideReviews, TourGuideReviews, fetchCanFeedback } = {} as any;
+  const {
+    ItineraryReviews,
+    cloading,
+    cerror,
+    fetchItineraryReviews,
+    fetchTourGuideReviews,
+    TourGuideReviews,
+    fetchCanFeedback,
+  } = {} as any;
 
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
 
-
   // Initialize feedbacks as an empty array
   if (type === "Itinerary") {
-    const { ItineraryReviews, cloading, cerror, fetchItineraryReviews } = UseGetItineraryReviews(id);
-
+    const { ItineraryReviews, cloading, cerror, fetchItineraryReviews } =
+      UseGetItineraryReviews(id);
 
     useEffect(() => {
       fetchItineraryReviews(); // Trigger the fetching function on mount
@@ -40,84 +51,71 @@ const FeedbackDisplay: React.FC<FeedbackDisplayProps> = ({ id, type, onClose }) 
     useEffect(() => {
       if (ItineraryReviews && ItineraryReviews.reviews) {
         // Access the 'reviews' key and map over them, ensuring rating is a number
-        const formattedReviews = ItineraryReviews.reviews.map((review: any) => ({
+        const formattedReviews = ItineraryReviews.reviews.map(
+          (review: any) => ({
+            ...review,
+            rating: Number(review.rating), // Convert rating to a number
+          })
+        );
+        setFeedbacks(formattedReviews);
+      }
+    }, [ItineraryReviews]);
+  } else if (type === "Tour_guide") {
+    const { TourGuideReviews, cloading, cerror, fetchTourGuideReviews } =
+      UseGetTourGuideReviews(id);
+
+    useEffect(() => {
+      fetchTourGuideReviews(); // Trigger the fetching function on mount
+    }, []);
+
+    useEffect(() => {
+      if (TourGuideReviews && TourGuideReviews.reviews) {
+        // Access the 'reviews' key and map over them, ensuring rating is a number
+        const formattedReviews = TourGuideReviews.reviews.map(
+          (review: any) => ({
+            ...review,
+            rating: Number(review.rating), // Convert rating to a number
+          })
+        );
+        setFeedbacks(formattedReviews);
+      }
+    }, [TourGuideReviews]);
+
+    //
+  } else if (type === "Activity") {
+    const { ActivityReviews, cloading, cerror, fetchActivityReviews } =
+      UseGetActivityReviews(id);
+
+    useEffect(() => {
+      fetchActivityReviews(); // Trigger the fetching function on mount
+    }, []);
+
+    useEffect(() => {
+      if (ActivityReviews && ActivityReviews.reviews) {
+        // Access the 'reviews' key and map over them, ensuring rating is a number
+        const formattedReviews = ActivityReviews.reviews.map((review: any) => ({
           ...review,
           rating: Number(review.rating), // Convert rating to a number
         }));
         setFeedbacks(formattedReviews);
       }
-    }, [ItineraryReviews]);
-
+    }, [ActivityReviews]);
   }
-  else
-    if (type === "Tour_guide") {
-
-      const { TourGuideReviews, cloading, cerror, fetchTourGuideReviews } = UseGetTourGuideReviews(id);
-
-
-      useEffect(() => {
-        fetchTourGuideReviews(); // Trigger the fetching function on mount
-      }, []);
-
-      useEffect(() => {
-        if (TourGuideReviews && TourGuideReviews.reviews) {
-          // Access the 'reviews' key and map over them, ensuring rating is a number
-          const formattedReviews = TourGuideReviews.reviews.map((review: any) => ({
-            ...review,
-            rating: Number(review.rating), // Convert rating to a number
-          }));
-          setFeedbacks(formattedReviews);
-        }
-      }, [TourGuideReviews]);
-
-
-
-
-      // console.log("CanFeedback",CanFeedback);
-
-
-
-
-
-    }
-    else
-      if (type === "Activity") {
-
-        const { ActivityReviews, cloading, cerror, fetchActivityReviews } = UseGetActivityReviews(id);
-
-
-        useEffect(() => {
-          fetchActivityReviews(); // Trigger the fetching function on mount
-        }, []);
-
-        useEffect(() => {
-          if (ActivityReviews && ActivityReviews.reviews) {
-            // Access the 'reviews' key and map over them, ensuring rating is a number
-            const formattedReviews = ActivityReviews.reviews.map((review: any) => ({
-              ...review,
-              rating: Number(review.rating), // Convert rating to a number
-            }));
-            setFeedbacks(formattedReviews);
-          }
-        }, [ActivityReviews]);
-
-
-
-      }
-
 
   let { CanFeedback } = UseGetCanFeedback(username!, id);
   if (type !== "Tour_guide") {
     CanFeedback = true;
   }
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   return (
     <div className="feedback-popup">
       <div className="feedback-popup-header">
         <h3>Feedback</h3>
-        <button className="feedback-popup-close" onClick={onClose}>&#10006;</button>
+        <button className="feedback-popup-close" onClick={onClose}>
+          &#10006;
+        </button>
       </div>
 
       <div className="feedback-list">
@@ -141,17 +139,19 @@ const FeedbackDisplay: React.FC<FeedbackDisplayProps> = ({ id, type, onClose }) 
       </div>
 
       <div className="feedback-popup-footer">
-        {
-          CanFeedback &&
+        {CanFeedback && (
           <FeedbackComponent
             type={type}
             id={id}
             touristUsername={username!}
-            touristFeedback={{ rating: null, review: null, touristUsername: username! }}
+            touristFeedback={{
+              rating: null,
+              review: null,
+              touristUsername: username!,
+            }}
           />
-        }
+        )}
       </div>
-
     </div>
   );
 };

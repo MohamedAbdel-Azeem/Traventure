@@ -38,7 +38,7 @@ export const TourGuide_Profile = () => {
   return (
     <>
       <NewNavbar />
-      <TourGuideProfile tourGuide={user as ITourGuide}></TourGuideProfile>;
+      <TourGuideProfile tourGuide={user as ITourGuide}></TourGuideProfile>
     </>
   );
 };

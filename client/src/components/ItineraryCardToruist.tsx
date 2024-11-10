@@ -5,10 +5,10 @@ import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import StarIcon from "@mui/icons-material/Star";
 import { format } from "date-fns";
 import { TouristProfileData } from "../routes/_app/tourist_profile/tourist_profile_data";
-import {IActivity} from "../custom_hooks/activities/activity_interface";
+import { IActivity } from "../custom_hooks/activities/activity_interface";
 import Place from "../custom_hooks/places/place_interface";
 import useBookItinerary from "../custom_hooks/itineraries/bookItinerary";
-import { useParams,useLocation } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -67,12 +67,10 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   selectedTags = [],
   plan,
   bookingActivated,
-  inappropriate
+  inappropriate,
 }) => {
-  
-  console.log(title,bookingActivated,inappropriate);
   const { bookItinerary, data, loading, error } = useBookItinerary();
-  const {username}=useParams<{username:string}>();
+  const { username } = useParams<{ username: string }>();
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
@@ -83,15 +81,11 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   };
 
   const handleBooking = async (id: string) => {
-    try{
+    try {
       await bookItinerary(id, username);
-    }
-
-    catch(error){
+    } catch (error) {
       console.error("Error booking itinerary  :", error);
-
     }
-
   };
 
   const exchangeRate = useSelector(
@@ -100,7 +94,6 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   const currentCurrency = useSelector(
     (state: any) => state.exchangeRate.currentCurrency
   );
-
 
   const currentType = useLocation().pathname.split("/")[1];
   const handleInappropriate = async () => {
@@ -193,7 +186,8 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
         <div className="flex justify-center items-center mb-4 space-x-4">
           <div className="bg-red-500 text-white p-2 rounded-lg flex fle x-col items-center w-1/2">
             <p className="text-sm flex items-center">
-              <ConfirmationNumberIcon className="mr-1" /> {currentCurrency} {(price * exchangeRate).toFixed(2)}
+              <ConfirmationNumberIcon className="mr-1" /> {currentCurrency}{" "}
+              {(price * exchangeRate).toFixed(2)}
             </p>
           </div>
           <div className="bg-yellow-500 text-white p-2 rounded-lg flex flex-col items-center w-1/2">
@@ -219,19 +213,20 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
               accesibility,
               dropoff_location,
               plan,
-              selectedTags
+              selectedTags,
             }}
             className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center"
           >
             View Details
           </Link>
-          {currentType==="tourist" && <button
-                        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                        onClick={() => handleBooking(_id)}
-                    >
-                        Book
-                    </button>}
-
+          {currentType === "tourist" && (
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+              onClick={() => handleBooking(_id)}
+            >
+              Book
+            </button>
+          )}
 
           {currentType === "admin" && (
             <div className="bg-yellow-500 text-white p-2 rounded-lg flex flex-col items-center w-1/2">
@@ -240,7 +235,6 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
               </p>
             </div>
           )}
-
         </div>
         {currentType === "admin" && (
           <Button onClick={handleInappropriate}>

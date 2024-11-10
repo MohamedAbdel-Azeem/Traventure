@@ -49,10 +49,10 @@ app.use("/api/itinerary", itineraryRouter);
 app.use("/api/login", LoginRouter);
 app.use("/api/historicalTags", historicalTagsRouter);
 app.use("/api/user/", changePasswordRouter);
-app.use("/api/bookings",BookingRouter );
-app.use("/api/purchase",purchaseRouter);
-app.use("/api/complaint",complaintRouter);
-app.use("/api/feedBack",feedbackRouter);
+app.use("/api/bookings", BookingRouter);
+app.use("/api/purchase", purchaseRouter);
+app.use("/api/complaint", complaintRouter);
+app.use("/api/feedBack", feedbackRouter);
 app.use("/api/admin/", reviewdocsRouter);
 
 app.use("/amadeus", amadeusRouter);
@@ -65,7 +65,4 @@ app.get("/", (req: Request, res: Response) => {
 
 app.listen(3000, () => {
   connectDB();
-  console.log(`Server started on http://localhost:3000`);
-  
 });
-

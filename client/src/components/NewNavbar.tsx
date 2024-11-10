@@ -25,6 +25,7 @@ import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import StadiumIcon from "@mui/icons-material/Stadium";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
 import NavbarDropdown from "./NavbarDropdown";
+import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import { Logout } from "@mui/icons-material";
 import ChangePasswordModal, {
   AddContactLeadFormType,
@@ -32,8 +33,8 @@ import ChangePasswordModal, {
 import Swal from "sweetalert2";
 import { editpassword } from "../custom_hooks/changepassowrd";
 import { GetCurrentUser } from "../custom_hooks/currentuser";
-import HotelIcon from '@mui/icons-material/Hotel';
-import FlightIcon from '@mui/icons-material/Flight';
+import HotelIcon from "@mui/icons-material/Hotel";
+import FlightIcon from "@mui/icons-material/Flight";
 
 const drawerHeight = 64;
 
@@ -53,7 +54,6 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   const hideTimeoutRef = useRef<number | null>(null);
 
   const handlePasswordChangeSubmit = (data: AddContactLeadFormType) => {
-    console.log("Password change data:", data);
     const { oldPassword, newPassword } = data;
     editpassword(currentuser, oldPassword, newPassword)
       .then(() => {
@@ -94,7 +94,6 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
       icon: <DescriptionIcon />,
       path: `/admin/${currentuser}/applications`,
     },
-    
   ];
 
   const TGnavbaritems = [
@@ -178,15 +177,27 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
 
   const sellernavbaritems = [
     { text: "Home", icon: <HomeIcon />, path: `/seller/${currentuser}` },
-    { text: "Sales", icon: <ShowChartIcon />, path: `/seller/${currentuser}/sales` },
+    {
+      text: "Sales",
+      icon: <ShowChartIcon />,
+      path: `/seller/${currentuser}/sales`,
+    },
   ];
 
   const guestnavbaritems = [
     { text: "Home", icon: <HomeIcon />, path: `/guest-page` },
     { text: "Shop", icon: <ShopIcon />, path: `/guest/shop` },
-    { text: "Itineraries", icon: <FlightTakeoffIcon />, path: `/guest/more-itineraries` },
+    {
+      text: "Itineraries",
+      icon: <FlightTakeoffIcon />,
+      path: `/guest/more-itineraries`,
+    },
     { text: "Locations", icon: <LocationOnIcon />, path: `/guest/more-places` },
-    { text: "Activities", icon: <StadiumIcon />, path: `/guest/more-activities` },
+    {
+      text: "Activities",
+      icon: <StadiumIcon />,
+      path: `/guest/more-activities`,
+    },
   ];
 
   const getNavbarItems = (currentusertype: string) => {
@@ -248,6 +259,12 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
               navigate(`/${currentusertype}/${currentuser}/complaints`),
             icon: HowToVoteIcon,
           },
+          {
+            label: "Purchases",
+            onClick: () =>
+              navigate(`/${currentusertype}/${currentuser}/purchases`),
+            icon: ShoppingBasketIcon,
+          },
         ]
       : []),
     {
@@ -264,7 +281,6 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   const [userdata, setUserdata] = useState<Currentuserdata | null>(null);
 
   useEffect(() => {
-    console.log("SECOND TIME" + cuserdata);
     setUserdata(cuserdata);
   }, [cuserdata]);
 

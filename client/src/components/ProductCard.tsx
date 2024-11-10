@@ -91,7 +91,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
     if (!isLoading && didSucceed && updatedProduct) {
       setCurrentProduct(updatedProduct);
     } else if (isLoading) {
-      console.log("Loading");
     }
   };
 
@@ -141,8 +140,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
       imageUrl: input,
     }));
   };
-
-  console.log("ProductCard", currentProduct);
 
   return (
     <div className="product-card">

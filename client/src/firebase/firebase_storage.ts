@@ -25,7 +25,7 @@ export const uploadFileToStorage = async (file: File) => {
 
     // Get the download URL after successful upload
     const downloadUrl = await getDownloadURL(snapshot.ref);
-    console.log("File uploaded successfully:", downloadUrl);
+
     return downloadUrl; // Return the download URL of the uploaded file
   } catch (error) {
     console.error("Error uploading file:", error);
@@ -51,7 +51,6 @@ export const deleteFileFromStorage = async (fileUrl: string) => {
   try {
     // Delete the file from Firebase Storage
     await deleteObject(fileRef);
-    console.log("File deleted successfully");
   } catch (error) {
     console.error("Error deleting file:", error);
     throw error;

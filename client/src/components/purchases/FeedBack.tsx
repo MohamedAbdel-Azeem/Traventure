@@ -44,7 +44,7 @@ export const Feedback: React.FC<FeedbackProps> = ({
   const [feedback, setFeedback] = useState<string | null>(
     touristFeedback.review
   );
-  console.log("feedback", touristFeedback);
+
   const handleFeedbackChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFeedback(event.target.value);
   };
@@ -137,7 +137,7 @@ export const Feedback: React.FC<FeedbackProps> = ({
         setLoading(false); // Set loading to false when submission is complete
       }
     }
-    if(type==="Activity"){
+    if (type === "Activity") {
       if (value === null) {
         setError("Rating is required");
         return;
@@ -165,8 +165,8 @@ export const Feedback: React.FC<FeedbackProps> = ({
         Swal.fire("Feedback not submitted", "Please try again", "error");
       } finally {
         setLoading(false); // Set loading to false when submission is complete
-      }}
-      
+      }
+    }
   };
 
   return (

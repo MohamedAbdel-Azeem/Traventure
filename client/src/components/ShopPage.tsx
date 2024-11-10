@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./ProductCard.css"; // Assuming styles are in this file
 import ProductCard from "./ProductCard";
 import { ACTUALProduct } from "./data/ProductData";
@@ -9,7 +9,6 @@ import {
   faForward,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
-import ImprovedSidebar from "./ImprovedSidebar";
 import ShowingResponse from "./ShowingResponse";
 import { useGetAllProducts } from "../custom_hooks/products/usegetProducts";
 import { useCreateProduct } from "../custom_hooks/products/usecreateProduct";
@@ -21,12 +20,8 @@ import {
   InputAdornment,
   InputLabel,
   OutlinedInput,
-  TextField,
 } from "@mui/material";
-import Navbar from "./navbar";
 import ImageUploader from "./ImageUploader";
-import NewNavbar from "./NewNavbar";
-import CurrencyDropdown from "./currencyDrop";
 
 const itemsPerPage = 8;
 interface ShopPageProps {
@@ -315,7 +310,6 @@ const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
           </Box>
         </Box>
       </Modal>
-      <NewNavbar/>
       <div className="flex flex-col flex-1" style={{ marginTop: '64px' }}>
       <div className="search-bar">
           <input
@@ -391,7 +385,6 @@ const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
               </div>
             )}
           </div>
-          <CurrencyDropdown />
         </div>
         <div className="product-list">
           {sortedProducts.length > 0 ? (

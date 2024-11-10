@@ -9,7 +9,6 @@ import {
   faForward,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
-import ImprovedSidebar from "./ImprovedSidebar";
 import ShowingResponse from "./ShowingResponse";
 import { useGetAllProducts } from "../custom_hooks/products/usegetProducts";
 import { useCreateProduct } from "../custom_hooks/products/usecreateProduct";
@@ -24,8 +23,6 @@ import {
   TextField,
 } from "@mui/material";
 import Navbar from "./navbar";
-import NewNavbar from "./NewNavbar";
-import CurrencyDropdown from "./currencyDrop";
 const itemsPerPage = 8;
 interface ShopPageProps {
   type: string;
@@ -228,11 +225,8 @@ const GuestShop: React.FC<ShopPageProps> = ({ type }) => {
 
   return (
     <div className="flex">
-<CurrencyDropdown />
       <Modal open={open} onClose={handleClose}>
-        
         <Box sx={style}>
-          
           <Box className="grid grid-cols-2">
             <FormControl fullWidth sx={{ marginY: 1 }}>
               <InputLabel>Name</InputLabel>
@@ -307,8 +301,7 @@ const GuestShop: React.FC<ShopPageProps> = ({ type }) => {
           </Box>
         </Box>
       </Modal>
-    <NewNavbar/>
-        <div className="flex flex-col flex-1" style={{ marginTop: '60px' }}>
+      <div className="flex flex-col flex-1" style={{ marginTop: "60px" }}>
         <div className="search-bar">
           <input
             type="text"

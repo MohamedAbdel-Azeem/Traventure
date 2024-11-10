@@ -74,7 +74,6 @@ const ItineraryDetailsTourist: React.FC = () => {
       setItinerary(initialItinerary);
     }
   }, [initialItinerary]);
-  console.log(itinerary);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -106,11 +105,10 @@ const ItineraryDetailsTourist: React.FC = () => {
   return (
     <Box className="flex justify-center items-center h-auto py-8 bg-gray-100">
       <div className="flex flex-col">
-      <div
+        <div
           className="relative w-[700px] h-[200px] rounded-[20px] bg-cover bg-center"
           style={{ backgroundImage: `url(${itinerary.main_Picture})` }}
         >
-          
           <p
             className="w-[690px] h-[50px] text-[30px] text-white
              from-neutral-500 absolute bottom-[30px] left-[10px]"
@@ -132,9 +130,11 @@ const ItineraryDetailsTourist: React.FC = () => {
             {itinerary.added_By.username}
           </p>
         </div>
-        
+
         <p>
-          {formatDate(itinerary.starting_Date) + " → " + formatDate(itinerary.ending_Date)}
+          {formatDate(itinerary.starting_Date) +
+            " → " +
+            formatDate(itinerary.ending_Date)}
         </p>
         <p className="w-[200px] h-[30px] text-[16px]">
           {currentCurrency + " " + (itinerary.price * exchangeRate).toFixed(2)}
@@ -193,12 +193,28 @@ const ItineraryDetailsTourist: React.FC = () => {
                   <line
                     className={`w-[1px] h-[250px] bg-black m-[30px] absolute top-[-46px] left-[-15px]`}
                     style={{ borderLeft: "1px solid black" }}
-                  >
-                  </line>
+                  ></line>
                   <p className="text-[18px] ml-12 mt-0 mb-auto text-black">
-                    {"Native: " + currentCurrency + " " + (plan.place.ticket_price.native * exchangeRate).toFixed(2) + " "}
-                    {"Foreign: " + currentCurrency + " " + (plan.place.ticket_price.foreign * exchangeRate).toFixed(2) + " "}
-                    {"Student: " + currentCurrency + " " + (plan.place.ticket_price.student * exchangeRate).toFixed(2)}
+                    {"Native: " +
+                      currentCurrency +
+                      " " +
+                      (plan.place.ticket_price.native * exchangeRate).toFixed(
+                        2
+                      ) +
+                      " "}
+                    {"Foreign: " +
+                      currentCurrency +
+                      " " +
+                      (plan.place.ticket_price.foreign * exchangeRate).toFixed(
+                        2
+                      ) +
+                      " "}
+                    {"Student: " +
+                      currentCurrency +
+                      " " +
+                      (plan.place.ticket_price.student * exchangeRate).toFixed(
+                        2
+                      )}
                   </p>
                   <p className="text-[18px] h-[100px] mt-auto ml-12 text-black overflow-auto">
                     {plan.place.description}
@@ -210,8 +226,7 @@ const ItineraryDetailsTourist: React.FC = () => {
                     <line
                       className={`w-[1px] h-[150px] bg-black m-[30px] absolute top-[0px] left-[-15px]`}
                       style={{ borderLeft: "1px solid black" }}
-                    >
-                    </line>
+                    ></line>
                     <div className="w-[600px] h-[140px] rounded-[15px] bg-[#D9D9D9] ml-[60px] flex flex-row">
                       <div className="flex flex-col w-[250px]">
                         <p className="w-[250px] h-[35px] text-[26px] ml-2 mr-auto mt-0 mb-auto text-black">
@@ -221,18 +236,32 @@ const ItineraryDetailsTourist: React.FC = () => {
                           {activity.activity_id.Category.name}
                         </p>
                         {activity.activity_id.SpecialDiscount >
-                        activity.activity_id.Price || activity.activity_id.SpecialDiscount ===
-                        activity.activity_id.Price ? (
+                          activity.activity_id.Price ||
+                        activity.activity_id.SpecialDiscount ===
+                          activity.activity_id.Price ? (
                           <p className="w-[100px] h-[16px] text-[16px] ml-2 mr-auto mt-2 mb-4 text-black">
-                            {currentCurrency + " " + (activity.activity_id.Price * exchangeRate).toFixed(2)}
+                            {currentCurrency +
+                              " " +
+                              (
+                                activity.activity_id.Price * exchangeRate
+                              ).toFixed(2)}
                           </p>
                         ) : (
                           <div className="relative h-[35px]">
                             <p className="w-[100px] h-[13px] text-[13px] ml-2 mr-auto mt-2 mb-1 text-red-500 line-through">
-                            {currentCurrency + " " + (activity.activity_id.Price * exchangeRate).toFixed(2)}
+                              {currentCurrency +
+                                " " +
+                                (
+                                  activity.activity_id.Price * exchangeRate
+                                ).toFixed(2)}
                             </p>
                             <p className="w-[100px] h-[16px] text-[16px] absolute bottom-[10px] left-[70px] text-black">
-                              {currentCurrency + " " + (activity.activity_id.SpecialDiscount * exchangeRate).toFixed(2)}
+                              {currentCurrency +
+                                " " +
+                                (
+                                  activity.activity_id.SpecialDiscount *
+                                  exchangeRate
+                                ).toFixed(2)}
                             </p>
                           </div>
                         )}
@@ -255,20 +284,22 @@ const ItineraryDetailsTourist: React.FC = () => {
                           }}
                         />
                         <div className="flex flex-col w-[130px] h-[80px] overflow-auto lasttimeipromise">
-                          {activity.activity_id.Tags.map((tag: TagStructure) => (
-                            <Chip
-                              key={tag._id}
-                              label={tag.name}
-                              color="info"
-                              size="small"
-                              sx={{
-                                width: "80px",
-                                marginLeft: "auto",
-                                marginRight: "auto",
-                                marginTop: "3.5px",
-                              }}
-                            />
-                          ))}
+                          {activity.activity_id.Tags.map(
+                            (tag: TagStructure) => (
+                              <Chip
+                                key={tag._id}
+                                label={tag.name}
+                                color="info"
+                                size="small"
+                                sx={{
+                                  width: "80px",
+                                  marginLeft: "auto",
+                                  marginRight: "auto",
+                                  marginTop: "3.5px",
+                                }}
+                              />
+                            )
+                          )}
                         </div>
                       </div>
                       <iframe

@@ -7,14 +7,10 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import useGetUpcoming from "../custom_hooks/itineraries/useGetupcoming";
 import Place from "../custom_hooks/places/place_interface";
 import LocationCardTourist from "./LocationCardTourist";
-import ImprovedSidebar from "./ImprovedSidebar";
 import { useGetHTags } from "../custom_hooks/useCreateHistoricalTag";
-import NewNavbar from "./NewNavbar";
-import CurrencyDropdown from "./currencyDrop";
 
 const MorePlaces: React.FC = () => {
   const {
@@ -24,11 +20,9 @@ const MorePlaces: React.FC = () => {
   } = useGetHTags();
 
   const { upcoming, loading, error } = useGetUpcoming();
-  const navigate = useNavigate();
-
   const [searchType, setSearchType] = useState<"name" | "tag">("name");
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState<string>(""); // Add state for filter type
+  const [filterType, setFilterType] = useState<string>("");
   const [sortType, setSortType] = useState<"price" | "rating">("price");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
@@ -52,13 +46,11 @@ const MorePlaces: React.FC = () => {
     });
   return (
     <div className="flex">
-      <NewNavbar/>
       <Box p={3} style={{ marginTop: '80px' }}>
         <Typography variant="h4" component="h1" gutterBottom>
           All Places
         </Typography>
         <hr />
-        <CurrencyDropdown />
         <Box my={3}>
           <FormControl
             variant="outlined"

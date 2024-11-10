@@ -10,7 +10,6 @@ import ClipLoader from "react-spinners/ClipLoader";
 import Swal from "sweetalert2";
 import BlockedAccountPopup from "../../components/BlockedAccountPopup";
 
-
 const SignIn: React.FC = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -23,11 +22,15 @@ const SignIn: React.FC = () => {
 
   const images = [image1, image2, image3, image4, image5];
 
-  const { data, loading, err} = useLoginGuest(apiBody);
+  const { data, loading, err } = useLoginGuest(apiBody);
 
   useEffect(() => {
     if (data === null) return;
-    if (data.type === "seller" || data.type === "advertiser" || data.type === "tourguide") {
+    if (
+      data.type === "seller" ||
+      data.type === "advertiser" ||
+      data.type === "tourguide"
+    ) {
       if (data.user.isAccepted === false) {
         setShowBlockedPopup(true);
         return;
@@ -60,8 +63,6 @@ const SignIn: React.FC = () => {
 
     setError("");
     setBody({ username: username, password: password });
-
-
   };
 
   const closePopup = () => {
@@ -70,14 +71,14 @@ const SignIn: React.FC = () => {
 
   useEffect(() => {
     function handleError() {
-      if(err === null) return;
+      if (err === null) return;
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: err,
       });
     }
-  
+
     handleError();
   }, [err]);
 
@@ -136,10 +137,10 @@ const SignIn: React.FC = () => {
               className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-transform duration-200 transform hover:scale-105 shadow-lg"
             >
               {loading ? (
-                  <ClipLoader size={20} color="#ffffff" /> // Show spinner while loading
-                ) : (
-                  "Sign In"
-                )}
+                <ClipLoader size={20} color="#ffffff" /> // Show spinner while loading
+              ) : (
+                "Sign In"
+              )}
             </button>
             {error && <p className="text-red-500 text-center mt-2">{error}</p>}
             <div className="text-center">
@@ -161,7 +162,7 @@ const SignIn: React.FC = () => {
               <br></br>
               <br></br>
               <a
-                href="/guest-page"
+                href="/guest/guest-page"
                 className="text-purple-700 hover:text-purple-600 underline"
               >
                 Enter as Guest
@@ -174,8 +175,9 @@ const SignIn: React.FC = () => {
           <img
             src={images[currentImageIndex]}
             alt="Sign In Illustration"
-            className={`object-cover w-full h-full rounded-r-lg transition-opacity duration-500 ${fadeIn ? "opacity-100" : "opacity-0"
-              }`}
+            className={`object-cover w-full h-full rounded-r-lg transition-opacity duration-500 ${
+              fadeIn ? "opacity-100" : "opacity-0"
+            }`}
           />
           <div className="absolute inset-0 bg-gradient-to-l from-purple-600 opacity-30"></div>
         </div>

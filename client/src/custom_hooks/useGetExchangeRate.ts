@@ -20,7 +20,6 @@ export const useGetExchangeRate = (toCurrency: string) => {
 
         setexchangeRate(response.data.total);
         setLoading(false);
-        console.log(exchangeRate);
       } catch (error) {
         console.error("Error fetching conversion rate:", error);
         setError(error);
