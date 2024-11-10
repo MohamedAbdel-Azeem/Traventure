@@ -80,6 +80,7 @@ router.post("/rateActivity/:ActivityId", async (req, res) => {
         await rateActivity(ActivityId, feedback);
         res.status(201).send("Feedback added successfully");
     } catch (error) {
+        console.log("khaldoon with me : error "+error);
         res.status(500).send("error adding feedback: "+error);
     }
 });

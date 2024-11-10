@@ -74,6 +74,16 @@ export async function updateLoyaltyPoints(touristId:string, amount:number){
     }
     tourist.currentLoyaltyPoints += points;
     tourist.totalLoyaltyPoints += points;
+
+    if(tourist.totalLoyaltyPoints>=500000){
+      tourist.loyaltyLevel=3;
+    }
+    else if(tourist.totalLoyaltyPoints>=100000){
+      tourist.loyaltyLevel=2;
+    }
+    else {
+      tourist.loyaltyLevel=1;
+    }
     await tourist.save();
   } catch (error) {
     throw error;

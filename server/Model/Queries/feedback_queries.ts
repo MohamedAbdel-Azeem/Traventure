@@ -2,6 +2,7 @@
 import tourGuideModel from "../Schemas/TourGuide";
 import ItineraryModel from '../Schemas/Itinerary';
 import ActivityModel, { INActivity } from "../Schemas/Activity";
+import BookingModel from '../Schemas/Booking';
 
 import mongoose from "mongoose";
 import { ObjectId } from 'mongoose';
@@ -82,16 +83,24 @@ export async function getAllItineraryReviews(itinerary_id: string) {
 
 
 export async function isUserAttendedActivity(user_id: string, activity_id: string): Promise<boolean> {
-    try {
-        const itinerary = await ItineraryModel.findOne({
-         plan : {$elemMatch: {activities : { $elemMatch: { activity_id: activity_id } }}},
-          booked_By: { $elemMatch: { user_id: user_id } },
-        });
+    // try {
+    //     const itinerary = await ItineraryModel.findOne({
+    //      plan : {$elemMatch: {activities : { $elemMatch: { activity_id: activity_id } }}},
+    //       booked_By: { $elemMatch: { user_id: user_id } },
+    //     });
     
-        return !!itinerary; // Returns true if itinerary is found, otherwise false
-      } catch (error) {
+    //     return !!itinerary; // Returns true if itinerary is found, otherwise false
+    //   } catch (error) {
+    //     throw error;
+    //   }
+    try {
+        const booking = await BookingModel.findOne({activity: activity_id, tourist: user_id});
+        return !!booking;
+    }
+    catch (error) {
         throw error;
-      }
+    }
+
 }
 
 

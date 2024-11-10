@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Button from '@mui/material/Button';
@@ -588,8 +587,8 @@ const Bookings: React.FC = () => {
             </div>
 
         </div>
-      </div>
-    </div>
+      // </div>
+    // </div>
   );
 };
 
