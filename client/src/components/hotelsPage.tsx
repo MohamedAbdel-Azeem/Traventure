@@ -12,6 +12,7 @@ import {
 import ImprovedSidebar from "./ImprovedSidebar";
 import HotelCard from "./hotelCard";
 import { useSelector } from "react-redux";
+import NewNavbar from "./NewNavbar";
 
 const cityOptions = [
   { city: "Atlanta", code: "ATL" },
@@ -186,7 +187,7 @@ const AvailableHotels = () => {
 
   return (
     <div className="flex">
-      <ImprovedSidebar />
+      <NewNavbar/>
       <Box p={3}>
         <Typography variant="h4" component="h1" gutterBottom>
           Available Hotels
