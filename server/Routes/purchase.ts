@@ -4,19 +4,21 @@ import {
   getTouristPurchases,
   getSellerSales,
   getExternalSellerSales,
+  updateLoyaltyPoints,
+  getPurchaseTotalAmount,
 } from "../Model/Queries/purchase_queries";
 import {
   getProduct,
   decrementProductQuantity,
 } from "../Model/Queries/product_queries";
 import Tourist from "../Model/Schemas/Tourist";
+import { IPurchase } from "../Model/Schemas/purchase";
 
 const router = Router();
 
 router.post("/buy", async (req: Request, res: Response) => {
   try {
     const { touristId, cart } = req.body;
-
     for (const singleProduct of cart) {
       const product = await getProduct(singleProduct.productId);
       if (!product) {
@@ -35,8 +37,11 @@ router.post("/buy", async (req: Request, res: Response) => {
         singleProduct.quantity
       );
     }
-
+    const body={touristId,cart} as IPurchase;
     const purchase = await addPurchase({ touristId, cart });
+    const totalAmount = await getPurchaseTotalAmount(body);
+    console.log("total amount is: "+totalAmount);
+    await updateLoyaltyPoints(touristId, totalAmount);
     return res.status(200).send(purchase);
   } catch (error) {
     return res.status(500).send(error);

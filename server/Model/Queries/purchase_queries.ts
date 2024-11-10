@@ -1,10 +1,90 @@
 import path from "path";
-import purchase from "../../Model/Schemas/purchase";
+import purchase, { IPurchase } from "../../Model/Schemas/purchase";
 import mongoose, { model } from "mongoose";
+import touristModel from "../Schemas/Tourist";
+import ProductModel, { IProduct } from "../Schemas/Product";
+import { ObjectId } from "mongoose"; 
+
 
 export async function addPurchase(purchaseData: object) {
   try {
     return await purchase.create(purchaseData);
+  } catch (error) {
+    throw error;
+  }
+}
+
+const getProduct = async (productId: string): Promise<IProduct | null> => {
+  try {
+    const product = await ProductModel.findById(productId).lean().exec();
+    if (!product) {
+      throw new Error("Product not found");
+    }
+    return product as IProduct;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//TODO : still not tested
+export async function getPurchaseTotalAmount(purchaseData: IPurchase){
+  
+  try {
+
+    const cart=purchaseData.cart;
+    var totalAmount=0;
+    for (const purchased_product of cart) {
+      const product = await getProduct(purchased_product.productId.toString());
+      if (product) {
+        totalAmount += product.price * purchased_product.quantity;
+      }
+    }
+    // cart.forEach(purchased_product => {
+    //   const product= async () =>{
+    //     try{
+    //       await ProductModel.findById(purchased_product.productId);
+    //     }catch(error){
+    //       throw error;
+    //     }
+    //   }
+      
+    //   if(product){
+    //     totalAmount+=product.price*purchased_product.quantity;
+
+    //   }
+
+
+    // });
+    return totalAmount;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+export async function updateLoyaltyPoints(touristId:string, amount:number){
+  try {
+    const tourist = await touristModel.findById(touristId);
+    if (!tourist) return null;
+    var points=0;
+    switch(tourist.loyaltyLevel){
+      case 1: points=amount*0.5; break;
+      case 2: points=amount; break; 
+      case 3: points=amount*1.5; break;
+    }
+    tourist.currentLoyaltyPoints += points;
+    tourist.totalLoyaltyPoints += points;
+
+    if(tourist.totalLoyaltyPoints>=500000){
+      tourist.loyaltyLevel=3;
+    }
+    else if(tourist.totalLoyaltyPoints>=100000){
+      tourist.loyaltyLevel=2;
+    }
+    else {
+      tourist.loyaltyLevel=1;
+    }
+    await tourist.save();
   } catch (error) {
     throw error;
   }
@@ -157,4 +237,6 @@ module.exports = {
   getTouristPurchases,
   getSellerSales,
   getExternalSellerSales,
+  updateLoyaltyPoints,
+  getPurchaseTotalAmount
 };

@@ -39,6 +39,7 @@ export interface ItineraryDocument extends Document {
     user_id: string;
     review?: string;
     rating?: Number;
+    username?: string;
     createdAt?: Date;
   }[];
 }

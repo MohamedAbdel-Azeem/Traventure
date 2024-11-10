@@ -1,7 +1,9 @@
+
 import {
   createUser,
   handleRegisterErrors,
 } from "../Model/Queries/guest_queries";
+
 import { Request, Response, Router } from "express";
 import {
   touristAddValidator,
@@ -20,6 +22,8 @@ import {
   getTouristUpcoming,
 } from "../Model/Queries/tourist_queries";
 import { get } from "http";
+import {redeemPoints} from "../Model/Queries/points_queries";
+
 
 const router = Router();
 
@@ -120,4 +124,21 @@ router.get("/complains/:username", async (req: Request, res: Response) => {
   }
 });
 
+
+router.patch('/redeemPoints', async (req: Request, res: Response) => {
+    try {
+        
+        const username = req.body.username;
+        const amount = req.body.amount;
+        console.log("username: "+username);
+        console.log("amount: "+amount);
+        await redeemPoints(username, amount);
+        res.status(200).send("points redeemed successfully");
+    } catch (error:any) {
+      console.log("Er Er :   "+error.message);
+        res.status(500).send(error.message);
+    }
+  });
+
 export default router;
+

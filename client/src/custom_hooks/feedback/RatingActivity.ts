@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import IFeedbackk from "../IFeedback";
 
-export const rateActivity = async (activityId:string ,feedback:any) => {
+export const rateActivity = async (activityId:string ,feedback:IFeedbackk) => {
     try {
-
-        
-
         const response = await axios.post(`/traventure/api/feedback/rateActivity/${activityId}`, feedback);
         if (response.status >= 200 && response.status < 300) {
-            return response.data;
+            return response;
         } else {
             throw new Error("Error adding feedback");
         }

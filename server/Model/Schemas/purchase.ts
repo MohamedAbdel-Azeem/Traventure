@@ -7,7 +7,7 @@ export interface IPurchasedProduct {
   quantity: number;
 }
 
-interface IPurchase {
+export interface IPurchase {
   touristId: mongoose.Types.ObjectId;
   cart: IPurchasedProduct[];
   timeStamp: Date;

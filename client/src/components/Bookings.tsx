@@ -23,6 +23,7 @@ import { ActivityCardTourist } from './ActivityCardTourist';
 import NewNavbar from './NewNavbar';
 import getFlights from '../custom_hooks/getTouristFlights';
 import getHotels from '../custom_hooks/getTouristHotels';
+import FeedbackDisplay from "./FeedbackDisplay"
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -33,12 +34,35 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     },
 }));
 
- 
-  export interface IBooking {
-    _id: string;
-    type: string;
-    itinerary: Itinerary;
-    activity: Activity;
+export interface IBooking {
+  _id: string;
+  type: string;
+  itinerary: Itinerary;
+  activity: Activity;
+}
+function Reviews(props: { id: string; type: string; text: string }) {
+  const [openFeedback, setOpenFeedback] = useState(false);
+  const { id, type, text } = props;
+  const { username } = useParams<{ username: string }>();
+  const [showFeedback, setShowFeedback] = useState(false);
+  const handleShowFeedback = () => {
+    setShowFeedback(!showFeedback);
+  };
+  return (
+    <>
+      <Button
+        variant="contained"
+        sx={{ fontSize: "9px" }}
+        onClick={handleShowFeedback}
+        color="primary"
+      >
+        {text}
+      </Button>
+      {showFeedback && (
+        <FeedbackDisplay id={id} type={type} onClose={handleShowFeedback} />
+      )}
+    </>
+  );
 }
 
 export interface IFlightBooking {
@@ -70,6 +94,7 @@ export interface IHotelBooking {
 
 
 const Bookings: React.FC = () => {
+
     const { username } = useParams<{ username: string }>();
     const { data,refetch} = getBookings(username); // Get the loading state
     const { flightsdata, flightsget } = getFlights(username);
@@ -82,6 +107,9 @@ const Bookings: React.FC = () => {
     const navigate=useNavigate();
     const [open, setOpen] = useState(false);
     const [selectedActivity, setSelectedActivity] = useState(null);
+    const [showFeedback, setShowFeedback] = useState(false);
+    const [showITFeedback, setShowITFeedback] = useState(false);
+    const [showActivityFeedback, setShowActivityFeedback] = useState(false);
 
   const showActivity = (activity:any) => {
     setSelectedActivity(activity);
@@ -92,6 +120,7 @@ const Bookings: React.FC = () => {
     setOpen(false);
     setSelectedActivity(null);
   };
+
 
     useEffect(() => {
         if (data) {
@@ -120,26 +149,232 @@ const Bookings: React.FC = () => {
         }
     };
 
-    function hasStarted(startTime: Date): boolean {
-        const now = new Date();
-        return now > startTime;
-    }
-    
-  
-    return (
-        <div>
-            
-             <Modal open={open} onClose={handleClose}>
-                <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 500, bgcolor: 'background.paper', boxShadow: 24, p: 4 }}>
-                <Typography variant="h6" component="h2">
-                    Activity Details
-                </Typography>
-                {selectedActivity && <ActivityCardTourist activity={selectedActivity} onDelete={()=>{}}/>}
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+
+
+  function hasStarted(startTime: Date): boolean {
+    const now = new Date();
+    return now > startTime;
+  }
+
+  const sampleFeedback = [
+    {
+      user_Id: "1",
+      username: "user123",
+      feedback: "Great tour guide!",
+      rate: 5,
+    },
+    {
+      user_Id: "1",
+      username: "user456",
+      feedback: "Very knowledgeable.",
+      rate: 4,
+    },
+    {
+      user_Id: "1",
+      username: "user123",
+      feedback: "Great tour guide!",
+      rate: 5,
+    },
+    {
+      user_Id: "1",
+      username: "user456",
+      feedback: "Very knowledgeable.",
+      rate: 4,
+    },
+    {
+      user_Id: "1",
+      username: "user123",
+      feedback: "Great tour guide!",
+      rate: 5,
+    },
+    {
+      user_Id: "1",
+      username: "user456",
+      feedback: "Very knowledgeable.",
+      rate: 4,
+    },
+    {
+      user_Id: "1",
+      username: "user123",
+      feedback: "Great tour guide!",
+      rate: 5,
+    },
+    {
+      user_Id: "1",
+      username: "user456",
+      feedback: "Very knowledgeable.",
+      rate: 4,
+    },
+    {
+      user_Id: "1",
+      username: "user123",
+      feedback: "Great tour guide!",
+      rate: 5,
+    },
+    {
+      user_Id: "1",
+      username: "user456",
+      feedback: "Very knowledgeable.",
+      rate: 4,
+    },
+  ];
+
+  const sampleITFeedback = [
+    {
+      user_Id: "1",
+      username: "user123",
+      feedback: "Great ittt guide!",
+      rate: 5,
+    },
+    {
+      user_Id: "1",
+      username: "user456",
+      feedback: "Very knowledgeable.",
+      rate: 4,
+    },
+    {
+      user_Id: "1",
+      username: "user123",
+      feedback: "Great tour guide!",
+      rate: 5,
+    },
+    {
+      user_Id: "1",
+      username: "user456",
+      feedback: "Very knowledgeable.",
+      rate: 4,
+    },
+    {
+      user_Id: "1",
+      username: "user123",
+      feedback: "Great tour guide!",
+      rate: 5,
+    },
+    {
+      user_Id: "1",
+      username: "user456",
+      feedback: "Very knowledgeable.",
+      rate: 4,
+    },
+    {
+      user_Id: "1",
+      username: "user123",
+      feedback: "Great tour guide!",
+      rate: 5,
+    },
+    {
+      user_Id: "1",
+      username: "user456",
+      feedback: "Very knowledgeable.",
+      rate: 4,
+    },
+    {
+      user_Id: "1",
+      username: "user123",
+      feedback: "Great tour guide!",
+      rate: 5,
+    },
+    {
+      user_Id: "1",
+      username: "user456",
+      feedback: "Very knowledgeable.",
+      rate: 4,
+    },
+  ];
+
+  const sampleActivityFeedback = [
+    {
+      user_Id: "1",
+      username: "user123",
+      feedback: "Great tour guide!",
+      rate: 5,
+    },
+    {
+      user_Id: "1",
+      username: "user456",
+      feedback: "Very knowledgeable.",
+      rate: 4,
+    },
+    {
+      user_Id: "1",
+      username: "user123",
+      feedback: "Great tour guide!",
+      rate: 5,
+    },
+    {
+      user_Id: "1",
+      username: "user456",
+      feedback: "Very knowledgeable.",
+      rate: 4,
+    },
+    {
+      user_Id: "1",
+      username: "user123",
+      feedback: "Great tour guide!",
+      rate: 5,
+    },
+    {
+      user_Id: "1",
+      username: "user456",
+      feedback: "Very knowledgeable.",
+      rate: 4,
+    },
+    {
+      user_Id: "1",
+      username: "user123",
+      feedback: "Great tour guide!",
+      rate: 5,
+    },
+    {
+      user_Id: "1",
+      username: "user456",
+      feedback: "Very knowledgeable.",
+      rate: 4,
+    },
+    {
+      user_Id: "1",
+      username: "user123",
+      feedback: "Great tour guide!",
+      rate: 5,
+    },
+    {
+      user_Id: "1",
+      username: "user456",
+      feedback: "Very knowledgeable.",
+      rate: 4,
+    },
+  ];
+
+  return (
+    <div>
+      <Modal open={open} onClose={handleClose}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 500,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <Typography variant="h6" component="h2">
+            Activity Details
+          </Typography>
+          {selectedActivity && (
+            <ActivityCardTourist
+              activity={selectedActivity}
+              onDelete={() => { }}
+            />
+          )}
+          <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
             <Button variant="contained" onClick={handleClose}>
               Close
             </Button>
           </Box>
+
                 </Box>
             </Modal>
             <NewNavbar/>           
@@ -191,14 +426,52 @@ const Bookings: React.FC = () => {
                                                     }
                                                   })}>More Info</Button></StyledTableCell>
                                           <StyledTableCell align="center">
-                                        {!hasStarted(new Date(booking.itinerary.starting_Date)) && (
-                                            <Button color="error" onClick={() => handleCancel(booking._id)} variant="outlined">Cancel</Button>
-                                        )}
-                                        {hasStarted(new Date(booking.itinerary.starting_Date)) && (
-                                            <Button variant="outlined" color="success">Rate</Button>
-                                        )}
+                        {!hasStarted(
+                          new Date(booking.itinerary.starting_Date)
+                        ) && (
+                            <Button
+                              color="error"
+                              sx={{ fontSize: "9px" }}
+                              onClick={() => handleCancel(booking._id)}
+                              variant="outlined"
+                            >
+                              Cancel
+                            </Button>
+                          )}
+                        {hasStarted(
+                          new Date(booking.itinerary.ending_Date)
+                        ) && (
+                            <Reviews
+                              id={booking.itinerary._id}
+                              type="Itinerary"
+                              text="Reviews"
+                            />
+                          )}
+
+
+                        {hasStarted(
+                          new Date(booking.itinerary.starting_Date)
+                        ) && !hasStarted(
+                          new Date(booking.itinerary.ending_Date)) && (
+
+                            <Button
+                              variant="contained"
+                              sx={{ fontSize: "8px" }}
+                              color="primary"
+
+                            >
+                              In Progress
+                            </Button>
+
+                          )}
                                     </StyledTableCell>
-                                          <StyledTableCell align="right" ><Button variant="contained" color="primary">Review</Button></StyledTableCell>
+                                          <StyledTableCell align="right">
+                        <Reviews
+                          id={booking.itinerary.added_By._id}
+                          type="Tour_guide"
+                          text="rate Tourguide"
+                        />
+                      </StyledTableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -232,7 +505,17 @@ const Bookings: React.FC = () => {
                                             <StyledTableCell align="right" style={{ width: '150px' }}> 
                                                 {!hasStarted(new Date(booking.activity.DateAndTime)) && (
                                             <Button color="error" onClick={() => handleCancel(booking._id)} variant="outlined">Cancel</Button>
-                                        )}</StyledTableCell>
+                                        )}
+                                        {hasStarted(new Date(booking.activity.DateAndTime)) && (
+                                          <Reviews
+                                            id={booking.activity._id}
+                                            type="Activity"
+                                            text="Reviews"
+                                          />
+
+
+                                        )}
+                                      </StyledTableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -302,8 +585,11 @@ const Bookings: React.FC = () => {
                     </div>
                 </div>
             </div>
+
         </div>
-    );
+      // </div>
+    // </div>
+  );
 };
 
 export default Bookings;
