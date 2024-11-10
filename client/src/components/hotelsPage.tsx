@@ -162,8 +162,8 @@ const AvailableHotels = () => {
       const filteredHotels = response.data.filter((hotel: any) => {
         const minAverageBasePrice = hotel.offers
           .map(
-            (offer: { price: { variations: { average: { base: any } } } }) => {
-              const basePrice = offer?.price?.variations?.average?.base;
+            (offer: { price:  { total: any }  }) => {
+              const basePrice = offer?.price?.total;
               return basePrice ? parseFloat(basePrice) : Infinity; // Use Infinity if no price exists
             }
           )
