@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 interface Currentuserdata {
   profilepic: string;
+  _id: string;
 }
 
 export function GetCurrentUser(username: string) {

@@ -1,7 +1,7 @@
 import axios from "axios";
-import { ITourGuide } from "../routes/_app/tourguide_profile/ITourGuide";
+import { ITourGuide } from "../routes/_app/TourGuide/tourguide_profile/ITourGuide";
 import { ISeller } from "../routes/_app/seller_profile/ISeller";
-import { IAdvertiser } from "../routes/_app/advertiser_profile/IAdvertiser";
+import { IAdvertiser } from "../routes/_app/Advertiser/advertiser_profile/IAdvertiser";
 import { useEffect, useState } from "react";
 
 interface Applicant {

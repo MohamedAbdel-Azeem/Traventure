@@ -984,3 +984,53 @@
   transform: translateX(34.4375em) translateY(21.875em);
   transition: transform 0.3s ease-in-out;
 }
+.saveBtn {
+  width: 45px;
+  height: 45px;
+  border-radius: 13px;
+  border: none;
+  background-color: rgb(86, 130, 130);
+  border: 3px solid rgb(180, 200, 200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.123);
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s;
+  position: relative;
+}
+.saveBtn::before {
+  content: "";
+  width: 200%;
+  height: 200%;
+  background-color: rgb(37, 100, 100);
+  position: absolute;
+  z-index: 1;
+  transform: scale(0);
+  transition: all 0.3s;
+  border-radius: 50%;
+  filter: blur(10px);
+}
+.saveBtn:hover::before {
+  transform: scale(1);
+}
+.saveBtn:hover {
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.336);
+}
+
+.saveBtn svg {
+  height: 17px;
+  fill: white;
+  z-index: 3;
+  transition: all 0.2s;
+  transform-origin: bottom;
+}
+.saveBtn svg .tomove{
+  transform: translateX(34px);
+  transition: transform 0.3s ease-in-out;
+}
+.saveBtn:hover svg .tomove{
+  transform: translateX(0px);
+  transition: transform 0.3s ease-in-out;
+}

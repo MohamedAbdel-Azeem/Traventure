@@ -12,7 +12,7 @@ router.post("/getFlights", async (req: Request, res: Response) => {
     children,
     travelClass,
   } = req.body;
-
+console.log();
   if (
     !originLocationCode ||
     !destinationLocationCode ||

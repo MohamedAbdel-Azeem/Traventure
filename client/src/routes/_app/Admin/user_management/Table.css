@@ -1,0 +1,186 @@
+.table-container {
+    width: 90%;
+    margin: 20px auto;
+    overflow-x: auto;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .user-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .user-table th,
+  .user-table td {
+    padding: 12px;
+    text-align: left;
+    border-top: 1px solid #ddd;
+  }
+  
+  .user-table th.pointer-cursor {
+    cursor: pointer;
+  }
+  
+  .user-table th {
+    background-color: #ffffff;
+    color: rgb(162, 162, 162);
+    text-align: left;
+    letter-spacing: 0.1em;
+    font-size: 14px;
+    position: sticky;
+    top: 0; /* Ensure table header stays visible */
+    z-index: 1; /* Ensure table header is above expanded rows */
+  }
+  
+  .user-table tr:hover:not(.expanded-row) {
+    background-color: #e0e0e0;
+  }
+  
+  .user-table tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .expand-arrow {
+    text-align: center;
+    min-width: 40px; /* Ensure a minimum width for the arrow column */
+    cursor: pointer;
+  }
+  
+  .expand-arrow svg {
+    font-size: 14px; /* Adjust the size as needed */
+    cursor: pointer;
+  }
+  
+  .expanded-row {
+    background-color: #ffffff;
+    border-top: none !important; /* Remove border between main row and expanded row */
+    display: flex; /* Use flexbox to ensure consistent row height */
+    align-items: center; /* Center align content vertically */
+  }
+  
+  .expanded-row td {
+    padding: 12px;
+    border-top: none !important; /* Remove top border for expanded row */
+    white-space: nowrap; /* Prevent text wrapping */
+  }
+  
+  .expanded-row p {
+    margin: 5px 0;
+  }
+  
+  .student-image {
+    width: 80px; /* Adjust size as needed */
+    height: 80px; /* Adjust size as needed */
+    border-radius: 50%;
+  }
+  
+  .edit-button {
+    padding: 6px 12px;
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-right: 8px;
+  }
+  
+  .edit-button:hover {
+    background-color: #6eb4ff;
+  }
+  
+  .suspend-button {
+    padding: 6px 12px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-right: 8px;
+  }
+  
+  .suspend-button:hover {
+    background-color: #c82333;
+  }
+  
+  .search-bar {
+    margin-bottom: 10px;
+  }
+  
+  .search-bar input {
+    padding: 8px;
+    width: 20%;
+    border: 1px solid #ddd;
+    border-radius: 40px;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+  
+  .search-bar input:focus {
+    outline: none;
+    border-color: #6eb4ff;
+    box-shadow: 0 0 0 2px rgba(110, 180, 255, 0.5);
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: right;
+    margin-top: 20px;
+  }
+  
+  .pagination ul {
+    list-style-type: none;
+    display: flex;
+    padding: 0;
+  }
+  
+  .pagination li {
+    margin: 0 5px;
+  }
+  
+  .pagination a {
+    padding: 8px 16px;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #333;
+  }
+  
+  .pagination a:hover {
+    background-color: #f2f2f2;
+  }
+  
+  .pagination .active-page a {
+    background-color: #6eb4ff;
+    color: white;
+    border: 1px solid #6eb4ff;
+  }
+  
+  .pagination .disabled a {
+    pointer-events: none;
+    background-color: #ddd;
+    color: #999;
+    border: 1px solid #ddd;
+  }
+  
+  .Accept-button {
+    background-color: #007bff; /* Blue button */
+    padding: 6px 12px;
+  
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-right: 8px;
+  }
+  
+  .Accept-button:hover {
+    background-color: #2e7ad1;
+  }
+  

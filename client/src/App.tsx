@@ -4,10 +4,9 @@ import { MantineProvider } from "@mantine/core";
 import "./index.css";
 import SignIn from "./routes/sign-in/sign-in";
 import Register from "./routes/sign-up/sign-up";
-import ItineraryDetails from "./components/ItineraryDetails";
-import LandingPage from "./pages/LandingPage";
-import ItineraryDetailsTourist from "./components/ItineraryDetailsTourist";
-import MoreItineraries from "./components/MoreItineraries";
+
+import LandingPage from "./routes/_app/Landing_page/LandingPage";
+import ItineraryDetailsTourist from "./components/Itinerary/ItineraryDetailsTourist";
 import TermsAndConditions from "./routes/_app/terms_and_conditions/terms_and_conditions";
 import AdminRouter from "./Routers/AdminRouter";
 import TouristRouter from "./Routers/TouristRouter";
@@ -16,34 +15,32 @@ import AdvertiserRouter from "./Routers/AdvertiserRouter";
 import TourGuideRouter from "./Routers/TourGuideRouter";
 import SellerRouter from "./Routers/SellerRouter";
 import GuestRouter from "./Routers/GuestRouter";
+import ItineraryDetails from "./routes/_app/TourGuide/tourguide_Itinerary/ItineraryDetails";
 
 function App() {
   return (
     <MantineProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<SignIn />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/" element={<SignIn />} />// 
+          <Route path="/register" element={<Register />} />//
           {/* Admin */}
-          <Route path="/admin/*" element={<AdminRouter />} />
+          <Route path="/admin/*" element={<AdminRouter />} />//
           {/* Tourist */}
-          <Route path="/tourist/*" element={<TouristRouter />} />
+          <Route path="/tourist/*" element={<TouristRouter />} />//
           {/* Tourism Governor */}
-          <Route path="/tourismgovernor/*" element={<TourismGovernorRouter />} />
+          <Route path="/tourismgovernor/*" element={<TourismGovernorRouter />} />//
           {/* Advertiser */}
-          <Route path="/advertiser/*" element={<AdvertiserRouter />} />
+          <Route path="/advertiser/*" element={<AdvertiserRouter />} />//
           {/* Tour Guide */}
-          <Route path="/tourguide/*" element={<TourGuideRouter />} />
+          <Route path="/tourguide/*" element={<TourGuideRouter />} />//
           {/* Seller */}
-          <Route path="/seller/*" element={<SellerRouter/>} />
+          <Route path="/seller/*" element={<SellerRouter/>} />//
           {/* Guest */}
-          <Route path="/guest/*" element={<GuestRouter/>}/>
+          <Route path="/guest/*" element={<GuestRouter/>}/>//
           {/* Extra */}
-          <Route path="/itinerary/:id" element={<ItineraryDetails />} />
-          <Route path="/tourist-itinerary/:id" element={<ItineraryDetailsTourist />} />
-          <Route path="/more-itineraries" element={<MoreItineraries />} />
-          <Route path="/terms-and-conditions" element={<TermsAndConditions />}/>
-          <Route path="/landing" element={<LandingPage />} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />}/>//
+          <Route path="/landing" element={<LandingPage />} />//
         </Routes>
       </Router>
     </MantineProvider>

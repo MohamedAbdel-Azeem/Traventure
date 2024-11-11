@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState, useCallback } from 'react';
-import {IFlightBooking} from '../components/Bookings';
+import {IFlightBooking} from '../routes/_app/Tourist/tourist_bookings/Bookings';
 
 
 export const getFlights = (touristusername: string | undefined) => {

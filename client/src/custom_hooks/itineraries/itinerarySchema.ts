@@ -1,6 +1,6 @@
 import IActivity from "../activities/activity_interface";
 import Place from "../places/place_interface";
-import { TouristProfileData } from "../../routes/_app/tourist_profile/tourist_profile_data";
+import { TouristProfileData } from "../../routes/_app/Tourist/tourist_profile/tourist_profile_data";
 
 
 interface TagStructure {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { IAdvertiser } from "../routes/_app/advertiser_profile/IAdvertiser";
+import { IAdvertiser } from "../routes/_app/Advertiser/advertiser_profile/IAdvertiser";
 
 export const useGetAdvertiser = (username: string | undefined) => {
   const [user, setUser] = useState<IAdvertiser | null>(null);

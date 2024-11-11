@@ -11,11 +11,13 @@ export const useGetAllActivitiesTitleAndId = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`/traventure/api/activity/`);
+        const response = await axios.get(`/traventure/api/activity`);
 
         setActivities(response.data);
         if (response.data.length === 0) {
+          setError("No activities found");
         } else {
+          setError(null);
         }
         setError(null);
       } catch (error: any) {

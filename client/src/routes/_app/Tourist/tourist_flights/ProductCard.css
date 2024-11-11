@@ -1,0 +1,615 @@
+/* Product List Grid */
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-gap: 16px;
+    padding: 16px;
+}
+
+
+
+
+.submit-button2 {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff; /* Blue button */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .submit-button2:hover {
+    background-color: #0056b3; /* Darker shade of blue on hover */
+  }
+
+
+
+  .submit-button3 {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #A594F9; /* Blue button */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-left: 16px;
+  }
+  
+  .submit-button3:hover {
+    background-color: #0056b3; /* Darker shade of blue on hover */
+  }
+
+
+
+  .cancel-button2{
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #ff0000; /* Red button */
+    color: #fff;
+    border: none;
+    
+    cursor: pointer;
+  }
+  
+  .cancel-button2:hover {
+    background-color: #cc0000; /* Darker shade of red on hover */
+  }
+
+/* Product Card Styles */
+.product-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f2f2f2;
+    overflow: hidden;
+    position: relative;
+}
+
+.card-header {
+    position: relative;
+    height: 150px;
+    background-color: #d3d3d3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-actions {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+}
+
+.edit-button,
+.delete-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.delete-button {
+   
+    border: none;
+    border-radius: 50%; /* Circular shape */
+    padding: 10px; /* Padding to increase size */
+    cursor: pointer; /* Pointer cursor */
+    
+    display: flex; /* Centering icon */
+    align-items: center; /* Centering icon vertically */
+    justify-content: center; /* Centering icon horizontally */
+    width: 40px; /* Set a width for the circle */
+    height: 40px; /* Set a height for the circle */
+}
+
+.delete-button:hover {
+    background-color: red; /* Red background on hover */
+ 
+    transform: scale(1.05); /* Slightly increase size on hover */
+}
+
+.edit-button:hover {
+    background-color: #A594F9; /* Blue background on hover */
+    transform: scale(1.05); /* Slightly increase size on hover */
+}
+
+.card-body {
+    padding: 10px;
+    background-color: #F5EFFF;
+}
+
+.product-title {
+    font-size: 18px;
+    margin: 0;
+}
+
+.product-description {
+    font-size: 12px;
+    color: #333;
+    margin: 10px 0;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product-price {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.product-rating {
+    font-size: 14px;
+    color: #ffa500;
+}
+
+/* View More Button */
+.view-more-button {
+    background-color: #A594F9; /* Blue background */
+    color: white; /* White text */
+    border: none; /* No border */
+    padding: 1px 1px; /* Padding for size */
+    cursor: pointer; /* Pointer cursor */
+    font-size: 10px; /* Font size */
+    border-radius: 3px; /* Rounded corners */
+    transition: background-color 0.3s, transform 0.2s; /* Transition for hover effects */
+}
+
+
+.view-more-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: scale(1.05); /* Slightly increase size on hover */
+}
+
+/* Popup Styling */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    max-height: 200vh; /* Set a max height for the popup */
+    overflow: hidden; /* Prevents overflow */
+    position: relative;
+}
+
+/* Carousel styles */
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 30%; /* Adjusted height for the carousel */
+    margin-bottom: 10px;
+}
+
+.popup-image {
+    width: 100%;
+    height: 200px; /* Ensure image takes full height */
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.prev-image,
+.next-image {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 4px;
+}
+
+.prev-image {
+    left: 10px;
+}
+
+.next-image {
+    right: 10px;
+}
+
+/* Split the Popup Left and Right */
+.popup-flex {
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space between left and right boxes */
+    margin-top: 10px; /* Add space below the images */
+}
+
+.popup-description-box,
+.popup-reviews-box {
+    flex: 1;
+    margin-right: 10px;
+    padding: 15px;
+    border-radius: 8px; 
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    overflow: auto;
+    height: 150px;
+}
+
+
+.popup-description {
+    font-size: 14px;
+    color: #333;
+    margin-top: 10px;
+    overflow-y: auto; /* Enables scrolling if the description is too long */
+    max-height: 100%; /* Allow full height */
+    line-height: 1.4; /* Adjust line height for better readability */
+}
+
+/* Popup Right Section */
+.popup-reviews {
+    max-height: 100%; /* Allow full height for reviews */
+    overflow-y: auto; /* Enables scrolling for reviews */
+    line-height: 1.4; /* Adjust line height for better readability */
+}
+
+.popup-reviews h4 {
+    margin: 0;
+}
+
+.popup-reviews ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* Popup Bottom Section */
+.popup-bottom {
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space between left and right boxes */
+    align-items: center; /* Align items vertically */
+    margin-top: 20px; /* Space above the bottom section */
+}
+
+/* Seller and Price Container */
+.price-seller-container {
+    flex: 1; /* Allow this container to take available space */
+}
+
+/* Add to Cart Button */
+.add-to-cart-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px; /* Adjust padding for better size */
+    cursor: pointer;
+    border-radius: 4px;
+    display: inline-flex; /* Use inline-flex for alignment */
+    align-items: center; /* Center icon and text vertically */
+}
+
+/* Close Popup Button */
+.close-popup {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: red; /* Red background */
+    color: white; /* White close mark */
+    border: none;
+    border-radius: 50%; /* Circular shape */
+    padding: 10px; /* Padding to increase size */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px; /* Set a width for the circle */
+    height: 40px; /* Set a height for the circle */
+}
+
+.close-popup svg {
+    width: 20px; /* Adjust icon size */
+    height: 20px; /* Adjust icon size */
+}
+
+/* Pagination Styles */
+.pagination {
+    display: flex;
+    justify-content: right;
+    margin-top: 20px;
+}
+
+.pagination ul {
+    list-style-type: none;
+    display: flex;
+    padding: 0;
+}
+
+.pagination li {
+    margin: 0 5px;
+}
+
+.pagination a {
+    padding: 8px 16px;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #333;
+}
+
+.pagination a:hover {
+    background-color: #f2f2f2;
+}
+
+.pagination .active-page a {
+    background-color: #A594F9;
+    color: white;
+    border: 1px solid #A594F9;
+}
+
+.pagination .disabled a {
+    pointer-events: none;
+    background-color: #ddd;
+    color: #999;
+    border: 1px solid #ddd;
+}
+
+
+/* Scrollbar Styling for WebKit browsers (Chrome, Safari) */
+.popup-description::-webkit-scrollbar,
+.popup-reviews::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+.popup-description::-webkit-scrollbar-track,
+.popup-reviews::-webkit-scrollbar-track {
+    background: #f2f2f2; /* Background of the scrollbar track */
+    border-radius: 10px; /* Rounded corners for the track */
+}
+
+.popup-description::-webkit-scrollbar-thumb,
+.popup-reviews::-webkit-scrollbar-thumb {
+    background: #A594F9; /* Color of the scrollbar thumb */
+    border-radius: 10px; /* Rounded corners for the thumb */
+}
+
+.popup-description::-webkit-scrollbar-thumb:hover,
+.popup-reviews::-webkit-scrollbar-thumb:hover {
+    background: #7c7cf5; /* Color of the thumb on hover */
+}
+
+/* Scrollbar Styling for Firefox */
+.popup-description,
+.popup-reviews {
+    scrollbar-width: thin; /* Make the scrollbar thin */
+    scrollbar-color: #757575 #f2f2f2; /* Thumb color and track color */
+}
+
+
+.popup-description-box h4,
+.popup-reviews-box h4 {
+    font-weight: bold; /* Make the text bold */
+    text-decoration: underline; /* Underline the text */
+}
+
+
+
+.search-bar {
+    margin-bottom: 10px;
+    padding: 16px;
+}
+
+.search-bar input {
+    padding: 8px;
+    width: 20%;
+    border: 1px solid #ddd;
+    border-radius: 40px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: #6eb4ff;
+}
+
+
+
+
+
+
+.sort-container {
+  position: relative;
+  display: inline-block;
+}
+
+.sorting-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.rating-container {
+  position: relative;
+}
+
+.rating-options {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  background-color: white;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 200;
+}
+
+.rating-container:hover .rating-options {
+  display: block;
+}
+
+.rating-options button {
+  padding: 8px 12px;
+  width: 120px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.rating-options button:hover {
+  background-color: #f1f1f1;
+}
+
+
+
+
+
+  
+  .sort-button {
+    background-color: #A594F9;;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 10px;
+  }
+  
+
+  
+
+  
+  .sorting-options button {
+    display: block;
+    width: 100%;
+    margin: 5px 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    padding: 5px;
+  }
+  
+  .sorting-options button:hover {
+    background-color: #f0f0f0;
+  }
+  
+
+
+
+  
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .price-filter {
+        flex-direction: column; /* Stack inputs vertically on small screens */
+        align-items: stretch; /* Stretch inputs to fill the container */
+    }
+
+    .price-filter input[type="number"] {
+        width: 100%; /* Full width for inputs on small screens */
+        margin-bottom: 10px; /* Space between inputs */
+    }
+
+      .product-list {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* More columns on smaller screens */
+    }
+    
+    .popup-content {
+        width: 90%; /* Responsive width */
+    }
+}
+
+
+
+.filter-options {
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space out the inputs */
+    align-items: center; /* Center items vertically */
+    position: absolute; /* Keeps the dropdown positioning */
+    top: 100%; /* Position it below the button */
+    left: 0; /* Align it with the button */
+    background: white; /* Change to the desired background */
+    border: 1px solid #ccc; /* Optional border */
+    z-index: 1000; /* Ensures it appears above other content */
+    padding: 10px; /* Adds some padding */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Optional shadow for effect */
+    width: 320px; /* Adjust the width as needed */
+}
+
+.filter-options input {
+    width: 100px; /* Set a fixed width for the input fields */
+    padding: 10px; /* Padding for the input field */
+    margin: 0 5px; /* Space between input fields */
+    border: 1px solid #ccc; /* Border for the input fields */
+    border-radius: 4px; /* Optional rounding for corners */
+    font-size: 15px; /* Larger text for better readability */
+}
+
+
+
+
+
+
+
+
+  /* Filter Section Styles */
+.price-filter {
+    display: flex;
+    justify-content: space-between; /* Space between min and max price inputs */
+    margin: 20px 0; /* Margin for spacing */
+    padding: 10px; /* Padding for the filter section */
+    background-color: #f7f7f7; /* Light background color */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Price Input Styles */
+.price-filter input[type="number"] {
+    width: 5%; /* Adjust width for both inputs */
+    padding: 10px; /* Padding for the inputs */
+    border: 1px solid #ccc; /* Border for the inputs */
+    border-radius: 4px; /* Rounded corners */
+    font-size: 16px; /* Font size */
+    transition: border-color 0.3s; /* Transition for border color */
+}
+
+/* Input focus effect */
+.price-filter input[type="number"]:focus {
+    border-color: #A594F9; /* Change border color on focus */
+    outline: none; /* Remove default outline */
+}
+
+
+
+/* Submit Button Styles */
+
+
+
+.submit-button,
+.sort-button
+{
+    background-color: #A594F9;
+}

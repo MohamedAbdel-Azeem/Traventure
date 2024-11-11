@@ -14,7 +14,9 @@ export const addActivity = async (newActivity: any) => {
 
 export const getActivities = async () => {
   try {
-    return await Activity.find().populate("Tags").populate("Category");
+    return await Activity.find()
+      .populate("Tags")
+      .populate("Category");
   } catch (e) {
     throw e;
   }
