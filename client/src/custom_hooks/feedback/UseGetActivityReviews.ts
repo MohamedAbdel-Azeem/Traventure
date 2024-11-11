@@ -12,10 +12,10 @@ export const UseGetActivityReviews = (ActivityId: string) => {
 
   
         const response = await axios.get(`/traventure/api/feedBack/showActivityReviews/${ActivityId}`);
-        if (response.status === 200) {
-            setActivityReviews(response.data);
+        if (response.status >= 200 && response.status < 300) {
+          setActivityReviews(response.data);
         } else {
-            setcError("Error fetching data");
+          setcError("Error fetching data");
         }
       } catch (err) {
         setcError(err.message);
