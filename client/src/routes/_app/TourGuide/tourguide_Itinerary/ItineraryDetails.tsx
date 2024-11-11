@@ -1,817 +1,1080 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  Card,
-  CardContent,
-  CardMedia,
-  Divider,
-  Typography,
-  Button,
+  AccordionDetails,
+  AccordionSummary,
+  Chip,
+  Rating,
   TextField,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  SelectChangeEvent,
-  Checkbox,
-  FormControl,
-  FormHelperText,
-  InputLabel,
-  ListItemText,
+  Button,
+  Input,
   MenuItem,
+  Checkbox,
+  ListItemText,
   Select,
+  SelectChangeEvent,
+  Stack,
 } from "@mui/material";
-
-import { useParams, useLocation, useNavigate } from "react-router-dom";
-import {IActivity} from "../../../../custom_hooks/activities/activity_interface";
+import { useLocation, useParams } from "react-router-dom";
+import { IActivity } from "../../../../custom_hooks/activities/activity_interface";
+import { TouristProfileData } from "../../../../routes/_app/Tourist/tourist_profile/tourist_profile_data";
 import Place from "../../../../custom_hooks/places/place_interface";
+import { useGetItineraryID } from "../../../../custom_hooks/itineraries/useGetItinerary";
+import TheBIGMAP from "../../../../components/Maps/TheBIGMAP";
+import ImageUploader from "../../../../components/PDFs&Images/ImageUploader";
+import { useSelector } from "react-redux";
+import { Accordion } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import SaveButton from "../../../../components/Buttons/SaveButton";
+import EditButton from "../../../../components/Buttons/EditButton";
 import { useGetAllTags } from "../../../../custom_hooks/categoryandTagCRUD";
-import { useGetAllActivities } from "../../../../custom_hooks/activities/useGetActivity";
-import { useGetAllActivitiesTitleAndId } from "../../../../custom_hooks/activities/useGetActivitiesTitlesAndID";
+import TheMAP from "../../../../components/Maps/TheMAP";
+import BestDeleteButton from "../../../../components/Buttons/BestDeleteButton";
+import { v4 as uuidv4 } from "uuid";
 import { useGetPlace } from "../../../../custom_hooks/places/useGetPlace";
-import EditItineraryModal from "./EditItineraryModal";
-import IActivityInItinerary from "../../../../custom_hooks/activities/activity_in_itinary";
-import { useUpdateItinerary } from "../../../../custom_hooks/itineraries/useUpdateItinerary";
-import { set } from "date-fns";
-
-
+import { useGetAllActivitiesTitleAndId } from "../../../../custom_hooks/activities/useGetActivitiesTitlesAndID";
+import {
+  UseUpdateItinerary,
+  useUpdateItinerary,
+} from "../../../../custom_hooks/itineraries/useUpdateItinerary";
 interface TagStructure {
   _id: string;
   name: string;
   __v: number;
 }
 
+interface Itinerary {
+  _id: string;
+  main_Picture?: object | null;
+  title: string;
+  description: string;
+  added_By?: {
+    profilepic: string;
+    username: string;
+  };
+  price: number;
+  starting_Date: string;
+  ending_Date: string;
+  rating?: number;
+  total: number;
+  language: string;
+  selectedTags?: string[];
+  pickup_location: { longitude: number; latitude: number };
+  dropoff_location: { longitude: number; latitude: number };
+  plan: {
+    place: string;
+    activities: {
+      activity_id: string;
+      activity_duration: number;
+      time_unit: string;
+    }[];
+  }[];
+  booked_By: {
+    user_id?: TouristProfileData;
+  }[];
+  accessibility: boolean;
+}
+
+interface SActivity {
+  activity_id?: string;
+  time_unit?: string;
+  activity_duration?: number;
+  _id?: string;
+  Title?: string;
+  DateAndTime: Date;
+  Location: {
+    latitude: number;
+    longitude: number;
+  };
+  Price: number;
+  SpecialDiscount: number;
+  Category: string;
+  Tags: TagStructure[];
+  BookingIsOpen: boolean;
+  added_By?: string;
+}
+
+type PlacetoGo = {
+  placeid: string;
+  placename: string;
+  activities: ActivitytoGo[];
+};
+
+type ActivitytoGo = {
+  activityid: string;
+  activityname: string;
+  activity_duration: number;
+  time_unit: string;
+};
+
 const ItineraryDetails: React.FC = () => {
-  //
-  const navigate = useNavigate();
-
   const location = useLocation();
-  const initialItinerary = location.state as any;
-  const id = location.state._id as string;
-  // const id=location.pathname.split(`/`)[2];
-  const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
-  const [itinerary, setItinerary] = useState(initialItinerary);
+  const id = location.pathname.split(`/`)[5];
+  const { itinerary: initialItinerary } = useGetItineraryID(id);
+  const [itinerary, setItinerary] = useState<Itinerary | null>(
+    initialItinerary
+  );
   const [isEditing, setIsEditing] = useState(false);
-
-  const deepCopy = (obj: any) => {
-    return JSON.parse(JSON.stringify(obj)) as any;
-  };
-
-  const [editedItinerary, setEditedItinerary] = useState(deepCopy(itinerary));
-  const [newTag, setNewTag] = useState("");
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [starting_Date, setStarting_Date] = useState<Date>(
+    initialItinerary ? new Date(initialItinerary.starting_Date) : new Date()
+  );
+  const [ending_Date, setEnding_Date] = useState<Date>(
+    initialItinerary ? new Date(initialItinerary.ending_Date) : new Date()
+  );
+  const [price, setPrice] = useState<number>(0);
+  const [image, setImage] = useState<File | null>(null);
+  const [accessibility, setAccessibility] = useState<boolean>(true);
+  const [language, setLanguage] = useState<string>("");
+  const [startinglongitude, setStartinglongitude] = useState<number>(30);
+  const [startinglatitude, setStartinglatitude] = useState<number>(30);
+  const [endinglongitude, setEndinglongitude] = useState<number>(30);
+  const [endinglatitude, setEndinglatitude] = useState<number>(30);
+  const [placestogo, setPlacestogo] = useState<PlacetoGo[]>(
+    initialItinerary
+      ? initialItinerary.plan.map((place) => ({
+          placeid: place.place._id || "",
+          placename: place.place.name,
+          activities: place.activities.map((activity) => ({
+            activityid: activity.activity_id?._id || "",
+            activityname: activity.activity_id?.Title || "",
+            activity_duration: activity.activity_duration,
+            time_unit: activity.time_unit as string,
+          })),
+        }))
+      : []
+  );
+  const [expanded, setExpanded] = useState<string | false>(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const timeUnits: string[] = ["sec", "hours", "days", "month", "years", "min"];
-  const [plans, setPlans] = React.useState<any["plan"]>(itinerary.plan);
-  const transformActivity = (activity: IActivity): IActivityInItinerary => {
-    return {
-      activity_id: activity.activity_id,
-      time_unit: activity.time_unit,
-      activity_duration: Number(activity.activity_duration),
-    };
+
+  useEffect(() => {
+    if (initialItinerary) {
+      setItinerary(initialItinerary);
+      setTitle(initialItinerary.title);
+      setDescription(initialItinerary.description);
+      setPrice(initialItinerary.price);
+      setStarting_Date(new Date(initialItinerary.starting_Date));
+      setEnding_Date(new Date(initialItinerary.ending_Date));
+      setSelectedTags(
+        initialItinerary.selectedTags?.map((tag) => tag._id) || []
+      );
+      setAccessibility(initialItinerary.accessibility);
+      setLanguage(initialItinerary.language);
+      setStartinglongitude(initialItinerary.pickup_location.longitude);
+      setStartinglatitude(initialItinerary.pickup_location.latitude);
+      setEndinglongitude(initialItinerary.dropoff_location.longitude);
+      setEndinglatitude(initialItinerary.dropoff_location.latitude);
+      setPlacestogo(
+        initialItinerary.plan.map((place) => ({
+          placeid: place.place._id || "",
+          placename: place.place.name,
+          activities: place.activities.map((activity) => ({
+            activityid: activity.activity_id?._id || "",
+            activityname: activity.activity_id?.Title || "",
+            activity_duration: activity.activity_duration,
+            time_unit: activity.time_unit as string,
+          })),
+        }))
+      );
+    }
+  }, [initialItinerary]);
+
+  useEffect(() => {
+    console.log(placestogo);
+  }, [placestogo]);
+
+  const handleEditClick = () => {
+    setIsEditing(true);
   };
-  //the one inserted in the database
-  const [updatedItinerary, setUpdatedItinerary] = useState({
-    ...editedItinerary,
-    starting_Date: editedItinerary.starting_Date.split("/").reverse().join("-"),
-    ending_Date: editedItinerary.ending_Date.split("/").reverse().join("-"),
-    selectedTags: editedItinerary.selectedTags?.map((tag) => tag._id),
-    plan: editedItinerary.plan.map((plan) => ({
-      place: plan.place._id,
-      activities: plan.activities.map(transformActivity),
-    })),
-  });
+
+  const { iddata: tagsOptions } = useGetAllTags();
+  const { places: apiPlaces } = useGetPlace();
+  const { activities: activities } = useGetAllActivitiesTitleAndId();
+  const [selectedTags, setSelectedTags] = useState<string[]>(
+    tagsOptions.map((tag) => tag._id)
+  );
+
   const handleTagsChange = (event: SelectChangeEvent<string[]>) => {
     const {
       target: { value },
     } = event;
-    const selectedIds = typeof value === "string" ? value.split(",") : value;
-
-    setSelectedTags(selectedIds); // Sync selected tags directly
-
-    // Sync the editedItinerary's selectedTags with actual tag objects
-    setEditedItinerary({
-      ...editedItinerary,
-      selectedTags: tagsOptions.filter((tag) => selectedIds.includes(tag._id)),
-    });
+    setSelectedTags(typeof value === "string" ? value.split(",") : value);
   };
-  const {
-    loading: tagsLoading,
-    error: tagsError,
-    iddata: tagsOptions,
-  } = useGetAllTags();
-  const {
-    activities: activities,
-    loading: activityLoading,
-    error: activityError,
-  } = useGetAllActivitiesTitleAndId();
-
-  const {
-    places: apiPlaces,
-    gloading: placeLoading,
-    gerror: placeError,
-  } = useGetPlace();
-
   const handleTagsText = (value: string[]) => {
-    const valueNames =
-      editedItinerary.selectedTags
-        ?.filter((tag) => value.includes(tag._id))
-        .map((tag) => tag.name) || [];
-
+    const valueNames = tagsOptions
+      .filter((tag) => value.includes(tag._id))
+      .map((tag) => tag.name);
     return valueNames.join(", ");
   };
-  const handleAddTag = (event: React.MouseEvent<HTMLButtonElement>): void => {
-    // Prevent adding a tag that is already in the selected tags
-    if (newTag && !selectedTags.includes(newTag)) {
-      const updatedTags = [...selectedTags, newTag];
-      setSelectedTags(updatedTags); // Update the local selectedTags state
 
-      // Update the itinerary state with the new selected tags
-      setEditedItinerary({
-        ...editedItinerary,
-        selectedTags: tagsOptions.filter((tag) =>
-          updatedTags.includes(tag._id)
-        ), // Update with tag objects
-      });
+  useEffect(() => {}, [selectedTags]);
+
+  const alltags = (value: string[]) => {
+    const valueNames = tagsOptions
+      .filter((tag) => value.includes(tag._id))
+      .map((tag) => tag.name);
+    return valueNames;
+  };
+  const handleDelete = (tagToDelete: string) => () => {
+    const tagIdToDelete = tagsOptions.find(
+      (tag) => tag.name === tagToDelete
+    )?._id;
+    if (tagIdToDelete) {
+      setSelectedTags(selectedTags.filter((tag) => tag !== tagIdToDelete));
     }
-    setNewTag(""); // Clear the new tag input after adding
   };
-  const handleRemoveTag = (tagToRemove: TagStructure) => {
-    setEditedItinerary((prev) => ({
-      ...prev,
-      selectedTags: prev.selectedTags?.filter(
-        (tag) => tag._id !== tagToRemove._id
-      ),
-    }));
+ 
+
+
+  const itineraryData = {
+    ...itinerary,
+    title,
+    description,
+    main_Picture: image ?? itinerary?.main_Picture,
+    accesibility: accessibility,
+    price,
+    starting_Date: starting_Date.toISOString(),
+    ending_Date: ending_Date.toISOString(),
+    rating: 0,
+    total: 0,
+    pickup_location: {
+      longitude: startinglongitude,
+      latitude: startinglatitude,
+    },
+    dropoff_location: {
+      longitude: endinglongitude,
+      latitude: endinglatitude,
+    },
+    language: language,
+    selectedTags: selectedTags.map((tag) => tag),
+    plan: placestogo.map((place) => ({
+      place: place.placeid,
+      activities: place.activities.map((activity) => ({
+        activity_id: activity.activityid,
+        activity_duration: activity.activity_duration,
+        time_unit: activity.time_unit,
+      })),
+    })),
   };
+
+  const handleSaveClick = () => {
+    setIsEditing(false);
+
+      console.log(
+        "LIFE IS PAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIN",
+        itineraryData
+      );
+
+      console.log(
+        placestogo.map((place) => ({
+          place: place.placeid,
+        }))
+      );
+
+      UseUpdateItinerary(itineraryData, id);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    switch (name) {
+      case "title":
+        setTitle(value);
+        break;
+      case "description":
+        setDescription(value);
+        break;
+      case "starting_Date":
+        setStarting_Date(new Date(value));
+        break;
+      case "ending_Date":
+        setEnding_Date(new Date(value));
+        break;
+      case "price":
+        setPrice(parseFloat(value));
+        break;
+      default:
+        break;
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    return date.toLocaleDateString(undefined, options);
+  };
+
+  const exchangeRate = useSelector(
+    (state: any) => state.exchangeRate.exchangeRate
+  );
+
+  const currentCurrency = useSelector(
+    (state: any) => state.exchangeRate.currentCurrency
+  );
 
   if (!itinerary) return <p>No itinerary data found</p>;
 
-  const handleEditToggle = () => {
-    setIsEditing(!isEditing);
-  };
-
-  const handleOpenModal = () => {
-    setIsEditing(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsEditing(false);
-  };
-  const [validationError, setValidationError] = useState({
-    tags: false,
-    activities: false,
+  const locations = [];
+  locations.push(itinerary.pickup_location);
+  locations.push(itinerary.dropoff_location);
+  itinerary.plan.forEach((item) => {
+    if (item.place && item.place.location) {
+      locations.push(item.place.location);
+    }
   });
-  const handleSaveModal = () => {
-    let isValid = true;
 
-    // Validate tags
-    if (editedItinerary.selectedTags?.length === 0) {
-      setValidationError((prev) => ({ ...prev, tags: true }));
-      isValid = false;
-    } else {
-      setValidationError((prev) => ({ ...prev, tags: false }));
-    }
-
-    // Validate activities (each place must have at least one activity)
-    const hasInvalidPlan = editedItinerary.plan.some((place) => {
-      return place.activities.length === 0;
-    });
-
-    if (hasInvalidPlan) {
-      setValidationError((prev) => ({ ...prev, activities: true }));
-      isValid = false;
-    } else {
-      setValidationError((prev) => ({ ...prev, activities: false }));
-    }
-    if (isValid) {
-      const updatedItineraryinline = {
-        ...editedItinerary,
-        starting_Date: editedItinerary.starting_Date
-          .split("/")
-          .reverse()
-          .join("-"),
-        ending_Date: editedItinerary.ending_Date.split("/").reverse().join("-"),
-        selectedTags: editedItinerary.selectedTags?.map((tag) => tag._id),
-        plan: editedItinerary.plan.map((plan) => ({
-          place: plan.place._id,
-          activities: plan.activities.map(transformActivity),
-        })),
-      };
-
-      setItinerary(editedItinerary);
-
-      setUpdatedItinerary(updatedItineraryinline);
-      setIsEditing(false);
-
-      navigate(-1);
-    }
-
-    // setId(editedItinerary._id);
-  };
-  useUpdateItinerary(updatedItinerary, id);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    field: string
-  ) => {
-    setEditedItinerary({ ...editedItinerary, [field]: e.target.value });
-  };
-
-  const handlePlaceChange = (index: number, field: string, value: string) => {
-    const updatedPlan = [...editedItinerary.plan];
-    updatedPlan[index].place = { ...updatedPlan[index].place, [field]: value };
-    setEditedItinerary({ ...editedItinerary, plan: updatedPlan });
-  };
-
+  const handleActivityNameChange = (
+    NewID: string,
+    placeidN: string,
+    activityidN: string
+  ) =>
+    setPlacestogo((prevPlacestogo) =>
+      prevPlacestogo.map((placetogonew) =>
+        placetogonew.placeid === placeidN
+          ? {
+              ...placetogonew,
+              activities: placetogonew.activities.map((activity) =>
+                activity.activityid === activityidN
+                  ? { ...activity, activityname: NewID }
+                  : activity
+              ),
+            }
+          : placetogonew
+      )
+    );
   const handleAddPlace = () => {
-    const newPlace: Place = {
-      name: "",
-      description: "",
-      pictures: [],
-      location: { latitude: 0, longitude: 0 },
-      opening_hrs: "",
-      ticket_price: { native: 0, foreign: 0, student: 0 },
-    };
-    setEditedItinerary({
-      ...editedItinerary,
-      plan: [...editedItinerary.plan, { place: newPlace, activities: [] }],
-    });
+    setPlacestogo([
+      ...placestogo,
+      { placeid: uuidv4(), placename: "", activities: [] },
+    ]);
   };
 
-  const handleRemovePlace = (placeIndex: number) => {
-    const updatedPlan = editedItinerary.plan.filter(
-      (_, index) => index !== placeIndex
+  const handleAddActivity = (placeid: string) => () => {
+    setPlacestogo((prevPlacestogo) =>
+      prevPlacestogo.map((placetogo) =>
+        placetogo.placeid === placeid
+          ? {
+              ...placetogo,
+              activities: [
+                ...placetogo.activities,
+                {
+                  activityid: uuidv4(),
+                  activityname: "",
+                  activity_duration: 1,
+                  time_unit: "",
+                },
+              ],
+            }
+          : placetogo
+      )
     );
-    setEditedItinerary({ ...editedItinerary, plan: updatedPlan });
   };
-  const handleActivityChangetime_unit = (
-    placeIndex: number,
-    activityIndex: number,
-    e: SelectChangeEvent<any>
+
+  const handleActivityTimeChange = (
+    e: string,
+    placeidN: string,
+    activityidN: string
   ) => {
-    const updatedPlaces = [...editedItinerary.plan];
-    // updatedPlaces[placeIndex].activities[activityIndex]._id = e.target
-    //   .value as string;
-    updatedPlaces[placeIndex].activities[activityIndex].time_unit =
-      e.target.value;
-    setEditedItinerary({ ...editedItinerary, plan: updatedPlaces });
-  };
-  const handleActivityChangeDuration = (
-    planindex: number,
-    activityIndex: number,
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const updatedPlaces = [...editedItinerary.plan];
-    updatedPlaces[planindex].activities[activityIndex].activity_duration =
-      e.target.value;
-    setEditedItinerary({ ...editedItinerary, plan: updatedPlaces });
-  };
-
-  // const handleAddActivity = (placeIndex: number) => {
-  //   const newActivity: IActivity = { Title: "", DateAndTime: new Date(), Location: { latitude: 0, longitude: 0 }, Price: 0, SpecialDiscount: 0, Category: "", Tags: [], BookingIsOpen: true };
-  //   const updatedPlan = [...itinerary.plan];
-  //   updatedPlan[placeIndex].activities.push(newActivity);
-  //   setItinerary({ ...itinerary, plan: updatedPlan });
-  // };
-
-  const handleRemoveActivity = (placeIndex: number, activityIndex: number) => {
-    const updatedPlan = [...editedItinerary.plan];
-    updatedPlan[placeIndex].activities = updatedPlan[
-      placeIndex
-    ].activities.filter((_, index) => index !== activityIndex);
-    setEditedItinerary({ ...editedItinerary, plan: updatedPlan });
-  };
-
-  const handleAddActivity = (planIndex: number) => {
-    const newActivity: IActivity = {
-      Title: "", // Set initial values for the new activity
-      DateAndTime: new Date(),
-      Location: { latitude: 0, longitude: 0 },
-      Price: 0,
-      SpecialDiscount: 0,
-      Category: "",
-      Tags: [],
-      BookingIsOpen: true,
-    };
-
-    const updatedPlan = [...editedItinerary.plan];
-    updatedPlan[planIndex].activities.push(newActivity); // Add the new activity to the specified plan
-
-    setEditedItinerary({ ...editedItinerary, plan: updatedPlan }); // Update the state with the new plan
-  };
-
-  const handleActivityChangeID = (
-    placeIndex: number,
-    activityIndex: number,
-    e: SelectChangeEvent<string>
-  ) => {
-    const updatedPlaces = [...editedItinerary.plan];
-    updatedPlaces[placeIndex].activities[activityIndex].activity_id =
-      e.target.value;
-    setEditedItinerary({ ...editedItinerary, plan: updatedPlaces });
-  };
-
-  const handlePlaceChangeID = (
-    planIndex: number,
-    e: SelectChangeEvent<string>
-  ) => {
-    const selectedPlaceId = e.target.value;
-    const selectedPlace = apiPlaces?.find(
-      (place) => place._id === selectedPlaceId
-    );
-
-    if (selectedPlace) {
-      const updatedPlan = [...editedItinerary.plan];
-      updatedPlan[planIndex].place = selectedPlace;
-      setEditedItinerary({ ...editedItinerary, plan: updatedPlan });
+    if (/^(?!0$)(\d*\.?\d*)$/.test(e)) {
+      setPlacestogo((prevPlacestogo) =>
+        prevPlacestogo.map((placetogonew) =>
+          placetogonew.placeid === placeidN
+            ? {
+                ...placetogonew,
+                activities: placetogonew.activities.map((activity) =>
+                  activity.activityid === activityidN
+                    ? { ...activity, activity_duration: parseInt(e) }
+                    : activity
+                ),
+              }
+            : placetogonew
+        )
+      );
     }
   };
-  // function handleActivityChange(planIndex: number, activityIndex: number, arg2: string, value: string): void {
-  //   throw new Error("Function not implemented.");
-  // }
+  const handleActivityUnitChange = (
+    e: string,
+    placeidN: string,
+    activityidN: string
+  ) =>
+    setPlacestogo((prevPlacestogo) =>
+      prevPlacestogo.map((placetogonew) =>
+        placetogonew.placeid === placeidN
+          ? {
+              ...placetogonew,
+              activities: placetogonew.activities.map((activity) =>
+                activity.activityid === activityidN
+                  ? { ...activity, time_unit: e }
+                  : activity
+              ),
+            }
+          : placetogonew
+      )
+    );
 
-  // const handleAddTag = () => {
-  //   if (newTag && !itinerary.selectedTags?.includes(newTag)) {
-  //     setItinerary((prev) => ({
-  //       ...prev,
-  //       selectedTags: [...(prev.selectedTags || []), newTag],
-  //     }));
-  //     setNewTag("");
-  //   }
-  // };
+  const handlePlaceNameChange = (e: string, placeidN: string) => (
+    console.log(e),
+    setPlacestogo((prevPlacestogo) =>
+      prevPlacestogo.map((placetogonew) =>
+        placetogonew.placeid === placeidN
+          ? {
+              ...placetogonew,
+              placename: e,
+            }
+          : placetogonew
+      )
+    )
+  );
+  const handleOChange =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      if (!isDropdownOpen) {
+        setExpanded(isExpanded ? panel : false);
+      }
+    };
 
-  // const handleRemoveTag = (tagToRemove: string) => {
-  //   setItinerary((prev) => ({
-  //     ...prev,
-  //     selectedTags: prev.selectedTags?.filter((tag) => tag !== tagToRemove),
-  //   }));
-  // };
+  const handleDropdownOpen = () => {
+    setIsDropdownOpen(true);
+  };
 
+  const handleDropdownClose = () => {
+    setIsDropdownOpen(false);
+  };
+  console.log(itinerary);
   return (
-    <Box className="flex justify-center items-center h-auto py-12 bg-gray-100">
-      <Card className="w-[95%] sm:w-[600px] md:w-[800px] lg:w-[900px] rounded-lg shadow-lg overflow-hidden bg-white">
-        <CardMedia
-          component="img"
-          image={itinerary.main_Picture}
-          alt={itinerary.title}
-          className="h-[400px] w-full object-cover"
-        />
-        <CardContent>
-          <Typography
-            variant="h4"
-            className="text-center font-bold mb-4 text-blue-600"
-          >
-            {itinerary.title}
-          </Typography>
-
-          <Divider className="my-4" />
-
-          <Box className="flex justify-between mb-4 text-gray-600">
-            <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">Start Date:</span>{" "}
-              {itinerary.starting_Date.slice(0, 10)}
-            </Typography>
-            <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">End Date:</span>{" "}
-              {itinerary.ending_Date.slice(0, 10)}
-            </Typography>
-          </Box>
-
-          <Box className="flex justify-between mb-4 text-gray-600">
-            <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">Price:</span> $
-              {itinerary.price}
-            </Typography>
-          </Box>
-
-          <Box className="flex justify-between mb-4 text-gray-600">
-            <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">Language:</span>{" "}
-              {itinerary.language}
-            </Typography>
-          </Box>
-
-          <Box className="flex justify-between mb-4 text-gray-600">
-            <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">Accessibility:</span>{" "}
-              {itinerary.accesibility ? "Yes" : "No"}
-            </Typography>
-          </Box>
-
-          <Box className="flex justify-between mb-4 text-gray-600">
-            <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">Pickup Location:</span>{" "}
-              <iframe
-                title="map"
-                className="rounded-b-[19px]"
-                src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${itinerary.pickup_location.longitude}!3d${itinerary.pickup_location.latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
-                width="400px"
-                height="166px"
-              ></iframe>
-            </Typography>
-            <Typography variant="body1" className="flex items-center">
-              <span className="mr-2 font-semibold">Dropoff Location:</span>{" "}
-              <iframe
-                title="map"
-                className="rounded-b-[19px]"
-                src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${itinerary.dropoff_location.longitude}!3d${itinerary.dropoff_location.latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
-                width="400px"
-                height="166px"
-              ></iframe>
-            </Typography>
-          </Box>
-
-          <Typography
-            variant="body2"
-            className="text-gray-700 text-justify leading-relaxed mb-4"
-          >
-            {itinerary.description}
-          </Typography>
-
-          <Divider className="my-4" />
-
-          {itinerary.plan &&
-            itinerary.plan.map((item, placeIndex) => (
-              <Box key={placeIndex} className="mb-4">
-                <Typography
-                  variant="h6"
-                  className="font-semibold mb-2 text-gray-800"
-                >
-                  {item.place.name}
-                </Typography>
-
-                {item.activities &&
-                  item.activities.map((activity, activityIndex) => (
-                    <Box key={activityIndex} className="ml-4 mb-2">
-                      <Typography variant="body2" className="text-gray-700">
-                        <span className="font-semibold">Activity:</span>{" "}
-                        {activity.activity_id.Title}
-                      </Typography>
-                      <Typography variant="body2" className="text-gray-600">
-                        <span className="font-semibold">Duration:</span>{" "}
-                        {activity.activity_duration} {activity.time_unit}
-                      </Typography>
-                    </Box>
-                  ))}
-              </Box>
-            ))}
-
-          <Divider className="my-4" />
-
-          {Array.isArray(itinerary.selectedTags) &&
-            itinerary.selectedTags.length > 0 && (
-              <Box>
-                <Typography
-                  variant="h6"
-                  className="font-semibold mb-2 text-gray-800"
-                >
-                  Tags:
-                </Typography>
-                <Box className="flex flex-wrap mb-4">
-                  {itinerary.selectedTags.map((tag, index) => (
-                    <Box
-                      key={index}
-                      className="bg-blue-100 text-blue-600 py-1 px-2 rounded-full mr-2 mb-2 flex items-center justify-between"
-                    >
-                      {tag.name}
-                      {/* <Button onClick={() => handleRemoveTag(tag)} color="inherit">
-                      &times;
-                    </Button> */}
-                    </Box>
-                  ))}
-                </Box>
-              </Box>
-            )}
-
-          <Box className="flex justify-center">
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleOpenModal}
-            >
-              Edit Itinerary
-            </Button>
-          </Box>
-
-          <Dialog open={isEditing} onClose={handleCloseModal}>
-            <DialogTitle>Edit Itinerary</DialogTitle>
-            <DialogContent>
-              <TextField
-                autoFocus
-                margin="dense"
-                label="Title"
-                type="text"
-                fullWidth
-                value={editedItinerary.title}
-                onChange={(e) => {
-                  setEditedItinerary({
-                    ...editedItinerary,
-                    title: e.target.value,
-                  });
-                }}
-              />
-              <TextField
-                margin="dense"
-                label="Description"
-                type="text"
-                fullWidth
-                multiline
-                rows={4}
-                value={editedItinerary.description}
-                onChange={(e) => handleChange(e, "description")}
-              />
-              {/* <TextField
-                margin="dense"
-                label="Price"
-                type="number"
-                fullWidth
-                value={editedItinerary.price}
-                onChange={(e) => handleChange(e, "price")}
-              /> */}
-
-              <TextField
-                label="Start Date"
+    <Box className="flex justify-center items-center h-auto py-8 bg-gray-100">
+      <div className="flex flex-col">
+        <div className="relative">
+          {!isEditing ? (
+            <div className="absolute top-[280px] left-[600px]">
+              <EditButton handleEditClick={handleEditClick} />
+            </div>
+          ) : (
+            <div className="absolute top-[450px] left-[800px]">
+              <SaveButton handleSaveClick={handleSaveClick} />
+            </div>
+          )}
+        </div>
+        {isEditing ? (
+          <>
+            <TextField
+              name="title"
+              value={title}
+              onChange={handleChange}
+              className="w-[700px] h-[90px] text-[28px]"
+            />
+            <TextField
+              name="description"
+              value={description}
+              onChange={handleChange}
+              className="w-[700px] h-[90px] text-[28px]"
+            />
+            <ImageUploader setSelectedImage={setImage} selectedImage={image} />
+            <div className="grid grid-cols-3 mt-4">
+              <p>Starting Date</p>
+              <p>Ending Date</p>
+              <p>Price</p>
+              <input
+                title="starting_Date"
                 type="date"
-                fullWidth
-                value={
-                  editedItinerary.starting_Date
-                    ? new Date(editedItinerary.starting_Date)
-                        .toISOString()
-                        .slice(0, 10)
-                    : ""
-                }
-                onChange={(e) => handleChange(e, "starting_Date")}
-                margin="dense"
+                name="starting_Date"
+                value={starting_Date.toISOString().split("T")[0]}
+                onChange={handleChange}
+                className="w-[200px] h-[30px] text-[16px]"
               />
-              <TextField
-                label="End Date"
+              <input
+                title="ending_Date"
                 type="date"
-                fullWidth
-                value={
-                  editedItinerary.ending_Date
-                    ? new Date(editedItinerary.ending_Date)
-                        .toISOString()
-                        .slice(0, 10)
-                    : ""
-                }
-                onChange={(e) => handleChange(e, "ending_Date")}
-                margin="dense"
+                name="ending_Date"
+                value={ending_Date.toISOString().split("T")[0]}
+                onChange={handleChange}
+                className="w-[200px] h-[30px] text-[16px]"
               />
-              <TextField
-                label="Price"
-                fullWidth
+              <input
+                title="price"
                 type="number"
-                value={editedItinerary.price}
-                onChange={(e) => handleChange(e, "price")}
-                margin="dense"
+                name="price"
+                value={(price * exchangeRate).toFixed(2)}
+                onChange={handleChange}
+                className="w-[200px] h-[30px] text-[16px]"
               />
-              <TextField
-                label="Language"
-                fullWidth
-                value={editedItinerary.language}
-                onChange={(e) => handleChange(e, "language")}
-                margin="dense"
-              />
-              <TextField
-                label="Pickup Location"
-                fullWidth
-                value={editedItinerary.pickup_location}
-                onChange={(e) => handleChange(e, "pickup_location")}
-                margin="dense"
-              />
-              <TextField
-                label="Dropoff Location"
-                fullWidth
-                value={editedItinerary.dropoff_location}
-                onChange={(e) => handleChange(e, "dropoff_location")}
-                margin="dense"
-              />
-
-              <Box className="mt-4">
-                <Typography variant="h6">Places</Typography>
-                {editedItinerary.plan.map((plan, planIndex) => (
-                  <Box key={planIndex} className="mb-2">
-                    {/* Access the place directly from each plan */}
-                    <FormControl fullWidth variant="outlined">
-                      <InputLabel id={`place-label-${planIndex}`}>
-                        Select Place
-                      </InputLabel>
-                      <Select
-                        labelId={`place-label-${planIndex}`}
-                        value={plan.place._id || ""}
-                        onChange={(e) => handlePlaceChangeID(planIndex, e)}
-                      >
-                        {Array.isArray(apiPlaces) &&
-                          apiPlaces.map((place) => (
-                            <MenuItem key={place._id} value={place._id}>
-                              {place.name}
-                            </MenuItem>
-                          ))}
-                      </Select>
-                      {plan.place === null && (
-                        <FormHelperText error>
-                          This field is required
-                        </FormHelperText>
-                      )}
-                    </FormControl>
-                    <Box className="mt-2">
-                      <Typography variant="subtitle1">Activities</Typography>
-                      {plan.activities.map((activity, activityIndex) => (
-                        <Box key={activityIndex} className="mb-2">
-                          <FormControl fullWidth>
-                            <InputLabel
-                              id={`activity-label-${planIndex}-${activityIndex}`}
-                            >
-                              Select Activity
-                            </InputLabel>
-                            <Select
-                              labelId={`activity-label-${planIndex}-${activityIndex}`}
-                              value={activity.activity_id} // Ensure value is a string
-                              onChange={(e) =>
-                                handleActivityChangeID(
-                                  planIndex,
-                                  activityIndex,
-                                  e
-                                )
-                              }
-                            >
-                              {activities.map((activityItem) => (
-                                <MenuItem
-                                  key={activityItem._id}
-                                  value={activityItem._id}
-                                >
-                                  {activityItem.Title}
-                                </MenuItem>
-                              ))}
-                            </Select>
-                            {activity.activity_id === "" && (
-                              <FormHelperText error>
-                                This field is required
-                              </FormHelperText>
-                            )}
-                          </FormControl>
-                          <TextField
-                            name="activity_duration"
-                            placeholder="activity_duration"
-                            variant="outlined"
-                            fullWidth
-                            margin="normal"
-                            type="number"
-                            sx={{ mb: 2 }}
-                            value={activity.activity_duration}
-                            onChange={(e) =>
-                              handleActivityChangeDuration(
-                                planIndex,
-                                activityIndex,
-                                e
-                              )
-                            }
-                          />
-                          <FormControl fullWidth>
-                            <InputLabel
-                              id={`timeUnit-label-${planIndex}-${activityIndex}`}
-                            >
-                              Time Unit
-                            </InputLabel>
-                            <Select
-                              labelId={`activity-label-${planIndex}-${activityIndex}`}
-                              value={activity.time_unit}
-                              onChange={(e) =>
-                                handleActivityChangetime_unit(
-                                  planIndex,
-                                  activityIndex,
-                                  e
-                                )
-                              }
-                            >
-                              {timeUnits.map((timeUnit) => (
-                                <MenuItem key={timeUnit} value={timeUnit}>
-                                  {timeUnit}
-                                </MenuItem>
-                              ))}
-                            </Select>
-                            {activity.time_unit === "" && (
-                              <FormHelperText error>
-                                This field is required
-                              </FormHelperText>
-                            )}
-                          </FormControl>
-
-                          <Button
-                            variant="outlined"
-                            color="secondary"
-                            onClick={() =>
-                              handleRemoveActivity(planIndex, activityIndex)
-                            }
-                          >
-                            Remove Activity
-                          </Button>
-                        </Box>
-                      ))}
-                      {validationError.activities &&
-                        plan.activities.length === 0 && (
-                          <FormHelperText error>
-                            Each place must have at least one activity.
-                          </FormHelperText>
-                        )}
-                      <Button
-                        variant="outlined"
-                        onClick={() => handleAddActivity(planIndex)}
-                      >
-                        Add Activity
-                      </Button>
-                    </Box>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      onClick={() => handleRemovePlace(planIndex)}
-                    >
-                      Remove Place
-                    </Button>
-                  </Box>
-                ))}
-                <Button variant="outlined" onClick={handleAddPlace}>
-                  Add Place
-                </Button>
-              </Box>
-              <Box>
-                <FormControl
-                  fullWidth
-                  margin="normal"
-                  error={validationError.tags}
-                >
-                  <InputLabel id="tags-select-label">Tags</InputLabel>
-                  <Select
-                    labelId="tags-select-label"
-                    multiple
-                    value={
-                      editedItinerary.selectedTags?.map((tag) => tag._id) ||
-                      selectedTags
-                    }
-                    onChange={handleTagsChange}
-                    renderValue={handleTagsText}
-                    MenuProps={{
-                      PaperProps: {
-                        style: {
-                          maxHeight: 200,
-                          width: 250,
-                        },
+              <div className="w-[260px] h-[50px] bg-[#D9D9D9] rounded-[9px] relative">
+                <Select
+                  sx={{
+                    height: "50px",
+                    fontSize: "18px",
+                    borderRadius: "9px",
+                    width: "260px",
+                  }}
+                  multiple
+                  value={selectedTags}
+                  onChange={handleTagsChange}
+                  input={<Input />}
+                  renderValue={handleTagsText}
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        maxHeight: 250,
+                        width: 139,
                       },
+                    },
+                  }}
+                >
+                  {tagsOptions.map((tag) => (
+                    <MenuItem key={tag._id} value={tag._id}>
+                      <Checkbox checked={selectedTags.indexOf(tag._id) > -1} />
+                      <ListItemText primary={tag.name} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </div>
+              <Select
+                value={accessibility}
+                label="Accessibility"
+                onChange={(e) => setAccessibility(e.target.value === "true")}
+                sx={{
+                  height: "50px",
+                  fontSize: "18px",
+                  borderRadius: "9px",
+                  width: "260px",
+                }}
+              >
+                <MenuItem value="true">Accessible</MenuItem>
+                <MenuItem value="false">Inaccessible</MenuItem>
+              </Select>
+              <Select
+                value={language}
+                label="Language"
+                onChange={(e) => setLanguage(e.target.value as string)}
+                sx={{
+                  height: "50px",
+                  fontSize: "18px",
+                  borderRadius: "9px",
+                  width: "260px",
+                }}
+              >
+                <MenuItem value="Egyptian">Egyptian</MenuItem>
+                <MenuItem value="American">American</MenuItem>
+                <MenuItem value="Quebecan">Quebecan</MenuItem>
+                <MenuItem value="Dutch">Dutch</MenuItem>
+                <MenuItem value="Mexican">Mexican</MenuItem>
+              </Select>
+            </div>
+            <div className="grid grid-cols-5 my-4">
+              {alltags(selectedTags).map((tag) => (
+                <Stack direction="row" spacing={1} key={tag}>
+                  <Chip
+                    sx={{
+                      fontSize: "18px",
+                      width: "130px",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      backgroundColor: "#D9D9D9",
+                      color: "#0000000",
+                    }}
+                    label={
+                      <span style={{ flexGrow: 1, textAlign: "left" }}>
+                        {tag}
+                      </span>
+                    }
+                    onDelete={handleDelete(tag)}
+                  />
+                </Stack>
+              ))}
+            </div>
+          </>
+        ) : (
+          <div>
+            <div
+              className="relative w-[700px] h-[200px] rounded-[20px] bg-cover bg-center"
+              style={{ backgroundImage: `url(${itinerary.main_Picture})` }}
+            >
+              <p
+                className="w-[690px] h-[50px] text-[20px] text-white break-words overflow-auto lasttimeipromise from-neutral-500 absolute bottom-[30px] left-[10px]"
+                style={{ textShadow: "0 4px 4px rgba(0, 0, 0, 0.25)" }}
+              >
+                {itinerary.title}
+              </p>
+              <img
+                src={itinerary.added_By.profilepic}
+                alt="Profile Picture"
+                className="w-[25px] h-[25px] rounded-[25px] absolute bottom-[20px] left-[30px]"
+              />
+              <p
+                className="w-[690px] h-[50px] text-[20px] text-white from-neutral-500 absolute top-[151px] left-[60px]"
+                style={{ textShadow: "0 4px 4px rgba(0, 0, 0, 0.25)" }}
+              >
+                {itinerary.added_By.username}
+              </p>
+            </div>
+            <div className="grid grid-cols-2">
+              <p>
+                {formatDate(itinerary.starting_Date) +
+                  " → " +
+                  formatDate(itinerary.ending_Date)}
+              </p>
+              <p className="w-[200px] h-[30px] text-[16px]">
+                {currentCurrency +
+                  " " +
+                  (itinerary.price * exchangeRate).toFixed(2)}
+              </p>
+
+              <Rating name="read-only" value={itinerary.rating} readOnly />
+              <p>{itinerary.total + " reviews"}</p>
+              <p>{itinerary.language}</p>
+              <p>{itinerary.accessibility ? "Accessible" : "Inaccessible"}</p>
+            </div>
+
+            <p className="w-[700px] h-[90px] text-[28px] overflow-auto lasttimeipromise">
+              {itinerary.description}
+            </p>
+
+            <div className="grid grid-cols-6">
+              {itinerary.selectedTags?.map((tag) => (
+                <Chip
+                  key={tag._id}
+                  label={tag.name}
+                  color="info"
+                  size="small"
+                  sx={{
+                    marginRight: "5px",
+                    width: "100px",
+                    height: "30px",
+                    marginBottom: "5px",
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+        {isEditing ? (
+          <div>
+            <div className=" w-[883px] h-[82px] bg-[#413B3B] rounded-[15px] my-2 mx-auto flex">
+              <Button
+                onClick={handleAddPlace}
+                sx={{
+                  width: "883px",
+                  height: "82px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: "15px",
+                  backgroundColor: "#413B3B",
+                  color: "white",
+                  "&:hover": {
+                    backgroundColor: "#5a5a5a",
+                  },
+                }}
+              >
+                <p className="text-[20px] text-start my-auto ml-2 text-white mr-auto">
+                  + Add New Place
+                </p>
+              </Button>
+            </div>
+
+            {placestogo.map((placetogo) => (
+              <Accordion
+                key={placetogo.placeid}
+                disableGutters
+                expanded={expanded === `panel${placetogo.placeid}`}
+                onChange={handleOChange(`panel${placetogo.placeid}`)}
+                sx={{
+                  width: "883px",
+                  backgroundColor: "transparent",
+                  borderRadius: "15px",
+                  borderColor: "transparent",
+                  boxShadow: "none",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                }}
+              >
+                <AccordionSummary
+                  expandIcon={
+                    <ExpandMoreIcon fontSize="large" sx={{ color: "white" }} />
+                  }
+                  sx={{
+                    minHeight: "unset",
+                    backgroundColor: "#413B3B",
+                    borderRadius: "15px",
+                    "&.Mui-expanded": { minHeight: "unset" },
+                    marginBottom: "8px",
+                  }}
+                >
+                  <Select
+                    value={placetogo.placename}
+                    label="Places"
+                    onChange={(e) =>
+                      handlePlaceNameChange(e.target.value, placetogo.placeid)
+                    }
+                    onOpen={handleDropdownOpen}
+                    onClose={handleDropdownClose}
+                    sx={{
+                      height: "58px",
+                      fontSize: "18px",
+                      borderRadius: "15px",
+                      width: "200px",
+                      color: "white",
                     }}
                   >
-                    {tagsOptions.map((tag) => (
-                      <MenuItem key={tag._id} value={tag._id}>
-                        <Checkbox
-                          checked={
-                            selectedTags.includes(tag._id) ||
-                            editedItinerary.selectedTags?.some(
-                              (selectedTag) => selectedTag._id === tag._id
-                            )
-                          }
-                        />
-                        <ListItemText primary={tag.name} />
-                      </MenuItem>
-                    ))}
+                    {apiPlaces &&
+                      apiPlaces.map((place) => (
+                        <MenuItem key={place._id} value={place.name}>
+                          {place.name}
+                        </MenuItem>
+                      ))}
                   </Select>
-                  {validationError.tags && (
-                    <FormHelperText error>
-                      At least one tag must be selected.
-                    </FormHelperText>
-                  )}
-                  {/* <FormHelperText>Select multiple tags</FormHelperText> */}
-                </FormControl>
-
-                {/* <Button variant="outlined" onClick={handleAddTag}>
-    Add Tag
-  </Button> */}
-                <div className="flex flex-wrap mt-2">
-                  {editedItinerary.selectedTags?.map((tag, index) => (
-                    <Box
-                      key={index}
-                      className="bg-blue-100 text-blue-600 py-1 px-2 rounded-full mr-2 mb-2 flex items-center justify-between"
+                  <BestDeleteButton
+                    className="ml-auto mr-2 my-auto"
+                    onDelete={() =>
+                      setPlacestogo((prevPlacestogo) =>
+                        prevPlacestogo.filter(
+                          (placetogonew) =>
+                            placetogonew.placeid !== placetogo.placeid
+                        )
+                      )
+                    }
+                  />
+                </AccordionSummary>
+                <AccordionDetails
+                  sx={{
+                    borderRadius: "15px",
+                    borderColor: "transparent",
+                    boxShadow: "none",
+                    marginBottom: "16px",
+                  }}
+                >
+                  <div className="w-[867px] h-[58px] bg-[#413B3B] rounded-[15px] flex flex-row my-4">
+                    <Button
+                      className="w-full"
+                      onClick={handleAddActivity(placetogo.placeid)}
                     >
-                      {tag.name}
-                      <Button
-                        onClick={() => handleRemoveTag(tag)}
-                        color="inherit"
+                      <p className="text-[20px] text-start my-auto text-white mr-auto">
+                        + Add Activity
+                      </p>
+                    </Button>
+                  </div>
+                  {placetogo.activities.map((currentactivity) => (
+                    <div
+                      key={currentactivity.activityid}
+                      className="w-[867px] h-[58px] bg-[#413B3B] rounded-[15px] flex flex-row my-4"
+                    >
+                      <Select
+                        value={currentactivity.activityname}
+                        label="Activity"
+                        onChange={(e) => {
+                          handleActivityNameChange(
+                            e.target.value,
+                            placetogo.placeid,
+                            currentactivity.activityid
+                          );
+                        }}
+                        sx={{
+                          height: "58px",
+                          fontSize: "18px",
+                          borderRadius: "15px",
+                          width: "200px",
+                          color: "white",
+                        }}
                       >
-                        &times;
-                      </Button>
-                    </Box>
+                        {activities.map((activity) => (
+                          <MenuItem key={activity._id} value={activity.Title}>
+                            {activity.Title}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      <TextField
+                        value={currentactivity.activity_duration}
+                        onChange={(e) =>
+                          handleActivityTimeChange(
+                            e.target.value,
+                            placetogo.placeid,
+                            currentactivity.activityid
+                          )
+                        }
+                        required
+                        type="number"
+                        className="w-[200px]"
+                        InputProps={{
+                          style: {
+                            fontSize: "18px",
+                            borderRadius: "9px",
+                            height: "50px",
+                            marginTop: "auto",
+                            marginBottom: "auto",
+                            marginLeft: "24px",
+                            color: "white",
+                          },
+                        }}
+                        placeholder="Time"
+                        variant="outlined"
+                      />
+                      <Select
+                        value={currentactivity.time_unit}
+                        label="timeUnit"
+                        onChange={(e) =>
+                          handleActivityUnitChange(
+                            e.target.value,
+                            placetogo.placeid,
+                            currentactivity.activityid
+                          )
+                        }
+                        required
+                        className="w-[260px] text-[18px] rounded-[9px] h-[50px] mt-auto mb-auto ml-2"
+                        placeholder="Days? Really?"
+                        variant="outlined"
+                        sx={{
+                          borderRadius: "9px",
+                          color: "white",
+                        }}
+                      >
+                        {timeUnits.map((unit) => (
+                          <MenuItem key={unit} value={unit}>
+                            {unit}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      <BestDeleteButton
+                        className="ml-auto mr-2 my-auto"
+                        onDelete={() =>
+                          setPlacestogo((prevPlacestogo) =>
+                            prevPlacestogo.map((placetogonew) =>
+                              placetogonew.placeid === placetogo.placeid
+                                ? {
+                                    ...placetogonew,
+                                    activities: [
+                                      ...placetogonew.activities.filter(
+                                        (activity) =>
+                                          activity.activityid !==
+                                          currentactivity.activityid
+                                      ),
+                                    ],
+                                  }
+                                : placetogonew
+                            )
+                          )
+                        }
+                      />
+                    </div>
                   ))}
-                </div>
-              </Box>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCloseModal} color="primary">
-                Cancel
-              </Button>
-              <Button onClick={handleSaveModal} color="primary">
-                Save
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </CardContent>
-      </Card>
+                </AccordionDetails>
+              </Accordion>
+            ))}
+          </div>
+        ) : (
+          <>
+            {itinerary.plan.map((plan) => (
+              <Accordion
+                key={itinerary._id}
+                disableGutters
+                sx={{
+                  width: "700px",
+                  backgroundColor: "transparent",
+                  borderRadius: "10px",
+                  borderColor: "transparent",
+                  boxShadow: "none",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                }}
+              >
+                <AccordionSummary
+                  expandIcon={
+                    <ExpandMoreIcon fontSize="large" sx={{ color: "black" }} />
+                  }
+                  sx={{
+                    backgroundImage: `url(${plan.place.pictures[0]})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    minHeight: "unset",
+                    backgroundColor: "#413B3B",
+                    borderRadius: "20px",
+                    marginBottom: "8px",
+                  }}
+                >
+                  <div className="relative w-[600px] h-[130px] rounded-[20px]">
+                    <p
+                      className="w-[150px] h-[60px] text-[35px] text-white absolute bottom-[10px] left-[10px]"
+                      style={{ textShadow: "0 4px 4px rgba(0, 0, 0, 0.25)" }}
+                    >
+                      {plan.place.name}
+                    </p>
+                  </div>
+                </AccordionSummary>
+                <AccordionDetails
+                  sx={{
+                    borderRadius: "10px",
+                    borderColor: "transparent",
+                    boxShadow: "none",
+                    marginBottom: "16px",
+                  }}
+                >
+                  <div className="flex flex-col w-[700px]">
+                    <div className="flex flex-col relative h-[170px] w-[650px]">
+                      <span className="w-[10px] h-[170px] bg-black m-[30px] rounded-b-[3px] absolute rounded-t-[10px] top-[-30px] left-[-20px]" />
+                      <line
+                        className={`w-[1px] h-[250px] bg-black m-[30px] absolute top-[-46px] left-[-15px]`}
+                        style={{ borderLeft: "1px solid black" }}
+                      ></line>
+                      <p className="text-[18px] ml-12 mt-0 mb-auto text-black">
+                        {"Native: " +
+                          currentCurrency +
+                          " " +
+                          (
+                            plan.place.ticket_price.native * exchangeRate
+                          ).toFixed(2) +
+                          " "}
+                        {"Foreign: " +
+                          currentCurrency +
+                          " " +
+                          (
+                            plan.place.ticket_price.foreign * exchangeRate
+                          ).toFixed(2) +
+                          " "}
+                        {"Student: " +
+                          currentCurrency +
+                          " " +
+                          (
+                            plan.place.ticket_price.student * exchangeRate
+                          ).toFixed(2)}
+                      </p>
+                      <p className="text-[18px] h-[100px] mt-auto ml-12 text-black overflow-auto">
+                        {plan.place.description}
+                      </p>
+                    </div>
+
+                    {plan.activities.map((activity) => (
+                      <div className="flex flex-row relative mt-[35px] w-[650px]">
+                        <span className="w-[30px] h-[30px] bg-black m-[30px] rounded-[30px] absolute top-[-30px] left-[-30px]" />
+                        <line
+                          className={`w-[1px] h-[150px] bg-black m-[30px] absolute top-[0px] left-[-15px]`}
+                          style={{ borderLeft: "1px solid black" }}
+                        ></line>
+                        <div className="w-[600px] h-[140px] rounded-[15px] bg-[#D9D9D9] ml-[60px] flex flex-row">
+                          <div className="flex flex-col w-[250px]">
+                            <p className="w-[250px] h-[35px] text-[26px] ml-2 mr-auto mt-0 mb-auto text-black">
+                              {activity.activity_id?.Title}
+                            </p>
+                            <p className="w-[250px] h-[30px] text-[16px] ml-2 mr-auto mt-0 mb-auto text-black">
+                              {activity.activity_id?.Category.name}
+                            </p>
+                            {activity.activity_id?.SpecialDiscount &&
+                            (activity.activity_id.SpecialDiscount >
+                              activity.activity_id.Price ||
+                              activity.activity_id.SpecialDiscount ===
+                                activity.activity_id.Price) ? (
+                              <p className="w-[100px] h-[16px] text-[16px] ml-2 mr-auto mt-2 mb-4 text-black">
+                                {currentCurrency +
+                                  " " +
+                                  (
+                                    activity.activity_id?.Price * exchangeRate
+                                  ).toFixed(2)}
+                              </p>
+                            ) : (
+                              <div className="relative h-[35px]">
+                                <p className="w-[100px] h-[13px] text-[13px] ml-2 mr-auto mt-2 mb-1 text-red-500 line-through">
+                                  {currentCurrency +
+                                    " " +
+                                    (activity.activity_id
+                                      ? activity.activity_id.Price *
+                                        exchangeRate
+                                      : 0
+                                    ).toFixed(2)}
+                                </p>
+                                <p className="w-[100px] h-[16px] text-[16px] absolute bottom-[10px] left-[70px] text-black">
+                                  {currentCurrency +
+                                    " " +
+                                    (activity.activity_id
+                                      ? activity.activity_id.SpecialDiscount *
+                                        exchangeRate
+                                      : 0
+                                    ).toFixed(2)}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex flex-col w-[130px] h-[140px]">
+                            <p className="text-[12px] w-[130px] h-[24px] mt-2 mb-0 text-center">
+                              {formatDate(
+                                activity.activity_id?.DateAndTime.split("T")[0]
+                              )}
+                            </p>
+                            <Rating
+                              name="read-only"
+                              value={activity.activity_id?.rating}
+                              readOnly
+                              sx={{
+                                marginTop: "2px",
+                                marginBottom: "5px",
+                                marginLeft: "auto",
+                                marginRight: "auto",
+                              }}
+                            />
+                            <div className="flex flex-col w-[130px] h-[80px] overflow-auto lasttimeipromise mt-[400px]">
+                              {activity.activity_id?.Tags.map(
+                                (tag: TagStructure) => (
+                                  <Chip
+                                    key={tag._id}
+                                    label={tag.name}
+                                    color="info"
+                                    size="small"
+                                    sx={{
+                                      width: "80px",
+                                      marginLeft: "auto",
+                                      marginRight: "auto",
+                                      marginTop: "3.5px",
+                                    }}
+                                  />
+                                )
+                              )}
+                            </div>
+                          </div>
+                          <iframe
+                            title="map"
+                            className="rounded-r-[15px] mt-0 mb-auto mr-0 ml-auto w-[220px] h-[140px]"
+                            src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${activity.activity_id?.Location.longitude}!3d${activity.activity_id?.Location.latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
+                            width="220px"
+                            height="140px"
+                          ></iframe>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </AccordionDetails>
+              </Accordion>
+            ))}
+          </>
+        )}
+      </div>
+
+      {isEditing ? (
+        <div className="flex flex-col">
+          <TheMAP
+            id="startitinerarymap"
+            className="flex h-[400px] w-[500px] ml-2 mb-2 mt-auto"
+            setLongitude={setStartinglongitude}
+            setLatitude={setStartinglatitude}
+            lat={startinglatitude}
+            long={startinglongitude}
+          />
+          <TheMAP
+            id="enditinerarymap"
+            className="flex h-[400px] w-[500px] ml-2"
+            setLongitude={setEndinglongitude}
+            setLatitude={setEndinglatitude}
+            lat={endinglatitude}
+            long={endinglongitude}
+          />
+        </div>
+      ) : (
+        <TheBIGMAP
+          id="bigmap"
+          className="flex h-[800px] w-[500px] ml-2 mb-0 mt-auto"
+          arrayofmarkers={locations}
+        />
+      )}
     </Box>
   );
 };

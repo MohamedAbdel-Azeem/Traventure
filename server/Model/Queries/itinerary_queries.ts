@@ -32,7 +32,7 @@ export async function getItinerary(tourGuide_username: String) {
         path: "plan.activities.activity_id",
         populate: {
           path: "Tags",
-          model: "Tags",
+          model: "PreferenceTags",
         },
       })
       .populate("plan.place")

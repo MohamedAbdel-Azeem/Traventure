@@ -2,8 +2,8 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import useGetUpcoming from "../../../custom_hooks/itineraries/useGetupcoming";
 import ItineraryCardToruist from "../../../components/Itinerary/ItineraryCardToruist";
-import LocationCardTourist from "../../../components/LocationCardTourist";
-import { ActivityCardTourist } from "../../../components/ActivityCardTourist";
+import LocationCardTourist from "../../../components/Locations/LocationCardTourist";
+import { ActivityCardTourist } from "../../../components/Activities/ActivityCardTourist";
 
 
 const GuestDashboard = () => {

@@ -1,6 +1,67 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Itinerary from "./itinerarySchema";
+import { TouristProfileData } from "../../routes/_app/Tourist/tourist_profile/tourist_profile_data";
+import Place from "../places/place_interface";
+
+
+interface TagStructure {
+  _id: string;
+  name: string;
+  __v: number;
+}
+
+interface Itinerary {
+  _id: string;
+  main_Picture?: string;
+  title: string;
+  description: string;
+  added_By: {
+    profilepic: string;
+    username: string;
+  };
+  price: number;
+  starting_Date: Date;
+  ending_Date: Date;
+  rating: number;
+  total: number;
+  language: string;
+  selectedTags?: TagStructure[];
+  pickup_location: { longitude: number; latitude: number };
+  dropoff_location: { longitude: number; latitude: number };
+  plan: {
+    place: Place;
+    activities: {
+      _id: string;
+      activity_id?: SActivity;
+      activity_duration: number;
+      time_unit: string;
+    }[];
+  }[];
+  booked_By: {
+    user_id?: TouristProfileData;
+  }[];
+  accessibility: boolean;
+}
+
+interface SActivity {
+  activity_id?: string;
+  time_unit?: string;
+  activity_duration?: number;
+  _id?: string;
+  Title?: string;
+  DateAndTime: Date;
+  Location: {
+    latitude: number;
+    longitude: number;
+  };
+  Price: number;
+  SpecialDiscount: number;
+  Category: string;
+  Tags: TagStructure[];
+  BookingIsOpen: boolean;
+  added_By?: string;
+}
+
 
 const useGetItinerary = (username: string | undefined) => {
   const [itinerary, setItinerary] = useState<Itinerary[] | null>(null);

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./ProductCard.css"; // Assuming styles are in this file
+import "./ProductCard.css";
 import ProductCard from "../../../../components/Shenawy/ProductCard";
 import { ACTUALProduct } from "../../../../components/data/ProductData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,9 +20,7 @@ import {
   InputAdornment,
   InputLabel,
   OutlinedInput,
-  TextField,
 } from "@mui/material";
-import Navbar from "./navbar";
 const itemsPerPage = 8;
 interface ShopPageProps {
   type: string;

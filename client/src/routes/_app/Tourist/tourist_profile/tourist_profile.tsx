@@ -379,7 +379,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
                     Wallet Balance:
                   </label>
                   <p className="text-4xl font-bold text-purple-900">
-                    ${currentTourist.wallet}
+                    ${walletBalance}
                   </p>
                 </div>
               </div>

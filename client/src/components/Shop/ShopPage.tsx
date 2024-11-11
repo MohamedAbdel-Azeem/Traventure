@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./ProductCard.css"; // Assuming styles are in this file
-
 import { ACTUALProduct } from "../data/ProductData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -22,6 +21,8 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import ImageUploader from "../PDFs&Images/ImageUploader";
+import ProductCard from "../Shenawy/ProductCard";
+import ShowingResponse from "../Shenawy/ShowingResponse";
 
 
 const itemsPerPage = 8;

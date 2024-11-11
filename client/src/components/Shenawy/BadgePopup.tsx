@@ -1,8 +1,8 @@
 import React from "react";
 import "./BadgePopup.css";
-import imagefirst from "../assets/gold.png";
-import imagesecond from "../assets/silver.png";
-import imagethird from "../assets/bronze.png";
+import imagefirst from "../../assets/gold.png";
+import imagesecond from "../../assets/silver.png";
+import imagethird from "../../assets/bronze.png";
 
 const badges = [
   { level: 1, requirement: 100000, name: "Badge Level 1", image: imagethird },

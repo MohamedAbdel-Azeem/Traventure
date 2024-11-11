@@ -39,8 +39,6 @@ function App() {
           {/* Guest */}
           <Route path="/guest/*" element={<GuestRouter/>}/>//
           {/* Extra */}
-          <Route path="/itinerary/:id" element={<ItineraryDetails />} />
-          <Route path="/tourist-itinerary/:id" element={<ItineraryDetailsTourist />} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions />}/>//
           <Route path="/landing" element={<LandingPage />} />//
         </Routes>

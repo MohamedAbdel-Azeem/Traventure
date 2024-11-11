@@ -98,6 +98,7 @@ router.patch(
     const newItinerary = matchedData(req);
     try {
       const itineraryId = req.params.id;
+      console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"+req);
       const updatedItinerary = await updateItinerary(itineraryId, newItinerary);
       res.status(200).send("itinerary Updated Successfully !!");
     } catch (error) {

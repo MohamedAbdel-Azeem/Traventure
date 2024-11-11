@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import StarIcon from "@mui/icons-material/Star";
@@ -12,6 +12,7 @@ import Place from "../../../../custom_hooks/places/place_interface";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useSelector } from "react-redux";
 interface TagStructure {
   _id: string;
   name: string;
@@ -117,6 +118,16 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
       }
     }
   };
+
+  const exchangeRate = useSelector(
+    (state: any) => state.exchangeRate.exchangeRate
+  );
+  const currentCurrency = useSelector(
+    (state: any) => state.exchangeRate.currentCurrency
+  );
+
+  const {username : currentuser}  = useParams();
+
   return (
     <div className="m-4 transition transform hover:scale-105 w-96 bg-gray-100 rounded-lg">
       <div className="relative w-full h-[200px]">
@@ -174,7 +185,8 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
         <div className="flex justify-center items-center mb-4 space-x-4">
           <div className="bg-red-500 text-white p-2 rounded-lg flex flex-col items-center w-1/2">
             <p className="text-sm flex items-center">
-              <ConfirmationNumberIcon className="mr-1" /> {price.toFixed(2)}
+              <ConfirmationNumberIcon className="mr-1" />
+              {currentCurrency} {(price * exchangeRate).toFixed(2)}
             </p>
           </div>
           <div className="bg-yellow-500 text-white p-2 rounded-lg flex flex-col items-center w-1/2">
@@ -193,7 +205,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
         )}
         <div className="mt-4 flex justify-between items-center">
           <Link
-            to={`/itinerary/${_id}`}
+            to={`/tourguide/${currentuser}/itineraries/itinerary/${_id}`}
             state={{
               _id,
               title,

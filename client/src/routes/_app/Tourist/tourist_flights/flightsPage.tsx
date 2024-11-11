@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import axios from "axios";
 import {
   Box,
@@ -148,6 +148,7 @@ const AvailableFlights = () => {
     };
 
     setIsLoading(true);
+    setError(null);
     await axios
       .post("/traventure/amadeus/getFlights", flightDetails)
       .then((response) => {
@@ -161,6 +162,10 @@ const AvailableFlights = () => {
         setIsLoading(false);
       });
   };
+
+
+
+
 
   return (
     <div className="flex">

@@ -12,17 +12,18 @@ import { Tourist_Profile } from "../routes/_app/Tourist/tourist_profile/tourist-
 import MoreActivities from "../components/Activities/MoreActivities";
 import ComplaintsTable from "../components/users_complaints/ComplaintsTable";
 import CurrencyDropdown from "../components/currencyDrop";
+import ItineraryDetailsTourist from "../components/Itinerary/ItineraryDetailsTourist";
 
 export default function TouristRouter() {
   return (
     <div className="flex flex-col w-screen h-screen">
       <NewNavbar />
-      <CurrencyDropdown />
       <Routes>
         <Route path="/:username" element={<TouristPage />} />
         <Route path="/:username/shop" element={<ShopPage type="Tourist" />} />
         <Route path="/:username/locations" element={<MorePlaces />} />
         <Route path="/:username/itineraries" element={<MoreItineraries />} />
+        <Route path="/:username/itineraries/tourist-itinerary/:id" element={<ItineraryDetailsTourist/>}/>
         <Route path="/:username/activities" element={<MoreActivities />} />
         <Route path="/:username/complaints" element={<ComplaintsTable />} />
         <Route path="/:username/profile" element={<Tourist_Profile />} />
@@ -31,6 +32,7 @@ export default function TouristRouter() {
         <Route path="/:username/flights" element={<FlightsPage />} />
         <Route path="/:username/hotels" element={<HotelsPage />} />
       </Routes>
+      <CurrencyDropdown />
     </div>
   );
 }

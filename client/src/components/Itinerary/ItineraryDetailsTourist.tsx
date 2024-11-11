@@ -1,30 +1,17 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  Card,
-  CardContent,
-  CardMedia,
-  Divider,
-  Typography,
-  Button,
-  TextField,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   AccordionDetails,
-  Select,
-  MenuItem,
   AccordionSummary,
   Chip,
   Rating,
 } from "@mui/material";
-import { useParams, useLocation } from "react-router-dom";
-import IActivity from "../custom_hooks/activities/activity_interface";
-import { TouristProfileData } from "../routes/_app/Tourist/tourist_profile/tourist_profile_data";
-import Place from "../custom_hooks/places/place_interface";
-import { useGetItineraryID } from "../custom_hooks/itineraries/useGetItinerary";
-import TheBIGMAP from "./TheBIGMAP";
+import { useLocation } from "react-router-dom";
+import {IActivity} from "../../custom_hooks/activities/activity_interface";
+import { TouristProfileData } from "../../routes/_app/Tourist/tourist_profile/tourist_profile_data";
+import Place from "../../custom_hooks/places/place_interface";
+import { useGetItineraryID } from "../../custom_hooks/itineraries/useGetItinerary";
+import TheBIGMAP from "../Maps/TheBIGMAP";
 
 import { useSelector } from "react-redux";
 import { Accordion } from "@mui/material";
@@ -63,7 +50,7 @@ interface Itinerary {
 
 const ItineraryDetailsTourist: React.FC = () => {
   const location = useLocation();
-  const id = location.pathname.split(`/`)[2];
+  const id = location.pathname.split(`/`)[5];
   const { itinerary: initialItinerary } = useGetItineraryID(id);
   const [itinerary, setItinerary] = useState<Itinerary | null>(
     initialItinerary
@@ -110,7 +97,7 @@ const ItineraryDetailsTourist: React.FC = () => {
           style={{ backgroundImage: `url(${itinerary.main_Picture})` }}
         >
           <p
-            className="w-[690px] h-[50px] text-[30px] text-white
+            className="w-[690px] h-[50px] text-[20px] text-white break-words overflow-auto lasttimeipromise
              from-neutral-500 absolute bottom-[30px] left-[10px]"
             style={{ textShadow: "0 4px 4px rgba(0, 0, 0, 0.25)" }}
           >

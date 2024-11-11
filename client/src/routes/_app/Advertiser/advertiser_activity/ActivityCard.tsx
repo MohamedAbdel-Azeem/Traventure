@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import TheMAP from "./TheMAP";
+import TheMAP from "../../../../components/Maps/TheMAP";
 import {
   Box,
   Checkbox,

@@ -1,121 +1,130 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useForm, Controller, set } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { TouristProfileData } from "./tourist_profile_data";
-import { patchUserProfile } from "../../../custom_hooks/updateTouristProfile";
-
-import RedeemPopup from "../../../components/RedeemPopup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAward } from "@fortawesome/free-solid-svg-icons";
-import BadgePopup from "../../../components/Shenawy/BadgePopup";
-import { redeemPoints } from "../../../custom_hooks/touristpoints/redeemPoints";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { set } from "react-hook-form";
+import { any, string } from "zod";
+import { ITourGuide } from "./ITourGuide";
+import { UpdateTourGuide } from "../../../../custom_hooks/tourGuideGetUpdate";
+import { Box, Button, Modal, TextField } from "@mui/material";
+import ChangePasswordModal, {
+  AddContactLeadFormType,
+} from "../../../../components/ChangePasswordModal";
+import { editpassword } from "../../../../custom_hooks/changepassowrd";
 import Swal from "sweetalert2";
-import { handleDeleteAccount } from "../../../custom_hooks/usedeleterequest";
-import ChangePasswordModal, { AddContactLeadFormType } from "../../../components/ChangePasswordModal";
-import { editpassword } from "../../../custom_hooks/changepassowrd";
-
-
-interface TouristProfileProps {
-  tourist: TouristProfileData;
+import ProfilePictureEdit from "../../../../components/PDFs&Images/ProfilePictureEdit";
+import { uploadFileToStorage } from "../../../../firebase/firebase_storage";
+import { handleDeleteAccount } from "../../../../custom_hooks/usedeleterequest";
+interface TourGuideProfileProps {
+  tourGuide: ITourGuide;
 }
 
-const schema = z.object({
-  username: z.string().min(1, "Username is required"),
-  email: z.string().email("Invalid email address"),
-  mobileNumber: z.string().min(1, "Mobile number is required"),
-  nationality: z.string().min(1, "Nationality is required"),
-  dateOfBirth: z.string().refine((val) => {
-    const today = new Date();
-    const dob = new Date(val);
-    const age = today.getFullYear() - dob.getFullYear();
-    const monthDiff = today.getMonth() - dob.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
-      return age - 1 >= 18;
-    }
-    return age >= 18;
-  }, "You must be 18 years or older"),
-  Occupation: z.string().min(1, "Occupation is required"),
-});
-export type TouristProfileUpdate = z.infer<typeof schema>;
-
-const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
+const TourGuideProfile: React.FC<TourGuideProfileProps> = ({ tourGuide }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [userData, setUserData] = useState<ITourGuide>(tourGuide);
+  const [currentData, setCurrentData] = useState<ITourGuide>(tourGuide);
   const navigate = useNavigate();
-  const [currentTourist, setCurrentTourist] = useState(tourist);
-  const [apiBody, setApiBody] = useState({});
-  const [apiUsername, setApiUsername] = useState("");
-  const response = patchUserProfile(apiBody, apiUsername);
-  const [isRedeemPopupOpen, setIsRedeemPopupOpen] = useState(false);
-  const [isBadgePopupOpen, setIsBadgePopupOpen] = useState(false);
+  //Modal States
+  const [open, setOpen] = useState(false);
+  const [company, setCompany] = useState<string>("");
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [role, setRole] = useState<string>("");
+  const [description, setdescription] = useState<string>("");
+  const [stillWorking, setStillWorking] = useState<boolean>(false);
+  const [location, setLocation] = useState<string>("");
 
-  // Function to open the popup
-  const handleRedeemClick = () => {
-    setIsRedeemPopupOpen(true);
-  };
+  const [update, setUpdate] = useState(false);
+  const [profilePicture, setProfilePicture] = useState<File | null>(null);
 
-  // Function to close the popup
-  const handleCloseRedeemPopup = () => {
-    setIsRedeemPopupOpen(false);
-  };
+  const handleEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
 
-  const handleBadgeClick = () => {
-    setIsBadgePopupOpen(true);
-  };
-
-  // Function to close the badge popup
-  const handleCloseBadgePopup = () => {
-    setIsBadgePopupOpen(false);
-  };
-
-  //  tourist = patchUserProfile(tourist, tourist.username).response as TouristProfileData;
-
-  // Define the Zod schema for form validation
-  // Initialize useForm with default values from props
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<TouristProfileData>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      username: currentTourist.username,
-      email: currentTourist.email,
-      mobileNumber: currentTourist.mobileNumber,
-      nationality: currentTourist.nationality,
-      dateOfBirth: currentTourist.dateOfBirth,
-      Occupation: currentTourist.Occupation,
-    },
-  });
-
-  const [isPasswordModalOpen, setPasswordModalOpen] = useState(false);
-  // Handle form submission (save edited data)
-  const onSubmit = (data: TouristProfileData) => {
-    setIsEditing(false);
-    setApiBody(data);
-    setApiUsername(data.username);
-
-    setCurrentTourist(data);
+    setCurrentData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const toggleEdit = () => {
     setIsEditing(!isEditing);
   };
 
+  const handleSave = async () => {
+    setUpdate(true);
+    const reponseUpdate = await UpdateTourGuide(
+      currentData,
+      userData.username,
+      profilePicture
+    );
+    if (reponseUpdate !== "error Updating Tour Guide") {
+      setIsEditing(false);
+      setUserData(currentData);
+      setProfilePicture(null);
+    } else {
+      Swal.fire({
+        title: "Error",
+        text: reponseUpdate,
+        icon: "error",
+      });
+    }
+    setUpdate(false);
+  };
+
   const handleLogout = () => {
     navigate("/");
   };
 
-  const [successMessage, setSuccessMessage] = useState("");
+  function handleDelete(_id: string): void {
+    setCurrentData((prevData) => ({
+      ...prevData,
+      previousWork: prevData.previousWork?.filter((work) => work._id !== _id),
+    }));
+  }
 
+  function handleAdd(): void {
+    if (!company || !startDate || !role || !description) {
+      return;
+    }
+    if (!stillWorking && !endDate) {
+      return;
+    }
+    const newWork = {
+      company,
+      startDate,
+      endDate: endDate,
+      stillWorkHere: stillWorking,
+      role,
+      description,
+      location,
+    };
+    setCurrentData((prevData) => ({
+      ...prevData,
+      previousWork: prevData.previousWork
+        ? [...prevData.previousWork, newWork]
+        : [newWork],
+    }));
+    setOpen(false);
+  }
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
+  const [isPasswordModalOpen, setPasswordModalOpen] = useState(false);
   const handlePasswordChangeSubmit = (data: AddContactLeadFormType) => {
     const { oldPassword, newPassword } = data;
-    editpassword(currentTourist.username, oldPassword, newPassword)
+    editpassword(currentData.username, oldPassword, newPassword)
       .then(() => {
-        setSuccessMessage("Password changed successfully!");
         setPasswordModalOpen(false);
-
         Swal.fire({
           title: "Password Changed Successfully",
           text: "Password has been changed",
@@ -132,7 +141,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
       });
   };
 
-  const handleDelete = () => {
+  const handleDeleteTwo = () => {
     Swal.fire({
       title: "Are you sure?",
       text: "You will not be able to recover this account!",
@@ -143,10 +152,10 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const res = await handleDeleteAccount(
-          currentTourist._id,
-          currentTourist.username,
-          "tourist",
-          currentTourist.wallet || 0
+          currentData._id,
+          currentData.username,
+          "tourguide",
+          currentData.wallet || 0
         );
         if (res === "success") {
           Swal.fire("Deleted!", "Your account has been deleted.", "success");
@@ -160,292 +169,329 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
     });
   };
 
-  const [walletBalance, setWalletBalance] = useState(currentTourist.wallet);
   return (
-    <>
-      <div
-        className="min-h-screen flex items-center justify-center bg-gray-900"
-        style={{
-          backgroundImage: `url('/src/assets/mtn.jpg')`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundBlendMode: "overlay",
-          backgroundColor: "rgba(0, 0, 0, 0.7)",
-        }}
-      >
-        <div className="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl p-8 backdrop-blur-lg bg-opacity-90">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex items-center gap-6">
-              <img
-                src={currentTourist.profilePicture}
-                alt="Profile"
-                className="w-32 h-32 rounded-full object-cover shadow-md border-4 border-purple-500"
+    <div
+      className="min-h-screen flex items-center justify-center bg-gray-900"
+      style={{
+        backgroundImage: `url('/src/assets/mtn.jpg')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundBlendMode: "overlay",
+        backgroundColor: "rgba(0, 0, 0, 0.7)",
+      }}
+    >
+      <Modal open={open} onClose={() => setOpen(false)}>
+        <Box sx={style}>
+          <Box className="flex flex-col">
+            <TextField
+              label="Company Name"
+              value={company}
+              type="text"
+              onChange={(e) => setCompany(String(e.target.value))}
+              fullWidth
+              margin="normal"
+            />
+            <div>
+              <label>Start Date</label>
+              <input
+                type="date"
+                value={startDate ? startDate.toISOString().split("T")[0] : ""}
+                onChange={(e) => setStartDate(new Date(e.target.value))}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition duration-200"
               />
-              <div className="text-left">
-                {isEditing ? (
-                  <Controller
-                    name="username"
-                    control={control}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        className="mt-1 text-lg text-gray-600 p-3 border border-gray-300 rounded-md w-full"
-                      />
-                    )}
-                  />
-                ) : (
-                  <h2 className="text-4xl font-extrabold text-purple-700">
-                    {currentTourist.username}
-                  </h2>
-                )}
-                {errors.username && (
-                  <p className="text-red-600">{errors.username.message}</p>
-                )}
-              </div>
-              <button
-                title="View Badges"
-                className="flex ml-auto mr-52 w-[100px] h-[100px] items-center justify-center bg-yellow-500 p-6 rounded-full shadow-lg hover:bg-yellow-600 transition duration-200"
-                onClick={handleBadgeClick}
-              >
-                <FontAwesomeIcon
-                  icon={faAward}
-                  className="text-white text-5xl"
+            </div>
+            {!stillWorking && (
+              <div>
+                <label>End Date</label>
+                <input
+                  type="date"
+                  value={endDate ? endDate.toISOString().split("T")[0] : ""}
+                  onChange={(e) => setEndDate(new Date(e.target.value))}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition duration-200"
                 />
-              </button>
-            </div>
-            {isBadgePopupOpen && (
-              <BadgePopup
-                points={tourist.totalLoyaltyPoints}
-                onClose={handleCloseBadgePopup}
-              />
+              </div>
             )}
-            <div className="mt-8 grid grid-cols-2 gap-6">
-              <div className="flex flex-col ml-2">
-                <label className="text-lg font-semibold text-gray-700">
-                  Email:
-                </label>
-                {isEditing ? (
-                  <Controller
-                    name="email"
-                    control={control}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        type="email"
-                        className="text-lg p-3 border border-gray-300 rounded-md"
-                      />
-                    )}
-                  />
-                ) : (
-                  <p className="text-gray-800 text-lg">
-                    {currentTourist.email}
-                  </p>
-                )}
-                {errors.email && (
-                  <p className="text-red-600">{errors.email.message}</p>
-                )}
-              </div>
-
-              <div className="flex flex-col ml-20">
-                <label className="text-lg font-semibold text-gray-700">
-                  Mobile Number:
-                </label>
-                {isEditing ? (
-                  <Controller
-                    name="mobileNumber"
-                    control={control}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        className="text-lg p-3 border border-gray-300 rounded-md"
-                      />
-                    )}
-                  />
-                ) : (
-                  <p className="text-gray-800 text-lg">
-                    {currentTourist.mobileNumber}
-                  </p>
-                )}
-                {errors.mobileNumber && (
-                  <p className="text-red-600">{errors.mobileNumber.message}</p>
-                )}
-              </div>
-
-              <div className="flex flex-col ml-2">
-                <label className="text-lg font-semibold text-gray-700">
-                  Nationality:
-                </label>
-                {isEditing ? (
-                  <Controller
-                    name="nationality"
-                    control={control}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        className="text-lg p-3 border border-gray-300 rounded-md"
-                      />
-                    )}
-                  />
-                ) : (
-                  <p className="text-gray-800 text-lg">
-                    {currentTourist.nationality}
-                  </p>
-                )}
-                {errors.nationality && (
-                  <p className="text-red-600">{errors.nationality.message}</p>
-                )}
-              </div>
-
-              <div className="flex flex-col ml-20">
-                <label className="text-lg font-semibold text-gray-700">
-                  Date of Birth:
-                </label>
-                {isEditing ? (
-                  <Controller
-                    name="dateOfBirth"
-                    control={control}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        type="date"
-                        className="text-lg p-3 border border-gray-300 rounded-md"
-                      />
-                    )}
-                  />
-                ) : (
-                  <p className="text-gray-800 text-lg">
-                    {currentTourist.dateOfBirth.split("T00:00:00.000Z")}
-                  </p>
-                )}
-                {errors.dateOfBirth && (
-                  <p className="text-red-600">{errors.dateOfBirth.message}</p>
-                )}
-              </div>
-
-              <div className="flex flex-col ml-2">
-                <label className="text-lg font-semibold text-gray-700">
-                  Occupation:
-                </label>
-                {isEditing ? (
-                  <Controller
-                    name="Occupation"
-                    control={control}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        className="text-lg p-3 border border-gray-300 rounded-md"
-                      />
-                    )}
-                  />
-                ) : (
-                  <p className="text-gray-800 text-lg">
-                    {currentTourist.Occupation}
-                  </p>
-                )}
-                {errors.Occupation && (
-                  <p className="text-red-600">{errors.Occupation.message}</p>
-                )}
-              </div>
-
-              <div className="flex flex-col ml-20">
-                <label className="text-lg font-semibold text-gray-700">
-                  Points:
-                </label>
-                <div className="flex flex-row items-center mt-1 space-x-20">
-                  {/* <p className="text-gray-800 text-lg">{currentTourist.points}</p>             lma t7ot fel database uncomment this line!!!*/}
-                  <p className="text-gray-800 text-lg">
-                    {currentTourist.currentLoyaltyPoints}
-                  </p>
-                  <button
-                    onClick={handleRedeemClick}
-                    className="bg-green-500 text-white text-sm py-1 px-2 rounded hover:bg-green-600 transition duration-200 -mt-2"
-                  >
-                    Redeem
-                  </button>
-                </div>
-
-                {isRedeemPopupOpen && (
-                  <RedeemPopup
-                    points={currentTourist.currentLoyaltyPoints}
-                    username={currentTourist.username}
-                    onClose={handleCloseRedeemPopup}
-                  />
-                )}
-              </div>
+            <div>
+              <label>Still Working Here</label>
+              <input
+                type="checkbox"
+                checked={stillWorking}
+                onChange={(e) => setStillWorking(e.target.checked)}
+              />
             </div>
 
-            <div className="mt-8 flex justify-center items-center bg-purple-50 py-3 px-4 rounded-lg shadow-md border border-purple-200 max-w-md mx-auto">
-              <div className="flex items-center space-x-4">
-                <div className="flex flex-col items-center">
-                  <label className="text-xl font-semibold text-purple-700">
-                    Wallet Balance:
-                  </label>
-                  <p className="text-4xl font-bold text-purple-900">
-                    ${currentTourist.wallet}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8 flex justify-end space-x-4">
-              <button
-                type="button"
-                onClick={handleDelete}
-                className="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-600 transition duration-200 mr-auto"
-              >
-                Delete Account
-              </button>
-              {isEditing ? (
-                <>
-                  <button
-                    type="submit"
-                    className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-700 transition duration-200"
-                  >
-                    Save
-                  </button>
-                  <button
-                    onClick={toggleEdit}
-                    className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
-                  >
-                    Cancel
-                  </button>
-                </>
-              ) : (
-                <button
-                  onClick={toggleEdit}
-                  className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-700 transition duration-200"
-                >
-                  Edit Profile
-                </button>
-              )}
-
-              <button
-                type="button"
-                onClick={() => setPasswordModalOpen(true)}
-                className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
-              >
-                Change Password
-              </button>
-
-              <button
-                onClick={handleLogout}
-                className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
-              >
-                Log Out
-              </button>
-            </div>
-          </form>
-          {isPasswordModalOpen && (
-            <ChangePasswordModal
-              username={currentTourist.username}
-              onClose={() => setPasswordModalOpen(false)}
-              onFormSubmit={handlePasswordChangeSubmit}
-            ></ChangePasswordModal>
+            <TextField
+              label="role"
+              type="text"
+              value={role}
+              onChange={(e) => setRole(String(e.target.value))}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="location"
+              type="text"
+              value={location}
+              onChange={(e) => setLocation(String(e.target.value))}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Description"
+              type="text"
+              value={description}
+              onChange={(e) => setdescription(String(e.target.value))}
+              fullWidth
+              margin="normal"
+            />
+            <Button onClick={handleAdd}>Add</Button>
+          </Box>
+        </Box>
+      </Modal>
+      <div className="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl p-8 backdrop-blur-lg bg-opacity-90">
+        <div className="flex items-center space-x-6">
+          {isEditing ? (
+            <ProfilePictureEdit
+              profilePicture={profilePicture}
+              onChange={setProfilePicture} // Directly pass setProfilePicture
+              isEditing={isEditing} // Controls the edit overlay visibility
+            />
+          ) : (
+            <img
+              src={userData.profilepic}
+              className="w-32 h-32 rounded-full object-cover shadow-md border-4 border-purple-500"
+            />
           )}
+          <div className="text-left">
+            <h2 className="text-4xl font-extrabold text-purple-700">
+              {userData.username}
+            </h2>
+            {isEditing ? (
+              <input
+                type="email"
+                name="email"
+                value={currentData.email}
+                onChange={handleEdit}
+                className="mt-1 text-lg text-gray-600 p-3 border border-gray-300 rounded-md w-full"
+              />
+            ) : (
+              <p className="text-lg text-gray-600 overflow-auto w-[255px]">
+                {userData.email}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-8 grid grid-cols-2 gap-6">
+          <div className="flex flex-col">
+            <label className="text-lg font-semibold text-gray-700">
+              Mobile Number:
+            </label>
+            {isEditing ? (
+              <input
+                type="number"
+                name="mobileNumber"
+                value={currentData.mobileNumber}
+                onChange={handleEdit}
+                className="text-lg p-3 border border-gray-300 rounded-md"
+              />
+            ) : (
+              <p className="text-gray-800 text-lg overflow-auto w-[404px]">
+                {userData.mobileNumber}
+              </p>
+            )}
+          </div>
+
+          <div className="flex flex-col">
+            <label className="text-lg font-semibold text-gray-700">
+              Years of work:
+            </label>
+            {isEditing ? (
+              <input
+                type="number"
+                name="yearsOfExperience"
+                value={currentData.yearsOfExperience}
+                onChange={handleEdit}
+                className="text-lg p-3 border border-gray-300 rounded-md"
+              />
+            ) : (
+              <p className="text-gray-800 text-lg overflow-auto w-[404px]">
+                {userData.yearsOfExperience}
+              </p>
+            )}
+            {error && <p className="text-red-600 mt-1">{error}</p>}
+          </div>
+          <div className="flex flex-col">
+            <label className="text-lg font-semibold text-gray-700">
+              Previous work experience:
+            </label>
+            {isEditing ? (
+              <ul className="flex flex-col gap-3 pt-2">
+                {currentData.previousWork &&
+                  currentData.previousWork.map((work, index) => (
+                    <li
+                      key={index}
+                      className="flex flex-row bg-white p-4 mb-2 rounded-md justify-around"
+                    >
+                      <div>
+                        <h3>
+                          <b>Company</b> : {work.company}
+                        </h3>
+                        <p>
+                          {" "}
+                          <b>Role</b> : {work.role}
+                        </p>
+                        <p>
+                          {" "}
+                          <b>Location</b> : {work.location}
+                        </p>
+                        <p>
+                          {" "}
+                          <b>Duration</b> :{" "}
+                          {new Date(work.startDate).toLocaleDateString()} -{" "}
+                          {work.endDate
+                            ? new Date(work.endDate).toLocaleDateString()
+                            : "Present"}
+                        </p>
+                        <p>
+                          {" "}
+                          <b>Description</b> : {work.description}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => handleDelete(work._id)}
+                        className=" size-10 self-center hover:text-red-500"
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </li>
+                  ))}
+
+                <button
+                  onClick={() => {
+                    setOpen(true);
+                  }}
+                  className="bg-purple-600  text-white w-1/4 self-center py-2 px-6 rounded-lg hover:bg-purple-700 transition duration-200 "
+                >
+                  Add
+                </button>
+              </ul>
+            ) : (
+              <ul className="flex flex-col gap-3 pt-2">
+                {userData.previousWork &&
+                  userData.previousWork.map((work, index) => (
+                    <li
+                      key={index}
+                      className="flex flex-row bg-white p-4 mb-2 rounded-md"
+                    >
+                      <div>
+                        <h3>
+                          <b>Company</b> : {work.company}
+                        </h3>
+                        <p>
+                          {" "}
+                          <b>Role</b> : {work.role} at {work.location}
+                        </p>
+                        <p>
+                          {" "}
+                          <b>Duration</b> :{" "}
+                          {new Date(work.startDate).toLocaleDateString()} -{" "}
+                          {work.endDate
+                            ? new Date(work.endDate).toLocaleDateString()
+                            : "Present"}
+                        </p>
+                        <p>
+                          {" "}
+                          <b>Description</b> : {work.description}
+                        </p>
+                      </div>
+                      <button className=" size-10 self-center"></button>
+                    </li>
+                  ))}
+              </ul>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-8 flex justify-end space-x-4">
+          <button
+            type="button"
+            onClick={handleDeleteTwo}
+            className="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-600 transition duration-200 mr-auto"
+          >
+            Delete Account
+          </button>
+          {isEditing ? (
+            <>
+              <button
+                onClick={handleSave}
+                className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-700 transition duration-200 flex items-center justify-center"
+                disabled={update}
+              >
+                {update ? (
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                ) : (
+                  "Save"
+                )}
+              </button>
+              <button
+                onClick={toggleEdit}
+                className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
+              >
+                Cancel
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={toggleEdit}
+              className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-700 transition duration-200"
+            >
+              Edit Profile
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => setPasswordModalOpen(true)}
+            className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
+          >
+            Change Password
+          </button>
+          <button
+            onClick={handleLogout}
+            className="bg-gray-500 text-white py-2 px-6 rounded-lg hover:bg-gray-600 transition duration-200"
+          >
+            Log Out
+          </button>
         </div>
       </div>
-    </>
+      {isPasswordModalOpen && (
+        <ChangePasswordModal
+          username={currentData.username}
+          onClose={() => setPasswordModalOpen(false)}
+          onFormSubmit={handlePasswordChangeSubmit}
+        ></ChangePasswordModal>
+      )}
+    </div>
   );
 };
 
-export default TouristProfile;
+export default TourGuideProfile;

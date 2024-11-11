@@ -71,6 +71,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
 }) => {
   const { bookItinerary, data, loading, error } = useBookItinerary();
   const { username } = useParams<{ username: string }>();
+  const currenttype = useLocation().pathname.split("/")[1];
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
@@ -199,7 +200,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
 
         <div className="mt-4 flex justify-between items-center">
           <Link
-            to={`/tourist-itinerary/${_id}`}
+            to={`/${currenttype+'/'+username}/itineraries/tourist-itinerary/${_id}`}
             state={{
               title,
               description,

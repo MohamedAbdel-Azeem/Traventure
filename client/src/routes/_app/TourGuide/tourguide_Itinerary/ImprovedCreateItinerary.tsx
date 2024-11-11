@@ -27,6 +27,8 @@ import { useGetAllActivitiesTitleAndId } from "../../../../custom_hooks/activiti
 import { UseCreateItineraryforME } from "../../../../custom_hooks/itineraries/createItinerary";
 import { SelectChangeEvent } from "@mui/material/Select";
 import CloseIcon from "@mui/icons-material/Close";
+import { GetCurrentUser } from "../../../../custom_hooks/currentuser";
+import { useParams } from "react-router-dom";
 
 const ImprovedCreateItinerary = ({
   isOpen,
@@ -49,6 +51,7 @@ const ImprovedCreateItinerary = ({
   const [placestogo, setPlacestogo] = useState<PlacetoGo[]>([]);
   const [open, setOpen] = useState(false);
   const timeUnits: string[] = ["sec", "hours", "days", "month", "years", "min"];
+  
   function returnallexceptactivityname(input: ActivitytoGo[]) {
     return input.map((activity: ActivitytoGo) => ({
       activity_id: activity.activityname,
@@ -254,9 +257,10 @@ const ImprovedCreateItinerary = ({
   const convertplacenametoactualname = (placename: string) => {
     return apiPlaces?.find((place) => place._id === placename)?.name;
   };
-
+  const {username} = useParams();
+const { cuserdata, userloading, usererror } = GetCurrentUser(username??"");
   const itineraryData = {
-    added_By: "672354deb87528da028f398e",
+    added_By: cuserdata?._id,
     title: title,
     description: description,
     main_Picture: image,
@@ -282,6 +286,7 @@ const ImprovedCreateItinerary = ({
     })),
   };
   const handleSubmit = async () => {
+    console.log(itineraryData);
     const whatitreturned = await UseCreateItineraryforME(itineraryData);
     if (whatitreturned === "success") {
       Swal.fire({
@@ -614,7 +619,6 @@ const ImprovedCreateItinerary = ({
                         </Stack>
                       </>
                     ))}
-                    <div></div>
                   </div>
                 </div>
               </div>
@@ -646,7 +650,10 @@ const ImprovedCreateItinerary = ({
             >
               <p className="text-[28px] text-center">Submit</p>
             </button>
-            <button className="w-[142px] h-[47px] bg-[#D9D9D9] mx-2 rounded-[34px]">
+            <button
+              className="w-[142px] h-[47px] bg-[#D9D9D9] mx-2 rounded-[34px]"
+              onClick={() => onClose()}
+            >
               <p className="text-[28px] text-center">Cancel</p>
             </button>
           </div>
