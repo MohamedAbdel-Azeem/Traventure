@@ -1,15 +1,15 @@
 import { Routes, Route } from "react-router-dom";
-import CT from "../components/Activity/CT";
-import Accounts from "../components/Admin/Accounts";
-import Applications from "../components/Admin/Applications";
-import Complaints from "../components/Admin/Complaints";
-import MoreActivities from "../components/MoreActivities";
-import MoreItineraries from "../components/MoreItineraries";
-import MorePlaces from "../components/MorePlaces";
-import ShopPage from "../components/ShopPage";
-import AdminPage from "../pages/AdminPage";
-import { AdminSalesPage } from "../pages/AdminSalesPage";
-import NewNavbar from "../components/NewNavbar";
+import CT from "../routes/_app/Admin/Activity/CT";
+import Accounts from "../routes/_app/Admin/user_management/Accounts";
+import Applications from "../routes/_app/Admin/users_applications/Applications";
+import Complaints from "../components/users_complaints/Complaints";
+import MoreActivities from "../components/Activities/MoreActivities";
+import MoreItineraries from "../components/Itinerary/MoreItineraries";
+import MorePlaces from "../components/Locations/MorePlaces";
+import ShopPage from "../components/Shop/ShopPage";
+import AdminPage from "../routes/_app/Admin/AdminPage";
+import { AdminSalesPage } from "../routes/_app/Admin/admin_sales/AdminSalesPage";
+import NewNavbar from "../components/Navbar/NewNavbar";
 import CurrencyDropdown from "../components/currencyDrop";
 
 export default function AdminRouter() {

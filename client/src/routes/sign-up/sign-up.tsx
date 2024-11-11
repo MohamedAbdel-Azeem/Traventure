@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 import { PhoneInput } from "../../components/PhoneInput/phone-input";
 import { E164Number } from "libphonenumber-js";
 import countryList from "react-select-country-list";
-import PDFUploader from "../../components/PDFUploader";
+import PDFUploader from "../../components/PDFs&Images/PDFUploader";
 
 const getAge = (dob: string): number => {
   const todaysdate = new Date();

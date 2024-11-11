@@ -1,10 +1,10 @@
 import { Routes, Route } from "react-router-dom";
-import NewNavbar from "../components/NewNavbar";
-import MoreItineraries from "../components/MoreItineraries";
-import MorePlaces from "../components/MorePlaces";
-import AdvertiserPage from "../pages/AdvertiserPage";
-import { Advertiser_Profile } from "../routes/_app/advertiser_profile/advertiser_profile-main";
-import { Activities } from "../routes/_app/advertiseractivity/Activities";
+import NewNavbar from "../components/Navbar/NewNavbar";
+import MoreItineraries from "../components/Itinerary/MoreItineraries";
+import MorePlaces from "../components/Locations/MorePlaces";
+import AdvertiserPage from "../routes/_app/Advertiser/AdvertiserPage";
+import { Advertiser_Profile } from "../routes/_app/Advertiser/advertiser_profile/advertiser_profile-main";
+import { Activities } from "../routes/_app/Advertiser/advertiser_activity/Activities";
 import CurrencyDropdown from "../components/currencyDrop";
 
 export default function AdvertiserRouter() {

@@ -1,9 +1,9 @@
 import { Routes, Route } from "react-router-dom";
-import NewNavbar from "../components/NewNavbar";
-import ShopPage from "../components/ShopPage";
-import { SellerSalesPage } from "../pages/SellerSalesPage";
-import { Seller_Profile } from "../routes/_app/seller_profile/seller-profile-main";
+import ShopPage from "../components/Shop/ShopPage";
 import CurrencyDropdown from "../components/currencyDrop";
+import NewNavbar from "../components/Navbar/NewNavbar";
+import { SellerSalesPage } from "../routes/_app/Seller/seller_sales/SellerSalesPage";
+import { Seller_Profile } from "../routes/_app/Seller/seller_profile/seller-profile-main";
 
 export default function SellerRouter() {
   return (

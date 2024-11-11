@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-import NewNavbar from "../components/NewNavbar";
-import HistoricalTags from "../components/HistoricalTags";
-import Locations from "../components/Locations";
-import TourismGovernorPage from "../pages/TourismGovernorPage";
+import NewNavbar from "../components/Navbar/NewNavbar";
+import HistoricalTags from "../routes/_app/TourismGovernor/tourismgovernor_tags/HistoricalTags";
+import Locations from "../routes/_app/TourismGovernor/tourismgovernor_locations/Locations";
+import TourismGovernorPage from "../routes/_app/TourismGovernor/TourismGovernorPage";
 import CurrencyDropdown from "../components/currencyDrop";
 
 export default function TourismGovernorRouter() {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import WaitingResponse from './WaitingResponse';
-import ShowingResponse from './ShowingResponse';
+import WaitingResponse from './Shenawy/WaitingResponse';
+import ShowingResponse from './Shenawy/ShowingResponse';
 import { redeemPoints } from '../custom_hooks/touristpoints/redeemPoints';
 
 

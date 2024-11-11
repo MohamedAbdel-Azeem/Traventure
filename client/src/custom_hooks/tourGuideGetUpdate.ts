@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { ITourGuide } from "../routes/_app/tourguide_profile/ITourGuide";
+import { ITourGuide } from "../routes/_app/TourGuide/tourguide_profile/ITourGuide";
 import { uploadFileToStorage } from "../firebase/firebase_storage";
 
 export const useGetTourGuide = (username: string | undefined) => {

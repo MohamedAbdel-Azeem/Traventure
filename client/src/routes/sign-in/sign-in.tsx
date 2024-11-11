@@ -8,7 +8,7 @@ import useLoginGuest from "../../custom_hooks/useLoginGuest";
 import { useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import Swal from "sweetalert2";
-import BlockedAccountPopup from "../../components/BlockedAccountPopup";
+import BlockedAccountPopup from "../../components/Shenawy/BlockedAccountPopup";
 
 const SignIn: React.FC = () => {
   const [username, setUsername] = useState<string>("");
