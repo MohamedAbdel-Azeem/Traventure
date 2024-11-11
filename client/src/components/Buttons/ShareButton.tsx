@@ -15,7 +15,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({
   const handleShareAsLink = () => {
     const linktocopy=
     type === "itinerary"
-      ? `http://localhost:5173/tourist-itinerary/${ID}`
+      ? `http://localhost:5173/tourist/jane_doe/itineraries/tourist-itinerary/${ID}`
       : type === "place"
       ? `http://localhost:5173/places/${ID}`
       : `http://localhost:5173/activities/${ID}`;

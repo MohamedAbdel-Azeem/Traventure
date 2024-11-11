@@ -20,8 +20,7 @@ export default function AdvertiserRouter() {
         <Route path="/:username/activities" element={<Activities />} />
         <Route path="/:username/profile" element={<Advertiser_Profile />} />
       </Routes>
-
-      <CurrencyDropdown />
+      {/* <CurrencyDropdown /> */}
     </div>
   );
 }

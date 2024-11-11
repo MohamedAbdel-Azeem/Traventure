@@ -416,7 +416,7 @@ const Bookings: React.FC = () => {
                             variant="outlined"
                             onClick={() =>
                               navigate(
-                                `/tourist-itinerary/${booking.itinerary._id}`,
+                                `/tourist/${username}/itineraries/tourist-itinerary/${booking.itinerary._id}`,
                                 {
                                   state: {
                                     title: booking.itinerary.title,

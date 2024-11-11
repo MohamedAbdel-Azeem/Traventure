@@ -17,7 +17,6 @@ export default function AdminRouter() {
   return (
     <div className="flex flex-col w-screen h-screen">
       <NewNavbar />
-      <CurrencyDropdown />
       <Routes>
         <Route path="/:username" element={<AdminPage />} />
         <Route path="/:username/sales" element={<AdminSalesPage />} />
@@ -31,6 +30,7 @@ export default function AdminRouter() {
         <Route path="/:username/itineraries/tourist-itinerary/:id" element={<ItineraryDetailsTourist/>}/>
         <Route path="/:username/applications" element={<Applications />} />
       </Routes>
+      {/* <CurrencyDropdown /> */}
     </div>
   );
 }

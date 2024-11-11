@@ -10,7 +10,6 @@ export default function TourGuideRouter() {
   return (
     <div className="flex flex-col w-screen h-screen">
       <NewNavbar />
-      {/* <CurrencyDropdown /> */}
       <Routes>
         <Route path="/:username" element={<TourGuidePage />} />
         <Route path="/:username/locations" element={<MorePlaces />} />
@@ -18,6 +17,7 @@ export default function TourGuideRouter() {
         <Route path="/:username/itineraries/itinerary/:id" element={<ItineraryDetails/>}/>
         <Route path="/:username/profile" element={<TourGuide_Profile />} />
       </Routes>
+      {/* <CurrencyDropdown /> */}
     </div>
   );
 }

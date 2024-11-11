@@ -10,7 +10,6 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 export function SellerSalesPage() {
   const { username } = useParams<{ username: string }>();
-
   const [compactView, setCompactView] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState("");
 
@@ -53,7 +52,6 @@ export function SellerSalesPage() {
   if (sellerLoading) {
     return (
       <div>
-        <NewNavbar />
         Loading...
       </div>
     );
@@ -77,7 +75,6 @@ export function SellerSalesPage() {
 
   return (
     <div className="flex flex-col items-center gap-8 pt-6">
-      <NewNavbar />
       <h1 className="font-sans text-xl font-medium">
         Sales Page for {username}
       </h1>

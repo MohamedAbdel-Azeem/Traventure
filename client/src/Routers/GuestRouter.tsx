@@ -12,15 +12,18 @@ export default function GuestRouter() {
   return (
     <div className="flex flex-col w-screen h-screen">
       <NewNavbar />
-      <CurrencyDropdown />
       <Routes>
         <Route path="/guest-page" element={<GuestPage />} />
         <Route path="/more-itineraries" element={<GuestMoreItineraries />} />
-        <Route path="/:username/itineraries/tourist-itinerary/:id" element={<ItineraryDetailsTourist/>}/>
+        <Route
+          path="/:username/itineraries/tourist-itinerary/:id"
+          element={<ItineraryDetailsTourist />}
+        />
         <Route path="/more-places" element={<GuestMorePlaces />} />
         <Route path="/more-activities" element={<GuestMoreActivities />} />
         <Route path="/shop" element={<GuestShop type={"Tourist"} />} />
       </Routes>
+      {/* <CurrencyDropdown /> */}
     </div>
   );
 }

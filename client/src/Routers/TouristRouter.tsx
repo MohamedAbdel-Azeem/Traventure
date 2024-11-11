@@ -32,7 +32,7 @@ export default function TouristRouter() {
         <Route path="/:username/flights" element={<FlightsPage />} />
         <Route path="/:username/hotels" element={<HotelsPage />} />
       </Routes>
-      <CurrencyDropdown />
+      {/* <CurrencyDropdown /> */}
     </div>
   );
 }

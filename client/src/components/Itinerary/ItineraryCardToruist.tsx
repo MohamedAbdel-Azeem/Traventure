@@ -13,6 +13,7 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
+import ShareButton from "../Buttons/ShareButton";
 
 interface TagStructure {
   _id: string;
@@ -200,7 +201,9 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
 
         <div className="mt-4 flex justify-between items-center">
           <Link
-            to={`/${currenttype+'/'+username}/itineraries/tourist-itinerary/${_id}`}
+            to={`/${
+              currenttype + "/" + username
+            }/itineraries/tourist-itinerary/${_id}`}
             state={{
               title,
               description,
@@ -221,12 +224,16 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
             View Details
           </Link>
           {currentType === "tourist" && (
-            <button
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-              onClick={() => handleBooking(_id)}
-            >
-              Book
-            </button>
+            <>
+              {" "}
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                onClick={() => handleBooking(_id)}
+              >
+                Book
+              </button>
+              <ShareButton type={"itinerary"} ID={_id} />
+            </>
           )}
 
           {currentType === "admin" && (
@@ -237,6 +244,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
             </div>
           )}
         </div>
+
         {currentType === "admin" && (
           <Button onClick={handleInappropriate}>
             {inappropriateV ? "Declare appropriate" : " Declare InAppropriate"}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ProductCard.css"; // Assuming styles are in this file
 import { ACTUALProduct } from "../data/ProductData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -31,7 +31,6 @@ interface ShopPageProps {
 }
 const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
   const { data, loading, error } = useGetAllProducts();
-
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [products, setProducts] = useState(data);
@@ -57,7 +56,14 @@ const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
 
   React.useEffect(() => {
     if (data) {
-      setProducts(data);
+      if (type.includes("Tourist")) {
+        const unarchivedProducts = data.filter(
+          (product: ACTUALProduct) => !product.isArchived
+        );
+        setProducts(unarchivedProducts);
+      } else {
+        setProducts(data);
+      }
     }
   }, [data]);
 
