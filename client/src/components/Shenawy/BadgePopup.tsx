@@ -5,8 +5,8 @@ import imagesecond from "../../assets/silver.png";
 import imagethird from "../../assets/bronze.png";
 
 const badges = [
-  { level: 1, requirement: 100000, name: "Badge Level 1", image: imagethird },
-  { level: 2, requirement: 500000, name: "Badge Level 2", image: imagesecond },
+  { level: 1, requirement: 0, name: "Badge Level 1", image: imagethird },
+  { level: 2, requirement: 100001, name: "Badge Level 2", image: imagesecond },
   { level: 3, requirement: 500001, name: "Badge Level 3", image: imagefirst },
 ];
 
