@@ -12,10 +12,10 @@ const useDeleteItinerary = () => {
         setSuccess(false);
         try {
             const response = await axios.delete(`/traventure/api/itinerary/delete/${id}`);
-            if (response.status === 200) {
-                setSuccess(true);
+            if (response.status >= 200 && response.status < 300) {
+              setSuccess(true);
             } else {
-                setError("Failed to delete itinerary.");
+              setError("Failed to delete itinerary.");
             }
         } catch (err: any) {
             setError(err.message);

@@ -112,6 +112,7 @@ router.delete("/delete/:id", async (req: Request, res: Response) => {
     const place = await deleteItinerary(req.params.id);
     res.status(200).send("Itinerary deleted successfully");
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error });
   }
 });
