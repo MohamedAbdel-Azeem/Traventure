@@ -62,33 +62,33 @@ export async function getPurchaseTotalAmount(purchaseData: IPurchase){
 }
 
 
-export async function updateLoyaltyPoints(touristId:string, amount:number){
-  try {
-    const tourist = await touristModel.findById(touristId);
-    if (!tourist) return null;
-    var points=0;
-    switch(tourist.loyaltyLevel){
-      case 1: points=amount*0.5; break;
-      case 2: points=amount; break; 
-      case 3: points=amount*1.5; break;
-    }
-    tourist.currentLoyaltyPoints += points;
-    tourist.totalLoyaltyPoints += points;
+// export async function updateLoyaltyPoints(touristId:string, amount:number){
+//   try {
+//     const tourist = await touristModel.findById(touristId);
+//     if (!tourist) return null;
+//     var points=0;
+//     switch(tourist.loyaltyLevel){
+//       case 1: points=amount*0.5; break;
+//       case 2: points=amount; break; 
+//       case 3: points=amount*1.5; break;
+//     }
+//     tourist.currentLoyaltyPoints += points;
+//     tourist.totalLoyaltyPoints += points;
 
-    if(tourist.totalLoyaltyPoints>500000){
-      tourist.loyaltyLevel=3;
-    }
-    else if(tourist.totalLoyaltyPoints>100000){
-      tourist.loyaltyLevel=2;
-    }
-    else {
-      tourist.loyaltyLevel=1;
-    }
-    await tourist.save();
-  } catch (error) {
-    throw error;
-  }
-}
+//     if(tourist.totalLoyaltyPoints>500000){
+//       tourist.loyaltyLevel=3;
+//     }
+//     else if(tourist.totalLoyaltyPoints>100000){
+//       tourist.loyaltyLevel=2;
+//     }
+//     else {
+//       tourist.loyaltyLevel=1;
+//     }
+//     await tourist.save();
+//   } catch (error) {
+//     throw error;
+//   }
+// }
 
 export async function getTouristPurchases(
   touristId: string | mongoose.Types.ObjectId
@@ -237,6 +237,6 @@ module.exports = {
   getTouristPurchases,
   getSellerSales,
   getExternalSellerSales,
-  updateLoyaltyPoints,
+  // updateLoyaltyPoints,
   getPurchaseTotalAmount
 };

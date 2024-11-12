@@ -4,6 +4,9 @@ import ItineraryModel from "../Schemas/Itinerary";
 import touristModel from "../Schemas/Tourist";
 import flightBooking from "../Schemas/flightBooking";
 import hotelBooking from "../Schemas/hotelBooking";
+import { ItineraryDocument } from "../../Interfaces/IItinerary";
+
+
 
 export async function getTouristBookings(tourist_id: string) {
   try {
@@ -114,6 +117,7 @@ export async function addBooking(bookingData: any) {
     }
     if (booked === null) {
       await bookingModel.create(bookingData);
+      await updateLoyaltyPoints(bookingData);
     } else {
       throw new Error("Booking already exists");
     }
@@ -121,6 +125,57 @@ export async function addBooking(bookingData: any) {
     throw error;
   }
 }
+export async function updateLoyaltyPoints(bookingdata:any){
+  const touristId = bookingdata.tourist;
+  let amount =0;
+  if (bookingdata.type === "itinerary") {
+    const itinerary= (await ItineraryModel.findById(bookingdata.itinerary))as ItineraryDocument |null;
+    if(!itinerary) return null;
+    amount+= itinerary.price;
+  }
+  else if(bookingdata.type === "activity") {
+    const activitydata= await ActivityModel.findById(bookingdata.activity);
+    if(!activitydata) return null;
+    amount+= activitydata.Price;
+  }
+
+  // if(bookingdata.activity !== null){
+    
+
+  // }
+  // if(bookingdata.itinerary !== null){
+  //   const itinerary= await ItineraryModel.findById(bookingdata.itinerary);
+  //   if(!itinerary) return null;
+  //   amount+=itinerary.price;
+  // }
+
+  try {
+    const tourist = await touristModel.findById(touristId);
+    if (!tourist) return null;
+    var points=0;
+    switch(tourist.loyaltyLevel){
+      case 1: points=amount*0.5; break;
+      case 2: points=amount; break; 
+      case 3: points=amount*1.5; break;
+    }
+    tourist.currentLoyaltyPoints += points;
+    tourist.totalLoyaltyPoints += points;
+
+    if(tourist.totalLoyaltyPoints>500000){
+      tourist.loyaltyLevel=3;
+    }
+    else if(tourist.totalLoyaltyPoints>100000){
+      tourist.loyaltyLevel=2;
+    }
+    else {
+      tourist.loyaltyLevel=1;
+    }
+    await tourist.save();
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 async function checkCancel(booking_id: string) {
   let toCancel = null;

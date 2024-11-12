@@ -4,7 +4,7 @@ import {
   getTouristPurchases,
   getSellerSales,
   getExternalSellerSales,
-  updateLoyaltyPoints,
+  // updateLoyaltyPoints,
   getPurchaseTotalAmount,
 } from "../Model/Queries/purchase_queries";
 import {
@@ -41,7 +41,7 @@ router.post("/buy", async (req: Request, res: Response) => {
     const purchase = await addPurchase({ touristId, cart });
     const totalAmount = await getPurchaseTotalAmount(body);
 
-    await updateLoyaltyPoints(touristId, totalAmount);
+    
     return res.status(200).send(purchase);
   } catch (error) {
     return res.status(500).send(error);
