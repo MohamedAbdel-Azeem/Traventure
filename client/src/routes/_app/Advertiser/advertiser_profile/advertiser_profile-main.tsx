@@ -2,7 +2,6 @@ import AdvertiserProfile from "./advertiser_profile";
 import { useParams } from "react-router-dom";
 import { useGetAdvertiser } from "../../../../custom_hooks/advertisercustomhooks";
 import { IAdvertiser } from "./IAdvertiser";
-import NewNavbar from "../../../../components/Navbar/NewNavbar";
 export const Advertiser_Profile = () => {
   // add calling the custom hook for data here
   const { username } = useParams();
@@ -11,7 +10,6 @@ export const Advertiser_Profile = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <NewNavbar />
         <div className="text-lg font-semibold text-blue-600">Loading...</div>
       </div>
     );

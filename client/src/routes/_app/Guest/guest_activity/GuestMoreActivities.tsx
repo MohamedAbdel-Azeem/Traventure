@@ -2,15 +2,14 @@ import React, { useState, useEffect } from "react";
 import { MenuItem, Select, InputLabel, FormControl } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ActivityCardTourist } from "../../../../components/Activities/ActivityCardTourist";
-import { useGetAllActivitiesS } from "../../../../custom_hooks/activities/useGetActivities";
-import {IActivity} from "../../../../custom_hooks/activities/activity_interface";
+import { IActivity } from "../../../../custom_hooks/activities/activity_interface";
 import { useGetAllCategories } from "../../../../custom_hooks/categoryandTagCRUD";
-import {Activity} from "../../../../custom_hooks/activities/activity_interface";
-
+import { Activity } from "../../../../custom_hooks/activities/activity_interface";
+import useGetUpcoming from "../../../../custom_hooks/itineraries/useGetupcoming";
 const GuestMoreActivities: React.FC = () => {
-  const { sactivities, aloading, aerror } = useGetAllActivitiesS();
   const { data: catData } = useGetAllCategories();
 
+  const { upcoming, loading: aloading, error: aerror } = useGetUpcoming();
   const [categoryTerms, setCategoryTerms] = useState<string[]>([]);
   const [selectedCat, setSelectedCats] = useState<string[]>([]);
   const [searchType, setSearchType] = useState<"name" | "tag" | "category">(
@@ -18,6 +17,7 @@ const GuestMoreActivities: React.FC = () => {
   );
   const [searchTerm, setSearchTerm] = useState("");
 
+  const sactivities = upcoming?.activities || [];
   const [filterType, setFilterType] = useState<
     "budget" | "date" | "category" | "rating"
   >("budget");
@@ -31,9 +31,6 @@ const GuestMoreActivities: React.FC = () => {
 
   const [sortBy, setSortBy] = useState<"price" | "rating">("price");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-
-  const navigate = useNavigate();
-
   useEffect(() => {
     if (filterType === "date") {
       const today = new Date();

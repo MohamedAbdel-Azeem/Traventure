@@ -5,7 +5,7 @@ export const sellerPatchValidator = [
     body("name").isString().optional(),
     body("description").isString().optional(),
     body("isAccepted").isBoolean().optional(),
-    body("profilepic").optional().isString().withMessage("Profile picture must be a string"),
+    body("profilepic").optional(),
 ];
 
 module.exports = { sellerPatchValidator };

@@ -98,7 +98,7 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
 
   const TGnavbaritems = [
     { text: "Home", icon: <HomeIcon />, path: `/tourguide/${currentuser}` },
-    // { text: 'Locations', icon: <LocationOnIcon />, path: `/tourguide/${currentuser}/locations` },
+    { text: 'Locations', icon: <LocationOnIcon />, path: `/tourguide/${currentuser}/locations` },
     {
       text: "Itinerary Management",
       icon: <ActivityIcon />,
@@ -157,7 +157,7 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
 
   const advertisernavbaritems = [
     { text: "Home", icon: <HomeIcon />, path: `/advertiser/${currentuser}` },
-    // { text: 'Locations', icon: <LocationOnIcon />, path: `/advertiser/${currentuser}/locations` },
+    { text: 'Locations', icon: <LocationOnIcon />, path: `/advertiser/${currentuser}/locations` },
     {
       text: "Activity Management",
       icon: <ActivityIcon />,
@@ -185,7 +185,7 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   ];
 
   const guestnavbaritems = [
-    { text: "Home", icon: <HomeIcon />, path: `/guest-page` },
+    { text: "Home", icon: <HomeIcon />, path: `/guest/guest-page` },
     { text: "Shop", icon: <ShopIcon />, path: `/guest/shop` },
     {
       text: "Itineraries",

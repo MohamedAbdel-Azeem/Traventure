@@ -139,7 +139,6 @@ const Locations = () => {
 
 return (
   <div className="flex justify-center">
-    <NewNavbar />
     <div className="grid grid-cols-3 mt-20">
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>

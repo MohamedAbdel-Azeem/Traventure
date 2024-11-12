@@ -9,7 +9,7 @@ export const advertiserPatchValidator = [
   body("founded").isNumeric().optional(),
   body("description").isString().optional(),
   body("location").isString().optional(),
-  body("profilepic").optional().isString().withMessage("Profile picture must be a string"),
+  body("profilepic").optional(),
 
 ];
 

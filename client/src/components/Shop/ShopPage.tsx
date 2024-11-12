@@ -53,10 +53,10 @@ const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
   }
 
   const currentuser = location.pathname.split(`/`)[2];
-
+  const currenttype = location.pathname.split(`/`)[1];
   React.useEffect(() => {
     if (data) {
-      if (type.includes("Tourist")) {
+      if (currenttype.includes("tourist") || currenttype.includes("guest")) {
         const unarchivedProducts = data.filter(
           (product: ACTUALProduct) => !product.isArchived
         );

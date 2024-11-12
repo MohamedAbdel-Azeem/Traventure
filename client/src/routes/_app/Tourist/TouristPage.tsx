@@ -1,6 +1,5 @@
 import Dashboard from "../../../components/Dashboard";
 const TouristPage = () => {
-    const navbarHeight = 64;
     return (
         <div>
             <div
@@ -9,7 +8,7 @@ const TouristPage = () => {
                     transition: "200ms",
                 }}
             >
-                <Dashboard type="Tourist"/>
+                <Dashboard/>
             </div>
         </div>
     );

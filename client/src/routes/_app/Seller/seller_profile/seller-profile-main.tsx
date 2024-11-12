@@ -20,7 +20,6 @@ export const Seller_Profile = () => {
   if (error) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <NewNavbar />
         <div className="text-lg font-semibold text-red-600">
           Error Fetching: {error}
         </div>
@@ -30,16 +29,10 @@ export const Seller_Profile = () => {
 
   if (!user)
     return (
-      <>
-        <NewNavbar />
         <div>No user found</div>
-      </>
     );
 
   return (
-    <>
-      <NewNavbar />
       <SellerProfile seller={user as ISeller}></SellerProfile>
-    </>
   );
 };

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 interface ShareButtonProps {
   type: string;
@@ -13,17 +12,17 @@ const ShareButton: React.FC<ShareButtonProps> = ({
   ID = "6728168cb91ef9fab4aaaa72",
 }) => {
   const handleShareAsLink = () => {
-    const linktocopy=
-    type === "itinerary"
-      ? `http://localhost:5173/tourist/jane_doe/itineraries/tourist-itinerary/${ID}`
-      : type === "place"
-      ? `http://localhost:5173/places/${ID}`
-      : `http://localhost:5173/activities/${ID}`;
+    const linktocopy =
+      type === "itinerary"
+        ? `http://localhost:5173/guest/undefined/itineraries/tourist-itinerary/${ID}`
+        : type === "place"
+        ? `http://localhost:5173/places/${ID}`
+        : `http://localhost:5173/activities/${ID}`;
     navigator.clipboard.writeText(linktocopy);
   };
   const linktomail =
     type === "itinerary"
-      ? `mailto:?subject=Check Out This Itinerary!&body=http://localhost:5173/tourist-itinerary/${ID}`
+      ? `mailto:?subject=Check Out This Itinerary!&body=http://localhost:5173/guest/undefined/itineraries/tourist-itinerary/${ID}`
       : type === "place"
       ? `mailto:?subject=Check Out This Place!&body=http://localhost:5173/places/${ID}`
       : `mailto:?subject=Check Out This Activity!&body=http://localhost:5173/activities/${ID}`;

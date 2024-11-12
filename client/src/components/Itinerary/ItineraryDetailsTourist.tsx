@@ -203,7 +203,10 @@ const ItineraryDetailsTourist: React.FC = () => {
                         2
                       )}
                   </p>
-                  <p className="text-[18px] h-[100px] mt-auto ml-12 text-black overflow-auto">
+                  <p className="text-[18px] h-[50px] mt-auto ml-12 text-black overflow-auto">
+                    {plan.place.opening_hrs}
+                  </p>
+                  <p className="text-[18px] h-[100px] mt-auto ml-12 text-black overflow-auto break-words lasttimeipromise">
                     {plan.place.description}
                   </p>
                 </div>

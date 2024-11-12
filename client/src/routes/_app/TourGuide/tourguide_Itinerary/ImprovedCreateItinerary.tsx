@@ -29,6 +29,7 @@ import { SelectChangeEvent } from "@mui/material/Select";
 import CloseIcon from "@mui/icons-material/Close";
 import { GetCurrentUser } from "../../../../custom_hooks/currentuser";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const ImprovedCreateItinerary = ({
   isOpen,
@@ -303,6 +304,16 @@ const { cuserdata, userloading, usererror } = GetCurrentUser(username??"");
       });
     }
   };
+
+  const exchangeRate = useSelector(
+    (state: any) => state.exchangeRate.exchangeRate
+  );
+  const currentCurrency = useSelector(
+    (state: any) => state.exchangeRate.currentCurrency
+  );
+
+
+
   return (
     <div>
       {!open ? (
@@ -375,7 +386,7 @@ const { cuserdata, userloading, usererror } = GetCurrentUser(username??"");
                     }}
                     placeholder="Price"
                     variant="outlined"
-                    value={price}
+                    value={(price * exchangeRate).toFixed(2)}
                     onChange={handlePriceChange}
                   />
                 </div>
