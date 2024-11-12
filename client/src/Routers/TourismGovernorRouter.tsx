@@ -14,7 +14,7 @@ export default function TourismGovernorRouter() {
         <Route path="/:username/historicaltags" element={<HistoricalTags />} />
         <Route path="/:username/locations" element={<Locations />} />
       </Routes>
-      {/* <CurrencyDropdown /> */}
+      <CurrencyDropdown />
     </div>
   );
 }

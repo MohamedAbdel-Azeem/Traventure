@@ -30,7 +30,7 @@ export default function AdminRouter() {
         <Route path="/:username/itineraries/tourist-itinerary/:id" element={<ItineraryDetailsTourist/>}/>
         <Route path="/:username/applications" element={<Applications />} />
       </Routes>
-      {/* <CurrencyDropdown /> */}
+      <CurrencyDropdown />
     </div>
   );
 }
