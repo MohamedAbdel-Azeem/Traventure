@@ -5,10 +5,12 @@ import "./index.css";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import exchangeRateReducer from "./redux/exchangeRateSlice.ts";
+import cartReducer from "./redux/cartSlice.ts";
 
 const store = configureStore({
   reducer: {
     exchangeRate: exchangeRateReducer,
+    cart: cartReducer,
   },
 });
 
