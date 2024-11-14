@@ -19,7 +19,7 @@ export function ProductCartButton({ product }: { product: ACTUALProduct }) {
     return (
       <div className="flex items-center justify-center p-3">
         <button
-          className="bg-red-500 p-2 rounded-md flex items-center justify-center gap-3"
+          className="bg-red-400 p-2 rounded-md flex items-center justify-center gap-3"
           onClick={() => dispatch(removeFromCart(product._id))}
         >
           <DeleteIcon />
@@ -32,7 +32,7 @@ export function ProductCartButton({ product }: { product: ACTUALProduct }) {
   return (
     <div className="flex items-center justify-center p-3">
       <button
-        className="bg-green-500 p-2 rounded-md flex items-center justify-center gap-3"
+        className="bg-[#288c08] p-2 rounded-md flex items-center justify-center gap-3"
         onClick={() => dispatch(addToCart(product))}
       >
         <AddShoppingCartIcon />

@@ -24,7 +24,6 @@ import ImageUploader from "../PDFs&Images/ImageUploader";
 import ProductCard from "../Shenawy/ProductCard";
 import ShowingResponse from "../Shenawy/ShowingResponse";
 
-
 const itemsPerPage = 8;
 interface ShopPageProps {
   type: string;
@@ -242,11 +241,8 @@ const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
     p: 4,
   };
 
-  
-
-
   return (
-    <div className="flex">
+    <div className="flex items-center justify-center">
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
           <Box className="grid grid-cols-2">
@@ -318,8 +314,8 @@ const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
           </Box>
         </Box>
       </Modal>
-      <div className="flex flex-col flex-1" style={{ marginTop: '64px' }}>
-      <div className="search-bar">
+      <div className="flex flex-col flex-1" style={{ marginTop: "64px" }}>
+        <div className="search-bar">
           <input
             type="text"
             placeholder="Search products by name..."
@@ -394,7 +390,7 @@ const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
             )}
           </div>
         </div>
-        <div className="product-list">
+        <div className="flex flex-wrap items-center justify-center w-full gap-14">
           {sortedProducts.length > 0 ? (
             displayedProducts.length > 0 ? (
               displayedProducts.map((product) => (

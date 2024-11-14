@@ -142,8 +142,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
   };
 
   return (
-    <div className="product-card">
-      <div className="card-header">
+    <div className="border border-gray-300 rounded-lg shadow-lg bg-gray-200 overflow-hidden relative">
+      <div className="relative h-36 bg-gray-300 flex items-center justify-center">
         {currentProduct.imageUrl ? (
           <img
             src={currentProduct.imageUrl}
@@ -154,13 +154,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
           <div className="no-image">No images</div>
         )}
       </div>
-      <div className="card-body">
+      <div className="p-2 bg-indigo-50">
         <h3 className="product-title">{currentProduct.name}</h3>
         <p className="product-description">
           {getTruncatedDescription(currentProduct.description)}
         </p>
 
-        <div className="flex flex-row justify-between items-center">
+        <div className="flex flex-row justify-between items-center gap-4 px-1">
           <span className="product-price">
             {currentCurrency} {(currentProduct.price * exchangeRate).toFixed(2)}
           </span>

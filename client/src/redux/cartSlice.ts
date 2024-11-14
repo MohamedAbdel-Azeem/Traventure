@@ -17,8 +17,7 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action: PayloadAction<IProduct>) => {
       if (!state.some((item) => item._id === action.payload._id)) {
-        const addedProduct = action.payload;
-        addedProduct.quantity = 1;
+        const addedProduct = { ...action.payload, quantity: 1 };
         state.push(addedProduct);
       }
     },

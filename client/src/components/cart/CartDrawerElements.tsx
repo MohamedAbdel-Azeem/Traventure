@@ -21,7 +21,7 @@ export default function CartDrawerElements() {
   }, [cart]);
 
   return (
-    <div className="h-full px-16 py-4 bg-red-500">
+    <div className="h-full px-16 py-4 bg-gradient-to-r from-purple-500 to-purple-700">
       {cart.length > 0 ? (
         <div className="flex flex-col justify-between h-full pb-10">
           <div className="overflow-y-auto">
@@ -31,7 +31,9 @@ export default function CartDrawerElements() {
           </div>
         </div>
       ) : (
-        <h1>Cart is Empty, Add Some Products?</h1>
+        <h1 className="pt-4 text-xl font-medium">
+          Cart is Empty, Add Some Products?
+        </h1>
       )}
     </div>
   );
