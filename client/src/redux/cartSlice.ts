@@ -7,6 +7,7 @@ export interface IProduct {
   price: number;
   imageUrl: string;
   quantity: number;
+  stock: number;
 }
 
 const initialState: IProduct[] = [];
@@ -17,7 +18,11 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action: PayloadAction<IProduct>) => {
       if (!state.some((item) => item._id === action.payload._id)) {
-        const addedProduct = { ...action.payload, quantity: 1 };
+        const addedProduct = {
+          ...action.payload,
+          quantity: 1,
+          stock: action.payload.quantity - 1,
+        };
         state.push(addedProduct);
       }
     },
@@ -28,15 +33,40 @@ const cartSlice = createSlice({
     clearCart: (state) => {
       return initialState;
     },
-    changeQuantity: (state, action: PayloadAction<Payload>) => {
-      const { id, quantity } = action.payload;
-      const product = state.find((product) => product._id === id);
-      if (product) {
-        product.quantity = quantity;
-      }
+    incrementQuantity: (state, action: PayloadAction<string>) => {
+      const product = state.find((item) => item._id === action.payload);
+      if (!product) return;
+      const newProduct = {
+        ...product,
+        quantity: product.quantity + 1,
+        stock: product.stock - 1,
+      };
+      const newProducts = state.map((item) =>
+        item._id === action.payload ? newProduct : item
+      );
+      return newProducts;
+    },
+    decrementQuantity: (state, action: PayloadAction<string>) => {
+      const product = state.find((item) => item._id === action.payload);
+      if (!product) return;
+      const newProduct = {
+        ...product,
+        quantity: product.quantity - 1,
+        stock: product.stock + 1,
+      };
+      const newProducts = state.map((item) =>
+        item._id === action.payload ? newProduct : item
+      );
+      return newProducts;
     },
   },
 });
 
-export const { addToCart, removeFromCart, clearCart } = cartSlice.actions;
+export const {
+  addToCart,
+  removeFromCart,
+  clearCart,
+  incrementQuantity,
+  decrementQuantity,
+} = cartSlice.actions;
 export default cartSlice.reducer;

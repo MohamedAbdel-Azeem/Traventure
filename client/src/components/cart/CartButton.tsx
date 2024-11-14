@@ -25,7 +25,7 @@ export default function CartButton() {
 
   useEffect(() => {
     const newNumberOfProducts = cart.reduce(
-      (total: number, product) => product.quantity + total,
+      (total: number, product) => total + 1,
       0
     );
     setNumberOfProducts(newNumberOfProducts);

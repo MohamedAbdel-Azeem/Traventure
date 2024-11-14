@@ -142,7 +142,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
   };
 
   return (
-    <div className="border border-gray-300 rounded-lg shadow-lg bg-gray-200 overflow-hidden relative">
+    <div className="border border-gray-200 rounded-lg shadow-lg bg-gray-100 overflow-hidden relative">
       <div className="relative h-36 bg-gray-300 flex items-center justify-center">
         {currentProduct.imageUrl ? (
           <img
