@@ -53,7 +53,9 @@ export function ProductCartButton({ product }: { product: ACTUALProduct }) {
 
       <span
         className={`mx-2 bg-indigo-100 shadow-lg rounded-2xl py-2 px-6 transition-transform duration-300 transform ${
-          showButtons ? "translate-y-0 visible" : "translate-y-4 invisible"
+          showButtons
+            ? "translate-y-0 visible"
+            : " -translate-x-4 invisible"
         }`}
       >
         {addedQuantity}
@@ -62,7 +64,7 @@ export function ProductCartButton({ product }: { product: ACTUALProduct }) {
       <button
         onClick={handleRemoveIconPress}
         className={`flex items-center justify-center bg-indigo-600 text-white p-2 rounded-2xl transition-transform duration-300 transform ${
-          showButtons ? "-translate-x-2 visible" : "translate-x-2 invisible"
+          showButtons ? "-translate-x-0 visible" : "translate-x-2 invisible"
         }`}
       >
         <RemoveIcon />
