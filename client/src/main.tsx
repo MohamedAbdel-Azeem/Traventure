@@ -12,6 +12,7 @@ import { CookieStorage } from "redux-persist-cookie-storage"; // Correct import
 import Cookies from "js-cookie";
 import { combineReducers } from "redux";
 
+//TODO: the cookie still persist when I change user so for example the cart of user 1 is still there when I log in as user 2 , handle it with login
 // Persist configuration
 const persistConfig = {
   key: "root",
