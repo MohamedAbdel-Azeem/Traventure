@@ -1,6 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Payload } from "recharts/types/component/DefaultLegendContent";
 
-interface ICart {
+export interface IProduct {
   _id: string;
   name: string;
   price: number;
@@ -8,24 +9,22 @@ interface ICart {
   quantity: number;
 }
 
-const initialState: { cart: ICart[] } = {
-  cart: [],
-};
+const initialState: IProduct[] = [];
 
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addToCart: (state, action) => {
-      if (!state.cart.some((item) => item._id === action.payload._id)) {
-        state.cart.push(action.payload);
+    addToCart: (state, action: PayloadAction<IProduct>) => {
+      if (!state.some((item) => item._id === action.payload._id)) {
+        state.push(action.payload);
       }
     },
-    removeFromCart: (state, action) => {
-      state.cart = state.cart.filter((item) => item._id !== action.payload);
+    removeFromCart: (state, action: PayloadAction<string>) => {
+      state = state.filter((item) => item._id !== action.payload);
     },
     clearCart: (state) => {
-      state.cart = [];
+      state.length = 0;
     },
   },
 });

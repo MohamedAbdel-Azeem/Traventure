@@ -13,7 +13,7 @@ import MoreActivities from "../components/Activities/MoreActivities";
 import ComplaintsTable from "../components/users_complaints/ComplaintsTable";
 import CurrencyDropdown from "../components/currencyDrop";
 import ItineraryDetailsTourist from "../components/Itinerary/ItineraryDetailsTourist";
-import CartButton from "../components/Buttons/CartButton";
+import CartButton from "../components/cart/CartButton";
 
 export default function TouristRouter() {
   return (
