@@ -13,9 +13,10 @@ import { useLocation } from "react-router-dom";
 import ImageUploader from "../PDFs&Images/ImageUploader";
 import ClipLoader from "react-spinners/ClipLoader";
 import { ToggleArchive } from "../../custom_hooks/products/useToggleArchive";
-import { useSelector } from "react-redux";
 import SaveButton from "../Buttons/SaveButton";
 import EditButton from "../Buttons/EditButton";
+import { ProductCartButton } from "../Shop/ProductCartButton";
+import { useSelector } from "react-redux";
 interface ProductCardProps {
   product: ACTUALProduct;
   productId: string;
@@ -90,7 +91,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
     updateProduct();
     if (!isLoading && didSucceed && updatedProduct) {
       setCurrentProduct(updatedProduct);
-    } else if (isLoading) {
     }
   };
 
@@ -174,6 +174,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
             View more
           </button>
         </div>
+        {type.includes("Tourist") && <ProductCartButton product={product} />}
       </div>
 
       {showPopup && (
@@ -298,9 +299,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
                 )}
               </div>
               {type.includes("Tourist") ? (
-                <button className="add-to-cart-button">
-                  <FontAwesomeIcon icon={faCartShopping} /> Add to Cart
-                </button>
+                <ProductCartButton product={product} />
               ) : type.includes("Admin") ||
                 (type.includes("Seller") &&
                   currentProduct.seller &&

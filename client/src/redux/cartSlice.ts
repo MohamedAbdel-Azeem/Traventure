@@ -17,14 +17,24 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action: PayloadAction<IProduct>) => {
       if (!state.some((item) => item._id === action.payload._id)) {
-        state.push(action.payload);
+        const addedProduct = action.payload;
+        addedProduct.quantity = 1;
+        state.push(addedProduct);
       }
     },
     removeFromCart: (state, action: PayloadAction<string>) => {
-      state = state.filter((item) => item._id !== action.payload);
+      const newProducts = state.filter((item) => item._id !== action.payload);
+      return newProducts;
     },
     clearCart: (state) => {
-      state.length = 0;
+      return initialState;
+    },
+    changeQuantity: (state, action: PayloadAction<Payload>) => {
+      const { id, quantity } = action.payload;
+      const product = state.find((product) => product._id === id);
+      if (product) {
+        product.quantity = quantity;
+      }
     },
   },
 });

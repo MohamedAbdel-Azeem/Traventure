@@ -8,6 +8,8 @@ import { useState, useEffect } from "react";
 export default function CartDrawerElements() {
   const cart = useSelector((state) => state.cart) as IProduct[];
 
+  console.log(cart);
+
   const dispatch = useDispatch();
   const [totalPrice, setTotal] = useState(0);
   useEffect(() => {
