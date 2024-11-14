@@ -40,22 +40,25 @@ export function ProductCartButton({ product }: { product: ACTUALProduct }) {
     }
   };
 
+  const disabledAddButton = product.quantity - addedQuantity === 0;
+
   return (
     <div className="flex flex-row-reverse items-center justify-center py-3">
       <button
         onClick={handleAddIconPress}
-        className={`flex items-center justify-center bg-indigo-600 text-white p-2 rounded-2xl transition-transform duration-500 transform ${
+        className={`flex items-center justify-center text-white p-2 rounded-2xl ${
+          disabledAddButton ? "bg-indigo-400" : "bg-indigo-600"
+        } transition-transform duration-500 transform ${
           showButtons ? "translate-x-0" : "-translate-x-14"
         }`}
+        disabled={disabledAddButton}
       >
         <AddIcon />
       </button>
 
       <span
         className={`mx-2 bg-indigo-100 shadow-lg rounded-2xl py-2 px-6 transition-transform duration-300 transform ${
-          showButtons
-            ? "translate-y-0 visible"
-            : " -translate-x-4 invisible"
+          showButtons ? "translate-y-0 visible" : " -translate-x-4 invisible"
         }`}
       >
         {addedQuantity}
