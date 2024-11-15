@@ -18,10 +18,13 @@ const CartProduct: React.FC<CartProductProps> = ({ product }) => {
 
   return (
     <div className="flex flex-col items-center justify-start bg-slate-200 w-80 h-72 rounded-lg shadow-sm">
-      <img
-        src={product.imageUrl}
-        alt={product.name}
-        className="w-full h-28 mb-4"
+      <div
+        className="mb-4 bg-cover bg-center"
+        style={{
+          backgroundImage: `url(${product.imageUrl})`,
+          width: "100%",
+          height: "50%",
+        }}
       />
       <h2 className="text-2xl font-medium -mt-2">{product.name}</h2>
 
