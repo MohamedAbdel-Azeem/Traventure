@@ -11,9 +11,11 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { ACTUALProduct } from "../data/ProductData";
 import { useEffect, useState } from "react";
 
-export function ProductCartButton({ product }: { product: ACTUALProduct }) {
+export function ProductCartButton({ product }: { product: IProduct }) {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart) as IProduct[];
+
+  console.log(product);
 
   const [addedQuantity, setAddedQuantity] = useState(0);
   const [showButtons, setShowButtons] = useState(false);
@@ -40,7 +42,13 @@ export function ProductCartButton({ product }: { product: ACTUALProduct }) {
     }
   };
 
-  const disabledAddButton = product.quantity - addedQuantity === 0;
+  let disabledAddButton;
+
+  if (product.stock) {
+    disabledAddButton = product.stock - addedQuantity === 0;
+  } else {
+    disabledAddButton = product.quantity - addedQuantity === 0;
+  }
 
   return (
     <div className="flex flex-row-reverse items-center justify-center py-3">

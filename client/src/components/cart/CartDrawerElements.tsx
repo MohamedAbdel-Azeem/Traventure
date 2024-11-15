@@ -2,7 +2,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { Icon } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PaymentsIcon from "@mui/icons-material/Payments";
-import { IProduct, removeFromCart } from "../../redux/cartSlice";
+import { IProduct } from "../../redux/cartSlice";
+import { CartProduct } from "./CartProduct";
 import { useState, useEffect } from "react";
 
 export default function CartDrawerElements() {
@@ -31,9 +32,9 @@ export default function CartDrawerElements() {
     <div className="h-full px-16 py-4 bg-slate-100">
       {cart.length > 0 ? (
         <div className="flex flex-col justify-between h-full pb-10">
-          <div className="overflow-y-auto">
+          <div className="overflow-y-auto flex flex-col items-center h-full gap-6 pb-6">
             {cart.map((product) => (
-              <h1>{product.name}</h1>
+              <CartProduct key={product._id} product={product} />
             ))}
           </div>
           <div className="flex flex-col justify-between gap-6 text-xl font-medium pt-3 border-t-2 border-gray-500">
