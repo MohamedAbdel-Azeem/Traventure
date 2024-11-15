@@ -35,7 +35,7 @@ export default function CartDrawerElements() {
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
+      confirmButtonColor: "#4f46e5",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, clear it!",
     }).then((result) => {

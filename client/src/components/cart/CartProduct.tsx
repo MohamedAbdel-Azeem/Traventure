@@ -28,10 +28,7 @@ const CartProduct: React.FC<CartProductProps> = ({ product }) => {
       />
       <h2 className="text-2xl font-medium -mt-2">{product.name}</h2>
 
-      <p className="text-lg">
-        {currentCurrency} {product.price * exchangeRate}
-      </p>
-      <div className="-mt-3">
+      <div className="mt-1">
         <ProductCartButton product={product} />
       </div>
       <p className="text-lg">
