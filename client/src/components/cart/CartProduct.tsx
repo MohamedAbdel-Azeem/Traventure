@@ -33,7 +33,7 @@ const CartProduct: React.FC<CartProductProps> = ({ product }) => {
       </div>
       <p className="text-lg">
         Total: {currentCurrency}{" "}
-        {product.price * exchangeRate * product.quantity}
+        {(product.price * exchangeRate * product.quantity).toFixed(2)}
       </p>
     </div>
   );

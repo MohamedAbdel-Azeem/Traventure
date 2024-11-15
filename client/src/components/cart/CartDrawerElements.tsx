@@ -62,7 +62,7 @@ export default function CartDrawerElements() {
             <div className="flex items-center justify-between w-full">
               <h1>Total Price</h1>
               <h1>
-                {currentCurrency} {totalPrice * exchangeRate}
+                {currentCurrency} {(totalPrice * exchangeRate).toFixed(2)}
               </h1>
             </div>
             <button className="py-3 px-6 bg-indigo-700 rounded-xl text-slate-50 flex items-center justify-center">
