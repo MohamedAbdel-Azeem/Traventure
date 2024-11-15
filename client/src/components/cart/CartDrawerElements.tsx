@@ -2,9 +2,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { Icon } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PaymentsIcon from "@mui/icons-material/Payments";
-import { IProduct } from "../../redux/cartSlice";
+import { IProduct, clearCart } from "../../redux/cartSlice";
 import { CartProduct } from "./CartProduct";
 import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 
 export default function CartDrawerElements() {
   const cart = useSelector((state) => state.cart) as IProduct[];
@@ -28,6 +29,26 @@ export default function CartDrawerElements() {
     setTotal(newTotalPrice);
   }, [cart]);
 
+  const handleClearCart = () => {
+    Swal.fire({
+      title: "Are you sure you want to clear the cart?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, clear it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(clearCart());
+        Swal.fire({
+          title: "Cart Cleared!",
+          icon: "success",
+        });
+      }
+    });
+  };
+
   return (
     <div className="h-full px-16 py-4 bg-slate-100">
       {cart.length > 0 ? (
@@ -47,6 +68,13 @@ export default function CartDrawerElements() {
             <button className="py-3 px-6 bg-indigo-700 rounded-xl text-slate-50 flex items-center justify-center">
               <PaymentsIcon className="mr-2" />
               Proceed to Checkout
+            </button>
+            <button
+              className="py-3 px-6 bg-red-700 rounded-xl text-slate-50 flex items-center justify-center -mt-3"
+              onClick={handleClearCart}
+            >
+              <DeleteIcon className="mr-2" />
+              Clear Cart
             </button>
           </div>
         </div>

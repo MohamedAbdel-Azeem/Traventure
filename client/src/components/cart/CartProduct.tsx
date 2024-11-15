@@ -2,6 +2,7 @@ import React from "react";
 import { IProduct } from "../../redux/cartSlice";
 import { ProductCartButton } from "../Shop/ProductCartButton";
 import { useSelector } from "react-redux";
+import "./swal-container.css";
 
 interface CartProductProps {
   product: IProduct;
@@ -31,7 +32,8 @@ const CartProduct: React.FC<CartProductProps> = ({ product }) => {
         <ProductCartButton product={product} />
       </div>
       <p className="text-lg">
-        Total: {currentCurrency} {product.price * exchangeRate * product.quantity}
+        Total: {currentCurrency}{" "}
+        {product.price * exchangeRate * product.quantity}
       </p>
     </div>
   );
