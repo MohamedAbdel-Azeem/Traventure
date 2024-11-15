@@ -13,6 +13,7 @@ import MoreActivities from "../components/Activities/MoreActivities";
 import ComplaintsTable from "../components/users_complaints/ComplaintsTable";
 import CurrencyDropdown from "../components/currencyDrop";
 import ItineraryDetailsTourist from "../components/Itinerary/ItineraryDetailsTourist";
+import CartButton from "../components/cart/CartButton";
 
 export default function TouristRouter() {
   return (
@@ -23,7 +24,10 @@ export default function TouristRouter() {
         <Route path="/:username/shop" element={<ShopPage type="Tourist" />} />
         <Route path="/:username/locations" element={<MorePlaces />} />
         <Route path="/:username/itineraries" element={<MoreItineraries />} />
-        <Route path="/:username/itineraries/tourist-itinerary/:id" element={<ItineraryDetailsTourist/>}/>
+        <Route
+          path="/:username/itineraries/tourist-itinerary/:id"
+          element={<ItineraryDetailsTourist />}
+        />
         <Route path="/:username/activities" element={<MoreActivities />} />
         <Route path="/:username/complaints" element={<ComplaintsTable />} />
         <Route path="/:username/profile" element={<Tourist_Profile />} />
@@ -33,6 +37,7 @@ export default function TouristRouter() {
         <Route path="/:username/hotels" element={<HotelsPage />} />
       </Routes>
       <CurrencyDropdown />
+      <CartButton />
     </div>
   );
 }
