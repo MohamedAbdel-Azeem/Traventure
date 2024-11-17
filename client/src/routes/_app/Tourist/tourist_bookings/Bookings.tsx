@@ -355,7 +355,6 @@ const Bookings: React.FC = () => {
           {selectedActivity && (
             <ActivityCardTourist
               activity={selectedActivity}
-              onDelete={() => {}}
             />
           )}
           <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>

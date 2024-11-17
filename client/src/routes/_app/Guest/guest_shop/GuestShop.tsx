@@ -220,6 +220,8 @@ const GuestShop: React.FC<ShopPageProps> = ({ type }) => {
     boxShadow: 24,
     p: 4,
   };
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error!</p>;
 
   return (
     <div className="flex">

@@ -136,6 +136,8 @@ const Locations = () => {
   const currentCurrency = useSelector(
     (state: any) => state.exchangeRate.currentCurrency
   );
+  if (idgloading) return <p>Loading...</p>;
+  if (idgerror) return <p>Error</p>;
 
 return (
   <div className="flex justify-center">
@@ -261,6 +263,8 @@ return (
                   },
                 }}
               >
+                {tagsLoading && <MenuItem>Loading...</MenuItem>}
+                {tagsError && <MenuItem>Error</MenuItem>}
                 {tagsData.map((tag) => (
                   <MenuItem key={tag._id} value={tag._id}>
                     <Checkbox checked={selectedTags.indexOf(tag._id) > -1} />

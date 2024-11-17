@@ -4,6 +4,7 @@ import sellerModel from '../Schemas/Seller';
 import tourGuideModel from '../Schemas/TourGuide';
 import adminModel from '../Schemas/Admin';
 import touristModel from '../Schemas/Tourist';
+import governorModel from '../Schemas/Governer';
 
 import { Response } from 'express'; 
 import { hashPassword } from '../../utils/functions/bcrypt_functions';
@@ -11,22 +12,29 @@ import { hashPassword } from '../../utils/functions/bcrypt_functions';
 
 export async function createUser(user:any,type:string) {
   let model:any;
-  switch(type){
+  switch (type) {
     case "advertiser":
-      model = advertiserModel;break;
+      model = advertiserModel;
+      break;
     case "seller":
-      model = sellerModel;break;
+      model = sellerModel;
+      break;
     case "tourGuide":
-      model = tourGuideModel;break;
+      model = tourGuideModel;
+      break;
     case "admin":
-      model = adminModel;break;
+      model = adminModel;
+      break;
     case "tourist":
-      model = touristModel;break;
-      
+      model = touristModel;
+      break;
+    case "governor":
+      model = governorModel;
+      break;
   }
   try {
     
-    if(model == adminModel){
+    if(model == adminModel || model == governorModel){
       await isUniqueUsername(user.username);
     }
     else{

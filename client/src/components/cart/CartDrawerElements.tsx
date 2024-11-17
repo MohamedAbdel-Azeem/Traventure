@@ -1,5 +1,4 @@
 import { useSelector, useDispatch } from "react-redux";
-import { Icon } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import { IProduct, clearCart } from "../../redux/cartSlice";

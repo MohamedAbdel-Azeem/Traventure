@@ -56,25 +56,32 @@ router.get("/all", async (req: Request, res: Response) => {
 
 router.post(
   "/add/governer",
-  governerValidator,
+  [
+    body("username")
+      .isString()
+      .isLength({ min: 3 })
+      .withMessage("Username must be at least 3 characters long"),
+    body("password")
+      .isString()
+      .isLength({ min: 8 })
+      .withMessage("Password must be at least 8 characters long"),
+  ],
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const governerData = matchedData(req);
-    governerData.password = await hashPassword(governerData.password);
-
+    const newUser = matchedData(req);
     try {
-      const governer = await addGoverner(governerData, governerData.username);
-      if (!governer) res.status(401).send("Usernme already exists");
-      else res.status(201).json(governer);
+      await createUser(newUser, "governor");
+      res.status(201).send({ message: "User created successfully" });
     } catch (error) {
-      res.status(500).send("Error adding governer");
+      const err = error as any;
+      handleRegisterErrors(err, res);
     }
   }
 );
-
 router.delete(
   "/delete/user/:username/:type",
   async (req: Request, res: Response) => {
