@@ -70,7 +70,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   bookingActivated,
   inappropriate,
 }) => {
-  const { bookItinerary, data, loading, error } = useBookItinerary();
+  const { bookItinerary } = useBookItinerary();
   const { username } = useParams<{ username: string }>();
   const currenttype = useLocation().pathname.split("/")[1];
   const formatDate = (dateString: string) => {

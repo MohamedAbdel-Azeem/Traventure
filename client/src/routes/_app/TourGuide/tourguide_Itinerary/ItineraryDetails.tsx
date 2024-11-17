@@ -15,10 +15,8 @@ import {
   SelectChangeEvent,
   Stack,
 } from "@mui/material";
-import { useLocation, useParams } from "react-router-dom";
-import { IActivity } from "../../../../custom_hooks/activities/activity_interface";
+import { useLocation } from "react-router-dom";
 import { TouristProfileData } from "../../../../routes/_app/Tourist/tourist_profile/tourist_profile_data";
-import Place from "../../../../custom_hooks/places/place_interface";
 import { useGetItineraryID } from "../../../../custom_hooks/itineraries/useGetItinerary";
 import TheBIGMAP from "../../../../components/Maps/TheBIGMAP";
 import ImageUploader from "../../../../components/PDFs&Images/ImageUploader";
@@ -33,10 +31,7 @@ import BestDeleteButton from "../../../../components/Buttons/BestDeleteButton";
 import { v4 as uuidv4 } from "uuid";
 import { useGetPlace } from "../../../../custom_hooks/places/useGetPlace";
 import { useGetAllActivitiesTitleAndId } from "../../../../custom_hooks/activities/useGetActivitiesTitlesAndID";
-import {
-  UseUpdateItinerary,
-  useUpdateItinerary,
-} from "../../../../custom_hooks/itineraries/useUpdateItinerary";
+import { UseUpdateItinerary } from "../../../../custom_hooks/itineraries/useUpdateItinerary";
 interface TagStructure {
   _id: string;
   name: string;
@@ -73,25 +68,6 @@ interface Itinerary {
     user_id?: TouristProfileData;
   }[];
   accessibility: boolean;
-}
-
-interface SActivity {
-  activity_id?: string;
-  time_unit?: string;
-  activity_duration?: number;
-  _id?: string;
-  Title?: string;
-  DateAndTime: Date;
-  Location: {
-    latitude: number;
-    longitude: number;
-  };
-  Price: number;
-  SpecialDiscount: number;
-  Category: string;
-  Tags: TagStructure[];
-  BookingIsOpen: boolean;
-  added_By?: string;
 }
 
 type PlacetoGo = {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./ProductCard.css"; // Assuming styles are in this file
 import { ACTUALProduct } from "../data/ProductData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -240,6 +240,13 @@ const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
     boxShadow: 24,
     p: 4,
   };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error
+    </div>;
+  }
 
   return (
     <div className="flex items-center justify-center">

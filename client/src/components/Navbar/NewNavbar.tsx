@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   AppBar,
@@ -48,10 +48,9 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   const currentuser = location.pathname.split(`/`)[2];
   const currentusertype = location.pathname.split(`/`)[1];
 
-  const { cuserdata, userloading, usererror } = GetCurrentUser(currentuser);
+  const { cuserdata } = GetCurrentUser(currentuser);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [isPasswordModalOpen, setPasswordModalOpen] = useState(false);
-  const hideTimeoutRef = useRef<number | null>(null);
 
   const handlePasswordChangeSubmit = (data: AddContactLeadFormType) => {
     const { oldPassword, newPassword } = data;

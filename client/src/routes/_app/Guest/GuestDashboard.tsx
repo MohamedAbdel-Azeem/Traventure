@@ -74,7 +74,6 @@ const GuestDashboard = () => {
                 key={location._id}
                 id={String(location._id)}
                 wholeLocation={location}
-                onDelete={() => {}}
               />
             ))
           ) : (
@@ -98,7 +97,6 @@ const GuestDashboard = () => {
               <ActivityCardTourist
                 key={activity._id}
                 activity={activity}
-                onDelete={(_id) => {}}
               />
             ))
           ) : (

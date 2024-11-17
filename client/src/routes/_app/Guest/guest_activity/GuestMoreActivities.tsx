@@ -283,7 +283,6 @@ const GuestMoreActivities: React.FC = () => {
                 <ActivityCardTourist
                   key={activity._id}
                   activity={activity}
-                  onDelete={(_id) => {}}
                 />
               ))
             ) : (

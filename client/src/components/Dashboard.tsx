@@ -94,7 +94,6 @@ const Dashboard: React.FC = () => {
                 key={location._id}
                 id={String(location._id)}
                 wholeLocation={location}
-                onDelete={() => {}}
               />
             ))
           ) : (
@@ -118,7 +117,6 @@ const Dashboard: React.FC = () => {
               <ActivityCardTourist
                 key={activity._id}
                 activity={activity}
-                onDelete={(_id) => {}}
                 {...(currenttype === "tourist" && { type: "tourist" })}
               />
             ))
