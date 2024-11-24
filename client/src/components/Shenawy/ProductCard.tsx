@@ -17,6 +17,7 @@ import SaveButton from "../Buttons/SaveButton";
 import EditButton from "../Buttons/EditButton";
 import { ProductCartButton } from "../Shop/ProductCartButton";
 import { useSelector } from "react-redux";
+import { WishListButton } from "../Shop/WishListButton";
 interface ProductCardProps {
   product: ACTUALProduct;
   productId: string;
@@ -144,6 +145,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
   return (
     <div className="border border-gray-200 rounded-lg shadow-lg bg-gray-100 overflow-hidden relative">
       <div className="relative h-36 bg-gray-300 flex items-center justify-center">
+        <div className="absolute bottom-2 right-2">
+          {type === "Tourist" && WishListButton(product, currentuser)}
+        </div>
         {currentProduct.imageUrl ? (
           <img
             src={currentProduct.imageUrl}
