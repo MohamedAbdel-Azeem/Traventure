@@ -165,7 +165,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
 
   const handleBooking = async (activity_id: string) => {
     try {
-      await bookActivity(activity_id, username);
+      await bookActivity(activity_id, username,currentActivity.Price,currentActivity.SpecialDiscount);
     } catch (error) {
       console.error("Error booking activity:", error);
     }

@@ -14,7 +14,7 @@ import { Activity } from "../../../../components/Activities/ActivityCardTourist"
 import Itinerary from "../../../../custom_hooks/itineraries/itinerarySchema";
 import { useNavigate, useParams } from "react-router-dom";
 import getBookings from "../../../../custom_hooks/getTouristBookings";
-import cancelBookings from "../../../../custom_hooks/cancelBooking";
+import cancelBookings  from "../../../../custom_hooks/cancelBooking";
 import { set } from "date-fns";
 import { get } from "react-hook-form";
 import { ActivityCardTourist } from "../../../../components/Activities/ActivityCardTourist";
@@ -115,6 +115,7 @@ const Bookings: React.FC = () => {
 
   useEffect(() => {
     if (data) {
+      console.log(username);
       setItiBookings(data.filter((booking) => booking.type === "itinerary")); // Fix to use data instead of bookings
       setActivityBookings(
         data.filter((booking) => booking.type === "activity")
@@ -131,7 +132,7 @@ const Bookings: React.FC = () => {
 
   const handleCancel = async (booking_id: string) => {
     try {
-      await cancelBooking(booking_id);
+      await cancelBooking(booking_id,username);
       await refetch();
       await flightsget();
       await hotelsget();

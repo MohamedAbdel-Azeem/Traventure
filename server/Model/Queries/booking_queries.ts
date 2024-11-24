@@ -116,7 +116,9 @@ export async function addBooking(bookingData: any) {
       );
     }
     if (booked === null) {
+      console.log("here");
       await bookingModel.create(bookingData);
+      console.log("here2");
       await updateLoyaltyPoints(bookingData);
     } else {
       throw new Error("Booking already exists");
@@ -230,10 +232,11 @@ export async function cancelBooking(booking_id: string) {
     booking = await checkCancel(booking_id);
     if (booking !== null) {
       if ((booking as any).type === "itinerary") {
+      
         const itinerary = await ItineraryModel.findById(
           (booking as any).itinerary
         );
-
+        
         if (itinerary) {
           const index = (itinerary as any).booked_By.findIndex(
             (entry: any) =>
@@ -245,7 +248,17 @@ export async function cancelBooking(booking_id: string) {
           }
         }
       }
+
+      const tourist = await touristModel.findById( booking.tourist );
+      if (tourist) {
+        tourist.wallet += booking.price;
+        await tourist.save(); // Save the updated wallet
+      } else {
+        throw new Error("Wallet not found");
+      }
+
       await bookingModel.findByIdAndDelete(booking_id);
+
     } else {
       throw new Error("Booking not found");
     }
