@@ -15,8 +15,6 @@ export function ProductCartButton({ product }: { product: IProduct }) {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart) as IProduct[];
 
-  console.log(product);
-
   const [addedQuantity, setAddedQuantity] = useState(0);
   const [showButtons, setShowButtons] = useState(false);
 

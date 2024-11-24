@@ -29,7 +29,10 @@ interface ShopPageProps {
   type: string;
 }
 const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
-  const { data, loading, error } = useGetAllProducts();
+  const currentuser = location.pathname.split(`/`)[2];
+  const currenttype = location.pathname.split(`/`)[1];
+
+  const { data, loading, error } = useGetAllProducts(currenttype, currentuser);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [products, setProducts] = useState(data);
@@ -51,8 +54,6 @@ const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
     externalseller?: string;
   }
 
-  const currentuser = location.pathname.split(`/`)[2];
-  const currenttype = location.pathname.split(`/`)[1];
   React.useEffect(() => {
     if (data) {
       if (currenttype.includes("tourist") || currenttype.includes("guest")) {
@@ -244,8 +245,7 @@ const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
     return <div>Loading...</div>;
   }
   if (error) {
-    return <div>Error
-    </div>;
+    return <div>Error</div>;
   }
 
   return (

@@ -34,7 +34,7 @@ export const useGetCurrencies = () => {
         setCurrencies(currencyList);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching currencies:", error);
+        setCurrencies([{ code: "EGP", name: "Egyptian Pound" }]);
         setError(error);
       }
     };
