@@ -12,6 +12,7 @@ import GovernerSchema from "../Model/Schemas/Governer";
 import { getExternalSellers } from "../Model/Queries/product_queries";
 import { addGoverner, deleteUser } from "../Model/Queries/admin_queries";
 import { hashPassword } from "../utils/functions/bcrypt_functions";
+import { getRevenues } from "../Model/Queries/revenues_queries";
 
 const router = Router();
 
@@ -108,5 +109,12 @@ router.get("/externalSellers", async (req: Request, res: Response) => {
     res.status(500).send("error getting external sellers");
   }
 });
-
+router.get("/revenues", async (req: Request, res: Response) => {
+  try {
+    const revenues = await getRevenues();
+    res.status(200).send(revenues);
+  } catch (err) {
+    res.status(500).send("error getting revenues");
+  }
+});
 export default router;

@@ -12,6 +12,7 @@ import { AdminSalesPage } from "../routes/_app/Admin/admin_sales/AdminSalesPage"
 import NewNavbar from "../components/Navbar/NewNavbar";
 import CurrencyDropdown from "../components/currencyDrop";
 import ItineraryDetailsTourist from "../components/Itinerary/ItineraryDetailsTourist";
+import { AdminRevenuePage } from "../routes/_app/Admin/admin_sales/AdminRevenuePage";
 
 export default function AdminRouter() {
   return (
@@ -27,8 +28,12 @@ export default function AdminRouter() {
         <Route path="/:username/complaints" element={<Complaints />} />
         <Route path="/:username/activities" element={<MoreActivities />} />
         <Route path="/:username/itineraries" element={<MoreItineraries />} />
-        <Route path="/:username/itineraries/tourist-itinerary/:id" element={<ItineraryDetailsTourist/>}/>
+        <Route
+          path="/:username/itineraries/tourist-itinerary/:id"
+          element={<ItineraryDetailsTourist />}
+        />
         <Route path="/:username/applications" element={<Applications />} />
+        <Route path="/:username/Revenue" element={<AdminRevenuePage />} />
       </Routes>
       <CurrencyDropdown />
     </div>
