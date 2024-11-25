@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import axios from "axios";
@@ -64,7 +64,9 @@ export function WishListButton(
           open={SnackBarState.isOpen}
           autoHideDuration={2000}
           onClose={() => setSnackBarState(initialSnackBarState)}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          TransitionComponent={(props) => <Slide {...props} direction="down" />}
+          style={{ top: "80px" }}
         >
           <Alert
             onClose={() => setSnackBarState(initialSnackBarState)}
