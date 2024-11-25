@@ -16,7 +16,6 @@ export default function CartDrawerElements() {
     (state: any) => state.exchangeRate.currentCurrency
   );
 
-  console.log(cart);
 
   const dispatch = useDispatch();
   const [totalPrice, setTotal] = useState(0);

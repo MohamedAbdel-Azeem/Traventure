@@ -14,4 +14,5 @@ export interface ACTUALProduct {
     touristUsername?: string;
   }[];
   isArchived: boolean;
+  isWishListed?: boolean;
 }
