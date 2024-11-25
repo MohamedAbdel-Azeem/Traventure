@@ -142,6 +142,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
     }));
   };
 
+  console.log(type, currentuser);
+
   return (
     <div className="border border-gray-200 rounded-lg shadow-lg bg-gray-100 overflow-hidden relative">
       <div className="relative h-36 bg-gray-300 flex items-center justify-center">
