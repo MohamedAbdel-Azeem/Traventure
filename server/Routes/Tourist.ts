@@ -15,8 +15,11 @@ import {
 } from "../Model/Queries/user_queries";
 import { getActivities } from "../Model/Queries/activity_queries";
 import {
+  bookmarkActivity,
+  bookmarkItinerary,
   getAll,
   getTouristBookings,
+  getTouristBookmarks,
   gettouristComplaints,
   getTouristUpcoming,
 } from "../Model/Queries/tourist_queries";
@@ -43,6 +46,7 @@ router.post(
     }
   }
 );
+
 
 router.get("/upcoming", async (req: Request, res: Response) => {
   try {
@@ -121,13 +125,35 @@ router.get("/complains/:username", async (req: Request, res: Response) => {
   }
 });
 
-router.patch("/redeemPoints", async (req: Request, res: Response) => {
+router.get("/bookmarks/:username", async (req: Request, res: Response) => {
   try {
-    const username = req.body.username;
-    const amount = req.body.amount;
+    const username = req.params.username;
+    const bookmarks = await getTouristBookmarks(username);
+    res.status(200).send(bookmarks);
+  } catch (error) {
+    res.status(500).send("error getting bookmarks");
+  }
+});
 
-    await redeemPoints(username, amount);
-    res.status(200).send("points redeemed successfully");
+router.patch("/bookmark_activity/:username", async (req: Request, res: Response) => {
+  try {
+    const username = req.params.username;
+    const activity_id = req.body.activity_id;
+
+    await bookmarkActivity(username, activity_id);
+    res.status(200).send("Activity bookmarked");
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+});
+
+router.patch("/bookmark_itinerary/:username", async (req: Request, res: Response) => {
+  try {
+    const username = req.params.username;
+    const itinerary_id = req.body.itinerary_id;
+
+    await bookmarkItinerary(username, itinerary_id);
+    res.status(200).send("Itinerary bookmarked");
   } catch (error: any) {
     res.status(500).send(error.message);
   }

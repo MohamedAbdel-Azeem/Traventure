@@ -18,11 +18,13 @@ import {
   useGetAllTags,
 } from "../../custom_hooks/categoryandTagCRUD";
 import useBookActivity from "../../custom_hooks/activities/bookActivity";
+import useBookmarkActivity from "../../custom_hooks/activities/bookmarkActivity";
 import { updateActivity } from "../../custom_hooks/activities/updateActivity";
 import { useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import { set } from "date-fns";
 import { useSelector } from "react-redux";
+import BookmarkIcon from '@mui/icons-material/BookmarkAdd';
 
 export type Activity = {
   _id: string;
@@ -82,6 +84,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
   const [mopen, setmOpen] = useState(false);
   const { username } = useParams<{ username: string }>();
   const { bookActivity, data, loading, error } = useBookActivity();
+  const { bookmarkActivity } = useBookmarkActivity();
   const [inappropriate, setInappropriate] = useState(
     currentActivity.inappropriate
   );
@@ -178,6 +181,15 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
     }
   };
 
+  const handleBookMark = async (activity_id: string) => {
+    try {
+      await bookmarkActivity(currentuser,activity_id);
+    } catch (error) {
+      console.error("Error bookmarking activity:", error);
+    }
+
+  };
+
   const handleDateChange = (e) => {
     setNewDate(new Date(e.target.value));
   };
@@ -239,6 +251,10 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
             </div>
             {type === "tourist" && currentActivity.BookingIsOpen && (
               <div className=" flex justify-end items-center py-2 px-5">
+                <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ml-2"
+                 title="Bookmark" onClick={() => handleBookMark(currentActivity._id)}>
+                  <BookmarkIcon />
+                </button>
                 <button
                   className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ml-2"
                   onClick={() => handleBooking(currentActivity._id)}
