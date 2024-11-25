@@ -8,12 +8,14 @@ import { TouristProfileData } from "../../routes/_app/Tourist/tourist_profile/to
 import { IActivity } from "../../custom_hooks/activities/activity_interface";
 import Place from "../../custom_hooks/places/place_interface";
 import useBookItinerary from "../../custom_hooks/itineraries/bookItinerary";
+import useBookmarkItinerary from "../../custom_hooks/itineraries/bookmarkItinerary";
 import { useParams, useLocation } from "react-router-dom";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 import ShareButton from "../Buttons/ShareButton";
+import BookmarkIcon from '@mui/icons-material/BookmarkAdd';
 
 interface TagStructure {
   _id: string;
@@ -71,6 +73,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   inappropriate,
 }) => {
   const { bookItinerary, data, loading, error } = useBookItinerary();
+  const { bookmarkItinerary} = useBookmarkItinerary();
   const { username } = useParams<{ username: string }>();
   const currenttype = useLocation().pathname.split("/")[1];
   const formatDate = (dateString: string) => {
@@ -89,6 +92,15 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
       console.error("Error booking itinerary  :", error);
     }
   };
+
+  const handleBookmark = async (id: string) => {
+    try{
+      const response = await bookmarkItinerary(username, id);
+    }
+    catch (error) {
+      console.error("Error bookmarking itinerary  :", error);
+    }
+  }
 
   const exchangeRate = useSelector(
     (state: any) => state.exchangeRate.exchangeRate
@@ -232,6 +244,10 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
               >
                 Book
               </button>
+              <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600" title="Bookmark"
+                onClick={() => handleBookmark(_id)}>
+                <BookmarkIcon className="cursor-pointer" />
+                </button>
               <ShareButton type={"itinerary"} ID={_id} />
             </>
           )}
