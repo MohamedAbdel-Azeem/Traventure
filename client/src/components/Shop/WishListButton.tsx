@@ -59,34 +59,37 @@ export function WishListButton(
           <FavoriteBorderIcon className="transition-transform duration-300 hover:scale-125" />
         )}
       </button>
-      <Snackbar
-        open={SnackBarState.isOpen}
-        autoHideDuration={2000}
-        onClose={() => setSnackBarState(initialSnackBarState)}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert
-          severity={
-            SnackBarState.status === "success"
-              ? "success"
-              : SnackBarState.status == "error"
-              ? "error"
-              : undefined
-          }
-          variant="filled"
-          icon={
-            SnackBarState.message === "Product removed from wishlist" ? (
-              <HeartBroken />
-            ) : SnackBarState.message === "Product added to wishlist" ? (
-              <FavoriteIcon />
-            ) : (
-              false
-            )
-          }
+      {SnackBarState.isOpen && (
+        <Snackbar
+          open={SnackBarState.isOpen}
+          autoHideDuration={2000}
+          onClose={() => setSnackBarState(initialSnackBarState)}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >
-          {SnackBarState.message}
-        </Alert>
-      </Snackbar>
+          <Alert
+            onClose={() => setSnackBarState(initialSnackBarState)}
+            severity={
+              SnackBarState.status === "success"
+                ? "success"
+                : SnackBarState.status == "error"
+                ? "error"
+                : undefined
+            }
+            variant="filled"
+            icon={
+              SnackBarState.message === "Product removed from wishlist" ? (
+                <HeartBroken />
+              ) : SnackBarState.message === "Product added to wishlist" ? (
+                <FavoriteIcon />
+              ) : (
+                false
+              )
+            }
+          >
+            {SnackBarState.message}
+          </Alert>
+        </Snackbar>
+      )}
     </>
   );
 }
