@@ -26,6 +26,7 @@ import StadiumIcon from "@mui/icons-material/Stadium";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
 import NavbarDropdown from "./NavbarDropdown";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Logout } from "@mui/icons-material";
 import ChangePasswordModal, {
   AddContactLeadFormType,
@@ -97,7 +98,11 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
 
   const TGnavbaritems = [
     { text: "Home", icon: <HomeIcon />, path: `/tourguide/${currentuser}` },
-    { text: 'Locations', icon: <LocationOnIcon />, path: `/tourguide/${currentuser}/locations` },
+    {
+      text: "Locations",
+      icon: <LocationOnIcon />,
+      path: `/tourguide/${currentuser}/locations`,
+    },
     {
       text: "Itinerary Management",
       icon: <ActivityIcon />,
@@ -111,7 +116,11 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
       icon: <HomeIcon />,
       path: `/tourismgovernor/${currentuser}`,
     },
-    { text: 'Locations', icon: <LocationOnIcon />, path: `/tourismgovernor/${currentuser}/locations` },
+    {
+      text: "Locations",
+      icon: <LocationOnIcon />,
+      path: `/tourismgovernor/${currentuser}/locations`,
+    },
     {
       text: "Historical Tags",
       icon: <ActivityIcon />,
@@ -156,7 +165,11 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
 
   const advertisernavbaritems = [
     { text: "Home", icon: <HomeIcon />, path: `/advertiser/${currentuser}` },
-    { text: 'Locations', icon: <LocationOnIcon />, path: `/advertiser/${currentuser}/locations` },
+    {
+      text: "Locations",
+      icon: <LocationOnIcon />,
+      path: `/advertiser/${currentuser}/locations`,
+    },
     {
       text: "Activity Management",
       icon: <ActivityIcon />,
@@ -252,6 +265,12 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
       : []),
     ...(currentusertype.includes("tourist") || currentusertype.includes("admin")
       ? [
+          {
+            label: "Wishlist",
+            onClick: () =>
+              navigate(`/${currentusertype}/${currentuser}/wishlist`),
+            icon: FavoriteIcon,
+          },
           {
             label: "Complaints",
             onClick: () =>
