@@ -17,9 +17,7 @@ interface Revenue {
 }
 
 interface RevenuesBarChartProps {
-  activityRevenues: Revenue[];
-  itineraryRevenues: Revenue[];
-  productRevenues: Revenue[];
+  Revenues: Revenue[];
   selectedYear: string;
   selectedMonth: string;
 }
@@ -41,98 +39,39 @@ const months = [
 ];
 
 const RevenuesBarChart: React.FC<RevenuesBarChartProps> = ({
-  activityRevenues,
-  itineraryRevenues,
-  productRevenues,
+  Revenues,
+
   selectedYear,
   selectedMonth,
 }) => {
   // Filter revenue data based on selected year and month
-  const filteredActivityRevenues = activityRevenues.filter((rev) => {
+  const filteredRevenues = Revenues.filter((rev) => {
     const yearMatch = rev.year.toString() === selectedYear;
     const monthMatch =
       selectedMonth === "ALL" || rev.month === months.indexOf(selectedMonth);
     return yearMatch && monthMatch;
   });
 
-  const filteredItineraryRevenues = itineraryRevenues.filter((rev) => {
-    const yearMatch = rev.year.toString() === selectedYear;
-    const monthMatch =
-      selectedMonth === "ALL" || rev.month === months.indexOf(selectedMonth);
-    return yearMatch && monthMatch;
-  });
-  const filteredProductRevenues = productRevenues.filter((rev) => {
-    const yearMatch = rev.year.toString() === selectedYear;
-    const monthMatch =
-      selectedMonth === "ALL" || rev.month === months.indexOf(selectedMonth);
-    return yearMatch && monthMatch;
-  });
   // Combine the filtered data for the chart
   const combinedDataMap = new Map<string, any>();
 
-  filteredActivityRevenues.forEach((activityRev) => {
+  filteredRevenues.forEach((rev) => {
     const key =
       selectedMonth === "ALL"
-        ? `${activityRev.year}-${activityRev.month}`
-        : `${activityRev.year}-${activityRev.month}-${activityRev.day}`;
+        ? `${rev.year}-${rev.month}`
+        : `${rev.year}-${rev.month}-${rev.day}`;
 
     if (!combinedDataMap.has(key)) {
       combinedDataMap.set(key, {
-        year: activityRev.year,
-        month: activityRev.month,
-        day: activityRev.day,
-        activityRevenue: 0,
-        itineraryRevenue: 0,
-        productRevenue: 0,
+        year: rev.year,
+        month: rev.month,
+        day: rev.day,
+        revenue: 0,
       });
     }
 
     const existingData = combinedDataMap.get(key);
-    existingData.activityRevenue += activityRev.revenue;
-    combinedDataMap.set(key, existingData);
-  });
-
-  filteredItineraryRevenues.forEach((itineraryRev) => {
-    const key =
-      selectedMonth === "ALL"
-        ? `${itineraryRev.year}-${itineraryRev.month}`
-        : `${itineraryRev.year}-${itineraryRev.month}-${itineraryRev.day}`;
-
-    if (!combinedDataMap.has(key)) {
-      combinedDataMap.set(key, {
-        year: itineraryRev.year,
-        month: itineraryRev.month,
-        day: itineraryRev.day,
-        activityRevenue: 0,
-        itineraryRevenue: 0,
-        productRevenue: 0,
-      });
-    }
-
-    const existingData = combinedDataMap.get(key);
-    existingData.itineraryRevenue += itineraryRev.revenue;
-    combinedDataMap.set(key, existingData);
-  });
-
-  filteredProductRevenues.forEach((produtctRev) => {
-    const key =
-      selectedMonth === "ALL"
-        ? `${produtctRev.year}-${produtctRev.month}`
-        : `${produtctRev.year}-${produtctRev.month}-${produtctRev.day}`;
-
-    if (!combinedDataMap.has(key)) {
-      combinedDataMap.set(key, {
-        year: produtctRev.year,
-        month: produtctRev.month,
-        day: produtctRev.day,
-        activityRevenue: 0,
-        itineraryRevenue: 0,
-        productRevenue: 0,
-      });
-    }
-
-    const existingData = combinedDataMap.get(key);
-    existingData.productRevenue += produtctRev.revenue;
+    existingData.revenue += rev.revenue;
     combinedDataMap.set(key, existingData);
   });
 
@@ -162,13 +101,7 @@ const RevenuesBarChart: React.FC<RevenuesBarChartProps> = ({
         <YAxis />
         <Tooltip />
         <Legend />
-        <Bar dataKey="activityRevenue" fill="#8884d8" name="Activity Revenue" />
-        <Bar
-          dataKey="itineraryRevenue"
-          fill="#82ca9d"
-          name="Itinerary Revenue"
-        />
-        <Bar dataKey="productRevenue" fill="#883433" name="Product Revenue" />
+        <Bar dataKey="revenue" fill="#8884d8" name="Revenue" />
       </BarChart>
     </div>
   );

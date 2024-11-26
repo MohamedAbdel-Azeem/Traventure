@@ -134,13 +134,32 @@ export function AdminRevenuePage() {
             ))}
           </select>
         </div>
-        <RevenuesBarChart
-          activityRevenues={revenue.activityRevenues || []}
-          itineraryRevenues={revenue.itineraryRevenues || []}
-          productRevenues={revenue.productRevenues || []}
-          selectedYear={selectedYear}
-          selectedMonth={selectedMonth}
-        />
+        <div className=" flex flex-row p-11 items-center justify-center">
+          <div className="flex-col ">
+            <h1>Products</h1>
+            <RevenuesBarChart
+              Revenues={revenue.productRevenues || []}
+              selectedYear={selectedYear}
+              selectedMonth={selectedMonth}
+            />
+          </div>
+          <div className="flex-col ">
+            <h1>Actvities</h1>
+            <RevenuesBarChart
+              Revenues={revenue.activityRevenues || []}
+              selectedYear={selectedYear}
+              selectedMonth={selectedMonth}
+            />
+          </div>
+          <div className="flex-col ">
+            <h1>Itinerary</h1>
+            <RevenuesBarChart
+              Revenues={revenue.itineraryRevenues || []}
+              selectedYear={selectedYear}
+              selectedMonth={selectedMonth}
+            />
+          </div>
+        </div>
         <div className="mt-8 flex justify-center items-center bg-purple-50 py-3 px-4 rounded-lg shadow-md border border-purple-200 max-w-md mx-auto">
           <div className="flex items-center space-x-4">
             <div className="flex flex-col items-center">
