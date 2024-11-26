@@ -19,7 +19,7 @@ interface itineraryRevenue {
 }
 // Function to generate an array of years from 2024 to the current year
 const generateYearsArray = (): number[] => {
-  const currentYear = new Date().getFullYear();
+  const currentYear = 2026;
   const startYear = 2024;
   const yearsArray = [];
 
@@ -75,6 +75,12 @@ export function AdminRevenuePage() {
       }
     );
 
+    const filteredProductRevenues = revenue.productRevenues.filter((rev) => {
+      const yearMatch = rev.year.toString() === selectedYear;
+      const monthMatch =
+        selectedMonth === "ALL" || rev.month === months.indexOf(selectedMonth);
+      return yearMatch && monthMatch;
+    });
     const totalActivityRevenue = filteredActivityRevenues.reduce(
       (acc, rev) => acc + rev.revenue,
       0
@@ -83,8 +89,13 @@ export function AdminRevenuePage() {
       (acc, rev) => acc + rev.revenue,
       0
     );
-
-    setTotalRevenue(totalActivityRevenue + totalItineraryRevenue);
+    const totalProductRevenue = filteredProductRevenues.reduce(
+      (acc, rev) => acc + rev.revenue,
+      0
+    );
+    setTotalRevenue(
+      totalActivityRevenue + totalItineraryRevenue + totalProductRevenue
+    );
   }, [revenue, selectedYear, selectedMonth]);
 
   if (loading) {
@@ -126,6 +137,7 @@ export function AdminRevenuePage() {
         <RevenuesBarChart
           activityRevenues={revenue.activityRevenues || []}
           itineraryRevenues={revenue.itineraryRevenues || []}
+          productRevenues={revenue.productRevenues || []}
           selectedYear={selectedYear}
           selectedMonth={selectedMonth}
         />
@@ -136,7 +148,7 @@ export function AdminRevenuePage() {
                 Total Revenue:
               </label>
               <p className="text-4xl font-bold text-purple-900">
-                ${totalRevenue.toFixed(2)}
+                EGP {totalRevenue.toFixed(2)}
               </p>
             </div>
           </div>

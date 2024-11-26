@@ -19,6 +19,7 @@ interface Revenue {
 interface RevenuesBarChartProps {
   activityRevenues: Revenue[];
   itineraryRevenues: Revenue[];
+  productRevenues: Revenue[];
   selectedYear: string;
   selectedMonth: string;
 }
@@ -42,6 +43,7 @@ const months = [
 const RevenuesBarChart: React.FC<RevenuesBarChartProps> = ({
   activityRevenues,
   itineraryRevenues,
+  productRevenues,
   selectedYear,
   selectedMonth,
 }) => {
@@ -59,7 +61,12 @@ const RevenuesBarChart: React.FC<RevenuesBarChartProps> = ({
       selectedMonth === "ALL" || rev.month === months.indexOf(selectedMonth);
     return yearMatch && monthMatch;
   });
-
+  const filteredProductRevenues = productRevenues.filter((rev) => {
+    const yearMatch = rev.year.toString() === selectedYear;
+    const monthMatch =
+      selectedMonth === "ALL" || rev.month === months.indexOf(selectedMonth);
+    return yearMatch && monthMatch;
+  });
   // Combine the filtered data for the chart
   const combinedDataMap = new Map<string, any>();
 
@@ -76,6 +83,7 @@ const RevenuesBarChart: React.FC<RevenuesBarChartProps> = ({
         day: activityRev.day,
         activityRevenue: 0,
         itineraryRevenue: 0,
+        productRevenue: 0,
       });
     }
 
@@ -97,11 +105,34 @@ const RevenuesBarChart: React.FC<RevenuesBarChartProps> = ({
         day: itineraryRev.day,
         activityRevenue: 0,
         itineraryRevenue: 0,
+        productRevenue: 0,
       });
     }
 
     const existingData = combinedDataMap.get(key);
     existingData.itineraryRevenue += itineraryRev.revenue;
+    combinedDataMap.set(key, existingData);
+  });
+
+  filteredProductRevenues.forEach((produtctRev) => {
+    const key =
+      selectedMonth === "ALL"
+        ? `${produtctRev.year}-${produtctRev.month}`
+        : `${produtctRev.year}-${produtctRev.month}-${produtctRev.day}`;
+
+    if (!combinedDataMap.has(key)) {
+      combinedDataMap.set(key, {
+        year: produtctRev.year,
+        month: produtctRev.month,
+        day: produtctRev.day,
+        activityRevenue: 0,
+        itineraryRevenue: 0,
+        productRevenue: 0,
+      });
+    }
+
+    const existingData = combinedDataMap.get(key);
+    existingData.productRevenue += produtctRev.revenue;
     combinedDataMap.set(key, existingData);
   });
 
@@ -137,6 +168,7 @@ const RevenuesBarChart: React.FC<RevenuesBarChartProps> = ({
           fill="#82ca9d"
           name="Itinerary Revenue"
         />
+        <Bar dataKey="productRevenue" fill="#883433" name="Product Revenue" />
       </BarChart>
     </div>
   );

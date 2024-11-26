@@ -117,6 +117,7 @@ router.get("/revenues", async (req: Request, res: Response) => {
     const revenues = await getRevenues();
     res.status(200).send(revenues);
   } catch (err) {
+    console.log(err);
     res.status(500).send("error getting revenues");
   }
 });

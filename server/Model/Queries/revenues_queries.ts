@@ -8,7 +8,7 @@ import TourGuide from "../Schemas/TourGuide";
 import Advertiser from "../Schemas/Advertiser";
 import Admin from "../Schemas/Admin";
 import Governer from "../Schemas/Governer";
-
+import purchase, { IPurchase } from "../../Model/Schemas/purchase";
 interface Revenue {
   year: number;
   month: number;
@@ -23,7 +23,6 @@ interface UserCount {
   type: string;
   count: number;
 }
-
 export const getRevenues = async () => {
   try {
     const bookings = await Booking.find()
@@ -36,9 +35,31 @@ export const getRevenues = async () => {
         model: Itinerary,
       })
       .lean();
+
+    const purchases: Array<{
+      cart: Array<{
+        productId: {
+          _id: mongoose.Types.ObjectId;
+          externalseller?: string;
+          price?: Number;
+        };
+        quantity: number;
+      }>;
+      timeStamp: Date;
+    }> = await purchase
+      .find()
+      .populate({
+        path: "cart.productId",
+
+        select: "price externalseller",
+      })
+      .lean();
     console.log("bookings", bookings.length);
+    console.log("purchases", purchases.length);
+
     const activityRevenues: Revenue[] = [];
     const itineraryRevenues: Revenue[] = [];
+    const productRevenues: Revenue[] = [];
 
     bookings.forEach((booking) => {
       const date = new Date(booking.timeStamp); // Use the date from the Booking schema
@@ -57,7 +78,7 @@ export const getRevenues = async () => {
       const day = date.getDate();
       // Months are 0-based in JavaScript
 
-      const revenue = price * 0.1;
+      const revenue = parseFloat((price * 0.1).toFixed(2));
 
       if (booking.activity) {
         const existingActivityRevenue = activityRevenues.find(
@@ -81,8 +102,34 @@ export const getRevenues = async () => {
         }
       }
     });
+    purchases.forEach((purchase) => {
+      const date = new Date(purchase.timeStamp); // Use the date from the Purchase schema
 
-    return { activityRevenues, itineraryRevenues };
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1; // Months are 0-based in JavaScript
+      const day = date.getDate();
+
+      let revenue = 0;
+
+      // Loop through the cart to calculate total revenue for the purchase
+
+      purchase.cart.forEach((cartItem) => {
+        if (cartItem.productId.externalseller) return;
+        const productPrice = cartItem.productId.price?.toFixed(2) || 0;
+        revenue += (productPrice as number) * cartItem.quantity * 0.1; // Assuming 10% revenue share
+      });
+
+      const existingProductRevenue = productRevenues.find(
+        (rev) => rev.year === year && rev.month === month && rev.day === day
+      );
+      if (existingProductRevenue) {
+        existingProductRevenue.revenue += revenue;
+      } else {
+        productRevenues.push({ year, month, day, revenue });
+      }
+    });
+
+    return { activityRevenues, itineraryRevenues, productRevenues };
   } catch (e) {
     throw e;
   }

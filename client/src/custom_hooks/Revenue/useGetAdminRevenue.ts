@@ -3,6 +3,7 @@ import axios from "axios";
 interface Revenue {
   activityRevenues: activityRevenue[];
   itineraryRevenues: itineraryRevenue[];
+  productRevenues: productRevenues[];
 }
 interface activityRevenue {
   year: number;
@@ -11,6 +12,12 @@ interface activityRevenue {
   revenue: number;
 }
 interface itineraryRevenue {
+  year: number;
+  month: number;
+  day: number;
+  revenue: number;
+}
+interface productRevenues {
   year: number;
   month: number;
   day: number;
