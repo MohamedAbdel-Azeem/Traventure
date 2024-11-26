@@ -81,6 +81,11 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   const adminnavbaritems = [
     { text: "Home", icon: <HomeIcon />, path: `/admin/${currentuser}` },
     { text: "Shop", icon: <ShopIcon />, path: `/admin/${currentuser}/shop` },
+    {
+      text: "Sales",
+      icon: <ShowChartIcon />,
+      path: `/admin/${currentuser}/sales`,
+    },
     // { text: 'Locations', icon: <LocationOnIcon />, path: `/admin/${currentuser}/locations` },
     {
       text: "Account Management",
@@ -266,7 +271,7 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
           },
         ]
       : []),
-    ...(currentusertype.includes("tourist") || currentusertype.includes("admin")
+    ...(currentusertype.includes("tourist")
       ? [
           {
             label: "Wishlist",
@@ -275,16 +280,20 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
             icon: FavoriteIcon,
           },
           {
-            label: "Complaints",
-            onClick: () =>
-              navigate(`/${currentusertype}/${currentuser}/complaints`),
-            icon: HowToVoteIcon,
-          },
-          {
             label: "Purchases",
             onClick: () =>
               navigate(`/${currentusertype}/${currentuser}/purchases`),
             icon: ShoppingBasketIcon,
+          },
+        ]
+      : []),
+    ...(currentusertype.includes("tourist") || currentusertype.includes("admin")
+      ? [
+          {
+            label: "Complaints",
+            onClick: () =>
+              navigate(`/${currentusertype}/${currentuser}/complaints`),
+            icon: HowToVoteIcon,
           },
         ]
       : []),
