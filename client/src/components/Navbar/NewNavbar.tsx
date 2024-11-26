@@ -28,6 +28,9 @@ import NavbarDropdown from "./NavbarDropdown";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Logout } from "@mui/icons-material";
+import LogoutIcon from "@mui/icons-material/Logout";
+import LoginIcon from "@mui/icons-material/Login";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import ChangePasswordModal, {
   AddContactLeadFormType,
 } from "../ChangePasswordModal";
@@ -78,6 +81,11 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   const adminnavbaritems = [
     { text: "Home", icon: <HomeIcon />, path: `/admin/${currentuser}` },
     { text: "Shop", icon: <ShopIcon />, path: `/admin/${currentuser}/shop` },
+    {
+      text: "Sales",
+      icon: <ShowChartIcon />,
+      path: `/admin/${currentuser}/sales`,
+    },
     // { text: 'Locations', icon: <LocationOnIcon />, path: `/admin/${currentuser}/locations` },
     {
       text: "Account Management",
@@ -263,19 +271,13 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
           },
         ]
       : []),
-    ...(currentusertype.includes("tourist") || currentusertype.includes("admin")
+    ...(currentusertype.includes("tourist")
       ? [
           {
             label: "Wishlist",
             onClick: () =>
               navigate(`/${currentusertype}/${currentuser}/wishlist`),
             icon: FavoriteIcon,
-          },
-          {
-            label: "Complaints",
-            onClick: () =>
-              navigate(`/${currentusertype}/${currentuser}/complaints`),
-            icon: HowToVoteIcon,
           },
           {
             label: "Purchases",
@@ -285,11 +287,39 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
           },
         ]
       : []),
-    {
-      label: "Log out",
-      onClick: () => navigate("/"),
-      icon: Logout,
-    },
+    ...(currentusertype.includes("tourist") || currentusertype.includes("admin")
+      ? [
+          {
+            label: "Complaints",
+            onClick: () =>
+              navigate(`/${currentusertype}/${currentuser}/complaints`),
+            icon: HowToVoteIcon,
+          },
+        ]
+      : []),
+    ...(currentusertype.includes("guest")
+      ? [
+          {
+            label: "Sign Up",
+            onClick: () => navigate("/register"),
+            icon: AccountCircleIcon,
+          },
+          {
+            label: "Login",
+            onClick: () => navigate("/"),
+            icon: LoginIcon,
+          },
+        ]
+      : []),
+    ...(!currentusertype.includes("guest")
+      ? [
+          {
+            label: "Log out",
+            onClick: () => navigate("/"),
+            icon: Logout,
+          },
+        ]
+      : []),
   ];
 
   interface Currentuserdata {
