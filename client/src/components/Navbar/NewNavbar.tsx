@@ -28,6 +28,9 @@ import NavbarDropdown from "./NavbarDropdown";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Logout } from "@mui/icons-material";
+import LogoutIcon from "@mui/icons-material/Logout";
+import LoginIcon from "@mui/icons-material/Login";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import ChangePasswordModal, {
   AddContactLeadFormType,
 } from "../ChangePasswordModal";
@@ -285,11 +288,20 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
           },
         ]
       : []),
-    {
-      label: "Log out",
-      onClick: () => navigate("/"),
-      icon: Logout,
-    },
+    ...(currentusertype.includes("guest")
+      ? [
+          {
+            label: "Sign Up",
+            onClick: () => navigate("/register"),
+            icon: AccountCircleIcon,
+          },
+          {
+            label: "Login",
+            onClick: () => navigate("/"),
+            icon: LoginIcon,
+          },
+        ]
+      : []),
   ];
 
   interface Currentuserdata {
