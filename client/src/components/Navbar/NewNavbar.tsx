@@ -311,6 +311,15 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
           },
         ]
       : []),
+    ...(!currentusertype.includes("guest")
+      ? [
+          {
+            label: "Log out",
+            onClick: () => navigate("/"),
+            icon: Logout,
+          },
+        ]
+      : []),
   ];
 
   interface Currentuserdata {
