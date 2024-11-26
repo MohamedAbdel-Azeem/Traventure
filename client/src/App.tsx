@@ -34,7 +34,7 @@ function App() {
           {/* Seller */}
           <Route path="/seller/*" element={<SellerRouter/>} />
           {/* Guest */}
-          <Route path="/guest/*" element
+          <Route path="/guest/*" element={<GuestRouter/>}/>
           {/* Extra */}
           <Route path="/terms-and-conditions" element={<TermsAndConditions />}/>
           <Route path="/landing" element={<LandingPage />} />
