@@ -17,7 +17,7 @@ interface itineraryRevenue {
   revenue: number;
 }
 export const useGetAdminRevenue = () => {
-  const [revenue, setRevenue] = useState<Revenue[]>([]);
+  const [revenue, setRevenue] = useState<Revenue>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

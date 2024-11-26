@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useGetAdminRevenue } from "../../../../custom_hooks/Revenue/useGetAdminRevenue";
-import RevenuesBarChart from "../../../../components/Revenues/RevenuesBarChart";
-
+import React, { useState, useEffect } from "react";
+import { useGetAdminRevenue } from "../../../../custom_hooks/Revenue/useGetAdminRevenue"; // Adjust the import path as needed
+import RevenuesBarChart from "../../../../components/Revenues/RevenuesBarChart"; // Adjust the import path as needed
 interface Revenue {
   activityRevenues: activityRevenue[];
   itineraryRevenues: itineraryRevenue[];
@@ -19,8 +17,9 @@ interface itineraryRevenue {
   day: number;
   revenue: number;
 }
+// Function to generate an array of years from 2024 to the current year
 const generateYearsArray = (): number[] => {
-  const currentYear = 2026;
+  const currentYear = new Date().getFullYear();
   const startYear = 2024;
   const yearsArray = [];
 
@@ -30,9 +29,11 @@ const generateYearsArray = (): number[] => {
 
   return yearsArray;
 };
+
 export function AdminRevenuePage() {
   const { revenue, loading, error } = useGetAdminRevenue();
-  console.log("revenue", revenue);
+
+  const years = generateYearsArray();
   const [selectedYear, setSelectedYear] = useState<string>(
     new Date().getFullYear().toString()
   );
@@ -52,55 +53,95 @@ export function AdminRevenuePage() {
     "November",
     "December",
   ];
-  const years = generateYearsArray();
+
+  const [totalRevenue, setTotalRevenue] = useState<number>(0);
+
+  useEffect(() => {
+    if (!revenue) return;
+    const filteredActivityRevenues = revenue.activityRevenues.filter((rev) => {
+      const yearMatch = rev.year.toString() === selectedYear;
+      const monthMatch =
+        selectedMonth === "ALL" || rev.month === months.indexOf(selectedMonth);
+      return yearMatch && monthMatch;
+    });
+
+    const filteredItineraryRevenues = revenue.itineraryRevenues.filter(
+      (rev) => {
+        const yearMatch = rev.year.toString() === selectedYear;
+        const monthMatch =
+          selectedMonth === "ALL" ||
+          rev.month === months.indexOf(selectedMonth);
+        return yearMatch && monthMatch;
+      }
+    );
+
+    const totalActivityRevenue = filteredActivityRevenues.reduce(
+      (acc, rev) => acc + rev.revenue,
+      0
+    );
+    const totalItineraryRevenue = filteredItineraryRevenues.reduce(
+      (acc, rev) => acc + rev.revenue,
+      0
+    );
+
+    setTotalRevenue(totalActivityRevenue + totalItineraryRevenue);
+  }, [revenue, selectedYear, selectedMonth]);
 
   if (loading) {
     return <div>Loading...</div>;
   }
+
   if (error) {
     return <div>Error: {error}</div>;
   }
 
   return (
-    <div className="flex flex-col items-center gap-8 pt-6">
-      <h1 className="font-sans text-xl font-medium">Admin Revenue Page</h1>
-      <div className="flex flex-row items-center gap-8 pt-6">
-        <select
-          title="Year"
-          className="px-4 py-3 border border-gray-300 rounded-lg"
-          onChange={(e) => setSelectedYear(e.target.value)}
-        >
-          <option value="" disabled selected>
-            Select Year
-          </option>
-          {years.map((year, index) => (
-            <option key={index} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
-        <select
-          title="Month"
-          className="px-4 py-3 border border-gray-300 rounded-lg"
-          onChange={(e) => setSelectedMonth(e.target.value)}
-        >
-          <option value="" disabled selected>
-            Select Month
-          </option>
-          {months.map((month, index) => (
-            <option key={index} value={month}>
-              {month}
-            </option>
-          ))}
-        </select>
+    revenue && (
+      <div className="flex flex-col items-center gap-8 pt-6">
+        <h1 className="font-sans text-xl font-medium">Admin Revenue Page</h1>
+        <div className="flex gap-4">
+          <select
+            className="p-2 border rounded"
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(e.target.value)}
+          >
+            {years.map((year, index) => (
+              <option key={index} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+          <select
+            className="p-2 border rounded"
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+          >
+            {months.map((month, index) => (
+              <option key={index} value={month}>
+                {month}
+              </option>
+            ))}
+          </select>
+        </div>
+        <RevenuesBarChart
+          activityRevenues={revenue.activityRevenues || []}
+          itineraryRevenues={revenue.itineraryRevenues || []}
+          selectedYear={selectedYear}
+          selectedMonth={selectedMonth}
+        />
+        <div className="mt-8 flex justify-center items-center bg-purple-50 py-3 px-4 rounded-lg shadow-md border border-purple-200 max-w-md mx-auto">
+          <div className="flex items-center space-x-4">
+            <div className="flex flex-col items-center">
+              <label className="text-xl font-semibold text-purple-700">
+                Total Revenue:
+              </label>
+              <p className="text-4xl font-bold text-purple-900">
+                ${totalRevenue.toFixed(2)}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
-      <RevenuesBarChart
-        activityRevenues={revenue.activityRevenues || []}
-        itineraryRevenues={revenue.itineraryRevenues || []}
-        selectedYear={selectedYear}
-        selectedMonth={selectedMonth}
-      />
-      <div>working on it</div>
-    </div>
+    )
   );
 }
