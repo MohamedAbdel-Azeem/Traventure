@@ -18,13 +18,14 @@ export interface ITourist extends Document {
   currentLoyaltyPoints: number;
   totalLoyaltyPoints: number;
   loyaltyLevel: number;
+  timeStamp: Date;
 }
 
 const touristSchema = new Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  profilepic: {type: String, default: null},
+  profilepic: { type: String, default: null },
   mobileNumber: { type: String, required: true, unique: true },
   dateOfBirth: { type: Date, required: true, immuatable: true },
   nationality: { type: String, required: true },
@@ -35,6 +36,7 @@ const touristSchema = new Schema({
   currentLoyaltyPoints: { type: Number, required: true, default: 0 },
   totalLoyaltyPoints: { type: Number, required: true, default: 0 },
   loyaltyLevel: { type: Number, default: 1 },
+  timeStamp: { type: Date, required: true, default: Date.now },
 });
 
 export default mongoose.model<ITourist>("Tourist", touristSchema);
