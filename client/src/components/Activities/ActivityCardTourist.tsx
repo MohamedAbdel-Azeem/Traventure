@@ -25,6 +25,8 @@ import axios from "axios";
 import { set } from "date-fns";
 import { useSelector } from "react-redux";
 import BookmarkIcon from '@mui/icons-material/BookmarkAdd';
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 export type Activity = {
   _id: string;
@@ -51,6 +53,7 @@ interface ActivityProp {
   activity: Activity;
   onDelete: (_id: string) => void;
   type?: string;
+  bookmarked?: boolean;
 }
 
 type CatStructure = {
@@ -63,8 +66,10 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
   type,
   activity,
   onDelete,
+  bookmarked
 }) => {
   const currentuser = useLocation().pathname.split("/")[2];
+  const currpath = useLocation().pathname.split("/")[3];
   const currenttype = useLocation().pathname.split("/")[1];
   const [isEditing, setIsEditing] = useState(false);
   const [currentActivity, setCurrentActivity] = useState<Activity>(activity);
@@ -84,10 +89,11 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
   const [mopen, setmOpen] = useState(false);
   const { username } = useParams<{ username: string }>();
   const { bookActivity, data, loading, error } = useBookActivity();
-  const { bookmarkActivity } = useBookmarkActivity();
+  const { bookmarkActivity,loading:loadingBookmark } = useBookmarkActivity();
   const [inappropriate, setInappropriate] = useState(
     currentActivity.inappropriate
   );
+  const [isBookmarked, setIsBookmarked] = useState(bookmarked);
 
   const handleInappropriate = async () => {
     try {
@@ -184,6 +190,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
   const handleBookMark = async (activity_id: string) => {
     try {
       await bookmarkActivity(currentuser,activity_id);
+      setIsBookmarked(true);
     } catch (error) {
       console.error("Error bookmarking activity:", error);
     }
@@ -251,10 +258,23 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
             </div>
             {type === "tourist" && currentActivity.BookingIsOpen && (
               <div className=" flex justify-end items-center py-2 px-5">
-                <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ml-2"
-                 title="Bookmark" onClick={() => handleBookMark(currentActivity._id)}>
-                  <BookmarkIcon />
-                </button>
+               {!isBookmarked && (
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ml-2"
+                title="Bookmark"
+                onClick={() => handleBookMark(currentActivity._id)}
+              >
+                {loadingBookmark?<ClipLoader size={30} color="#ffffff"></ClipLoader>: <BookmarkIcon />}
+              </button>
+            )}
+            {isBookmarked && currpath!="bookmarks" && (
+              <button
+                className="bg-green-700 text-white px-4 py-2 rounded-lg  ml-2" disabled
+              >
+                <BookmarkAddedIcon />
+              </button>
+            )}
+
                 <button
                   className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ml-2"
                   onClick={() => handleBooking(currentActivity._id)}

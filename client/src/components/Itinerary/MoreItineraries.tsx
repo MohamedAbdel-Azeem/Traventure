@@ -13,10 +13,14 @@ import useGetUpcoming from "../../custom_hooks/itineraries/useGetupcoming";
 import ItineraryCardToruist from "./ItineraryCardToruist";
 import { useGetAllTags } from "../../custom_hooks/categoryandTagCRUD";
 import { useLocation } from "react-router-dom";
+import Itinerary from "../../custom_hooks/itineraries/itinerarySchema";
+import axios from "axios";
 
 const MoreItineraries: React.FC = () => {
   const { upcoming, loading, error } = useGetUpcoming();
   const currenttype = useLocation().pathname.split("/")[1];
+  const currentuser = useLocation().pathname.split("/")[2];
+  const [bookmarkedItineraries, setBookmarkedItineraries] = useState<Itinerary[]>([]);
   const [searchType, setSearchType] = useState<"name" | "tag">("name");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortType, setSortType] = useState<"price" | "rating">("price");
@@ -43,6 +47,19 @@ const MoreItineraries: React.FC = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<string>("");
 
   useEffect(() => {
+
+    
+      const fetchBookmarks = async () => {
+        try {
+          const response = await axios.get(`/traventure/api/tourist/bookmarks/${currentuser}`); // Adjust the API endpoint as needed
+          setBookmarkedItineraries(response.data.bookmarkedItineraries);
+        } catch (err : any) {
+          console.error(err.message);
+        }
+      }
+
+    fetchBookmarks();
+
     if (upcoming && upcoming.itineraries && upcoming.itineraries.length > 0) {
       const uniqueLanguages = [
         ...new Set(upcoming.itineraries.map((itinerary) => itinerary.language)),
@@ -339,6 +356,10 @@ const MoreItineraries: React.FC = () => {
                     accesibility={itinerary.accesibility}
                     bookingActivated={itinerary.bookingActivated}
                     inappropriate={itinerary.inappropriate}
+                    bookmarked={bookmarkedItineraries.some(
+                      (bookmarkedItinerary) =>
+                        bookmarkedItinerary._id === itinerary._id
+                    )}
                   />
                 ))
               ) : (

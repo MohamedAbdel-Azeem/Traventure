@@ -16,6 +16,8 @@ import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 import ShareButton from "../Buttons/ShareButton";
 import BookmarkIcon from '@mui/icons-material/BookmarkAdd';
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 interface TagStructure {
   _id: string;
@@ -52,6 +54,7 @@ interface ItineraryCardCRUDProps {
   accesibility: boolean;
   bookingActivated: boolean;
   inappropriate: boolean;
+  bookmarked?: boolean;
 }
 
 const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
@@ -71,11 +74,14 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   plan,
   bookingActivated,
   inappropriate,
+  bookmarked
 }) => {
   const { bookItinerary, data, loading, error } = useBookItinerary();
-  const { bookmarkItinerary} = useBookmarkItinerary();
+  const { bookmarkItinerary,loading:loadingBookmark} = useBookmarkItinerary();
   const { username } = useParams<{ username: string }>();
   const currenttype = useLocation().pathname.split("/")[1];
+  const currpath = useLocation().pathname.split("/")[3];
+  const [isBookmarked, setIsBookmarked] = useState(bookmarked);
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
@@ -96,6 +102,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   const handleBookmark = async (id: string) => {
     try{
       const response = await bookmarkItinerary(username, id);
+      setIsBookmarked(true);
     }
     catch (error) {
       console.error("Error bookmarking itinerary  :", error);
@@ -244,10 +251,13 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
               >
                 Book
               </button>
-              <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600" title="Bookmark"
+              {!isBookmarked && <button className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600" title="Bookmark"
                 onClick={() => handleBookmark(_id)}>
-                <BookmarkIcon className="cursor-pointer" />
-                </button>
+                {loadingBookmark?<ClipLoader size={30} color="#ffffff"></ClipLoader>: <BookmarkIcon />}
+                </button>}
+                {isBookmarked && currpath!=="bookmarks" && <button className="bg-green-600 text-white p-2 rounded-lg" disabled>
+                <BookmarkAddedIcon  />
+                </button>}
               <ShareButton type={"itinerary"} ID={_id} />
             </>
           )}

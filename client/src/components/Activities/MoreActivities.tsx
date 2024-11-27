@@ -11,12 +11,15 @@ import {IActivity} from "../../custom_hooks/activities/activity_interface";
 import { useGetAllCategories } from "../../custom_hooks/categoryandTagCRUD";
 import {Activity} from "../../custom_hooks/activities/activity_interface";
 import useGetUpcoming from "../../custom_hooks/itineraries/useGetupcoming";
+import axios from "axios";
 
 const MoreActivities: React.FC = () => {
   const { upcoming, loading, error } = useGetUpcoming();
+  const [bookmarkedActivities,setBookmarkedActivities] = useState<Activity[]>([]);
   const sactivities = upcoming?.activities || [];
   const { data: catData } = useGetAllCategories();
   const currenttype = useLocation().pathname.split("/")[1];
+  const currentuser = useLocation().pathname.split("/")[2];
   const [categoryTerms, setCategoryTerms] = useState<string[]>([]);
   const [searchType, setSearchType] = useState<"name" | "tag" | "category">(
     "name"
@@ -37,6 +40,18 @@ const MoreActivities: React.FC = () => {
 
 
   useEffect(() => {
+
+      const fetchBookmarks = async () => {
+        try {
+          const response = await axios.get(`/traventure/api/tourist/bookmarks/${currentuser}`); // Adjust the API endpoint as needed
+          setBookmarkedActivities(response.data.bookmarkedActivities);
+        } catch (err : any) {
+          console.error(err.message);
+        }
+      };
+  
+      fetchBookmarks();
+
     if (filterType === "date") {
       const today = new Date();
       const start = new Date();
@@ -302,6 +317,7 @@ const MoreActivities: React.FC = () => {
                 <ActivityCardTourist
                   key={activity._id}
                   activity={activity}
+                  bookmarked={bookmarkedActivities.some((bookmarkedActivity) => bookmarkedActivity._id === activity._id)}
                   {...(currenttype === "tourist" && { type: "tourist" })}
                   onDelete={(_id) => {}}
                 />

@@ -16,7 +16,7 @@ const Bookmarks = () => {
   useEffect(() => {
     const fetchBookmarks = async () => {
       try {
-        const response = await axios.get(`/traventure/api/tourist/bookmarks/${currentuser}`); // Adjust the API endpoint as needed
+        const response = await axios.get(`/traventure/api/tourist/bookmarks/${currentuser}`);
         setItineraries(response.data.bookmarkedItineraries);
         setActivities(response.data.bookmarkedActivities);
       } catch (err : any) {
@@ -34,7 +34,7 @@ const Bookmarks = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Itineraries</h1>
+      <h1 className="text-2xl p-2 font-bold mb-4">Itineraries</h1>
       <div className="overflow-x-auto">
       <div className="flex gap-4 items-center">
       {itineraries.length === 0 ? (
@@ -63,13 +63,14 @@ const Bookmarks = () => {
              booked_By={itinerary.booked_By}
              bookingActivated={itinerary.bookingActivated}
              inappropriate={itinerary.inappropriate}
+             bookmarked={true}
            />
           ))
       )}
         </div>
         </div>
 
-    <h1 className="text-2xl font-bold mt-8 mb-4">Activities</h1>
+    <h1 className="text-2xl p-2 font-bold mt-8 mb-4">Activities</h1>
       <div className="overflow-x-auto">
         <div className="flex gap-4 items-center">
         {activities.length === 0 ? (
