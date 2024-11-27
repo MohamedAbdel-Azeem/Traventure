@@ -116,9 +116,7 @@ export async function addBooking(bookingData: any) {
       );
     }
     if (booked === null) {
-      console.log("here");
       await bookingModel.create(bookingData);
-      console.log("here2");
       await updateLoyaltyPoints(bookingData);
     } else {
       throw new Error("Booking already exists");
