@@ -45,8 +45,9 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
       " ",
     ],      
     guest: [
-      "Welcome, guest! Explore shops, activities, and places before registering.",
-      "Sign up to unlock personalized features!",
+      "Welcome to Traventure! As a guest, you can explore snippets of the website and its features before registering. Click 'Next' to learn more.", 
+       " ",
+      " ",
     ],
   };
 
@@ -56,7 +57,11 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
       "Navigation Bar Overview",
       "Profile Dropdown Overview",
     ],
-    guest: ["Welcome, Guest!", "Sign Up for More Features"],
+    guest: [
+      "Welcome to Traventure!",
+      "Navigation Bar Overview",
+      "Profile Dropdown Overview",
+    ],
   };
 
   const navbarDescriptions = {
@@ -79,7 +84,7 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
       {
         name: "Itineraries",
         icon: <FlightTakeoffIcon />,
-        description: "View and manage your itineraries.",
+        description: "View the various available itineraries.",
       },
       {
         name: "Locations",
@@ -114,14 +119,9 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
           description: "Explore the available shops and products.",
         },
         {
-          name: "Bookings",
-          icon: <EditCalendarIcon />,
-          description: "Manage and view your bookings.",
-        },
-        {
           name: "Itineraries",
           icon: <FlightTakeoffIcon />,
-          description: "View and manage your itineraries.",
+          description: "View the various available itineraries.",
         },
         {
           name: "Locations",
@@ -131,17 +131,7 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
         {
           name: "Activities",
           icon: <StadiumIcon />,
-          description: "Browse and book activities at your destinations.",
-        },
-        {
-          name: "Hotels",
-          icon: <HotelIcon />,
-          description: "Find and book hotels during your travels.",
-        },
-        {
-          name: "Flights",
-          icon: <FlightIcon />,
-          description: "Search and book flights to your next destination.",
+          description: "Browse activities at your destinations.",
         },
       ],
   };
@@ -155,7 +145,7 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
   ];
 
   const [currentPage, setCurrentPage] = useState(0);
-  const maxPages = userText[userType]?.length || 0;
+  const maxPages = userType === "guest" ? 2 : 3; 
 
   const handleNext = () => {
     if (currentPage < maxPages - 1) setCurrentPage(currentPage + 1);
