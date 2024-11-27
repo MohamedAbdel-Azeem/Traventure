@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import Activity from "../Schemas/Activity";
 import Booking from "../Schemas/Booking";
 import Tourist from "../Schemas/Tourist";
+import TourGuide from "../Schemas/TourGuide";
 
 export const addActivity = async (newActivity: any) => {
   try {
@@ -54,8 +55,23 @@ export const toggleInappropriate = async (id: string) => {
     // Toggle the inappropriate flag
     const newInappropriate = !activity.inappropriate;
 
+
     // If the activity is being declared inappropriate, remove bookings and add funds to users
     if (newInappropriate) {
+      
+      // notify the tourguide that this activity is inappropriate
+      await TourGuide.findByIdAndUpdate(activity.added_By, {
+        $push: {
+          Notifications: {
+            message: `Your activity ${activity.Title} has been marked as inappropriate`,
+            sent_by_mail: false,
+            read: false,
+            createdAt: new Date(),
+          },
+        },
+      });
+    
+
       const bookings = await Booking.find({ activity: id });
       for (const booking of bookings) {
         // Add funds to the user who booked the activity

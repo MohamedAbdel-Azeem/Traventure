@@ -41,6 +41,14 @@ const touristSchema = new Schema({
   bookmarkedActivities: [{ type: mongoose.Types.ObjectId, ref: "Activity" }],
   bookmarkedItineraries: [{ type: mongoose.Types.ObjectId, ref: "Itinerary" }],
   wishlisted_products: [{ type: mongoose.Types.ObjectId, ref: "Product" }],
+  Notifications: [
+    {
+      message: { type: String, required: true },
+      sent_by_mail: { type: Boolean, default: false },
+      read: { type: Boolean, default: false },
+      createdAt: { type: Date, default: Date.now },
+    },
+  ],
 });
 
 export default mongoose.model<ITourist>("Tourist", touristSchema);

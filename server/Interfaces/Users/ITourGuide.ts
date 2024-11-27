@@ -22,6 +22,12 @@ export interface ITourGuide extends Document {
     username?: string;
     createdAt?: Date;
   }[];
+  Notifications: {
+    message: string;
+    sent_by_mail: boolean;
+    read: boolean;
+    createdAt: Date;
+  }[];
 }
 
 export default ITourGuide;

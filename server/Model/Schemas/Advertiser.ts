@@ -17,7 +17,15 @@ const AdvertiserSchema = new Schema({
   hotline: { type: String},
   founded: { type: Number },
   description: { type: String },
-  location: { type: String}
+  location: { type: String},
+  Notifications: [
+    {
+      message: { type: String, required: true },
+      sent_by_mail: { type: Boolean, default: false },
+      read: { type: Boolean, default: false },
+      createdAt: { type: Date, default: Date.now },
+    },
+  ],
 });
 
 export default mongoose.model<IAdvertiser>("Advertiser", AdvertiserSchema);
