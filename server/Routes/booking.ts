@@ -44,8 +44,8 @@ router.get("/getHotels/:username", async (req, res) => {
 
 router.delete("/cancel/:booking_id", async (req, res) => { 
     try {
-        await cancelBooking(req.params.booking_id);
-        res.status(201).send("Booking cancelled");
+        const response=await cancelBooking(req.params.booking_id);
+        res.status(201).send(response);
     } catch (error ) {
         if ((error as any).message === "Cannot cancel activity within 48 hours of the start time") {
             res.status(403).json({ error: "Cannot cancel activity within 48 hours of the start time" });

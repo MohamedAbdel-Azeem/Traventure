@@ -6,17 +6,19 @@ import {
   FormControl,
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import { ActivityCardTourist } from "./ActivityCardTourist";
+import { Activity, ActivityCardTourist } from "./ActivityCardTourist";
 import {IActivity} from "../../custom_hooks/activities/activity_interface";
 import { useGetAllCategories } from "../../custom_hooks/categoryandTagCRUD";
-import {Activity} from "../../custom_hooks/activities/activity_interface";
 import useGetUpcoming from "../../custom_hooks/itineraries/useGetupcoming";
+import axios from "axios";
 
 const MoreActivities: React.FC = () => {
   const { upcoming, loading, error } = useGetUpcoming();
+  const [bookmarkedActivities,setBookmarkedActivities] = useState<Activity[]>([]);
   const sactivities = upcoming?.activities || [];
   const { data: catData } = useGetAllCategories();
   const currenttype = useLocation().pathname.split("/")[1];
+  const currentuser = useLocation().pathname.split("/")[2];
   const [categoryTerms, setCategoryTerms] = useState<string[]>([]);
   const [searchType, setSearchType] = useState<"name" | "tag" | "category">(
     "name"
@@ -37,6 +39,18 @@ const MoreActivities: React.FC = () => {
 
 
   useEffect(() => {
+
+      const fetchBookmarks = async () => {
+        try {
+          const response = await axios.get(`/traventure/api/tourist/bookmarks/${currentuser}`); // Adjust the API endpoint as needed
+          setBookmarkedActivities(response.data.bookmarkedActivities);
+        } catch (err : any) {
+          console.error(err.message);
+        }
+      };
+  
+      fetchBookmarks();
+
     if (filterType === "date") {
       const today = new Date();
       const start = new Date();
@@ -57,7 +71,7 @@ const MoreActivities: React.FC = () => {
   };
 
   const filteredActivities = sactivities
-    ?.filter((activity: IActivity) => {
+    ?.filter((activity: Activity) => {
       const term = searchTerm.toLowerCase();
 
       if (searchType === "name") {
@@ -72,7 +86,7 @@ const MoreActivities: React.FC = () => {
 
       return true;
     })
-    .filter((activity: IActivity) => {
+    .filter((activity: Activity) => {
       switch (filterType) {
         case "budget":
           return activity.Price >= minPrice && activity.Price <= maxPrice;
@@ -94,7 +108,7 @@ const MoreActivities: React.FC = () => {
           return true;
       }
     })
-    .filter((activity: IActivity) => {
+    .filter((activity: Activity) => {
       if (currenttype === "tourist" || currenttype === "guest")
         return !activity.inappropriate;
       return true;
@@ -300,10 +314,11 @@ const MoreActivities: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {sortedActivities && sortedActivities.length > 0 ? (
-              sortedActivities.map((activity: IActivity) => (
+              sortedActivities.map((activity: Activity) => (
                 <ActivityCardTourist
                   key={activity._id}
                   activity={activity}
+                  bookmarked={bookmarkedActivities.some((bookmarkedActivity) => bookmarkedActivity._id === activity._id)}
                   {...(currenttype === "tourist" && { type: "tourist" })}
                 />
               ))

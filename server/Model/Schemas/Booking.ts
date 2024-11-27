@@ -15,6 +15,7 @@ const bookingSchema = new schema({
   itinerary: { type: mongoose.Types.ObjectId, ref: "Itinerary" },
   activity: { type: mongoose.Types.ObjectId, ref: "Activity" },
   tourist: { type: mongoose.Types.ObjectId, required: true, ref: "Tourist" },
+  price: { type: Number, required: true },
 });
 
 export default mongoose.model<IBooking>("Booking", bookingSchema);

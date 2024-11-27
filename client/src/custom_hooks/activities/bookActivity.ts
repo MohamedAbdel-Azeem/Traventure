@@ -7,17 +7,20 @@ const useBookActivity = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const bookActivity = async (activity_id: string | undefined, tourist_username: string | undefined) => {
+  const bookActivity = async (activity_id: string | undefined, tourist_username: string | undefined,price:Number,discount:Number) => {
     const url1 = `/traventure/api/tourist/${tourist_username}`;
     const url = `/traventure/api/bookings/add`;
     setLoading(true); // Set loading to true when the request starts
     try {
         const response1 = await axios.get(url1);
         const tourist_id = response1.data._id;
+        const validPrice = typeof price === 'number' ? price : 0;
+        const validDiscount = typeof discount === 'number' ? discount : 0;
       const response = await axios.post(url, {
         type:"activity",
         activity:activity_id,
-        tourist:tourist_id
+        tourist:tourist_id,
+        price:validPrice-validDiscount
       });
       setData(response.data);
       Swal.fire({

@@ -18,6 +18,8 @@ export interface ITourist extends Document {
   currentLoyaltyPoints: number;
   totalLoyaltyPoints: number;
   loyaltyLevel: number;
+  bookmarkedActivities: mongoose.Types.ObjectId[];
+  bookmarkedItineraries: mongoose.Types.ObjectId[];
   wishlisted_products: mongoose.Types.ObjectId[];
 }
 
@@ -36,6 +38,8 @@ const touristSchema = new Schema({
   currentLoyaltyPoints: { type: Number, required: true, default: 0 },
   totalLoyaltyPoints: { type: Number, required: true, default: 0 },
   loyaltyLevel: { type: Number, default: 1 },
+  bookmarkedActivities: [{ type: mongoose.Types.ObjectId, ref: "Activity" }],
+  bookmarkedItineraries: [{ type: mongoose.Types.ObjectId, ref: "Itinerary" }],
   wishlisted_products: [{ type: mongoose.Types.ObjectId, ref: "Product" }],
 });
 

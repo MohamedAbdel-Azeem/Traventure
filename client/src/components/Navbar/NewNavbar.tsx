@@ -39,6 +39,7 @@ import { editpassword } from "../../custom_hooks/changepassowrd";
 import { GetCurrentUser } from "../../custom_hooks/currentuser";
 import HotelIcon from "@mui/icons-material/Hotel";
 import FlightIcon from "@mui/icons-material/Flight";
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
 
 const drawerHeight = 64;
 
@@ -285,8 +286,15 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
               navigate(`/${currentusertype}/${currentuser}/purchases`),
             icon: ShoppingBasketIcon,
           },
+         {
+          label: "Bookmarks",
+              onClick: () =>
+                navigate(`/${currentusertype}/${currentuser}/bookmarks`),
+              icon: BookmarksIcon,
+        }
         ]
       : []),
+
     ...(currentusertype.includes("tourist") || currentusertype.includes("admin")
       ? [
           {
