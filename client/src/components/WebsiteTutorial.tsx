@@ -258,7 +258,26 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
 
 
         {/* Content Area */}
-        <Box sx={{ flexGrow: 1, overflowY: "auto", mb: 4, maxHeight: "calc(100vh - 250px)" }}>
+        <Box sx={{ flexGrow: 1, overflowY: "auto", mb: 4,
+             maxHeight: "calc(100vh - 250px)",
+            
+    // Scrollbar Styling
+    "&::-webkit-scrollbar": {
+        width: "8px", 
+      },
+      "&::-webkit-scrollbar-thumb": {
+        backgroundColor: "#8b3fe8", 
+        borderRadius: "10px", 
+        boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.3)", 
+      },
+      "&::-webkit-scrollbar-track": {
+        backgroundColor: "rgba(255, 255, 255, 0.3)", 
+        borderRadius: "10px", 
+      },
+      // Firefox support
+      scrollbarWidth: "thin", // Thin scrollbar in Firefox
+      scrollbarColor: "#8b3fe8 rgba(255, 255, 255, 0.3)",  
+             }}>
         {/* Page 2 (Navigation Bar) */}
           {currentPage === 1 && (
             <Box>
