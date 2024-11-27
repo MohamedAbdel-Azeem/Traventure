@@ -76,6 +76,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   inappropriate,
   bookmarked
 }) => {
+
   const { bookItinerary, data, loading, error } = useBookItinerary();
   const { bookmarkItinerary,loading:loadingBookmark} = useBookmarkItinerary();
   const { username } = useParams<{ username: string }>();

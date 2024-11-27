@@ -103,10 +103,10 @@ export async function loginUser(username: string, password: string) {
     const models = [
       "seller",
       "advertiser",
-      "tourGuide",
+      "tourguide",
       "admin",
       "tourist",
-      "Governer",
+      "tourismgovernor",
     ];
 
     for (let i = 0; i < results.length; i++) {
@@ -190,6 +190,12 @@ export async function changePassword(
           );
         } else if (i === 4) {
           return await touristModel.findOneAndUpdate(
+            { username },
+            { password: newpass },
+            { new: true }
+          );
+        } else if (i === 5) {
+          return await governerModel.findOneAndUpdate(
             { username },
             { password: newpass },
             { new: true }

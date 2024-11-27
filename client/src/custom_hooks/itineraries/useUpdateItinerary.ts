@@ -34,7 +34,6 @@ interface Itinerary {
   accessibility: boolean;
 }
 
-
 export const UseUpdateItinerary = async (
   itineraryData: Itinerary | null,
   id: string | undefined
@@ -42,20 +41,17 @@ export const UseUpdateItinerary = async (
   try {
     if (!id) return;
     if (!itineraryData) return;
-  try {
-    if (itineraryData.main_Picture instanceof File) {
-      itineraryData = {
-        ...itineraryData,
-        main_Picture: await uploadFileToStorage(itineraryData.main_Picture),
-      };
+    try {
+      if (itineraryData.main_Picture instanceof File) {
+        itineraryData = {
+          ...itineraryData,
+          main_Picture: await uploadFileToStorage(itineraryData.main_Picture),
+        };
+      }
+    } catch (err) {
+      return "errorrrrrrrrrrrrrrrrrrrrrrrrrrrrr";
     }
-   
-  } catch (err) {
-    console.log("you should kill yourself now");
-    return "errorrrrrrrrrrrrrrrrrrrrrrrrrrrrr";
-  }
 
-    
     const response = await axios.patch(
       `/traventure/api/itinerary/update/${id}`,
       itineraryData

@@ -13,9 +13,11 @@ import { useLocation } from "react-router-dom";
 import ImageUploader from "../PDFs&Images/ImageUploader";
 import ClipLoader from "react-spinners/ClipLoader";
 import { ToggleArchive } from "../../custom_hooks/products/useToggleArchive";
-import { useSelector } from "react-redux";
 import SaveButton from "../Buttons/SaveButton";
 import EditButton from "../Buttons/EditButton";
+import { ProductCartButton } from "../Shop/ProductCartButton";
+import { useSelector } from "react-redux";
+import { WishListButton } from "../Shop/WishListButton";
 interface ProductCardProps {
   product: ACTUALProduct;
   productId: string;
@@ -90,7 +92,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
     updateProduct();
     if (!isLoading && didSucceed && updatedProduct) {
       setCurrentProduct(updatedProduct);
-    } else if (isLoading) {
     }
   };
 
@@ -141,9 +142,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
     }));
   };
 
+  console.log(type, currentuser);
+
   return (
-    <div className="product-card">
-      <div className="card-header">
+    <div className="border border-gray-200 rounded-lg shadow-lg bg-gray-100 overflow-hidden relative">
+      <div className="relative h-36 bg-gray-300 flex items-center justify-center">
+        <div className="absolute bottom-2 right-2">
+          {type === "Tourist" && WishListButton(product, currentuser)}
+        </div>
         {currentProduct.imageUrl ? (
           <img
             src={currentProduct.imageUrl}
@@ -154,13 +160,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
           <div className="no-image">No images</div>
         )}
       </div>
-      <div className="card-body">
+      <div className="p-2 bg-indigo-50">
         <h3 className="product-title">{currentProduct.name}</h3>
         <p className="product-description">
           {getTruncatedDescription(currentProduct.description)}
         </p>
 
-        <div className="flex flex-row justify-between items-center">
+        <div className="flex flex-row justify-between items-center gap-4 px-1">
           <span className="product-price">
             {currentCurrency} {(currentProduct.price * exchangeRate).toFixed(2)}
           </span>
@@ -174,6 +180,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
             View more
           </button>
         </div>
+        {type.includes("Tourist") && <ProductCartButton product={product} />}
       </div>
 
       {showPopup && (
@@ -298,9 +305,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
                 )}
               </div>
               {type.includes("Tourist") ? (
-                <button className="add-to-cart-button">
-                  <FontAwesomeIcon icon={faCartShopping} /> Add to Cart
-                </button>
+                <ProductCartButton product={product} />
               ) : type.includes("Admin") ||
                 (type.includes("Seller") &&
                   currentProduct.seller &&

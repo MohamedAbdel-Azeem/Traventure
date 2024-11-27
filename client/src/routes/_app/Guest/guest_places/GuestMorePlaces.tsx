@@ -102,9 +102,6 @@ const GuestMorePlaces: React.FC = () => {
                                     key={location._id}
                                     id={String(location._id)}
                                     wholeLocation={location}
-                                    onDelete={function (id: string): void {
-                                        throw new Error('Function not implemented.');
-                                    }}
                                     className=""
                                 />
                             ))

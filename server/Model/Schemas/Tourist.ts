@@ -20,13 +20,14 @@ export interface ITourist extends Document {
   loyaltyLevel: number;
   bookmarkedActivities: mongoose.Types.ObjectId[];
   bookmarkedItineraries: mongoose.Types.ObjectId[];
+  wishlisted_products: mongoose.Types.ObjectId[];
 }
 
 const touristSchema = new Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  profilepic: {type: String, default: null},
+  profilepic: { type: String, default: null },
   mobileNumber: { type: String, required: true, unique: true },
   dateOfBirth: { type: Date, required: true, immuatable: true },
   nationality: { type: String, required: true },
@@ -39,6 +40,7 @@ const touristSchema = new Schema({
   loyaltyLevel: { type: Number, default: 1 },
   bookmarkedActivities: [{ type: mongoose.Types.ObjectId, ref: "Activity" }],
   bookmarkedItineraries: [{ type: mongoose.Types.ObjectId, ref: "Itinerary" }],
+  wishlisted_products: [{ type: mongoose.Types.ObjectId, ref: "Product" }],
 });
 
 export default mongoose.model<ITourist>("Tourist", touristSchema);

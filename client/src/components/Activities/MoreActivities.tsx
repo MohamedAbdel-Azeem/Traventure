@@ -5,7 +5,7 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { ActivityCardTourist } from "./ActivityCardTourist";
 import {IActivity} from "../../custom_hooks/activities/activity_interface";
 import { useGetAllCategories } from "../../custom_hooks/categoryandTagCRUD";
@@ -222,12 +222,14 @@ const MoreActivities: React.FC = () => {
             {filterType === "date" && (
               <div className="flex gap-2">
                 <input
+                  title="Start Date"
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
                   className="border p-2 rounded"
                 />
                 <input
+                  title="End Date"
                   type="date"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
@@ -319,7 +321,6 @@ const MoreActivities: React.FC = () => {
                   activity={activity}
                   bookmarked={bookmarkedActivities.some((bookmarkedActivity) => bookmarkedActivity._id === activity._id)}
                   {...(currenttype === "tourist" && { type: "tourist" })}
-                  onDelete={(_id) => {}}
                 />
               ))
             ) : (

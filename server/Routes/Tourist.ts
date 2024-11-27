@@ -22,6 +22,7 @@ import {
   getTouristBookmarks,
   gettouristComplaints,
   getTouristUpcoming,
+  toggleWishlistProduct,
 } from "../Model/Queries/tourist_queries";
 import { get } from "http";
 import { redeemPoints } from "../Model/Queries/points_queries";
@@ -154,6 +155,25 @@ router.patch("/bookmark_itinerary/:username", async (req: Request, res: Response
 
     await bookmarkItinerary(username, itinerary_id);
     res.status(200).send("Itinerary bookmarked");
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+});
+
+router.post("/wishlist/:username", async (req: Request, res: Response) => {
+  try {
+    const username = req.params.username;
+    const productId = req.body.productId;
+
+    // Assuming you have a function to add a product to the wishlist
+    const { action } = await toggleWishlistProduct(username, productId);
+
+    const isAdded = action === "added";
+
+    res.status(200).send({
+      isAdded,
+      message: `Product ${isAdded ? "added to" : "removed from"} wishlist`,
+    });
   } catch (error: any) {
     res.status(500).send(error.message);
   }

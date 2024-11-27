@@ -117,7 +117,6 @@ const Dashboard: React.FC = () => {
                 key={location._id}
                 id={String(location._id)}
                 wholeLocation={location}
-                onDelete={() => {}}
               />
             ))
           ) : (

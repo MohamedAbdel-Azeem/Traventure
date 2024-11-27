@@ -20,6 +20,7 @@ export interface IProduct extends Document {
   feedback: IFeedback[];
   sales: mongoose.Types.ObjectId[];
   isArchived: boolean;
+  isWishListed: boolean;
 }
 
 const ProductSchema = new schema({

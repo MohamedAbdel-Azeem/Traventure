@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import TheMAP from "./TheMAP";
 import {
   Box,
   Checkbox,
@@ -10,19 +9,18 @@ import {
   Rating,
   Select,
   SelectChangeEvent,
-  TextField,
 } from "@mui/material";
 import {
-  useGetAllCategories,
   useGetAllCategoriesD,
   useGetAllTags,
 } from "../../custom_hooks/categoryandTagCRUD";
 import useBookActivity from "../../custom_hooks/activities/bookActivity";
+
 import useBookmarkActivity from "../../custom_hooks/activities/bookmarkActivity";
 import { updateActivity } from "../../custom_hooks/activities/updateActivity";
+
 import { useParams, useLocation } from "react-router-dom";
 import axios from "axios";
-import { set } from "date-fns";
 import { useSelector } from "react-redux";
 import BookmarkIcon from '@mui/icons-material/BookmarkAdd';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
@@ -51,7 +49,6 @@ export type Activity = {
 };
 interface ActivityProp {
   activity: Activity;
-  onDelete: (_id: string) => void;
   type?: string;
   bookmarked?: boolean;
 }
@@ -71,23 +68,11 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
   const currentuser = useLocation().pathname.split("/")[2];
   const currpath = useLocation().pathname.split("/")[3];
   const currenttype = useLocation().pathname.split("/")[1];
-  const [isEditing, setIsEditing] = useState(false);
-  const [currentActivity, setCurrentActivity] = useState<Activity>(activity);
-  const [newTitle, setNewTitle] = useState(currentActivity.Title);
-  const [newDate, setNewDate] = useState(new Date(currentActivity.DateAndTime));
-  const [newLatitude, setNewLatitude] = useState(
-    currentActivity.Location.latitude
-  );
-  const [newLongitude, setNewLongitude] = useState(
-    currentActivity.Location.longitude
-  );
-  const [newPrice, setNewPrice] = useState(currentActivity.Price);
-  const [newSpecialDiscount, setNewSpecialDiscount] = useState(
-    currentActivity.SpecialDiscount
-  );
-  const [newBIO, setNewBIO] = useState(currentActivity.BookingIsOpen);
+  const [newDate, setNewDate] = useState(new Date(activity.DateAndTime));
+  const [newBIO, setNewBIO] = useState(activity.BookingIsOpen);
   const [mopen, setmOpen] = useState(false);
   const { username } = useParams<{ username: string }>();
+
   const { bookActivity, data, loading, error } = useBookActivity();
   const { bookmarkActivity,loading:loadingBookmark } = useBookmarkActivity();
   const [inappropriate, setInappropriate] = useState(
@@ -95,16 +80,18 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
   );
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);
 
+
   const handleInappropriate = async () => {
     try {
       const response = await axios.patch(
-        `/traventure/api/activity/toggleInappropriate/${currentActivity._id}`
+        `/traventure/api/activity/toggleInappropriate/${activity._id}`
       );
       if (response.status === 200) {
         setInappropriate(!inappropriate);
       }
     } catch (error: any) {
       if (error.response && error.response.status === 400) {
+        console.error(error.response.data.message);
       }
     }
   };
@@ -116,15 +103,13 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
     (state: any) => state.exchangeRate.currentCurrency
   );
 
-  const calculateAverageRating = (currentActivity: Activity): number => {
-    const allRatings = currentActivity.feedback?.map((fb) =>
-      parseFloat(fb.rating)
-    );
+  const calculateAverageRating = (activity: Activity): number => {
+    const allRatings = activity.feedback?.map((fb) => parseFloat(fb.rating));
     const totalRating = allRatings?.reduce((acc, rating) => acc + rating, 0);
     return allRatings?.length ? totalRating / allRatings?.length : 0;
   };
 
-  const averageRating = calculateAverageRating(currentActivity);
+  const averageRating = calculateAverageRating(activity);
 
   const {
     loading: tagsLoading,
@@ -148,30 +133,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
   };
   const alltags = handleTagsText;
 
-  const handleSave = async () => {
-    const updatedActivity = {
-      _id: currentActivity._id,
-      Title: newTitle,
-      DateAndTime: newDate,
-      Location: {
-        latitude: newLatitude,
-        longitude: newLongitude,
-      },
-      Price: newPrice,
-      SpecialDiscount: newSpecialDiscount,
-      Tags: selectedTags,
-      Category: selectedCat,
-      BookingIsOpen: newBIO,
-      added_By: currentActivity.added_By,
-    };
-    try {
-      await updateActivity(currentActivity._id, updatedActivity);
-      setIsEditing(false);
-    } catch (error) {
-      console.error("Error updating activity:", error);
-    }
-  };
-
+ 
   const handleBooking = async (activity_id: string) => {
     try {
       await bookActivity(activity_id, username,currentActivity.Price,currentActivity.SpecialDiscount);
@@ -180,12 +142,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
     }
   };
 
-  const handleEditClick = () => {
-    setIsEditing(!isEditing);
-    if (isEditing) {
-      handleSave();
-    }
-  };
+
 
   const handleBookMark = async (activity_id: string) => {
     try {
@@ -221,8 +178,6 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
       date.getDate()
     )}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
   };
-  const [latitude, setLatitude] = useState(30.0);
-  const [longitude, setLongitude] = useState(31.2);
 
   if (tagsLoading || CatLoading) {
     return <div>loading</div>;
@@ -256,7 +211,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
             <div className="absolute text-center top-0 left-0 w-[71px] h-[30px] rounded-tl-[19px] bg-[#FF0000] border-black border-[1px] rounded-br-[19px]">
               {newBIO ? "Open" : "Closed"}
             </div>
-            {type === "tourist" && currentActivity.BookingIsOpen && (
+            {type === "tourist" && activity.BookingIsOpen && (
               <div className=" flex justify-end items-center py-2 px-5">
                {!isBookmarked && (
               <button
@@ -277,7 +232,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
 
                 <button
                   className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ml-2"
-                  onClick={() => handleBooking(currentActivity._id)}
+                  onClick={() => handleBooking(activity._id)}
                 >
                   Book
                 </button>
@@ -305,7 +260,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
             precision={0.1}
           />
           <div className="text-[38px] h-[45px] text-center leading-[43px]">
-            {newTitle}
+            {activity.Title}
           </div>
           <div className="flex flex-row">
             <FormControl fullWidth>
@@ -369,15 +324,13 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
                 <div>
                   <div>
                     Price: {currentCurrency}{" "}
-                    {(currentActivity.Price * exchangeRate).toFixed(2)}
+                    {(activity.Price * exchangeRate).toFixed(2)}
                   </div>
                 </div>
                 <div>
                   <div>
                     Special Discount: {currentCurrency}{" "}
-                    {(currentActivity.SpecialDiscount * exchangeRate).toFixed(
-                      2
-                    )}
+                    {(activity.SpecialDiscount * exchangeRate).toFixed(2)}
                   </div>
                 </div>
               </div>
@@ -386,7 +339,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
               <iframe
                 title="map"
                 className="rounded-b-[19px]"
-                src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${longitude}!3d${latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
+                src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${activity.Location.longitude}!3d${activity.Location.latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
                 width="400px"
                 height="166px"
               ></iframe>

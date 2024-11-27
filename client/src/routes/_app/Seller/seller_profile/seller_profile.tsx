@@ -42,8 +42,6 @@ const SellerProfile: React.FC<SellerProfileProps> = ({ seller }) => {
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
   const [currentSeller, setCurrentSeller] = useState(seller);
-  const [apiBody, setApiBody] = useState({});
-  const [apiUsername, setApiUsername] = useState("");
   const [update, setUpdate] = useState(false);
   // React Hook Form setup with Zod validation
   const {
@@ -118,10 +116,7 @@ const SellerProfile: React.FC<SellerProfileProps> = ({ seller }) => {
   };
 
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
-  const handleProfilePictureClick = () => {
-    document.getElementById("profilePictureInput")?.click();
-  };
-
+ 
   const handleDelete = () => {
     Swal.fire({
       title: "Are you sure?",

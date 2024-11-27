@@ -7,6 +7,7 @@ import {
   updateProduct,
   toggleProductArchive,
   addFeedback,
+  getProductsWithWishList,
 } from "../Model/Queries/product_queries";
 import { addPurchase } from "../Model/Queries/purchase_queries";
 import {
@@ -38,8 +39,14 @@ router.post(
 
 router.get("/", async (req: Request, res: Response) => {
   try {
-    const products = await getProducts();
-    res.status(200).send(products);
+    const touristUsername = req.query.touristUsername as string;
+    if (touristUsername) {
+      const products = await getProductsWithWishList(touristUsername);
+      return res.status(200).send(products);
+    } else {
+      const products = await getProducts();
+      return res.status(200).send(products);
+    }
   } catch (error) {
     res.status(500).send(error);
   }

@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { date, z } from "zod";
+import { z } from "zod";
 import { Controller } from "react-hook-form";
 import useRegisterUser from "../../custom_hooks/useRegisterUser";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -150,7 +150,7 @@ const Register: React.FC = () => {
 
   const [apiBody, setApiBody] = useState(null);
 
-  const { data, loading, error } = useRegisterUser(apiBody, role);
+  const { loading, error } = useRegisterUser(apiBody, role);
   const countries = countryList().getData();
   const onSubmit = (data: any) => {
     setApiBody(data);
