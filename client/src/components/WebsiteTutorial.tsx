@@ -20,6 +20,8 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
+import mtnImage from '../assets/mtn2.jpg'; 
+
 
 
 
@@ -178,8 +180,8 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
     bgcolor: "background.paper",
     boxShadow: 24,
     borderRadius: 2,
-    width: "80%",
-    height: "80%",
+    width: "85%",
+    height: "85%",
     maxWidth: "60%",
     display: "flex",
     flexDirection: "column",
@@ -196,59 +198,106 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
     BackdropProps={{ timeout: 500 }}
   >
     <Fade in={open}>
-      <Box
+    <Box
         sx={{
           ...modalStyle,
-          background: "linear-gradient(145deg, #ffffff, #f0f0f0)",
+          backgroundImage: `url(${mtnImage})`, 
+          backgroundSize: "cover",  
+          backgroundPosition: "center", 
+          backgroundBlendMode: "overlay",  
+          backgroundColor: "rgba(255, 255, 255, 0.7)", 
           borderRadius: "12px",
           boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
           p: 4,
         }}
       >
-        {/* Title */}
-        <Typography variant="h4" mb={3} align="center" color="secondary" fontWeight="bold">
-          {pageTitles[userType]?.[currentPage] || "Website Tutorial"}
-          <hr></hr>
 
-          <Typography variant="body1" mb={3} color="text.secondary" lineHeight={1.8}>
-            {userText[userType]?.[currentPage]}
-            </Typography>   
-        </Typography>
+        {/* Title */}
+        <Typography variant="h4" mb={3} align="center" color="#8b3fe8" fontWeight={600}>
+  {pageTitles[userType]?.[currentPage] || "Website Tutorial"}
+  <hr />
+  
+  <Typography
+    variant="body1"
+    mb={3}
+    color="text.secondary"
+    lineHeight={1.8}
+    sx={{
+      fontSize: "1.3rem", 
+      fontFamily: "'Poppins', sans-serif",  
+      fontWeight: 300,  
+      letterSpacing: "0.5px", 
+      textAlign: "justify",  
+      color: "rgba(0, 0, 0, 0.7)",
+      textShadow: "1px 1px 2px rgba(0, 0, 0, 0.1)",  
+      transition: "color 0.3s ease, transform 0.3s ease", 
+      
+    }}
+  >
+    {userText[userType]?.[currentPage]}
+  </Typography>
+</Typography>
+
+
+
 
         {/* Content Area */}
-        <Box sx={{ flexGrow: 1, overflowY: "auto", mb: 4 }}>
-          {/* Page 2 (Navigation Bar) */}
+        <Box sx={{ flexGrow: 1, overflowY: "auto", mb: 4, maxHeight: "calc(100vh - 250px)" }}>
+        {/* Page 2 (Navigation Bar) */}
           {currentPage === 1 && (
             <Box>
               <Grid container spacing={4}>
                 {navbarDescriptions[userType]?.map((item, index) => (
                   <Grid item xs={12} sm={6} md={4} key={index}>
                     <Paper
-                      sx={{
-                        p: 3,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        height: "180px",
-                        borderRadius: "16px",
-                        boxShadow: "0px 6px 14px rgba(0, 0, 0, 0.08)",
-                        transition: "transform 0.2s ease, box-shadow 0.3s ease",
-                        "&:hover": {
-                          transform: "scale(1.03)",
-                          boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.12)",
-                        },
-                      }}
-                    >
-                      <Box sx={{ fontSize: 48, color: "secondary.main" }}>{item.icon}</Box>
-                      <Box sx={{ ml: 2, textAlign: "left" }}>
-                        <Typography variant="h6" fontWeight="bold" color="text.primary">
-                          {item.name}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {item.description}
-                        </Typography>
-                      </Box>
-                    </Paper>
+  sx={{
+    p: 3,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    height: "180px",
+    borderRadius: "16px",
+    boxShadow: "0px 6px 14px rgba(0, 0, 0, 0.08)",
+    transition: "transform 0.2s ease, box-shadow 0.3s ease",
+    "&:hover": {
+      transform: "scale(1.03)",
+      boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.12)",
+    },
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+  }}
+>
+ 
+  <Box sx={{ fontSize: 48, color: "secondary.main", marginRight: 2 }}>
+    {item.icon}
+  </Box>
+
+
+  <Box sx={{ textAlign: "left" }}>
+    <Typography
+      variant="h6"
+      fontWeight="600" 
+      color="text.primary"
+      sx={{
+        mb: 1, 
+        fontSize: "1.1rem",
+      }}
+    >
+      {item.name}
+    </Typography>
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      sx={{
+        fontSize: "0.95rem", 
+        lineHeight: 1.6, 
+        color: "rgba(0, 0, 0, 0.7)", 
+      }}
+    >
+      {item.description}
+    </Typography>
+  </Box>
+</Paper>
+
                   </Grid>
                 ))}
               </Grid>
@@ -266,31 +315,32 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
                 {profileDropdownItems.map((item, index) => (
                   <Grid item xs={12} sm={6} md={4} key={index}>
                     <Paper
-                      sx={{
-                        p: 3,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        height: "180px",
-                        borderRadius: "16px",
-                        boxShadow: "0px 6px 14px rgba(0, 0, 0, 0.08)",
-                        transition: "transform 0.2s ease, box-shadow 0.3s ease",
-                        "&:hover": {
-                          transform: "scale(1.03)",
-                          boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.12)",
-                        },
-                      }}
-                    >
-                      <Box sx={{ fontSize: 48, color: "secondary.main" }}>{item.icon}</Box>
-                      <Box sx={{ ml: 2, textAlign: "left" }}>
-                        <Typography variant="h6" fontWeight="bold" color="text.primary">
-                          {item.text}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {item.description}
-                        </Typography>
-                      </Box>
-                    </Paper>
+  sx={{
+    p: 3,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    height: "180px",
+    borderRadius: "16px",
+    boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.1)",
+    transition: "transform 0.2s ease, box-shadow 0.3s ease",
+    background: "linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(240, 240, 240, 0.85))",
+    "&:hover": {
+      transform: "scale(1.05)",
+      boxShadow: "0px 12px 24px rgba(0, 0, 0, 0.15)",
+    },
+  }}
+>
+  <Box sx={{ fontSize: 48, color: "secondary.main" }}>{item.icon}</Box>
+  <Box sx={{ ml: 2, textAlign: "left" }}>
+    <Typography variant="h6" fontWeight="bold" color="text.primary">
+      {item.text}
+    </Typography>
+    <Typography variant="body2" color="text.secondary">
+      {item.description}
+    </Typography>
+  </Box>
+</Paper>
                   </Grid>
                 ))}
               </Grid>
@@ -298,7 +348,39 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
           )}
         </Box>
         {/* Footer Navigation */}
-<Box
+        {/* Page Indicators */}
+  <Box
+    sx={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      gap: "0.8rem",
+      mt: 3,
+    }}
+  >
+    {Array.from({ length: maxPages }).map((_, index) => (
+      <Box
+        key={index}
+        sx={{
+          width: index === currentPage ? "10px" : "8px",
+          height: index === currentPage ? "10px" : "8px",
+          borderRadius: "50%",
+          backgroundColor: index === currentPage ? "#8b3fe8" : "white",
+          boxShadow: index === currentPage
+            ? "0px 0px 6px 2px rgba(139, 63, 232, 0.5)" 
+            : "none",
+          transition: "all 0.3s ease",
+          cursor: "pointer",
+          "&:hover": {
+            transform: "scale(1.2)", 
+            backgroundColor: index !== currentPage ? "grey.500" : "secondary.main", 
+          },
+        }}
+      />
+    ))}
+  </Box>
+
+        <Box
   sx={{
     display: "flex",
     justifyContent: "space-between",
@@ -309,146 +391,116 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
     gap: 2, 
   }}
 >
-  <Button
-    variant="contained"
-    onClick={handlePrevious}
-    disabled={currentPage === 0}
-    startIcon={<ArrowBackIosNewIcon />}
-    sx={{
-      px: 4,
-      py: 1,
-      background: "linear-gradient(to right, #8e44ad, #9b59b6)",
-      color: "#fff",
-      borderRadius: "8px",
-      fontSize: "1rem",
-      textTransform: "none", 
-      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-      "&:hover": {
-        background: "linear-gradient(to right, #732d91, #8e44ad)",
-      },
-      "&:disabled": {
-        backgroundColor: "#ddd",
-        color: "#aaa",
-      },
-    }}
-  >
-    Previous
-  </Button>
-
-  <Box
-  sx={{
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: "0.8rem",
-    mt: 3,
-  }}
->
-  {Array.from({ length: maxPages }).map((_, index) => (
-    <Box
-      key={index}
+  {/* Previous and Don't Show Again buttons */}
+  <Box sx={{ display: "flex", gap: 2 }}>
+    <Button
+      variant="contained"
+      onClick={handlePrevious}
+      disabled={currentPage === 0}
+      startIcon={<ArrowBackIosNewIcon />}
       sx={{
-        width: index === currentPage ? "10px" : "8px",
-        height: index === currentPage ? "10px" : "8px",
-        borderRadius: "50%",
-        backgroundColor: index === currentPage ? "secondary.main" : "grey.400",
-        boxShadow: index === currentPage
-          ? "0px 0px 6px 2px rgba(139, 63, 232, 0.5)" 
-          : "none",
-        transition: "all 0.3s ease",
-        cursor: "pointer",
+        px: 4,
+        py: 1,
+        backgroundColor: "#8b3fe8", 
+        color: "#fff", 
+        borderRadius: "8px",
+        fontSize: "1rem",
+        textTransform: "none",
+        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
         "&:hover": {
-          transform: "scale(1.2)", 
-          backgroundColor: index !== currentPage ? "grey.500" : "secondary.main", 
+          backgroundColor: "#7a2de7", 
+        },
+        "&:disabled": {
+          backgroundColor: "#ddd",
+          color: "#aaa", 
         },
       }}
-    />
-  ))}
+    >
+      Previous
+    </Button>
+
+    <Button
+      variant="outlined"
+      onClick={handleDontShowAgain}
+      startIcon={<VisibilityOffIcon />} 
+      sx={{
+        px: 4,
+        py: 1,
+        backgroundColor: "#8b3fe8", 
+        color: "#fff",
+        borderRadius: "8px",
+        fontSize: "1rem",
+        textTransform: "none",
+        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+        "&:hover": {
+          backgroundColor: "#7a2de7",
+        },
+        "&:disabled": {
+          backgroundColor: "#ddd", 
+          color: "#aaa", 
+        },
+      }}
+    >
+      Don't Show Again
+    </Button>
+  </Box>
+
+  
+  {/* Next and Skip buttons */}
+  <Box sx={{ display: "flex", gap: 2 }}>
+    <Button
+      variant="contained"
+      onClick={handleNext}
+      disabled={currentPage === maxPages - 1}
+      endIcon={<ArrowForwardIosIcon />}
+      sx={{
+        px: 4,
+        py: 1,
+        backgroundColor: "#8b3fe8", 
+        color: "#fff",
+        borderRadius: "8px",
+        fontSize: "1rem",
+        textTransform: "none",
+        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+        "&:hover": {
+          backgroundColor: "#7a2de7",
+        },
+        "&:disabled": {
+          backgroundColor: "#ddd", 
+          color: "#aaa", 
+        },
+      }}
+    >
+      Next
+    </Button>
+
+    <Button
+      variant="outlined"
+      onClick={handleSkip}
+      startIcon={<SkipNextIcon />}
+      sx={{
+        px: 4,
+        py: 1,
+        backgroundColor: "#8b3fe8", 
+        color: "#fff",
+        borderRadius: "8px",
+        fontSize: "1rem",
+        textTransform: "none",
+        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+        "&:hover": {
+          backgroundColor: "#7a2de7",
+        },
+        "&:disabled": {
+          backgroundColor: "#ddd", 
+          color: "#aaa", 
+        },
+      }}
+    >
+      Skip
+    </Button>
+  </Box>
 </Box>
 
-
-
-  <Button
-    variant="contained"
-    onClick={handleNext}
-    disabled={currentPage === maxPages - 1}
-    endIcon={<ArrowForwardIosIcon />}
-    sx={{
-      px: 4,
-      py: 1,
-      background: "linear-gradient(to right, #8e44ad, #9b59b6)",
-      color: "#fff",
-      borderRadius: "8px",
-      fontSize: "1rem",
-      textTransform: "none",
-      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-      "&:hover": {
-        background: "linear-gradient(to right, #732d91, #8e44ad)",
-      },
-      "&:disabled": {
-        backgroundColor: "#ddd",
-        color: "#aaa",
-      },
-    }}
-  >
-    Next
-  </Button>
-</Box>
-
-{/* Action Buttons */}
-<Box
-  sx={{
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    mt: 4,
-    gap: 2,
-  }}
->
-  <Button
-    variant="outlined"
-    onClick={handleDontShowAgain}
-    startIcon={<VisibilityOffIcon />} 
-    sx={{
-      px: 4,
-      py: 1,
-      borderColor: "secondary.main",
-      color: "secondary.main",
-      borderRadius: "8px",
-      fontSize: "1rem",
-      textTransform: "none",
-      transition: "0.3s ease",
-      "&:hover": {
-        backgroundColor: "secondary.light",
-        borderColor: "secondary.dark",
-      },
-    }}
-  >
-    Don't Show Again
-  </Button>
-
-  <Button
-    variant="outlined"
-    onClick={handleSkip}
-    startIcon={<SkipNextIcon />}
-    sx={{
-      px: 4,
-      py: 1,
-      borderColor: "secondary.main",
-      color: "secondary.main",
-      borderRadius: "8px",
-      fontSize: "1rem",
-      textTransform: "none",
-      transition: "0.3s ease",
-      "&:hover": {
-        backgroundColor: "secondary.light",
-        borderColor: "secondary.dark",
-      },
-    }}
-  >
-    Skip
-  </Button>
-</Box>
 
       </Box>
     </Fade>
