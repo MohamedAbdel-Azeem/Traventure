@@ -6,10 +6,9 @@ import {
   FormControl,
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import { ActivityCardTourist } from "./ActivityCardTourist";
+import { Activity, ActivityCardTourist } from "./ActivityCardTourist";
 import {IActivity} from "../../custom_hooks/activities/activity_interface";
 import { useGetAllCategories } from "../../custom_hooks/categoryandTagCRUD";
-import {Activity} from "../../custom_hooks/activities/activity_interface";
 import useGetUpcoming from "../../custom_hooks/itineraries/useGetupcoming";
 import axios from "axios";
 
@@ -72,7 +71,7 @@ const MoreActivities: React.FC = () => {
   };
 
   const filteredActivities = sactivities
-    ?.filter((activity: IActivity) => {
+    ?.filter((activity: Activity) => {
       const term = searchTerm.toLowerCase();
 
       if (searchType === "name") {
@@ -87,7 +86,7 @@ const MoreActivities: React.FC = () => {
 
       return true;
     })
-    .filter((activity: IActivity) => {
+    .filter((activity: Activity) => {
       switch (filterType) {
         case "budget":
           return activity.Price >= minPrice && activity.Price <= maxPrice;
@@ -109,7 +108,7 @@ const MoreActivities: React.FC = () => {
           return true;
       }
     })
-    .filter((activity: IActivity) => {
+    .filter((activity: Activity) => {
       if (currenttype === "tourist" || currenttype === "guest")
         return !activity.inappropriate;
       return true;
@@ -315,7 +314,7 @@ const MoreActivities: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {sortedActivities && sortedActivities.length > 0 ? (
-              sortedActivities.map((activity: IActivity) => (
+              sortedActivities.map((activity: Activity) => (
                 <ActivityCardTourist
                   key={activity._id}
                   activity={activity}

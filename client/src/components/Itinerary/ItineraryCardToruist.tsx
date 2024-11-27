@@ -250,7 +250,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
                 onClick={() => handleBooking(_id)}
               >
-                Book
+                {loading?<ClipLoader size={30} color="#ffffff"></ClipLoader>: "Book"}
               </button>
               {!isBookmarked && <button className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600" title="Bookmark"
                 onClick={() => handleBookmark(_id)}>

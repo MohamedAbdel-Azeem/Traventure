@@ -191,8 +191,6 @@ export async function toggleWishlistProduct(
 }
 
 
-  }
-
   export async function bookmarkActivity(touristUsername: string, activityId: string) {
     try {
       const tourist = await touristModel.findOne({ username: touristUsername });

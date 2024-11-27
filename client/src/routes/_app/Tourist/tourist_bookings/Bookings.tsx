@@ -116,7 +116,6 @@ const Bookings: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      console.log(username);
       setItiBookings(data.filter((booking) => booking.type === "itinerary")); // Fix to use data instead of bookings
       setActivityBookings(
         data.filter((booking) => booking.type === "activity")

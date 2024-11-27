@@ -140,7 +140,6 @@ const Dashboard: React.FC = () => {
               <ActivityCardTourist
                 key={activity._id}
                 activity={activity}
-                onDelete={(_id) => {}}
                 bookmarked={bookmarkedActivities.some((bookmarkedActivity) => bookmarkedActivity._id === activity._id)}
                 {...(currenttype === "tourist" && { type: "tourist" })}
               />

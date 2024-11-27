@@ -62,7 +62,6 @@ type CatStructure = {
 export const ActivityCardTourist: React.FC<ActivityProp> = ({
   type,
   activity,
-  onDelete,
   bookmarked
 }) => {
   const currentuser = useLocation().pathname.split("/")[2];
@@ -76,7 +75,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
   const { bookActivity, data, loading, error } = useBookActivity();
   const { bookmarkActivity,loading:loadingBookmark } = useBookmarkActivity();
   const [inappropriate, setInappropriate] = useState(
-    currentActivity.inappropriate
+    activity.inappropriate
   );
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);
 
@@ -136,7 +135,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
  
   const handleBooking = async (activity_id: string) => {
     try {
-      await bookActivity(activity_id, username,currentActivity.Price,currentActivity.SpecialDiscount);
+      await bookActivity(activity_id, username,activity.Price,activity.SpecialDiscount);
     } catch (error) {
       console.error("Error booking activity:", error);
     }
@@ -217,7 +216,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
               <button
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ml-2"
                 title="Bookmark"
-                onClick={() => handleBookMark(currentActivity._id)}
+                onClick={() => handleBookMark(activity._id)}
               >
                 {loadingBookmark?<ClipLoader size={30} color="#ffffff"></ClipLoader>: <BookmarkIcon />}
               </button>
@@ -234,7 +233,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
                   className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ml-2"
                   onClick={() => handleBooking(activity._id)}
                 >
-                  Book
+                  {loading?<ClipLoader size={30} color="#ffffff"></ClipLoader>: "Book"}
                 </button>
               </div>
             )}

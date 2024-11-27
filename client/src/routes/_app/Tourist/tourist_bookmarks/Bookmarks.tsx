@@ -82,7 +82,6 @@ const Bookmarks = () => {
               <ActivityCardTourist
                 key={activity._id}
                 activity={activity}
-                onDelete={(_id) => {}}
                 bookmarked={true}
                 {...(currenttype === "tourist" && { type: "tourist" })}
               />

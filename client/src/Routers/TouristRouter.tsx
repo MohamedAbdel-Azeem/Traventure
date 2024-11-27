@@ -41,7 +41,7 @@ export default function TouristRouter() {
         <Route path="/:username/bookmarks" element={<Bookmarks />} />
         <Route path="/:username/wishlist" element={<TouristWishList />} />
       </Routes>
-      <CurrencyDropdown />
+      {/* <CurrencyDropdown /> */}
       <CartButton />
 
     </div>
