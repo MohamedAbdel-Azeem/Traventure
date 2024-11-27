@@ -18,9 +18,11 @@ import { HowToVote as HowToVoteIcon } from "@mui/icons-material";
 import { Logout as LogoutIcon } from "@mui/icons-material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import CloseIcon from "@mui/icons-material/Close";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import mtnImage from '../assets/mtn2.jpg'; 
+import CancelIcon from '@mui/icons-material/Cancel';
 
 
 
@@ -445,15 +447,14 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
 >
   {/* Previous and Don't Show Again buttons */}
   <Box sx={{ display: "flex", gap: 2 }}>
-
     <Button
       variant="outlined"
       onClick={handleDontShowAgain}
-      startIcon={<VisibilityOffIcon />} 
+      startIcon={<VisibilityOffIcon />}
       sx={{
         px: 4,
         py: 1,
-        backgroundColor: "#8b3fe8", 
+        backgroundColor: "#8b3fe8",
         color: "#fff",
         borderRadius: "8px",
         fontSize: "1rem",
@@ -463,8 +464,8 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
           backgroundColor: "#7a2de7",
         },
         "&:disabled": {
-          backgroundColor: "#ddd", 
-          color: "#aaa", 
+          backgroundColor: "#ddd",
+          color: "#aaa",
         },
       }}
     >
@@ -479,38 +480,7 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
       sx={{
         px: 4,
         py: 1,
-        backgroundColor: "#8b3fe8", 
-        color: "#fff", 
-        borderRadius: "8px",
-        fontSize: "1rem",
-        textTransform: "none",
-        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-        "&:hover": {
-          backgroundColor: "#7a2de7", 
-        },
-        "&:disabled": {
-          backgroundColor: "#ddd",
-          color: "#aaa", 
-        },
-      }}
-    >
-      Previous
-    </Button>
-  </Box>
-
-  
-  {/* Next and Skip buttons */}
-  <Box sx={{ display: "flex", gap: 2 }}>
-
-    <Button
-      variant="contained"
-      onClick={handleNext}
-      disabled={currentPage === maxPages - 1}
-      endIcon={<ArrowForwardIosIcon />}
-      sx={{
-        px: 4,
-        py: 1,
-        backgroundColor: "#8b3fe8", 
+        backgroundColor: "#8b3fe8",
         color: "#fff",
         borderRadius: "8px",
         fontSize: "1rem",
@@ -520,13 +490,65 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
           backgroundColor: "#7a2de7",
         },
         "&:disabled": {
-          backgroundColor: "#ddd", 
-          color: "#aaa", 
+          backgroundColor: "#ddd",
+          color: "#aaa",
         },
       }}
     >
-      Next
+      Previous
     </Button>
+  </Box>
+
+  {/* Next and Close buttons */}
+  <Box sx={{ display: "flex", gap: 2 }}>
+    {currentPage === maxPages - 1 ? (
+      <Button
+        variant="contained"
+        onClick={onClose}
+        startIcon={<CancelIcon />}
+        sx={{
+          px: 4,
+          py: 1,
+          backgroundColor: "#8b3fe8",
+          color: "#fff",
+          borderRadius: "8px",
+          fontSize: "1rem",
+          textTransform: "none",
+          boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+          "&:hover": {
+            backgroundColor: "#7a2de7",
+          },
+        }}
+      >
+        Close
+      </Button>
+    ) : (
+      <Button
+        variant="contained"
+        onClick={handleNext}
+        disabled={currentPage === maxPages - 1}
+        endIcon={<ArrowForwardIosIcon />}
+        sx={{
+          px: 4,
+          py: 1,
+          backgroundColor: "#8b3fe8",
+          color: "#fff",
+          borderRadius: "8px",
+          fontSize: "1rem",
+          textTransform: "none",
+          boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+          "&:hover": {
+            backgroundColor: "#7a2de7",
+          },
+          "&:disabled": {
+            backgroundColor: "#ddd",
+            color: "#aaa",
+          },
+        }}
+      >
+        Next
+      </Button>
+    )}
 
     <Button
       variant="outlined"
@@ -535,7 +557,7 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
       sx={{
         px: 4,
         py: 1,
-        backgroundColor: "#8b3fe8", 
+        backgroundColor: "#8b3fe8",
         color: "#fff",
         borderRadius: "8px",
         fontSize: "1rem",
@@ -545,14 +567,13 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
           backgroundColor: "#7a2de7",
         },
         "&:disabled": {
-          backgroundColor: "#ddd", 
-          color: "#aaa", 
+          backgroundColor: "#ddd",
+          color: "#aaa",
         },
       }}
     >
       Skip
     </Button>
-
   </Box>
 </Box>
 
