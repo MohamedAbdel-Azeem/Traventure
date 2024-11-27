@@ -38,7 +38,7 @@ export default function TouristRouter() {
         <Route path="/:username/hotels" element={<HotelsPage />} />
         <Route path="/:username/wishlist" element={<TouristWishList />} />
       </Routes>
-      <CurrencyDropdown />
+      {/* <CurrencyDropdown /> */}
       <CartButton />
     </div>
   );

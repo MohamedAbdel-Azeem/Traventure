@@ -16,6 +16,11 @@ import { Favorite as FavoriteIcon } from "@mui/icons-material";
 import { ShoppingBasket as ShoppingBasketIcon } from "@mui/icons-material";
 import { HowToVote as HowToVoteIcon } from "@mui/icons-material";
 import { Logout as LogoutIcon } from "@mui/icons-material";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import SkipNextIcon from "@mui/icons-material/SkipNext";
+
 
 
 interface WebsiteTutorialProps {
@@ -34,7 +39,7 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
       "Welcome to Traventure! As a tourist, you can explore and enjoy many of our features that we have to offer. Click 'Next' to learn more.",
       " ",
       " ",
-    ],
+    ],      
     guest: [
       "Welcome, guest! Explore shops, activities, and places before registering.",
       "Sign up to unlock personalized features!",
@@ -181,124 +186,276 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
     p: 4,
     border: "5px solid #8b3fe8", 
   };
+  
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{ timeout: 500 }}
-    >
-      <Fade in={open}>
-        <Box sx={{ ...modalStyle }}>
-          <Typography variant="h6" mb={2} align="center">
-            {pageTitles[userType]?.[currentPage] || "Website Tutorial"}
-          </Typography>
+  <Modal
+    open={open}
+    onClose={onClose}
+    closeAfterTransition
+    BackdropComponent={Backdrop}
+    BackdropProps={{ timeout: 500 }}
+  >
+    <Fade in={open}>
+      <Box
+        sx={{
+          ...modalStyle,
+          background: "linear-gradient(145deg, #ffffff, #f0f0f0)",
+          borderRadius: "12px",
+          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+          p: 4,
+        }}
+      >
+        {/* Title */}
+        <Typography variant="h4" mb={3} align="center" color="secondary" fontWeight="bold">
+          {pageTitles[userType]?.[currentPage] || "Website Tutorial"}
+          <hr></hr>
 
-          <Box sx={{ flexGrow: 1, overflowY: "auto", mb: 2 }}>
-            {/* Page 1 (Navigation Bar) */}
-            {currentPage === 1 && (
-              <Box>
-                <Grid container spacing={2}>
-                  {navbarDescriptions[userType]?.map((item, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={index}>
-                      <Paper
-                        sx={{
-                          p: 2,
-                          display: "flex",
-                          alignItems: "center",
-                          height: "150px", 
-                          width: "100%", 
-                          overflow: "hidden",
-                        }}
-                      >
-                        <Box sx={{ mr: 2 }}>
-                          {item.icon}
-                        </Box>
-                        <Box>
-                          <Typography variant="body1" fontWeight="bold">
-                            {item.name}
-                          </Typography>
-                          <Typography variant="body2">{item.description}</Typography>
-                        </Box>
-                      </Paper>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Box>
-            )}
+          <Typography variant="body1" mb={3} color="text.secondary" lineHeight={1.8}>
+            {userText[userType]?.[currentPage]}
+            </Typography>   
+        </Typography>
 
-            
-            {currentPage === 2 && (
-              <Box>
-                <Typography variant="body1">
-                 Located at the top right of the navigation bar, the profile dropdown mainly allows you to access your profile page as well as additional miscellaneous features.
-                </Typography>
-                <Grid container spacing={2} mt={2}>
-                  {profileDropdownItems.map((item, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={index}>
-                      <Paper sx={{ p: 2, display: "flex", alignItems: "center", height: "150px", width: "100%" }}>
-                        {item.icon}
-                        <Box>
-                          <Typography variant="body1" fontWeight="bold">
-                            {item.text}
-                          </Typography>
-                          <Typography variant="body2">
+        {/* Content Area */}
+        <Box sx={{ flexGrow: 1, overflowY: "auto", mb: 4 }}>
+          {/* Page 2 (Navigation Bar) */}
+          {currentPage === 1 && (
+            <Box>
+              <Grid container spacing={4}>
+                {navbarDescriptions[userType]?.map((item, index) => (
+                  <Grid item xs={12} sm={6} md={4} key={index}>
+                    <Paper
+                      sx={{
+                        p: 3,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        height: "180px",
+                        borderRadius: "16px",
+                        boxShadow: "0px 6px 14px rgba(0, 0, 0, 0.08)",
+                        transition: "transform 0.2s ease, box-shadow 0.3s ease",
+                        "&:hover": {
+                          transform: "scale(1.03)",
+                          boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.12)",
+                        },
+                      }}
+                    >
+                      <Box sx={{ fontSize: 48, color: "secondary.main" }}>{item.icon}</Box>
+                      <Box sx={{ ml: 2, textAlign: "left" }}>
+                        <Typography variant="h6" fontWeight="bold" color="text.primary">
+                          {item.name}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
                           {item.description}
-                          </Typography>
-                        </Box>
-                      </Paper>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Box>
-            )}
+                        </Typography>
+                      </Box>
+                    </Paper>
+                  </Grid>
+                ))}
+              </Grid>
+            </Box>
+          )}
 
-            <Typography variant="body1">
-              {userText[userType]?.[currentPage] || "No content available for this user type."}
-            </Typography>
-          </Box>
-
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid #ccc", pt: 2 }}>
-            <Button
-              variant="contained"
-              onClick={handlePrevious}
-              disabled={currentPage === 0}
-              sx={{ backgroundColor: "#8b3fe8", "&:hover": { backgroundColor: "#5b29b8" } }}
-            >
-              Previous
-            </Button>
-            <Typography>Page {currentPage + 1} of {maxPages}</Typography>
-            <Button
-              variant="contained"
-              onClick={handleNext}
-              disabled={currentPage === maxPages - 1}
-              sx={{ backgroundColor: "#8b3fe8", "&:hover": { backgroundColor: "#5b29b8" } }}
-            >
-              Next
-            </Button>
-          </Box>
-
-          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-            <Button
-              variant="contained"
-              onClick={handleDontShowAgain}
-              sx={{ backgroundColor: "#8b3fe8", "&:hover": { backgroundColor: "#5b29b8" } }}
-            >
-              Don't Show Again
-            </Button>
-            <Button
-              variant="contained"
-              onClick={handleSkip}
-              sx={{ backgroundColor: "#8b3fe8", "&:hover": { backgroundColor: "#5b29b8" } }}
-            >
-              Skip
-            </Button>
-          </Box>
+          {/* Page 3 (Profile Dropdown) */}
+          {currentPage === 2 && (
+            <Box>
+              <Typography variant="body1" mb={3} color="text.secondary" lineHeight={1.8}>
+                Located at the top right of the navigation bar, the profile dropdown allows you to manage your profile
+                and access additional features.
+              </Typography>
+              <Grid container spacing={4}>
+                {profileDropdownItems.map((item, index) => (
+                  <Grid item xs={12} sm={6} md={4} key={index}>
+                    <Paper
+                      sx={{
+                        p: 3,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        height: "180px",
+                        borderRadius: "16px",
+                        boxShadow: "0px 6px 14px rgba(0, 0, 0, 0.08)",
+                        transition: "transform 0.2s ease, box-shadow 0.3s ease",
+                        "&:hover": {
+                          transform: "scale(1.03)",
+                          boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.12)",
+                        },
+                      }}
+                    >
+                      <Box sx={{ fontSize: 48, color: "secondary.main" }}>{item.icon}</Box>
+                      <Box sx={{ ml: 2, textAlign: "left" }}>
+                        <Typography variant="h6" fontWeight="bold" color="text.primary">
+                          {item.text}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {item.description}
+                        </Typography>
+                      </Box>
+                    </Paper>
+                  </Grid>
+                ))}
+              </Grid>
+            </Box>
+          )}
         </Box>
-      </Fade>
-    </Modal>
-  );
+        {/* Footer Navigation */}
+<Box
+  sx={{
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderTop: "2px solid #e0e0e0",
+    pt: 3,
+    mt: 4,
+    gap: 2, 
+  }}
+>
+  <Button
+    variant="contained"
+    onClick={handlePrevious}
+    disabled={currentPage === 0}
+    startIcon={<ArrowBackIosNewIcon />}
+    sx={{
+      px: 4,
+      py: 1,
+      background: "linear-gradient(to right, #8e44ad, #9b59b6)",
+      color: "#fff",
+      borderRadius: "8px",
+      fontSize: "1rem",
+      textTransform: "none", 
+      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+      "&:hover": {
+        background: "linear-gradient(to right, #732d91, #8e44ad)",
+      },
+      "&:disabled": {
+        backgroundColor: "#ddd",
+        color: "#aaa",
+      },
+    }}
+  >
+    Previous
+  </Button>
+
+  <Box
+  sx={{
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "0.8rem",
+    mt: 3,
+  }}
+>
+  {Array.from({ length: maxPages }).map((_, index) => (
+    <Box
+      key={index}
+      sx={{
+        width: index === currentPage ? "10px" : "8px",
+        height: index === currentPage ? "10px" : "8px",
+        borderRadius: "50%",
+        backgroundColor: index === currentPage ? "secondary.main" : "grey.400",
+        boxShadow: index === currentPage
+          ? "0px 0px 6px 2px rgba(139, 63, 232, 0.5)" 
+          : "none",
+        transition: "all 0.3s ease",
+        cursor: "pointer",
+        "&:hover": {
+          transform: "scale(1.2)", 
+          backgroundColor: index !== currentPage ? "grey.500" : "secondary.main", 
+        },
+      }}
+    />
+  ))}
+</Box>
+
+
+
+  <Button
+    variant="contained"
+    onClick={handleNext}
+    disabled={currentPage === maxPages - 1}
+    endIcon={<ArrowForwardIosIcon />}
+    sx={{
+      px: 4,
+      py: 1,
+      background: "linear-gradient(to right, #8e44ad, #9b59b6)",
+      color: "#fff",
+      borderRadius: "8px",
+      fontSize: "1rem",
+      textTransform: "none",
+      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+      "&:hover": {
+        background: "linear-gradient(to right, #732d91, #8e44ad)",
+      },
+      "&:disabled": {
+        backgroundColor: "#ddd",
+        color: "#aaa",
+      },
+    }}
+  >
+    Next
+  </Button>
+</Box>
+
+{/* Action Buttons */}
+<Box
+  sx={{
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    mt: 4,
+    gap: 2,
+  }}
+>
+  <Button
+    variant="outlined"
+    onClick={handleDontShowAgain}
+    startIcon={<VisibilityOffIcon />} 
+    sx={{
+      px: 4,
+      py: 1,
+      borderColor: "secondary.main",
+      color: "secondary.main",
+      borderRadius: "8px",
+      fontSize: "1rem",
+      textTransform: "none",
+      transition: "0.3s ease",
+      "&:hover": {
+        backgroundColor: "secondary.light",
+        borderColor: "secondary.dark",
+      },
+    }}
+  >
+    Don't Show Again
+  </Button>
+
+  <Button
+    variant="outlined"
+    onClick={handleSkip}
+    startIcon={<SkipNextIcon />}
+    sx={{
+      px: 4,
+      py: 1,
+      borderColor: "secondary.main",
+      color: "secondary.main",
+      borderRadius: "8px",
+      fontSize: "1rem",
+      textTransform: "none",
+      transition: "0.3s ease",
+      "&:hover": {
+        backgroundColor: "secondary.light",
+        borderColor: "secondary.dark",
+      },
+    }}
+  >
+    Skip
+  </Button>
+</Box>
+
+      </Box>
+    </Fade>
+  </Modal>
+);
+
+  
 };
 
 export default WebsiteTutorial;
