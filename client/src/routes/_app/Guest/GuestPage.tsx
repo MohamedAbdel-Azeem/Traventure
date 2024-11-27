@@ -41,7 +41,7 @@ const GuestPage = () => {
           Open Tutorial
         </Button>
       </div>
-      <WebsiteTutorial open={isTutorialOpen} onClose={handleTutorialClose} userType="tourist" />
+      <WebsiteTutorial open={isTutorialOpen} onClose={handleTutorialClose} userType="guest" />
 
 
     </div>
