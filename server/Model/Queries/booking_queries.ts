@@ -257,7 +257,8 @@ export async function cancelBooking(booking_id: string) {
         throw new Error("Wallet not found");
       }
 
-      await bookingModel.findByIdAndDelete(booking_id);
+      await bookingModel.findByIdAndDelete(booking_id); 
+      return booking;
 
     } else {
       throw new Error("Booking not found");

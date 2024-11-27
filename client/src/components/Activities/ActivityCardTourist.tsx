@@ -267,7 +267,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
                 {loadingBookmark?<ClipLoader size={30} color="#ffffff"></ClipLoader>: <BookmarkIcon />}
               </button>
             )}
-            {isBookmarked && currpath!="bookmarks" && (
+            {isBookmarked && currpath!=="bookmarks" && (
               <button
                 className="bg-green-700 text-white px-4 py-2 rounded-lg  ml-2" disabled
               >

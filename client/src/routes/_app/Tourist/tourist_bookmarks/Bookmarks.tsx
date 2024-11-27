@@ -11,6 +11,7 @@ const Bookmarks = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const currenttype = useLocation().pathname.split("/")[1];
   const currentuser = useLocation().pathname.split("/")[2];
 
   useEffect(() => {
@@ -82,6 +83,8 @@ const Bookmarks = () => {
                 key={activity._id}
                 activity={activity}
                 onDelete={(_id) => {}}
+                bookmarked={true}
+                {...(currenttype === "tourist" && { type: "tourist" })}
               />
             ))
         )}
