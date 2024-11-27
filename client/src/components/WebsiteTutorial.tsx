@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, Modal, Typography, Backdrop, Fade, Grid, Paper } from "@mui/material";
+import { Box, Button, Modal, Typography, Backdrop, Fade, Grid, Paper, Slide } from "@mui/material";
 import { Home as HomeIcon } from "@mui/icons-material";
 import { Shop as ShopIcon } from "@mui/icons-material";
 import { ShowChart as ShowChartIcon } from "@mui/icons-material";
@@ -254,6 +254,7 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
   >
     {userText[userType]?.[currentPage]}
   </Typography>
+  
 </Typography>
 
 
@@ -276,12 +277,13 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
         backgroundColor: "rgba(255, 255, 255, 0.3)", 
         borderRadius: "10px", 
       },
-      // Firefox support
-      scrollbarWidth: "thin", // Thin scrollbar in Firefox
+     
+      scrollbarWidth: "thin", 
       scrollbarColor: "#8b3fe8 rgba(255, 255, 255, 0.3)",  
              }}>
         {/* Page 2 (Navigation Bar) */}
           {currentPage === 1 && (
+             <Slide direction="left" in={currentPage === 1} mountOnEnter unmountOnExit>
             <Box>
               <Grid container spacing={4}>
                 {navbarDescriptions[userType]?.map((item, index) => (
@@ -339,10 +341,12 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
                 ))}
               </Grid>
             </Box>
+            </Slide>
           )}
 
           {/* Page 3 (Profile Dropdown) */}
           {currentPage === 2 && (
+            <Slide direction="left" in={currentPage === 2} mountOnEnter unmountOnExit>
             <Box>
               <Typography
   variant="body1"
@@ -398,6 +402,7 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
                 ))}
               </Grid>
             </Box>
+            </Slide>
           )}
         </Box>
         {/* Footer Navigation */}
