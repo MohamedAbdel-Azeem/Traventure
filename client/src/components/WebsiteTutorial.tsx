@@ -213,9 +213,24 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
       >
 
         {/* Title */}
-        <Typography variant="h4" mb={3} align="center" color="#8b3fe8" fontWeight={600}>
+        <Typography
+  variant="h4"
+  mb={3}
+  align="center"
+  color="#8b3fe8"
+  fontWeight={800}
+  sx={{ fontFamily: "'Oswald', sans-serif", fontWeight: 800 }}
+
+
+
+
+
+
+
+
+>
   {pageTitles[userType]?.[currentPage] || "Website Tutorial"}
-  <hr />
+  
   
   <Typography
     variant="body1"
@@ -231,6 +246,7 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
       color: "rgba(0, 0, 0, 0.7)",
       textShadow: "1px 1px 2px rgba(0, 0, 0, 0.1)",  
       transition: "color 0.3s ease, transform 0.3s ease", 
+      borderTop: "2px solid #FFFFFF",
       
     }}
   >
@@ -307,10 +323,26 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
           {/* Page 3 (Profile Dropdown) */}
           {currentPage === 2 && (
             <Box>
-              <Typography variant="body1" mb={3} color="text.secondary" lineHeight={1.8}>
-                Located at the top right of the navigation bar, the profile dropdown allows you to manage your profile
-                and access additional features.
-              </Typography>
+              <Typography
+  variant="body1"
+  mb={4}  
+  color="text.primary" 
+  lineHeight={1.6}  
+  sx={{
+    fontSize: "1.1rem",  
+    fontFamily: "'Poppins', sans-serif", 
+    fontWeight: 400,  
+    letterSpacing: "0.5px",  
+    textShadow: "1px 1px 2px rgba(0, 0, 0, 0.1)",
+    color: "rgba(0, 0, 0, 0.8)", 
+    textAlign: "justify", 
+    transition: "color 0.3s ease",  
+  }}
+>
+  Located at the top right of the navigation bar, the profile dropdown allows you to manage your profile
+  and access additional features.
+</Typography>
+
               <Grid container spacing={4}>
                 {profileDropdownItems.map((item, index) => (
                   <Grid item xs={12} sm={6} md={4} key={index}>
@@ -348,6 +380,7 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
           )}
         </Box>
         {/* Footer Navigation */}
+        
         {/* Page Indicators */}
   <Box
     sx={{
@@ -393,31 +426,6 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
 >
   {/* Previous and Don't Show Again buttons */}
   <Box sx={{ display: "flex", gap: 2 }}>
-    <Button
-      variant="contained"
-      onClick={handlePrevious}
-      disabled={currentPage === 0}
-      startIcon={<ArrowBackIosNewIcon />}
-      sx={{
-        px: 4,
-        py: 1,
-        backgroundColor: "#8b3fe8", 
-        color: "#fff", 
-        borderRadius: "8px",
-        fontSize: "1rem",
-        textTransform: "none",
-        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-        "&:hover": {
-          backgroundColor: "#7a2de7", 
-        },
-        "&:disabled": {
-          backgroundColor: "#ddd",
-          color: "#aaa", 
-        },
-      }}
-    >
-      Previous
-    </Button>
 
     <Button
       variant="outlined"
@@ -443,11 +451,38 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
     >
       Don't Show Again
     </Button>
+
+    <Button
+      variant="contained"
+      onClick={handlePrevious}
+      disabled={currentPage === 0}
+      startIcon={<ArrowBackIosNewIcon />}
+      sx={{
+        px: 4,
+        py: 1,
+        backgroundColor: "#8b3fe8", 
+        color: "#fff", 
+        borderRadius: "8px",
+        fontSize: "1rem",
+        textTransform: "none",
+        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+        "&:hover": {
+          backgroundColor: "#7a2de7", 
+        },
+        "&:disabled": {
+          backgroundColor: "#ddd",
+          color: "#aaa", 
+        },
+      }}
+    >
+      Previous
+    </Button>
   </Box>
 
   
   {/* Next and Skip buttons */}
   <Box sx={{ display: "flex", gap: 2 }}>
+
     <Button
       variant="contained"
       onClick={handleNext}
@@ -498,6 +533,7 @@ const WebsiteTutorial: React.FC<WebsiteTutorialProps> = ({
     >
       Skip
     </Button>
+
   </Box>
 </Box>
 
