@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { get } from "react-hook-form";
 import { Feedback } from "../../../../components/purchases/FeedBack";
+import axios from "axios";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -44,8 +45,10 @@ interface IPurchase {
   status: string;
 }
 
-export function TouristPreviousPurchaseRow(purchase: IPurchase) {
+export function TouristPreviousPurchaseRow(_purchase: IPurchase) {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const [purchase, setPurchase] = useState<IPurchase>(_purchase);
 
   const { username } = useParams();
   const currentuser = useLocation().pathname.split("/")[2];
@@ -62,6 +65,19 @@ export function TouristPreviousPurchaseRow(purchase: IPurchase) {
         touristUsername: null,
       }
     );
+  };
+
+  const cancelProduct = async (purchaseId: string) => {
+    try {
+      const response = await axios.post(`/traventure/api/purchase/cancel`, {
+        purchaseId: purchaseId,
+      });
+      if (response.status === 200) {
+        setPurchase({ ...purchase, status: "cancelled" });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -96,6 +112,16 @@ export function TouristPreviousPurchaseRow(purchase: IPurchase) {
               }`}
             ></div>
           </div>
+        </StyledTableCell>
+        <StyledTableCell>
+          {purchase.status === "processing" && (
+            <button
+              className="rounded-lg bg-red-600 text-slate-50 px-4 py-2"
+              onClick={() => cancelProduct(purchase._id)}
+            >
+              Cancel order
+            </button>
+          )}
         </StyledTableCell>
       </TableRow>
       {isExpanded && (

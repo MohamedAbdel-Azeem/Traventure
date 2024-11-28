@@ -59,6 +59,7 @@ export function TouristPurchases() {
                 <StyledTableCell sx={{ textAlign: "center" }}>
                   Status
                 </StyledTableCell>
+                <StyledTableCell></StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
