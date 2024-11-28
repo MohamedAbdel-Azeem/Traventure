@@ -12,6 +12,10 @@ import GovernerSchema from "../Model/Schemas/Governer";
 import { getExternalSellers } from "../Model/Queries/product_queries";
 import { addGoverner, deleteUser } from "../Model/Queries/admin_queries";
 import { hashPassword } from "../utils/functions/bcrypt_functions";
+import {
+  getRevenues,
+  getNumberofUsers,
+} from "../Model/Queries/revenues_queries";
 
 const router = Router();
 
@@ -108,5 +112,26 @@ router.get("/externalSellers", async (req: Request, res: Response) => {
     res.status(500).send("error getting external sellers");
   }
 });
-
+router.get("/revenues", async (req: Request, res: Response) => {
+  try {
+    const revenues = await getRevenues();
+    res.status(200).send(revenues);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("error getting revenues");
+  }
+});
+router.get("/numberofusers", async (req: Request, res: Response) => {
+  try {
+    const { year, month, type } = req.query;
+    const userCounts = await getNumberofUsers(
+      parseInt(year as string),
+      parseInt(month as string),
+      type as string
+    );
+    res.status(200).send(userCounts);
+  } catch (err) {
+    res.status(500).send("error getting number of users");
+  }
+});
 export default router;

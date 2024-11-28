@@ -7,11 +7,12 @@ const SellerSchema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   documents: { type: String, required: true },
-  profilepic: {type: String, default: null},
+  profilepic: { type: String, default: null },
   wallet: { type: Number, required: true, default: 0 },
   name: String,
   description: String,
   isAccepted: { type: Boolean, default: false },
+  timeStamp: { type: Date, required: true, default: Date.now },
 });
 
 export default mongoose.model("Seller", SellerSchema);

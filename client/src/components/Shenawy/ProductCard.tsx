@@ -47,6 +47,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
   const currentImageUrl = currentProduct.imageUrl;
   useEffect(() => {
     const fetchImage = async (url: string) => {
+      console.log(currentProduct.imageUrl);
       const response = await fetch(url);
       const blob = await response.blob();
       const file = new File([blob], "image.jpg", { type: blob.type });
