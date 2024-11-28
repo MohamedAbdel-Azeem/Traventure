@@ -19,6 +19,10 @@ export interface ITourist extends Document {
   totalLoyaltyPoints: number;
   loyaltyLevel: number;
   timeStamp: Date;
+  bookmarkedActivities: mongoose.Types.ObjectId[];
+  bookmarkedItineraries: mongoose.Types.ObjectId[];
+  wishlisted_products: mongoose.Types.ObjectId[];
+
 }
 
 const touristSchema = new Schema({
@@ -37,6 +41,10 @@ const touristSchema = new Schema({
   totalLoyaltyPoints: { type: Number, required: true, default: 0 },
   loyaltyLevel: { type: Number, default: 1 },
   timeStamp: { type: Date, required: true, default: Date.now },
+  bookmarkedActivities: [{ type: mongoose.Types.ObjectId, ref: "Activity" }],
+  bookmarkedItineraries: [{ type: mongoose.Types.ObjectId, ref: "Itinerary" }],
+  wishlisted_products: [{ type: mongoose.Types.ObjectId, ref: "Product" }],
+
 });
 
 export default mongoose.model<ITourist>("Tourist", touristSchema);

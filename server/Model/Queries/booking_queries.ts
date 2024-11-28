@@ -230,10 +230,11 @@ export async function cancelBooking(booking_id: string) {
     booking = await checkCancel(booking_id);
     if (booking !== null) {
       if ((booking as any).type === "itinerary") {
+      
         const itinerary = await ItineraryModel.findById(
           (booking as any).itinerary
         );
-
+        
         if (itinerary) {
           const index = (itinerary as any).booked_By.findIndex(
             (entry: any) =>
@@ -245,7 +246,18 @@ export async function cancelBooking(booking_id: string) {
           }
         }
       }
-      await bookingModel.findByIdAndDelete(booking_id);
+
+      const tourist = await touristModel.findById( booking.tourist );
+      if (tourist) {
+        tourist.wallet += booking.price;
+        await tourist.save(); // Save the updated wallet
+      } else {
+        throw new Error("Wallet not found");
+      }
+
+      await bookingModel.findByIdAndDelete(booking_id); 
+      return booking;
+
     } else {
       throw new Error("Booking not found");
     }

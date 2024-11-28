@@ -13,7 +13,9 @@ import MoreActivities from "../components/Activities/MoreActivities";
 import ComplaintsTable from "../components/users_complaints/ComplaintsTable";
 import CurrencyDropdown from "../components/currencyDrop";
 import ItineraryDetailsTourist from "../components/Itinerary/ItineraryDetailsTourist";
+import Bookmarks from "../routes/_app/Tourist/tourist_bookmarks/Bookmarks";
 import CartButton from "../components/cart/CartButton";
+import { TouristWishList } from "../routes/_app/Tourist/tourist_purchases/TouristWishList";
 
 export default function TouristRouter() {
   return (
@@ -35,8 +37,10 @@ export default function TouristRouter() {
         <Route path="/:username/purchases" element={<TouristPurchases />} />
         <Route path="/:username/flights" element={<FlightsPage />} />
         <Route path="/:username/hotels" element={<HotelsPage />} />
+        <Route path="/:username/bookmarks" element={<Bookmarks />} />
+        <Route path="/:username/wishlist" element={<TouristWishList />} />
       </Routes>
-      <CurrencyDropdown />
+      {/* <CurrencyDropdown /> */}
       <CartButton />
     </div>
   );

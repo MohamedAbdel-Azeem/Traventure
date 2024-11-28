@@ -51,20 +51,19 @@ router.get("/getHotels/:username", async (req, res) => {
   }
 });
 
-router.delete("/cancel/:booking_id", async (req, res) => {
-  try {
-    await cancelBooking(req.params.booking_id);
-    res.status(201).send("Booking cancelled");
-  } catch (error) {
-    if (
-      (error as any).message ===
-      "Cannot cancel activity within 48 hours of the start time"
-    ) {
-      res.status(403).json({
-        error: "Cannot cancel activity within 48 hours of the start time",
-      });
-    } else {
-      res.status(500).json({ error: "Cannot cancel booking" });
+
+
+router.delete("/cancel/:booking_id", async (req, res) => { 
+    try {
+        const response=await cancelBooking(req.params.booking_id);
+        res.status(201).send(response);
+    } catch (error ) {
+        if ((error as any).message === "Cannot cancel activity within 48 hours of the start time") {
+            res.status(403).json({ error: "Cannot cancel activity within 48 hours of the start time" });
+        } else {
+            res.status(500).json({ error: "Cannot cancel booking" });
+        }
+    }
     }
   }
 });

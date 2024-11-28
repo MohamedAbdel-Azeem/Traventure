@@ -26,7 +26,11 @@ import StadiumIcon from "@mui/icons-material/Stadium";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
 import NavbarDropdown from "./NavbarDropdown";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Logout } from "@mui/icons-material";
+import LogoutIcon from "@mui/icons-material/Logout";
+import LoginIcon from "@mui/icons-material/Login";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import ChangePasswordModal, {
   AddContactLeadFormType,
 } from "../ChangePasswordModal";
@@ -35,6 +39,7 @@ import { editpassword } from "../../custom_hooks/changepassowrd";
 import { GetCurrentUser } from "../../custom_hooks/currentuser";
 import HotelIcon from "@mui/icons-material/Hotel";
 import FlightIcon from "@mui/icons-material/Flight";
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
 
 const drawerHeight = 64;
 
@@ -77,6 +82,11 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   const adminnavbaritems = [
     { text: "Home", icon: <HomeIcon />, path: `/admin/${currentuser}` },
     { text: "Shop", icon: <ShopIcon />, path: `/admin/${currentuser}/shop` },
+    {
+      text: "Sales",
+      icon: <ShowChartIcon />,
+      path: `/admin/${currentuser}/sales`,
+    },
     // { text: 'Locations', icon: <LocationOnIcon />, path: `/admin/${currentuser}/locations` },
     {
       text: "Account Management",
@@ -97,7 +107,11 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
 
   const TGnavbaritems = [
     { text: "Home", icon: <HomeIcon />, path: `/tourguide/${currentuser}` },
-    { text: 'Locations', icon: <LocationOnIcon />, path: `/tourguide/${currentuser}/locations` },
+    {
+      text: "Locations",
+      icon: <LocationOnIcon />,
+      path: `/tourguide/${currentuser}/locations`,
+    },
     {
       text: "Itinerary Management",
       icon: <ActivityIcon />,
@@ -111,7 +125,11 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
       icon: <HomeIcon />,
       path: `/tourismgovernor/${currentuser}`,
     },
-    { text: 'Locations', icon: <LocationOnIcon />, path: `/tourismgovernor/${currentuser}/locations` },
+    {
+      text: "Locations",
+      icon: <LocationOnIcon />,
+      path: `/tourismgovernor/${currentuser}/locations`,
+    },
     {
       text: "Historical Tags",
       icon: <ActivityIcon />,
@@ -156,7 +174,11 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
 
   const advertisernavbaritems = [
     { text: "Home", icon: <HomeIcon />, path: `/advertiser/${currentuser}` },
-    { text: 'Locations', icon: <LocationOnIcon />, path: `/advertiser/${currentuser}/locations` },
+    {
+      text: "Locations",
+      icon: <LocationOnIcon />,
+      path: `/advertiser/${currentuser}/locations`,
+    },
     {
       text: "Activity Management",
       icon: <ActivityIcon />,
@@ -250,6 +272,29 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
           },
         ]
       : []),
+    ...(currentusertype.includes("tourist")
+      ? [
+          {
+            label: "Wishlist",
+            onClick: () =>
+              navigate(`/${currentusertype}/${currentuser}/wishlist`),
+            icon: FavoriteIcon,
+          },
+          {
+            label: "Purchases",
+            onClick: () =>
+              navigate(`/${currentusertype}/${currentuser}/purchases`),
+            icon: ShoppingBasketIcon,
+          },
+         {
+          label: "Bookmarks",
+              onClick: () =>
+                navigate(`/${currentusertype}/${currentuser}/bookmarks`),
+              icon: BookmarksIcon,
+        }
+        ]
+      : []),
+
     ...(currentusertype.includes("tourist") || currentusertype.includes("admin")
       ? [
           {
@@ -258,19 +303,31 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
               navigate(`/${currentusertype}/${currentuser}/complaints`),
             icon: HowToVoteIcon,
           },
+        ]
+      : []),
+    ...(currentusertype.includes("guest")
+      ? [
           {
-            label: "Purchases",
-            onClick: () =>
-              navigate(`/${currentusertype}/${currentuser}/purchases`),
-            icon: ShoppingBasketIcon,
+            label: "Sign Up",
+            onClick: () => navigate("/register"),
+            icon: AccountCircleIcon,
+          },
+          {
+            label: "Login",
+            onClick: () => navigate("/"),
+            icon: LoginIcon,
           },
         ]
       : []),
-    {
-      label: "Log out",
-      onClick: () => navigate("/"),
-      icon: Logout,
-    },
+    ...(!currentusertype.includes("guest")
+      ? [
+          {
+            label: "Log out",
+            onClick: () => navigate("/"),
+            icon: Logout,
+          },
+        ]
+      : []),
   ];
 
   interface Currentuserdata {

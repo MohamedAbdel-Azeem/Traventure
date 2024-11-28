@@ -37,7 +37,50 @@ export async function getProducts() {
       })
     );
     return populatedProducts;
-    return products;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getProductsWithWishList(touristUsername: string) {
+  try {
+    const products = await productModel.find().populate("seller");
+    let tourist = await Tourist.find({ username: touristUsername }).select(
+      "wishlisted_products"
+    );
+
+    if (!tourist || tourist.length == 0) throw Error("Tourist Does not Exist");
+
+    const wishList = tourist[0].wishlisted_products;
+
+    const populatedProducts = await Promise.all(
+      products.map(async (product) => {
+        const populatedFeedback = await Promise.all(
+          product.feedback.map(async (feedback) => {
+            const tourist = await Tourist.findById(
+              feedback.touristId,
+              "username"
+            );
+            return {
+              touristId: feedback.touristId,
+              rating: feedback.rating,
+              review: feedback.review,
+              touristUsername: tourist?.username,
+            };
+          })
+        );
+        return {
+          ...product.toObject(),
+          feedback: populatedFeedback,
+        };
+      })
+    );
+
+    populatedProducts.map(
+      (product) => (product.isWishListed = wishList.includes(product._id))
+    );
+
+    return populatedProducts;
   } catch (error) {
     throw error;
   }
@@ -152,4 +195,5 @@ module.exports = {
   decrementProductQuantity,
   getExternalSellers,
   addFeedback,
+  getProductsWithWishList,
 };
