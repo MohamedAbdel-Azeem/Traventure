@@ -81,7 +81,22 @@ export function TouristPreviousPurchaseRow(purchase: IPurchase) {
           {purchase.timeStamp.toString().split("T")[0]}
         </StyledTableCell>
         <StyledTableCell>{calculateTotal(purchase.cart)}</StyledTableCell>
-        <StyledTableCell>{purchase.status}</StyledTableCell>
+        <StyledTableCell>
+          <div
+            style={{ display: "flex", justifyContent: "center" }}
+            title={purchase.status}
+          >
+            <div
+              className={`w-4 h-4 rounded-full ${
+                purchase.status === "delivered"
+                  ? "bg-green-500"
+                  : purchase.status === "processing"
+                  ? "bg-yellow-500"
+                  : "bg-red-500"
+              }`}
+            ></div>
+          </div>
+        </StyledTableCell>
       </TableRow>
       {isExpanded && (
         <TableRow>

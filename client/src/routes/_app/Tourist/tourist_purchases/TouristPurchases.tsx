@@ -56,7 +56,9 @@ export function TouristPurchases() {
                 <StyledTableCell>Purchase ID</StyledTableCell>
                 <StyledTableCell>Date</StyledTableCell>
                 <StyledTableCell>Total</StyledTableCell>
-                <StyledTableCell>Status</StyledTableCell>
+                <StyledTableCell sx={{ textAlign: "center" }}>
+                  Status
+                </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
