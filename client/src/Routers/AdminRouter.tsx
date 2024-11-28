@@ -13,7 +13,7 @@ import NewNavbar from "../components/Navbar/NewNavbar";
 import CurrencyDropdown from "../components/currencyDrop";
 import ItineraryDetailsTourist from "../components/Itinerary/ItineraryDetailsTourist";
 import { AdminRevenuePage } from "../routes/_app/Admin/admin_sales/AdminRevenuePage";
-
+import { AdminUsersNumPage } from "../routes/_app/Admin/admin_sales/AdminUsersNumPage";
 export default function AdminRouter() {
   return (
     <div className="flex flex-col w-screen h-screen">
@@ -34,8 +34,9 @@ export default function AdminRouter() {
         />
         <Route path="/:username/applications" element={<Applications />} />
         <Route path="/:username/Revenue" element={<AdminRevenuePage />} />
+        <Route path="/:username/usersstats" element={<AdminUsersNumPage />} />
       </Routes>
-      <CurrencyDropdown />
+      {/* <CurrencyDropdown />*/}
     </div>
   );
 }

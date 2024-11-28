@@ -40,7 +40,6 @@ const months = [
 
 const RevenuesBarChart: React.FC<RevenuesBarChartProps> = ({
   Revenues,
-
   selectedYear,
   selectedMonth,
 }) => {

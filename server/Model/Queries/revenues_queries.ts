@@ -147,7 +147,7 @@ export const getNumberofUsers = async (
     const advertisers = await Advertiser.find().lean();
     const admins = await Admin.find().lean();
     const governer = await Governer.find().lean();
-
+    console.log(tourists.length);
     const userCounts: UserCount[] = [];
 
     const users = [
@@ -160,34 +160,44 @@ export const getNumberofUsers = async (
     ];
 
     users.forEach((user) => {
-      const date = new Date((user as any).timeStamp); // Assuming you have a createdAt field in User schema
-      const userYear = date.getFullYear();
-      const userMonth = date.getMonth() + 1;
-      const day = date.getDate();
-      const type = user.type;
-      if ((!year || userYear === year) && (!month || userMonth === month)) {
-        const existingUserCount = userCounts.find(
-          (uc) =>
-            uc.year === userYear &&
-            uc.month === userMonth &&
-            uc.day === day &&
-            uc.type === type
-        );
-        if (existingUserCount) {
-          existingUserCount.count += 1;
-        } else {
-          userCounts.push({
-            year: userYear,
-            month: userMonth,
-            day,
-            type,
-            count: 1,
-          });
+      // Assuming you have a createdAt field in User schema
+
+      if ((user as any).timeStamp) {
+        const date = new Date((user as any).timeStamp);
+        const userYear = date.getFullYear();
+        const userMonth = date.getMonth() + 1;
+        const day = date.getDate();
+        const type = user.type;
+        if ((!year || userYear === year) && (!month || userMonth === month)) {
+          const existingUserCount = userCounts.find(
+            (uc) =>
+              uc.year === userYear &&
+              uc.month === userMonth &&
+              uc.day === day &&
+              uc.type === type
+          );
+          if (existingUserCount) {
+            existingUserCount.count += 1;
+          } else {
+            userCounts.push({
+              year: userYear,
+              month: userMonth,
+              day,
+              type,
+              count: 1,
+            });
+          }
         }
       }
     });
-
-    return userCounts;
+    const totalUsers =
+      tourists.length +
+      sellers.length +
+      tourGuides.length +
+      advertisers.length +
+      admins.length +
+      governer.length;
+    return { userCounts, totalUsers };
   } catch (e) {
     throw e;
   }
