@@ -8,6 +8,8 @@ import { useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { get } from "react-hook-form";
 import { Feedback } from "../../../../components/purchases/FeedBack";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -41,10 +43,14 @@ interface IPurchase {
   _id: string;
   timeStamp: Date;
   cart: ICartElement[];
+  status: string;
 }
 
-export function TouristPreviousPurchaseRow(purchase: IPurchase) {
+export function TouristPreviousPurchaseRow(_purchase: IPurchase) {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const [purchase, setPurchase] = useState<IPurchase>(_purchase);
+  const [cancelLoading, setCancelLoading] = useState(false);
 
   const { username } = useParams();
   const currentuser = useLocation().pathname.split("/")[2];
@@ -61,6 +67,31 @@ export function TouristPreviousPurchaseRow(purchase: IPurchase) {
         touristUsername: null,
       }
     );
+  };
+
+  const cancelProduct = async (purchaseId: string) => {
+    try {
+      setCancelLoading(true);
+      const response = await axios.post(`/traventure/api/purchase/cancel`, {
+        purchaseId: purchaseId,
+      });
+      if (response.status === 200) {
+        setPurchase({ ...purchase, status: "cancelled" });
+      }
+      Swal.fire({
+        icon: "success",
+        title: "Order Cancelled",
+        text: "Your order has been cancelled successfully.",
+      });
+    } catch {
+      Swal.fire({
+        icon: "error",
+        title: "Cancellation Failed",
+        text: "There was an error cancelling your order. Please try again later.",
+      });
+    } finally {
+      setCancelLoading(false);
+    }
   };
 
   return (
@@ -80,10 +111,37 @@ export function TouristPreviousPurchaseRow(purchase: IPurchase) {
           {purchase.timeStamp.toString().split("T")[0]}
         </StyledTableCell>
         <StyledTableCell>{calculateTotal(purchase.cart)}</StyledTableCell>
+        <StyledTableCell>
+          <div
+            style={{ display: "flex", justifyContent: "center" }}
+            title={purchase.status}
+          >
+            <div
+              className={`w-4 h-4 rounded-full ${
+                purchase.status === "delivered"
+                  ? "bg-green-500"
+                  : purchase.status === "processing"
+                  ? "bg-yellow-500"
+                  : "bg-red-500"
+              }`}
+            ></div>
+          </div>
+        </StyledTableCell>
+        <StyledTableCell>
+          {purchase.status === "processing" && (
+            <button
+              className="rounded-lg bg-red-600 text-slate-50 px-4 py-2"
+              onClick={() => cancelProduct(purchase._id)}
+              disabled={cancelLoading}
+            >
+              {cancelLoading ? "Cancelling..." : "Cancel order"}
+            </button>
+          )}
+        </StyledTableCell>
       </TableRow>
       {isExpanded && (
         <TableRow>
-          <StyledTableCell colSpan={4} className="bg-blue-400">
+          <StyledTableCell colSpan={6} className="bg-blue-400">
             <TableContainer
               component={Paper}
               style={{
@@ -125,15 +183,17 @@ export function TouristPreviousPurchaseRow(purchase: IPurchase) {
                     {item.productId.price * item.quantity}
                   </StyledTableCell>
                   <StyledTableCell style={{ borderBottom: "none" }}>
-                    <Feedback
-                      touristFeedback={getUserFeedback(
-                        item.productId,
-                        username
-                      )}
-                      type="product"
-                      id={item.productId._id}
-                      touristUsername={currentuser}
-                    />
+                    {purchase.status === "delivered" && (
+                      <Feedback
+                        touristFeedback={getUserFeedback(
+                          item.productId,
+                          username
+                        )}
+                        type="product"
+                        id={item.productId._id}
+                        touristUsername={currentuser}
+                      />
+                    )}
                   </StyledTableCell>
                 </TableRow>
               ))}

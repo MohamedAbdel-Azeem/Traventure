@@ -17,7 +17,6 @@ import Bookmarks from "../routes/_app/Tourist/tourist_bookmarks/Bookmarks";
 import CartButton from "../components/cart/CartButton";
 import { TouristWishList } from "../routes/_app/Tourist/tourist_purchases/TouristWishList";
 
-
 export default function TouristRouter() {
   return (
     <div className="flex flex-col w-screen h-screen">
@@ -41,9 +40,8 @@ export default function TouristRouter() {
         <Route path="/:username/bookmarks" element={<Bookmarks />} />
         <Route path="/:username/wishlist" element={<TouristWishList />} />
       </Routes>
-      <CurrencyDropdown />
+      {/* <CurrencyDropdown /> */}
       <CartButton />
-
     </div>
   );
 }

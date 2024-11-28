@@ -1,10 +1,12 @@
 import path from "path";
-import purchase, { IPurchase } from "../../Model/Schemas/purchase";
+import purchase, {
+  IPurchase,
+  PurchaseStatus,
+} from "../../Model/Schemas/purchase";
 import mongoose, { model } from "mongoose";
 import touristModel from "../Schemas/Tourist";
 import ProductModel, { IProduct } from "../Schemas/Product";
-import { ObjectId } from "mongoose"; 
-
+import { ObjectId } from "mongoose";
 
 export async function addPurchase(purchaseData: object) {
   try {
@@ -26,13 +28,10 @@ const getProduct = async (productId: string): Promise<IProduct | null> => {
   }
 };
 
-//TODO : still not tested
-export async function getPurchaseTotalAmount(purchaseData: IPurchase){
-  
+export async function getPurchaseTotalAmount(purchaseData: IPurchase) {
   try {
-
-    const cart=purchaseData.cart;
-    var totalAmount=0;
+    const cart = purchaseData.cart;
+    var totalAmount = 0;
     for (const purchased_product of cart) {
       const product = await getProduct(purchased_product.productId.toString());
       if (product) {
@@ -47,12 +46,11 @@ export async function getPurchaseTotalAmount(purchaseData: IPurchase){
     //       throw error;
     //     }
     //   }
-      
+
     //   if(product){
     //     totalAmount+=product.price*purchased_product.quantity;
 
     //   }
-
 
     // });
     return totalAmount;
@@ -61,7 +59,6 @@ export async function getPurchaseTotalAmount(purchaseData: IPurchase){
   }
 }
 
-
 // export async function updateLoyaltyPoints(touristId:string, amount:number){
 //   try {
 //     const tourist = await touristModel.findById(touristId);
@@ -69,7 +66,7 @@ export async function getPurchaseTotalAmount(purchaseData: IPurchase){
 //     var points=0;
 //     switch(tourist.loyaltyLevel){
 //       case 1: points=amount*0.5; break;
-//       case 2: points=amount; break; 
+//       case 2: points=amount; break;
 //       case 3: points=amount*1.5; break;
 //     }
 //     tourist.currentLoyaltyPoints += points;
@@ -232,11 +229,36 @@ export async function getExternalSellerSales(
   }
 }
 
+export async function cancelPurchase(purchaseId: string) {
+  try {
+    const product = await purchase.findById(purchaseId);
+    if (!product) return null;
+    if (product.status == PurchaseStatus.delivered) return null;
+    product.status = PurchaseStatus.cancelled;
+    return await product.save();
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function DeliverPurchase(purchaseId: string) {
+  try {
+    const product = await purchase.findByIdAndUpdate(purchaseId, {
+      status: PurchaseStatus.delivered,
+    });
+    return product;
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   addPurchase,
   getTouristPurchases,
   getSellerSales,
   getExternalSellerSales,
   // updateLoyaltyPoints,
-  getPurchaseTotalAmount
+  getPurchaseTotalAmount,
+  cancelPurchase,
+  DeliverPurchase,
 };
