@@ -49,6 +49,7 @@ export function TouristPreviousPurchaseRow(_purchase: IPurchase) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const [purchase, setPurchase] = useState<IPurchase>(_purchase);
+  const [cancelLoading, setCancelLoading] = useState(false);
 
   const { username } = useParams();
   const currentuser = useLocation().pathname.split("/")[2];
@@ -69,6 +70,7 @@ export function TouristPreviousPurchaseRow(_purchase: IPurchase) {
 
   const cancelProduct = async (purchaseId: string) => {
     try {
+      setCancelLoading(true);
       const response = await axios.post(`/traventure/api/purchase/cancel`, {
         purchaseId: purchaseId,
       });
@@ -77,6 +79,8 @@ export function TouristPreviousPurchaseRow(_purchase: IPurchase) {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setCancelLoading(false);
     }
   };
 
@@ -118,8 +122,9 @@ export function TouristPreviousPurchaseRow(_purchase: IPurchase) {
             <button
               className="rounded-lg bg-red-600 text-slate-50 px-4 py-2"
               onClick={() => cancelProduct(purchase._id)}
+              disabled={cancelLoading}
             >
-              Cancel order
+              {cancelLoading ? "Cancelling..." : "Cancel order"}
             </button>
           )}
         </StyledTableCell>
