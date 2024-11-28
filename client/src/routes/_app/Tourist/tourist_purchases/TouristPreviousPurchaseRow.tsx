@@ -41,6 +41,7 @@ interface IPurchase {
   _id: string;
   timeStamp: Date;
   cart: ICartElement[];
+  status: string;
 }
 
 export function TouristPreviousPurchaseRow(purchase: IPurchase) {
@@ -80,10 +81,11 @@ export function TouristPreviousPurchaseRow(purchase: IPurchase) {
           {purchase.timeStamp.toString().split("T")[0]}
         </StyledTableCell>
         <StyledTableCell>{calculateTotal(purchase.cart)}</StyledTableCell>
+        <StyledTableCell>{purchase.status}</StyledTableCell>
       </TableRow>
       {isExpanded && (
         <TableRow>
-          <StyledTableCell colSpan={4} className="bg-blue-400">
+          <StyledTableCell colSpan={5} className="bg-blue-400">
             <TableContainer
               component={Paper}
               style={{
@@ -125,15 +127,17 @@ export function TouristPreviousPurchaseRow(purchase: IPurchase) {
                     {item.productId.price * item.quantity}
                   </StyledTableCell>
                   <StyledTableCell style={{ borderBottom: "none" }}>
-                    <Feedback
-                      touristFeedback={getUserFeedback(
-                        item.productId,
-                        username
-                      )}
-                      type="product"
-                      id={item.productId._id}
-                      touristUsername={currentuser}
-                    />
+                    {purchase.status === "delivered" && (
+                      <Feedback
+                        touristFeedback={getUserFeedback(
+                          item.productId,
+                          username
+                        )}
+                        type="product"
+                        id={item.productId._id}
+                        touristUsername={currentuser}
+                      />
+                    )}
                   </StyledTableCell>
                 </TableRow>
               ))}

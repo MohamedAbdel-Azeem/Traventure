@@ -56,6 +56,7 @@ export function TouristPurchases() {
                 <StyledTableCell>Purchase ID</StyledTableCell>
                 <StyledTableCell>Date</StyledTableCell>
                 <StyledTableCell>Total</StyledTableCell>
+                <StyledTableCell>Status</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
