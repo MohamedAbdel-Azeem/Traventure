@@ -9,6 +9,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { get } from "react-hook-form";
 import { Feedback } from "../../../../components/purchases/FeedBack";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -77,8 +78,17 @@ export function TouristPreviousPurchaseRow(_purchase: IPurchase) {
       if (response.status === 200) {
         setPurchase({ ...purchase, status: "cancelled" });
       }
-    } catch (error) {
-      console.log(error);
+      Swal.fire({
+        icon: "success",
+        title: "Order Cancelled",
+        text: "Your order has been cancelled successfully.",
+      });
+    } catch {
+      Swal.fire({
+        icon: "error",
+        title: "Cancellation Failed",
+        text: "There was an error cancelling your order. Please try again later.",
+      });
     } finally {
       setCancelLoading(false);
     }
@@ -131,7 +141,7 @@ export function TouristPreviousPurchaseRow(_purchase: IPurchase) {
       </TableRow>
       {isExpanded && (
         <TableRow>
-          <StyledTableCell colSpan={5} className="bg-blue-400">
+          <StyledTableCell colSpan={6} className="bg-blue-400">
             <TableContainer
               component={Paper}
               style={{
