@@ -108,7 +108,8 @@ router.post("/cancel", async (req: Request, res: Response) => {
   try {
     const { purchaseId } = req.body;
     const purchase = await cancelPurchase(purchaseId);
-    if (!purchase) return res.status(404).send("Purchase not found");
+    if (!purchase)
+      return res.status(404).send("Purchase not found or already delivered");
     return res.status(200).send(purchase);
   } catch (error) {
     return res.status(500).send(error);
