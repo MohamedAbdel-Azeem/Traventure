@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { IAddress } from "./Tourist";
 
 const schema = mongoose.Schema;
 
@@ -34,6 +35,15 @@ const purchaseSchema = new schema({
   ],
   timeStamp: { type: Date, required: true, default: Date.now },
   status: { type: String, required: true, default: PurchaseStatus.processing },
+  address: {
+    latitude: { type: Number, required: true },
+    longitude: { type: Number, required: true },
+    street: { type: String, required: true },
+    buildingNumber: { type: String, required: true },
+    floor: { type: String, required: false, default: "" },
+    apartmentNumber: { type: String, required: true },
+    additionalDirections: { type: String, required: false, default: "" },
+  },
 });
 
 export default mongoose.model<IPurchase>("Purchase", purchaseSchema);
