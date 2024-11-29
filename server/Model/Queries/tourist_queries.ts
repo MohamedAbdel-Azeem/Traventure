@@ -79,25 +79,32 @@ export async function getTouristBookings(username: string) {
 }
 
 export async function getTouristBookmarks(username: string) {
-    try {
-        const tourist = await touristModel.findOne({ username: username })
-    .populate("bookmarkedActivities")
-    .populate("bookmarkedItineraries");
+  try {
+    const tourist = await touristModel
+      .findOne({ username: username })
+      .populate("bookmarkedActivities")
+      .populate("bookmarkedItineraries");
     if (!tourist) {
-        throw new Error("Tourist not found");
+      throw new Error("Tourist not found");
     }
     console.log(tourist);
-    let bookmarkedActivities = await Activity.find({ _id: { $in: tourist.bookmarkedActivities } }).populate("Tags").populate("Category");
-    let bookmarkedItineraries = await Itinerary.find({ _id: { $in: tourist.bookmarkedItineraries } }).populate('added_By')
-    .populate('plan.place')
-    .populate('plan.activities.activity_id')
-    .populate('selectedTags');
-     return {bookmarkedItineraries,bookmarkedActivities};
-    } catch (error) {
-        throw error;
-    }
+    let bookmarkedActivities = await Activity.find({
+      _id: { $in: tourist.bookmarkedActivities },
+    })
+      .populate("Tags")
+      .populate("Category");
+    let bookmarkedItineraries = await Itinerary.find({
+      _id: { $in: tourist.bookmarkedItineraries },
+    })
+      .populate("added_By")
+      .populate("plan.place")
+      .populate("plan.activities.activity_id")
+      .populate("selectedTags");
+    return { bookmarkedItineraries, bookmarkedActivities };
+  } catch (error) {
+    throw error;
+  }
 }
-    
 
 export async function gettouristComplaints(username: string) {
   try {
@@ -158,85 +165,110 @@ export async function getTouristUpcoming(username: string) {
 }
 
 export async function toggleWishlistProduct(
-    username: string,
-    productId: string
+  username: string,
+  productId: string
 ) {
-    try {
-        const tourist = await touristModel.findOne({ username: username });
-        if (!tourist) {
-            throw new Error("Tourist not found");
-        }
-        const product = await Product.findById(productId);
-        if (!product) {
-            throw new Error("Product not found");
-        }
-
-        const productObjectId = new mongoose.Types.ObjectId(productId);
-        let action;
-        if (tourist.wishlisted_products.includes(productObjectId)) {
-            tourist.wishlisted_products = tourist.wishlisted_products.filter(
-                (id) => !id.equals(productObjectId)
-            );
-            action = "removed";
-        } else {
-            tourist.wishlisted_products.push(productObjectId);
-            action = "added";
-        }
-
-        await tourist.save();
-        return { action, productId };
-    } catch (error) {
-        throw error;
+  try {
+    const tourist = await touristModel.findOne({ username: username });
+    if (!tourist) {
+      throw new Error("Tourist not found");
     }
+    const product = await Product.findById(productId);
+    if (!product) {
+      throw new Error("Product not found");
+    }
+
+    const productObjectId = new mongoose.Types.ObjectId(productId);
+    let action;
+    if (tourist.wishlisted_products.includes(productObjectId)) {
+      tourist.wishlisted_products = tourist.wishlisted_products.filter(
+        (id) => !id.equals(productObjectId)
+      );
+      action = "removed";
+    } else {
+      tourist.wishlisted_products.push(productObjectId);
+      action = "added";
+    }
+
+    await tourist.save();
+    return { action, productId };
+  } catch (error) {
+    throw error;
+  }
 }
 
-
-  export async function bookmarkActivity(touristUsername: string, activityId: string) {
-    try {
-      const tourist = await touristModel.findOne({ username: touristUsername });
-      if (!tourist) {
-        throw new Error("Tourist not found");
-      }
-        const activity = await Activity.findById(activityId);
-        if (!activity) {
-          throw new Error("Activity not found");
-        }
-        const activityObjectId = new mongoose.Types.ObjectId(activityId);
-        if (!tourist.bookmarkedActivities.includes(activityObjectId)) {
-          tourist.bookmarkedActivities.push(activityObjectId);
-          await tourist.save();
-        } else {
-          throw new Error("Activity already bookmarked");
-        }
-    } catch (err: any) {
-      throw err;
+export async function bookmarkActivity(
+  touristUsername: string,
+  activityId: string
+) {
+  try {
+    const tourist = await touristModel.findOne({ username: touristUsername });
+    if (!tourist) {
+      throw new Error("Tourist not found");
     }
-  }
-
-  export async function bookmarkItinerary(touristUsername: string, itineraryId: string) {
-    try {
-      const tourist = await touristModel.findOne({ username: touristUsername });
-      if (!tourist) {
-        throw new Error("Tourist not found");
-      }
-        const itinerary = await Itinerary.findById(itineraryId);
-        if (!itinerary) {
-          throw new Error("Itinerary not found");
-        }
-        const itineraryObjectId = new mongoose.Types.ObjectId(itineraryId);
-        if (!tourist.bookmarkedItineraries.includes(itineraryObjectId)) {
-          tourist.bookmarkedItineraries.push(itineraryObjectId);
-          await tourist.save();
-        } 
-        else {
-            throw new Error("Itinerary already bookmarked");
-          }
-    }catch (err: any) {
-      throw err;
+    const activity = await Activity.findById(activityId);
+    if (!activity) {
+      throw new Error("Activity not found");
     }
+    const activityObjectId = new mongoose.Types.ObjectId(activityId);
+    if (!tourist.bookmarkedActivities.includes(activityObjectId)) {
+      tourist.bookmarkedActivities.push(activityObjectId);
+      await tourist.save();
+    } else {
+      throw new Error("Activity already bookmarked");
+    }
+  } catch (err: any) {
+    throw err;
   }
+}
 
-
+export async function bookmarkItinerary(
+  touristUsername: string,
+  itineraryId: string
+) {
+  try {
+    const tourist = await touristModel.findOne({ username: touristUsername });
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    const itinerary = await Itinerary.findById(itineraryId);
+    if (!itinerary) {
+      throw new Error("Itinerary not found");
+    }
+    const itineraryObjectId = new mongoose.Types.ObjectId(itineraryId);
+    if (!tourist.bookmarkedItineraries.includes(itineraryObjectId)) {
+      tourist.bookmarkedItineraries.push(itineraryObjectId);
+      await tourist.save();
+    } else {
+      throw new Error("Itinerary already bookmarked");
+    }
+  } catch (err: any) {
+    throw err;
+  }
+}
+export async function getPromoCodeUsed(username: string) {
+  try {
+    const tourist = await touristModel.findOne({ username });
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    return tourist.promo_sent;
+  } catch (err) {
+    throw err;
+  }
+}
+export async function setPromoCodeUsed(username: string) {
+  try {
+    const tourist = await touristModel.findOne({ username: username });
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    tourist.promo_sent = true;
+    await tourist.save();
+  } catch (err) {
+    throw err;
+  }
+}
 
 module.exports = {
   getAll,
@@ -247,4 +279,6 @@ module.exports = {
   bookmarkItinerary,
   getTouristBookmarks,
   toggleWishlistProduct,
+  getPromoCodeUsed,
+  setPromoCodeUsed,
 };

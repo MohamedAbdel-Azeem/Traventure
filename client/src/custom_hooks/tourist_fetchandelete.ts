@@ -117,6 +117,7 @@ export const useGetAllUsers = () => {
       };
   
       fetchData();
+      console.log(data);
     }, []);
   
     return { data, loading, error };

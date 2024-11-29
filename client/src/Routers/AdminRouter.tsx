@@ -36,7 +36,7 @@ export default function AdminRouter() {
         <Route path="/:username/Revenue" element={<AdminRevenuePage />} />
         <Route path="/:username/usersstats" element={<AdminUsersNumPage />} />
       </Routes>
-      {/* <CurrencyDropdown />*/}
+      {/* <CurrencyDropdown /> */}
     </div>
   );
 }

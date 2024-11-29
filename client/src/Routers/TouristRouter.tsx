@@ -26,10 +26,7 @@ export default function TouristRouter() {
         <Route path="/:username/shop" element={<ShopPage type="Tourist" />} />
         <Route path="/:username/locations" element={<MorePlaces />} />
         <Route path="/:username/itineraries" element={<MoreItineraries />} />
-        <Route
-          path="/:username/itineraries/tourist-itinerary/:id"
-          element={<ItineraryDetailsTourist />}
-        />
+        <Route path="/:username/itineraries/tourist-itinerary/:id" element={<ItineraryDetailsTourist />}/>
         <Route path="/:username/activities" element={<MoreActivities />} />
         <Route path="/:username/complaints" element={<ComplaintsTable />} />
         <Route path="/:username/profile" element={<Tourist_Profile />} />
