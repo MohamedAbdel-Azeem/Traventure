@@ -26,6 +26,9 @@ import reviewdocsRouter from "./Routes/ReviewDoc";
 import amadeusRouter from "./amadeus/amadeus-router";
 import currentuserRouter from "./Routes/Current_user";
 import requestdeleteRouter from "./Routes/RequestDelete";
+import promocodeRouter from "./Routes/PromoCodes";
+import promocodefunction from "./utils/functions/promo_code_function";
+
 const app = express();
 
 app.use(express.json());
@@ -54,6 +57,8 @@ app.use("/api/purchase", purchaseRouter);
 app.use("/api/complaint", complaintRouter);
 app.use("/api/feedBack", feedbackRouter);
 app.use("/api/admin/", reviewdocsRouter);
+app.use("/api/promocode", promocodeRouter);
+
 
 app.use("/amadeus", amadeusRouter);
 app.use("/api/requestdelete", requestdeleteRouter);

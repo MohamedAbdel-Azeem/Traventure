@@ -23,10 +23,9 @@ import {
   gettouristComplaints,
   getTouristUpcoming,
   toggleWishlistProduct,
+  getPromoCodeUsed,
+  setPromoCodeUsed,
 } from "../Model/Queries/tourist_queries";
-import { get } from "http";
-import { redeemPoints } from "../Model/Queries/points_queries";
-
 const router = Router();
 
 router.post(
@@ -174,6 +173,26 @@ router.post("/wishlist/:username", async (req: Request, res: Response) => {
       isAdded,
       message: `Product ${isAdded ? "added to" : "removed from"} wishlist`,
     });
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+});
+
+router.get("/promo_code/get/:username", async (req: Request, res: Response) => {
+  try {
+    const username = req.params.username;
+    const promoCode = await getPromoCodeUsed(username);
+    res.status(200).send(promoCode);
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+});
+
+router.patch("/promo_code/use/:username", async (req: Request, res: Response) => {
+  try {
+    const username = req.params.username;
+    await setPromoCodeUsed(username);
+    res.status(200).send("Promo code used");
   } catch (error: any) {
     res.status(500).send(error.message);
   }

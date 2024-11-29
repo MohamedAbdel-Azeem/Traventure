@@ -17,7 +17,7 @@ export default function TourGuideRouter() {
         <Route path="/:username/itineraries/itinerary/:id" element={<ItineraryDetails/>}/>
         <Route path="/:username/profile" element={<TourGuide_Profile />} />
       </Routes>
-      <CurrencyDropdown />
+      {/* <CurrencyDropdown /> */}
     </div>
   );
 }

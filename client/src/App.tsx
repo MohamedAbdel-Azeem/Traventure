@@ -14,8 +14,11 @@ import TourGuideRouter from "./Routers/TourGuideRouter";
 import SellerRouter from "./Routers/SellerRouter";
 import GuestRouter from "./Routers/GuestRouter";
 
+import promocode_function from "../../server/utils/functions/promo_code_function";
 function App() {
-  return (
+
+    promocode_function();
+   return (
     <MantineProvider>
       <Router>
         <Routes>
@@ -32,11 +35,11 @@ function App() {
           {/* Tour Guide */}
           <Route path="/tourguide/*" element={<TourGuideRouter />} />
           {/* Seller */}
-          <Route path="/seller/*" element={<SellerRouter/>} />
+          <Route path="/seller/*" element={<SellerRouter />} />
           {/* Guest */}
-          <Route path="/guest/*" element={<GuestRouter/>}/>
+          <Route path="/guest/*" element={<GuestRouter />} />
           {/* Extra */}
-          <Route path="/terms-and-conditions" element={<TermsAndConditions />}/>
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/landing" element={<LandingPage />} />
         </Routes>
       </Router>
