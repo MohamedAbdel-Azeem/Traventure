@@ -15,6 +15,7 @@ import {
 import HomeIcon from "@mui/icons-material/Home";
 import ShopIcon from "@mui/icons-material/Shop";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ActivityIcon from "@mui/icons-material/LocalActivity";
 import CategoryIcon from "@mui/icons-material/Category";
@@ -56,6 +57,9 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   const { cuserdata } = GetCurrentUser(currentuser);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [isPasswordModalOpen, setPasswordModalOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const togglePopup = () => setIsOpen(!isOpen);
+  const [unreadCount, setUnreadCount] = useState(1);
 
   const handlePasswordChangeSubmit = (data: AddContactLeadFormType) => {
     const { oldPassword, newPassword } = data;
@@ -430,6 +434,26 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
             onMouseLeave={handleMouseLeave}
             sx={{ position: "relative" }}
           >
+            {/* <NotificationsNoneIcon className="text-white" fontSize="large" /> */}
+            <label
+        className="relative flex justify-center items-center cursor-pointer text-[30px] text-gray-400"
+        onClick={togglePopup}
+      >
+        <NotificationsNoneIcon className="text-white" fontSize="large" />
+
+        {unreadCount > 0 && (
+          <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center translate-y-[-1px]">
+            {unreadCount}
+          </span>
+        )}
+      </label>
+            
+          </Box>
+          <Box
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            sx={{ position: "relative" }}
+          >
             {userdata?.profilepic ? (
               <img
                 src={userdata.profilepic}
@@ -450,9 +474,11 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
                   onMouseEnter={handleMouseEnter}
                   onMouseLeave={handleMouseLeave}
                 />
+                
               </div>
             </Fade>
           </Box>
+
         </Toolbar>
       </AppBar>
       {isPasswordModalOpen && (

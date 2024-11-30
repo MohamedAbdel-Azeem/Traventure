@@ -22,7 +22,7 @@ export interface ITourGuide extends Document {
     username?: string;
     createdAt?: Date;
   }[];
-  Notifications: {
+  notifications: {
     message: string;
     sent_by_mail: boolean;
     read: boolean;

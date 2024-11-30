@@ -18,7 +18,7 @@ const AdvertiserSchema = new Schema({
   founded: { type: Number },
   description: { type: String },
   location: { type: String},
-  Notifications: [
+  notifications: [
     {
       message: { type: String, required: true },
       sent_by_mail: { type: Boolean, default: false },

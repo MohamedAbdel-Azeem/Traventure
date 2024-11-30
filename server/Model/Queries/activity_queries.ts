@@ -3,6 +3,7 @@ import Activity from "../Schemas/Activity";
 import Booking from "../Schemas/Booking";
 import Tourist from "../Schemas/Tourist";
 import TourGuide from "../Schemas/TourGuide";
+import Advertiser from "../Schemas/Advertiser";
 
 export const addActivity = async (newActivity: any) => {
   try {
@@ -49,6 +50,7 @@ export const updateActivity = async (id: string, updatedActivity: any) => {
 
 export const toggleInappropriate = async (id: string) => {
   try {
+
     const activity = await Activity.findById(id);
     if (!activity) throw new Error("Activity not found");
 
@@ -59,10 +61,10 @@ export const toggleInappropriate = async (id: string) => {
     // If the activity is being declared inappropriate, remove bookings and add funds to users
     if (newInappropriate) {
       
-      // notify the tourguide that this activity is inappropriate
-      await TourGuide.findByIdAndUpdate(activity.added_By, {
+      // notify the Advertise that this activity is inappropriate
+      await Advertiser.findByIdAndUpdate(activity.added_By, {
         $push: {
-          Notifications: {
+          notifications: {
             message: `Your activity ${activity.Title} has been marked as inappropriate`,
             sent_by_mail: false,
             read: false,
@@ -70,6 +72,7 @@ export const toggleInappropriate = async (id: string) => {
           },
         },
       });
+
     
 
       const bookings = await Booking.find({ activity: id });

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import productModel, { IFeedback } from "../Schemas/Product";
 import Tourist from "../Schemas/Tourist";
+import Seller from "../Schemas/Seller";
 
 export async function addProduct(product: Object) {
   try {
@@ -127,6 +128,19 @@ export async function decrementProductQuantity(
     if (product) {
       const prodQuantity = product.quantity;
       product.quantity = prodQuantity - quantity;
+      if(product.quantity == 0){
+             // notify the Advertise that this activity is inappropriate
+      await Seller.findByIdAndUpdate(product.seller, {
+        $push: {
+          notifications: {
+            message: `Your product ${product.name} is Out of Stock`,
+            sent_by_mail: false,
+            read: false,
+            createdAt: new Date(),
+          },
+        },
+      });
+      }
       const newProduct = await product.save();
       return newProduct;
     }

@@ -132,6 +132,19 @@ export async function toggleItineraryInappropriate(itinerary_Id: string) {
 
     // Find and remove bookings associated with the itinerary
     if (newInappropriate) {
+
+           // notify the TourGuide that this activity is inappropriate
+           await TourGuide.findByIdAndUpdate(itinerary.added_By, {
+            $push: {
+              notifications: {
+                message: `Your itinerary ${itinerary.title} has been marked as inappropriate`,
+                sent_by_mail: false,
+                read: false,
+                createdAt: new Date(),
+              },
+            },
+          });
+
       const bookings = await Booking.find({ itinerary: itinerary_Id });
       for (const booking of bookings) {
         // Add funds to the user who booked the itinerary

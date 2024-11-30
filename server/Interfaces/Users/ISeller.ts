@@ -7,7 +7,7 @@ export interface ISeller extends Document {
   name?: string;
   description?: string;
   isAccepted: boolean;
-  Notifications: {
+  notifications: {
     message: string;
     sent_by_mail: boolean;
     read: boolean;

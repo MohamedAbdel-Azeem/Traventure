@@ -12,7 +12,7 @@ const SellerSchema = new Schema({
   name: String,
   description: String,
   isAccepted: { type: Boolean, default: false },
-  Notifications: [
+  notifications: [
     {
       message: { type: String, required: true },
       sent_by_mail: { type: Boolean, default: false },

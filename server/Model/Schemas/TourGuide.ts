@@ -34,7 +34,7 @@ const tourGuideSchema = new Schema({
 
     },
   ],
-  Notifications: [
+  notifications: [
     {
       message: { type: String, required: true },
       sent_by_mail: { type: Boolean, default: false },
