@@ -20,7 +20,7 @@ const router = Router();
 
 router.post("/buy", async (req: Request, res: Response) => {
   try {
-    const { touristId, cart } = req.body;
+    const { touristId, cart, promoCode } = req.body;
     for (const singleProduct of cart) {
       const product = await getProduct(singleProduct.productId);
       if (!product) {
@@ -40,7 +40,12 @@ router.post("/buy", async (req: Request, res: Response) => {
       );
     }
     const body = { touristId, cart } as IPurchase;
-    const purchase = await addPurchase({ touristId, cart });
+
+    if (promoCode) {
+      body.promoCode = promoCode;
+    }
+
+    const purchase = await addPurchase(body);
     const totalAmount = await getPurchaseTotalAmount(body);
 
     return res.status(200).send(purchase);
