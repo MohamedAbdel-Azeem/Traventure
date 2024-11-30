@@ -16,7 +16,7 @@ export enum PurchaseStatus {
 export interface IPurchase {
   touristId: mongoose.Types.ObjectId;
   cart: IPurchasedProduct[];
-  timeStamp?: Date;
+  timeStamp: Date;
   status?: PurchaseStatus;
   totalAmount?: number;
   promoCode?: string;

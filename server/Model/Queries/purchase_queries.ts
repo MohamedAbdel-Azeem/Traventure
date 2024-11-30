@@ -19,9 +19,10 @@ export async function addPurchase(purchaseData: IPurchase) {
     if (promoCode && !promoCode.used) {
       purchaseData["totalAmount"] *= 0.9;
       promoCode.used = true;
-      await promoCode.save();
     }
-    return await purchase.create(purchaseData);
+    const resultPurchase = await purchase.create(purchaseData);
+    if (promoCode) await promoCode.save();
+    return resultPurchase;
   } catch (error) {
     throw error;
   }
@@ -119,6 +120,7 @@ export async function getSellerSales(
       timeStamp: Date;
     }> = await purchase
       .find()
+      .find()
       .populate({
         path: "cart.productId",
         match: { seller: sellerId },
@@ -177,6 +179,7 @@ export async function getExternalSellerSales(
         };
         quantity: number;
       }>;
+
       timeStamp: Date;
     }> = await purchase
       .find()
