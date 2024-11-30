@@ -2,7 +2,7 @@ import PromoCodes from "../Schemas/PromoCodes";
 
 export const addPromoCode = async (newPromoCode: any) => {
   try {
-    const addedPromoCode = PromoCodes.create(newPromoCode);
+    const addedPromoCode = await PromoCodes.create(newPromoCode);
     return addedPromoCode;
   } catch (err) {
     throw err;
