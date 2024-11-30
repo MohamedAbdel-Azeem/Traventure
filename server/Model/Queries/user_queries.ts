@@ -235,6 +235,14 @@ export async function getcurrentuser(username: string) {
   }
 }
 
+export async function getAllTourists() {
+  try {
+    return await touristModel.find();
+  } catch {
+    console.log("Error getting All Tourists");
+  }
+}
+
 module.exports = {
   getprofileInfo,
   getAllUsers,
@@ -242,4 +250,5 @@ module.exports = {
   loginUser,
   changePassword,
   getcurrentuser,
+  getAllTourists,
 };
