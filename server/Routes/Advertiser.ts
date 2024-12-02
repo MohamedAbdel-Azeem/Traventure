@@ -11,7 +11,10 @@ import {
   updateProfileInfo,
 } from "../Model/Queries/user_queries";
 import { advertiserPatchValidator } from "../utils/express-validator/advertiserValidator";
-import { advertiserRevenue } from "../Model/Queries/activity_queries";
+import {
+  advertiserRevenue,
+  advNumTourists,
+} from "../Model/Queries/activity_queries";
 const router = Router();
 
 router.post("/add", guestAddValidator, async (req: Request, res: Response) => {
@@ -87,6 +90,24 @@ router.get("/revenue/:username", async (req: Request, res: Response) => {
     res.status(200).send(revenue);
   } catch (error) {
     res.status(500).send(error);
+  }
+});
+router.get("/numstats/:username", async (req: Request, res: Response) => {
+  try {
+    const username = req.params.username;
+    const { month, activityName } = req.query;
+    const stats = await advNumTourists(
+      username,
+      parseInt(month as string),
+      activityName as string
+    );
+    if (!stats) {
+      return res.status(404).send("advertiser not found");
+    }
+    res.status(200).send(stats);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
   }
 });
 export default router;

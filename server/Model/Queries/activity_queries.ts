@@ -118,13 +118,34 @@ export const advertiserRevenue = async (
           : true;
 
         if (matchesMonth && matchesActivityName) {
-          ActivityRevenue.push({
-            name: activity.Title,
-            year: booking.timeStamp.getFullYear(),
-            month: booking.timeStamp.getMonth() + 1,
-            day: booking.timeStamp.getDate(),
-            revenue: activity.Price,
-          });
+          if (
+            !ActivityRevenue.find(
+              (rev) =>
+                rev.name === activity.Title &&
+                rev.year === booking.timeStamp.getFullYear() &&
+                rev.month === booking.timeStamp.getMonth() + 1 &&
+                rev.day === booking.timeStamp.getDate()
+            )
+          ) {
+            ActivityRevenue.push({
+              name: activity.Title,
+              year: booking.timeStamp.getFullYear(),
+              month: booking.timeStamp.getMonth() + 1,
+              day: booking.timeStamp.getDate(),
+              revenue: activity.Price * 0.9,
+            });
+          } else {
+            const existingActivityRevenue = ActivityRevenue.find(
+              (rev) =>
+                rev.name === activity.Title &&
+                rev.year === booking.timeStamp.getFullYear() &&
+                rev.month === booking.timeStamp.getMonth() + 1 &&
+                rev.day === booking.timeStamp.getDate()
+            );
+            if (existingActivityRevenue) {
+              existingActivityRevenue.revenue += activity.Price * 0.9;
+            }
+          }
         }
       }
     }
@@ -135,7 +156,75 @@ export const advertiserRevenue = async (
     throw err;
   }
 };
+export const advNumTourists = async (
+  username: string,
+  month: number,
+  activityName: string
+) => {
+  try {
+    // Find the advertiser
+    const advertiser = await Advertiser.findOne({ username });
+    if (!advertiser) throw new Error("Advertiser not found");
+    console.log(month);
+    // Find all activities by the advertiser
+    const activities = await Activity.find({ added_By: advertiser._id });
+    if (!activities.length) return []; // No activities found
 
+    const ActivityRevenue: Revenue[] = [];
+
+    for (const activity of activities) {
+      // Find bookings for the activity
+      const bookings = await Booking.find({ activity: activity._id });
+
+      for (const booking of bookings) {
+        // Check conditions
+        if (activity.DateAndTime > new Date()) continue;
+        const matchesMonth = !isNaN(month)
+          ? booking.timeStamp.getMonth() === month - 1
+          : true;
+        const matchesActivityName = activityName
+          ? activity.Title === activityName
+          : true;
+
+        if (matchesMonth && matchesActivityName) {
+          if (
+            !ActivityRevenue.find(
+              (rev) =>
+                rev.name === activity.Title &&
+                rev.year === booking.timeStamp.getFullYear() &&
+                rev.month === booking.timeStamp.getMonth() + 1 &&
+                rev.day === booking.timeStamp.getDate()
+            )
+          ) {
+            ActivityRevenue.push({
+              name: activity.Title,
+              year: booking.timeStamp.getFullYear(),
+              month: booking.timeStamp.getMonth() + 1,
+              day: booking.timeStamp.getDate(),
+              revenue: 1,
+            });
+          } else {
+            const existingActivityRevenue = ActivityRevenue.find(
+              (rev) =>
+                rev.name === activity.Title &&
+                rev.year === booking.timeStamp.getFullYear() &&
+                rev.month === booking.timeStamp.getMonth() + 1 &&
+                rev.day === booking.timeStamp.getDate()
+            );
+            if (existingActivityRevenue) {
+              existingActivityRevenue.revenue += 1;
+            }
+          }
+        }
+      }
+    }
+
+    return ActivityRevenue;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
 module.exports = {
   addActivity,
   getActivities,
@@ -144,4 +233,5 @@ module.exports = {
   updateActivity,
   toggleInappropriate,
   advertiserRevenue,
+  advNumTourists,
 };
