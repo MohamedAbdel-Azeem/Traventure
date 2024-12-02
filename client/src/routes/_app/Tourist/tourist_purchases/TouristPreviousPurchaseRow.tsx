@@ -69,6 +69,17 @@ export function TouristPreviousPurchaseRow(_purchase: IPurchase) {
     );
   };
 
+  const updateUserwallet = async (username: string | undefined, amount: number) => {
+    try {
+        const response = await axios.patch(`/traventure/api/tourist/updateWallet/${username}`, {
+            amount: amount,
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
   const cancelProduct = async (purchaseId: string) => {
     try {
       setCancelLoading(true);
@@ -82,8 +93,24 @@ export function TouristPreviousPurchaseRow(_purchase: IPurchase) {
         icon: "success",
         title: "Order Cancelled",
         text: "Your order has been cancelled successfully.",
-      });
-    } catch {
+      }).then(async () => {
+        try {
+            const tourist = await updateUserwallet(username,calculateTotal(purchase.cart));
+            Swal.fire({
+                title: "Wallet",
+                html: `<p><strong>Order Value Refunded:</strong> ${calculateTotal(purchase.cart)}$</p><p>Your current wallet balance is ${tourist.wallet}</p>`,
+                icon: "info",
+            });
+        } catch (error) {
+            Swal.fire({
+                title: "Error",
+                text: "Failed to fetch tourist wallet",
+                icon: "error",
+            });
+        }
+    });
+    }
+    catch {
       Swal.fire({
         icon: "error",
         title: "Cancellation Failed",

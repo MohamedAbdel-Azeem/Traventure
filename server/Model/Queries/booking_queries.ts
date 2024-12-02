@@ -5,6 +5,7 @@ import touristModel from "../Schemas/Tourist";
 import flightBooking from "../Schemas/flightBooking";
 import hotelBooking from "../Schemas/hotelBooking";
 import { ItineraryDocument } from "../../Interfaces/IItinerary";
+import PromoCodes from "../Schemas/PromoCodes";
 
 
 
@@ -87,7 +88,7 @@ async function checkBooking(
     if (itinerary_id) {
       query.itinerary = itinerary_id;
       const itinerary = await ItineraryModel.findById(itinerary_id);
-      if (itinerary && new Date((itinerary as any).starting_Date) < now) {
+      if (itinerary && ((new Date((itinerary as any).starting_Date) < now) || !(itinerary as any).bookingActivated )) {
         throw new Error("The itinerary has already started or passed.");
       }
     }
@@ -116,6 +117,20 @@ export async function addBooking(bookingData: any) {
       );
     }
     if (booked === null) {
+    
+      if (bookingData.promoCode) {
+        const promo = await PromoCodes.findOne({ name: bookingData.promoCode });
+        if (promo && !promo.used) {
+          (bookingData.totalPrice *= 0.9).toFixed(2);
+          promo.used = true;
+          await promo.save();
+        } else {
+          delete bookingData.promoCode;
+        }
+      }
+
+
+    
       await bookingModel.create(bookingData);
       await updateLoyaltyPoints(bookingData);
     } else {
@@ -268,6 +283,18 @@ export async function cancelBooking(booking_id: string) {
 
 export async function addFlightBooking(bookingData: any) {
   try {
+    bookingData.promoCode ="fRrfz71";
+    if (bookingData.promoCode) {
+      const promo = await PromoCodes.findOne({ name: bookingData.promoCode });
+      if (promo && !promo.used) {
+        (bookingData.totalPrice *= 0.9).toFixed(2);
+        promo.used = true;
+        await promo.save();
+      } else {
+        // Erase the promo code if it is invalid or used
+        delete bookingData.promoCode;
+      }
+    }
     const response = await flightBooking.create(bookingData);
     return response;
   } catch (error) {
@@ -277,6 +304,17 @@ export async function addFlightBooking(bookingData: any) {
 
 export async function addHotelBooking(bookingData: any) {
   try {
+    if (bookingData.promoCode) {
+      const promo = await PromoCodes.findOne({ name: bookingData.promoCode });
+      if (promo && !promo.used) {
+        (bookingData.totalPrice *= 0.9).toFixed(2);
+        promo.used = true;
+        await promo.save();
+      } else {
+        // Erase the promo code if it is invalid or used
+        delete bookingData.promoCode;
+      }
+    }
     const response = await hotelBooking.create(bookingData);
     return response;
   } catch (error) {

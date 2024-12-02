@@ -25,6 +25,7 @@ import {
   toggleWishlistProduct,
   getPromoCodeUsed,
   setPromoCodeUsed,
+  updateUserWallet,
 } from "../Model/Queries/tourist_queries";
 const router = Router();
 
@@ -132,6 +133,17 @@ router.get("/bookmarks/:username", async (req: Request, res: Response) => {
     res.status(200).send(bookmarks);
   } catch (error) {
     res.status(500).send("error getting bookmarks");
+  }
+});
+
+router.patch("/updateWallet/:username", async (req: Request, res: Response) => {
+  try {
+    const username = req.params.username;
+    const amount = req.body.amount;
+    const user = await updateUserWallet(username, amount);
+    res.status(200).send(user);
+  } catch (error: any) {
+    res.status(500).send(error.message);
   }
 });
 
