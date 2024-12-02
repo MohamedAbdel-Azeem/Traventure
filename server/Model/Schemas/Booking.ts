@@ -18,6 +18,7 @@ const bookingSchema = new schema({
   tourist: { type: mongoose.Types.ObjectId, required: true, ref: "Tourist" },
   timeStamp: { type: Date, required: true, default: Date.now },
   price: { type: Number, required: true },
+  promoCode: { type: String, default: "" }
 
 });
 
