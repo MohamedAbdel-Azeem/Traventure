@@ -283,7 +283,6 @@ export async function cancelBooking(booking_id: string) {
 
 export async function addFlightBooking(bookingData: any) {
   try {
-    bookingData.promoCode ="fRrfz71";
     if (bookingData.promoCode) {
       const promo = await PromoCodes.findOne({ name: bookingData.promoCode });
       if (promo && !promo.used) {
