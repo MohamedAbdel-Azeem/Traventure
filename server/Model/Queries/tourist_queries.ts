@@ -90,11 +90,13 @@ export async function getTouristBookmarks(username: string) {
     console.log(tourist);
     let bookmarkedActivities = await Activity.find({
       _id: { $in: tourist.bookmarkedActivities },
+      inappropriate: false,
     })
       .populate("Tags")
       .populate("Category");
     let bookmarkedItineraries = await Itinerary.find({
       _id: { $in: tourist.bookmarkedItineraries },
+      inappropriate: false,
     })
       .populate("added_By")
       .populate("plan.place")
@@ -286,6 +288,20 @@ export async function addAddress(username: String, address: IAddress) {
   }
 }
 
+export async function updateUserWallet(username: string, amount: number) {
+  try {
+    const tourist = await touristModel.findOne({ username });
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    tourist.wallet += amount;
+    await tourist.save();
+    return tourist;
+  } catch (err) {
+    throw err;
+  }
+}
+
 module.exports = {
   getAll,
   getTouristBookings,
@@ -298,4 +314,5 @@ module.exports = {
   getPromoCodeUsed,
   setPromoCodeUsed,
   addAddress,
+  updateUserWallet,
 };

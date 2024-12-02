@@ -4,13 +4,25 @@ import purchase, {
   PurchaseStatus,
 } from "../../Model/Schemas/purchase";
 import mongoose, { model } from "mongoose";
-import touristModel from "../Schemas/Tourist";
 import ProductModel, { IProduct } from "../Schemas/Product";
-import { ObjectId } from "mongoose";
+import PromoCodes from "../Schemas/PromoCodes";
 
-export async function addPurchase(purchaseData: object) {
+export async function addPurchase(purchaseData: IPurchase) {
   try {
-    return await purchase.create(purchaseData);
+    const totalAmount = await getPurchaseTotalAmount(purchaseData);
+    purchaseData["totalAmount"] = totalAmount;
+
+    const promoCode = await PromoCodes.findOne({
+      name: purchaseData.promoCode,
+    });
+
+    if (promoCode && !promoCode.used) {
+      purchaseData["totalAmount"] *= 0.9;
+      promoCode.used = true;
+    }
+    const resultPurchase = await purchase.create(purchaseData);
+    if (promoCode) await promoCode.save();
+    return resultPurchase;
   } catch (error) {
     throw error;
   }
@@ -38,21 +50,6 @@ export async function getPurchaseTotalAmount(purchaseData: IPurchase) {
         totalAmount += product.price * purchased_product.quantity;
       }
     }
-    // cart.forEach(purchased_product => {
-    //   const product= async () =>{
-    //     try{
-    //       await ProductModel.findById(purchased_product.productId);
-    //     }catch(error){
-    //       throw error;
-    //     }
-    //   }
-
-    //   if(product){
-    //     totalAmount+=product.price*purchased_product.quantity;
-
-    //   }
-
-    // });
     return totalAmount;
   } catch (error) {
     throw error;
@@ -123,6 +120,7 @@ export async function getSellerSales(
       timeStamp: Date;
     }> = await purchase
       .find()
+      .find()
       .populate({
         path: "cart.productId",
         match: { seller: sellerId },
@@ -181,6 +179,7 @@ export async function getExternalSellerSales(
         };
         quantity: number;
       }>;
+
       timeStamp: Date;
     }> = await purchase
       .find()
