@@ -143,7 +143,8 @@ export const advertiserRevenue = async (
                 rev.day === booking.timeStamp.getDate()
             );
             if (existingActivityRevenue) {
-              existingActivityRevenue.revenue += activity.Price * 0.9;
+              existingActivityRevenue.revenue +=
+                activity.Price * (activity.SpecialDiscount / 100) * 0.9;
             }
           }
         }
