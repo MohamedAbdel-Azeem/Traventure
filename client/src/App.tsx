@@ -13,6 +13,7 @@ import AdvertiserRouter from "./Routers/AdvertiserRouter";
 import TourGuideRouter from "./Routers/TourGuideRouter";
 import SellerRouter from "./Routers/SellerRouter";
 import GuestRouter from "./Routers/GuestRouter";
+import Checkout from "./components/Checkout";
 function App() {
   return (
     <MantineProvider>
@@ -37,6 +38,7 @@ function App() {
           {/* Extra */}
           <Route path="/terms-and-conditions" element={<TermsAndConditions/>}/>
           <Route path="/landing" element={<LandingPage/>}/>
+          <Route path="/test" element={<Checkout/>}/>
         </Routes>
       </Router>
     </MantineProvider>
