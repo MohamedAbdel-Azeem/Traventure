@@ -132,7 +132,7 @@ export default function AdvGuideUsers({
         const entry = filteredGroupedData[key]?.find(
           (point) => point[xAxisDataKey] === i + 1
         );
-        dataPoint[key] = entry ? entry.revenue : 0;
+        dataPoint[key] = entry ? entry.revenue.toFixed(2) : 0;
       });
       return dataPoint;
     }
@@ -161,7 +161,13 @@ export default function AdvGuideUsers({
           type="monotone"
           dataKey={key}
           name={key}
-          stroke={`#${Math.floor(Math.random() * 16777215).toString(16)}`} // Random color
+          stroke={`#${Math.floor(Math.random() * 128)
+            .toString(16)
+            .padStart(2, "0")}${Math.floor(Math.random() * 128)
+            .toString(16)
+            .padStart(2, "0")}${Math.floor(Math.random() * 128)
+            .toString(16)
+            .padStart(2, "0")}`}
           activeDot={{ r: 8 }}
         />
       ))}

@@ -132,12 +132,13 @@ export default function AdvGuideRevenue({
         const entry = filteredGroupedData[key]?.find(
           (point) => point[xAxisDataKey] === i + 1
         );
-        dataPoint[key] = entry ? entry.revenue : 0;
+        dataPoint[key] = entry ? entry.revenue.toFixed(2) : 0;
       });
       return dataPoint;
     }
   );
   console.log("filtered", filteredGroupedData);
+  console.log("chartData", chartData);
   return (
     <LineChart
       width={800}
@@ -161,7 +162,13 @@ export default function AdvGuideRevenue({
           type="monotone"
           dataKey={key}
           name={key}
-          stroke={`#${Math.floor(Math.random() * 16777215).toString(16)}`} // Random color
+          stroke={`#${Math.floor(Math.random() * 128)
+            .toString(16)
+            .padStart(2, "0")}${Math.floor(Math.random() * 128)
+            .toString(16)
+            .padStart(2, "0")}${Math.floor(Math.random() * 128)
+            .toString(16)
+            .padStart(2, "0")}`} // Dark random color
           activeDot={{ r: 8 }}
         />
       ))}

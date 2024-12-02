@@ -74,6 +74,7 @@ export const TourguideStats = () => {
             value={selectedActivity}
             onChange={(e) => setSelectedActivity(e.target.value)}
           >
+            <option value="">All Itineraries</option>
             {itineraries.map((itinerary, index) => (
               <option key={index} value={itinerary.title}>
                 {(itinerary as Itinerary).title}

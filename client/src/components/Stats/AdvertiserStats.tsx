@@ -74,6 +74,7 @@ export const AdvertiserStats = () => {
             value={selectedActivity}
             onChange={(e) => setSelectedActivity(e.target.value)}
           >
+            <option value="">All Activities</option>
             {activities.map((activity, index) => (
               <option key={index} value={activity.Title}>
                 {(activity as Activity).Title}
