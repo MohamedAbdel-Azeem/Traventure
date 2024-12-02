@@ -39,7 +39,6 @@ router.get("/", async (req: Request, res: Response) => {
     const activities = await getActivities();
     res.status(200).send(activities);
   } catch (err) {
-    
     res.status(500).send("error getting activities");
   }
 });
