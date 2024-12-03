@@ -21,7 +21,6 @@ export default function TourGuideRouter() {
         <Route path="/:username/statistics" element={<TourguideStats />} />
       </Routes>
       {/* <CurrencyDropdown /> */}
-      {/* <CurrencyDropdown /> */}
     </div>
   );
 }
