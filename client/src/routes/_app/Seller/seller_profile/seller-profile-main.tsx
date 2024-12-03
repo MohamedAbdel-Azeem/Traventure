@@ -10,7 +10,7 @@ export const Seller_Profile = () => {
   // add calling the custom hook for data here
   const { username } = useParams();
   const { user, loading, error } = useGetSeller(username);
-  const { isAuthenticated, isLoading, isError } = useAuth(1);
+  const { isAuthenticated, isLoading, isError } = useAuth(0);
     if (isLoading) {
         return (
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
