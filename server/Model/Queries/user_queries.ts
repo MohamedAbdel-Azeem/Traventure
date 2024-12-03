@@ -208,6 +208,67 @@ export async function changePassword(
   }
 }
 
+export async function updatePassword(
+  email: string,
+  newpassword: string
+) {
+  try {
+    const results = await Promise.all([
+      sellerModel.findOne({ email }),
+      advertiserModel.findOne({ email }),
+      tourGuideModel.findOne({ email }),
+      adminModel.findOne({ email }),
+      touristModel.findOne({ email }),
+      governerModel.findOne({ email }),
+    ]);
+
+    for (let i = 0; i < results.length; i++) {
+      if (results[i]) {
+        const newpass = await hashPassword(newpassword);
+        if (i === 0) {
+          return await sellerModel.findOneAndUpdate(
+            { email },
+            { password: newpass },
+            { new: true }
+          );
+        } else if (i === 1) {
+          return await advertiserModel.findOneAndUpdate(
+            { email },
+            { password: newpass },
+            { new: true }
+          );
+        } else if (i === 2) {
+          return await tourGuideModel.findOneAndUpdate(
+            { email },
+            { password: newpass },
+            { new: true }
+          );
+        } else if (i === 3) {
+          return await adminModel.findOneAndUpdate(
+            { email },
+            { password: newpass },
+            { new: true }
+          );
+        } else if (i === 4) {
+          return await touristModel.findOneAndUpdate(
+            { email },
+            { password: newpass },
+            { new: true }
+          );
+        } else if (i === 5) {
+          return await governerModel.findOneAndUpdate(
+            { email },
+            { password: newpass },
+            { new: true }
+          );
+        }
+      }
+    }
+  } catch (err) {
+    throw err;
+  }
+}
+
 export async function getcurrentuser(username: string) {
   try {
     const results = await Promise.all([
@@ -249,6 +310,7 @@ module.exports = {
   updateProfileInfo,
   loginUser,
   changePassword,
+  updatePassword,
   getcurrentuser,
   getAllTourists,
 };
