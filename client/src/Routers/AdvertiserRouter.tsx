@@ -21,7 +21,7 @@ export default function AdvertiserRouter() {
         <Route path="/:username/activities" element={isAccessTokenPresent() ?<Activities />:<Navigate to="/" />} />
         <Route path="/:username/profile" element={isAccessTokenPresent() ?<Advertiser_Profile />:<Navigate to="/" />} />
       </Routes>
-      <CurrencyDropdown />
+      {/* <CurrencyDropdown /> */}
     </div>
   );
 }

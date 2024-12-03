@@ -24,7 +24,7 @@ export default function GuestRouter() {
         <Route path="/more-activities" element={<GuestMoreActivities />} />
         <Route path="/shop" element={<GuestShop type={"Tourist"} />} />
       </Routes>
-      <CurrencyDropdown />
+      {/* <CurrencyDropdown /> */}
     </div>
   );
 }

@@ -325,6 +325,8 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
           {
             label: "Log out",
             onClick: () => {Cookies.set("access_token", "", { expires: 0});
+            Cookies.set("reduxPersistIndex", "", { expires: 0});
+            Cookies.set("persist%3Aroot", "", { expires: 0});
             navigate("/")},
             icon: Logout,
           },

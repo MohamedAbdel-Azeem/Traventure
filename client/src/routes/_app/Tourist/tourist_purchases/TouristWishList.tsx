@@ -14,26 +14,25 @@ export function TouristWishList() {
     []
   );
   const { isAuthenticated, isLoading, isError } = useAuth(4);
-    if (isLoading) {
-        return (
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-            <ClipLoader color="#f86c6b" loading={true} size={150} />
-          </div>
-        );
-      }
-      if (isError || isAuthenticated !== username) {
-        return (
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-            <h1>Error 403 Unauthrized access</h1>
-          </div>
-        );
-      }
   useEffect(() => {
     setWishListedProducts(
       data?.filter((product) => product.isWishListed) ?? []
     );
   }, [data]);
-
+  if (isLoading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <ClipLoader color="#f86c6b" loading={true} size={150} />
+      </div>
+    );
+  }
+  if (isError || isAuthenticated !== username) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <h1>Error 403 Unauthrized access</h1>
+      </div>
+    );
+  }
   if (loading)
     return <ClipLoader color="#B72B2B" loading={loading} size={50} />;
 

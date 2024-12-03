@@ -18,7 +18,7 @@ export default function TourGuideRouter() {
         <Route path="/:username/itineraries/itinerary/:id" element={isAccessTokenPresent() ?<ItineraryDetails/>:<Navigate to="/" />}/>
         <Route path="/:username/profile" element={isAccessTokenPresent() ?<TourGuide_Profile />:<Navigate to="/" />} />
       </Routes>
-      <CurrencyDropdown />
+      {/* <CurrencyDropdown /> */}
     </div>
   );
 }

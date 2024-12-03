@@ -12,6 +12,7 @@ import HotelCard from "./hotelCard";
 import { useSelector } from "react-redux";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useParams } from "react-router-dom";
+import { useAuth } from "../../../../custom_hooks/auth";
 
 const cityOptions = [
   { city: "Atlanta", code: "ATL" },

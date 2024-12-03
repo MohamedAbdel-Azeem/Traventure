@@ -15,7 +15,7 @@ export default function TourismGovernorRouter() {
         <Route path="/:username/historicaltags" element={isAccessTokenPresent() ?<HistoricalTags />:<Navigate to="/" />} />
         <Route path="/:username/locations" element={isAccessTokenPresent() ?<Locations />:<Navigate to="/" />} />
       </Routes>
-      <CurrencyDropdown />
+      {/* <CurrencyDropdown /> */}
     </div>
   );
 }

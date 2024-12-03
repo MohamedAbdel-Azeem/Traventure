@@ -14,6 +14,7 @@ import Swal from "sweetalert2";
 import { handleDeleteAccount } from "../../../../custom_hooks/usedeleterequest";
 import ChangePasswordModal, { AddContactLeadFormType } from "../../../../components/ChangePasswordModal";
 import { editpassword } from "../../../../custom_hooks/changepassowrd";
+import Cookies from 'js-cookie';
 
 interface TouristProfileProps {
   tourist: TouristProfileData;
@@ -102,6 +103,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
   };
 
   const handleLogout = () => {
+    Cookies.set("access_token", "", { expires: 0});
     navigate("/");
   };
 
