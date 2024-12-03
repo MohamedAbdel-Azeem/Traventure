@@ -31,8 +31,8 @@ export default function AdminRouter() {
         <Route path="/:username/itineraries" element={isAccessTokenPresent() ?<MoreItineraries />:<Navigate to="/" />} />
         <Route path="/:username/itineraries/tourist-itinerary/:id" element={isAccessTokenPresent() ?<ItineraryDetailsTourist/>:<Navigate to="/" />}/>
         <Route path="/:username/applications" element={isAccessTokenPresent() ?<Applications />:<Navigate to="/" />} />
-        <Route path="/:username/Revenue" element={<AdminRevenuePage />} />
-        <Route path="/:username/usersstats" element={<AdminUsersNumPage />} />
+        <Route path="/:username/Revenue" element={isAccessTokenPresent()? <AdminRevenuePage />:<Navigate to="/" />} />
+        <Route path="/:username/usersstats" element={isAccessTokenPresent()?<AdminUsersNumPage />:<Navigate to="/" />} />
       </Routes>
       {/* <CurrencyDropdown /> */}
     </div>

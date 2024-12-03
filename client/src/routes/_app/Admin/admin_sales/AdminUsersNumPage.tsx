@@ -10,6 +10,9 @@ import {
   Line,
 } from "recharts";
 import { set } from "date-fns";
+import { useAuth } from "../../../../custom_hooks/auth";
+import { useParams } from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
 
 interface Count {
   year: number;
@@ -36,6 +39,8 @@ const months = [
 ];
 
 export function AdminUsersNumPage() {
+  const { isAuthenticated, isLoading, isError } = useAuth(3);
+  const { username } = useParams<{ username: string }>();
   const [selectedYear, setSelectedYear] = useState<string>(
     new Date().getFullYear().toString()
   );
@@ -128,6 +133,20 @@ export function AdminUsersNumPage() {
       [type]: !prev[type],
     }));
   };
+  if (isLoading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <ClipLoader color="#f86c6b" loading={true} size={150} />
+      </div>
+    );
+  }
+  if (isError || isAuthenticated !== username) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <h1>Error 403 Unauthrized access</h1>
+      </div>
+    );
+  }
   console.log("here", preparedData);
   return (
     <div className="flex flex-col items-center gap-8 pt-6">

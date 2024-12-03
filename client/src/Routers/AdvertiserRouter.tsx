@@ -21,7 +21,7 @@ export default function AdvertiserRouter() {
         <Route path="/:username/itineraries/tourist-itinerary/:id" element={isAccessTokenPresent() ?<ItineraryDetailsTourist/>:<Navigate to="/" />}/>
         <Route path="/:username/activities" element={isAccessTokenPresent() ?<Activities />:<Navigate to="/" />} />
         <Route path="/:username/profile" element={isAccessTokenPresent() ?<Advertiser_Profile />:<Navigate to="/" />} />
-        <Route path="/:username/stats" element={<AdvertiserStats />} />
+        <Route path="/:username/stats" element={isAccessTokenPresent() ?<AdvertiserStats />:<Navigate to="/" />} />
       </Routes>
       {/* <CurrencyDropdown /> */}
     </div>
