@@ -183,6 +183,20 @@ export async function skipWebsiteTutorial(username: string) {
   }
 }
 
+export async function getSkipTutorialStatus(username: string) {
+  try {
+    const tourist = await touristModel
+      .findOne({ username: username })
+      .select("skipWebsiteTutorial");
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    return tourist.skipWebsiteTutorial;
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   getAll,
   getTouristBookings,
@@ -190,4 +204,5 @@ module.exports = {
   getTouristUpcoming,
   toggleWishlistProduct,
   skipWebsiteTutorial,
+  getSkipTutorialStatus,
 };

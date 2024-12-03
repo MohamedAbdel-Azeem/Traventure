@@ -21,6 +21,7 @@ import {
   getTouristUpcoming,
   toggleWishlistProduct,
   skipWebsiteTutorial,
+  getSkipTutorialStatus,
 } from "../Model/Queries/tourist_queries";
 import { get } from "http";
 import { redeemPoints } from "../Model/Queries/points_queries";
@@ -159,6 +160,16 @@ router.patch("/skipTutorial/:username", async (req: Request, res: Response) => {
     const username = req.params.username;
     await skipWebsiteTutorial(username);
     res.status(200).send("Tutorial skipped");
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+});
+
+router.get("/skipTutorial/:username", async (req: Request, res: Response) => {
+  try {
+    const username = req.params.username;
+    const skipStatus = await getSkipTutorialStatus(username);
+    res.status(200).send(skipStatus);
   } catch (error: any) {
     res.status(500).send(error.message);
   }
