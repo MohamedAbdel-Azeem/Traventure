@@ -39,7 +39,7 @@ function App() {
           {/* Extra */}
           <Route path="/terms-and-conditions" element={<TermsAndConditions />}/>
           <Route path="/landing" element={<LandingPage />} />
-          <Route path="/test" element={<Checkout />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>
       </Router>

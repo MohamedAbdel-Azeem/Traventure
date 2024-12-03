@@ -5,7 +5,7 @@ import TheMAP from "./Maps/TheMAP";
 import PromoCodeButton from "./PromoCodeButton";
 import { useEffect, useState } from "react";
 import EditButton from "./Buttons/EditButton";
-import Swal from "sweetalert2";
+import {GetCurrentUser} from "../custom_hooks/currentuser";
 const Checkout = () => {
   const [selectedValue, setSelectedValue] = useState("cod");
   const [cardNumber, setCardNumber] = useState("");
@@ -17,10 +17,21 @@ const Checkout = () => {
   const [street, setStreet] = useState("");
   const [floor, setFloor] = useState("");
   const [onAccept, setOnAccept] = useState(false);
-  const [isEditing, setEditing] = useState(true);
+  const [isEditing, setEditing] = useState(false);
   const [fearandDelight, setFearandDelight] = useState(true);
-  const [latitude, setLatitude] = useState(0);
-  const [longitude, setLongitude] = useState(0);
+  const [latitude, setLatitude] = useState(30);
+  const [longitude, setLongitude] = useState(31);
+  const [subtotal, setSubtotal] = useState(7969.69);
+
+  const {cuserdata} = GetCurrentUser("jane_doe");
+  const [currentUser, setCurrentUser] = useState(cuserdata);
+  
+  useEffect(() => {
+    if (currentUser) {
+      setCurrentUser(currentUser);
+      console.log(currentUser);
+    }
+  }, [cuserdata]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedValue(event.target.value);
@@ -52,30 +63,30 @@ const Checkout = () => {
 
  }, []);
   return (
-    <div className=" ml-8 mt-8 w-[756px] h-[892px] rounded-[24px] bg-gradient-to-r from-[#A855F7] to-[#6D28D9] flex flex-col">
+    <div className=" ml-8 mt-8 w-[529.2px] h-[650px] rounded-[24px] bg-gradient-to-r from-[#A855F7] to-[#6D28D9] flex flex-col">
       {isEditing ? (
         <div>
           <TheMAP
-            className="w-[728px] h-[369px] mx-auto mt-[14px] rounded-t-[10px]"
+            className="w-[509.6px] h-[258.3px] mx-auto mt-[9.8px] rounded-t-[10px]"
             lat={latitude}
             long={longitude}
             setLatitude={setLatitude}
             setLongitude={setLongitude}
           />
-          <div className="w-[756px] h-[73px] flex flex-row items-center">
+          <div className="w-[529.2px] h-[51.1px] flex flex-row items-center">
             <button
               onClick={() => {
                 setFearandDelight(true);
               }}
-              className={`mr-auto ml-[141px] w-[213px] h-[43px] ${
+              className={`mr-auto ml-[98.7px] w-[149.1px] h-[30.1px] ${
                 fearandDelight ? "bg-[#430096]" : "bg-[#C89BFF]"
-              } flex rounded-[27px] text-[27px] items-center justify-center text-white`}
+              } flex rounded-[27px] text-[20px] items-center justify-center text-white`}
             >
               <svg
                 className="mr-[10px]"
                 xmlns="http://www.w3.org/2000/svg"
-                width="28"
-                height="28"
+                width="20"
+                height="20"
                 viewBox="0 0 28 28"
                 fill="none"
               >
@@ -158,15 +169,15 @@ const Checkout = () => {
               onClick={() => {
                 setFearandDelight(false);
               }}
-              className={`mr-[217px] ml-auto w-[130px] h-[43px] ${
+              className={`mr-[143.9px] ml-auto w-[99px] h-[30.1px] ${
                 !fearandDelight ? "bg-[#430096]" : "bg-[#C89BFF]"
-              } flex rounded-[27px] text-[27px] items-center justify-center text-white`}
+              } flex rounded-[27px] text-[20px] items-center justify-center text-white`}
             >
               <svg
                 className="mr-[5px]"
                 xmlns="http://www.w3.org/2000/svg"
-                width="25"
-                height="26"
+                width="20"
+                height="20"
                 viewBox="0 0 25 26"
                 fill="none"
               >
@@ -194,76 +205,74 @@ const Checkout = () => {
               House
             </button>
           </div>
-
           <TextField
             value={street}
             onChange={(e) => setStreet(e.target.value)}
             label="Street"
             variant="outlined"
             sx={{
-              width: "728px",
-              height: "69px",
-              marginLeft: "14px",
+              width: "509.6px",
+              height: "48.3px",
+              marginLeft: "9.8px",
               "& .MuiInputBase-input": {
                 color: "white",
-                fontSize: "20px",
-                padding: "0 14px",
-                height: "69px",
+                fontSize: "14px",
+                padding: "0 9.8px",
+                height: "48.3px",
                 boxSizing: "border-box",
               },
               "& .MuiInputBase-input::placeholder": {
                 textAlign: "center",
               },
               "& .MuiInputLabel-root:not(.MuiInputLabel-shrink)": {
-                marginTop: "5px",
-                fontSize: "20px",
+                fontSize: "14px",
                 color: "white",
               },
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
                   borderColor: "white",
-                  borderRadius: "10px",
+                  borderRadius: "7px",
                 },
                 "&.Mui-focused fieldset": {
                   borderColor: "white",
-                  borderRadius: "10px",
+                  borderRadius: "7px",
                 },
               },
             }}
           />
+
           {fearandDelight ? (
-            <div className="w-[728px] h-[69px] flex flex-row ml-[14px] justify-between mt-[13px]">
+            <div className="w-[509.6px] h-[48.3px] flex flex-row ml-[9.8px] justify-between mt-[9.1px]">
               <TextField
                 value={building}
                 onChange={(e) => setBuilding(e.target.value)}
                 label="Building"
                 variant="outlined"
                 sx={{
-                  width: "222px",
-                  height: "69px",
+                  width: "155.4px",
+                  height: "48.3px",
                   "& .MuiInputBase-input": {
-                    padding: "0 14px",
-                    height: "69px",
+                    padding: "0 9.8px",
+                    height: "48.3px",
                     boxSizing: "border-box",
                     color: "white",
-                    fontSize: "20px",
+                    fontSize: "14px",
                   },
                   "& .MuiInputBase-input::placeholder": {
                     textAlign: "center",
                   },
                   "& .MuiInputLabel-root:not(.MuiInputLabel-shrink)": {
-                    marginTop: "5px",
-                    fontSize: "20px",
+                    fontSize: "14px",
                     color: "white",
                   },
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": {
                       borderColor: "white",
-                      borderRadius: "10px",
+                      borderRadius: "7px",
                     },
                     "&.Mui-focused fieldset": {
                       borderColor: "white",
-                      borderRadius: "10px",
+                      borderRadius: "7px",
                     },
                   },
                 }}
@@ -274,31 +283,30 @@ const Checkout = () => {
                 label="Floor"
                 variant="outlined"
                 sx={{
-                  width: "222px",
-                  height: "69px",
+                  width: "155.4px",
+                  height: "48.3px",
                   "& .MuiInputBase-input": {
-                    padding: "0 14px",
-                    height: "69px",
+                    padding: "0 9.8px",
+                    height: "48.3px",
                     boxSizing: "border-box",
                     color: "white",
-                    fontSize: "20px",
+                    fontSize: "14px",
                   },
                   "& .MuiInputBase-input::placeholder": {
                     textAlign: "center",
                   },
                   "& .MuiInputLabel-root:not(.MuiInputLabel-shrink)": {
-                    marginTop: "5px",
-                    fontSize: "20px",
+                    fontSize: "14px",
                     color: "white",
                   },
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": {
                       borderColor: "white",
-                      borderRadius: "10px",
+                      borderRadius: "7px",
                     },
                     "&.Mui-focused fieldset": {
                       borderColor: "white",
-                      borderRadius: "10px",
+                      borderRadius: "7px",
                     },
                   },
                 }}
@@ -309,31 +317,30 @@ const Checkout = () => {
                 label="Apartment"
                 variant="outlined"
                 sx={{
-                  width: "222px",
-                  height: "69px",
+                  width: "155.4px",
+                  height: "48.3px",
                   "& .MuiInputBase-input": {
                     color: "white",
-                    fontSize: "20px",
-                    padding: "0 14px",
-                    height: "69px",
+                    fontSize: "14px",
+                    padding: "0 9.8px",
+                    height: "48.3px",
                     boxSizing: "border-box",
                   },
                   "& .MuiInputBase-input::placeholder": {
                     textAlign: "center",
                   },
                   "& .MuiInputLabel-root:not(.MuiInputLabel-shrink)": {
-                    marginTop: "5px",
-                    fontSize: "20px",
+                    fontSize: "14px",
                     color: "white",
                   },
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": {
                       borderColor: "white",
-                      borderRadius: "10px",
+                      borderRadius: "7px",
                     },
                     "&.Mui-focused fieldset": {
                       borderColor: "white",
-                      borderRadius: "10px",
+                      borderRadius: "7px",
                     },
                   },
                 }}
@@ -346,33 +353,32 @@ const Checkout = () => {
               onChange={(e) => setBuilding(e.target.value)}
               variant="outlined"
               sx={{
-                width: "728px",
-                height: "69px",
-                marginLeft: "14px",
-                marginTop: "13px",
+                width: "509.6px",
+                height: "48.3px",
+                marginLeft: "9.8px",
+                marginTop: "9.1px",
                 "& .MuiInputBase-input": {
-                  padding: "0 14px",
-                  height: "69px",
+                  padding: "0 9.8px",
+                  height: "48.3px",
                   boxSizing: "border-box",
                   color: "white",
-                  fontSize: "20px",
+                  fontSize: "14px",
                 },
                 "& .MuiInputBase-input::placeholder": {
                   textAlign: "center",
                 },
                 "& .MuiInputLabel-root:not(.MuiInputLabel-shrink)": {
-                  marginTop: "5px",
-                  fontSize: "20px",
+                  fontSize: "14px",
                   color: "white",
                 },
                 "& .MuiOutlinedInput-root": {
                   "& fieldset": {
                     borderColor: "white",
-                    borderRadius: "10px",
+                    borderRadius: "7px",
                   },
                   "&.Mui-focused fieldset": {
                     borderColor: "white",
-                    borderRadius: "10px",
+                    borderRadius: "7px",
                   },
                 },
               }}
@@ -386,41 +392,41 @@ const Checkout = () => {
             multiline
             rows={6}
             sx={{
-              width: "728px",
-              height: "197px",
-              marginLeft: "14px",
-              marginTop: "13px",
+              width: "509.6px",
+              height: "137.9px",
+              marginLeft: "9.8px",
+              marginTop: "9.1px",
               "& .MuiInputBase-input": {
-                padding: "0 14px",
-                height: "197px",
+                padding: "0 9.8px",
+                height: "137.9px",
                 boxSizing: "border-box",
                 color: "white",
-                fontSize: "27px",
+                fontSize: "18.9px",
               },
               "& .MuiInputBase-input::placeholder": {
                 textAlign: "center",
               },
               "& .MuiInputLabel-root:not(.MuiInputLabel-shrink)": {
-                marginTop: "60px",
-                fontSize: "27px",
+                marginTop: "52px",
+                fontSize: "18.9px",
                 color: "white",
               },
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
                   borderColor: "white",
-                  borderRadius: "10px",
+                  borderRadius: "7px",
                 },
                 "&.Mui-focused fieldset": {
                   borderColor: "white",
-                  borderRadius: "10px",
+                  borderRadius: "7px",
                 },
               },
             }}
           />
-          <div className="mt-[9px] h-[49px] w-[728px] justify-between flex ml-[14px]">
+          <div className="h-[34.3px] w-[509.6px] justify-between flex ml-[9.8px] mt-[38px]">
             <button
               onClick={() => setEditing(false)}
-              className="w-[201px] h-[49px] rounded-[11px] border-[1px] border-[#652795] text-[27px]"
+              className="w-[140.7px] h-[34.3px] rounded-[7.7px] border-[0.7px] border-[#652795] text-[18.9px]"
               style={{
                 background:
                   "linear-gradient(to right, #DBC3FF 0%, #A855F7 47%, #C390FB 100%)",
@@ -432,7 +438,7 @@ const Checkout = () => {
               onClick={() => {
                 setEditing(false);
               }}
-              className="w-[201px] h-[49px] rounded-[11px] border-[1px] border-[#652795] text-[27px]"
+              className="w-[140.7px] h-[34.3px] rounded-[7.7px] border-[0.7px] border-[#652795] text-[18.9px]"
               style={{
                 background:
                   "linear-gradient(to right, #DBC3FF 0%, #A855F7 47%, #C390FB 100%)",
@@ -444,47 +450,47 @@ const Checkout = () => {
         </div>
       ) : (
         <div>
-          <div className="w-[756px] h-[70px] flex">
-            <p className="text-[29px] text-black flex items-center justify-start my-auto ml-12">
+          <div className="w-[529.2px] h-[49px] flex">
+            <p className="text-[20.3px] text-black flex items-center justify-start my-auto ml-8">
               Checkout
             </p>
           </div>
-          <div className="flex mx-auto w-[698px] h-[47px] rounded-l-[38px] bg-gradient-to-r from-[#DBC3FF] to-[#A855F7]">
-            <p className="text-[22px] text-black flex items-center justify-start my-auto ml-6">
+          <div className="flex mx-auto w-[488.6px] h-[32.9px] rounded-l-[26.6px] bg-gradient-to-r from-[#DBC3FF] to-[#A855F7]">
+            <p className="text-[15.4px] text-black flex items-center justify-start my-auto ml-4">
               Shipping
             </p>
           </div>
-          <div className="h-[245px] flex flex-row relative">
-            <div className="flex flex-col ml-[58px] my-auto">
-              <p className="text-[22px] text-white">{street}</p>
-              <p className="text-[22px] text-white">Building: {building}</p>
+          <div className="h-[171.5px] flex flex-row relative">
+            <div className="flex flex-col ml-[40.6px] my-auto">
+              <p className="text-[15.4px] text-white">{street}</p>
+              <p className="text-[15.4px] text-white">Building: {building}</p>
               {fearandDelight ? (
-                <p className="text-[22px] text-white">
+                <p className="text-[15.4px] text-white">
                   Floor {floor}, Apt. {apartment}
                 </p>
               ) : (
                 <></>
               )}
-              <p className="text-[20px] text-white">{additionalinfo}</p>
+              <p className="text-[14px] text-white">{additionalinfo}</p>
             </div>
-            <div className="absolute right-[295px] top-[10px]">
+            <div className="absolute right-[206.5px] top-[7px]">
               <EditButton handleEditClick={() => setEditing(true)} />
             </div>
             <iframe
               title="map"
-              className="rounded-[10px] my-auto ml-auto mr-[58px]"
-              src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${30}!3d${31}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
-              width="225px"
-              height="225px"
+              className="rounded-[7px] my-auto ml-auto mr-[40.6px]"
+              src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${longitude}!3d${latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
+              width="157.5px"
+              height="157.5px"
             ></iframe>
           </div>
-          <div className="flex mx-auto w-[698px] h-[47px] rounded-r-[38px] bg-gradient-to-r from-[#DBC3FF] to-[#A855F7]">
-            <p className="text-[22px] text-black flex items-center justify-start my-auto ml-6">
+          <div className="flex mx-auto w-[488.6px] h-[32.9px] rounded-r-[26.6px] bg-gradient-to-r from-[#DBC3FF] to-[#A855F7]">
+            <p className="text-[15.4px] text-black flex items-center justify-start my-auto ml-4">
               Payment
             </p>
           </div>
-          <div className="flex ml-[50px] h-[196px]">
-            <div className="my-auto gap-[13px] flex flex-col">
+          <div className="flex ml-[35px] h-[137.2px]">
+            <div className="my-auto gap-[9.1px] flex flex-col">
               <FormControlLabel
                 control={
                   <Radio
@@ -497,14 +503,18 @@ const Checkout = () => {
                       "&.Mui-checked": {
                         color: "#000000",
                       },
+                      transform: "scale(0.75)",
                     }}
                   />
                 }
                 sx={{
-                  width: "304px",
-                  height: "49px",
+                  width: "212.8px",
+                  height: "34.3px",
                   backgroundColor: "white",
-                  borderRadius: "10px",
+                  borderRadius: "7px",
+                  "& .MuiFormControlLabel-label": {
+                    fontSize: "15px",
+                  },
                 }}
                 label="Credit Card"
               />
@@ -520,14 +530,18 @@ const Checkout = () => {
                       "&.Mui-checked": {
                         color: "#000000",
                       },
+                      transform: "scale(0.75)",
                     }}
                   />
                 }
                 sx={{
-                  width: "304px",
-                  height: "49px",
+                  width: "212.8px",
+                  height: "34.3px",
                   backgroundColor: "white",
-                  borderRadius: "10px",
+                  borderRadius: "7px",
+                  "& .MuiFormControlLabel-label": {
+                    fontSize: "15px",
+                  },
                 }}
                 label="COD (Cash on Delivery)"
               />
@@ -543,20 +557,24 @@ const Checkout = () => {
                       "&.Mui-checked": {
                         color: "#000000",
                       },
+                      transform: "scale(0.75)",
                     }}
                   />
                 }
                 sx={{
-                  width: "304px",
-                  height: "49px",
+                  width: "212.8px",
+                  height: "34.3px",
                   backgroundColor: "white",
-                  borderRadius: "10px",
+                  borderRadius: "7px",
+                  "& .MuiFormControlLabel-label": {
+                    fontSize: "15px",
+                  },
                 }}
                 label="Wallet"
               />
             </div>
             <div
-              className={`my-auto gap-[13px] flex flex-col ${
+              className={`my-auto gap-[9.1px] flex flex-col ${
                 !selectedValue.includes("creditcard") ? "hidden" : ""
               }`}
             >
@@ -576,12 +594,13 @@ const Checkout = () => {
                   }
                 }}
                 sx={{
-                  width: "350px",
-                  height: "49px",
+                  width: "245px",
+                  height: "34.3px",
                   "& .MuiInputBase-input": {
+                    color: "white",
                     textAlign: "center",
-                    padding: "0 14px",
-                    height: "49px",
+                    padding: "0 9.8px",
+                    height: "34.3px",
                     boxSizing: "border-box",
                   },
                   "& .MuiInputBase-input::placeholder": {
@@ -590,16 +609,16 @@ const Checkout = () => {
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": {
                       borderColor: "white",
-                      borderRadius: "10px",
+                      borderRadius: "7px",
                     },
                     "&.Mui-focused fieldset": {
                       borderColor: "white",
-                      borderRadius: "10px",
+                      borderRadius: "7px",
                     },
                   },
                 }}
               />
-              <div className="flex flex-row gap-[10px]">
+              <div className="flex flex-row gap-[7px]">
                 <TextField
                   id="exp-date"
                   type="tel"
@@ -616,23 +635,24 @@ const Checkout = () => {
                     }
                   }}
                   sx={{
-                    width: "210px",
-                    height: "49px",
-                    borderRadius: "30px",
+                    width: "147px",
+                    height: "34.3px",
+                    borderRadius: "21px",
                     "& .MuiInputBase-input": {
+                      color: "white",
                       textAlign: "center",
-                      padding: "0 14px",
-                      height: "49px",
+                      padding: "0 9.8px",
+                      height: "34.3px",
                       boxSizing: "border-box",
                     },
                     "& .MuiOutlinedInput-root": {
                       "& fieldset": {
                         borderColor: "white",
-                        borderRadius: "10px",
+                        borderRadius: "7px",
                       },
                       "&.Mui-focused fieldset": {
                         borderColor: "white",
-                        borderRadius: "10px",
+                        borderRadius: "7px",
                       },
                     },
                   }}
@@ -653,23 +673,24 @@ const Checkout = () => {
                     }
                   }}
                   sx={{
-                    width: "129px",
-                    height: "49px",
-                    borderRadius: "30px",
+                    width: "90.3px",
+                    height: "34.3px",
+                    borderRadius: "21px",
                     "& .MuiInputBase-input": {
+                      color: "white",
                       textAlign: "center",
-                      padding: "0 14px",
-                      height: "49px",
+                      padding: "0 9.8px",
+                      height: "34.3px",
                       boxSizing: "border-box",
                     },
                     "& .MuiOutlinedInput-root": {
                       "& fieldset": {
                         borderColor: "white",
-                        borderRadius: "10px",
+                        borderRadius: "7px",
                       },
                       "&.Mui-focused fieldset": {
                         borderColor: "white",
-                        borderRadius: "10px",
+                        borderRadius: "7px",
                       },
                     },
                   }}
@@ -677,13 +698,13 @@ const Checkout = () => {
               </div>
             </div>
           </div>
-          <div className="flex mx-auto w-[698px] h-[47px] rounded-l-[38px] bg-gradient-to-r from-[#A855F7] to-[#DBC3FF]">
-            <p className="text-[22px] text-black flex items-center justify-start my-auto ml-6">
+          <div className="flex mx-auto w-[488.6px] h-[32.9px] rounded-l-[26.6px] bg-gradient-to-r from-[#A855F7] to-[#DBC3FF]">
+            <p className="text-[15.4px] text-black flex items-center justify-start my-auto ml-4">
               Promo Code
             </p>
-            <div className="relative group h-[30px] w-[30px] mr-auto ml-[30px] my-auto cursor-pointer">
+            <div className="relative group h-[21px] w-[21px] mr-auto ml-[21px] my-auto cursor-pointer">
               <svg
-                className="h-[30px] w-[30px] mr-auto ml-[30px] my-auto cursor-pointer"
+                className="h-[20px] w-[20px] mr-auto ml-[30px] my-auto cursor-pointer"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 512 512"
               >
@@ -696,6 +717,7 @@ const Checkout = () => {
                   d="M216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
                 ></path>
               </svg>
+
               <div className="absolute w-[250px] h-[60px] bottom-[-23px] left-[-60px] transform translate-x-1/2 mb-2 hidden group-hover:flex items-center justify-center bg-black text-white text-[16px] rounded-[16px] px-4 shadow-lg">
                 Promo codes apply a 10% discount and can't be reused
               </div>
@@ -703,16 +725,16 @@ const Checkout = () => {
           </div>
           <PromoCodeButton
             onAccept={setOnAccept}
-            className="ml-[19px] w-[648px] mt-[11px]"
+            className="ml-[4px] w-[200px] mt-[7.7px]"
           />
-          <line className="bg-white size-5 h-[1px] w-[698px] flex mx-auto mt-[10px]" />
-          <div className="w-[698px] h-[67px] grid grid-cols-2 mx-auto my-[1px]">
+          <line className="bg-white size-3.5 h-[0.7px] w-[488.6px] flex mx-auto mt-[7px]" />
+          <div className="w-[488.6px] h-[46.9px] grid grid-cols-2 mx-auto my-[0.7px]">
             <div className="mr-auto">
-              <p className="text-[21px] text-white justify-start flex mb-1">
+              <p className="text-[18px] text-white justify-start flex mb-[0px]">
                 Subtotal:
               </p>
               {onAccept ? (
-                <p className="text-[21px] text-white justify-start flex mt-1">
+                <p className="text-[18px] text-white justify-start flex">
                   Discount:
                 </p>
               ) : (
@@ -720,13 +742,13 @@ const Checkout = () => {
               )}
             </div>
             <div className="ml-auto">
-              <p className="text-[21px] text-white justify-end flex mb-1">
-                EGP 7969.69
+              <p className="text-[18px] text-white justify-end flex mb-[0px]">
+                {subtotal.toFixed(2)}
               </p>
 
               {onAccept ? (
-                <p className="text-[21px] text-white justify-end flex mt-1">
-                  -EGP 1000.00
+                <p className="text-[18px] text-white justify-end flex">
+                  -{(subtotal * 0.1).toFixed(2)}
                 </p>
               ) : (
                 <></>
@@ -734,9 +756,11 @@ const Checkout = () => {
             </div>
           </div>
           <div>
-            <div className="bg-gradient-to-r from-[#DBC3FF] to-[#A855F7] rounded-tl-[24px] rounded-br-[24px] h-[91px] w-[726px] flex flex-row mx-auto mb-[17px]">
-              <p className="text-[30px] text-black my-auto ml-2">EGP 6969.69</p>
-              <button className="my-auto ml-auto mr-[14px] w-[270px] h-[66px] bg-gradient-to-r from-[#A855F7] via-[#DBC3FF] to-[#C390FB] border-[#652795] border-[1px] rounded-[11px] text-[30px]">
+            <div className="bg-gradient-to-r from-[#DBC3FF] to-[#A855F7] rounded-tl-[16.8px] rounded-br-[16.8px] h-[63.7px] w-[508.2px] flex flex-row mx-auto mt-[12px]">
+              <p className="text-[21px] text-black my-auto ml-2">
+                {(onAccept ? subtotal * 0.9 : subtotal * 1.0).toFixed(2)}
+              </p>
+              <button className="my-auto ml-auto mr-[9.8px] w-[189px] h-[46.2px] bg-gradient-to-r from-[#A855F7] via-[#DBC3FF] to-[#C390FB] border-[#652795] border-[0.7px] rounded-[7.7px] text-[21px]">
                 Checkout
               </button>
             </div>
