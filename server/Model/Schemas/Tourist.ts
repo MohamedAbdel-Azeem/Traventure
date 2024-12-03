@@ -64,7 +64,7 @@ const touristSchema = new Schema({
         street: { type: String, required: true },
         buildingNumber: { type: String, required: true },
         floor: { type: String, default: null },
-        apartmentNumber: { type: String, required: true },
+        apartmentNumber: { type: String },
         additionalDirections: { type: String, default: "" },
       },
     ],
