@@ -2,8 +2,8 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { useAuth } from "../../../custom_hooks/auth";
 import { useParams } from "react-router-dom";
 import ShopPage from "../../../components/Shop/ShopPage";
-const SellerPage = () => {
-    const { isAuthenticated, isLoading, isError } = useAuth(0);
+const AdminShopPage = () => {
+    const { isAuthenticated, isLoading, isError } = useAuth(3);
     const { username } = useParams<{ username: string }>();
     if (isLoading) {
         return (
@@ -26,10 +26,10 @@ const SellerPage = () => {
                     transition: "200ms",
                 }}
             >
-               <ShopPage type="Seller" />
+               <ShopPage type="Admin" />
             </div>
         </div>
     );
 };
 
-export default SellerPage;
+export default AdminShopPage;
