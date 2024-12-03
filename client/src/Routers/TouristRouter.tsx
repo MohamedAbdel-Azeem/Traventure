@@ -17,6 +17,7 @@ import Bookmarks from "../routes/_app/Tourist/tourist_bookmarks/Bookmarks";
 import CartButton from "../components/cart/CartButton";
 import { TouristWishList } from "../routes/_app/Tourist/tourist_purchases/TouristWishList";
 import {isAccessTokenPresent} from "../components/Protection/authUtils";
+import TouristComplaints from "../routes/_app/Tourist/TouristComplaints";
 
 export default function TouristRouter() {
   return (
@@ -32,7 +33,7 @@ export default function TouristRouter() {
           element={isAccessTokenPresent() ?<ItineraryDetailsTourist />:<Navigate to="/" />}
         />
         <Route path="/:username/activities" element={isAccessTokenPresent() ?<MoreActivities />:<Navigate to="/" />} />
-        <Route path="/:username/complaints" element={isAccessTokenPresent() ?<ComplaintsTable />:<Navigate to="/" />} />
+        <Route path="/:username/complaints" element={isAccessTokenPresent() ?<TouristComplaints />:<Navigate to="/" />} />
         <Route path="/:username/profile" element={isAccessTokenPresent() ?<Tourist_Profile />:<Navigate to="/" />} />
         <Route path="/:username/bookings" element={isAccessTokenPresent() ?<Bookings />:<Navigate to="/" />} />
         <Route path="/:username/purchases" element={isAccessTokenPresent() ?<TouristPurchases />:<Navigate to="/" />} />
