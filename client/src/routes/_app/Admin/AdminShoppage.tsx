@@ -1,10 +1,10 @@
 import ClipLoader from "react-spinners/ClipLoader";
-import Dashboard from "../../../components/Dashboard";
 import { useAuth } from "../../../custom_hooks/auth";
 import { useParams } from "react-router-dom";
-const TouristPage = () => {
-    const { isAuthenticated, isLoading, isError } = useAuth(4);
-  const { username } = useParams<{ username: string }>();
+import ShopPage from "../../../components/Shop/ShopPage";
+const AdminShopPage = () => {
+    const { isAuthenticated, isLoading, isError } = useAuth(3);
+    const { username } = useParams<{ username: string }>();
     if (isLoading) {
         return (
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
@@ -23,13 +23,13 @@ const TouristPage = () => {
         <div>
             <div
                 style={{
-                    //margin: `20px 20px 20px 100px`,
                     transition: "200ms",
                 }}
             >
-                <Dashboard/>
+               <ShopPage type="Admin" />
             </div>
         </div>
     );
 };
-export default TouristPage;
+
+export default AdminShopPage;

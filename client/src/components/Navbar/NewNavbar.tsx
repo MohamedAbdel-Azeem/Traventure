@@ -39,7 +39,8 @@ import { editpassword } from "../../custom_hooks/changepassowrd";
 import { GetCurrentUser } from "../../custom_hooks/currentuser";
 import HotelIcon from "@mui/icons-material/Hotel";
 import FlightIcon from "@mui/icons-material/Flight";
-import BookmarksIcon from "@mui/icons-material/Bookmarks";
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
+import Cookies from 'js-cookie';
 
 const drawerHeight = 64;
 
@@ -333,7 +334,10 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
       ? [
           {
             label: "Log out",
-            onClick: () => navigate("/"),
+            onClick: () => {Cookies.set("access_token", "", { expires: 0});
+            Cookies.set("reduxPersistIndex", "", { expires: 0});
+            Cookies.set("persist%3Aroot", "", { expires: 0});
+            navigate("/")},
             icon: Logout,
           },
         ]

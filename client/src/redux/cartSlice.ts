@@ -60,7 +60,11 @@ const cartSlice = createSlice({
       );
       return newProducts;
     },
+    resetState: () => {
+      return initialState;
+    },
   },
+  
 });
 
 export const {
@@ -69,5 +73,6 @@ export const {
   clearCart,
   incrementQuantity,
   decrementQuantity,
+  resetState
 } = cartSlice.actions;
 export default cartSlice.reducer;

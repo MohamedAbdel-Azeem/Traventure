@@ -36,7 +36,7 @@ const store = configureStore({
   reducer: persistedReducer,
 });
 
-const persistor = persistStore(store);
+export const persistor = persistStore(store);
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

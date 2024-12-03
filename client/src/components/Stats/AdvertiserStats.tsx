@@ -4,12 +4,15 @@ import AdvGuideRevenue from "./AdvGuideRevenue";
 import AdvGuideUsers from "./AdvGuideUsers";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { useAuth } from "../../custom_hooks/auth";
+import ClipLoader from "react-spinners/ClipLoader";
 
 export type Activity = {
   _id: string;
   Title: string;
 };
 export const AdvertiserStats = () => {
+  const { isAuthenticated, isLoading, isError } = useAuth(1);
   const [revenueView, setRevenueView] = useState(false);
 
   const handleViewChange = (event: MouseEvent, value: boolean) => {
@@ -43,6 +46,20 @@ export const AdvertiserStats = () => {
     "November",
     "December",
   ];
+  if (isLoading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <ClipLoader color="#f86c6b" loading={true} size={150} />
+      </div>
+    );
+  }
+  if (isError || isAuthenticated !== username) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <h1>Error 403 Unauthrized access</h1>
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col items-center gap-8 pt-6">
       <h1 className="font-sans text-xl font-medium">Revenue and Statistics</h1>

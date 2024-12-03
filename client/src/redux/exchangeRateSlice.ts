@@ -13,6 +13,9 @@ const exchangeRateSlice = createSlice({
       state.exchangeRate = action.payload.rate;
       state.currentCurrency = action.payload.currency;
     },
+    resetState: () => {
+      return initialState;
+    },
   },
 });
 
