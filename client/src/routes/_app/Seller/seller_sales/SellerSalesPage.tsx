@@ -6,13 +6,15 @@ import { SalesChart } from "../../../../components/Shop/SalesChart";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useAuth } from "../../../../custom_hooks/auth";
 
 
 export function SellerSalesPage() {
   const { username } = useParams<{ username: string }>();
   const [compactView, setCompactView] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState("");
-
+  const { isAuthenticated, isLoading, isError } = useAuth(0);
+   
   const {
     user: seller,
     loading: sellerLoading,
@@ -48,7 +50,20 @@ export function SellerSalesPage() {
       )
     );
   };
-
+  if (isLoading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <ClipLoader color="#f86c6b" loading={true} size={150} />
+      </div>
+    );
+  }
+  if (isError || isAuthenticated !== username) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <h1>Error 403 Unauthrized access</h1>
+      </div>
+    );
+  }
   if (sellerLoading) {
     return (
       <div>

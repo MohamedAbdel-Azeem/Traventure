@@ -4,6 +4,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import ProductCard from "../../../../components/Shenawy/ProductCard";
 import { useEffect, useState } from "react";
 import { ACTUALProduct } from "../../../../components/data/ProductData";
+import { useAuth } from "../../../../custom_hooks/auth";
 
 export function TouristWishList() {
   const { username } = useParams();
@@ -12,7 +13,21 @@ export function TouristWishList() {
   const [wishListedProducts, setWishListedProducts] = useState<ACTUALProduct[]>(
     []
   );
-
+  const { isAuthenticated, isLoading, isError } = useAuth(4);
+    if (isLoading) {
+        return (
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+            <ClipLoader color="#f86c6b" loading={true} size={150} />
+          </div>
+        );
+      }
+      if (isError || isAuthenticated !== username) {
+        return (
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+            <h1>Error 403 Unauthrized access</h1>
+          </div>
+        );
+      }
   useEffect(() => {
     setWishListedProducts(
       data?.filter((product) => product.isWishListed) ?? []
