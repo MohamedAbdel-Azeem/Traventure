@@ -19,6 +19,7 @@ export interface ITourist extends Document {
   totalLoyaltyPoints: number;
   loyaltyLevel: number;
   wishlisted_products: mongoose.Types.ObjectId[];
+  skipWebsiteTutorial: boolean;
 }
 
 const touristSchema = new Schema({
@@ -37,6 +38,7 @@ const touristSchema = new Schema({
   totalLoyaltyPoints: { type: Number, required: true, default: 0 },
   loyaltyLevel: { type: Number, default: 1 },
   wishlisted_products: [{ type: mongoose.Types.ObjectId, ref: "Product" }],
+  skipWebsiteTutorial: { type: Boolean, default: false },
 });
 
 export default mongoose.model<ITourist>("Tourist", touristSchema);

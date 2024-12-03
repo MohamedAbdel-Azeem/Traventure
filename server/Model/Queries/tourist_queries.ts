@@ -137,36 +137,50 @@ export async function getTouristUpcoming(username: string) {
 }
 
 export async function toggleWishlistProduct(
-    username: string,
-    productId: string
+  username: string,
+  productId: string
 ) {
-    try {
-        const tourist = await touristModel.findOne({ username: username });
-        if (!tourist) {
-            throw new Error("Tourist not found");
-        }
-        const product = await Product.findById(productId);
-        if (!product) {
-            throw new Error("Product not found");
-        }
-
-        const productObjectId = new mongoose.Types.ObjectId(productId);
-        let action;
-        if (tourist.wishlisted_products.includes(productObjectId)) {
-            tourist.wishlisted_products = tourist.wishlisted_products.filter(
-                (id) => !id.equals(productObjectId)
-            );
-            action = "removed";
-        } else {
-            tourist.wishlisted_products.push(productObjectId);
-            action = "added";
-        }
-
-        await tourist.save();
-        return { action, productId };
-    } catch (error) {
-        throw error;
+  try {
+    const tourist = await touristModel.findOne({ username: username });
+    if (!tourist) {
+      throw new Error("Tourist not found");
     }
+    const product = await Product.findById(productId);
+    if (!product) {
+      throw new Error("Product not found");
+    }
+
+    const productObjectId = new mongoose.Types.ObjectId(productId);
+    let action;
+    if (tourist.wishlisted_products.includes(productObjectId)) {
+      tourist.wishlisted_products = tourist.wishlisted_products.filter(
+        (id) => !id.equals(productObjectId)
+      );
+      action = "removed";
+    } else {
+      tourist.wishlisted_products.push(productObjectId);
+      action = "added";
+    }
+
+    await tourist.save();
+    return { action, productId };
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function skipWebsiteTutorial(username: string) {
+  try {
+    const tourist = await touristModel.findOne({ username: username });
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    tourist.skipWebsiteTutorial = true;
+    await tourist.save();
+    return "Tutorial skipped";
+  } catch (error) {
+    throw error;
+  }
 }
 
 module.exports = {
@@ -175,4 +189,5 @@ module.exports = {
   gettouristComplaints,
   getTouristUpcoming,
   toggleWishlistProduct,
+  skipWebsiteTutorial,
 };

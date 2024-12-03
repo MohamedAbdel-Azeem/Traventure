@@ -20,6 +20,7 @@ import {
   gettouristComplaints,
   getTouristUpcoming,
   toggleWishlistProduct,
+  skipWebsiteTutorial,
 } from "../Model/Queries/tourist_queries";
 import { get } from "http";
 import { redeemPoints } from "../Model/Queries/points_queries";
@@ -148,6 +149,16 @@ router.post("/wishlist/:username", async (req: Request, res: Response) => {
       isAdded,
       message: `Product ${isAdded ? "added to" : "removed from"} wishlist`,
     });
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+});
+
+router.patch("/skipTutorial/:username", async (req: Request, res: Response) => {
+  try {
+    const username = req.params.username;
+    await skipWebsiteTutorial(username);
+    res.status(200).send("Tutorial skipped");
   } catch (error: any) {
     res.status(500).send(error.message);
   }
