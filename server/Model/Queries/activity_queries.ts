@@ -5,6 +5,15 @@ import Tourist from "../Schemas/Tourist";
 import TourGuide from "../Schemas/TourGuide";
 import Advertiser from "../Schemas/Advertiser";
 
+
+interface Revenue {
+  name: string;
+  year: number;
+  month: number;
+  day: number;
+  revenue: number;
+}
+
 export const addActivity = async (newActivity: any) => {
   try {
     await Activity.create(newActivity);
@@ -16,9 +25,7 @@ export const addActivity = async (newActivity: any) => {
 
 export const getActivities = async () => {
   try {
-    return await Activity.find()
-      .populate("Tags")
-      .populate("Category");
+    return await Activity.find().populate("Tags").populate("Category");
   } catch (e) {
     throw e;
   }
@@ -99,6 +106,145 @@ export const toggleInappropriate = async (id: string) => {
     throw err;
   }
 };
+
+export const advertiserRevenue = async (
+  username: string,
+  month: number,
+  activityName: string
+) => {
+  try {
+    // Find the advertiser
+    const advertiser = await Advertiser.findOne({ username });
+    if (!advertiser) throw new Error("Advertiser not found");
+    console.log(month);
+    // Find all activities by the advertiser
+    const activities = await Activity.find({ added_By: advertiser._id });
+    if (!activities.length) return []; // No activities found
+
+    const ActivityRevenue: Revenue[] = [];
+
+    for (const activity of activities) {
+      // Find bookings for the activity
+      const bookings = await Booking.find({ activity: activity._id });
+
+      for (const booking of bookings) {
+        // Check conditions
+        const matchesMonth = !isNaN(month)
+          ? booking.timeStamp.getMonth() === month - 1
+          : true;
+        const matchesActivityName = activityName
+          ? activity.Title === activityName
+          : true;
+
+        if (matchesMonth && matchesActivityName) {
+          if (
+            !ActivityRevenue.find(
+              (rev) =>
+                rev.name === activity.Title &&
+                rev.year === booking.timeStamp.getFullYear() &&
+                rev.month === booking.timeStamp.getMonth() + 1 &&
+                rev.day === booking.timeStamp.getDate()
+            )
+          ) {
+            ActivityRevenue.push({
+              name: activity.Title,
+              year: booking.timeStamp.getFullYear(),
+              month: booking.timeStamp.getMonth() + 1,
+              day: booking.timeStamp.getDate(),
+              revenue: activity.Price * 0.9,
+            });
+          } else {
+            const existingActivityRevenue = ActivityRevenue.find(
+              (rev) =>
+                rev.name === activity.Title &&
+                rev.year === booking.timeStamp.getFullYear() &&
+                rev.month === booking.timeStamp.getMonth() + 1 &&
+                rev.day === booking.timeStamp.getDate()
+            );
+            if (existingActivityRevenue) {
+              existingActivityRevenue.revenue +=
+                activity.Price * (activity.SpecialDiscount / 100) * 0.9;
+            }
+          }
+        }
+      }
+    }
+
+    return ActivityRevenue;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
+export const advNumTourists = async (
+  username: string,
+  month: number,
+  activityName: string
+) => {
+  try {
+    // Find the advertiser
+    const advertiser = await Advertiser.findOne({ username });
+    if (!advertiser) throw new Error("Advertiser not found");
+    console.log(month);
+    // Find all activities by the advertiser
+    const activities = await Activity.find({ added_By: advertiser._id });
+    if (!activities.length) return []; // No activities found
+
+    const ActivityRevenue: Revenue[] = [];
+
+    for (const activity of activities) {
+      // Find bookings for the activity
+      const bookings = await Booking.find({ activity: activity._id });
+
+      for (const booking of bookings) {
+        // Check conditions
+        if (activity.DateAndTime > new Date()) continue;
+        const matchesMonth = !isNaN(month)
+          ? booking.timeStamp.getMonth() === month - 1
+          : true;
+        const matchesActivityName = activityName
+          ? activity.Title === activityName
+          : true;
+
+        if (matchesMonth && matchesActivityName) {
+          if (
+            !ActivityRevenue.find(
+              (rev) =>
+                rev.name === activity.Title &&
+                rev.year === booking.timeStamp.getFullYear() &&
+                rev.month === booking.timeStamp.getMonth() + 1 &&
+                rev.day === booking.timeStamp.getDate()
+            )
+          ) {
+            ActivityRevenue.push({
+              name: activity.Title,
+              year: booking.timeStamp.getFullYear(),
+              month: booking.timeStamp.getMonth() + 1,
+              day: booking.timeStamp.getDate(),
+              revenue: 1,
+            });
+          } else {
+            const existingActivityRevenue = ActivityRevenue.find(
+              (rev) =>
+                rev.name === activity.Title &&
+                rev.year === booking.timeStamp.getFullYear() &&
+                rev.month === booking.timeStamp.getMonth() + 1 &&
+                rev.day === booking.timeStamp.getDate()
+            );
+            if (existingActivityRevenue) {
+              existingActivityRevenue.revenue += 1;
+            }
+          }
+        }
+      }
+    }
+
+    return ActivityRevenue;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+};
 module.exports = {
   addActivity,
   getActivities,
@@ -106,4 +252,6 @@ module.exports = {
   deleteActivity,
   updateActivity,
   toggleInappropriate,
+  advertiserRevenue,
+  advNumTourists,
 };

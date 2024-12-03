@@ -28,6 +28,7 @@ export interface ITourGuide extends Document {
     read: boolean;
     createdAt: Date;
   }[];
+  timeStamp: Date;
 }
 
 export default ITourGuide;

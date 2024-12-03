@@ -7,6 +7,7 @@ import { Advertiser_Profile } from "../routes/_app/Advertiser/advertiser_profile
 import { Activities } from "../routes/_app/Advertiser/advertiser_activity/Activities";
 import CurrencyDropdown from "../components/currencyDrop";
 import ItineraryDetailsTourist from "../components/Itinerary/ItineraryDetailsTourist";
+import { AdvertiserStats } from "../components/Stats/AdvertiserStats";
 
 export default function AdvertiserRouter() {
   return (
@@ -16,9 +17,13 @@ export default function AdvertiserRouter() {
         <Route path="/:username" element={<AdvertiserPage />} />
         <Route path="/:username/locations" element={<MorePlaces />} />
         <Route path="/:username/itineraries" element={<MoreItineraries />} />
-        <Route path="/:username/itineraries/tourist-itinerary/:id" element={<ItineraryDetailsTourist/>}/>
+        <Route
+          path="/:username/itineraries/tourist-itinerary/:id"
+          element={<ItineraryDetailsTourist />}
+        />
         <Route path="/:username/activities" element={<Activities />} />
         <Route path="/:username/profile" element={<Advertiser_Profile />} />
+        <Route path="/:username/stats" element={<AdvertiserStats />} />
       </Routes>
       {/* <CurrencyDropdown /> */}
     </div>

@@ -141,6 +141,11 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
       icon: <ActivityIcon />,
       path: `/tourguide/${currentuser}/itineraries`,
     },
+    {
+      text: "Sales",
+      icon: <ShowChartIcon />,
+      path: `/tourguide/${currentuser}/statistics`,
+    },
   ];
 
   const TGonavbaritems = [
@@ -217,6 +222,11 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
       text: "Locations",
       icon: <LocationOnIcon />,
       path: `/advertiser/${currentuser}/locations`,
+    },
+    {
+      text: "Sales",
+      icon: <ShowChartIcon />,
+      path: `/advertiser/${currentuser}/stats`,
     },
   ];
 
@@ -339,12 +349,12 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
               navigate(`/${currentusertype}/${currentuser}/purchases`),
             icon: ShoppingBasketIcon,
           },
-         {
-          label: "Bookmarks",
-              onClick: () =>
-                navigate(`/${currentusertype}/${currentuser}/bookmarks`),
-              icon: BookmarksIcon,
-        }
+          {
+            label: "Bookmarks",
+            onClick: () =>
+              navigate(`/${currentusertype}/${currentuser}/bookmarks`),
+            icon: BookmarksIcon,
+          },
         ]
       : []),
 

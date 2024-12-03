@@ -13,7 +13,8 @@ const flightBookingSchema = new schema({
     flightClass:{type:String , required:true},
     flightNumber:{type:Number , required:true},
     booked_by:{ type: mongoose.Types.ObjectId, required: true, ref: "Tourist" },
-    transportation:{type:Boolean,required:true}
+    transportation:{type:Boolean,required:true},
+    promoCode: { type: String, default: "" }
 })
 
 export default mongoose.model("flightBooking", flightBookingSchema);

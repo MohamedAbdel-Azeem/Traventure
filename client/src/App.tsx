@@ -13,31 +13,32 @@ import AdvertiserRouter from "./Routers/AdvertiserRouter";
 import TourGuideRouter from "./Routers/TourGuideRouter";
 import SellerRouter from "./Routers/SellerRouter";
 import GuestRouter from "./Routers/GuestRouter";
-
+import Checkout from "./components/Checkout";
 function App() {
   return (
     <MantineProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<SignIn />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/" element={<SignIn/>}/>
+          <Route path="/register" element={<Register/>}/>
           {/* Admin */}
-          <Route path="/admin/*" element={<AdminRouter />} />
+          <Route path="/admin/*" element={<AdminRouter/>}/>
           {/* Tourist */}
-          <Route path="/tourist/*" element={<TouristRouter />} />
+          <Route path="/tourist/*" element={<TouristRouter/>}/>
           {/* Tourism Governor */}
-          <Route path="/tourismgovernor/*" element={<TourismGovernorRouter />} />
+          <Route path="/tourismgovernor/*" element={<TourismGovernorRouter/>}/>
           {/* Advertiser */}
-          <Route path="/advertiser/*" element={<AdvertiserRouter />} />
+          <Route path="/advertiser/*" element={<AdvertiserRouter/>}/>
           {/* Tour Guide */}
-          <Route path="/tourguide/*" element={<TourGuideRouter />} />
+          <Route path="/tourguide/*" element={<TourGuideRouter/>}/>
           {/* Seller */}
-          <Route path="/seller/*" element={<SellerRouter/>} />
+          <Route path="/seller/*" element={<SellerRouter/>}/>
           {/* Guest */}
           <Route path="/guest/*" element={<GuestRouter/>}/>
           {/* Extra */}
-          <Route path="/terms-and-conditions" element={<TermsAndConditions />}/>
-          <Route path="/landing" element={<LandingPage />} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditions/>}/>
+          <Route path="/landing" element={<LandingPage/>}/>
+          <Route path="/test" element={<Checkout/>}/>
         </Routes>
       </Router>
     </MantineProvider>

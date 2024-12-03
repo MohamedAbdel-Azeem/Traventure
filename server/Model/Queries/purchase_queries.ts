@@ -1,14 +1,28 @@
 import path from "path";
-import purchase, { IPurchase } from "../../Model/Schemas/purchase";
+import purchase, {
+  IPurchase,
+  PurchaseStatus,
+} from "../../Model/Schemas/purchase";
 import mongoose, { model } from "mongoose";
-import touristModel from "../Schemas/Tourist";
 import ProductModel, { IProduct } from "../Schemas/Product";
-import { ObjectId } from "mongoose"; 
+import PromoCodes from "../Schemas/PromoCodes";
 
-
-export async function addPurchase(purchaseData: object) {
+export async function addPurchase(purchaseData: IPurchase) {
   try {
-    return await purchase.create(purchaseData);
+    const totalAmount = await getPurchaseTotalAmount(purchaseData);
+    purchaseData["totalAmount"] = totalAmount;
+
+    const promoCode = await PromoCodes.findOne({
+      name: purchaseData.promoCode,
+    });
+
+    if (promoCode && !promoCode.used) {
+      purchaseData["totalAmount"] *= 0.9;
+      promoCode.used = true;
+    }
+    const resultPurchase = await purchase.create(purchaseData);
+    if (promoCode) await promoCode.save();
+    return resultPurchase;
   } catch (error) {
     throw error;
   }
@@ -26,41 +40,21 @@ const getProduct = async (productId: string): Promise<IProduct | null> => {
   }
 };
 
-//TODO : still not tested
-export async function getPurchaseTotalAmount(purchaseData: IPurchase){
-  
+export async function getPurchaseTotalAmount(purchaseData: IPurchase) {
   try {
-
-    const cart=purchaseData.cart;
-    var totalAmount=0;
+    const cart = purchaseData.cart;
+    var totalAmount = 0;
     for (const purchased_product of cart) {
       const product = await getProduct(purchased_product.productId.toString());
       if (product) {
         totalAmount += product.price * purchased_product.quantity;
       }
     }
-    // cart.forEach(purchased_product => {
-    //   const product= async () =>{
-    //     try{
-    //       await ProductModel.findById(purchased_product.productId);
-    //     }catch(error){
-    //       throw error;
-    //     }
-    //   }
-      
-    //   if(product){
-    //     totalAmount+=product.price*purchased_product.quantity;
-
-    //   }
-
-
-    // });
     return totalAmount;
   } catch (error) {
     throw error;
   }
 }
-
 
 // export async function updateLoyaltyPoints(touristId:string, amount:number){
 //   try {
@@ -69,7 +63,7 @@ export async function getPurchaseTotalAmount(purchaseData: IPurchase){
 //     var points=0;
 //     switch(tourist.loyaltyLevel){
 //       case 1: points=amount*0.5; break;
-//       case 2: points=amount; break; 
+//       case 2: points=amount; break;
 //       case 3: points=amount*1.5; break;
 //     }
 //     tourist.currentLoyaltyPoints += points;
@@ -125,6 +119,7 @@ export async function getSellerSales(
       }>;
       timeStamp: Date;
     }> = await purchase
+      .find()
       .find()
       .populate({
         path: "cart.productId",
@@ -184,6 +179,7 @@ export async function getExternalSellerSales(
         };
         quantity: number;
       }>;
+
       timeStamp: Date;
     }> = await purchase
       .find()
@@ -232,11 +228,36 @@ export async function getExternalSellerSales(
   }
 }
 
+export async function cancelPurchase(purchaseId: string) {
+  try {
+    const product = await purchase.findById(purchaseId);
+    if (!product) return null;
+    if (product.status == PurchaseStatus.delivered) return null;
+    product.status = PurchaseStatus.cancelled;
+    return await product.save();
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function DeliverPurchase(purchaseId: string) {
+  try {
+    const product = await purchase.findByIdAndUpdate(purchaseId, {
+      status: PurchaseStatus.delivered,
+    });
+    return product;
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   addPurchase,
   getTouristPurchases,
   getSellerSales,
   getExternalSellerSales,
   // updateLoyaltyPoints,
-  getPurchaseTotalAmount
+  getPurchaseTotalAmount,
+  cancelPurchase,
+  DeliverPurchase,
 };

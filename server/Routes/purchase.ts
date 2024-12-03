@@ -6,6 +6,8 @@ import {
   getExternalSellerSales,
   // updateLoyaltyPoints,
   getPurchaseTotalAmount,
+  DeliverPurchase,
+  cancelPurchase,
 } from "../Model/Queries/purchase_queries";
 import {
   getProduct,
@@ -18,7 +20,7 @@ const router = Router();
 
 router.post("/buy", async (req: Request, res: Response) => {
   try {
-    const { touristId, cart } = req.body;
+    const { touristId, cart, promoCode } = req.body;
     for (const singleProduct of cart) {
       const product = await getProduct(singleProduct.productId);
       if (!product) {
@@ -38,10 +40,14 @@ router.post("/buy", async (req: Request, res: Response) => {
       );
     }
     const body = { touristId, cart } as IPurchase;
-    const purchase = await addPurchase({ touristId, cart });
+
+    if (promoCode) {
+      body.promoCode = promoCode;
+    }
+
+    const purchase = await addPurchase(body);
     const totalAmount = await getPurchaseTotalAmount(body);
 
-    
     return res.status(200).send(purchase);
   } catch (error) {
     return res.status(500).send(error);
@@ -87,6 +93,29 @@ router.get("/seller", async (req: Request, res: Response) => {
       );
       return res.status(200).send(sales);
     }
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});
+
+router.post("/deliver", async (req: Request, res: Response) => {
+  try {
+    const { purchaseId } = req.body;
+    const purchase = await DeliverPurchase(purchaseId);
+    if (!purchase) return res.status(404).send("Purchase not found");
+    return res.status(200).send(purchase);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});
+
+router.post("/cancel", async (req: Request, res: Response) => {
+  try {
+    const { purchaseId } = req.body;
+    const purchase = await cancelPurchase(purchaseId);
+    if (!purchase)
+      return res.status(404).send("Purchase not found or already delivered");
+    return res.status(200).send(purchase);
   } catch (error) {
     return res.status(500).send(error);
   }
