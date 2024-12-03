@@ -10,7 +10,6 @@ import {
   comparePassword,
   hashPassword,
 } from "../../utils/functions/bcrypt_functions";
-import { compare } from "bcryptjs";
 
 export async function getprofileInfo(username: string, type: string) {
   let model: mongoose.Model<any>;

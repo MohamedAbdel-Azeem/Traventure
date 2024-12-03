@@ -41,7 +41,7 @@ router.post("/buy", async (req: Request, res: Response) => {
         singleProduct.quantity
       );
     }
-    const body = { touristId, cart } as IPurchase;
+    const body = { touristUsername, cart } as IPurchase;
 
     if (promoCode) {
       body.promoCode = promoCode;

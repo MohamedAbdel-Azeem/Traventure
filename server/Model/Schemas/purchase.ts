@@ -15,7 +15,7 @@ export enum PurchaseStatus {
 }
 
 export interface IPurchase {
-  touristId: mongoose.Types.ObjectId;
+  touristUsername: mongoose.Types.ObjectId;
   cart: IPurchasedProduct[];
   timeStamp: Date;
   status?: PurchaseStatus;

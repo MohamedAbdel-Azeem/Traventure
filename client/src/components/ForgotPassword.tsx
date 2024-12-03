@@ -1,42 +1,41 @@
 import { TextField } from "@mui/material";
-import { set } from "date-fns";
 import React, { useState } from "react";
 import Swal from "sweetalert2";
-// import sendMail from "../../../server/utils/functions/email_sender";
-import {updatepassword} from "../custom_hooks/changepassowrd";
+import { updatepassword } from "../custom_hooks/changepassowrd";
+import { sendEmail, useCode } from "../custom_hooks/forgotpassword";
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
-  const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
-  const [codesent, setcodeSent] = useState("");
-  const [iscodesent, setisCodeSent] = useState(0); 
+  const [code, setCode] = useState("");
+  const [iscodesent, setisCodeSent] = useState(0);
   const [error, setError] = useState("");
 
-  const generateRandomCode = () => {
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    const numbers = "0123456789";
-    let code = "";
-
-    for (let i = 0; i < 7; i++) {
-      const randomIndex = Math.floor(Math.random() * letters.length);
-      code += letters[randomIndex];
+  const handleSendCode = async (email: string) => {
+    const trueornot = await sendEmail(email);
+    console.log(trueornot);
+    if (trueornot.includes("success")) {
+      setisCodeSent(1);
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid Email...",
+        text: "The email you entered doesn't exist",
+      });
     }
-
-    for (let i = 0; i < 5; i++) {
-      const randomIndex = Math.floor(Math.random() * numbers.length);
-      code += numbers[randomIndex];
-    }
-    console.log(code);
-    return code;
   };
-
-  function sendCode(email: string) {
-    setisCodeSent(1);
-    const Code = generateRandomCode();
-    setcodeSent(Code);
-    const textHtml = `<h1>Here is the recovery code you requested: <strong>${Code}</strong></h1> <br> <p>If you haven't requested a recovery code you might want to change your password</p> <br> <p>Thank you for being a part of our community.</p>`;
-    //   sendMail(email, "Recovery Code!", textHtml);
-  }
+  const HandleUseCode = async (email: string) => {
+    const trueornot = await useCode(email, code);
+    console.log(trueornot);
+    if (trueornot.includes("success")) {
+      setisCodeSent(2);
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid Code...",
+        text: "The code you entered is incorrect",
+      });
+    }
+  };
   const validatePassword = (password: string) => {
     if (password.length < 8) {
       return "Password must be at least 8 characters long";
@@ -55,27 +54,24 @@ const ForgotPassword = () => {
     setError(validationError);
   };
 
-
-
-const handleSubmit = () => {
-  const validationError = validatePassword(password);
-  if (validationError) {
-    setError(validationError);
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: validationError,
-    });
-  } else {
-    updatepassword(email, password);
-    Swal.fire({
-      icon: "success",
-      title: "Success",
-      text: "Your password has been changed successfully!",
-    });
-  }
-};
-
+  const handleSubmit = () => {
+    const validationError = validatePassword(password);
+    if (validationError) {
+      setError(validationError);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: validationError,
+      });
+    } else {
+      updatepassword(email, password);
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Your password has been changed successfully!",
+      });
+    }
+  };
 
   return (
     <div className="w-full h-screen flex justify-center items-center">
@@ -115,7 +111,7 @@ const handleSubmit = () => {
             />
             <button
               className="bg-[#707070] w-[318px] h-[52px] mt-[13px] flex mx-auto text-white text-center items-center justify-center text-[20px] rounded-[4px]"
-              onClick={() => sendCode(email)}
+              onClick={() => handleSendCode(email)}
             >
               Send
             </button>
@@ -168,15 +164,7 @@ const handleSubmit = () => {
             <button
               className="bg-[#707070] w-[318px] h-[52px] mt-[13px] flex mx-auto text-white text-center items-center justify-center text-[20px] rounded-[4px]"
               onClick={() => {
-                if (code === codesent) {
-                  setisCodeSent(2);
-                } else {
-                  Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "The code you entered is incorrect",
-                  });
-                }
+                HandleUseCode(email);
               }}
             >
               Send

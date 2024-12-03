@@ -9,7 +9,7 @@ export interface IAddress {
   street: string;
   buildingNumber: string;
   floor?: string;
-  apartmentNumber: string;
+  apartmentNumber?: string;
   additionalDirections?: string;
 }
 

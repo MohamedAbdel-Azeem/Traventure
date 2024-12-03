@@ -288,6 +288,44 @@ export async function addAddress(username: String, address: IAddress) {
   }
 }
 
+export async function editAddress(username: String, address: IAddress, index: number) {
+  try {
+    const tourist = await touristModel.findOne({ username: username });
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    if (tourist.saved_addressess === undefined) {
+      tourist.saved_addressess = [];
+    }
+    //edit specific address based on index number
+    tourist.saved_addressess[index] = address;
+    return await tourist.save();
+  } catch {
+    throw new Error("Error adding address");
+  }
+}
+
+export async function deleteAddress(username: String, index: number) {
+  try {
+    const tourist = await touristModel.findOne({ username
+    });
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    if (!tourist.saved_addressess || tourist.saved_addressess.length <= index) {
+      throw new Error("Address not found");
+    }
+    if (tourist.saved_addressess === undefined) {
+      tourist.saved_addressess = [];
+    }
+    tourist.saved_addressess.splice(index, 1);
+    return await tourist.save();
+  }
+  catch {
+    throw new Error("Error deleting address");
+  }
+}
+
 export async function updateUserWallet(username: string, amount: number) {
   try {
     const tourist = await touristModel.findOne({ username });
@@ -314,5 +352,7 @@ module.exports = {
   getPromoCodeUsed,
   setPromoCodeUsed,
   addAddress,
+  editAddress,
+  deleteAddress,
   updateUserWallet,
 };
