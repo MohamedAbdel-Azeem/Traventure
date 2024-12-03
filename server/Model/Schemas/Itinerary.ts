@@ -68,7 +68,7 @@ const itinerarychema = new schema({
     },
   ],default: []},
   bookingActivated: { type: Boolean, default: true },
-  canBook: { type: Boolean, default: false },
+  allowBooking: { type: Boolean, default: false },
   InterestedUsers: [
     {
       user_id: { type: mongoose.Types.ObjectId, ref: "Tourist" },

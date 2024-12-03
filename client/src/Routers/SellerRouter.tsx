@@ -14,7 +14,7 @@ export default function SellerRouter() {
         <Route path="/:username/sales" element={<SellerSalesPage />} />
         <Route path="/:username/profile" element={<Seller_Profile />} />
       </Routes>
-      <CurrencyDropdown />
+      {/* <CurrencyDropdown /> */}
     </div>
   );
 }

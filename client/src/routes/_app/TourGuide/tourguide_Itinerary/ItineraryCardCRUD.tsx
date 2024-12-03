@@ -229,6 +229,8 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
           <Button onClick={handleActivation}>
             {!active ? "Activate" : "Deactivate"}
           </Button>
+          
+          
           {onDelete &&
             (isDeleting ? (
               <CircularProgress size={24} className="text-red-500" />
@@ -242,6 +244,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
               </button>
             ))}
         </div>
+        
       </div>
     </div>
   );

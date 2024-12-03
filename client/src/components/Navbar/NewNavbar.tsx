@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect ,useRef} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import moment from 'moment';
 import {
   AppBar,
   Box,
@@ -41,6 +42,7 @@ import { GetCurrentUser } from "../../custom_hooks/currentuser";
 import HotelIcon from "@mui/icons-material/Hotel";
 import FlightIcon from "@mui/icons-material/Flight";
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
+import { set } from "date-fns";
 
 const drawerHeight = 64;
 
@@ -55,12 +57,30 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   const currentusertype = location.pathname.split(`/`)[1];
 
   const { cuserdata } = GetCurrentUser(currentuser);
-  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [dropdownVisible, setProfileDropdownVisible] = useState(false);
   const [isPasswordModalOpen, setPasswordModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const togglePopup = () => setIsOpen(!isOpen);
-  const [unreadCount, setUnreadCount] = useState(1);
+  console.log(cuserdata?.notifications);
+  const [notifications, setNotifications] = useState([]);
+  const [unreadNotifications, setUnreadNotifications] = useState([]);
+  const [notificationPopUpVisible, setNotificationPopUpVisible] = useState(false);
+  const [showAllPopup, setShowAllPopup] = useState(false);  
 
+  const [unreadCount, setUnreadCount] = useState(0);
+  useEffect(() => {
+    if (cuserdata) {
+      const unreadNotifications = cuserdata.notifications.filter(notification => !notification.read);
+      setUnreadNotifications(unreadNotifications)
+      setUnreadCount(unreadNotifications.length);
+      setNotifications(cuserdata.notifications);
+    }
+  }, [cuserdata]);
+  
+
+  const OpenShowAllPopUp = () => {
+    setShowAllPopup(true);
+  }
   const handlePasswordChangeSubmit = (data: AddContactLeadFormType) => {
     const { oldPassword, newPassword } = data;
     editpassword(currentuser, oldPassword, newPassword)
@@ -246,13 +266,42 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
 
   const whichoptions = getNavbarItems(currentusertype);
 
-  const handleMouseEnter = () => {
-    setDropdownVisible(true);
+  const handleMouseEnterProfilePic = () => {
+    setProfileDropdownVisible(true);
   };
 
-  const handleMouseLeave = () => {
-    setDropdownVisible(false);
+  const handleMouseLeaveProfilePic = () => {
+    setProfileDropdownVisible(false);
   };
+  const handleMouseEnterNotifications = () => {
+    setNotificationPopUpVisible(true);
+  }
+  const handleMouseLeaveNotifications = () => {
+    setNotificationPopUpVisible(false);
+    setShowAllPopup(false);
+  }
+  const handleNotificationClick = (notification:any) => {
+    // markAsRead(notification);
+    // navigate(`/notifications/${notification.id}`);
+  }
+
+  const NotificationItem = ({ notification}) => (
+
+    <li className={`${
+      notification.read
+        ? 'text-gray-500' 
+        : 'text-white' 
+    } bg-white text-[#6d28d9] rounded   hover:bg-gray-100`}
+    onClick={() => {
+      handleNotificationClick(notification)
+    }}
+  >
+      <p className="px-2 ">{notification.message}</p>
+      <p className="text-right text-xs text-gray-400 ">
+        {moment(notification.createdAt).fromNow()} 
+      </p>
+    </li>
+  );
 
   const profileDropdownItems = [
     ...(!currentusertype.includes("tourismgovernor") &&
@@ -430,15 +479,13 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
             </List>
           </Box>
           <Box
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            sx={{ position: "relative" }}
+            sx={{ position: "relative", marginRight: "20px" }}
+            className="relative flex justify-center items-center cursor-pointer text-[30px] text-gray-400"
+            onMouseEnter={handleMouseEnterNotifications}
+            onMouseLeave={handleMouseLeaveNotifications}
+            onClick={togglePopup}
           >
-            {/* <NotificationsNoneIcon className="text-white" fontSize="large" /> */}
-            <label
-        className="relative flex justify-center items-center cursor-pointer text-[30px] text-gray-400"
-        onClick={togglePopup}
-      >
+
         <NotificationsNoneIcon className="text-white" fontSize="large" />
 
         {unreadCount > 0 && (
@@ -446,12 +493,66 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
             {unreadCount}
           </span>
         )}
-      </label>
-            
+
+
+      <Fade in={notificationPopUpVisible} timeout={200}>
+              
+              
+
+        <div  className="absolute top-16 right-0 w-64 bg-gradient-to-r from-[#a855f7] to-[#6d28d9] shadow-lg rounded-lg p-4 z-10 text-white">
+{!showAllPopup ? (
+  <div>          
+          <h3 className="text-sm font-semibold mb-2 text-center text-white">Notifications</h3>
+
+
+{unreadCount > 0 ? (
+               <ul className="space-y-2">
+               {unreadNotifications.map((notification) => (
+                 <NotificationItem  notification={notification}/>
+                ))}
+             </ul>
+            ) : (
+              <p className="text-sm text-gray-500">No new notifications</p>
+            )}
+
+          {/* Buttons */}
+          <div className="flex justify-between mt-4">
+            <button
+              // onClick={markAllAsRead}
+              className="text-white text-sm font-semibold hover:underline"
+            >
+              Mark all as read
+            </button>
+            {/* text-[#a855f7]*/}
+            <button className="text-white text-sm font-semibold hover:underline"
+              onClick={() => {
+                OpenShowAllPopUp();
+              }}
+            >
+              Show all
+            </button>
+          </div>
+        </div>
+          ):(
+            // Show all notifications
+            <div>
+              <h3 className="text-sm font-semibold mb-2 text-center text-white">All Notifications</h3>
+              <ul className="space-y-2 max-h-[50vh] overflow-y-auto custom-scrollbar">
+                {notifications.map((notification) => (
+                  <NotificationItem notification={notification} />
+                ))}
+              </ul>
+
+              </div>
+          )}
+
+      
+              </div>
+            </Fade>
           </Box>
           <Box
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
+            onMouseEnter={handleMouseEnterProfilePic}
+            onMouseLeave={handleMouseLeaveProfilePic}
             sx={{ position: "relative" }}
           >
             {userdata?.profilepic ? (
@@ -471,8 +572,8 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
               <div>
                 <NavbarDropdown
                   items={profileDropdownItems}
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
+                  onMouseEnter={handleMouseEnterProfilePic}
+                  onMouseLeave={handleMouseLeaveProfilePic}
                 />
                 
               </div>
