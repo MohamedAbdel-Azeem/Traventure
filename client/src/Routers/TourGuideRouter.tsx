@@ -6,6 +6,7 @@ import CurrencyDropdown from "../components/currencyDrop";
 import NewNavbar from "../components/Navbar/NewNavbar";
 import ItineraryDetails from "../routes/_app/TourGuide/tourguide_Itinerary/ItineraryDetails";
 import {isAccessTokenPresent} from "../components/Protection/authUtils";
+import { TourguideStats } from "../components/Stats/TourguideStats";
 
 export default function TourGuideRouter() {
   return (
@@ -17,7 +18,9 @@ export default function TourGuideRouter() {
         <Route path="/:username/itineraries" element={isAccessTokenPresent() ?<TourGuidePage />:<Navigate to="/" />} />
         <Route path="/:username/itineraries/itinerary/:id" element={isAccessTokenPresent() ?<ItineraryDetails/>:<Navigate to="/" />}/>
         <Route path="/:username/profile" element={isAccessTokenPresent() ?<TourGuide_Profile />:<Navigate to="/" />} />
+        <Route path="/:username/statistics" element={<TourguideStats />} />
       </Routes>
+      {/* <CurrencyDropdown /> */}
       {/* <CurrencyDropdown /> */}
     </div>
   );

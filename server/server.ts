@@ -27,12 +27,18 @@ import amadeusRouter from "./amadeus/amadeus-router";
 import currentuserRouter from "./Routes/Current_user";
 import requestdeleteRouter from "./Routes/RequestDelete";
 import authRouter from "./Routes/Auth";
+import promocodeRouter from "./Routes/PromoCodes";
+
+const scheduleTask = require("./utils/functions/node_scheduler");
+
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(logger("dev"));
+
+scheduleTask();
 
 // Endpoints
 app.use("/api/admin", adminRouter);
@@ -55,6 +61,7 @@ app.use("/api/purchase", purchaseRouter);
 app.use("/api/complaint", complaintRouter);
 app.use("/api/feedBack", feedbackRouter);
 app.use("/api/admin/", reviewdocsRouter);
+app.use("/api/promocode", promocodeRouter);
 
 app.use("/amadeus", amadeusRouter);
 app.use("/api/requestdelete", requestdeleteRouter);

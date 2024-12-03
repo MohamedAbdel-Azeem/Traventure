@@ -8,6 +8,7 @@ import { Activities } from "../routes/_app/Advertiser/advertiser_activity/Activi
 import CurrencyDropdown from "../components/currencyDrop";
 import ItineraryDetailsTourist from "../components/Itinerary/ItineraryDetailsTourist";
 import {isAccessTokenPresent} from "../components/Protection/authUtils";
+import { AdvertiserStats } from "../components/Stats/AdvertiserStats";
 
 export default function AdvertiserRouter() {
   return (
@@ -20,6 +21,7 @@ export default function AdvertiserRouter() {
         <Route path="/:username/itineraries/tourist-itinerary/:id" element={isAccessTokenPresent() ?<ItineraryDetailsTourist/>:<Navigate to="/" />}/>
         <Route path="/:username/activities" element={isAccessTokenPresent() ?<Activities />:<Navigate to="/" />} />
         <Route path="/:username/profile" element={isAccessTokenPresent() ?<Advertiser_Profile />:<Navigate to="/" />} />
+        <Route path="/:username/stats" element={<AdvertiserStats />} />
       </Routes>
       {/* <CurrencyDropdown /> */}
     </div>

@@ -240,6 +240,15 @@ export async function getcurrentuser(username: string) {
     throw err;
   }
 }
+
+export async function getAllTourists() {
+  try {
+    return await touristModel.find();
+  } catch {
+    console.log("Error getting All Tourists");
+  }
+}
+
 export async function auth(
   id: string,
   module2: number
@@ -276,5 +285,6 @@ module.exports = {
   loginUser,
   changePassword,
   getcurrentuser,
+  getAllTourists,
   auth
 };

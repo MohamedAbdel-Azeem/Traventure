@@ -13,6 +13,8 @@ import ItineraryDetailsTourist from "../components/Itinerary/ItineraryDetailsTou
 import {isAccessTokenPresent} from "../components/Protection/authUtils";
 import AdminComplaints from "../routes/_app/Admin/AdminComplaints";
 import AdminShopPage from "../routes/_app/Admin/AdminShoppage";
+import { AdminRevenuePage } from "../routes/_app/Admin/admin_sales/AdminRevenuePage";
+import { AdminUsersNumPage } from "../routes/_app/Admin/admin_sales/AdminUsersNumPage";
 export default function AdminRouter() {
   return (
     <div className="flex flex-col w-screen h-screen">
@@ -29,6 +31,8 @@ export default function AdminRouter() {
         <Route path="/:username/itineraries" element={isAccessTokenPresent() ?<MoreItineraries />:<Navigate to="/" />} />
         <Route path="/:username/itineraries/tourist-itinerary/:id" element={isAccessTokenPresent() ?<ItineraryDetailsTourist/>:<Navigate to="/" />}/>
         <Route path="/:username/applications" element={isAccessTokenPresent() ?<Applications />:<Navigate to="/" />} />
+        <Route path="/:username/Revenue" element={<AdminRevenuePage />} />
+        <Route path="/:username/usersstats" element={<AdminUsersNumPage />} />
       </Routes>
       {/* <CurrencyDropdown /> */}
     </div>
