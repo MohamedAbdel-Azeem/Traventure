@@ -7,10 +7,19 @@ export interface IPurchasedProduct {
   quantity: number;
 }
 
+export enum PurchaseStatus {
+  processing = "processing",
+  delivered = "delivered",
+  cancelled = "cancelled",
+}
+
 export interface IPurchase {
   touristId: mongoose.Types.ObjectId;
   cart: IPurchasedProduct[];
   timeStamp: Date;
+  status?: PurchaseStatus;
+  totalAmount?: number;
+  promoCode?: string;
 }
 
 const purchaseSchema = new schema({
@@ -26,6 +35,9 @@ const purchaseSchema = new schema({
     },
   ],
   timeStamp: { type: Date, required: true, default: Date.now },
+  status: { type: String, required: true, default: PurchaseStatus.processing },
+  totalAmount: { type: Number, default: 0 },
+  promoCode: { type: String, default: "" },
 });
 
 export default mongoose.model<IPurchase>("Purchase", purchaseSchema);

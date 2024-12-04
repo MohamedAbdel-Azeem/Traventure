@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import emailjs from "emailjs-com";
-
 import { useState } from "react";
 import {
   Table,
@@ -159,12 +158,6 @@ export const ApplicantTable = ({ type }: ApplicantTableProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
-
-
-
-
-
 
 
 

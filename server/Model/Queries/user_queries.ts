@@ -11,6 +11,10 @@ import {
   hashPassword,
 } from "../../utils/functions/bcrypt_functions";
 import { compare } from "bcryptjs";
+import jwt from 'jsonwebtoken';
+
+// create json web token
+const time = 3 * 24 * 60 * 60;
 
 export async function getprofileInfo(username: string, type: string) {
   let model: mongoose.Model<any>;
@@ -119,8 +123,10 @@ export async function loginUser(username: string, password: string) {
         if (!passwordMatch) {
           throw new Error("Incorrect password");
         }
-
-        return { type: models[i], user: results[i] };
+        const token = jwt.sign({ id: (user as any)._id }, 'supersecret', {
+          expiresIn: time,
+        });
+        return { type: models[i], user: results[i], access_token:token};
       }
     }
 
@@ -235,6 +241,43 @@ export async function getcurrentuser(username: string) {
   }
 }
 
+export async function getAllTourists() {
+  try {
+    return await touristModel.find();
+  } catch {
+    console.log("Error getting All Tourists");
+  }
+}
+
+export async function auth(
+  id: string,
+  module2: number
+) {
+  try {
+    const results = await Promise.all([
+      sellerModel.findById( id ),
+      advertiserModel.findById(id ),
+      tourGuideModel.findById( id ),
+      adminModel.findById( id ),
+      touristModel.findById(id ),
+      governerModel.findById( id ),
+    ]);
+    
+    for (let i = 0; i < results.length; i++) {
+      if (results[i]) {
+        const user = results[i];
+        if (module2 != i) {
+          throw new Error("unauthorized");
+        }
+        return (user as any).username;
+        }
+      }
+    }
+  catch (err) {
+    throw err;
+  }
+  
+}
 module.exports = {
   getprofileInfo,
   getAllUsers,
@@ -242,4 +285,6 @@ module.exports = {
   loginUser,
   changePassword,
   getcurrentuser,
+  getAllTourists,
+  auth
 };

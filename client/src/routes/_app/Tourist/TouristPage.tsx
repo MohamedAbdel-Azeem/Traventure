@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
 import Dashboard from "../../../components/Dashboard";
 import WebsiteTutorial from "../../../components/WebsiteTutorial";
 import { Button } from "@mui/material";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { set } from "date-fns";
+import { useAuth } from "../../../custom_hooks/auth";
 
 const TouristPage = () => {
   const [isTutorialOpen, setTutorialOpen] = useState(false);
@@ -13,6 +14,8 @@ const TouristPage = () => {
   const handleTutorialClose = () => setTutorialOpen(false);
 
   const { username } = useParams<{ username: string }>();
+
+  const { isAuthenticated, isLoading, isError } = useAuth(4);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,9 +29,37 @@ const TouristPage = () => {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchData();
   }, []);
+
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <ClipLoader color="#f86c6b" loading={true} size={150} />
+      </div>
+    );
+  }
+  if (isError || isAuthenticated !== username) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <h1>Error 403 Unauthrized access</h1>
+      </div>
+    );
+  }
 
   const handleDontShowAgain = async () => {
     try {

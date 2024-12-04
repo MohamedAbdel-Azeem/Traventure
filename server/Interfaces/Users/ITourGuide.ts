@@ -22,6 +22,7 @@ export interface ITourGuide extends Document {
     username?: string;
     createdAt?: Date;
   }[];
+  timeStamp: Date;
 }
 
 export default ITourGuide;

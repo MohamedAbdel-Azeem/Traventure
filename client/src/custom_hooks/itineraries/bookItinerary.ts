@@ -7,7 +7,7 @@ const useBookItinerary = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const bookItinerary= async (itinerary_id: string | undefined, tourist_username: string | undefined) => {
+  const bookItinerary= async (itinerary_id: string | undefined, tourist_username: string | undefined,order_price:number) => {
     const url1 = `/traventure/api/tourist/${tourist_username}`;
     const url = `/traventure/api/bookings/add`;
     setLoading(true); // Set loading to true when the request starts
@@ -17,8 +17,9 @@ const useBookItinerary = () => {
         const response = await axios.post(url, {
             type:"itinerary",
             itinerary:itinerary_id,
-            tourist:tourist_id
-        });
+            tourist:tourist_id,
+            price:order_price});
+            
         if (response.status === 201 ){
             const getItinerary = await axios.get(`/traventure/api/itinerary/get/${itinerary_id}`);
             const Bookings= getItinerary.data.booked_By;

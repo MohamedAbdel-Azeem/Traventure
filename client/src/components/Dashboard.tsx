@@ -1,16 +1,47 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ItineraryCardToruist from "./Itinerary/ItineraryCardToruist";
 import LocationCardTourist from "./Locations/LocationCardTourist";
 import useGetUpcoming from "../custom_hooks/itineraries/useGetupcoming";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { ActivityCardTourist } from "./Activities/ActivityCardTourist";
+import {
+  Activity,
+  ActivityCardTourist,
+} from "./Activities/ActivityCardTourist";
+import axios from "axios";
+import Itinerary from "../custom_hooks/itineraries/itinerarySchema";
 
 const Dashboard: React.FC = () => {
   const { upcoming, loading, error } = useGetUpcoming();
+  const [bookmarkedItineraries, setBookmarkedItineraries] = useState<
+    Itinerary[]
+  >([]);
+  const [bookmarkedActivities, setBookmarkedActivities] = useState<Activity[]>(
+    []
+  );
   const navigate = useNavigate();
   const currenttype = useLocation().pathname.split("/")[1];
   const { username } = useParams<{ username: string }>();
   const currentuser = username as string;
+
+
+
+  useEffect(() => {
+    const fetchBookmarks = async () => {
+      try {
+        if (currenttype.includes("tourist")) {
+          const response = await axios.get(
+            `/traventure/api/tourist/bookmarks/${currentuser}`
+          );
+          setBookmarkedItineraries(response.data.bookmarkedItineraries);
+          setBookmarkedActivities(response.data.bookmarkedActivities);
+        }
+      } catch (err: any) {
+        console.error(err.message);
+      }
+    };
+
+    fetchBookmarks();
+  }, []);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -37,6 +68,7 @@ const Dashboard: React.FC = () => {
       return !activity.inappropriate;
     return true;
   });
+
   tourist_activities = tourist_activities.slice(0, 5);
   tourist_itineraries = tourist_itineraries.slice(0, 5);
 
@@ -68,6 +100,10 @@ const Dashboard: React.FC = () => {
                 booked_By={itinerary.booked_By}
                 bookingActivated={itinerary.bookingActivated}
                 inappropriate={itinerary.inappropriate}
+                bookmarked={bookmarkedItineraries.some(
+                  (bookmarkedItinerary) =>
+                    bookmarkedItinerary._id === itinerary._id
+                )}
               />
             ))
           ) : (
@@ -117,6 +153,10 @@ const Dashboard: React.FC = () => {
               <ActivityCardTourist
                 key={activity._id}
                 activity={activity}
+                bookmarked={bookmarkedActivities.some(
+                  (bookmarkedActivity) =>
+                    bookmarkedActivity._id === activity._id
+                )}
                 {...(currenttype === "tourist" && { type: "tourist" })}
               />
             ))

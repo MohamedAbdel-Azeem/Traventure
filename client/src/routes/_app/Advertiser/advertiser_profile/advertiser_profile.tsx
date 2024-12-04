@@ -13,6 +13,7 @@ import ProfilePictureEdit from "../../../../components/PDFs&Images/ProfilePictur
 import { uploadFileToStorage } from "../../../../firebase/firebase_storage";
 import { updateAdvertiser } from "../../../../custom_hooks/advertisercustomhooks";
 import { handleDeleteAccount } from "../../../../custom_hooks/usedeleterequest";
+import Cookies from 'js-cookie';
 // Define Zod schema for validation
 interface AdvertiserProfileProps {
   advertiser: IAdvertiser;
@@ -89,6 +90,9 @@ const AdvertiserProfile: React.FC<AdvertiserProfileProps> = ({
 
   // Handle logout
   const handleLogout = () => {
+    Cookies.set("access_token", "", { expires: 0});
+    Cookies.set("reduxPersistIndex", "", { expires: 0});
+    Cookies.set("persist%3Aroot", "", { expires: 0});
     navigate("/");
   };
 

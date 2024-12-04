@@ -14,13 +14,15 @@ import { Activity } from "../../../../components/Activities/ActivityCardTourist"
 import Itinerary from "../../../../custom_hooks/itineraries/itinerarySchema";
 import { useNavigate, useParams } from "react-router-dom";
 import getBookings from "../../../../custom_hooks/getTouristBookings";
-import cancelBookings from "../../../../custom_hooks/cancelBooking";
+import cancelBookings  from "../../../../custom_hooks/cancelBooking";
 import { set } from "date-fns";
 import { get } from "react-hook-form";
 import { ActivityCardTourist } from "../../../../components/Activities/ActivityCardTourist";
 import getFlights from "../../../../custom_hooks/getTouristFlights";
 import getHotels from "../../../../custom_hooks/getTouristHotels";
 import FeedbackDisplay from "../../../../components/Shenawy/FeedbackDisplay";
+import { useAuth } from "../../../../custom_hooks/auth";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -36,6 +38,7 @@ export interface IBooking {
   type: string;
   itinerary: Itinerary;
   activity: Activity;
+  price: number;
 }
 function Reviews(props: { id: string; type: string; text: string }) {
   const [openFeedback, setOpenFeedback] = useState(false);
@@ -102,7 +105,7 @@ const Bookings: React.FC = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
-
+  const { isAuthenticated, isLoading, isError } = useAuth(4);
   const showActivity = (activity: any) => {
     setSelectedActivity(activity);
     setOpen(true);
@@ -131,7 +134,7 @@ const Bookings: React.FC = () => {
 
   const handleCancel = async (booking_id: string) => {
     try {
-      await cancelBooking(booking_id);
+      await cancelBooking(booking_id,username);
       await refetch();
       await flightsget();
       await hotelsget();
@@ -333,6 +336,20 @@ const Bookings: React.FC = () => {
       rate: 4,
     },
   ];
+  if (isLoading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <ClipLoader color="#f86c6b" loading={true} size={150} />
+      </div>
+    );
+  }
+  if (isError || isAuthenticated !== username) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <h1>Error 403 Unauthrized access</h1>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -383,6 +400,7 @@ const Bookings: React.FC = () => {
                         Starting Date
                       </StyledTableCell>
                       <StyledTableCell align="center">Language</StyledTableCell>
+                      <StyledTableCell align="center">Price</StyledTableCell>
                       <StyledTableCell align="right">
                         Tour Guide
                       </StyledTableCell>
@@ -402,6 +420,9 @@ const Bookings: React.FC = () => {
                         </StyledTableCell>
                         <StyledTableCell align="center">
                           {booking.itinerary.language}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {booking.price}$
                         </StyledTableCell>
                         <StyledTableCell align="right">
                           {(booking.itinerary.added_By as any).username}
@@ -511,6 +532,7 @@ const Bookings: React.FC = () => {
                       <StyledTableCell align="left">Title</StyledTableCell>
                       <StyledTableCell align="center">Date</StyledTableCell>
                       <StyledTableCell align="center">Time</StyledTableCell>
+                      <StyledTableCell align="center">Price</StyledTableCell>
                       <StyledTableCell align="right"></StyledTableCell>
                       <StyledTableCell align="right"></StyledTableCell>
                     </TableRow>
@@ -533,6 +555,9 @@ const Bookings: React.FC = () => {
                             hour: "2-digit",
                             minute: "2-digit",
                           })}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {booking.price}$
                         </StyledTableCell>
 
                         <StyledTableCell

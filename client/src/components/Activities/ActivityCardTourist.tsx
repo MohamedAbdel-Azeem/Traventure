@@ -15,9 +15,16 @@ import {
   useGetAllTags,
 } from "../../custom_hooks/categoryandTagCRUD";
 import useBookActivity from "../../custom_hooks/activities/bookActivity";
+
+import useBookmarkActivity from "../../custom_hooks/activities/bookmarkActivity";
+import { updateActivity } from "../../custom_hooks/activities/updateActivity";
+
 import { useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import BookmarkIcon from '@mui/icons-material/BookmarkAdd';
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 export type Activity = {
   _id: string;
@@ -43,6 +50,7 @@ export type Activity = {
 interface ActivityProp {
   activity: Activity;
   type?: string;
+  bookmarked?: boolean;
 }
 
 type CatStructure = {
@@ -54,14 +62,23 @@ type CatStructure = {
 export const ActivityCardTourist: React.FC<ActivityProp> = ({
   type,
   activity,
+  bookmarked
 }) => {
+  const currentuser = useLocation().pathname.split("/")[2];
+  const currpath = useLocation().pathname.split("/")[3];
   const currenttype = useLocation().pathname.split("/")[1];
   const [newDate, setNewDate] = useState(new Date(activity.DateAndTime));
   const [newBIO, setNewBIO] = useState(activity.BookingIsOpen);
   const [mopen, setmOpen] = useState(false);
   const { username } = useParams<{ username: string }>();
-  const { bookActivity } = useBookActivity();
-  const [inappropriate, setInappropriate] = useState(activity.inappropriate);
+
+  const { bookActivity, data, loading, error } = useBookActivity();
+  const { bookmarkActivity,loading:loadingBookmark } = useBookmarkActivity();
+  const [inappropriate, setInappropriate] = useState(
+    activity.inappropriate
+  );
+  const [isBookmarked, setIsBookmarked] = useState(bookmarked);
+
 
   const handleInappropriate = async () => {
     try {
@@ -118,13 +135,23 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
  
   const handleBooking = async (activity_id: string) => {
     try {
-      await bookActivity(activity_id, username);
+      await bookActivity(activity_id, username,activity.Price,activity.SpecialDiscount);
     } catch (error) {
       console.error("Error booking activity:", error);
     }
   };
 
 
+
+  const handleBookMark = async (activity_id: string) => {
+    try {
+      await bookmarkActivity(currentuser,activity_id);
+      setIsBookmarked(true);
+    } catch (error) {
+      console.error("Error bookmarking activity:", error);
+    }
+
+  };
 
   const handleDateChange = (e) => {
     setNewDate(new Date(e.target.value));
@@ -185,11 +212,28 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
             </div>
             {type === "tourist" && activity.BookingIsOpen && (
               <div className=" flex justify-end items-center py-2 px-5">
+               {!isBookmarked && (
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ml-2"
+                title="Bookmark"
+                onClick={() => handleBookMark(activity._id)}
+              >
+                {loadingBookmark?<ClipLoader size={30} color="#ffffff"></ClipLoader>: <BookmarkIcon />}
+              </button>
+            )}
+            {isBookmarked && currpath!=="bookmarks" && (
+              <button
+                className="bg-green-700 text-white px-4 py-2 rounded-lg  ml-2" disabled
+              >
+                <BookmarkAddedIcon />
+              </button>
+            )}
+
                 <button
                   className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ml-2"
                   onClick={() => handleBooking(activity._id)}
                 >
-                  Book
+                  {loading?<ClipLoader size={30} color="#ffffff"></ClipLoader>: "Book"}
                 </button>
               </div>
             )}

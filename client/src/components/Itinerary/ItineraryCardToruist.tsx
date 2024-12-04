@@ -8,12 +8,16 @@ import { TouristProfileData } from "../../routes/_app/Tourist/tourist_profile/to
 import { IActivity } from "../../custom_hooks/activities/activity_interface";
 import Place from "../../custom_hooks/places/place_interface";
 import useBookItinerary from "../../custom_hooks/itineraries/bookItinerary";
+import useBookmarkItinerary from "../../custom_hooks/itineraries/bookmarkItinerary";
 import { useParams, useLocation } from "react-router-dom";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 import ShareButton from "../Buttons/ShareButton";
+import BookmarkIcon from '@mui/icons-material/BookmarkAdd';
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 interface TagStructure {
   _id: string;
@@ -50,6 +54,7 @@ interface ItineraryCardCRUDProps {
   accesibility: boolean;
   bookingActivated: boolean;
   inappropriate: boolean;
+  bookmarked?: boolean;
 }
 
 const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
@@ -69,10 +74,15 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   plan,
   bookingActivated,
   inappropriate,
+  bookmarked
 }) => {
-  const { bookItinerary } = useBookItinerary();
+
+  const { bookItinerary, data, loading, error } = useBookItinerary();
+  const { bookmarkItinerary,loading:loadingBookmark} = useBookmarkItinerary();
   const { username } = useParams<{ username: string }>();
   const currenttype = useLocation().pathname.split("/")[1];
+  const currpath = useLocation().pathname.split("/")[3];
+  const [isBookmarked, setIsBookmarked] = useState(bookmarked);
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
@@ -84,11 +94,21 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
 
   const handleBooking = async (id: string) => {
     try {
-      await bookItinerary(id, username);
+      await bookItinerary(id, username,price);
     } catch (error) {
       console.error("Error booking itinerary  :", error);
     }
   };
+
+  const handleBookmark = async (id: string) => {
+    try{
+      const response = await bookmarkItinerary(username, id);
+      setIsBookmarked(true);
+    }
+    catch (error) {
+      console.error("Error bookmarking itinerary  :", error);
+    }
+  }
 
   const exchangeRate = useSelector(
     (state: any) => state.exchangeRate.exchangeRate
@@ -230,8 +250,15 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
                 onClick={() => handleBooking(_id)}
               >
-                Book
+                {loading?<ClipLoader size={30} color="#ffffff"></ClipLoader>: "Book"}
               </button>
+              {!isBookmarked && <button className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600" title="Bookmark"
+                onClick={() => handleBookmark(_id)}>
+                {loadingBookmark?<ClipLoader size={30} color="#ffffff"></ClipLoader>: <BookmarkIcon />}
+                </button>}
+                {isBookmarked && currpath!=="bookmarks" && <button className="bg-green-600 text-white p-2 rounded-lg" disabled>
+                <BookmarkAddedIcon  />
+                </button>}
               <ShareButton type={"itinerary"} ID={_id} />
             </>
           )}
