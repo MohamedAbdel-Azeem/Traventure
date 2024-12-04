@@ -9,18 +9,19 @@ import { GetCurrentUser } from "../custom_hooks/currentuser";
 import { useSelector } from "react-redux";
 import { IProduct } from "../redux/cartSlice";
 import { useParams } from "react-router-dom";
+import { useAuth } from "../custom_hooks/auth";
 import {
   addAddress,
   editAddress,
   deleteAddress,
 } from "../custom_hooks/checkout";
+
 import BestDeleteButton from "./Buttons/BestDeleteButton";
+import ClipLoader from "react-spinners/ClipLoader";
 const Checkout = () => {
+  const { isAuthenticated, isLoading, isError } = useAuth(4);
   const {username} = useParams();
   const [selectedValue, setSelectedValue] = useState("cod");
-  const [cardNumber, setCardNumber] = useState("");
-  const [cardDate, setCardDate] = useState("");
-  const [cardSecurity, setCardSecurity] = useState("");
   const [apartment, setApartment] = useState("");
   const [additionalinfo, setAdditionalinfo] = useState("");
   const [building, setBuilding] = useState("");
@@ -62,29 +63,6 @@ const Checkout = () => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedValue(event.target.value);
-  };
-
-  const handleCardNumberChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    let value = event.target.value.replace(/\D/g, "");
-    value = value.replace(/(.{4})/g, "$1 ").trim();
-    setCardNumber(value);
-  };
-
-  const handleCardDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let value = event.target.value.replace(/\D/g, "");
-    value = value.replace(/(.{2})/g, "$1/").trim();
-    if (value.length > 5) value = value.slice(0, 5);
-    setCardDate(value);
-  };
-
-  const handleCardSecurityChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    let value = event.target.value.replace(/\D/g, "");
-    if (value.length > 3) value = value.slice(0, 3);
-    setCardSecurity(value);
   };
 
   const handleSubmit = (index: number) => {
@@ -154,10 +132,58 @@ const Checkout = () => {
       setCurrentIndex(saved_addresses.length - 1);
     }
   };
-
+ if (isLoading) {
+   return (
+     <div
+     className="flex items-center justify-center h-screen"
+       
+     >
+       <ClipLoader color="#f86c6b" loading={true} size={150} />
+     </div>
+   );
+ }
+ if (isError || isAuthenticated !== username) {
+   return (
+     <div
+       style={{
+         display: "flex",
+         justifyContent: "center",
+         alignItems: "center",
+         height: "100vh",
+       }}
+     >
+       <h1>Error 403 Unauthrized access</h1>
+     </div>
+   );
+ }
   return (
     <div className="flex flex-row mt-8">
-      <div className=" ml-8 mt-8 w-[529.2px] h-[650px] rounded-[24px] bg-gradient-to-r from-[#A855F7] to-[#6D28D9] flex flex-col">
+      <div className="ml-[100px] h-[650px] mt-8 w-[811px] bg-gradient-to-b from-[#A855F7] to-[#6D28D9] flex flex-col rounded-[10px] overflow-auto lasttimeipromise">
+        <div className="flex text-[32px] h-[68px] mt-[20px] w-[811px] justify-center items-center text-white">
+          Order Summary
+        </div>
+        {cart.map((item) => (
+          <div className="flex flex-col mt-4">
+            <div
+              className="h-[150px] w-[788px] flex mx-auto"
+              style={{
+                backgroundImage: `url('${item.imageUrl}')`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            />
+            <div className="flex flex-row mt-3 justify-between w-[777px] mx-auto">
+              <div className="w-[313px] h-[45px] text-white text-[32px]">
+                {item.name}
+              </div>
+              <div className="w-[300px] h-[45px] text-white text-[32px] text-end">
+                {(item.price * item.quantity).toFixed(2)}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="mr-[90px] ml-auto mt-8 w-[529.2px] h-[650px] rounded-[15px] bg-gradient-to-t from-violet-700 to-violet-900 flex flex-col">
         {isEditing ? (
           isEditing2 ? (
             <div className="relative">
@@ -730,299 +756,202 @@ const Checkout = () => {
                 Checkout
               </p>
             </div>
-            <div className="flex mx-auto w-[488.6px] h-[32.9px] rounded-l-[26.6px] bg-gradient-to-r from-[#DBC3FF] to-[#A855F7]">
+            <div className="h-[204.4px] w-[488.6px] bg-violet-300 text-black mx-auto rounded-[20px] mb-4">
               <p className="text-[15.4px] text-black flex items-center justify-start my-auto ml-4">
                 Shipping
               </p>
-            </div>
-            {!(saved_addresses?.length === 0) ? (
-              <div className="h-[171.5px] flex flex-row relative">
-                <div className="flex flex-col ml-[40.6px] my-auto">
-                  <p className="text-[15.4px] text-white">
-                    {currentaddress?.street}
-                  </p>
-                  <p className="text-[15.4px] text-white">
-                    Building: {currentaddress?.buildingNumber}
-                  </p>
-                  {fearandDelight ? (
-                    <p className="text-[15.4px] text-white">
-                      Floor {currentaddress?.floor}, Apt.
-                      {currentaddress?.apartmentNumber}
+              {!(saved_addresses?.length === 0) ? (
+                <div className="h-[171.5px] flex flex-row relative">
+                  <div className="flex flex-col ml-[40.6px] my-auto">
+                    <p className="text-[15.4px] text-black">
+                      {currentaddress?.street}
                     </p>
-                  ) : (
-                    <></>
-                  )}
-                  <p className="text-[14px] w-[290px] break-words text-white">
-                    {currentaddress?.additionalDirections}
+                    <p className="text-[15.4px] text-white">
+                      Building: {currentaddress?.buildingNumber}
+                    </p>
+                    {fearandDelight ? (
+                      <p className="text-[15.4px] text-white">
+                        Floor {currentaddress?.floor}, Apt.
+                        {currentaddress?.apartmentNumber}
+                      </p>
+                    ) : (
+                      <></>
+                    )}
+                    <p className="text-[14px] w-[290px] break-words text-white">
+                      {currentaddress?.additionalDirections}
+                    </p>
+                  </div>
+                  <div className="absolute right-[206.5px] top-[7px]">
+                    <EditButton
+                      handleEditClick={() => {
+                        setEditing(true);
+                        setEditing2(false);
+                      }}
+                    />
+                  </div>
+                  <iframe
+                    title="map"
+                    className="rounded-[7px] my-auto ml-auto mr-[40.6px]"
+                    src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${longitude}!3d${latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
+                    width="157.5px"
+                    height="157.5px"
+                  ></iframe>
+                </div>
+              ) : (
+                <div className="h-[171.5px] flex flex-row relative">
+                  <button
+                    onClick={() => {
+                      setEditing(true);
+                      setEditing2(false);
+                    }}
+                    className="text-white text-[23px] border-white rounded-[7px] border-[1px] w-[395px] h-[61px] flex mx-auto my-auto items-center justify-center"
+                  >
+                    Add a new address to continue
+                  </button>
+                </div>
+              )}
+            </div>
+            <div className="flex flex-row gap-4 justify-center relative">
+              <div className="flex flex-col w-[240px] h-[170px] bg-violet-200 rounded-l-[10px]">
+                <div className="flex mx-auto w-[240px] h-[32.9px] rounded-l-[10px] ">
+                  <p className="text-[15.4px] text-black flex items-center justify-start my-auto ml-4">
+                    Payment
                   </p>
                 </div>
-                <div className="absolute right-[206.5px] top-[7px]">
-                  <EditButton handleEditClick={() => {setEditing(true);setEditing2(false);}} />
-                </div>
-                <iframe
-                  title="map"
-                  className="rounded-[7px] my-auto ml-auto mr-[40.6px]"
-                  src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${longitude}!3d${latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
-                  width="157.5px"
-                  height="157.5px"
-                ></iframe>
-              </div>
-            ) : (
-              <div className="h-[171.5px] flex flex-row relative">
-                <button
-                  onClick={() => {
-                    setEditing(true);
-                    setEditing2(false);
-                  }}
-                  className="text-white text-[23px] border-white rounded-[7px] border-[1px] w-[395px] h-[61px] flex mx-auto my-auto items-center justify-center"
-                >
-                  Add a new address to continue
-                </button>
-              </div>
-            )}
-            <div className="flex mx-auto w-[488.6px] h-[32.9px] rounded-r-[26.6px] bg-gradient-to-r from-[#DBC3FF] to-[#A855F7]">
-              <p className="text-[15.4px] text-black flex items-center justify-start my-auto ml-4">
-                Payment
-              </p>
-            </div>
-            <div className="flex ml-[35px] h-[137.2px]">
-              <div className="my-auto gap-[9.1px] flex flex-col">
-                <FormControlLabel
-                  control={
-                    <Radio
-                      checked={selectedValue === "creditcard"}
-                      onChange={handleChange}
-                      value="creditcard"
-                      name="paymentMethod"
-                      sx={{
-                        color: "#000000",
-                        "&.Mui-checked": {
-                          color: "#000000",
-                        },
-                        transform: "scale(0.75)",
-                      }}
-                    />
-                  }
-                  sx={{
-                    width: "212.8px",
-                    height: "34.3px",
-                    backgroundColor: "white",
-                    borderRadius: "7px",
-                    "& .MuiFormControlLabel-label": {
-                      fontSize: "15px",
-                    },
-                  }}
-                  label="Credit Card"
-                />
-                <FormControlLabel
-                  control={
-                    <Radio
-                      checked={selectedValue === "cod"}
-                      onChange={handleChange}
-                      value="cod"
-                      name="paymentMethod"
-                      sx={{
-                        color: "#000000",
-                        "&.Mui-checked": {
-                          color: "#000000",
-                        },
-                        transform: "scale(0.75)",
-                      }}
-                    />
-                  }
-                  sx={{
-                    width: "212.8px",
-                    height: "34.3px",
-                    backgroundColor: "white",
-                    borderRadius: "7px",
-                    "& .MuiFormControlLabel-label": {
-                      fontSize: "15px",
-                    },
-                  }}
-                  label="COD (Cash on Delivery)"
-                />
-                <FormControlLabel
-                  control={
-                    <Radio
-                      checked={selectedValue === "wallet"}
-                      onChange={handleChange}
-                      value="wallet"
-                      name="paymentMethod"
-                      sx={{
-                        color: "#000000",
-                        "&.Mui-checked": {
-                          color: "#000000",
-                        },
-                        transform: "scale(0.75)",
-                      }}
-                    />
-                  }
-                  sx={{
-                    width: "212.8px",
-                    height: "34.3px",
-                    backgroundColor: "white",
-                    borderRadius: "7px",
-                    "& .MuiFormControlLabel-label": {
-                      fontSize: "15px",
-                    },
-                  }}
-                  label="Wallet"
-                />
-              </div>
-              <div
-                className={`my-auto gap-[9.1px] flex flex-col ${
-                  !selectedValue.includes("creditcard") ? "hidden" : ""
-                }`}
-              >
-                <TextField
-                  id="ccn"
-                  type="tel"
-                  inputMode="numeric"
-                  inputProps={{ maxLength: 19, pattern: "[0-9s]{13,19}" }}
-                  placeholder="XXXX XXXX XXXX XXXX"
-                  required
-                  variant="outlined"
-                  value={cardNumber}
-                  onChange={handleCardNumberChange}
-                  onKeyPress={(event) => {
-                    if (!/[0-9\s]/.test(event.key)) {
-                      event.preventDefault();
-                    }
-                  }}
-                  sx={{
-                    width: "245px",
-                    height: "34.3px",
-                    "& .MuiInputBase-input": {
-                      color: "white",
-                      textAlign: "center",
-                      padding: "0 9.8px",
-                      height: "34.3px",
-                      boxSizing: "border-box",
-                    },
-                    "& .MuiInputBase-input::placeholder": {
-                      textAlign: "center",
-                    },
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": {
-                        borderColor: "white",
-                        borderRadius: "7px",
-                      },
-                      "&.Mui-focused fieldset": {
-                        borderColor: "white",
-                        borderRadius: "7px",
-                      },
-                    },
-                  }}
-                />
-                <div className="flex flex-row gap-[7px]">
-                  <TextField
-                    id="exp-date"
-                    type="tel"
-                    inputMode="numeric"
-                    inputProps={{ maxLength: 5, pattern: "[0-9/]*" }}
-                    placeholder="MM/YY"
-                    required
-                    variant="outlined"
-                    value={cardDate}
-                    onChange={handleCardDateChange}
-                    onKeyPress={(event) => {
-                      if (!/[0-9/]/.test(event.key)) {
-                        event.preventDefault();
+                <div className="flex mx-auto h-[137.2px]">
+                  <div className="my-auto gap-[9px] flex flex-col">
+                    <FormControlLabel
+                      control={
+                        <Radio
+                          checked={selectedValue === "creditcard"}
+                          onChange={handleChange}
+                          value="creditcard"
+                          name="paymentMethod"
+                          sx={{
+                            color: "#000000",
+                            "&.Mui-checked": {
+                              color: "#000000",
+                            },
+                            transform: "scale(0.75)",
+                          }}
+                        />
                       }
-                    }}
-                    sx={{
-                      width: "147px",
-                      height: "34.3px",
-                      borderRadius: "21px",
-                      "& .MuiInputBase-input": {
-                        color: "white",
-                        textAlign: "center",
-                        padding: "0 9.8px",
-                        height: "34.3px",
-                        boxSizing: "border-box",
-                      },
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          borderColor: "white",
-                          borderRadius: "7px",
+                      sx={{
+                        width: "212px",
+                        height: "34px",
+                        marginX: "auto",
+                        backgroundColor: "white",
+                        borderRadius: "7px",
+                        "& .MuiFormControlLabel-label": {
+                          fontSize: "15px",
                         },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "white",
-                          borderRadius: "7px",
-                        },
-                      },
-                    }}
-                  />
-                  <TextField
-                    id="cvv"
-                    type="tel"
-                    inputMode="numeric"
-                    inputProps={{ maxLength: 3, pattern: "[0-9]*" }}
-                    placeholder="CVV"
-                    required
-                    variant="outlined"
-                    value={cardSecurity}
-                    onChange={handleCardSecurityChange}
-                    onKeyPress={(event) => {
-                      if (!/[0-9]/.test(event.key)) {
-                        event.preventDefault();
+                      }}
+                      label="Credit Card"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Radio
+                          checked={selectedValue === "cod"}
+                          onChange={handleChange}
+                          value="cod"
+                          name="paymentMethod"
+                          sx={{
+                            color: "#000000",
+                            "&.Mui-checked": {
+                              color: "#000000",
+                            },
+                            transform: "scale(0.75)",
+                          }}
+                        />
                       }
-                    }}
-                    sx={{
-                      width: "90.3px",
-                      height: "34.3px",
-                      borderRadius: "21px",
-                      "& .MuiInputBase-input": {
-                        color: "white",
-                        textAlign: "center",
-                        padding: "0 9.8px",
-                        height: "34.3px",
-                        boxSizing: "border-box",
-                      },
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                          borderColor: "white",
-                          borderRadius: "7px",
+                      sx={{
+                        width: "212px",
+                        height: "34px",
+                        marginX: "auto",
+                        backgroundColor: "white",
+                        borderRadius: "7px",
+                        "& .MuiFormControlLabel-label": {
+                          fontSize: "15px",
                         },
-                        "&.Mui-focused fieldset": {
-                          borderColor: "white",
-                          borderRadius: "7px",
+                      }}
+                      label="COD (Cash on Delivery)"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Radio
+                          checked={selectedValue === "wallet"}
+                          onChange={handleChange}
+                          value="wallet"
+                          name="paymentMethod"
+                          sx={{
+                            color: "#000000",
+                            "&.Mui-checked": {
+                              color: "#000000",
+                            },
+                            transform: "scale(0.75)",
+                          }}
+                        />
+                      }
+                      sx={{
+                        width: "212px",
+                        height: "34px",
+                        marginX: "auto",
+                        backgroundColor: "white",
+                        borderRadius: "7px",
+                        "& .MuiFormControlLabel-label": {
+                          fontSize: "15px",
                         },
-                      },
-                    }}
-                  />
+                      }}
+                      label="Wallet"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="flex mx-auto w-[488.6px] h-[32.9px] rounded-l-[26.6px] bg-gradient-to-r from-[#A855F7] to-[#DBC3FF]">
-              <p className="text-[15.4px] text-black flex items-center justify-start my-auto ml-4">
-                Promo Code
-              </p>
-              <div className="relative group h-[21px] w-[21px] mr-auto ml-[21px] my-auto cursor-pointer">
-                <svg
-                  className="h-[20px] w-[20px] mr-auto ml-[30px] my-auto cursor-pointer"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 512 512"
-                >
-                  <path
-                    fill="#000000"
-                    d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z"
-                  ></path>
-                  <path
-                    fill="#FFFFFF"
-                    d="M216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
-                  ></path>
-                </svg>
+              <div className="absolute">
+                <div className="bg-violet-200 h-[17px] w-[16px]" />
+                <div className="bg-violet-500 h-[17px] w-[16px]" />
+                <div className="bg-violet-200 h-[17px] w-[16px]" />
+                <div className="bg-violet-500 h-[17px] w-[16px]" />
+                <div className="bg-violet-200 h-[17px] w-[16px]" />
+                <div className="bg-violet-500 h-[17px] w-[16px]" />
+                <div className="bg-violet-200 h-[17px] w-[16px]" />
+                <div className="bg-violet-500 h-[17px] w-[16px]" />
+                <div className="bg-violet-200 h-[17px] w-[16px]" />
+                <div className="bg-violet-500 h-[17px] w-[16px]" />
+              </div>
+              <div className="flex flex-col w-[240px] h-[170px] bg-violet-500 rounded-r-[10px]">
+                <div className="flex mx-auto w-[240px] h-[32.9px] rounded-r-[10px]">
+                  <p className="text-[15.4px] text-black flex items-center justify-start my-auto ml-auto mr-4">
+                    Promo Code
+                  </p>
+                  <div className="relative group h-[21px] w-[21px] cursor-pointer">
+                    <svg
+                      className="h-[20px] w-[20px] top-[7px] left-[-10px] absolute"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 512 512"
+                    >
+                      <path
+                        fill="#000000"
+                        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z"
+                      ></path>
+                      <path
+                        fill="#FFFFFF"
+                        d="M216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+                      ></path>
+                    </svg>
 
-                <div className="absolute w-[250px] h-[60px] bottom-[-23px] left-[-60px] transform translate-x-1/2 mb-2 hidden group-hover:flex items-center justify-center bg-black text-white text-[16px] rounded-[16px] px-4 shadow-lg">
-                  Promo codes apply a 10% discount and can't be reused
+                    <div className="absolute w-[250px] h-[60px] bottom-[-23px] left-[-490px] transform translate-x-1/2 mb-2 hidden group-hover:flex items-center justify-center bg-black text-white text-[16px] rounded-[16px] px-4 shadow-lg">
+                      Promo codes apply a 10% discount and can't be reused
+                    </div>
+                  </div>
                 </div>
+                <PromoCodeButton
+                  onAccept={setOnAccept}
+                  className="mt-[7.7px] mx-auto h-[120px]"
+                />
               </div>
             </div>
-            <PromoCodeButton
-              onAccept={setOnAccept}
-              className="ml-[4px] w-[200px] mt-[7.7px]"
-            />
+
             <line className="bg-white size-3.5 h-[0.7px] w-[488.6px] flex mx-auto mt-[7px]" />
             <div className="w-[488.6px] h-[46.9px] grid grid-cols-2 mx-auto my-[0.7px]">
               <div className="mr-auto">
@@ -1063,31 +992,6 @@ const Checkout = () => {
             </div>
           </div>
         )}
-      </div>
-      <div className="ml-10 h-[650px] w-[811px] bg-gradient-to-b from-[#A855F7] to-[#6D28D9] flex flex-col rounded-[10px] overflow-auto lasttimeipromise">
-        <div className="flex text-[32px] h-[68px] w-[811px] justify-center items-center text-white">
-          Order Summary
-        </div>
-        {cart.map((item) => (
-          <div className="flex flex-col mt-4">
-            <div
-              className="h-[150px] w-[788px] flex mx-auto"
-              style={{
-                backgroundImage: `url('${item.imageUrl}')`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            />
-            <div className="flex flex-row mt-3 justify-between w-[777px] mx-auto">
-              <div className="w-[313px] h-[45px] text-white text-[32px]">
-                {item.name}
-              </div>
-              <div className="w-[300px] h-[45px] text-white text-[32px] text-end">
-                {(item.price * item.quantity).toFixed(2)}
-              </div>
-            </div>
-          </div>
-        ))}
       </div>
     </div>
   );
