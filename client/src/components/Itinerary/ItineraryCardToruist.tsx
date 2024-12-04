@@ -178,14 +178,14 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
           </h2>
         </div>
         <div className="mb-2 flex justify-between items-center">
-          <p className="text-s font-bold text-gray-800 flex items-center">
-            {rating.toFixed(1)} · {getRatingStatus(rating)}
-          </p>
-          <p className="text-s font-bold text-gray-800 flex items-center">
-            <ConfirmationNumberIcon className="mr-1" /> {currentCurrency}{" "}
-            {(price * exchangeRate).toFixed(2)}
-          </p>
-        </div>
+  <p className="text-s font-bold text-gray-800 flex items-center">
+    <StarIcon className="mr-1 text-yellow-500" /> {rating.toFixed(1)} · {getRatingStatus(rating)}
+  </p>
+  <p className="text-s font-bold text-gray-800 flex items-center">
+    <ConfirmationNumberIcon className="mr-1" /> {currentCurrency}{" "}
+    {(price * exchangeRate).toFixed(2)}
+  </p>
+</div>
   
         {currentType === "tourist" && (
           <div className="mb-4 text-left">
@@ -302,12 +302,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
       </div>
     </div>
   );
-  
-  
-  
-  
-  
-  
+   
 };
 
 export default ItineraryCardCRUDTourist;
