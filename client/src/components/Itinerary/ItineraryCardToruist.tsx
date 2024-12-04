@@ -186,6 +186,18 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
             {(price * exchangeRate).toFixed(2)}
           </p>
         </div>
+  
+        {currentType === "tourist" && (
+          <div className="mb-4 text-left">
+            <p className="text-gray-600 text-sm font-semibold">
+              {`${format(new Date(starting_Date), "MMM dd")} - ${format(
+                new Date(ending_Date),
+                "MMM dd"
+              )}`}
+            </p>
+          </div>
+        )}
+  
         <div className="mb-4">
           <p className="text-gray-600 text-center text-sm truncate">
             {description}
@@ -193,19 +205,22 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
         </div>
   
         {Array.isArray(selectedTags) && selectedTags.length > 0 && (
-          <div className="mb-2">
-            <div className="flex flex-wrap justify-center items-center">
-              {selectedTags.map((tag) => (
-                <span
-                  key={tag._id}
-                  className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm mr-2 mb-2"
-                >
-                  {tag.name}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
+  <div className="mb-2">
+    <div className="flex flex-wrap justify-center items-center">
+      {selectedTags.slice(0, 3).map((tag) => (
+        <span
+          key={tag._id}
+          className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm mr-2 mb-2"
+        >
+          {tag.name}
+        </span>
+      ))}
+      {selectedTags.length > 3 && (
+        <span className="text-blue-800 px-2 py-1 text-sm">...</span>
+      )}
+    </div>
+  </div>
+)}
   
         <div className="mt-4 flex justify-between items-center">
           <Link
@@ -261,15 +276,6 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
                   <BookmarkAddedIcon />
                 </button>
               )}
-              <div className="flex flex-col items-end space-y-2">
-                <p className="text-gray-600 text-sm font-semibold">
-                  {`${format(new Date(starting_Date), "MMM dd")} - ${format(
-                    new Date(ending_Date),
-                    "MMM dd"
-                  )}`}
-                </p>
-                <ShareButton type={"itinerary"} ID={_id} />
-              </div>
             </>
           )}
   
@@ -282,6 +288,12 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
           )}
         </div>
   
+        {currentType === "tourist" && (
+          <div className="mt-2">
+            <ShareButton type={"itinerary"} ID={_id} />
+          </div>
+        )}
+  
         {currentType === "admin" && (
           <Button onClick={handleInappropriate}>
             {inappropriateV ? "Declare Appropriate" : "Declare Inappropriate"}
@@ -290,6 +302,8 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
       </div>
     </div>
   );
+  
+  
   
   
   
