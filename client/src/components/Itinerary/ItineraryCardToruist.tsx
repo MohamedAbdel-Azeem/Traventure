@@ -151,8 +151,19 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   };
   const [inappropriateV, setActive] = useState(inappropriate);
 
+  const getRatingStatus = (rating: number) => {
+    if (rating >= 4.5) return "Excellent";
+    if (rating >= 4.0) return "Very Good";
+    if (rating >= 3.5) return "Good";
+    if (rating >= 3.0) return "Average";
+    return "Below Average";
+  };
+
   return (
-    <div className="m-4 transition transform hover:scale-105 w-96 bg-gray-200 rounded-lg">
+    <div
+      className="m-4 transition transform hover:scale-105 w-96 bg-gray-200 rounded-lg overflow-hidden shadow-lg"
+      style={{ boxShadow: "10px 10px 20px rgba(0, 0, 0, 0.2)" }} 
+    >
       <div className="relative w-full h-[200px]">
         <img
           src={main_Picture}
@@ -166,12 +177,21 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
             {title}
           </h2>
         </div>
+        <div className="mb-2 flex justify-between items-center">
+          <p className="text-s font-bold text-gray-800 flex items-center">
+            {rating.toFixed(1)} · {getRatingStatus(rating)}
+          </p>
+          <p className="text-s font-bold text-gray-800 flex items-center">
+            <ConfirmationNumberIcon className="mr-1" /> {currentCurrency}{" "}
+            {(price * exchangeRate).toFixed(2)}
+          </p>
+        </div>
         <div className="mb-4">
           <p className="text-gray-600 text-center text-sm truncate">
             {description}
           </p>
         </div>
-
+  
         {Array.isArray(selectedTags) && selectedTags.length > 0 && (
           <div className="mb-2">
             <div className="flex flex-wrap justify-center items-center">
@@ -186,39 +206,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
             </div>
           </div>
         )}
-
-        <div className="flex justify-center items-center mb-4">
-          <div className="flex flex-col items-center mx-2">
-            <div className="bg-green-500 text-white p-2 rounded-lg">
-              <p className="text-sm flex items-center">
-                <AccessTimeIcon className="mr-1" /> {formatDate(starting_Date)}
-              </p>
-            </div>
-          </div>
-          <span className="text-gray-500 mx-4">-</span>
-          <div className="flex flex-col items-center mx-2">
-            <div className="bg-blue-500 text-white p-2 rounded-lg">
-              <p className="text-sm flex items-center">
-                <AccessTimeIcon className="mr-1" /> {formatDate(ending_Date)}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex justify-center items-center mb-4 space-x-4">
-          <div className="bg-red-500 text-white p-2 rounded-lg flex fle x-col items-center w-1/2">
-            <p className="text-sm flex items-center">
-              <ConfirmationNumberIcon className="mr-1" /> {currentCurrency}{" "}
-              {(price * exchangeRate).toFixed(2)}
-            </p>
-          </div>
-          <div className="bg-yellow-500 text-white p-2 rounded-lg flex flex-col items-center w-1/2">
-            <p className="text-sm flex items-center">
-              <StarIcon className="mr-1" /> {rating}
-            </p>
-          </div>
-        </div>
-
+  
         <div className="mt-4 flex justify-between items-center">
           <Link
             to={`/${
@@ -245,24 +233,46 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
           </Link>
           {currentType === "tourist" && (
             <>
-              {" "}
               <button
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
                 onClick={() => handleBooking(_id)}
               >
-                {loading?<ClipLoader size={30} color="#ffffff"></ClipLoader>: "Book"}
+                {loading ? (
+                  <ClipLoader size={30} color="#ffffff"></ClipLoader>
+                ) : (
+                  "Book"
+                )}
               </button>
-              {!isBookmarked && <button className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600" title="Bookmark"
-                onClick={() => handleBookmark(_id)}>
-                {loadingBookmark?<ClipLoader size={30} color="#ffffff"></ClipLoader>: <BookmarkIcon />}
-                </button>}
-                {isBookmarked && currpath!=="bookmarks" && <button className="bg-green-600 text-white p-2 rounded-lg" disabled>
-                <BookmarkAddedIcon  />
-                </button>}
-              <ShareButton type={"itinerary"} ID={_id} />
+              {!isBookmarked && (
+                <button
+                  className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
+                  title="Bookmark"
+                  onClick={() => handleBookmark(_id)}
+                >
+                  {loadingBookmark ? (
+                    <ClipLoader size={30} color="#ffffff"></ClipLoader>
+                  ) : (
+                    <BookmarkIcon />
+                  )}
+                </button>
+              )}
+              {isBookmarked && currpath !== "bookmarks" && (
+                <button className="bg-green-600 text-white p-2 rounded-lg" disabled>
+                  <BookmarkAddedIcon />
+                </button>
+              )}
+              <div className="flex flex-col items-end space-y-2">
+                <p className="text-gray-600 text-sm font-semibold">
+                  {`${format(new Date(starting_Date), "MMM dd")} - ${format(
+                    new Date(ending_Date),
+                    "MMM dd"
+                  )}`}
+                </p>
+                <ShareButton type={"itinerary"} ID={_id} />
+              </div>
             </>
           )}
-
+  
           {currentType === "admin" && (
             <div className="bg-yellow-500 text-white p-2 rounded-lg flex flex-col items-center w-1/2">
               <p className="text-sm flex items-center">
@@ -271,15 +281,19 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
             </div>
           )}
         </div>
-
+  
         {currentType === "admin" && (
           <Button onClick={handleInappropriate}>
-            {inappropriateV ? "Declare appropriate" : " Declare InAppropriate"}
+            {inappropriateV ? "Declare Appropriate" : "Declare Inappropriate"}
           </Button>
         )}
       </div>
     </div>
   );
+  
+  
+  
+  
 };
 
 export default ItineraryCardCRUDTourist;
