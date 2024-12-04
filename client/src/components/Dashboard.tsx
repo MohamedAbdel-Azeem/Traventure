@@ -79,37 +79,39 @@ const Dashboard: React.FC = () => {
         <div className="flex gap-4 items-center">
           {tourist_itineraries.length > 0 ? (
             tourist_itineraries.map((itinerary) => (
-              <ItineraryCardToruist
-                key={itinerary._id}
-                _id={String(itinerary._id)}
-                title={itinerary.title}
-                description={itinerary.description}
-                added_By={itinerary.added_By}
-                price={itinerary.price}
-                starting_Date={itinerary.starting_Date}
-                ending_Date={itinerary.ending_Date}
-                rating={itinerary.rating}
-                total={itinerary.total}
-                language={itinerary.language}
-                pickup_location={itinerary.pickup_location}
-                dropoff_location={itinerary.dropoff_location}
-                plan={itinerary.plan}
-                selectedTags={itinerary.selectedTags}
-                main_Picture={itinerary.main_Picture}
-                accesibility={itinerary.accesibility}
-                booked_By={itinerary.booked_By}
-                bookingActivated={itinerary.bookingActivated}
-                inappropriate={itinerary.inappropriate}
-                bookmarked={bookmarkedItineraries.some(
-                  (bookmarkedItinerary) =>
-                    bookmarkedItinerary._id === itinerary._id
-                )}
-              />
+              <div className="w-96 flex-shrink-0">
+                <ItineraryCardToruist
+                  key={itinerary._id}
+                  _id={String(itinerary._id)}
+                  title={itinerary.title}
+                  description={itinerary.description}
+                  added_By={itinerary.added_By}
+                  price={itinerary.price}
+                  starting_Date={itinerary.starting_Date}
+                  ending_Date={itinerary.ending_Date}
+                  rating={itinerary.rating}
+                  total={itinerary.total}
+                  language={itinerary.language}
+                  pickup_location={itinerary.pickup_location}
+                  dropoff_location={itinerary.dropoff_location}
+                  plan={itinerary.plan}
+                  selectedTags={itinerary.selectedTags}
+                  main_Picture={itinerary.main_Picture}
+                  accesibility={itinerary.accesibility}
+                  booked_By={itinerary.booked_By}
+                  bookingActivated={itinerary.bookingActivated}
+                  inappropriate={itinerary.inappropriate}
+                  bookmarked={bookmarkedItineraries.some(
+                    (bookmarkedItinerary) =>
+                      bookmarkedItinerary._id === itinerary._id
+                  )}
+                />
+              </div>
             ))
           ) : (
             <div>No upcoming itineraries available.</div>
           )}
-          <button
+           <button
             className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
             onClick={() =>
               navigate(`/${currenttype}/${currentuser}/itineraries`)
@@ -118,6 +120,8 @@ const Dashboard: React.FC = () => {
             View More
           </button>
         </div>
+       
+         
       </div>
 
       {/* Upcoming Places */}

@@ -166,7 +166,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
       className="m-4 transition transform hover:scale-105 w-96 bg-gray-200 rounded-lg overflow-hidden shadow-lg"
       style={{ boxShadow: "10px 10px 20px rgba(0, 0, 0, 0.2)" }} 
     >
-      <div className="relative w-full h-[200px]">
+      <div className="relative w-full h-[250px]">
         <img
           src={main_Picture}
           alt={title}
@@ -208,11 +208,11 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
       
               {/* Description */}
 
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <p className="text-gray-600 text-center text-sm truncate">
             {description}
           </p>
-        </div>
+        </div> */}
 
 
         {/* Tags */}
@@ -237,7 +237,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
 
 
        {/* Buttons */}
-<div className="mt-4">
+<div className="mt-2">
   <div className="flex justify-between items-center">
     <Link
       to={`/${currenttype + "/" + username}/itineraries/tourist-itinerary/${_id}`}
