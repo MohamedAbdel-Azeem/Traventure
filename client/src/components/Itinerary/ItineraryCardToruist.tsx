@@ -177,17 +177,24 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
             {title}
           </h2>
         </div>
+
+
+        {/* Rating */}
+
         <div className="mb-2 flex justify-between items-center">
   <p className="text-s font-bold text-gray-800 flex items-center">
     <StarIcon className="mr-1 text-yellow-500" /> {rating.toFixed(1)} · {getRatingStatus(rating)}
   </p>
+
+       {/* Price */}
   <p className="text-s font-bold text-gray-800 flex items-center">
     <ConfirmationNumberIcon className="mr-1" /> {currentCurrency}{" "}
     {(price * exchangeRate).toFixed(2)}
   </p>
 </div>
   
-        {currentType === "tourist" && (
+        {/* Date */}
+        
           <div className="mb-4 text-left">
             <p className="text-gray-600 text-sm font-semibold">
               {`${format(new Date(starting_Date), "MMM dd")} - ${format(
@@ -196,13 +203,17 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
               )}`}
             </p>
           </div>
-        )}
-  
+      
+              {/* Description */}
+
         <div className="mb-4">
           <p className="text-gray-600 text-center text-sm truncate">
             {description}
           </p>
         </div>
+
+
+        {/* Tags */}
   
         {Array.isArray(selectedTags) && selectedTags.length > 0 && (
   <div className="mb-2">
@@ -221,6 +232,9 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
     </div>
   </div>
 )}
+
+
+        {/* Buttons */}
   
         <div className="mt-4 flex justify-between items-center">
           <Link
