@@ -20,7 +20,9 @@ const router = Router();
 
 router.post("/buy", async (req: Request, res: Response) => {
   try {
-    const { touristId, cart, promoCode } = req.body;
+    const { touristUsername, cart, promoCode } = req.body;
+    const tourist = await Tourist.findOne({ username: touristUsername });
+    if (!tourist) return res.status(404).send("Tourist not found");
     for (const singleProduct of cart) {
       const product = await getProduct(singleProduct.productId);
       if (!product) {
@@ -39,7 +41,7 @@ router.post("/buy", async (req: Request, res: Response) => {
         singleProduct.quantity
       );
     }
-    const body = { touristId, cart } as IPurchase;
+    const body = { touristUsername, cart } as IPurchase;
 
     if (promoCode) {
       body.promoCode = promoCode;

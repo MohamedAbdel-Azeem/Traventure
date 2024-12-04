@@ -28,7 +28,7 @@ import currentuserRouter from "./Routes/Current_user";
 import requestdeleteRouter from "./Routes/RequestDelete";
 import authRouter from "./Routes/Auth";
 import promocodeRouter from "./Routes/PromoCodes";
-
+import recoveryRouter from "./Routes/Code";
 const scheduleTask = require("./utils/functions/node_scheduler");
 
 const app = express();
@@ -62,6 +62,7 @@ app.use("/api/complaint", complaintRouter);
 app.use("/api/feedBack", feedbackRouter);
 app.use("/api/admin/", reviewdocsRouter);
 app.use("/api/promocode", promocodeRouter);
+app.use("/api/recovery", recoveryRouter);
 
 app.use("/amadeus", amadeusRouter);
 app.use("/api/requestdelete", requestdeleteRouter);

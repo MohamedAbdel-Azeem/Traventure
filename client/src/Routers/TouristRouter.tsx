@@ -15,6 +15,7 @@ import CurrencyDropdown from "../components/currencyDrop";
 import ItineraryDetailsTourist from "../components/Itinerary/ItineraryDetailsTourist";
 import Bookmarks from "../routes/_app/Tourist/tourist_bookmarks/Bookmarks";
 import CartButton from "../components/cart/CartButton";
+import Checkout from "../components/Checkout";
 import { TouristWishList } from "../routes/_app/Tourist/tourist_purchases/TouristWishList";
 import {isAccessTokenPresent} from "../components/Protection/authUtils";
 import TouristComplaints from "../routes/_app/Tourist/TouristComplaints";
@@ -28,10 +29,7 @@ export default function TouristRouter() {
         <Route path="/:username/shop" element={isAccessTokenPresent() ?<ShopPage type="Tourist" />:<Navigate to="/" />} />
         <Route path="/:username/locations" element={isAccessTokenPresent() ?<MorePlaces />:<Navigate to="/" />} />
         <Route path="/:username/itineraries" element={isAccessTokenPresent() ?<MoreItineraries />:<Navigate to="/" />} />
-        <Route
-          path="/:username/itineraries/tourist-itinerary/:id"
-          element={isAccessTokenPresent() ?<ItineraryDetailsTourist />:<Navigate to="/" />}
-        />
+        <Route path="/:username/itineraries/tourist-itinerary/:id" element={isAccessTokenPresent() ?<ItineraryDetailsTourist />:<Navigate to="/" />}/>
         <Route path="/:username/activities" element={isAccessTokenPresent() ?<MoreActivities />:<Navigate to="/" />} />
         <Route path="/:username/complaints" element={isAccessTokenPresent() ?<TouristComplaints />:<Navigate to="/" />} />
         <Route path="/:username/profile" element={isAccessTokenPresent() ?<Tourist_Profile />:<Navigate to="/" />} />
@@ -41,6 +39,7 @@ export default function TouristRouter() {
         <Route path="/:username/hotels" element={isAccessTokenPresent() ?<HotelsPage />:<Navigate to="/" />} />
         <Route path="/:username/bookmarks" element={isAccessTokenPresent() ?<Bookmarks />:<Navigate to="/" />} />
         <Route path="/:username/wishlist" element={isAccessTokenPresent() ?<TouristWishList />:<Navigate to="/" />} />
+        <Route path="/:username/checkout" element={isAccessTokenPresent() ?<Checkout />:<Navigate to="/" />} />
       </Routes>
       {/* <CurrencyDropdown /> */}
       <CartButton />

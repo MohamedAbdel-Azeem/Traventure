@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { IAddress } from "./Tourist";
 
 const schema = mongoose.Schema;
 
@@ -14,7 +15,7 @@ export enum PurchaseStatus {
 }
 
 export interface IPurchase {
-  touristId: mongoose.Types.ObjectId;
+  touristUsername: mongoose.Types.ObjectId;
   cart: IPurchasedProduct[];
   timeStamp: Date;
   status?: PurchaseStatus;
@@ -36,6 +37,15 @@ const purchaseSchema = new schema({
   ],
   timeStamp: { type: Date, required: true, default: Date.now },
   status: { type: String, required: true, default: PurchaseStatus.processing },
+  address: {
+    latitude: { type: Number, required: true },
+    longitude: { type: Number, required: true },
+    street: { type: String, required: true },
+    buildingNumber: { type: String, required: true },
+    floor: { type: String, required: false, default: "" },
+    apartmentNumber: { type: String, required: true },
+    additionalDirections: { type: String, required: false, default: "" },
+  },
   totalAmount: { type: Number, default: 0 },
   promoCode: { type: String, default: "" },
 });

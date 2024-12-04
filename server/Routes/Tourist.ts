@@ -27,6 +27,9 @@ import {
   getSkipTutorialStatus,
   getPromoCodeUsed,
   setPromoCodeUsed,
+  addAddress,
+  editAddress,
+  deleteAddress,
   updateUserWallet,
 } from "../Model/Queries/tourist_queries";
 const router = Router();
@@ -230,14 +233,49 @@ router.get("/skipTutorial/:username", async (req: Request, res: Response) => {
   }
 });
 
+router.patch("/add/address/:username", async (req: Request, res: Response) => {
+  try {
+    const username = req.body.username;
+    const address = req.body.address;
+    addAddress(username, address);
+    res.status(200).send("Address added");
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+});
+
+router.patch("/edit/address/:username", async (req: Request, res: Response) => {
+  try {
+    const username = req.body.username;
+    const address = req.body.address;
+    const index = req.body.index;
+    editAddress(username, address, index);
+    res.status(200).send("Address edited");
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+});
+
+router.patch("/delete/address/:username", async (req: Request, res: Response) => {
+  try {
+    const username = req.body.username;
+    const index = req.body.index;
+    deleteAddress(username, index);
+    res.status(200).send("Address deleted"); 
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+});
+
 router.patch("/skipTutorial/:username", async (req: Request, res: Response) => {
   try {
     const username = req.params.username;
     await skipWebsiteTutorial(username);
     res.status(200).send("Tutorial skipped");
-  } catch (error: any) {
+    } catch (error: any) {
     res.status(500).send(error.message);
   }
 });
+  
 
 export default router;

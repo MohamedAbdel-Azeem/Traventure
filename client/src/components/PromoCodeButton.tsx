@@ -1,7 +1,7 @@
 import { TextField } from "@mui/material";
 import { useCheckPromoCode } from "../custom_hooks/promo_codes/promocodecustomhooks";
 import { useState } from "react";
-
+import Swal from "sweetalert2";
 interface PromoCodeButtonProps {
   onAccept: (accepted: boolean) => void;
   className?: string;
@@ -19,10 +19,24 @@ const PromoCodeButton = ({ onAccept, className }: PromoCodeButtonProps) => {
         onAccept(true);
         setError(false);
         setErrorText("");
+        Swal.fire({
+          title: "Success",
+          text: "Promo code applied successfully.",
+          icon: "success",
+          confirmButtonText: "Ok",
+          confirmButtonColor: "#000000",
+        });
       } else {
         onAccept(false);
         setError(true);
         setErrorText("Invalid promo code.");
+        Swal.fire({
+          title: "Error",
+          text: "Invalid promo code.",
+          icon: "error",
+          confirmButtonText: "Ok",
+          confirmButtonColor: "#000000",
+        });
       }
     } catch (err) {
       onAccept(false);
@@ -32,7 +46,7 @@ const PromoCodeButton = ({ onAccept, className }: PromoCodeButtonProps) => {
   };
 
   return (
-    <div className={`w-[648px] h-[43px] rounded-[16px] ${className}`}>
+    <div className={`w-[448px] h-[43px] rounded-[16px] ${className}`}>
       <div className="flex mb-1">
         <TextField
           value={promoCode}
@@ -57,7 +71,7 @@ const PromoCodeButton = ({ onAccept, className }: PromoCodeButtonProps) => {
         />
         <button
           onClick={handleApplyCode}
-          className=" ml-[55px] w-[170px] h-[43px] bg-[#000000] rounded-[16px] text-[#FFFFFF] font-normal text-[22px]"
+          className=" ml-[55px] w-[170px] h-[43px] bg-[#000000] rounded-[16px] text-[#FFFFFF] font-normal text-[18px]"
         >
           Apply Code
         </button>

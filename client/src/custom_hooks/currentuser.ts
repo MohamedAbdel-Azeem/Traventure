@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 interface Currentuserdata {
   profilepic: string;
   _id: string;
+  saved_addressess: string[];
 }
 
 export function GetCurrentUser(username: string) {

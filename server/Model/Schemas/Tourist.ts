@@ -3,6 +3,16 @@ import Booking from "./Booking";
 import { timeStamp } from "console";
 const Schema = mongoose.Schema;
 
+export interface IAddress {
+  latitude: number;
+  longitude: number;
+  street: string;
+  buildingNumber: string;
+  floor?: string;
+  apartmentNumber?: string;
+  additionalDirections?: string;
+}
+
 export interface ITourist extends Document {
   username: string;
   email: string;
@@ -24,6 +34,7 @@ export interface ITourist extends Document {
   wishlisted_products: mongoose.Types.ObjectId[];
   skipWebsiteTutorial: boolean;
   promo_sent?: boolean;
+  saved_addressess?: IAddress[];
 }
 
 const touristSchema = new Schema({
@@ -47,6 +58,20 @@ const touristSchema = new Schema({
   wishlisted_products: [{ type: mongoose.Types.ObjectId, ref: "Product" }],
   skipWebsiteTutorial: { type: Boolean, default: false },
   promo_sent: { type: Boolean, default: false },
+  saved_addressess: {
+    type: [
+      {
+        latitude: { type: Number, required: true },
+        longitude: { type: Number, required: true },
+        street: { type: String, required: true },
+        buildingNumber: { type: String, required: true },
+        floor: { type: String, default: null },
+        apartmentNumber: { type: String },
+        additionalDirections: { type: String, default: "" },
+      },
+    ],
+    default: [],
+  },
 });
 
 export default mongoose.model<ITourist>("Tourist", touristSchema);
