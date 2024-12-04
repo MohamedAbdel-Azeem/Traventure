@@ -262,6 +262,14 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
           >
            <InfoIcon className="w-6 h-6 text-white" />
   </Link>
+
+
+  {currentType === "tourist" && (
+          <div className="mt-2">
+            <ShareButton type={"itinerary"} ID={_id} />
+          </div>
+        )}
+  
           {currentType === "tourist" && (
             <>
               <button
@@ -304,12 +312,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
           )}
         </div>
   
-        {currentType === "tourist" && (
-          <div className="mt-2">
-            <ShareButton type={"itinerary"} ID={_id} />
-          </div>
-        )}
-  
+        
         {currentType === "admin" && (
           <Button onClick={handleInappropriate}>
             {inappropriateV ? "Declare Appropriate" : "Declare Inappropriate"}
