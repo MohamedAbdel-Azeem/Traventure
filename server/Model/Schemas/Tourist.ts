@@ -22,6 +22,7 @@ export interface ITourist extends Document {
   bookmarkedActivities: mongoose.Types.ObjectId[];
   bookmarkedItineraries: mongoose.Types.ObjectId[];
   wishlisted_products: mongoose.Types.ObjectId[];
+  skipWebsiteTutorial: boolean;
   promo_sent?: boolean;
 }
 
@@ -44,6 +45,7 @@ const touristSchema = new Schema({
   bookmarkedActivities: [{ type: mongoose.Types.ObjectId, ref: "Activity" }],
   bookmarkedItineraries: [{ type: mongoose.Types.ObjectId, ref: "Itinerary" }],
   wishlisted_products: [{ type: mongoose.Types.ObjectId, ref: "Product" }],
+  skipWebsiteTutorial: { type: Boolean, default: false },
   promo_sent: { type: Boolean, default: false },
 });
 

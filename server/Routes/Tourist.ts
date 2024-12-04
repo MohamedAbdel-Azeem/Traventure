@@ -23,6 +23,8 @@ import {
   gettouristComplaints,
   getTouristUpcoming,
   toggleWishlistProduct,
+  skipWebsiteTutorial,
+  getSkipTutorialStatus,
   getPromoCodeUsed,
   setPromoCodeUsed,
   updateUserWallet,
@@ -47,7 +49,6 @@ router.post(
     }
   }
 );
-
 
 router.get("/upcoming", async (req: Request, res: Response) => {
   try {
@@ -147,29 +148,35 @@ router.patch("/updateWallet/:username", async (req: Request, res: Response) => {
   }
 });
 
-router.patch("/bookmark_activity/:username", async (req: Request, res: Response) => {
-  try {
-    const username = req.params.username;
-    const activity_id = req.body.activity_id;
+router.patch(
+  "/bookmark_activity/:username",
+  async (req: Request, res: Response) => {
+    try {
+      const username = req.params.username;
+      const activity_id = req.body.activity_id;
 
-    await bookmarkActivity(username, activity_id);
-    res.status(200).send("Activity bookmarked");
-  } catch (error: any) {
-    res.status(500).send(error.message);
+      await bookmarkActivity(username, activity_id);
+      res.status(200).send("Activity bookmarked");
+    } catch (error: any) {
+      res.status(500).send(error.message);
+    }
   }
-});
+);
 
-router.patch("/bookmark_itinerary/:username", async (req: Request, res: Response) => {
-  try {
-    const username = req.params.username;
-    const itinerary_id = req.body.itinerary_id;
+router.patch(
+  "/bookmark_itinerary/:username",
+  async (req: Request, res: Response) => {
+    try {
+      const username = req.params.username;
+      const itinerary_id = req.body.itinerary_id;
 
-    await bookmarkItinerary(username, itinerary_id);
-    res.status(200).send("Itinerary bookmarked");
-  } catch (error: any) {
-    res.status(500).send(error.message);
+      await bookmarkItinerary(username, itinerary_id);
+      res.status(200).send("Itinerary bookmarked");
+    } catch (error: any) {
+      res.status(500).send(error.message);
+    }
   }
-});
+);
 
 router.post("/wishlist/:username", async (req: Request, res: Response) => {
   try {
@@ -200,11 +207,34 @@ router.get("/promo_code/get/:username", async (req: Request, res: Response) => {
   }
 });
 
-router.patch("/promo_code/use/:username", async (req: Request, res: Response) => {
+router.patch(
+  "/promo_code/use/:username",
+  async (req: Request, res: Response) => {
+    try {
+      const username = req.params.username;
+      await setPromoCodeUsed(username);
+      res.status(200).send("Promo code used");
+    } catch (error: any) {
+      res.status(500).send(error.message);
+    }
+  }
+);
+
+router.get("/skipTutorial/:username", async (req: Request, res: Response) => {
   try {
     const username = req.params.username;
-    await setPromoCodeUsed(username);
-    res.status(200).send("Promo code used");
+    const skipStatus = await getSkipTutorialStatus(username);
+    res.status(200).send(skipStatus);
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+});
+
+router.patch("/skipTutorial/:username", async (req: Request, res: Response) => {
+  try {
+    const username = req.params.username;
+    await skipWebsiteTutorial(username);
+    res.status(200).send("Tutorial skipped");
   } catch (error: any) {
     res.status(500).send(error.message);
   }
