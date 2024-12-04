@@ -18,6 +18,8 @@ import ShareButton from "../Buttons/ShareButton";
 import BookmarkIcon from '@mui/icons-material/BookmarkAdd';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import ClipLoader from 'react-spinners/ClipLoader';
+import InfoIcon from '@mui/icons-material/Info';
+import { Icon } from "@mui/material";
 
 interface TagStructure {
   _id: string;
@@ -221,13 +223,13 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
       {selectedTags.slice(0, 3).map((tag) => (
         <span
           key={tag._id}
-          className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm mr-2 mb-2"
+          className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-sm mr-2 mb-2"
         >
           {tag.name}
         </span>
       ))}
       {selectedTags.length > 3 && (
-        <span className="text-blue-800 px-2 py-1 text-sm">...</span>
+        <span className="text-purple-800 px-2 py-1 text-sm">...</span>
       )}
     </div>
   </div>
@@ -256,14 +258,14 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
               plan,
               selectedTags,
             }}
-            className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center"
+            className="p-2 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition flex items-center"
           >
-            View Details
-          </Link>
+           <InfoIcon className="w-6 h-6 text-white" />
+  </Link>
           {currentType === "tourist" && (
             <>
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600"
                 onClick={() => handleBooking(_id)}
               >
                 {loading ? (
@@ -274,7 +276,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
               </button>
               {!isBookmarked && (
                 <button
-                  className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
+                  className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600"
                   title="Bookmark"
                   onClick={() => handleBookmark(_id)}
                 >
