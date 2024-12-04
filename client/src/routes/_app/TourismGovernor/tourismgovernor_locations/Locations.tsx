@@ -22,6 +22,8 @@ import { createPlaceID } from "../../../../custom_hooks/places/placeService";
 import { useDeletePlaces } from "../../../../custom_hooks/places/useDeletePlace";
 import TheMAP from "../../../../components/Maps/TheMAP";
 import { useSelector } from "react-redux";
+import { useAuth } from "../../../../custom_hooks/auth";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const Locations = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -40,6 +42,7 @@ const Locations = () => {
   const [longitude, setLongitude] = useState(31.2);
   const [image, setImage] = useState<string>("");
   const [newcards, setNewcards] = useState<Place[] | null>(null);
+  const { isAuthenticated, isLoading, isError } = useAuth(5);
   const handleTagsChange = (event: SelectChangeEvent<string[]>) => {
     const {
       target: { value },
@@ -136,6 +139,20 @@ const Locations = () => {
   const currentCurrency = useSelector(
     (state: any) => state.exchangeRate.currentCurrency
   );
+  if (isLoading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <ClipLoader color="#f86c6b" loading={true} size={150} />
+      </div>
+    );
+  }
+  if (isError || isAuthenticated !== username) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <h1>Error 403 Unauthrized access</h1>
+      </div>
+    );
+  }
   if (idgloading) return <p>Loading...</p>;
   if (idgerror) return <p>Error</p>;
 

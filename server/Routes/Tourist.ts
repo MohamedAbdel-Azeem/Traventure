@@ -23,6 +23,8 @@ import {
   gettouristComplaints,
   getTouristUpcoming,
   toggleWishlistProduct,
+  skipWebsiteTutorial,
+  getSkipTutorialStatus,
   getPromoCodeUsed,
   setPromoCodeUsed,
   addAddress,
@@ -155,6 +157,7 @@ router.patch(
     try {
       const username = req.params.username;
       const activity_id = req.body.activity_id;
+
       await bookmarkActivity(username, activity_id);
       res.status(200).send("Activity bookmarked");
     } catch (error: any) {
@@ -220,6 +223,16 @@ router.patch(
   }
 );
 
+router.get("/skipTutorial/:username", async (req: Request, res: Response) => {
+  try {
+    const username = req.params.username;
+    const skipStatus = await getSkipTutorialStatus(username);
+    res.status(200).send(skipStatus);
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+});
+
 router.patch("/add/address/:username", async (req: Request, res: Response) => {
   try {
     const username = req.body.username;
@@ -248,10 +261,21 @@ router.patch("/delete/address/:username", async (req: Request, res: Response) =>
     const username = req.body.username;
     const index = req.body.index;
     deleteAddress(username, index);
-    res.status(200).send("Address deleted");
+    res.status(200).send("Address deleted"); 
   } catch (error: any) {
     res.status(500).send(error.message);
   }
 });
+
+router.patch("/skipTutorial/:username", async (req: Request, res: Response) => {
+  try {
+    const username = req.params.username;
+    await skipWebsiteTutorial(username);
+    res.status(200).send("Tutorial skipped");
+    } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+});
+  
 
 export default router;

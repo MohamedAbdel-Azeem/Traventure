@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import Swal from "sweetalert2";
 import BlockedAccountPopup from "../../components/Shenawy/BlockedAccountPopup";
+import Cookies from "js-cookie";
 
 const SignIn: React.FC = () => {
   const [username, setUsername] = useState<string>("");
@@ -36,6 +37,8 @@ const SignIn: React.FC = () => {
         return;
       }
     }
+
+    Cookies.set("access_token", data.access_token, { expires: 3*24*60*60 });
     // Assuming that data.type and data.user._id are valid
     navigate(`/${data.type}/${data.user.username}`);
   }, [data]);

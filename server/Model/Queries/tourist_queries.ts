@@ -199,6 +199,34 @@ export async function toggleWishlistProduct(
   }
 }
 
+export async function skipWebsiteTutorial(username: string) {
+  try {
+    const tourist = await touristModel.findOne({ username: username });
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    tourist.skipWebsiteTutorial = true;
+    await tourist.save();
+    return "Tutorial skipped";
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getSkipTutorialStatus(username: string) {
+  try {
+    const tourist = await touristModel
+      .findOne({ username: username })
+      .select("skipWebsiteTutorial");
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    return tourist.skipWebsiteTutorial;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function bookmarkActivity(
   touristUsername: string,
   activityId: string
@@ -349,6 +377,8 @@ module.exports = {
   bookmarkItinerary,
   getTouristBookmarks,
   toggleWishlistProduct,
+  skipWebsiteTutorial,
+  getSkipTutorialStatus,
   getPromoCodeUsed,
   setPromoCodeUsed,
   addAddress,

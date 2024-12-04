@@ -10,6 +10,9 @@ import {
 } from "@mui/material";
 import HotelCard from "./hotelCard";
 import { useSelector } from "react-redux";
+import ClipLoader from "react-spinners/ClipLoader";
+import { useParams } from "react-router-dom";
+import { useAuth } from "../../../../custom_hooks/auth";
 
 const cityOptions = [
   { city: "Atlanta", code: "ATL" },
@@ -124,7 +127,7 @@ const AvailableHotels = () => {
   const [adults, setAdults] = useState(1);
   const [maxPrice, setMaxPrice] = useState("");
   const [hotels, setHotels] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading2, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const exchangeRate = useSelector(
@@ -176,7 +179,22 @@ const AvailableHotels = () => {
       setIsLoading(false);
     }
   };
-
+  const { isAuthenticated, isLoading, isError } = useAuth(4);
+  const { username } = useParams<{ username: string }>();
+  if (isLoading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <ClipLoader color="#f86c6b" loading={true} size={150} />
+      </div>
+    );
+  }
+  if (isError || isAuthenticated !== username) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <h1>Error 403 Unauthrized access</h1>
+      </div>
+    );
+  }
   return (
     <div className="flex">
       <Box p={3}>
@@ -264,7 +282,7 @@ const AvailableHotels = () => {
 
         {/* Display Hotels */}
         <Box mt={3}>
-          {isLoading ? (
+          {isLoading2 ? (
             <Typography variant="body1">Loading hotels...</Typography>
           ) : error ? (
             <Typography variant="body1" color="error">
