@@ -236,81 +236,90 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
 )}
 
 
-        {/* Buttons */}
-  
-        <div className="mt-4 flex justify-between items-center">
-          <Link
-            to={`/${
-              currenttype + "/" + username
-            }/itineraries/tourist-itinerary/${_id}`}
-            state={{
-              title,
-              description,
-              price,
-              starting_Date,
-              ending_Date,
-              rating,
-              main_Picture,
-              language,
-              pickup_location,
-              accesibility,
-              dropoff_location,
-              plan,
-              selectedTags,
-            }}
-            className="p-2 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition flex items-center"
-          >
-           <InfoIcon className="w-6 h-6 text-white" />
-  </Link>
+       {/* Buttons */}
+<div className="mt-4">
+  <div className="flex justify-between items-center">
+    <Link
+      to={`/${currenttype + "/" + username}/itineraries/tourist-itinerary/${_id}`}
+      state={{
+        title,
+        description,
+        price,
+        starting_Date,
+        ending_Date,
+        rating,
+        main_Picture,
+        language,
+        pickup_location,
+        accesibility,
+        dropoff_location,
+        plan,
+        selectedTags,
+      }}
+      className="p-2 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition flex items-center"
+    >
+      <InfoIcon className="w-6 h-6 text-white" />
+    </Link>
 
+    {currentType === "tourist" && (
+      <>
+        {/* Bookmark Button */}
+        {!isBookmarked && (
+          <button
+            className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600"
+            title="Bookmark"
+            onClick={() => handleBookmark(_id)}
+          >
+            {loadingBookmark ? (
+              <ClipLoader size={30} color="#ffffff"></ClipLoader>
+            ) : (
+              <BookmarkIcon />
+            )}
+          </button>
+        )}
+        {isBookmarked && currpath !== "bookmarks" && (
+          <button
+            className="bg-green-600 text-white p-2 rounded-lg"
+            disabled
+          >
+            <BookmarkAddedIcon />
+          </button>
+        )}
+
+        {/* Share Button */}
+        <div className="mt-2">
+          <ShareButton type={"itinerary"} ID={_id} />
+        </div>
+      </>
+    )}
+  </div>
 
   {currentType === "tourist" && (
-          <div className="mt-2">
-            <ShareButton type={"itinerary"} ID={_id} />
-          </div>
+    <div className="mt-4">
+      {/* Book Button */}
+      <button
+        className="w-full bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600"
+        onClick={() => handleBooking(_id)}
+      >
+        {loading ? (
+          <ClipLoader size={30} color="#ffffff"></ClipLoader>
+        ) : (
+          "Book"
         )}
-  
-          {currentType === "tourist" && (
-            <>
-              <button
-                className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600"
-                onClick={() => handleBooking(_id)}
-              >
-                {loading ? (
-                  <ClipLoader size={30} color="#ffffff"></ClipLoader>
-                ) : (
-                  "Book"
-                )}
-              </button>
-              {!isBookmarked && (
-                <button
-                  className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600"
-                  title="Bookmark"
-                  onClick={() => handleBookmark(_id)}
-                >
-                  {loadingBookmark ? (
-                    <ClipLoader size={30} color="#ffffff"></ClipLoader>
-                  ) : (
-                    <BookmarkIcon />
-                  )}
-                </button>
-              )}
-              {isBookmarked && currpath !== "bookmarks" && (
-                <button className="bg-green-600 text-white p-2 rounded-lg" disabled>
-                  <BookmarkAddedIcon />
-                </button>
-              )}
-            </>
-          )}
-  
-          {currentType === "admin" && (
-            <div className="bg-yellow-500 text-white p-2 rounded-lg flex flex-col items-center w-1/2">
-              <p className="text-sm flex items-center">
-                {bookingActivated ? "Booking Activated" : "Booking Deactivated"}
-              </p>
-            </div>
-          )}
-        </div>
+      </button>
+    </div>
+  )}
+
+  {currentType === "admin" && (
+    <div className="bg-yellow-500 text-white p-2 rounded-lg flex flex-col items-center w-full mt-4">
+      <p className="text-sm flex items-center">
+        {bookingActivated ? "Booking Activated" : "Booking Deactivated"}
+      </p>
+    </div>
+  )}
+
+</div>
+
   
         
         {currentType === "admin" && (
