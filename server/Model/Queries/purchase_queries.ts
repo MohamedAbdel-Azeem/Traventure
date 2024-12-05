@@ -289,7 +289,63 @@ export async function getExternalSellerSales(
     throw error;
   }
 }
+export async function getExternalSellerRevenue(
+  externalSeller: string | null,
+  month: number,
+  year: number,
+  productName: string
+) {
+  try {
+    const purchases: Array<{
+      cart: Array<{
+        productId: {
+          _id: mongoose.Types.ObjectId;
+          name?: string;
+          quantity?: number;
+          price?: number;
+        };
+        quantity: number;
+      }>;
 
+      timeStamp: Date;
+    }> = await purchase
+      .find()
+      .populate({
+        path: "cart.productId",
+        match: externalSeller
+          ? { externalseller: externalSeller }
+          : { externalseller: { $ne: null } },
+        select: "name quantity price externalseller",
+      })
+      .lean();
+    const sellerSales = purchases.map((purchase) => {
+      return purchase.cart
+        .filter((item) => item.productId)
+        .map((item) => ({
+          productName: item.productId.name,
+          price: item.productId.price
+            ? item.productId.price * item.quantity
+            : 0,
+          soldQuantity: item.quantity,
+          month: purchase.timeStamp.getMonth() + 1,
+          year: purchase.timeStamp.getFullYear(),
+          day: purchase.timeStamp.getDate(),
+        }));
+    });
+
+    const sellerRevenue = sellerSales.flat().filter((sale) => {
+      if (productName) return sale.productName == productName;
+      if (!isNaN(month) && !isNaN(year))
+        return sale.month == month && sale.year == year;
+      else if (!isNaN(month)) return sale.month == month;
+      else if (!isNaN(year)) return sale.year == year;
+      else return true;
+    });
+    return sellerRevenue;
+  } catch (error) {
+    throw error;
+  }
+}
 export async function cancelPurchase(purchaseId: string) {
   try {
     const product = await purchase.findById(purchaseId);
@@ -323,4 +379,5 @@ module.exports = {
   cancelPurchase,
   DeliverPurchase,
   getSellerRevenue,
+  getExternalSellerRevenue,
 };

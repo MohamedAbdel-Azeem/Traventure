@@ -9,6 +9,7 @@ import {
   DeliverPurchase,
   cancelPurchase,
   getSellerRevenue,
+  getExternalSellerRevenue,
 } from "../Model/Queries/purchase_queries";
 import {
   getProduct,
@@ -105,15 +106,34 @@ router.get("/seller", async (req: Request, res: Response) => {
 
 router.get("/revenue", async (req: Request, res: Response) => {
   try {
-    const { sellerId, month, year, productName } = req.query;
-    if (!sellerId) return res.status(404).send("Invalid query parameters");
-    const revenue = await getSellerRevenue(
-      sellerId as string,
-      parseInt(month as string),
-      parseInt(year as string),
-      productName as string
-    );
-    return res.status(200).send(revenue);
+    const { sellerId, month, year, productName, externalSeller } = req.query;
+
+    if (sellerId) {
+      const revenue = await getSellerRevenue(
+        sellerId as string,
+        parseInt(month as string),
+        parseInt(year as string),
+        productName as string
+      );
+      return res.status(200).send(revenue);
+    }
+    if (externalSeller) {
+      const revenue = await getExternalSellerRevenue(
+        externalSeller as string,
+        parseInt(month as string),
+        parseInt(year as string),
+        productName as string
+      );
+      return res.status(200).send(revenue);
+    } else {
+      const revenue = await getExternalSellerRevenue(
+        null,
+        parseInt(month as string),
+        parseInt(year as string),
+        productName as string
+      );
+      return res.status(200).send(revenue);
+    }
   } catch (error) {
     console.log(error);
     return res.status(500).send(error);
