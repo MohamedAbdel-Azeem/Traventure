@@ -1,6 +1,9 @@
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { useState, MouseEvent as ReactMouseEvent } from "react";
 import { AdminExternalProductrevenue } from "./AdminExternalProductrevenue";
+import { AdminUsersNumPage } from "./AdminUsersNumPage";
+import { AdminRevenuePage } from "./AdminRevenuePage";
+import { AdminSalesPage } from "./AdminSalesPage";
 
 export function AdminStats() {
   const [revenueView, setRevenueView] = useState(0);
@@ -27,21 +30,9 @@ export function AdminStats() {
         <ToggleButton value={3}>External products Revenues</ToggleButton>
       </ToggleButtonGroup>
 
-      {revenueView === 0 && (
-        <div>
-          <h1>Users Count</h1>
-        </div>
-      )}
-      {revenueView === 1 && (
-        <div>
-          <h1>Revenues</h1>
-        </div>
-      )}
-      {revenueView === 2 && (
-        <div>
-          <h1>External products stats</h1>
-        </div>
-      )}
+      {revenueView === 0 && <AdminUsersNumPage />}
+      {revenueView === 1 && <AdminRevenuePage />}
+      {revenueView === 2 && <AdminSalesPage />}
       {revenueView === 3 && <AdminExternalProductrevenue />}
     </div>
   );
