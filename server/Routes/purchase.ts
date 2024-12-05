@@ -8,6 +8,7 @@ import {
   getPurchaseTotalAmount,
   DeliverPurchase,
   cancelPurchase,
+  getSellerRevenue,
 } from "../Model/Queries/purchase_queries";
 import {
   getProduct,
@@ -73,7 +74,7 @@ router.get("/seller", async (req: Request, res: Response) => {
   try {
     // externalSeller and sellerId are mutually exclusive
     // compactView is optional & makes the response more compact removing timestamps and getting all the similar products are in a single object with total quantity
-    const { externalSeller, sellerId, compactView } = req.query;
+    const { externalSeller, sellerId, compactView, month } = req.query;
     const compactViewBoolean = compactView === "true";
 
     if ((!externalSeller && !sellerId) || (externalSeller && sellerId)) {
@@ -83,7 +84,8 @@ router.get("/seller", async (req: Request, res: Response) => {
     if (sellerId) {
       const sales = await getSellerSales(
         sellerId as string,
-        compactViewBoolean
+        compactViewBoolean,
+        parseInt(month as string)
       );
       return res.status(200).send(sales);
     }
@@ -96,6 +98,24 @@ router.get("/seller", async (req: Request, res: Response) => {
       return res.status(200).send(sales);
     }
   } catch (error) {
+    console.log(error);
+    return res.status(500).send(error);
+  }
+});
+
+router.get("/revenue", async (req: Request, res: Response) => {
+  try {
+    const { sellerId, month, year, productName } = req.query;
+    if (!sellerId) return res.status(404).send("Invalid query parameters");
+    const revenue = await getSellerRevenue(
+      sellerId as string,
+      parseInt(month as string),
+      parseInt(year as string),
+      productName as string
+    );
+    return res.status(200).send(revenue);
+  } catch (error) {
+    console.log(error);
     return res.status(500).send(error);
   }
 });
