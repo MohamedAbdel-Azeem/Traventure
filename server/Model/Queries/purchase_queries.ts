@@ -309,7 +309,7 @@ export async function getExternalSellerRevenue(
 
       timeStamp: Date;
     }> = await purchase
-      .find()
+      .find({ status: "delivered" })
       .populate({
         path: "cart.productId",
         match: externalSeller
