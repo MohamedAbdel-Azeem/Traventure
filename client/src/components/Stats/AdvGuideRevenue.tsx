@@ -122,7 +122,7 @@ export default function AdvGuideRevenue({
     actItenName === "" // When "ALL" is selected
       ? groupedData
       : { [actItenName]: groupedData[actItenName] };
-
+  let totalRevenue = 0;
   // Convert grouped data into an array format for plotting
   const chartData = Array.from(
     { length: month === "ALL" ? 12 : 31 },
@@ -133,6 +133,7 @@ export default function AdvGuideRevenue({
           (point) => point[xAxisDataKey] === i + 1
         );
         dataPoint[key] = entry ? entry.revenue.toFixed(2) : 0;
+        totalRevenue += entry ? entry.revenue : 0;
       });
       return dataPoint;
     }
@@ -140,38 +141,52 @@ export default function AdvGuideRevenue({
   console.log("filtered", filteredGroupedData);
   console.log("chartData", chartData);
   return (
-    <LineChart
-      width={800}
-      height={400}
-      data={chartData}
-      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis
-        dataKey={xAxisDataKey}
-        tickFormatter={(tick) =>
-          xAxisDataKey === "month" ? months[tick] : tick
-        }
-      />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      {Object.keys(filteredGroupedData).map((key, index) => (
-        <Line
-          key={index}
-          type="monotone"
-          dataKey={key}
-          name={key}
-          stroke={`#${Math.floor(Math.random() * 128)
-            .toString(16)
-            .padStart(2, "0")}${Math.floor(Math.random() * 128)
-            .toString(16)
-            .padStart(2, "0")}${Math.floor(Math.random() * 128)
-            .toString(16)
-            .padStart(2, "0")}`} // Dark random color
-          activeDot={{ r: 8 }}
+    <div className="flex flex-row gap-2">
+      <LineChart
+        width={800}
+        height={400}
+        data={chartData}
+        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis
+          dataKey={xAxisDataKey}
+          tickFormatter={(tick) =>
+            xAxisDataKey === "month" ? months[tick] : tick
+          }
         />
-      ))}
-    </LineChart>
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        {Object.keys(filteredGroupedData).map((key, index) => (
+          <Line
+            key={index}
+            type="monotone"
+            dataKey={key}
+            name={key}
+            stroke={`#${Math.floor(Math.random() * 128)
+              .toString(16)
+              .padStart(2, "0")}${Math.floor(Math.random() * 128)
+              .toString(16)
+              .padStart(2, "0")}${Math.floor(Math.random() * 128)
+              .toString(16)
+              .padStart(2, "0")}`} // Dark random color
+            activeDot={{ r: 8 }}
+          />
+        ))}
+      </LineChart>
+      <div className="mt-8 flex justify-center items-center bg-purple-50 py-3 px-4 rounded-lg shadow-md border border-purple-200 max-w-md mx-auto h-1/4">
+        <div className="flex items-center space-x-4">
+          <div className=" items-center">
+            <label className="text-xl font-semibold text-purple-700">
+              Total Revenue:
+            </label>
+            <p className="text-4xl font-bold text-purple-900">
+              EGP {totalRevenue.toFixed(2)}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

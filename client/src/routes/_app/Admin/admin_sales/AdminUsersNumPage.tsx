@@ -135,23 +135,37 @@ export function AdminUsersNumPage() {
   };
   if (isLoading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
         <ClipLoader color="#f86c6b" loading={true} size={150} />
       </div>
     );
   }
   if (isError || isAuthenticated !== username) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
         <h1>Error 403 Unauthrized access</h1>
       </div>
     );
   }
   console.log("here", preparedData);
   return (
-    <div className="flex flex-col items-center gap-8 pt-6">
+    <div className="flex flex-col items-center gap-3 pt-2">
       <h1 className="font-sans text-xl font-medium">Users Statistics Page</h1>
-      <div className="flex gap-4">
+      <div className="flex gap-2">
         <select
           className="p-2 border rounded"
           value={selectedYear}
@@ -191,7 +205,7 @@ export function AdminUsersNumPage() {
         ))}
       </div>
 
-      <div className="mt-8">
+      <div className="">
         <h2 className="font-sans text-lg font-medium">Users </h2>
         <div className="flex flex-row items-center gap-8 pt-6">
           <LineChart
