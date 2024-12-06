@@ -13,7 +13,7 @@ const ForgotPassword = () => {
   const handleSendCode = async (email: string) => {
     const trueornot = await sendEmail(email);
     console.log(trueornot);
-    if (trueornot.includes("success")) {
+    if (trueornot.includes("Success")) {
       setisCodeSent(1);
     } else {
       Swal.fire({
