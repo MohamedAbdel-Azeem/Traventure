@@ -26,6 +26,7 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
   const currentuser = useLocation().pathname.split("/")[2];
+  type = useLocation().pathname.split("/")[1];
   const [showPopup, setShowPopup] = useState(false);
   const [currentProduct, setCurrentProduct] = useState<ACTUALProduct>(product);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
