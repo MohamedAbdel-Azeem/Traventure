@@ -18,6 +18,8 @@ import ShareButton from "../Buttons/ShareButton";
 import BookmarkIcon from '@mui/icons-material/BookmarkAdd';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import ClipLoader from 'react-spinners/ClipLoader';
+import InfoIcon from '@mui/icons-material/Info';
+import { Icon } from "@mui/material";
 
 interface TagStructure {
   _id: string;
@@ -151,9 +153,20 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   };
   const [inappropriateV, setActive] = useState(inappropriate);
 
+  const getRatingStatus = (rating: number) => {
+    if (rating >= 4.5) return "Excellent";
+    if (rating >= 4.0) return "Very Good";
+    if (rating >= 3.5) return "Good";
+    if (rating >= 3.0) return "Average";
+    return "Below Average";
+  };
+
   return (
-    <div className="m-4 transition transform hover:scale-105 w-96 bg-gray-200 rounded-lg">
-      <div className="relative w-full h-[200px]">
+    <div
+      className="m-4 transition transform hover:scale-105 w-96 bg-gray-200 rounded-lg overflow-hidden shadow-lg"
+      style={{ boxShadow: "10px 10px 20px rgba(0, 0, 0, 0.2)" }} 
+    >
+      <div className="relative w-full h-[250px]">
         <img
           src={main_Picture}
           alt={title}
@@ -166,120 +179,158 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
             {title}
           </h2>
         </div>
-        <div className="mb-4">
+
+
+        {/* Rating */}
+
+        <div className="mb-2 flex justify-between items-center">
+  <p className="text-s font-bold text-gray-800 flex items-center">
+    <StarIcon className="mr-1 text-yellow-500" /> {rating.toFixed(1)} · {getRatingStatus(rating)}
+  </p>
+
+       {/* Price */}
+  <p className="text-s font-bold text-gray-800 flex items-center">
+    <ConfirmationNumberIcon className="mr-1" /> {currentCurrency}{" "}
+    {(price * exchangeRate).toFixed(2)}
+  </p>
+</div>
+  
+        {/* Date */}
+        
+          <div className="mb-4 text-left">
+            <p className="text-gray-600 text-sm font-semibold">
+              {`${format(new Date(starting_Date), "MMM dd")} - ${format(
+                new Date(ending_Date),
+                "MMM dd"
+              )}`}
+            </p>
+          </div>
+      
+              {/* Description */}
+
+        {/* <div className="mb-4">
           <p className="text-gray-600 text-center text-sm truncate">
             {description}
           </p>
-        </div>
+        </div> */}
 
+
+        {/* Tags */}
+  
         {Array.isArray(selectedTags) && selectedTags.length > 0 && (
-          <div className="mb-2">
-            <div className="flex flex-wrap justify-center items-center">
-              {selectedTags.map((tag) => (
-                <span
-                  key={tag._id}
-                  className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm mr-2 mb-2"
-                >
-                  {tag.name}
-                </span>
-              ))}
-            </div>
-          </div>
+  <div className="mb-2">
+    <div className="flex flex-wrap justify-center items-center">
+      {selectedTags.slice(0, 3).map((tag) => (
+        <span
+          key={tag._id}
+          className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-sm mr-2 mb-2"
+        >
+          {tag.name}
+        </span>
+      ))}
+      {selectedTags.length > 3 && (
+        <span className="text-purple-800 px-2 py-1 text-sm">...</span>
+      )}
+    </div>
+  </div>
+)}
+
+
+       {/* Buttons */}
+<div className="mt-2">
+  <div className="flex justify-between items-center">
+    <Link
+      to={`/${currenttype + "/" + username}/itineraries/tourist-itinerary/${_id}`}
+      state={{
+        title,
+        description,
+        price,
+        starting_Date,
+        ending_Date,
+        rating,
+        main_Picture,
+        language,
+        pickup_location,
+        accesibility,
+        dropoff_location,
+        plan,
+        selectedTags,
+      }}
+      className="p-2 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition flex items-center"
+    >
+      <InfoIcon className="w-6 h-6 text-white" />
+    </Link>
+
+    {currentType === "tourist" && (
+      <>
+        {/* Bookmark Button */}
+        {!isBookmarked && (
+          <button
+            className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600"
+            title="Bookmark"
+            onClick={() => handleBookmark(_id)}
+          >
+            {loadingBookmark ? (
+              <ClipLoader size={30} color="#ffffff"></ClipLoader>
+            ) : (
+              <BookmarkIcon />
+            )}
+          </button>
+        )}
+        {isBookmarked && currpath !== "bookmarks" && (
+          <button
+            className="bg-green-600 text-white p-2 rounded-lg"
+            disabled
+          >
+            <BookmarkAddedIcon />
+          </button>
         )}
 
-        <div className="flex justify-center items-center mb-4">
-          <div className="flex flex-col items-center mx-2">
-            <div className="bg-green-500 text-white p-2 rounded-lg">
-              <p className="text-sm flex items-center">
-                <AccessTimeIcon className="mr-1" /> {formatDate(starting_Date)}
-              </p>
-            </div>
-          </div>
-          <span className="text-gray-500 mx-4">-</span>
-          <div className="flex flex-col items-center mx-2">
-            <div className="bg-blue-500 text-white p-2 rounded-lg">
-              <p className="text-sm flex items-center">
-                <AccessTimeIcon className="mr-1" /> {formatDate(ending_Date)}
-              </p>
-            </div>
-          </div>
+        {/* Share Button */}
+        <div className="mt-2">
+          <ShareButton type={"itinerary"} ID={_id} />
         </div>
+      </>
+    )}
+  </div>
 
-        <div className="flex justify-center items-center mb-4 space-x-4">
-          <div className="bg-red-500 text-white p-2 rounded-lg flex fle x-col items-center w-1/2">
-            <p className="text-sm flex items-center">
-              <ConfirmationNumberIcon className="mr-1" /> {currentCurrency}{" "}
-              {(price * exchangeRate).toFixed(2)}
-            </p>
-          </div>
-          <div className="bg-yellow-500 text-white p-2 rounded-lg flex flex-col items-center w-1/2">
-            <p className="text-sm flex items-center">
-              <StarIcon className="mr-1" /> {rating}
-            </p>
-          </div>
-        </div>
+  {currentType === "tourist" && (
+    <div className="mt-4">
+      {/* Book Button */}
+      <button
+        className="w-full bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600"
+        onClick={() => handleBooking(_id)}
+      >
+        {loading ? (
+          <ClipLoader size={30} color="#ffffff"></ClipLoader>
+        ) : (
+          "Book"
+        )}
+      </button>
+    </div>
+  )}
 
-        <div className="mt-4 flex justify-between items-center">
-          <Link
-            to={`/${
-              currenttype + "/" + username
-            }/itineraries/tourist-itinerary/${_id}`}
-            state={{
-              title,
-              description,
-              price,
-              starting_Date,
-              ending_Date,
-              rating,
-              main_Picture,
-              language,
-              pickup_location,
-              accesibility,
-              dropoff_location,
-              plan,
-              selectedTags,
-            }}
-            className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition flex items-center"
-          >
-            View Details
-          </Link>
-          {currentType === "tourist" && (
-            <>
-              {" "}
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                onClick={() => handleBooking(_id)}
-              >
-                {loading?<ClipLoader size={30} color="#ffffff"></ClipLoader>: "Book"}
-              </button>
-              {!isBookmarked && <button className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600" title="Bookmark"
-                onClick={() => handleBookmark(_id)}>
-                {loadingBookmark?<ClipLoader size={30} color="#ffffff"></ClipLoader>: <BookmarkIcon />}
-                </button>}
-                {isBookmarked && currpath!=="bookmarks" && <button className="bg-green-600 text-white p-2 rounded-lg" disabled>
-                <BookmarkAddedIcon  />
-                </button>}
-              <ShareButton type={"itinerary"} ID={_id} />
-            </>
-          )}
+  {currentType === "admin" && (
+    <div className="bg-yellow-500 text-white p-2 rounded-lg flex flex-col items-center w-full mt-4">
+      <p className="text-sm flex items-center">
+        {bookingActivated ? "Booking Activated" : "Booking Deactivated"}
+      </p>
+    </div>
+  )}
 
-          {currentType === "admin" && (
-            <div className="bg-yellow-500 text-white p-2 rounded-lg flex flex-col items-center w-1/2">
-              <p className="text-sm flex items-center">
-                {bookingActivated ? "Booking Activated" : "Booking Deactivated"}
-              </p>
-            </div>
-          )}
-        </div>
+</div>
 
+  
+        
         {currentType === "admin" && (
           <Button onClick={handleInappropriate}>
-            {inappropriateV ? "Declare appropriate" : " Declare InAppropriate"}
+            {inappropriateV ? "Declare Appropriate" : "Declare Inappropriate"}
           </Button>
         )}
       </div>
     </div>
   );
+   
 };
 
 export default ItineraryCardCRUDTourist;
