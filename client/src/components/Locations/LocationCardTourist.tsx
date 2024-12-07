@@ -87,7 +87,7 @@ const LocationCardTourist: React.FC<LocationCardTouristProps> = ({
   
       {/* Hover Overlay Content */}
       <div 
-        className="absolute inset-0 bg-purple-900 bg-opacity-90 text-white opacity-0 hover:opacity-100 transition-all duration-300 flex flex-col p-6"
+        className="absolute inset-0 bg-purple-800 bg-opacity-50 text-white opacity-0 hover:opacity-100 transition-all duration-300 flex flex-col p-6"
       >
         {/* Images Section (when editing) */}
         {isEditing && (
