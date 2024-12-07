@@ -73,9 +73,11 @@ const Dashboard: React.FC = () => {
 
   tourist_activities = tourist_activities.slice(0, 5);
   tourist_itineraries = tourist_itineraries.slice(0, 5);
+  
 
   return (
     <>
+    
       {/* Page Header */}
       <header className="bg-gradient-to-r from-purple-500 via-blue-500 to-teal-500 py-16 text-center rounded-b-3xl shadow-lg">
         <h1 className="text-5xl font-extrabold text-white drop-shadow-md"> Welcome Back, {currentuser}!</h1>
