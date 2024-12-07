@@ -89,68 +89,10 @@ const LocationCardTourist: React.FC<LocationCardTouristProps> = ({
       <div 
         className="absolute inset-0 bg-purple-800 bg-opacity-50 text-white opacity-0 hover:opacity-100 transition-all duration-300 flex flex-col p-6"
       >
-        {/* Images Section (when editing) */}
-        {isEditing && (
-          <div className="w-full h-[150px] rounded-lg overflow-hidden mb-4">
-            <div className="flex flex-col">
-              <div className="flex w-full h-[100px] overflow-x-auto space-x-2">
-                {images?.map((cimage, index) => (
-                  <TextField
-                    key={index}
-                    title="Upload Image"
-                    value={cimage}
-                    className="pr-2"
-                  />
-                ))}
-              </div>
-              <div className="flex mt-4">
-                <TextField 
-                  onChange={(e) => setImage(e.target.value)} 
-                  className="flex-1" 
-                  placeholder="Image URL" 
-                />
-                <Button onClick={() => setImages([...images, image])} className="ml-2 bg-purple-600 text-white rounded-md px-4">
-                  Add Image
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-        
-        {/* Historical Tags */}
-        {Array.isArray(selectedTags) && selectedTags.length > 0 && (
-          <div className="flex flex-wrap justify-center items-center mb-4">
-            {details?.historicalTags.map((tag, index) => (
-              <span 
-                key={index} 
-                className="px-3 py-1 bg-purple-200 text-purple-900 rounded-full text-sm font-medium mr-2 mb-2"
-              >
-                {tag.name}
-              </span>
-            ))}
-          </div>
-        )}
-    
-        {/* Description */}
-        <div className="w-full mb-4">
-          {isEditing ? (
-            <TextField
-              multiline
-              maxRows={2}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="w-full"
-              placeholder="Description"
-            />
-          ) : (
-            <p className="text-center text-sm text-gray-200">{description}</p>
-          )}
-        </div>
-  
-        {/* Ticket Prices and Hours */}
-        <div className="w-full flex flex-col md:flex-row">
+        {/* Ticket Prices and Hours (top) */}
+        <div className="flex w-full mb-4 mt-5">
           {/* Ticket Prices Section */}
-          <div className="flex-1 mb-4 md:mb-0">
+          <div className="flex-1 mr-4">
             <div className="flex items-center mb-2">
               <ConfirmationNumberIcon className="mr-2 text-white" />
               <span className="font-semibold">Ticket Prices</span>
@@ -188,8 +130,39 @@ const LocationCardTourist: React.FC<LocationCardTouristProps> = ({
             )}
           </div>
         </div>
+  
+        {/* Historical Tags */}
+        {Array.isArray(selectedTags) && selectedTags.length > 0 && (
+          <div className="flex flex-wrap justify-center items-center mb-4">
+            {details?.historicalTags.map((tag, index) => (
+              <span 
+                key={index} 
+                className="px-3 py-1 bg-purple-200 text-purple-900 rounded-full text-sm font-medium mr-2 mb-2"
+              >
+                {tag.name}
+              </span>
+            ))}
+          </div>
+        )}
+  
+        {/* Description */}
+        <div className="w-full mb-4">
+          {isEditing ? (
+            <TextField
+              multiline
+              maxRows={2}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full"
+              placeholder="Description"
+            />
+          ) : (
+            <p className="text-center text-sm text-gray-200">{description}</p>
+          )}
+        </div>
       </div>
     </div>
   );
+  
 }
   export default LocationCardTourist;
