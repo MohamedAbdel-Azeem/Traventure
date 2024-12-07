@@ -183,9 +183,13 @@ Activities management
 <summary> Advertiser Endpoint </summary>
 
 `POST /add`  -create a new advertiser
+
 `GET /:username`  -get an advertiser by username
+
 `PATCH /update/:username`  -change username of a user
+
 `GET /revenue/:username`   -get revenue of a certain advertiser
+
 `GET /numstats/:username`  -get statistics of a certain advertiser
 </details> 
 
