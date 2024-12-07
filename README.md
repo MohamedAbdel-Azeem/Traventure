@@ -147,7 +147,7 @@ Activities management
 
 `PATCH /toggleInappropriate/:id`  - Updates a certain field (toggleInappropriate) in an activity 
 
-<details>
+</details>
 
 <details> 
 <summary> Admin Endpoint </summary>
