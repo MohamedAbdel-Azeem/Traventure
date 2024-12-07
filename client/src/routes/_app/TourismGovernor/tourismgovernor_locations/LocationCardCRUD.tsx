@@ -276,11 +276,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
                 {isEditing ? (
                   <div>
                     <TextField
-                      value={
-                        currentCurrency +
-                        " " +
-                        (native * exchangeRate).toFixed(2)
-                      }
+                      value={native}
                       size="small"
                       onChange={(e) => setNative(Number(e.target.value))}
                       className="w-[124px]"
@@ -296,11 +292,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
                       }}
                     />
                     <TextField
-                      value={
-                        currentCurrency +
-                        " " +
-                        (foreign * exchangeRate).toFixed(2)
-                      }
+                      value={foreign}
                       size="small"
                       onChange={(e) => setForeign(Number(e.target.value))}
                       className="w-[124px]"
@@ -316,11 +308,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
                       }}
                     />
                     <TextField
-                      value={
-                        currentCurrency +
-                        " " +
-                        (student * exchangeRate).toFixed(2)
-                      }
+                      value={student}
                       size="small"
                       onChange={(e) => setStudent(Number(e.target.value))}
                       className="w-[124px]"

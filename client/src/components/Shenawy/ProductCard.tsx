@@ -150,7 +150,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
     <div className="border border-gray-200 rounded-lg shadow-lg bg-gray-100 overflow-hidden relative">
       <div className="relative h-36 bg-gray-300 flex items-center justify-center">
         <div className="absolute bottom-2 right-2">
-          {type === "Tourist" && WishListButton(product, currentuser)}
+          {type.includes("tourist") && WishListButton(product, currentuser)}
         </div>
         {currentProduct.imageUrl ? (
           <img
@@ -306,7 +306,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
                   </p>
                 )}
               </div>
-              {type.includes("Tourist") ? (
+              {type.includes("tourist") ? (
                 <ProductCartButton product={product} />
               ) : type.includes("Admin") ||
                 (type.includes("Seller") &&

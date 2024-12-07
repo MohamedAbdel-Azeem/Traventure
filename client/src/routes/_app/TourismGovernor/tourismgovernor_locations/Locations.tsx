@@ -184,11 +184,7 @@ return (
               <InputLabel>Native Price</InputLabel>
               <OutlinedInput
                 type="number"
-                value={
-                  currentCurrency +
-                  " " +
-                  (nativePrice * exchangeRate).toFixed(2)
-                }
+                value={nativePrice}
                 startAdornment={
                   <InputAdornment position="start">{currentCurrency}</InputAdornment>
                 }
@@ -201,11 +197,7 @@ return (
               <InputLabel>Foreign Price</InputLabel>
               <OutlinedInput
                 type="number"
-                value={
-                  currentCurrency +
-                  " " +
-                  (foreignPrice * exchangeRate).toFixed(2)
-                }
+                value={foreignPrice}
                 startAdornment={
                   <InputAdornment position="start">{currentCurrency}</InputAdornment>
                 }
@@ -218,11 +210,7 @@ return (
               <InputLabel>Student Price</InputLabel>
               <OutlinedInput
                 type="number"
-                value={
-                  currentCurrency +
-                  " " +
-                  (studentPrice * exchangeRate).toFixed(2)
-                }
+                value={studentPrice}
                 startAdornment={
                   <InputAdornment position="start">{currentCurrency}</InputAdornment>
                 }
