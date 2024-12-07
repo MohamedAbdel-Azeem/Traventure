@@ -442,6 +442,12 @@ AMADEUS_CLIENT_SECRET="A secret string to use for encrypting passwords"
 GMAIL_PASSWORD="your gmail password"
 GMAIL_ADDRESS="your gmail address"
 ```
+- start Traventure
+
+```bash
+
+npm run start
+```
 
 ---
 
