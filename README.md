@@ -217,7 +217,7 @@ Here are examples of testing one of our endpoints using Postman:
 ---
 
 ##  Contribute  
-We welcome contributions to Traventure.All you need to do is:
+We welcome contributions to Traventure. All you need to do is:
 
 1- Fork the repo
 
