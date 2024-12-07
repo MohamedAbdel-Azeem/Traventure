@@ -171,8 +171,15 @@ const Dashboard: React.FC = () => {
             <div className="flex gap-6 items-start">
               {tourist_activities.length > 0 ? (
                 tourist_activities.map((activity) => (
-                  <ActivityCardTourist key={activity._id} {...activity} />
-                ))
+              <ActivityCardTourist
+                key={activity._id}
+                activity={activity}
+                bookmarked={bookmarkedActivities.some(
+                  (bookmarkedActivity) =>
+                    bookmarkedActivity._id === activity._id
+                )}
+                {...(currenttype === "tourist" && { type: "tourist" })}
+              />                ))
               ) : (
                 <div className="text-gray-500 italic text-center">No upcoming activities available.</div>
               )}
