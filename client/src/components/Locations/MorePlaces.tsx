@@ -45,7 +45,7 @@ const MorePlaces: React.FC = () => {
       return true;
     });
   return (
-    <div className="flex">
+    <div className="flex-grow">
       <Box p={3} style={{ marginTop: '80px' }}>
         <Typography variant="h4" component="h1" gutterBottom>
           All Places
