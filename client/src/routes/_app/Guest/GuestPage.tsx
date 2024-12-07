@@ -5,7 +5,7 @@ import { useState } from "react";
 const GuestPage = () => {
 
 
-  const [isTutorialOpen, setTutorialOpen] = useState(false);
+  const [isTutorialOpen, setTutorialOpen] = useState(true);
 
   const handleTutorialOpen = () => setTutorialOpen(true);
   const handleTutorialClose = () => setTutorialOpen(false);
@@ -42,8 +42,6 @@ const GuestPage = () => {
         </Button> */}
       </div>
       {/* <WebsiteTutorial open={isTutorialOpen} onClose={handleTutorialClose} userType="guest" /> */}
-
-
     </div>
   );
 };

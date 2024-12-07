@@ -80,14 +80,7 @@ const TouristPage = () => {
         <Dashboard />
       </div>
 
-      <div
-        style={{
-          position: "fixed",
-          bottom: 20,
-          left: 20,
-          zIndex: 1000,
-        }}
-      >
+      <div className="fixed bottom-5 left-5 z-[1000]">
         {/* <Button
           variant="contained"
           color="primary"
@@ -100,7 +93,7 @@ const TouristPage = () => {
           }}
         >
           Open Tutorial
-        </Button> */}
+        </Button>  */}
       </div>
 
       <WebsiteTutorial
