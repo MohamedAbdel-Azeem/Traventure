@@ -38,9 +38,7 @@ Welcome to Traventure, an all-in-one travel platform designed to make vacation p
 
 ## Code Style  
 
-We follow a consistent code style using **Prettier** 
-
-The  full team uses **Prettier**  as its linter which automatically works when saving (ctrl + s)
+The  full team works on vscode and uses **Prettier**  as its linter which automatically works when saving (ctrl + s)
 
 
 ---
