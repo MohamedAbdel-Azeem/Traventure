@@ -56,7 +56,7 @@ const TouristPage = () => {
           height: "100vh",
         }}
       >
-        <h1>Error 403 Unauthrized access</h1>
+        <h1>Error 403 Unauthorized access</h1>
       </div>
     );
   }
@@ -88,7 +88,7 @@ const TouristPage = () => {
           zIndex: 1000,
         }}
       >
-        <Button
+        {/* <Button
           variant="contained"
           color="primary"
           onClick={handleTutorialOpen}
@@ -100,7 +100,7 @@ const TouristPage = () => {
           }}
         >
           Open Tutorial
-        </Button>
+        </Button> */}
       </div>
 
       <WebsiteTutorial

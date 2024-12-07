@@ -27,7 +27,7 @@ const GuestPage = () => {
           zIndex: 1000,
         }}
       >
-        <Button
+        {/* <Button
           variant="contained"
           color="primary"
           onClick={handleTutorialOpen}
@@ -39,9 +39,9 @@ const GuestPage = () => {
           }}
         >
           Open Tutorial
-        </Button>
+        </Button> */}
       </div>
-      <WebsiteTutorial open={isTutorialOpen} onClose={handleTutorialClose} userType="guest" />
+      {/* <WebsiteTutorial open={isTutorialOpen} onClose={handleTutorialClose} userType="guest" /> */}
 
 
     </div>

@@ -29,6 +29,7 @@ const GuestDashboard = () => {
         <div className="flex gap-4 items-center">
           {itineraries.length > 0 ? (
             itineraries.map((itinerary) => (
+              <div className="w-96 flex-shrink-0">
               <ItineraryCardToruist
                 key={itinerary._id}
                 _id={String(itinerary._id)}
@@ -51,6 +52,7 @@ const GuestDashboard = () => {
                 bookingActivated={false}
                 inappropriate={false}
               />
+              </div>
             ))
           ) : (
             <div>No upcoming itineraries available.</div>
