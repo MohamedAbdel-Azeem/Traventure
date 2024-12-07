@@ -113,7 +113,34 @@ Activities management
 
 ## Code Examples  
 
+<details>
+<summary>BE Routes Example</summary>
 
+```js
+app.use("/api/admin", adminRouter);
+app.use("/api/category", categoryRouter);
+app.use("/api/activity", activityRouter);
+app.use("/api/preferenceTags", preferenceTagsRouter);
+app.use("/api/seller", sellerRouter);
+app.use("/api/product", productRouter);
+app.use("/api/place", placeRouter);
+app.use("/api/advertiser", advertiserRouter);
+app.use("/api/tourGuide", tourGuideRouter);
+app.use("/api/tourist", touristRouter);
+app.use("/api/governer", governerRouter);
+app.use("/api/itinerary", itineraryRouter);
+app.use("/api/login", LoginRouter);
+app.use("/api/historicalTags", historicalTagsRouter);
+app.use("/api/user/", changePasswordRouter);
+app.use("/api/bookings", BookingRouter);
+app.use("/api/purchase", purchaseRouter);
+app.use("/api/complaint", complaintRouter);
+app.use("/api/feedBack", feedbackRouter);
+app.use("/api/admin/", reviewdocsRouter);
+app.use("/api/promocode", promocodeRouter);
+
+```
+</details>
 
 
 
