@@ -12,7 +12,7 @@
 2. [ Build Status](#-build-status)
 3. [ Code Style](#-code-style)
 4. [ Tech and Frameworks used](#%EF%B8%8F-tech-and-frameworks-used)
-5. [ Features & Screenshots](#-features--screenshots)
+5. [ Features](#-features--screenshots)
 6. [ Code Examples](#-code-examples)
 7. [ Installation](#%EF%B8%8F-installation)
 8. [ API Reference](#-api-reference)
@@ -67,7 +67,7 @@ npm run format:fix
 
 ---
 
-##  Features & Screenshots  
+##  Features
 
 ### User Registration 
 
