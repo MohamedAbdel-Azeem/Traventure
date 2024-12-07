@@ -12,9 +12,14 @@ import BadgePopup from "../../../../components/Shenawy/BadgePopup";
 import { redeemPoints } from "../../../../custom_hooks/touristpoints/redeemPoints";
 import Swal from "sweetalert2";
 import { handleDeleteAccount } from "../../../../custom_hooks/usedeleterequest";
-import ChangePasswordModal, { AddContactLeadFormType } from "../../../../components/ChangePasswordModal";
+import ChangePasswordModal, {
+  AddContactLeadFormType,
+} from "../../../../components/ChangePasswordModal";
 import { editpassword } from "../../../../custom_hooks/changepassowrd";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { resetCartState } from "../../../../redux/cartSlice";
+import { resetCurrencyState } from "../../../../redux/exchangeRateSlice";
 
 interface TouristProfileProps {
   tourist: TouristProfileData;
@@ -40,6 +45,7 @@ const schema = z.object({
 export type TouristProfileUpdate = z.infer<typeof schema>;
 
 const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
+  const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
   const [currentTourist, setCurrentTourist] = useState(tourist);
@@ -103,7 +109,9 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
   };
 
   const handleLogout = () => {
-    Cookies.set("access_token", "", { expires: 0});
+    Cookies.set("access_token", "", { expires: 0 });
+    dispatch(resetCartState());
+    dispatch(resetCurrencyState());
     navigate("/");
   };
 

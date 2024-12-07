@@ -13,11 +13,13 @@ const exchangeRateSlice = createSlice({
       state.exchangeRate = action.payload.rate;
       state.currentCurrency = action.payload.currency;
     },
-    resetState: () => {
+    resetCurrencyState: () => {
+      console.log("resetting currency state");
       return initialState;
     },
   },
 });
 
-export const { setExchangeRate } = exchangeRateSlice.actions;
+export const { setExchangeRate, resetCurrencyState } =
+  exchangeRateSlice.actions;
 export default exchangeRateSlice.reducer;
