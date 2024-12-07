@@ -39,8 +39,11 @@ import { editpassword } from "../../custom_hooks/changepassowrd";
 import { GetCurrentUser } from "../../custom_hooks/currentuser";
 import HotelIcon from "@mui/icons-material/Hotel";
 import FlightIcon from "@mui/icons-material/Flight";
-import BookmarksIcon from '@mui/icons-material/Bookmarks';
-import Cookies from 'js-cookie';
+import BookmarksIcon from "@mui/icons-material/Bookmarks";
+import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { resetCartState } from "../../redux/cartSlice";
+import { resetCurrencyState } from "../../redux/exchangeRateSlice";
 
 const drawerHeight = 64;
 
@@ -51,6 +54,7 @@ interface NewNavbarProps {
 export default function NewNavbar({ className = "" }: NewNavbarProps) {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const currentuser = location.pathname.split(`/`)[2];
   const currentusertype = location.pathname.split(`/`)[1];
 
@@ -261,6 +265,13 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
     setDropdownVisible(false);
   };
 
+  const handleLogOut = () => {
+    Cookies.set("access_token", "", { expires: 0 });
+    dispatch(resetCartState());
+    dispatch(resetCurrencyState());
+    navigate("/");
+  };
+
   const profileDropdownItems = [
     ...(!currentusertype.includes("tourismgovernor") &&
     !currentusertype.includes("admin") &&
@@ -334,10 +345,7 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
       ? [
           {
             label: "Log out",
-            onClick: () => {Cookies.set("access_token", "", { expires: 0});
-            Cookies.set("reduxPersistIndex", "", { expires: 0});
-            Cookies.set("persist%3Aroot", "", { expires: 0});
-            navigate("/")},
+            onClick: handleLogOut,
             icon: Logout,
           },
         ]
