@@ -434,17 +434,14 @@ Here are examples of testing one of our endpoints using Postman:
 
 - Add a `.env` in the `client` and `server`
 
-``bash
+```bash
 
 MONGODB_URI="Your Mongo Connection String"
-AMADEUS_CLIENT_ID= "<Your Amadeus Client ID>"
-AMADEUS_CLIENT_SECRET="<A secret string to use for encrypting passwords"
-GMAIL_PASSWORD = "your gmail password"
-GMAIL_ADDRESS = "your gmail address"
+AMADEUS_CLIENT_ID="Your Amadeus Client ID"
+AMADEUS_CLIENT_SECRET="A secret string to use for encrypting passwords"
+GMAIL_PASSWORD="your gmail password"
+GMAIL_ADDRESS="your gmail address"
 ```
-
-
-
 
 ---
 
