@@ -452,8 +452,11 @@ We welcome contributions to Traventure. All you need to do is:
 ### Docs 
 
 [Tailwind docs](https://v2.tailwindcss.com/docs)
+
 [Jwt docs](https://jwt.io/introduction)
+
 [React docs](https://legacy.reactjs.org/docs/getting-started.html)
+
 [Prettier docs](https://prettier.io/docs/en/)
 
 
