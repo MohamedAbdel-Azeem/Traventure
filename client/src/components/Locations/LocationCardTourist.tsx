@@ -60,190 +60,136 @@ const LocationCardTourist: React.FC<LocationCardTouristProps> = ({
   );
 
   return (
-    <div className={`w-full max-w-[500px] border border-gray-300 rounded-lg p-4 ${className}`}>
-      {/* Image Section */}
-      <div className="w-full h-[250px] rounded-lg overflow-hidden">
-        {isEditing ? (
-          <div className="flex flex-col">
-            <div className="flex w-full h-full object-cover overflow-auto whitespace-nowrap">
-              {images?.map((cimage, index) => (
-                <TextField
-                  key={index}
-                  title="Upload Image"
-                  value={cimage}
-                  className="pr-2"
-                />
-              ))}
-            </div>
-            <div className="flex flex-row mt-2">
-              <TextField onChange={(e) => setImage(e.target.value)} className="flex-1" />
-              <Button onClick={() => setImages([...images, image])} className="ml-2">
-                Add Image
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <div className="w-full h-full object-cover relative">
-            <div className="flex w-full h-full object-cover overflow-auto whitespace-nowrap">
-              {images?.map((cimage) => (
-                <img key={cimage} className="w-full h-full object-cover" src={cimage} alt={locationName} />
-              ))}
-            </div>
-          </div>
-        )}
+    <div 
+      className={`relative w-full max-w-[500px] h-[350px] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all ${className}`}
+    >
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center transition-all duration-300"
+        style={{ backgroundImage: `url(${images?.[0] || 'https://via.placeholder.com/500'})` }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
       </div>
-
-      {/* Location Name */}
-      <div className="w-full mt-4">
+  
+      {/* Title displayed at bottom-left */}
+      <div className="absolute bottom-4 left-4 z-10">
         {isEditing ? (
           <TextField
             value={locationName}
             onChange={(e) => setLocationName(e.target.value)}
-            className="w-full text-center"
+            className="w-full text-center bg-white bg-opacity-70 rounded-md p-1"
             placeholder="Location Name"
-            size="small"
-            sx={{
-              "& .MuiInputBase-input": {
-                textAlign: "center",
-                padding: "8px",
-              },
-            }}
           />
         ) : (
-          <p className="text-2xl text-center font-medium">{locationName}</p>
+          <h2 className="text-2xl font-bold text-white drop-shadow-md">{locationName}</h2>
         )}
       </div>
-
-      {/* Historical Tags */}
-
-      {Array.isArray(selectedTags) && selectedTags.length > 0 && (
-  <div className="mb-2">
-    <div className="flex flex-wrap justify-center items-center">
-      {details?.historicalTags.map((tag, index) => (
-        <span 
-          key={index} 
-          className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium mr-2 mb-2"
-        >
-          {tag.name}
-        </span>
-      ))}
-    </div>
-  </div>
-)}
-
-
-
-
-      {/* Description */}
-      <div className="w-full mt-2">
-        {isEditing ? (
-          <TextField
-            multiline
-            maxRows={2}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full"
-            placeholder="Description"
-            size="small"
-            sx={{
-              "& .MuiInputBase-input": {
-                textAlign: "center",
-                padding: "8px",
-              },
-            }}
-          />
-        ) : (
-          <p className="text-base text-center mt-2">{description}</p>
+  
+      {/* Hover Overlay Content */}
+      <div 
+        className="absolute inset-0 bg-purple-900 bg-opacity-90 text-white opacity-0 hover:opacity-100 transition-all duration-300 flex flex-col p-6"
+      >
+        {/* Images Section (when editing) */}
+        {isEditing && (
+          <div className="w-full h-[150px] rounded-lg overflow-hidden mb-4">
+            <div className="flex flex-col">
+              <div className="flex w-full h-[100px] overflow-x-auto space-x-2">
+                {images?.map((cimage, index) => (
+                  <TextField
+                    key={index}
+                    title="Upload Image"
+                    value={cimage}
+                    className="pr-2"
+                  />
+                ))}
+              </div>
+              <div className="flex mt-4">
+                <TextField 
+                  onChange={(e) => setImage(e.target.value)} 
+                  className="flex-1" 
+                  placeholder="Image URL" 
+                />
+                <Button onClick={() => setImages([...images, image])} className="ml-2 bg-purple-600 text-white rounded-md px-4">
+                  Add Image
+                </Button>
+              </div>
+            </div>
+          </div>
         )}
-      </div>
-      
-
-      {/* Ticket Prices and Hours */}
-      <div className="w-full mt-4 flex flex-row">
-        {/* Ticket Prices Section */}
-        <div className="flex-1">
-          <div className="flex items-center mb-2">
-            <ConfirmationNumberIcon className="mr-2" />
-            <span className="font-semibold">Ticket Prices</span>
+        
+        {/* Historical Tags */}
+        {Array.isArray(selectedTags) && selectedTags.length > 0 && (
+          <div className="flex flex-wrap justify-center items-center mb-4">
+            {details?.historicalTags.map((tag, index) => (
+              <span 
+                key={index} 
+                className="px-3 py-1 bg-purple-200 text-purple-900 rounded-full text-sm font-medium mr-2 mb-2"
+              >
+                {tag.name}
+              </span>
+            ))}
           </div>
-          {isEditing ? (
-            <div className="space-y-2">
-              <TextField
-                value={native}
-                size="small"
-                onChange={(e) => setNative(Number(e.target.value))}
-                placeholder="Native"
-                fullWidth
-                sx={{
-                  "& .MuiInputBase-input": {
-                    textAlign: "center",
-                    padding: "8px",
-                  },
-                }}
-              />
-              <TextField
-                value={foreign}
-                size="small"
-                onChange={(e) => setForeign(Number(e.target.value))}
-                placeholder="Foreign"
-                fullWidth
-                sx={{
-                  "& .MuiInputBase-input": {
-                    textAlign: "center",
-                    padding: "8px",
-                  },
-                }}
-              />
-              <TextField
-                value={student}
-                size="small"
-                onChange={(e) => setStudent(Number(e.target.value))}
-                placeholder="Student"
-                fullWidth
-                sx={{
-                  "& .MuiInputBase-input": {
-                    textAlign: "center",
-                    padding: "8px",
-                  },
-                }}
-              />
-            </div>
-          ) : (
-            <div>
-              <p>Native: {currentCurrency} {(native * exchangeRate).toFixed(2)}</p>
-              <p>Foreign: {currentCurrency} {(foreign * exchangeRate).toFixed(2)}</p>
-              <p>Student: {currentCurrency} {(student * exchangeRate).toFixed(2)}</p>
-            </div>
-          )}
-        </div>
-
-        {/* Hours of Operation Section */}
-        <div className="flex-1 ml-4">
-          <div className="flex items-center mb-2">
-            <AccessTimeIcon className="mr-2" />
-            <span className="font-semibold">Hours of Operation</span>
-          </div>
+        )}
+    
+        {/* Description */}
+        <div className="w-full mb-4">
           {isEditing ? (
             <TextField
-              value={hours}
-              size="small"
-              onChange={(e) => setHours(e.target.value)}
-              placeholder="Hours"
-              fullWidth
-              sx={{
-                "& .MuiInputBase-input": {
-                  textAlign: "center",
-                  padding: "8px",
-                },
-              }}
+              multiline
+              maxRows={2}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full"
+              placeholder="Description"
             />
           ) : (
-            <p>{hours}</p>
+            <p className="text-center text-sm text-gray-200">{description}</p>
           )}
+        </div>
+  
+        {/* Ticket Prices and Hours */}
+        <div className="w-full flex flex-col md:flex-row">
+          {/* Ticket Prices Section */}
+          <div className="flex-1 mb-4 md:mb-0">
+            <div className="flex items-center mb-2">
+              <ConfirmationNumberIcon className="mr-2 text-white" />
+              <span className="font-semibold">Ticket Prices</span>
+            </div>
+            {isEditing ? (
+              <div className="space-y-3 text-white text-sm">
+                <TextField value={native} onChange={(e) => setNative(Number(e.target.value))} placeholder="Native" fullWidth />
+                <TextField value={foreign} onChange={(e) => setForeign(Number(e.target.value))} placeholder="Foreign" fullWidth />
+                <TextField value={student} onChange={(e) => setStudent(Number(e.target.value))} placeholder="Student" fullWidth />
+              </div>
+            ) : (
+              <div>
+                <p className="text-white text-sm">Native: {currentCurrency} {(native * exchangeRate).toFixed(2)}</p>
+                <p className="text-white text-sm">Foreign: {currentCurrency} {(foreign * exchangeRate).toFixed(2)}</p>
+                <p className="text-white text-sm">Student: {currentCurrency} {(student * exchangeRate).toFixed(2)}</p>
+              </div>
+            )}
+          </div>
+  
+          {/* Hours of Operation Section */}
+          <div className="flex-1">
+            <div className="flex items-center mb-2">
+              <AccessTimeIcon className="mr-2 text-white" />
+              <span className="font-semibold">Hours of Operation</span>
+            </div>
+            {isEditing ? (
+              <TextField 
+                value={hours} 
+                onChange={(e) => setHours(e.target.value)} 
+                placeholder="Hours" 
+                fullWidth 
+              />
+            ) : (
+              <p className="text-white text-sm">{hours}</p>
+            )}
+          </div>
         </div>
       </div>
     </div>
   );
-};
-
-export default LocationCardTourist;
+}
+  export default LocationCardTourist;
