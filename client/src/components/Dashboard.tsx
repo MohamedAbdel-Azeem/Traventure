@@ -139,7 +139,7 @@ const Dashboard: React.FC = () => {
             <div className="flex gap-6 items-start">
               {locations.length > 0 ? (
                 locations.map((location) => (
-                  <div key={location._id} className="min-w-[300px]">
+                  <div key={location._id} className="min-w-[600px]">
                     <LocationCardTourist id={String(location._id)} wholeLocation={location} />
                   </div>
                 ))
