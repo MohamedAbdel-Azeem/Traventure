@@ -166,20 +166,23 @@ const Checkout = () => {
         backgroundColor: "rgba(0, 0, 0, 0.7)",
       }}
     >
-      <div className="ml-[100px] h-[650px] mt-8 w-[650px] bg-gradient-to-b from-[#A855F7] to-[#6D28D9] flex flex-col rounded-[10px] overflow-auto lasttimeipromise">
+      <div className="ml-[100px] h-[650px] mt-8 w-[650px] bg-gradient-to-b from-[#A855F7] to-[#6D28D9] flex flex-col rounded-[10px] overflow-auto lasttimeipromise relative">
         <div className="flex text-[30px] h-[68px] mt-[2px] w-[612px] justify-center items-center text-white">
           Order Summary
         </div>
         {cart.map((item) => (
-          <div className="flex flex-row mt-1">
-            <div
-              className="h-[100px] w-[100px] flex mx-auto"
-              style={{
-                backgroundImage: `url('${item.imageUrl}')`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            />
+          <div className="relative">
+            <line className="w-[1px] h-[110px] bg-white absolute right-[210px] top-[7px]"></line>
+            <line className="w-[650px] h-[1px] bg-white absolute"></line>
+            <div className="flex flex-row mt-1">
+              <div
+                className="h-[120px] w-[120px] flex mx-auto"
+                style={{
+                  backgroundImage: `url('${item.imageUrl}')`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              />
               <div className="w-[300px] h-[120px] text-white text-[30px] break-words overflow-auto lasttimeipromise">
                 {item.name}
               </div>
@@ -194,7 +197,7 @@ const Checkout = () => {
                   Total: {(item.price * item.quantity).toFixed(2)}
                 </div>
               </div>
-     
+            </div>
           </div>
         ))}
       </div>
