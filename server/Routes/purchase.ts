@@ -51,7 +51,7 @@ router.post("/buy", async (req: Request, res: Response) => {
 
     const purchase = await addPurchase(body);
     const totalAmount = await getPurchaseTotalAmount(body);
-
+    
     return res.status(200).send(purchase);
   } catch (error) {
     return res.status(500).send(error);

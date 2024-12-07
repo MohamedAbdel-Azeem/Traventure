@@ -21,6 +21,7 @@ export interface IPurchase {
   status?: PurchaseStatus;
   totalAmount?: number;
   promoCode?: string;
+  payment?: string;
 }
 
 const purchaseSchema = new schema({
@@ -37,6 +38,7 @@ const purchaseSchema = new schema({
   ],
   timeStamp: { type: Date, required: true, default: Date.now },
   status: { type: String, required: true, default: PurchaseStatus.processing },
+  payment: { type: String, required: true },
   address: {
     latitude: { type: Number, required: true },
     longitude: { type: Number, required: true },
