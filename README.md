@@ -8,35 +8,35 @@
 
 # Traventure
 ## Table of Contents  
-1. [ Motivation](#-motivation)
-2. [ Build Status](#-build-status)
-3. [ Code Style](#-code-style)
-4. [ Tech and Frameworks used](#%EF%B8%8F-tech-and-frameworks-used)
-5. [ Features](#-features--screenshots)
-6. [ Code Examples](#-code-examples)
-7. [ Installation](#%EF%B8%8F-installation)
-8. [ API Reference](#-api-reference)
-9. [ Tests](#-tests)
-10. [ How to Use](#-how-to-use)
-11. [ Contribute](#-contribute)
-12. [ Credits](#-credits)
+1. [Motivation](#-motivation)
+2. [Build Status](#-build-status)
+3. [Code Style](#-code-style)
+4. [Tech and Frameworks used](#%EF%B8%8F-tech-and-frameworks-used)
+5. [Features](#-features--screenshots)
+6. [Code Examples](#-code-examples)
+7. [Installation](#%EF%B8%8F-installation)
+8. [API Reference](#-api-reference)
+9. [Tests](#-tests)
+10. [How to Use](#-how-to-use)
+11. [Contribute](#-contribute)
+12. [Credits](#-credits)
 13. [License](#-license)
 
 ---
 
-##  Motivation  
+## Motivation  
 Welcome to Traventure, an all-in-one travel platform designed to make vacation planning effortless and exciting! Whether you're dreaming of exploring historic landmarks, unwinding on relaxing beaches, or embarking on family-friendly adventures, our app brings everything together to create the perfect trip. With features tailored to simplify planning and enhance your travel experience, we’re here to turn your dream destinations into reality.
 
 ---
 
-##  Build Status  
+## Build Status  
 
 - Still under development and not deployed yet
 - Regular updates planned to add new features and improvements.  
 - No known issues as of now.  
 ---
 
-##  Code Style  
+## Code Style  
 
 We follow a consistent code style using **Prettier** 
 
@@ -45,7 +45,7 @@ The  full team uses **Prettier**  as its linter which automatically works when s
 
 ---
 
-##  Tech and Frameworks used  
+## Tech and Frameworks used  
 - NodeJs
 - Express
 - ReactJs
@@ -58,7 +58,7 @@ The  full team uses **Prettier**  as its linter which automatically works when s
 
 ---
 
-##  Features
+## Features
 
 ### User Registration 
 
@@ -113,7 +113,7 @@ Activities management
 
 ---
 
-##  Code Examples  
+## Code Examples  
 
 
 
@@ -121,7 +121,7 @@ Activities management
 
 ---
 
-##  Installation  
+## Installation  
 
 
 
@@ -129,7 +129,7 @@ Activities management
 
 ---
 
-##  API Reference  
+## API Reference  
 
 
 <details>
@@ -409,7 +409,7 @@ Activities management
 
 ---
 
-##  Tests  
+## Tests  
 We  use Postman to manually test all our api references by making sure the response is as expected.
 
 Here are examples of testing one of our endpoints using Postman:
@@ -420,7 +420,7 @@ Here are examples of testing one of our endpoints using Postman:
 
 ---
 
-##  How to Use  
+## How to Use  
 
 
 
@@ -429,7 +429,7 @@ Here are examples of testing one of our endpoints using Postman:
 
 ---
 
-##  Contribute  
+## Contribute  
 We welcome contributions to Traventure. All you need to do is:
 
 1- Fork the repo
@@ -448,7 +448,7 @@ We welcome contributions to Traventure. All you need to do is:
 
 ---
 
-##  Credits  
+## Credits  
 ### Docs 
 
 [Tailwind docs](https://v2.tailwindcss.com/docs)
@@ -466,7 +466,7 @@ We welcome contributions to Traventure. All you need to do is:
 
 ---
 
-## 📜 License  
+## License  
 The software is open source under the Apache 2.0 License.
 
 
