@@ -359,7 +359,7 @@ Activities management
 </details>
 
 <details>
-<summary> TourGuide Endpoint <summary>
+<summary> TourGuide Endpoint </summary>
 
 `POST /add`  -create a new tourguide user
 
