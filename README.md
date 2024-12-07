@@ -31,7 +31,7 @@ Welcome to Traventure, an all-in-one travel platform designed to make vacation p
 
 ##  Build Status  
 
-- Fully operational with all major features implemented.  
+- Still under development and not deployed yet
 - Regular updates planned to add new features and improvements.  
 - No known issues as of now.  
 ---
