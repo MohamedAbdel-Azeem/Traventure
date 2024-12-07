@@ -77,105 +77,118 @@ const Dashboard: React.FC = () => {
 
   return (
     <>
-    
       {/* Page Header */}
       <header className="bg-gradient-to-r from-purple-500 via-blue-500 to-teal-500 py-16 text-center rounded-b-3xl shadow-lg">
-        <h1 className="text-5xl font-extrabold text-white drop-shadow-md"> Welcome Back, {currentuser}!</h1>
-        <p className="mt-4 text-lg text-white opacity-90">Plan your next adventure with ease. Check upcoming itineraries, places, and activities all in one place.</p>
+        <h1 className="text-5xl font-extrabold text-white drop-shadow-md">
+          Welcome Back, {currentuser}!
+        </h1>
+        <p className="mt-4 text-lg text-white opacity-90">
+          Plan your next adventure with ease. Check upcoming itineraries, places, and activities all in one place.
+        </p>
       </header>
   
       {/* Upcoming Itineraries Section */}
-      <section className="mt-12 p-8 bg-white shadow-md rounded-lg mx-4 lg:mx-20">
-      <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
-  Upcoming Itineraries
-  <span className="block h-1 mt-2 bg-gradient-to-r from-purple-500 to-pink-500"></span>
-</h2>
-       <p className="mb-6 text-gray-600">Stay on top of your travel plans with these upcoming trips.</p>
-        <div className="overflow-x-auto">
-          <div className="flex gap-6 items-start">
-            {tourist_itineraries.length > 0 ? (
-              tourist_itineraries.map((itinerary) => (
-                <div className="w-96 flex-shrink-0">
-                  <ItineraryCardToruist 
-                    key={itinerary._id} 
-                    {...itinerary} 
-                    bookmarked={bookmarkedItineraries.some(
-                      (bookmarkedItinerary) => bookmarkedItinerary._id === itinerary._id
-                    )} 
-                  />
-                </div>
-              ))
-            ) : (
-              <div className="text-gray-500 italic text-center">No upcoming itineraries available.</div>
-            )}
-           <button
-  className="flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-4 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 mt-4"
-  onClick={() => navigate(`/${currenttype}/${currentuser}/itineraries`)}
->
-  <MoreHorizIcon className="w-6 h-6 text-white" />
-</button>
+      <div className="bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 p-1 mx-4 lg:mx-20 rounded-lg shadow-md mt-5">
+        <section className="p-8 bg-white rounded-lg">
+          <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
+            Upcoming Itineraries
+            <span className="block h-1 mt-2 bg-gradient-to-r from-purple-500 to-pink-500"></span>
+          </h2>
+          <p className="mb-6 text-gray-600">
+            Stay on top of your travel plans with these upcoming trips.
+          </p>
+          <div className="overflow-x-auto">
+            <div className="flex gap-6 items-start">
+              {tourist_itineraries.length > 0 ? (
+                tourist_itineraries.map((itinerary) => (
+                  <div className="w-96 flex-shrink-0">
+                    <ItineraryCardToruist 
+                      key={itinerary._id} 
+                      {...itinerary} 
+                      bookmarked={bookmarkedItineraries.some(
+                        (bookmarkedItinerary) => bookmarkedItinerary._id === itinerary._id
+                      )} 
+                    />
+                  </div>
+                ))
+              ) : (
+                <div className="text-gray-500 italic text-center">No upcoming itineraries available.</div>
+              )}
+              <button
+                className="flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-4 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 mt-4"
+                onClick={() => navigate(`/${currenttype}/${currentuser}/itineraries`)}
+              >
+                <MoreHorizIcon className="w-6 h-6 text-white" />
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
   
       {/* Upcoming Places Section */}
-      <section className="mt-12 p-8 bg-white shadow-md rounded-lg mx-4 lg:mx-20">
-      <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
-  Upcoming Places
-  <span className="block h-1 mt-2 bg-gradient-to-r from-purple-500 to-pink-500"></span>
-</h2>
-        <p className="mb-6 text-gray-600">Explore new destinations you’re about to discover.</p>
-        <div className="overflow-x-auto">
-          <div className="flex gap-6 items-start">
-          {locations.length > 0 ? (
-            locations.map((location) => (
-              <div key={location._id} className="min-w-[300px]">
-                <LocationCardTourist
-                  id={String(location._id)}
-                  wholeLocation={location}
-                />
-              </div>
-            ))
-          ) : (
-            <div className="text-gray-500 italic">No upcoming places available.</div>
-          )}
-           <button
-  className="flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-4 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 mt-4"
-  onClick={() => navigate(`/${currenttype}/${currentuser}/locations`)}
->
-  <MoreHorizIcon className="w-6 h-6 text-white" />
-</button>
+      <div className="bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 p-1 mx-4 lg:mx-20 rounded-lg shadow-md mt-5">
+        <section className="p-8 bg-white rounded-lg">
+          <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
+            Upcoming Places
+            <span className="block h-1 mt-2 bg-gradient-to-r from-purple-500 to-pink-500"></span>
+          </h2>
+          <p className="mb-6 text-gray-600">
+            Explore new destinations you’re about to discover.
+          </p>
+          <div className="overflow-x-auto">
+            <div className="flex gap-6 items-start">
+              {locations.length > 0 ? (
+                locations.map((location) => (
+                  <div key={location._id} className="min-w-[300px]">
+                    <LocationCardTourist id={String(location._id)} wholeLocation={location} />
+                  </div>
+                ))
+              ) : (
+                <div className="text-gray-500 italic">No upcoming places available.</div>
+              )}
+              <button
+                className="flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-4 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 mt-4"
+                onClick={() => navigate(`/${currenttype}/${currentuser}/locations`)}
+              >
+                <MoreHorizIcon className="w-6 h-6 text-white" />
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
   
       {/* Upcoming Activities Section */}
-      <section className="mt-12 p-8 bg-white shadow-md rounded-lg mx-4 lg:mx-20">
-      <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
-  Upcoming Activities
-  <span className="block h-1 mt-2 bg-gradient-to-r from-purple-500 to-pink-500"></span>
-</h2>
-        <p className="mb-6 text-gray-600">Get ready for exciting activities for your journey.</p>
-        <div className="overflow-x-auto">
-          <div className="flex gap-6 items-start">
-            {tourist_activities.length > 0 ? (
-              tourist_activities.map((activity) => (
-                <ActivityCardTourist key={activity._id} {...activity} />
-              ))
-            ) : (
-              <div className="text-gray-500 italic text-center">No upcoming activities available.</div>
-            )}
-             <button
-  className="flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-4 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 mt-4"
-  onClick={() => navigate(`/${currenttype}/${currentuser}/activities`)}
->
-  <MoreHorizIcon className="w-6 h-6 text-white" />
-</button>
+      <div className="bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 p-1 mx-4 lg:mx-20 rounded-lg shadow-md mt-5">
+        <section className="p-8 bg-white rounded-lg">
+          <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
+            Upcoming Activities
+            <span className="block h-1 mt-2 bg-gradient-to-r from-purple-500 to-pink-500"></span>
+          </h2>
+          <p className="mb-6 text-gray-600">
+            Get ready for exciting activities for your journey.
+          </p>
+          <div className="overflow-x-auto">
+            <div className="flex gap-6 items-start">
+              {tourist_activities.length > 0 ? (
+                tourist_activities.map((activity) => (
+                  <ActivityCardTourist key={activity._id} {...activity} />
+                ))
+              ) : (
+                <div className="text-gray-500 italic text-center">No upcoming activities available.</div>
+              )}
+              <button
+                className="flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-4 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 mt-4"
+                onClick={() => navigate(`/${currenttype}/${currentuser}/activities`)}
+              >
+                <MoreHorizIcon className="w-6 h-6 text-white" />
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </>
   );
+  
   };
   
   export default Dashboard;
