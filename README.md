@@ -414,7 +414,7 @@ We  use Postman to manually test all our api references by making sure the respo
 
 Here are examples of testing one of our endpoints using Postman:
 
-![Tests Postman Collection](https://api.postman.com/collections/39534055-d77464fa-685e-400b-9b78-dfb9e3c907c4?access_key=PMAT-01JEGPF0R9RFK4KAGB14C2XK04)  
+[Tests Postman Collection](https://api.postman.com/collections/39534055-d77464fa-685e-400b-9b78-dfb9e3c907c4?access_key=PMAT-01JEGPF0R9RFK4KAGB14C2XK04)  
 
  
 
