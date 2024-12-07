@@ -8,19 +8,19 @@
 
 # Traventure
 ## Table of Contents  
-1. [Motivation](#-motivation)
-2. [Build Status](#-build-status)
-3. [Code Style](#-code-style)
-4. [Tech and Frameworks used](#%EF%B8%8F-tech-and-frameworks-used)
-5. [Features](#-features--screenshots)
-6. [Code Examples](#-code-examples)
-7. [Installation](#%EF%B8%8F-installation)
-8. [API Reference](#-api-reference)
-9. [Tests](#-tests)
-10. [How to Use](#-how-to-use)
-11. [Contribute](#-contribute)
-12. [Credits](#-credits)
-13. [License](#-license)
+1. [Motivation](#motivation)  
+2. [Build Status](#build-status)  
+3. [Code Style](#code-style)  
+4. [Tech and Frameworks used](#tech-and-frameworks-used)  
+5. [Features](#features--screenshots)  
+6. [Code Examples](#code-examples)  
+7. [Installation](#installation)  
+8. [API Reference](#api-reference)  
+9. [Tests](#tests)  
+10. [How to Use](#how-to-use)  
+11. [Contribute](#contribute)  
+12. [Credits](#credits)  
+13. [License](#license)  
 
 ---
 
