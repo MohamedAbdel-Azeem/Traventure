@@ -121,6 +121,16 @@ Activities management
 
 ## Installation  
 
+- Make sure you have [Node](https://nodejs.org/en) and [Git](https://git-scm.com/) installed
+```bash
+git clone https://github.com/MohamedAbdel-Azeem/Traventure.git
+```
+- install dependencies for Traventure
+```bash
+npm run setup
+```
+- run the web app 
+
 
 
 
@@ -420,7 +430,18 @@ Here are examples of testing one of our endpoints using Postman:
 
 ## How to Use  
 
+- Make sure to follow the [Installation](#-installation) steps first
 
+- Add a `.env` in the `client` and `server`
+
+``bash
+
+MONGODB_URI="Your Mongo Connection String"
+AMADEUS_CLIENT_ID= "<Your Amadeus Client ID>"
+AMADEUS_CLIENT_SECRET="<A secret string to use for encrypting passwords"
+GMAIL_PASSWORD = "your gmail password"
+GMAIL_ADDRESS = "your gmail address"
+```
 
 
 
