@@ -71,19 +71,22 @@ const LocationCardTourist: React.FC<LocationCardTouristProps> = ({
         <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
       </div>
   
-      {/* Title displayed at bottom-left */}
-      <div className="absolute bottom-4 left-4 z-10">
-        {isEditing ? (
-          <TextField
-            value={locationName}
-            onChange={(e) => setLocationName(e.target.value)}
-            className="w-full text-center bg-white bg-opacity-70 rounded-md p-1"
-            placeholder="Location Name"
-          />
-        ) : (
-          <h2 className="text-2xl font-bold text-white drop-shadow-md">{locationName}</h2>
-        )}
-      </div>
+     {/* Title displayed at bottom-left */}
+<div className="absolute bottom-4 left-4 z-10">
+  {isEditing ? (
+    <TextField
+      value={locationName}
+      onChange={(e) => setLocationName(e.target.value)}
+      className="w-full text-center bg-white bg-opacity-70 rounded-md p-1"
+      placeholder="Location Name"
+    />
+  ) : (
+    <h2 className="text-2xl font-bold text-white drop-shadow-md" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)' }}>
+      {locationName}
+    </h2>
+  )}
+</div>
+
   
       {/* Hover Overlay Content */}
       <div 
