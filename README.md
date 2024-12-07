@@ -42,7 +42,7 @@ We follow a consistent code style using **Prettier**
 
 The  full team uses **Prettier**  as its linter which automatically works when saving (ctrl + s)
 
-```
+
 ---
 
 ##  Tech and Frameworks used  
