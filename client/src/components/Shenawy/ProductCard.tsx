@@ -182,7 +182,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, type }) => {
             View more
           </button>
         </div>
-        {type.includes("Tourist") && <ProductCartButton product={product} />}
+        {type.includes("tourist") && <ProductCartButton product={product} />}
       </div>
 
       {showPopup && (
