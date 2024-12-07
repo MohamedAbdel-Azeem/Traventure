@@ -122,7 +122,7 @@ const LocationCardTourist: React.FC<LocationCardTouristProps> = ({
       {details?.historicalTags.map((tag, index) => (
         <span 
           key={index} 
-          className="px-3 py-1 bg-purple-200 text-gray-800 rounded-full text-sm font-medium mr-2 mb-2"
+          className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium mr-2 mb-2"
         >
           {tag.name}
         </span>
