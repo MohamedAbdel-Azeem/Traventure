@@ -40,16 +40,7 @@ Welcome to Traventure, an all-in-one travel platform designed to make vacation p
 
 We follow a consistent code style using **Prettier** 
 
-### Useful Commands  
-
-- #### Check formatting using Prettier  
-```bash
-npm run format
-
-```
-- #### And then fix formatting using Prettier
-```bash
-npm run format:fix
+The  full team uses **Prettier**  as its linter which automatically works when saving (ctrl + s)
 
 ```
 ---
@@ -141,7 +132,6 @@ Activities management
 ##  API Reference  
 
 
-
 <details>
 <summary> Activity Endpoint </summary>
 
@@ -157,7 +147,7 @@ Activities management
 
 `PATCH /toggleInappropriate/:id`  - Updates a certain field (toggleInappropriate) in an activity 
 
-</details>
+<details>
 
 <details> 
 <summary> Admin Endpoint </summary>
@@ -183,16 +173,239 @@ Activities management
 <summary> Advertiser Endpoint </summary>
 
 `POST /add`  -create a new advertiser
-
 `GET /:username`  -get an advertiser by username
-
 `PATCH /update/:username`  -change username of a user
-
 `GET /revenue/:username`   -get revenue of a certain advertiser
-
 `GET /numstats/:username`  -get statistics of a certain advertiser
 </details> 
 
+<details>
+<summary>Auth Endpoint</summary>
+
+`POST /auth` -Checks permission of a user by verifying the access token
+</details> 
+
+<details>
+<summary>Booking Endpoint</summary>
+`POST /add`  -Create a new booking
+
+`GET /:username`   -Get all bookings of a user
+
+`GET /getHotels/:username`  -Get hotel bookings of a user
+
+`DELETE /cancel/:booking_id`  -Cancel  booking by its ID
+
+`POST /addFlight/:username`  -Create a new flight booking for a user
+
+`POST /addHotel/:username`  -Create a new hotel booking for a user
+
+</details> 
+
+<details>
+<summary>Category Endpoint</summary>
+
+`POST /add`  -Create a new category
+`GET /`   -Get all categories
+`DELETE /delete/:id`   -Delete a category by ID
+`PUT /update/:id`   -Update a category by ID
+</details>
+
+<details>
+<summary>ChangePassword Endpoint</summary>
+
+`PATCH /changePassword`   -Updates a user's password
+</details>
+
+<details>
+ <summary>Complaint Endpoint</summary>
+
+`POST /add`  -Create a new complaint
+
+`PATCH  /update/:complaintId`  -Update a complaint by its ID
+
+`GET /`  -Get all complaints
+
+`GET /:complaintID`   -Get a complaint by its ID
+</details>
+
+<details>
+<summary>Current_user Endpoint</summary>
+`GET /me/:username` -Get the current user's username
+</details>
+
+<details>
+<summary> Feedback Endpoint </summary>
+
+`POST /rateItinerary/:itineraryId` -Add  new rating for an itinerary
+
+`POST /rateTourGuide/:tourGuideUserId`  -Add new rating for a tourguide
+
+`POST /rateActivity/:ActivityId`  -Add new rating for an activity
+
+`GET /canfeedback`   -Checks if a tourist can provide feedback for a tourguide
+
+`GET /showTourGuideReviews/:tourGuideUserId`  -Gets reviews of a certain tourguide by ID
+
+`GET /showActivityReviews/:ActivityId`  -Gets reviews of a certain activity by its ID
+
+`GET /showItineraryReviews/:itineraryId` -Gets reviews of a certain itinerary by its ID
+</details>
+
+<details>
+<summary> Governer Endpoint</summary>
+
+`POST /add/HistoricalTag`  -Adds  new historical tag
+</details>
+
+<details>
+<summary>historicalTags Endpoint</summary>
+`POST /add`  -Creates a new historical tag
+</details>
+
+<details>
+<summary> Itinerary Endpoint </summary>
+`POST /add`  -Creates a new itinerary
+
+`GET /`  -Gets all itineraries
+
+`GET /:username`  -gets itinerary of a specific user
+
+`GET /get/:itinerary_id`  -gets itinerary by its ID
+
+`PATCH  /update/:id`  -updates an existing itinerary based on its ID
+
+`DELETE /delete/:id`  -deletes an itinerary
+
+`PATCH /toggleActivation/:id`  -toggles the activation status of an itinerary by its ID
+
+`PATCH /toggleInappropriate/:id`  -toggles the "inappropriate" status of an itinerary based on its ID
+</details>
+
+<details>
+<summary> Places Endpoint</summary>
+`GET /`  -gets all places
+
+`GET /:id`  -gets a place by its ID
+
+`POST /add` -Adds a new place
+
+`PATCH /update/:id` -updates a place based on its ID
+
+`DELETE /delete/:id`  -deletes a place
+</details>
+
+<details>
+<summary> preferenceTags Endpoint </summary>
+`POST /add`  -Adds a new preference tag
+`GET /`  -gets all preference tags
+`DELETE /delete/:id`  -deletes a preference tag by its ID
+`PUT /update/:id`  -updates a preference tag by its ID
+</details>
+
+<details>
+<summary> Product Endpoint </summary>
+`POST /add` -Adds a new product
+
+`GET /`  -gets all products
+
+`PATCH /update/:id` -updates a product by its ID
+
+`PATCH /archive/:id`  -Archives a product based on its ID
+
+`PATCH /feedback/:productid`  -Updates feedback for a product based on its ID
+</details>
+
+<details>
+<summary> PromoCodes Endpoint </summary>
+`GET /use/:name`  -uses promo code by its name
+
+`GET /check/:name`  -checks if promo code is still in use by its name
+</details>
+
+<details>
+<summary> purchase Endpoint </summary>
+`POST /buy`   -Adds product to user's cart
+
+`GET /tourist/:touristUsername`  -Gets all the purchases made by a specific tourist
+
+`GET /seller`  -Gets sales information for a seller
+
+`POST /deliver`  -Marks a purchase as delivered
+
+`POST /cancel`  -Used to cancel a purchase
+</details>
+
+
+<details>
+<summary> RequestDelete Endpoint </summary>
+
+`DELETE /deleterequestdelete`   -Deletes a user's account deletion request
+</details>
+
+<details>
+<summary> ReviewDoc Endpoint </summary>
+`GET /pendingusers`   -gets all pending users
+
+`PATCH /acceptuser`   -updates the status of a user whether accepted or rejected
+</details>
+
+<details>
+<summary> Seller Endpoint </summary>
+`POST /add`  -create a new seller user
+
+`GET /:username`  -Gets a certain seller
+
+`PATCH /update/:username`  -Update a certain seller by his username
+</details>
+
+<details>
+<summary> TourGuide Endpoint <summary>
+
+`POST /add`  -create a new tourguide user
+
+`GET /username`  -gets a certain tourguide
+
+`PATCH /update/:username`   -updates a tourguide by his username
+
+`GET /revenue/:username`  -get revenues of a tourguide by his username
+
+`GET "/userstats/:username`  -get stats of users interacting with a tourguide's itinerary
+</details>
+
+<details>
+<summary> Tourist Endpoint </summary>
+`POST /add`  -create a new tourist user
+
+`GET /upcoming` -get all upcoming activities
+
+`GET /:username`  -get a certain tourist's user profile
+
+`PATCH /update/:username`  -update a user
+
+`GET /bookings/:username`  -get all bookings of a certain tourist
+
+`GET /upcoming/:username`  -get all upcoming activities of a certain tourist
+
+`GET /complains/:username`  -get all complaints of a certain tourist
+
+`GET /bookmarks/:username`  -get bookmarks of a certain tourist by his username
+
+`PATCH /updateWallet/:username`  -update a tourist's wallet by his username
+
+`PATCH /bookmark_activity/:username`  -bookmark an activity for a certain tourist
+
+`PATCH /bookmark_itinerary/:username`   -bookmark an itinerary for a certain tourist
+
+`POST /wishlist/:username`  -Add to a wishlist of a tourist
+
+`GET /promo_code/get/:username`  -get promo codes used by a tourist 
+
+`PATCH /promo_code/use/:username` -update the status of a promo code for a specific tourist
+
+`GET /skipTutorial/:username` -gets the status of whether a specific tourist has skipped a tutorial
+
+`PATCH /skipTutorial/:username`  -allows a user to mark their tutorial as "skipped".
+</details>
 
 ---
 
