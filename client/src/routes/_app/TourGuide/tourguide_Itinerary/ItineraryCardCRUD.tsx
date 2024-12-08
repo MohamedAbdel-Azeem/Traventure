@@ -5,7 +5,7 @@ import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import StarIcon from "@mui/icons-material/Star";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CircularProgress from "@mui/material/CircularProgress";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { TouristProfileData } from "../../../../routes/_app/Tourist/tourist_profile/tourist_profile_data";
 import {IActivity} from "../../../../custom_hooks/activities/activity_interface";
 import Place from "../../../../custom_hooks/places/place_interface";
@@ -13,6 +13,7 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
+import { toggleAllowBooking } from "../../../../custom_hooks/itineraries/toggleAllowBooking";
 interface TagStructure {
   _id: string;
   name: string;
@@ -50,6 +51,12 @@ interface ItineraryCardCRUDProps {
   isDeleting?: boolean;
   bookingActivated: boolean;
   inappropriate: boolean;
+  allowBooking: boolean;
+  InterestedUsers: [
+    {
+      user_id?:TouristProfileData;
+    },
+  ],
 }
 
 const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
@@ -70,6 +77,8 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
   onDelete,
   isDeleting = false,
   bookingActivated,
+  allowBooking,
+
   inappropriate,
 }) => {
   const handleDeleteClick = () => {
@@ -87,6 +96,9 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
     }
   };
   const [active, setActive] = useState(bookingActivated);
+  const [allowBookingState, setAllowBookingState] = useState(!allowBooking);
+  console.log("allowBooking ",allowBooking);
+  console.log("allowBookingState ",allowBookingState);
   const handleActivation = async () => {
     try {
       const response = await axios.patch(
@@ -117,6 +129,39 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
         });
       }
     }
+  };
+  const handleAllowBooking = async () => {
+
+    setAllowBookingState(!allowBookingState);
+    const response = await toggleAllowBooking(_id);
+    
+    console.log("responee ",response);
+    console.log("allowBookingState ",allowBookingState);
+    if(response==='Error Toggling Allow Booking'){
+      Swal.fire({
+        title: "Error",
+        text: "Error Toggling Allow Booking",
+        icon: "error",
+      });
+    }
+    else{
+      if(allowBookingState){
+      Swal.fire({
+        title: "Success",
+        text: "Booking Allowed",
+        icon: "success",
+      });
+    }
+    
+    else{
+      Swal.fire({
+        title: "Success",
+        text: "Booking Stopped",
+        icon: "success",
+      });
+    }
+  }
+   
   };
 
   const exchangeRate = useSelector(
@@ -229,6 +274,14 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
           <Button onClick={handleActivation}>
             {!active ? "Activate" : "Deactivate"}
           </Button>
+
+          {(
+          <Button onClick={handleAllowBooking}>
+            {(allowBookingState) ? "Allow Booking" : " Stop Booking"}
+          </Button>
+        )}
+          
+          
           {onDelete &&
             (isDeleting ? (
               <CircularProgress size={24} className="text-red-500" />
@@ -242,6 +295,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
               </button>
             ))}
         </div>
+        
       </div>
     </div>
   );

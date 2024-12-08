@@ -103,6 +103,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
         setInappropriate(!inappropriate);
       }
     } catch (error: any) {
+      console.log("Error toggling inappropriate:", error);
       if (error.response && error.response.status === 400) {
         console.error(error.response.data.message);
       }

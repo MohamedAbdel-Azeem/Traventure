@@ -11,7 +11,7 @@ import {
   hashPassword,
 } from "../../utils/functions/bcrypt_functions";
 import { compare } from "bcryptjs";
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
 // create json web token
 const time = 3 * 24 * 60 * 60;
@@ -123,10 +123,10 @@ export async function loginUser(username: string, password: string) {
         if (!passwordMatch) {
           throw new Error("Incorrect password");
         }
-        const token = jwt.sign({ id: (user as any)._id }, 'supersecret', {
+        const token = jwt.sign({ id: (user as any)._id }, "supersecret", {
           expiresIn: time,
         });
-        return { type: models[i], user: results[i], access_token:token};
+        return { type: models[i], user: results[i], access_token: token };
       }
     }
 
@@ -214,10 +214,7 @@ export async function changePassword(
   }
 }
 
-export async function updatePassword(
-  email: string,
-  newpassword: string
-) {
+export async function updatePassword(email: string, newpassword: string) {
   try {
     const results = await Promise.all([
       sellerModel.findOne({ email }),
@@ -310,20 +307,91 @@ export async function getAllTourists() {
   }
 }
 
-export async function auth(
-  id: string,
-  module2: number
+export async function markNotificationAsRead(
+  username: string,
+  userType: string,
+  notificationId: string
 ) {
   try {
+    let model: mongoose.Model<any>;
+    console.log("userType", userType);
+    switch (userType) {
+      case "advertiser":
+        model = advertiserModel;
+        break;
+      case "seller":
+        model = sellerModel;
+        break;
+      case "tourguide":
+        model = tourGuideModel;
+        break;
+      case "tourist":
+        model = touristModel;
+        break;
+      default:
+        throw new Error("Invalid user type");
+    }
+
+    await model.updateOne(
+      { username, "notifications._id": notificationId },
+      { $set: { "notifications.$.read": true } }
+    );
+
+    const user = await model.findOne({ username });
+    if (!user) throw new Error("User not found");
+    return user;
+  } catch (err) {
+    console.log("Error mark notification as Read", err);
+  }
+}
+
+export async function markAllNotificationAsRead(
+  username: string,
+  userType: string
+) {
+  try {
+    let model: mongoose.Model<any>;
+    switch (userType) {
+      case "advertiser":
+        model = advertiserModel;
+        break;
+      case "seller":
+        model = sellerModel;
+        break;
+      case "tourGuide":
+        model = tourGuideModel;
+        break;
+      case "tourist":
+        model = touristModel;
+        break;
+      default:
+        throw new Error("Invalid user type");
+    }
+
+    await model.updateMany(
+      { username, "notifications.read": false },
+      { $set: { "notifications.$[elem].read": true } },
+      { arrayFilters: [{ "elem.read": false }] }
+    );
+    const user = await model.findOne({ username });
+    if (!user) throw new Error("User not found");
+    return user;
+  } catch (err) {
+    console.log("Error mark all notifications as Read");
+  }
+}
+
+export async function auth(id: string, module2: number) {
+  try {
     const results = await Promise.all([
-      sellerModel.findById( id ),
-      advertiserModel.findById(id ),
-      tourGuideModel.findById( id ),
-      adminModel.findById( id ),
-      touristModel.findById(id ),
-      governerModel.findById( id ),
+      sellerModel.findById(id),
+      advertiserModel.findById(id),
+      tourGuideModel.findById(id),
+      adminModel.findById(id),
+      touristModel.findById(id),
+      governerModel.findById(id),
     ]);
-    
+
     for (let i = 0; i < results.length; i++) {
       if (results[i]) {
         const user = results[i];
@@ -331,13 +399,11 @@ export async function auth(
           throw new Error("unauthorized");
         }
         return (user as any).username;
-        }
       }
     }
-  catch (err) {
+  } catch (err) {
     throw err;
   }
-  
 }
 module.exports = {
   getprofileInfo,
@@ -348,5 +414,7 @@ module.exports = {
   updatePassword,
   getcurrentuser,
   getAllTourists,
-  auth
+  markNotificationAsRead,
+  markAllNotificationAsRead,
+  auth,
 };

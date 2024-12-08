@@ -14,15 +14,18 @@ import {
 import {
   getProduct,
   decrementProductQuantity,
+  sendMailAndNotificationToSeller,
 } from "../Model/Queries/product_queries";
 import Tourist from "../Model/Schemas/Tourist";
 import { IPurchase } from "../Model/Schemas/purchase";
+import { send } from "@emailjs/nodejs";
 
 const router = Router();
 
 router.post("/buy", async (req: Request, res: Response) => {
   try {
     const { touristUsername, cart, promoCode } = req.body;
+
     const tourist = await Tourist.findOne({ username: touristUsername });
     if (!tourist) return res.status(404).send("Tourist not found");
     for (const singleProduct of cart) {
@@ -42,7 +45,9 @@ router.post("/buy", async (req: Request, res: Response) => {
         singleProduct.productId,
         singleProduct.quantity
       );
+      await sendMailAndNotificationToSeller(singleProduct.productId);
     }
+    
     const body = { touristUsername, cart } as IPurchase;
 
     if (promoCode) {
@@ -53,7 +58,9 @@ router.post("/buy", async (req: Request, res: Response) => {
     const totalAmount = await getPurchaseTotalAmount(body);
 
     return res.status(200).send(purchase);
+    // return res.status(200).send("Purchase added successfully");
   } catch (error) {
+    console.log(error);
     return res.status(500).send(error);
   }
 });

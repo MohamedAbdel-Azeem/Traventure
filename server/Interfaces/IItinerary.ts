@@ -42,4 +42,9 @@ export interface ItineraryDocument extends Document {
     username?: string;
     createdAt?: Date;
   }[];
+  InterestedUsers :{
+    user_id: string;
+  }[];
+  allowBooking: boolean;
+  
 }

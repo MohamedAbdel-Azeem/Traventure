@@ -15,10 +15,13 @@ import tourguidemodel from "../Model/Schemas/TourGuide";
 import { ITourGuide } from "../Interfaces/Users/ITourGuide";
 import { tourGuideUpdateValidator } from "../utils/express-validator/TourguideValidator";
 import {
+  sendMailAndNotificationToInterestedUsers,
+  toggleItineraryAllowBooking,
   tourguideItenRevenue,
   tourguideItenUsers,
 } from "../Model/Queries/itinerary_queries";
 import TourGuide from "../Model/Schemas/TourGuide";
+import sendMail from "../utils/functions/email_sender";
 const router = Router();
 
 router.post("/add", guestAddValidator, async (req: Request, res: Response) => {
@@ -107,6 +110,21 @@ router.get("/userstats/:username", async (req: Request, res: Response) => {
     res.status(200).send(users);
   } catch (err) {
     res.status(500).send("error getting users");
+  }
+});
+
+router.patch("/toggleAllowBooking", async (req: Request, res: Response) => {
+  try {
+    const itineraryId = req.body.itineraryId;
+    const allowBooking= await toggleItineraryAllowBooking(itineraryId);
+    res.status(200).send("Allow booking toggled");
+    console.log("start sending mail");
+    console.log("allow Booking before sending",allowBooking);
+    await sendMailAndNotificationToInterestedUsers(itineraryId,allowBooking);
+
+  }
+  catch (err) {
+    res.status(500).send("error updating user profile");
   }
 });
 
