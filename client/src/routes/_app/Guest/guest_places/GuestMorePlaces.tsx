@@ -42,78 +42,109 @@ const GuestMorePlaces: React.FC = () => {
 
     return (
         <div className="flex-grow">
-            <Box p={3} mt={7}>
-                <Typography variant="h4" component="h1" gutterBottom>
-                    All Places
-                    
-                </Typography>
-                <hr />
-                <Box my={3}>
-                    <FormControl variant="outlined" className="min-w-[120px]" margin="normal">
-                        <InputLabel id="search-type-label">Search By</InputLabel>
-                        <Select
-                            labelId="search-type-label"
-                            value={searchType}
-                            onChange={(e) => setSearchType(e.target.value as 'name' | 'tag')}
-                            label="Search By"
-                        >
-                            <MenuItem value="name">Name</MenuItem>
-                            <MenuItem value="tag">Tag</MenuItem>
-                        </Select>
-                    </FormControl>
-
-                    <FormControl variant="outlined" className="min-w-[120px]">
-                        <InputLabel id="filter-type-label">Filter By</InputLabel>
-                        <Select
-                            labelId="filter-type-label"
-                            value={filterType}
-                            onChange={(e) => setFilterType(e.target.value)}
-                            label="Filter By"
-                        >
-                            {tagsLoading ? (
-                                <MenuItem disabled>Loading...</MenuItem>
-                            ) : tagsError ? (
-                                <MenuItem disabled>Error loading tags</MenuItem>
-                            ) : (
-                                tagsData.map((tag: any) => (
-                                    <MenuItem key={tag._id} value={tag.name}>
-                                        {tag.name}
-                                    </MenuItem>
-                                ))
-                            )}
-                        </Select>
-                    </FormControl>
-
-                    <Box mt={2}>
-                        <input
-                            type="text"
-                            placeholder={`Search by ${searchType === 'name' ? 'Name' : 'Tag'}`}
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="border p-2 rounded w-full"
-                        />
-                    </Box>
-                </Box>
-                <hr />
-                <Box mt={3}>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                        {searchedPlaces && searchedPlaces.length > 0 ? (
-                            searchedPlaces.map((location: Place) => (
-                                <LocationCardTourist
-                                    key={location._id}
-                                    id={String(location._id)}
-                                    wholeLocation={location}
-                                    className=""
-                                />
-                            ))
-                        ) : (
-                            <Typography>No upcoming places available.</Typography>
-                        )}
-                    </div>
-                </Box>
+          {/* Header Section */}
+          <header className="bg-gradient-to-r from-purple-500 via-blue-500 to-teal-500 py-16 min-h-[220px] text-center rounded-b-3xl shadow-2xl mb-8 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-32 h-32 bg-white/25 rounded-full blur-3xl opacity-40 animate-pulse"></div>
+            <div className="absolute bottom-0 right-0 w-48 h-48 bg-pink-400/25 rounded-full blur-3xl opacity-50 animate-pulse"></div>
+    
+            {/* Title and Subtitle */}
+            <h1
+              className="text-5xl font-extrabold text-white relative drop-shadow-xl"
+              style={{
+                textShadow: "2px 2px 10px rgba(0, 0, 0, 0.7)",
+                WebkitTextStroke: "1px black"
+              }}
+            >
+              Upcoming Places
+            </h1>
+            <p className="mt-4 text-xl text-white/90">
+              Explore and discover new destinations with ease.
+            </p>
+            <hr className="border-t-2 border-white/40 w-2/3 mx-auto mt-6" />
+  
+  
+            <Box my={3} className="flex justify-center gap-4">
+              {/* Search Input */}
+              <div className="flex items-center bg-white shadow-lg rounded-full px-4 py-2">
+                <select
+                  className="bg-transparent outline-none text-gray-700 font-medium"
+                  value={searchType}
+                  onChange={(e) => setSearchType(e.target.value)}
+                >
+                  <option value="name">Name</option>
+                  <option value="tag">Tag</option>
+                </select>
+                <input
+                  type="text"
+                  placeholder={`Search by ${searchType === "name" ? "Name" : "Tag"}`}
+                  className="bg-transparent outline-none ml-2 w-full text-gray-700"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+    
+    
+              {/* Filter Dropdown for Tags */}
+  <FormControl
+    variant="outlined"
+    className="min-w-[150px] w-[200px] bg-white shadow-lg rounded-full px-4 py-2">
+    <InputLabel id="filter-type-label" className="text-gray-700 font-medium">
+      Filter By
+    </InputLabel>
+    <Select
+      labelId="filter-type-label"
+      value={filterType}
+      onChange={(e) => setFilterType(e.target.value)}
+      label="Filter By"
+      className="bg-transparent outline-none text-gray-700"
+      MenuProps={{
+        PaperProps: {
+          className: 'bg-white shadow-lg rounded-xl',
+        },
+      }}
+    >
+      {tagsLoading ? (
+        <MenuItem disabled>Loading...</MenuItem>
+      ) : tagsError ? (
+        <MenuItem disabled>Error loading tags</MenuItem>
+      ) : (
+        tagsData.map((tag: any) => (
+          <MenuItem key={tag._id} value={tag.name}>
+            {tag.name}
+          </MenuItem>
+        ))
+      )}
+    </Select>
+  </FormControl>
+  
             </Box>
+  
+            
+          </header>
+    
+          {/* Search and Filter Section */}
+          <Box p={3} style={{ marginTop: '80px' }}>
+            
+  
+            {/* Places Grid */}
+            <Box mt={3}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {searchedPlaces && searchedPlaces.length > 0 ? (
+                  searchedPlaces.map((location: Place) => (
+                    <LocationCardTourist
+                      key={location._id}
+                      id={String(location._id)}
+                      wholeLocation={location}
+                    />
+                  ))
+                ) : (
+                  <Typography>No upcoming places available.</Typography>
+                )}
+              </div>
+            </Box>
+          </Box>
         </div>
-    );
-};
+      );
+    };
 
 export default GuestMorePlaces;
