@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import StarIcon from "@mui/icons-material/Star";
@@ -170,7 +170,8 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
     }
   };
   const [inappropriateV, setActive] = useState(inappropriate);
-
+  const location = useLocation();
+  const currentpath = useLocation().pathname.split("/")[5];
   const getRatingStatus = (rating: number) => {
     if (rating >= 4.5) return "Excellent";
     if (rating >= 4.0) return "Very Good";
@@ -178,7 +179,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
     if (rating >= 3.0) return "Average";
     return "Below Average";
   };
-
+  const navigate = useNavigate();
   return (
     <div
       className={`m-4 transition transform hover:scale-105 w-96 bg-gray-200 rounded-lg overflow-hidden
@@ -191,7 +192,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
           alt={title}
           className="w-full h-full object-cover"
         />
-        {false ? (
+        {currentpath ? (
           <></>
         ) : (
           <>
@@ -286,7 +287,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
         )}
 
         {/* Buttons */}
-        {false ? (
+        {currentpath ? (
           <></>
         ) : (
           <div className="mt-2">
@@ -330,7 +331,11 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
                 {/* Book Button */}
                 <button
                   className="w-full bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600"
-                  onClick={() => handleBooking(_id)}
+                  onClick={() =>
+                    navigate(
+                      `/tourist/${username}/itinerary/${_id}/eventcheckout`
+                    )
+                  }
                 >
                   {loading ? <ClipLoader size={30} color="#ffffff" /> : "Book"}
                 </button>
