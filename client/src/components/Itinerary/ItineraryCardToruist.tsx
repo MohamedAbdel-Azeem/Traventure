@@ -62,6 +62,7 @@ interface ItineraryCardCRUDProps {
   bookingActivated: boolean;
   inappropriate: boolean;
   bookmarked?: boolean;
+  interested?: boolean;
 }
 
 const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
@@ -81,7 +82,8 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   plan,
   bookingActivated,
   inappropriate,
-  bookmarked
+  bookmarked,
+  interested
 }) => {
 
   const { bookItinerary, data, loading, error } = useBookItinerary();
@@ -90,6 +92,21 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   const currenttype = useLocation().pathname.split("/")[1];
   const currpath = useLocation().pathname.split("/")[3];
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);
+
+  const [isInterested, setIsInterested] = useState(interested);
+
+
+  const handleInterested = async (id: string) => {
+    try{
+      //const response = await bookmarkItinerary(username, id);
+      setIsInterested(prevState => !prevState);
+    }
+    catch (error) {
+      console.error("Error marking itinerary as interested  :", error);
+    }
+  }
+
+
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
@@ -286,10 +303,14 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
                 {/* Interested Button */}
                 <button 
                   className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600" 
-                  title="Interested"
+                  title={isInterested ? "Remove Interest" : "Interested"}  onClick={() => handleInterested(_id)}
                 >
-                  <ThumbUpOffAltIcon />
-                </button>
+                  {isInterested ? (
+                 <ThumbUpAltIcon />
+                  ) : (
+                <ThumbUpOffAltIcon />
+                )}
+              </button>
   
                 {/* Share Button */}
                 <div className="mt-2">
