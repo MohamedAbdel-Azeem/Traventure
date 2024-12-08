@@ -17,6 +17,10 @@ import {
 } from "../Model/Queries/product_queries";
 import Tourist from "../Model/Schemas/Tourist";
 import { IPurchase } from "../Model/Schemas/purchase";
+import { stripVTControlCharacters } from "util";
+import Stripe from "stripe";
+
+const stripe = new Stripe('sk_test_51QRdbVFm6xcJ3Gl38kryyDRgSNzeWEFIls5QIfsWyKb2EBmi9aNoP38umgbvEWAGmcb4iIxgw19YfXWFe8IrltY200052c7f6l');
 
 const router = Router();
 
@@ -51,7 +55,27 @@ router.post("/buy", async (req: Request, res: Response) => {
 
     const purchase = await addPurchase(body);
     const totalAmount = await getPurchaseTotalAmount(body);
-    
+  //   if(true){
+  //   const line_items = cart.map((product) => ({
+  //       price_data: {
+  //         currency: "EGP",
+  //         product_data: {
+  //           name: product.name,
+  //           image: product.imageUrl
+  //         },
+  //         unit_amount: product.price,
+  //       },
+  //       quantity: product.quantity,
+  //     })
+  //   );
+  //   const session = await stripe.checkout.sessions.create({
+  //     payment_method_types: ["card"],
+  //     line_items: line_items,
+  //     mode: "payment",
+  //     success_url: "http://localhost:3000/success",
+  //     cancel_url: "http://localhost:3000/cancel",
+  //   })
+  // }
     return res.status(200).send(purchase);
   } catch (error) {
     return res.status(500).send(error);

@@ -20,6 +20,7 @@ import { TouristWishList } from "../routes/_app/Tourist/tourist_purchases/Touris
 import {isAccessTokenPresent} from "../components/Protection/authUtils";
 import TouristComplaints from "../routes/_app/Tourist/TouristComplaints";
 import { useLocation } from "react-router-dom";
+
 export default function TouristRouter() {
 const location = useLocation();
 const currentpage = location.pathname.split(`/`)[3];

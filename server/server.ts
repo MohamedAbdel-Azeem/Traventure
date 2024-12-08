@@ -29,6 +29,7 @@ import requestdeleteRouter from "./Routes/RequestDelete";
 import authRouter from "./Routes/Auth";
 import promocodeRouter from "./Routes/PromoCodes";
 import recoveryRouter from "./Routes/Code";
+import stripeitineraryRouter from "./Routes/Stripe_itinerary";
 const scheduleTask = require("./utils/functions/node_scheduler");
 
 const app = express();
@@ -68,6 +69,7 @@ app.use("/amadeus", amadeusRouter);
 app.use("/api/requestdelete", requestdeleteRouter);
 app.use("/api/user/", currentuserRouter);
 app.use("/api/user/", authRouter);
+app.use("/api/stripe", stripeitineraryRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Traventure API");

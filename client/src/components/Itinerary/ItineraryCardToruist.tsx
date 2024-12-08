@@ -20,7 +20,7 @@ import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import ClipLoader from 'react-spinners/ClipLoader';
 import InfoIcon from '@mui/icons-material/Info';
 import { Icon } from "@mui/material";
-
+import {loadStripe} from '@stripe/stripe-js';
 interface TagStructure {
   _id: string;
   name: string;
@@ -85,6 +85,41 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   const currenttype = useLocation().pathname.split("/")[1];
   const currpath = useLocation().pathname.split("/")[3];
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);
+  const makePayment = async () => {
+    const stripe = await loadStripe(
+      "pk_test_51QRdbVFm6xcJ3Gl355cPHCY15ntXsEfomEvQUbfnCQZ3cZyf6EwNBkMoVlKBOjPG7517vlEsXwhELkCBEFlzqSzQ00kqMCDBCi"
+    );
+    const body = {
+      price: price,
+      title: title,
+      image: main_Picture,
+      quantity: 1,
+      username: username,
+    }
+    const response = await axios.post("/traventure/api/stripe/create-checkout-session",body);
+    if(response.status === 200){
+      const session = response.data;
+      if(!stripe) return;
+      const result = await stripe.redirectToCheckout({
+        sessionId: session.id,
+      });
+      if(result.error){
+        Swal.fire({
+          title: "Error",
+          text: "Can not make payment",
+          icon: "error",
+        });
+      }
+      else{
+        Swal.fire({
+          title: "Success",
+          text: "Payment has been made successfully",
+          icon: "success",
+        });
+      }
+}
+
+   }
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
@@ -268,7 +303,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
           <button
             className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600"
             title="Bookmark"
-            onClick={() => handleBookmark(_id)}
+            onClick={() => makePayment()}
           >
             {loadingBookmark ? (
               <ClipLoader size={30} color="#ffffff"></ClipLoader>
