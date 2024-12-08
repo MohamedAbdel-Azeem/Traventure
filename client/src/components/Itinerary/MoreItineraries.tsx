@@ -175,11 +175,14 @@ const MoreItineraries: React.FC = () => {
     <div className="flex">
       <div className="w-full mt-[20px]">
       <center>
-  <h1 className="text-4xl font-bold mb-4 mx-auto text-white">
-    All Itineraries
-  </h1>
+      <h1 className="text-4xl font-bold mb-4 mx-auto text-white animate-bounce" style={{ textShadow: "2px 2px 5px rgba(0, 0, 0, 0.7)" }}>
+  All Itineraries
+</h1>
+
+
+
+
 </center>
-        <hr />
         <br />
         <div>
           <div className="mb-4 flex gap-2">
@@ -334,7 +337,6 @@ const MoreItineraries: React.FC = () => {
               </Select>
             </FormControl>
           </div>
-          <hr />
           <div className="overflow-x-auto">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {filteredItineraries?.length ?? 0 > 0 ? (
