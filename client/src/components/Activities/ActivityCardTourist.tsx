@@ -198,76 +198,76 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
   };
   return (
     <div className="flex flex-col items-center justify-center mt-12 mx-4">
+      {/* Modal for Tags */}
       <Modal open={mopen} onClose={() => setmOpen(false)}>
         <Box sx={style}>
           <div>{alltags(selectedTags)}</div>
         </Box>
       </Modal>
-
-      <div className="rounded-[19px]">
-        <div className="w-[400px] h-[475px] bg-[#25b396] rounded-[19px] relative">
-          <div className="w-[400px] h-[69px] rounded-t-[19px]">
-            <div className="absolute text-center top-0 left-0 w-[71px] h-[30px] rounded-tl-[19px] bg-[#FF0000] border-black border-[1px] rounded-br-[19px]">
-              {newBIO ? "Open" : "Closed"}
-            </div>
-            {type === "tourist" && activity.BookingIsOpen && (
-              <div className=" flex justify-end items-center py-2 px-5">
-               {!isBookmarked && (
+  
+      <div className="w-[400px] bg-white rounded-lg shadow-lg overflow-hidden">
+        {/* Booking Status & Admin Status */}
+        <div className="flex justify-between items-center bg-gray-100 p-4">
+          <div className={`text-sm px-3 py-1 rounded-full ${newBIO ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
+            {newBIO ? "Open" : "Closed"}
+          </div>
+  
+          {currenttype === "admin" && (
+            <select
+              title="status"
+              name="status"
+              value={inappropriate ? "true" : "false"}
+              onChange={handleInappropriate}
+              className="text-sm bg-gray-200 rounded-full px-2 py-1"
+            >
+              <option value="true">Inappropriate</option>
+              <option value="false">Appropriate</option>
+            </select>
+          )}
+        </div>
+  
+        {/* Title */}
+        <div className="text-center py-4">
+          <h2 className="text-2xl font-bold">{activity.Title}</h2>
+          <Rating disabled name="rating" value={averageRating} precision={0.1} />
+        </div>
+  
+        {/* Booking Section */}
+        {type === "tourist" && activity.BookingIsOpen && (
+          <div className="flex justify-center gap-4 py-4">
+            {!isBookmarked && (
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ml-2"
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
                 title="Bookmark"
                 onClick={() => handleBookMark(activity._id)}
               >
-                {loadingBookmark?<ClipLoader size={30} color="#ffffff"></ClipLoader>: <BookmarkIcon />}
+                {loadingBookmark ? <ClipLoader size={30} color="#ffffff" /> : <BookmarkIcon />}
               </button>
             )}
-            {isBookmarked && currpath!=="bookmarks" && (
-              <button
-                className="bg-green-700 text-white px-4 py-2 rounded-lg  ml-2" disabled
-              >
+            {isBookmarked && currpath !== "bookmarks" && (
+              <button className="bg-green-700 text-white px-4 py-2 rounded-lg" disabled>
                 <BookmarkAddedIcon />
               </button>
             )}
-
-                <button
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ml-2"
-                  onClick={() => handleBooking(activity._id)}
-                >
-                  {loading?<ClipLoader size={30} color="#ffffff"></ClipLoader>: "Book"}
-                </button>
-              </div>
-            )}
-            {currenttype === "admin" && (
-              <div className="absolute text-center top-0 right-0 w-[171px] h-[30px] rounded-tl-[19px] bg-[#FF0000] border-black border-[1px] rounded-br-[19px]">
-                <select
-                  title="status"
-                  name="status"
-                  value={inappropriate ? "true" : "false"}
-                  onChange={handleInappropriate}
-                  className="bg-transparent text-black border-none"
-                >
-                  <option value="true">Inappropriate</option>
-                  <option value="false">Appropriate</option>
-                </select>
-              </div>
-            )}
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+              onClick={() => handleBooking(activity._id)}
+            >
+              {loading ? <ClipLoader size={30} color="#ffffff" /> : "Book"}
+            </button>
           </div>
-          <Rating
-            disabled
-            name="rating"
-            value={averageRating}
-            precision={0.1}
-          />
-          <div className="text-[38px] h-[45px] text-center leading-[43px]">
-            {activity.Title}
-          </div>
-          <div className="flex flex-row">
+        )}
+  
+        {/* Dropdown Selectors */}
+        <div className="px-6 py-4">
+          <div className="flex justify-between gap-4">
             <FormControl fullWidth>
               <Select
-                disabled={true}
+                disabled
                 labelId="cat-select-label"
                 value={selectedCat}
                 onChange={handleCatChange}
+                className="bg-gray-100"
               >
                 {CatOptions.map((tag) => (
                   <MenuItem key={tag._id} value={tag._id}>
@@ -276,15 +276,16 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
                 ))}
               </Select>
             </FormControl>
+  
             <FormControl fullWidth>
               <Select
-                disabled={true}
+                disabled
                 labelId="tags-select-label"
                 multiple
                 value={selectedTags}
                 onChange={handleTagsChange}
                 renderValue={handleTagsText}
-                sx={{ padding: "4.45px" }}
+                className="bg-gray-100"
               >
                 {tagsOptions.map((tag) => (
                   <MenuItem key={tag._id} value={tag._id}>
@@ -294,58 +295,57 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
                 ))}
               </Select>
             </FormControl>
-            <div className="my-auto w-[50px] h-[65px] text-[11px] flex flex-col items-center justify-center">
-              <button
-                title="View Tags"
-                onClick={() => setmOpen(true)}
-                className="text-center"
-              >
-                {" "}
-                View More
-              </button>
+          </div>
+  
+          <button
+            title="View Tags"
+            onClick={() => setmOpen(true)}
+            className="text-center mt-4 text-blue-600 underline"
+          >
+            View More
+          </button>
+        </div>
+  
+        {/* Price & Date Section */}
+        <div className="px-6 py-4">
+          <div className="flex justify-between border-t pt-4">
+            <input
+              title="date"
+              name="date"
+              disabled
+              value={formatDate(newDate)}
+              onChange={handleDateChange}
+              type="datetime-local"
+              className="border border-gray-300 rounded-md p-2 text-sm w-full"
+            />
+          </div>
+  
+          <div className="flex justify-between pt-4">
+            <div className="text-gray-700">
+              <p>Price:</p>
+              <p className="font-bold">
+                {currentCurrency} {(activity.Price * exchangeRate).toFixed(2)}
+              </p>
+            </div>
+            <div className="text-gray-700">
+              <p>Special Discount:</p>
+              <p className="font-bold">
+                {currentCurrency} {(activity.SpecialDiscount * exchangeRate).toFixed(2)}
+              </p>
             </div>
           </div>
-          <hr className="border-dotted border-t-2 border-gray-400  mt-[10px]" />
-          <div className="w-[400px] h-[284px] rounded-b-[19px] flex flex-col">
-            <div className="flex flex-row">
-              <div className="border-dotted border-r-2 border-gray-400 flex flex-col w-[260px]">
-                <input
-                  title="date"
-                  name="date"
-                  disabled={true}
-                  value={formatDate(newDate)}
-                  onChange={handleDateChange}
-                  type="datetime-local"
-                  className="text-[20px] py-3 border border-gray-300 rounded-md"
-                />
-              </div>
-              <div className="flex flex-col items-center justify-center text-[13px] w-[160px] h-full">
-                <div>
-                  <div>
-                    Price: {currentCurrency}{" "}
-                    {(activity.Price * exchangeRate).toFixed(2)}
-                  </div>
-                </div>
-                <div>
-                  <div>
-                    Special Discount: {currentCurrency}{" "}
-                    {(activity.SpecialDiscount * exchangeRate).toFixed(2)}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col items-center justify-center text-[13px] h-[236px]">
-              <iframe
-                title="map"
-                className="rounded-b-[19px]"
-                src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${activity.Location.longitude}!3d${activity.Location.latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
-                width="400px"
-                height="166px"
-              ></iframe>
-            </div>
-          </div>
+        </div>
+  
+        {/* Embedded Google Map */}
+        <div className="w-full h-[200px]">
+          <iframe
+            title="map"
+            className="w-full h-full rounded-b-lg"
+            src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${activity.Location.longitude}!3d${activity.Location.latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
+          ></iframe>
         </div>
       </div>
     </div>
   );
+  
 };
