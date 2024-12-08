@@ -332,7 +332,7 @@ export default cartSlice.reducer;
 
 
 <details>
-<summary>BE Scheduler Function Example</summary>
+<summary>FE Filter Example</summary>
 
 ```js
 
@@ -535,6 +535,8 @@ export { getFlightOffers, getHotelsInCity, getHotelByInfo };
 
 ```
 </details>
+
+
 
 
 
