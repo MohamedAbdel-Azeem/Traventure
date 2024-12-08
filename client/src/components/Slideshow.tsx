@@ -30,7 +30,7 @@ const Slideshow: React.FC<SlideshowProps> = ({ items }) => {
   };
 
   return (
-    <div className="relative w-full sm:h-[400px] md:h-[500px] lg:h-[700px] overflow-hidden rounded-xl mb-5">
+    <div className="relative w-full sm:h-[400px] md:h-[500px] lg:h-[700px] overflow-hidden rounded-xl mb-5 group">
       {items.map((item, index) => (
         <div
           key={index}
@@ -55,19 +55,19 @@ const Slideshow: React.FC<SlideshowProps> = ({ items }) => {
       {/* Navigation Buttons */}
       <button
         onClick={handlePrev}
-        className="absolute top-1/2 left-4 -translate-y-1/2 bg-black bg-opacity-50 p-4 rounded-full text-white hover:bg-opacity-70 sm:text-lg md:text-xl lg:text-2xl"
+        className="absolute top-1/2 left-4 -translate-y-1/2 bg-black bg-opacity-50 p-4 rounded-full text-white hover:bg-opacity-70 sm:text-lg md:text-xl lg:text-2xl opacity-0 group-hover:opacity-100 transition-all"
       >
         ❮
       </button>
       <button
         onClick={handleNext}
-        className="absolute top-1/2 right-4 -translate-y-1/2 bg-black bg-opacity-50 p-4 rounded-full text-white hover:bg-opacity-70 sm:text-lg md:text-xl lg:text-2xl"
+        className="absolute top-1/2 right-4 -translate-y-1/2 bg-black bg-opacity-50 p-4 rounded-full text-white hover:bg-opacity-70 sm:text-lg md:text-xl lg:text-2xl opacity-0 group-hover:opacity-100 transition-all"
       >
         ❯
       </button>
 
       {/* Navigation Dots */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 opacity-0 group-hover:opacity-100 transition-all">
         {items.map((_, index) => (
           <div
             key={index}
