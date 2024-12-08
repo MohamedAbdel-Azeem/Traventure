@@ -538,10 +538,117 @@ export { getFlightOffers, getHotelsInCity, getHotelByInfo };
 
 
 
+<details>
+<summary>FE waiting for the user response example</summary>
+
+```js
+
+// WaitingResponse.tsx
+import React from 'react';
+import './WaitingResponse.css';
+
+interface WaitingResponseProps {
+  message: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+}
+
+const WaitingResponse: React.FC<WaitingResponseProps> = ({ message, onConfirm, onCancel }) => {
+  return (
+    <div className="waiting-response-overlay">
+      <div className="waiting-response-content">
+        <h3 className="waiting-response-message">{message}</h3>
+        <div className="waiting-response-buttons">
+          <button className="confirm-button" onClick={onConfirm}>Yes</button>
+          <button className="cancel-button2" onClick={onCancel}>No</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default WaitingResponse;
 
 
 
 
+```
+</details>
+
+
+
+
+
+
+
+<details>
+<summary>FE showing the awarded badges for the user</summary>
+
+```js
+
+
+import React from "react";
+import "./BadgePopup.css";
+import imagefirst from "../../assets/gold.png";
+import imagesecond from "../../assets/silver.png";
+import imagethird from "../../assets/bronze.png";
+
+const badges = [
+  { level: 1, requirement: 0, name: "Badge Level 1", image: imagethird },
+  { level: 2, requirement: 100001, name: "Badge Level 2", image: imagesecond },
+  { level: 3, requirement: 500001, name: "Badge Level 3", image: imagefirst },
+];
+
+interface BadgePopupProps {
+  points: number;
+  onClose: () => void;
+}
+
+const BadgePopup: React.FC<BadgePopupProps> = ({ points, onClose }) => {
+  return (
+    <div className="popup-overlay">
+      <div className="popup-container">
+        <div className="header">
+          <h2 className="popup-title">Your Badges</h2>
+          <button onClick={onClose} className="close-button">
+            Close
+          </button>
+        </div>
+        <ul className="badge-list">
+          {badges.map((badge) => (
+            <li key={badge.level} className="badge-item">
+              <div className="flex items-center">
+                <img
+                  src={badge.image}
+                  alt={`${badge.name} Icon`}
+                  className="badge-image"
+                />
+                <span className="badge-name">{badge.name}</span>
+                {points < badge.requirement && (
+                  <div className="locked-overlay">
+                    <span className="lock-icon" role="img" aria-label="Locked">
+                      🔒
+                    </span>
+                  </div>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+export default BadgePopup;
+
+
+
+
+
+
+```
+</details>
 
 
 
@@ -918,6 +1025,9 @@ We welcome contributions to Traventure. All you need to do is:
 
 ### Youtube Videos
 
+
+[React introduction](https://www.youtube.com/watch?v=w7ejDZ8SWv8&t=4485s)
+[Express.js](https://www.youtube.com/watch?v=fgTGADljAeg)
 
 
 ---
