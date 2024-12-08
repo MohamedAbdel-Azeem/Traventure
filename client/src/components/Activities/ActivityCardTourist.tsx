@@ -270,28 +270,17 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
           </div>
         )}
   
-        {/* Dropdown Selectors */}
-        <div className="px-6 py-4">
-          <div className="flex justify-between gap-4">
-            <FormControl fullWidth>
-              <Select
-                disabled
-                labelId="cat-select-label"
-                value={selectedCat}
-                onChange={handleCatChange}
-                className="bg-gray-100"
-              >
-                {CatOptions.map((tag) => (
-                  <MenuItem key={tag._id} value={tag._id}>
-                    <ListItemText primary={tag.name} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-  
-           
-          </div>
-        </div>
+       {/* Categorical Tag */}
+<div className="px-6 py-4">
+  <div className="flex flex-wrap justify-center items-center gap-2">
+    {/* Display selected category as a tag */}
+    {selectedCat && (
+      <span className="px-3 py-1 bg-purple-200 text-purple-900 rounded-full text-sm font-medium">
+        {CatOptions.find(tag => tag._id === selectedCat)?.name || 'No Category'}
+      </span>
+    )}
+  </div>
+</div>
   
 {/* Price & Date Section */}
 
