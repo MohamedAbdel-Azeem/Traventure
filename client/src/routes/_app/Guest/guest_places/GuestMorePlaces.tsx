@@ -55,7 +55,7 @@ const GuestMorePlaces: React.FC = () => {
                 WebkitTextStroke: "1px black"
               }}
             >
-              All Places
+              Upcoming Places
             </h1>
             <p className="mt-4 text-xl text-white/90">
               Explore and discover new destinations with ease.
