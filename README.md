@@ -1129,6 +1129,9 @@ We welcome contributions to Traventure. All you need to do is:
 
 [Express.js](https://www.youtube.com/watch?v=fgTGADljAeg)
 
+[Node.js](https://www.youtube.com/watch?v=mI_-1tbIXQI&list=PLZlA0Gpn_vH_uZs4vJMIhcinABSTUH2bY&index=2)
+
+[Currency Converter](https://www.youtube.com/watch?v=0_Lwi5ucGwM)
 
 ---
 
