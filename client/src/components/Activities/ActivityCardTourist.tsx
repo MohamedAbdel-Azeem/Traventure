@@ -358,31 +358,35 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
           </button>
   
           {/* Bookmark Button */}
-          <div className="flex gap-4">
-            {!isBookmarked && (
-              <button
-                className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600"
-                title="Bookmark"
-                onClick={() => handleBookMark(activity._id)}
-              >
-                {loadingBookmark ? <ClipLoader size={30} color="#ffffff" /> : <BookmarkIcon />}
-              </button>
-            )}
-            {isBookmarked && currpath !== "bookmarks" && (
-              <button className="bg-purple-800 text-white px-4 py-2 rounded-lg" disabled>
-                <BookmarkAddedIcon />
-              </button>
-            )}
-          </div>
+          {currenttype === "tourist" && (
+    <div className="flex gap-4">
+      {!isBookmarked && (
+        <button
+          className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600"
+          title="Bookmark"
+          onClick={() => handleBookMark(activity._id)}
+        >
+          {loadingBookmark ? <ClipLoader size={30} color="#ffffff" /> : <BookmarkIcon />}
+        </button>
+      )}
+      {isBookmarked && currpath !== "bookmarks" && (
+        <button className="bg-purple-800 text-white px-4 py-2 rounded-lg" disabled>
+          <BookmarkAddedIcon />
+        </button>
+      )}
+    </div>
+  )}
   
           {/* Book Button */}
-          <button
-            className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600"
-            onClick={() => handleBooking(activity._id)}
-          >
-            {loading ? <ClipLoader size={30} color="#ffffff" /> : "Book"}
-          </button>
-        </div>
+          {currenttype === "tourist" && (
+    <button
+      className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600"
+      onClick={() => handleBooking(activity._id)}
+    >
+      {loading ? <ClipLoader size={30} color="#ffffff" /> : "Book"}
+    </button>
+  )}
+</div>
   
         {/* Map Modal */}
         {isModalOpen && (
