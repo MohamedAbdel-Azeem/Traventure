@@ -20,6 +20,8 @@ import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import ClipLoader from 'react-spinners/ClipLoader';
 import InfoIcon from '@mui/icons-material/Info';
 import { Icon } from "@mui/material";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 interface TagStructure {
   _id: string;
@@ -279,12 +281,23 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
         )}
         {isBookmarked && currpath !== "bookmarks" && (
           <button
-            className="bg-green-600 text-white p-2 rounded-lg"
+            className="bg-purple-800 text-white p-2 rounded-lg"
             disabled
           >
             <BookmarkAddedIcon />
           </button>
         )}
+
+        {/* Interested Button */}
+        
+        <button 
+        className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600" 
+        title="Interested"
+        >
+        <FavoriteBorderIcon />
+        </button>
+
+
 
         {/* Share Button */}
         <div className="mt-2">
