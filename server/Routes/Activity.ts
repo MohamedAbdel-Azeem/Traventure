@@ -11,8 +11,10 @@ import {
   updateActivity,
   getActivitiesid,
   toggleInappropriate,
+  sendMailAndNotificationToAdvertiser,
 } from "../Model/Queries/activity_queries";
 import Advertiser from "../Model/Schemas/Advertiser";
+import sendMail from "../utils/functions/email_sender";
 const router = Router();
 
 router.post(
@@ -94,6 +96,7 @@ router.patch(
       const id = req.params.id;
       const updatedActivity = await toggleInappropriate(id);
       res.status(200).send(updatedActivity);
+      await sendMailAndNotificationToAdvertiser(id);
     } catch (err) {
       res.status(500).send("error updating activity");
     }

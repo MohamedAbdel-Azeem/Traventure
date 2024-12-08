@@ -134,36 +134,63 @@ export async function toggleItineraryAllowBooking(itineraryId:string){
     if (!itinerary) throw new Error("Itinerary not found");
     //if the allowBooking was true
     if(itinerary.allowBooking){
-      itinerary.allowBooking = false;
-    }
-    else{
+      await Itinerary.updateOne(
+        { _id: itineraryId },
+        { $set: { allowBooking: false } }
+      );
+      return false;
       
-      itinerary.allowBooking = true;
-      for (const userobj of itinerary.InterestedUsers) {
-        const user_id=userobj.user_id;
-        await Tourist.findByIdAndUpdate(user_id, {
-          $push: {
-        notifications: {
-          message: `Booking for itinerary ${itinerary.title} is now allowed`,
-          sent_by_mail: false,
-          read: false,
-          createdAt: new Date(),
-        },
-          },
-        });
-        console.log("userrrrrrrrr Idddddddiddidd",user_id);
-        const tourist = await Tourist.findById(user_id);
-        if(!tourist) throw new Error("Tourist not found");
-        sendMail(tourist.email, "Booking Allowed", `Hello ${tourist?.username}, \n\nBooking for itinerary ${itinerary.title} is now allowed`);
-      }
 
     }
+    else{
+      await Itinerary.updateOne(
+        { _id: itineraryId },
+        { $set: { allowBooking: true } }
+      );
+      
+      return true;
+    }
+ 
 
 }
 catch (error) {
   throw error;
 }
 }
+
+export async function sendMailAndNotificationToInterestedUsers(itineraryId: string,allowBooking:any){
+  try {
+    if(!allowBooking) return;
+
+    const itinerary = await Itinerary.findById(itineraryId);
+    if (!itinerary) throw new Error("Itinerary not found");
+
+    for (const userobj of itinerary.InterestedUsers) {
+      const user_id=userobj.user_id;
+      await Tourist.findByIdAndUpdate(user_id, {
+        $push: {
+      notifications: {
+        message: `Booking for itinerary ${itinerary.title} is now allowed`,
+        sent_by_mail: false,
+        read: false,
+        createdAt: new Date(),
+      },
+        },
+      });
+      console.log("userrrrrrrrr Idddddddiddidd",user_id);
+      const tourist = await Tourist.findById(user_id);
+      if(!tourist) throw new Error("Tourist not found");
+      sendMail(tourist.email, "Booking Allowed", `Hello ${tourist?.username}, \n\nBooking for itinerary ${itinerary.title} is now allowed`);
+    }
+
+
+}
+catch (error) {
+  throw error;
+}
+}
+
+
 
 
 
@@ -181,17 +208,7 @@ export async function toggleItineraryInappropriate(itinerary_Id: string) {
     // Find and remove bookings associated with the itinerary
     if (newInappropriate) {
 
-           // notify the TourGuide that this activity is inappropriate
-           await TourGuide.findByIdAndUpdate(itinerary.added_By, {
-            $push: {
-              notifications: {
-                message: `Your itinerary ${itinerary.title} has been marked as inappropriate`,
-                sent_by_mail: false,
-                read: false,
-                createdAt: new Date(),
-              },
-            },
-          });
+   
 
       const bookings = await Booking.find({ itinerary: itinerary_Id });
       for (const booking of bookings) {
@@ -216,6 +233,33 @@ export async function toggleItineraryInappropriate(itinerary_Id: string) {
     throw error;
   }
 }
+
+export async function sendMailAndNotificationToTourGuide(itineraryId: string){
+  try {
+    
+    const itinerary = await Itinerary.findById(itineraryId);
+    if (!itinerary) throw new Error("Itinerary not found");
+    if(itinerary.inappropriate){
+    const tourGuide = await TourGuide.findById(itinerary.added_By);
+    if (!tourGuide) throw new Error("TourGuide not found");
+     // notify the TourGuide that this activity is inappropriate
+     await TourGuide.findByIdAndUpdate(itinerary.added_By, {
+      $push: {
+        notifications: {
+          message: `Your itinerary ${itinerary.title} has been marked as inappropriate`,
+          sent_by_mail: false,
+          read: false,
+          createdAt: new Date(),
+        },
+      },
+    });
+    sendMail(tourGuide.email, "Itinerary Inappropriate", `Hello ${tourGuide.username}, \n\nYour itinerary ${itinerary.title} has been marked as inappropriate`);
+  }
+  } catch (error) {
+      throw error;
+    }
+  }
+
 export async function tourguideItenRevenue(
   username: string,
   month: number,

@@ -4,6 +4,7 @@ import Booking from "../Schemas/Booking";
 import Tourist from "../Schemas/Tourist";
 import TourGuide from "../Schemas/TourGuide";
 import Advertiser from "../Schemas/Advertiser";
+import sendMail from "../../utils/functions/email_sender";
 
 
 interface Revenue {
@@ -68,17 +69,7 @@ export const toggleInappropriate = async (id: string) => {
     // If the activity is being declared inappropriate, remove bookings and add funds to users
     if (newInappropriate) {
       
-      // notify the Advertise that this activity is inappropriate
-      await Advertiser.findByIdAndUpdate(activity.added_By, {
-        $push: {
-          notifications: {
-            message: `Your activity ${activity.Title} has been marked as inappropriate`,
-            sent_by_mail: false,
-            read: false,
-            createdAt: new Date(),
-          },
-        },
-      });
+    
 
     
 
@@ -106,6 +97,34 @@ export const toggleInappropriate = async (id: string) => {
     throw err;
   }
 };
+
+
+export async function sendMailAndNotificationToAdvertiser(activityId: string){
+  try {
+    
+    const activity = await Activity.findById(activityId);
+    if (!activity) throw new Error("activity not found");
+    if(activity.inappropriate){
+    const advertiser = await Advertiser.findById(activity.added_By);
+    if (!advertiser) throw new Error("advertiser not found");
+
+       // notify the Advertise that this activity is inappropriate
+       await Advertiser.findByIdAndUpdate(activity.added_By, {
+        $push: {
+          notifications: {
+            message: `Your activity ${activity.Title} has been marked as inappropriate`,
+            sent_by_mail: false,
+            read: false,
+            createdAt: new Date(),
+          },
+        },
+      });
+    sendMail(advertiser.email, "Activity Inappropriate", `Hello ${advertiser.username}, \n\nYour activity ${activity.Title} has been marked as inappropriate`);
+  }
+  } catch (error) {
+      throw error;
+    }
+  }
 
 export const advertiserRevenue = async (
   username: string,

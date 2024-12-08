@@ -73,10 +73,14 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   const [unreadCount, setUnreadCount] = useState(0);
   useEffect(() => {
     if (cuserdata) {
-      const unreadNotifications = cuserdata.notifications.filter(notification => !notification.read);
+      const sortedNotifications = [...cuserdata.notifications].sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      const unreadNotifications = sortedNotifications.filter(notification => !notification.read);
+
       setUnreadNotifications(unreadNotifications)
       setUnreadCount(unreadNotifications.length);
-      setNotifications(cuserdata.notifications);
+      setNotifications(sortedNotifications);
       console.log("userrrrrrrIddddd",cuserdata._id);
       console.log("userrrrrrrType",currentusertype);
     }
@@ -335,16 +339,19 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   };
 
   const NotificationItem = ({ notification}) => (
+ 
 
     <li className={`${
       notification.read
-        ? 'text-gray-500' 
+        ? 'text-red ' 
         : 'text-white' 
-    } bg-white text-[#6d28d9] rounded   hover:bg-gray-100`}
+    } bg-white rounded  hover:bg-gray-100`}
     onClick={() => {
       handleNotificationClick(notification)
     }}
+    
   >
+    
       <p className="px-2 ">{notification.message}</p>
       <p className="text-right text-xs text-gray-400 ">
         {moment(notification.createdAt).fromNow()} 
@@ -544,29 +551,29 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
         )}
 
 <style jsx>{`
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 8px;
-    }
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: white #6d28d9;
+  }
 
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: #a855f7;
-    }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 12px;
+  }
 
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background-color: #00FFA3;
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: white;
+    border-radius: 10px;
+  }
 
-      border-radius: 10px;
-      border: 2px solid #ff00000;
-    }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #6d28d9;
+    border-radius: 10px;
+    border: 2px solid white;
+  }
 
-    .custom-scrollbar::-webkit-scrollbar-button {
-      display: none;
-    }
-
-    .custom-scrollbar {
-      scrollbar-width: thin;
-      scrollbar-color: white #6d28d9;
-    }
+  .custom-scrollbar::-webkit-scrollbar-button {
+    display: none;
+  }
   `}</style>
       <Fade in={notificationPopUpVisible} timeout={200}>
               

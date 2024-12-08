@@ -5,13 +5,12 @@ import axios from 'axios';
     try {
         console.log("itineraryId in custom hook ",itineraryId);
       const response= await axios.patch(`/traventure/api/tourGuide/toggleAllowBooking`,{itineraryId});  
-      if(response.status>=400){
-        throw new Error('Error Toggling Allow Booking');
-      }
-      console.log("response in custom hook ",response);
+      console.log("response in custom hook ",response.status);
+      return response.status;
+      
       
     
     } catch (err) {
-      return 'Error Toggling Allow Booking';
+      return 500;
     } 
   };

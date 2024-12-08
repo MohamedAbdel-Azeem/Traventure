@@ -8,6 +8,7 @@ import {
   getAllItinerary,
   toggleItineraryActivation,
   toggleItineraryInappropriate,
+  sendMailAndNotificationToTourGuide,
 } from "../Model/Queries/itinerary_queries";
 import {
   itineraryAddValidator,
@@ -157,6 +158,8 @@ router.patch(
         .json({
           message: "Itinerary inappropriate status toggled successfully",
         });
+        await sendMailAndNotificationToTourGuide(req.params.id);
+        
     } catch (error) {
       res.status(500).json({ error: "An internal server error occurred" });
     }

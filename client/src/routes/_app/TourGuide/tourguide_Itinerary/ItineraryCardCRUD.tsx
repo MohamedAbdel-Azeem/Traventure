@@ -97,6 +97,8 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
   };
   const [active, setActive] = useState(bookingActivated);
   const [allowBookingState, setAllowBookingState] = useState(!allowBooking);
+  console.log("allowBooking ",allowBooking);
+  console.log("allowBookingState ",allowBookingState);
   const handleActivation = async () => {
     try {
       const response = await axios.patch(
@@ -143,7 +145,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
       });
     }
     else{
-      if(!allowBookingState){
+      if(allowBookingState){
       Swal.fire({
         title: "Success",
         text: "Booking Allowed",

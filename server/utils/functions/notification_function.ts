@@ -21,7 +21,7 @@ async function handleSendNotificationsUpcomingEvents(){
                 try {
                     const tourist = await tourstModel.findById(itinerary.booked_By[i].user_id);
                     if (!tourist) throw new Error("Tourist not found");
-                    sendMail(tourist.email, "Itinerary Reminder", `Hello ${tourist.username}, \n\nThis is a reminder that your itinerary ${itinerary.title} is starting tomorrow. \n\nEnjoy your trip!`);
+                    
                     tourist.notifications.push({
                         message: `Your itinerary ${itinerary.title} is starting tomorrow`,
                         sent_by_mail: true,
@@ -30,6 +30,7 @@ async function handleSendNotificationsUpcomingEvents(){
                     });
                    
                     await tourist.save();
+                    sendMail(tourist.email, "Itinerary Reminder", `Hello ${tourist.username}, \n\nThis is a reminder that your itinerary ${itinerary.title} is starting tomorrow. \n\nEnjoy your trip!`);
                 } catch (error) {
                     console.error("Error sending notification to: ", itinerary.booked_By[i].user_id);
                     console.error(error);

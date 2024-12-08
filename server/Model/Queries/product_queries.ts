@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import productModel, { IFeedback } from "../Schemas/Product";
 import Tourist from "../Schemas/Tourist";
 import Seller from "../Schemas/Seller";
+import sendMail from "../../utils/functions/email_sender";
 
 export async function addProduct(product: Object) {
   try {
@@ -128,19 +129,7 @@ export async function decrementProductQuantity(
     if (product) {
       const prodQuantity = product.quantity;
       product.quantity = prodQuantity - quantity;
-      if(product.quantity == 0){
-             // notify the Advertise that this activity is inappropriate
-      await Seller.findByIdAndUpdate(product.seller, {
-        $push: {
-          notifications: {
-            message: `Your product ${product.name} is Out of Stock`,
-            sent_by_mail: false,
-            read: false,
-            createdAt: new Date(),
-          },
-        },
-      });
-      }
+      
       const newProduct = await product.save();
       return newProduct;
     }
@@ -148,6 +137,35 @@ export async function decrementProductQuantity(
   } catch (error) {
     throw error;
   }
+}
+
+export async function sendMailAndNotificationToSeller(productId:string){
+  try {
+    const product = await productModel.findById(productId);
+    if (!product) throw new Error("product not found");
+  
+      if(product.quantity == 0){
+        // notify the Advertise that this activity is inappropriate
+        const seller = await Seller.findById(product.seller).lean();
+       if (!seller) throw new Error("seller not found");
+ await Seller.findByIdAndUpdate(product.seller, {
+   $push: {
+     notifications: {
+       message: `Your product ${product.name} is Out of Stock`,
+       sent_by_mail: false,
+       read: false,
+       createdAt: new Date(),
+     },
+   },
+ });
+
+ sendMail(seller.email, "Product Out of Stock", `Hello ${seller.username}, \n\nYour product ${product.name} is Out of Stock`);
+ }
+
+} catch (error) {
+    throw error;
+}
+
 }
 
 export async function getExternalSellers() {
