@@ -30,7 +30,7 @@ const Slideshow: React.FC<SlideshowProps> = ({ items }) => {
   };
 
   return (
-    <div className="relative w-full h-[700px] overflow-hidden rounded-xl mb-5">
+    <div className="relative w-full sm:h-[400px] md:h-[500px] lg:h-[700px] overflow-hidden rounded-xl mb-5">
       {items.map((item, index) => (
         <div
           key={index}
@@ -44,24 +44,26 @@ const Slideshow: React.FC<SlideshowProps> = ({ items }) => {
             className="w-full h-full object-cover"
           />
           <div className="absolute bottom-4 left-4 bg-black bg-opacity-60 text-white p-4 rounded-lg">
-            <h2 className="text-2xl font-bold">{item.title}</h2>
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold">{item.title}</h2>
           </div>
         </div>
       ))}
 
+      {/* Navigation Buttons */}
       <button
         onClick={handlePrev}
-        className="absolute top-1/2 left-4 -translate-y-1/2 bg-black bg-opacity-50 p-2 rounded-full hover:bg-opacity-70"
+        className="absolute top-1/2 left-4 -translate-y-1/2 bg-black bg-opacity-50 p-2 rounded-full hover:bg-opacity-70 sm:text-lg md:text-xl lg:text-2xl"
       >
         ❮
       </button>
       <button
         onClick={handleNext}
-        className="absolute top-1/2 right-4 -translate-y-1/2 bg-black bg-opacity-50 p-2 rounded-full hover:bg-opacity-70"
+        className="absolute top-1/2 right-4 -translate-y-1/2 bg-black bg-opacity-50 p-2 rounded-full hover:bg-opacity-70 sm:text-lg md:text-xl lg:text-2xl"
       >
         ❯
       </button>
 
+      {/* Navigation Dots */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
         {items.map((_, index) => (
           <div
