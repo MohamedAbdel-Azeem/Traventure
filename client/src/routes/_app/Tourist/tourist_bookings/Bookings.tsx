@@ -14,9 +14,7 @@ import { Activity } from "../../../../components/Activities/ActivityCardTourist"
 import Itinerary from "../../../../custom_hooks/itineraries/itinerarySchema";
 import { useNavigate, useParams } from "react-router-dom";
 import getBookings from "../../../../custom_hooks/getTouristBookings";
-import cancelBookings  from "../../../../custom_hooks/cancelBooking";
-import { set } from "date-fns";
-import { get } from "react-hook-form";
+import cancelBookings from "../../../../custom_hooks/cancelBooking";
 import { ActivityCardTourist } from "../../../../components/Activities/ActivityCardTourist";
 import getFlights from "../../../../custom_hooks/getTouristFlights";
 import getHotels from "../../../../custom_hooks/getTouristHotels";
@@ -36,12 +34,11 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 export interface IBooking {
   _id: string;
   type: string;
-  itinerary: Itinerary;
+  itinerary: string;
   activity: Activity;
   price: number;
 }
 function Reviews(props: { id: string; type: string; text: string }) {
-  const [openFeedback, setOpenFeedback] = useState(false);
   const { id, type, text } = props;
   const { username } = useParams<{ username: string }>();
   const [showFeedback, setShowFeedback] = useState(false);
@@ -122,6 +119,7 @@ const Bookings: React.FC = () => {
       setActivityBookings(
         data.filter((booking) => booking.type === "activity")
       );
+      console.log(data,"LIFE IS PAIN");
     }
 
     if (flightsdata) {
@@ -134,7 +132,7 @@ const Bookings: React.FC = () => {
 
   const handleCancel = async (booking_id: string) => {
     try {
-      await cancelBooking(booking_id,username);
+      await cancelBooking(booking_id, username);
       await refetch();
       await flightsget();
       await hotelsget();
@@ -148,205 +146,31 @@ const Bookings: React.FC = () => {
     return now > startTime;
   }
 
-  const sampleFeedback = [
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-  ];
-
-  const sampleITFeedback = [
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great ittt guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-  ];
-
-  const sampleActivityFeedback = [
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-  ];
   if (isLoading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
         <ClipLoader color="#f86c6b" loading={true} size={150} />
       </div>
     );
   }
   if (isError || isAuthenticated !== username) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-        <h1>Error 403 Unauthrized access</h1>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <h1>Error 403 Unauthorized access</h1>
       </div>
     );
   }
@@ -370,9 +194,7 @@ const Bookings: React.FC = () => {
             Activity Details
           </Typography>
           {selectedActivity && (
-            <ActivityCardTourist
-              activity={selectedActivity}
-            />
+            <ActivityCardTourist activity={selectedActivity} />
           )}
           <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
             <Button variant="contained" onClick={handleClose}>
@@ -422,7 +244,7 @@ const Bookings: React.FC = () => {
                           {booking.itinerary.language}
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          {booking.price}$
+                          {booking.price}
                         </StyledTableCell>
                         <StyledTableCell align="right">
                           {(booking.itinerary.added_By as any).username}
@@ -709,8 +531,6 @@ const Bookings: React.FC = () => {
         </div>
       </div>
     </div>
-    // </div>
-    // </div>
   );
 };
 

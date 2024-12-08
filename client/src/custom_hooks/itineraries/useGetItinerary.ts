@@ -41,11 +41,10 @@ interface Itinerary {
     user_id?: TouristProfileData;
   }[];
   accessibility: boolean;
-  allowBooking: boolean;
-  
-  InterestedUsers: {
-    user_id?: TouristProfileData;
-  }[];
+  bookingActivated: boolean;
+  category: string;
+  inappropriate: boolean;
+
 }
 
 interface SActivity {
@@ -106,7 +105,8 @@ export const useGetItineraryID = (id: string | undefined) => {
       setLoading(true);
       try {
         const response = await axios.get(`/traventure/api/itinerary/get/${id}`);
-        if (response.status === 200) {
+        if (response.status >= 200 && response.status < 300) {
+          console.log(response.data, "LIFE IS PAIN");
           setItinerary(response.data);
         } else {
           setError("Error fetching data");

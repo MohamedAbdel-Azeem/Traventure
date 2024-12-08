@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import StarIcon from "@mui/icons-material/Star";
-import { format, set } from "date-fns";
+import { format } from "date-fns";
 import { TouristProfileData } from "../../routes/_app/Tourist/tourist_profile/tourist_profile_data";
 import { IActivity } from "../../custom_hooks/activities/activity_interface";
 import Place from "../../custom_hooks/places/place_interface";
@@ -11,15 +11,13 @@ import useBookItinerary from "../../custom_hooks/itineraries/bookItinerary";
 import useBookmarkItinerary from "../../custom_hooks/itineraries/bookmarkItinerary";
 import { useParams, useLocation } from "react-router-dom";
 import Button from "@mui/material/Button";
-import axios, { all } from "axios";
+import axios from "axios";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 import ShareButton from "../Buttons/ShareButton";
 import BookmarkIcon from "@mui/icons-material/BookmarkAdd";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import ClipLoader from "react-spinners/ClipLoader";
-import { patchInterested } from "../../custom_hooks/itineraries/patchInterested";
-import { getTouristUsername } from "../../custom_hooks/getTouristUsername";
 import InfoIcon from "@mui/icons-material/Info";
 import { Icon } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -35,6 +33,7 @@ interface TagStructure {
 }
 
 interface ItineraryCardCRUDProps {
+  className?: string;
   _id: string;
   main_Picture?: string;
   title: string;
@@ -62,17 +61,12 @@ interface ItineraryCardCRUDProps {
   }[];
   accesibility: boolean;
   bookingActivated: boolean;
-  allowBooking: boolean;
-  InterestedUsers: [
-    {
-      user_id?: TouristProfileData;
-    }
-  ];
   inappropriate: boolean;
   bookmarked?: boolean;
 }
 
 const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
+  className,
   _id,
   title,
   description,
@@ -90,8 +84,6 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   bookingActivated,
   inappropriate,
   bookmarked,
-  allowBooking,
-  InterestedUsers,
 }) => {
   const { bookItinerary, data, loading, error } = useBookItinerary();
   const { bookmarkItinerary, loading: loadingBookmark } =
@@ -101,22 +93,17 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   const currpath = useLocation().pathname.split("/")[3];
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);
 
-  console.log("allowBooking:  ", allowBooking);
-  console.log("ititnerary title", title,"InterestedUsers:  ", InterestedUsers);
+  const [isInterested, setIsInterested] = useState(false);
 
-  useEffect(() => {
-    const checkInterestedUsers = async () => {
-      const results = await Promise.all(
-        InterestedUsers.map(async (user) => {
-          const touristUsername = await getTouristUsername(user.user_id);
-          return touristUsername === username;
-        })
-      );
-      setInterested(!results.some((result) => result));
-    };
+  const handleInterested = async (id: string) => {
+    try {
+      //const response = await bookmarkItinerary(username, id);
+      setIsInterested((prevState) => !prevState);
+    } catch (error) {
+      console.error("Error marking itinerary as interested  :", error);
+    }
+  };
 
-    checkInterestedUsers();
-  }, [InterestedUsers, username]);
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
@@ -182,34 +169,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
       }
     }
   };
-
-  const handleInterested = async () => {
-    setInterested(!Interested);
-    await patchInterested({
-      username,
-      itineraryId: _id,
-      interested: Interested,
-    });
-
-    if (Interested) {
-      Swal.fire({
-        title: "Success",
-        text: "Itinerary marked as Interested",
-        icon: "success",
-      });
-    } else {
-      Swal.fire({
-        title: "Success",
-        text: "Itinerary marked as Not Interested",
-        icon: "success",
-      });
-    }
-  };
- 
   const [inappropriateV, setActive] = useState(inappropriate);
-  const [Interested, setInterested] = useState(
-    !InterestedUsers.some((user) => user.user_id?.username === username)
-  );
 
   const getRatingStatus = (rating: number) => {
     if (rating >= 4.5) return "Excellent";
@@ -221,7 +181,8 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
 
   return (
     <div
-      className="m-4 transition transform hover:scale-105 w-96 bg-gray-200 rounded-lg overflow-hidden shadow-lg"
+      className={`m-4 transition transform hover:scale-105 w-96 bg-gray-200 rounded-lg overflow-hidden
+         shadow-lg ${className}`}
       style={{ boxShadow: "10px 10px 20px rgba(0, 0, 0, 0.2)" }}
     >
       <div className="relative w-full h-[250px]">
@@ -230,42 +191,47 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
           alt={title}
           className="w-full h-full object-cover"
         />
-
-        {currentType === "tourist" && (
-          <div className="absolute top-2 right-2 flex gap-2">
-            {/* Interested Button */}
-            <button
-              className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600"
-              title={Interested ? "Remove Interest" : "Interested"}
-              onClick={() => handleInterested()}
-            >
-              {Interested ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />}
-            </button>
-
-            {/* Bookmark Button */}
-            {!isBookmarked ? (
-              <button
-                className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600 shadow-lg hover:shadow-xl transition-all"
-                title="Bookmark"
-                onClick={() => handleBookmark(_id)}
-              >
-                {loadingBookmark ? (
-                  <ClipLoader size={30} color="#ffffff" />
-                ) : (
-                  <BookmarkIcon />
-                )}
-              </button>
-            ) : (
-              currpath !== "bookmarks" && (
+        {false ? (
+          <></>
+        ) : (
+          <>
+            {currentType === "tourist" && (
+              <div className="absolute top-2 right-2 flex gap-2">
+                {/* Interested Button */}
                 <button
-                  className="bg-purple-800 text-white p-2 rounded-lg shadow-lg hover:shadow-xl transition-all"
-                  disabled
+                  className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600"
+                  title={isInterested ? "Remove Interest" : "Interested"}
+                  onClick={() => handleInterested(_id)}
                 >
-                  <BookmarkAddedIcon />
+                  {isInterested ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />}
                 </button>
-              )
+
+                {/* Bookmark Button */}
+                {!isBookmarked ? (
+                  <button
+                    className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600 shadow-lg hover:shadow-xl transition-all"
+                    title="Bookmark"
+                    onClick={() => handleBookmark(_id)}
+                  >
+                    {loadingBookmark ? (
+                      <ClipLoader size={30} color="#ffffff" />
+                    ) : (
+                      <BookmarkIcon />
+                    )}
+                  </button>
+                ) : (
+                  currpath !== "bookmarks" && (
+                    <button
+                      className="bg-purple-800 text-white p-2 rounded-lg shadow-lg hover:shadow-xl transition-all"
+                      disabled
+                    >
+                      <BookmarkAddedIcon />
+                    </button>
+                  )
+                )}
+              </div>
             )}
-          </div>
+          </>
         )}
       </div>
 
@@ -320,74 +286,74 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
         )}
 
         {/* Buttons */}
-        <div className="mt-2">
-          <div className="flex justify-between items-center">
-            <Link
-              to={`/${
-                currenttype + "/" + username
-              }/itineraries/tourist-itinerary/${_id}`}
-              state={{
-                title,
-                description,
-                price,
-                starting_Date,
-                ending_Date,
-                rating,
-                main_Picture,
-                language,
-                pickup_location,
-                accesibility,
-                dropoff_location,
-                plan,
-                selectedTags,
-              }}
-              className="p-2 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition flex items-center"
-            >
-              <InfoIcon className="w-6 h-6 text-white" />
-            </Link>
+        {false ? (
+          <></>
+        ) : (
+          <div className="mt-2">
+            <div className="flex justify-between items-center">
+              <Link
+                to={`/${
+                  currenttype + "/" + username
+                }/itineraries/tourist-itinerary/${_id}`}
+                state={{
+                  title,
+                  description,
+                  price,
+                  starting_Date,
+                  ending_Date,
+                  rating,
+                  main_Picture,
+                  language,
+                  pickup_location,
+                  accesibility,
+                  dropoff_location,
+                  plan,
+                  selectedTags,
+                }}
+                className="p-2 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition flex items-center"
+              >
+                <InfoIcon className="w-6 h-6 text-white" />
+              </Link>
+
+              {currentType === "tourist" && (
+                <>
+                  {/* Share Button */}
+                  <div className="mt-2">
+                    <ShareButton type={"itinerary"} ID={_id} />
+                  </div>
+                </>
+              )}
+            </div>
 
             {currentType === "tourist" && (
-              <>
-                {/* Share Button */}
-                <div className="mt-2">
-                  <ShareButton type={"itinerary"} ID={_id} />
-                </div>
-              </>
+              <div className="mt-4">
+                {/* Book Button */}
+                <button
+                  className="w-full bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600"
+                  onClick={() => handleBooking(_id)}
+                >
+                  {loading ? <ClipLoader size={30} color="#ffffff" /> : "Book"}
+                </button>
+              </div>
+            )}
+
+            {currentType === "admin" && (
+              <div className="bg-yellow-500 text-white p-2 rounded-lg flex flex-col items-center w-full mt-4">
+                <p className="text-sm flex items-center">
+                  {bookingActivated
+                    ? "Booking Activated"
+                    : "Booking Deactivated"}
+                </p>
+              </div>
             )}
           </div>
-
-          {currentType === "tourist" && (
-            <div className="mt-4">
-              {/* Book Button */}
-              <button
-                className="w-full bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600"
-                onClick={() => handleBooking(_id)}
-              >
-                {loading ? <ClipLoader size={30} color="#ffffff" /> : "Book"}
-              </button>
-            </div>
-          )}
-
-          {currentType === "admin" && (
-            <div className="bg-yellow-500 text-white p-2 rounded-lg flex flex-col items-center w-full mt-4">
-              <p className="text-sm flex items-center">
-                {bookingActivated ? "Booking Activated" : "Booking Deactivated"}
-              </p>
-            </div>
-          )}
-        </div>
+        )}
 
         {currentType === "admin" && (
           <Button onClick={handleInappropriate}>
             {inappropriateV ? "Declare Appropriate" : "Declare Inappropriate"}
           </Button>
         )}
-
-        {/* {currentType === "tourist" && allowBooking === false && (
-          <Button onClick={handleInterested}>
-            {Interested ? " Interested" : " Not Interested"}
-          </Button>
-        )} */}
       </div>
     </div>
   );

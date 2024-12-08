@@ -7,8 +7,6 @@ import hotelBooking from "../Schemas/hotelBooking";
 import { ItineraryDocument } from "../../Interfaces/IItinerary";
 import PromoCodes from "../Schemas/PromoCodes";
 
-
-
 export async function getTouristBookings(tourist_id: string) {
   try {
     const bookings = await bookingModel
@@ -69,7 +67,7 @@ export async function getBookingsByTourist(username: string) {
   }
 }
 
-async function checkBooking(
+export async function checkBooking(
   tourist_id: string,
   activity_id: string | undefined,
   itinerary_id: string | undefined
@@ -88,7 +86,11 @@ async function checkBooking(
     if (itinerary_id) {
       query.itinerary = itinerary_id;
       const itinerary = await ItineraryModel.findById(itinerary_id);
-      if (itinerary && ((new Date((itinerary as any).starting_Date) < now) || !(itinerary as any).bookingActivated )) {
+      if (
+        itinerary &&
+        (new Date((itinerary as any).starting_Date) < now ||
+          !(itinerary as any).bookingActivated)
+      ) {
         throw new Error("The itinerary has already started or passed.");
       }
     }
@@ -99,29 +101,71 @@ async function checkBooking(
   }
 }
 
+export async function getBookingTotalAmount(bookingData: any) {
+  try {
+    let price = 0;
+    if (
+      bookingData.type &&
+      (bookingData.type === "activity" || bookingData.type === "itinerary")
+    ) {
+      price = bookingData.price;
+    } else {
+      price = bookingData.totalPrice;
+    }
+    var totalAmount = price;
+
+    const promoCode = await PromoCodes.findOne({
+      name: bookingData.promoCode,
+    });
+    if (promoCode && !promoCode.used) {
+      totalAmount *= 0.9;
+    }
+    return totalAmount;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function handlePayment(
+  paymentMethod: string,
+  totalAmount: number,
+  tourist_id: string,
+  bookingType: string
+) {
+  try {
+    if (paymentMethod == "wallet") {
+      let tourist;
+      if (bookingType === "flight/hotel") {
+        tourist = await touristModel.findOne({ username: tourist_id });
+      } else {
+        tourist = await touristModel.findById(tourist_id);
+      }
+      if (!tourist) throw new Error("Tourist not found");
+      if (tourist.wallet < totalAmount) throw new Error("Insufficient funds");
+      tourist.wallet -= totalAmount;
+      await tourist.save();
+    }
+    if (paymentMethod == "card") {
+      return;
+    }
+    if (paymentMethod == "cod") {
+      return;
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function addBooking(bookingData: any) {
   let booked = null;
   try {
-    if (bookingData.type === "activity") {
-      booked = await checkBooking(
-        bookingData.tourist,
-        bookingData.activity,
-        undefined
-      );
-    }
-    if (bookingData.type === "itinerary") {
-      booked = await checkBooking(
-        bookingData.tourist,
-        undefined,
-        bookingData.itinerary
-      );
-    }
     if (booked === null) {
-    
+      const tourist = await touristModel.findById(bookingData.tourist);
+      if (!tourist) throw new Error("Tourist not found");
+
       if (bookingData.promoCode) {
         const promo = await PromoCodes.findOne({ name: bookingData.promoCode });
         if (promo && !promo.used) {
-          (bookingData.totalPrice *= 0.9).toFixed(2);
           promo.used = true;
           await promo.save();
         } else {
@@ -129,8 +173,6 @@ export async function addBooking(bookingData: any) {
         }
       }
 
-
-    
       await bookingModel.create(bookingData);
       await updateLoyaltyPoints(bookingData);
     } else {
@@ -140,22 +182,22 @@ export async function addBooking(bookingData: any) {
     throw error;
   }
 }
-export async function updateLoyaltyPoints(bookingdata:any){
+export async function updateLoyaltyPoints(bookingdata: any) {
   const touristId = bookingdata.tourist;
-  let amount =0;
+  let amount = 0;
   if (bookingdata.type === "itinerary") {
-    const itinerary= (await ItineraryModel.findById(bookingdata.itinerary))as ItineraryDocument |null;
-    if(!itinerary) return null;
-    amount+= itinerary.price;
-  }
-  else if(bookingdata.type === "activity") {
-    const activitydata= await ActivityModel.findById(bookingdata.activity);
-    if(!activitydata) return null;
-    amount+= activitydata.Price;
+    const itinerary = (await ItineraryModel.findById(
+      bookingdata.itinerary
+    )) as ItineraryDocument | null;
+    if (!itinerary) return null;
+    amount += itinerary.price;
+  } else if (bookingdata.type === "activity") {
+    const activitydata = await ActivityModel.findById(bookingdata.activity);
+    if (!activitydata) return null;
+    amount += activitydata.Price;
   }
 
   // if(bookingdata.activity !== null){
-    
 
   // }
   // if(bookingdata.itinerary !== null){
@@ -167,30 +209,33 @@ export async function updateLoyaltyPoints(bookingdata:any){
   try {
     const tourist = await touristModel.findById(touristId);
     if (!tourist) return null;
-    var points=0;
-    switch(tourist.loyaltyLevel){
-      case 1: points=amount*0.5; break;
-      case 2: points=amount; break; 
-      case 3: points=amount*1.5; break;
+    var points = 0;
+    switch (tourist.loyaltyLevel) {
+      case 1:
+        points = amount * 0.5;
+        break;
+      case 2:
+        points = amount;
+        break;
+      case 3:
+        points = amount * 1.5;
+        break;
     }
     tourist.currentLoyaltyPoints += points;
     tourist.totalLoyaltyPoints += points;
 
-    if(tourist.totalLoyaltyPoints>500000){
-      tourist.loyaltyLevel=3;
-    }
-    else if(tourist.totalLoyaltyPoints>100000){
-      tourist.loyaltyLevel=2;
-    }
-    else {
-      tourist.loyaltyLevel=1;
+    if (tourist.totalLoyaltyPoints > 500000) {
+      tourist.loyaltyLevel = 3;
+    } else if (tourist.totalLoyaltyPoints > 100000) {
+      tourist.loyaltyLevel = 2;
+    } else {
+      tourist.loyaltyLevel = 1;
     }
     await tourist.save();
   } catch (error) {
     throw error;
   }
 }
-
 
 async function checkCancel(booking_id: string) {
   let toCancel = null;
@@ -245,11 +290,10 @@ export async function cancelBooking(booking_id: string) {
     booking = await checkCancel(booking_id);
     if (booking !== null) {
       if ((booking as any).type === "itinerary") {
-      
         const itinerary = await ItineraryModel.findById(
           (booking as any).itinerary
         );
-        
+
         if (itinerary) {
           const index = (itinerary as any).booked_By.findIndex(
             (entry: any) =>
@@ -262,17 +306,17 @@ export async function cancelBooking(booking_id: string) {
         }
       }
 
-      const tourist = await touristModel.findById( booking.tourist );
+      const tourist = await touristModel.findById(booking.tourist);
       if (tourist) {
-        tourist.wallet += booking.price;
-        await tourist.save(); // Save the updated wallet
+        if (!booking.paymentMethod.includes("cod")) {
+          tourist.wallet += booking.price;
+          await tourist.save();
+        }
       } else {
         throw new Error("Wallet not found");
       }
-
-      await bookingModel.findByIdAndDelete(booking_id); 
+      await bookingModel.findByIdAndDelete(booking_id);
       return booking;
-
     } else {
       throw new Error("Booking not found");
     }
@@ -286,7 +330,6 @@ export async function addFlightBooking(bookingData: any) {
     if (bookingData.promoCode) {
       const promo = await PromoCodes.findOne({ name: bookingData.promoCode });
       if (promo && !promo.used) {
-        (bookingData.totalPrice *= 0.9).toFixed(2);
         promo.used = true;
         await promo.save();
       } else {
@@ -306,7 +349,6 @@ export async function addHotelBooking(bookingData: any) {
     if (bookingData.promoCode) {
       const promo = await PromoCodes.findOne({ name: bookingData.promoCode });
       if (promo && !promo.used) {
-        (bookingData.totalPrice *= 0.9).toFixed(2);
         promo.used = true;
         await promo.save();
       } else {
@@ -360,4 +402,7 @@ module.exports = {
   addHotelBooking,
   getFlightBookings,
   getHotelBookings,
+  handlePayment,
+  getBookingTotalAmount,
+  checkBooking,
 };

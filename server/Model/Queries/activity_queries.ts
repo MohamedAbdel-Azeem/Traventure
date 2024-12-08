@@ -41,6 +41,17 @@ export const getActivitiesid = async (id: string) => {
     throw err;
   }
 };
+
+export const getActivityid = async (id: string) => {
+  try {
+    return await Activity.findById( id )
+      .populate("Tags")
+      .populate("Category");
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const deleteActivity = async (id: string) => {
   try {
     return await Activity.findByIdAndDelete(id);
@@ -48,6 +59,7 @@ export const deleteActivity = async (id: string) => {
     throw err;
   }
 };
+
 export const updateActivity = async (id: string, updatedActivity: any) => {
   try {
     return await Activity.findByIdAndUpdate(id, updatedActivity);
@@ -269,6 +281,7 @@ export const advNumTourists = async (
 module.exports = {
   addActivity,
   getActivities,
+  getActivityid,
   getActivitiesid,
   deleteActivity,
   updateActivity,

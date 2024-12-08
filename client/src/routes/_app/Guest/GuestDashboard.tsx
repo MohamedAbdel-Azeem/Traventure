@@ -70,7 +70,6 @@ const GuestDashboard = () => {
                       _id={String(itinerary._id)}
                       title={itinerary.title}
                       description={itinerary.description}
-                      added_By={itinerary.added_By}
                       price={itinerary.price}
                       starting_Date={itinerary.starting_Date}
                       ending_Date={itinerary.ending_Date}
@@ -83,7 +82,6 @@ const GuestDashboard = () => {
                       selectedTags={itinerary.selectedTags}
                       main_Picture={itinerary.main_Picture}
                       accesibility={itinerary.accesibility}
-                      booked_By={itinerary.booked_By}
                       bookingActivated={false}
                       inappropriate={false}
                     />

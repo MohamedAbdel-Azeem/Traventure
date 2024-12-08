@@ -10,6 +10,7 @@ import {
   cancelPurchase,
   getSellerRevenue,
   getExternalSellerRevenue,
+  handlePayment,
 } from "../Model/Queries/purchase_queries";
 import {
   getProduct,
@@ -24,8 +25,8 @@ const router = Router();
 
 router.post("/buy", async (req: Request, res: Response) => {
   try {
-    const { touristUsername, cart, promoCode } = req.body;
-
+    const { touristUsername, cart, promoCode, paymentMethod, address } =
+      req.body; // payment Method is either Wallet , Card or COD
     const tourist = await Tourist.findOne({ username: touristUsername });
     if (!tourist) return res.status(404).send("Tourist not found");
     for (const singleProduct of cart) {
@@ -39,26 +40,32 @@ router.post("/buy", async (req: Request, res: Response) => {
           .send("Product out of stock or not enough quantity");
       }
     }
+    const touristId = tourist._id;
+    const body = { touristId, cart, paymentMethod, address } as IPurchase;
 
-    for (const singleProduct of cart) {
-      await decrementProductQuantity(
-        singleProduct.productId,
-        singleProduct.quantity
-      );
-      await sendMailAndNotificationToSeller(singleProduct.productId);
-    }
-    
-    const body = { touristUsername, cart } as IPurchase;
 
     if (promoCode) {
       body.promoCode = promoCode;
     }
 
-    const purchase = await addPurchase(body);
-    const totalAmount = await getPurchaseTotalAmount(body);
+    body.totalAmount = await getPurchaseTotalAmount(body);
 
-    return res.status(200).send(purchase);
-    // return res.status(200).send("Purchase added successfully");
+
+    try {
+      await handlePayment(paymentMethod, body.totalAmount, touristUsername);
+      const purchase = await addPurchase(body);
+      for (const singleProduct of cart) {
+        await decrementProductQuantity(
+          singleProduct.productId,
+          singleProduct.quantity
+        );
+      }
+      return res.status(200).send(purchase);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+
   } catch (error) {
     console.log(error);
     return res.status(500).send(error);

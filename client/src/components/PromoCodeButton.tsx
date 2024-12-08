@@ -5,9 +5,14 @@ import Swal from "sweetalert2";
 interface PromoCodeButtonProps {
   onAccept: (accepted: boolean) => void;
   className?: string;
+  setPromoCodeAgain: (promoCode: string) => void;
 }
 
-const PromoCodeButton = ({ onAccept, className }: PromoCodeButtonProps) => {
+const PromoCodeButton = ({
+  onAccept,
+  className,
+  setPromoCodeAgain,
+}: PromoCodeButtonProps) => {
   const [promoCode, setPromoCode] = useState("");
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState("");
@@ -17,6 +22,7 @@ const PromoCodeButton = ({ onAccept, className }: PromoCodeButtonProps) => {
       const res = await useCheckPromoCode(promoCode);
       if (res) {
         onAccept(true);
+        setPromoCodeAgain(promoCode);
         setError(false);
         setErrorText("Code Accepted");
       } else {

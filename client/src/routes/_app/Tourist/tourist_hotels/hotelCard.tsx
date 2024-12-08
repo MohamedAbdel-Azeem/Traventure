@@ -3,7 +3,6 @@ import { Rating } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import "./ProductCard.css";
-import Swal from "sweetalert2";
 import { useLocation } from "react-router-dom";
 import useBookHotel from "../../../../custom_hooks/useBookHotel";
 
@@ -40,18 +39,11 @@ const HotelCard: React.FC<HotelCardProps> = ({
   const handleBookHotel = async (hotel: any) => {
     // Call the bookHotel function from the custom hook
     try {
-      await bookHotel(hotel, currentuser);
-      Swal.fire({
-        icon: "success",
-        title: "Hotel Booked Successfully!",
-        text: "You have successfully booked the hotel.",
-      });
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Booking Failed!",
-        text: "An error occurred while booking the hotel.",
-      });
+      await bookHotel(hotel, currentuser, "", "wallet");
+
+    } 
+    catch (error) {
+     
     }
   };
 
