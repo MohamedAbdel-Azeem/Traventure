@@ -151,7 +151,13 @@ const MoreActivities: React.FC = () => {
 
         {/* Page Header */}
 <header className="bg-gradient-to-r from-purple-500 via-blue-500 to-teal-500 py-16 text-center rounded-b-3xl shadow-lg">
-  <h1 className="text-5xl font-extrabold text-white drop-shadow-md">
+<h1
+            className="text-5xl font-extrabold text-white relative drop-shadow-xl"
+            style={{
+              textShadow: "2px 2px 10px rgba(0, 0, 0, 0.7)",
+              WebkitTextStroke: "1px black"
+            }}
+          >
     Upcoming Activities
   </h1>
   <p className="mt-4 text-lg text-white opacity-90">
@@ -316,15 +322,8 @@ const MoreActivities: React.FC = () => {
 
   
         {/* Activities Grid */}
-        <div className="bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 p-1 mx-4 lg:mx-20 rounded-lg shadow-md mt-5">
-          <section className="p-8 bg-white rounded-lg">
-            <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
-              All Activities
-              <span className="block h-1 mt-2 bg-gradient-to-r from-purple-500 to-pink-500"></span>
-            </h2>
-            <p className="mb-6 text-gray-600">
-              Discover a range of exciting activities tailored to your interests.
-            </p>
+           
+      
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {sortedActivities && sortedActivities.length > 0 ? (
                 sortedActivities.map((activity: Activity) => (
@@ -339,10 +338,8 @@ const MoreActivities: React.FC = () => {
                 <div>No activities found.</div>
               )}
             </div>
-          </section>
         </div>
       </div>
-    </div>
   );
 };
 
