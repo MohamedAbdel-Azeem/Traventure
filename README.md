@@ -1048,10 +1048,13 @@ Here are examples of testing one of our endpoints using Postman:
 
 [Tests Postman Collection](https://elements.getpostman.com/redirect?entityId=39534055-d77464fa-685e-400b-9b78-dfb9e3c907c4&entityType=collection)  
 
-![Adding a new admin user 1](client/src/assets/addnewadmintest.png)  
+![Getting count of users](client/src/assets/GET.png)  
 
-![Getting count of users](client/src/assets/getcountuserstest.png)
+![Adding a new admin user](client/src/assets/POST.png)
 
+![Deleting a user](client/src/assets/DELETE.png)
+
+![Updating tourist nationality](client/src/assets/PATCH.png)
 ---
 
 ## How to Use  
