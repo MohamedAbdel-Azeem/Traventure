@@ -4,6 +4,7 @@ import { timeStamp } from "console";
 const Schema = mongoose.Schema;
 
 export interface IAddress {
+  _id?: mongoose.Types.ObjectId;
   latitude: number;
   longitude: number;
   street: string;

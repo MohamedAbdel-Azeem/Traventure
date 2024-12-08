@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { IAddress } from "./Tourist";
+import mongoose, { mongo } from "mongoose";
+import Tourist, { IAddress } from "./Tourist";
 
 const schema = mongoose.Schema;
 
@@ -21,13 +21,14 @@ export enum PaymentMethod {
 }
 
 export interface IPurchase {
-  touristUsername: mongoose.Types.ObjectId;
+  touristId: mongoose.Types.ObjectId;
   cart: IPurchasedProduct[];
   timeStamp: Date;
   status?: PurchaseStatus;
   totalAmount?: number;
   promoCode?: string;
   paymentMethod: PaymentMethod;
+  address: string;
 }
 
 const purchaseSchema = new schema({
@@ -46,13 +47,21 @@ const purchaseSchema = new schema({
   paymentMethod: { type: String, required: true },
   status: { type: String, required: true, default: PurchaseStatus.processing },
   address: {
-    latitude: { type: Number, required: true },
-    longitude: { type: Number, required: true },
-    street: { type: String, required: true },
-    buildingNumber: { type: String, required: true },
-    floor: { type: String, required: false, default: "" },
-    apartmentNumber: { type: String, required: true },
-    additionalDirections: { type: String, required: false, default: "" },
+    type: mongoose.Types.ObjectId,
+    required: true,
+    validate: {
+      validator: async function (
+        this: IPurchase,
+        value: mongoose.Types.ObjectId
+      ) {
+        const tourist = await Tourist.findById(this.touristId);
+        if (!tourist || !tourist.saved_addressess) return false;
+        return tourist.saved_addressess.some((address) => {
+          if (address._id) return address._id.equals(value);
+        });
+      },
+      message: "Invalid address id",
+    },
   },
   totalAmount: { type: Number, default: 0 },
   promoCode: { type: String, default: "" },

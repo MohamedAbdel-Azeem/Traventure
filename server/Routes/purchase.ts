@@ -23,7 +23,8 @@ const router = Router();
 
 router.post("/buy", async (req: Request, res: Response) => {
   try {
-    const { touristUsername, cart, promoCode, paymentMethod } = req.body; // payment Method is either Wallet , Card or COD
+    const { touristUsername, cart, promoCode, paymentMethod, address } =
+      req.body; // payment Method is either Wallet , Card or COD
     const tourist = await Tourist.findOne({ username: touristUsername });
     if (!tourist) return res.status(404).send("Tourist not found");
     for (const singleProduct of cart) {
@@ -37,14 +38,14 @@ router.post("/buy", async (req: Request, res: Response) => {
           .send("Product out of stock or not enough quantity");
       }
     }
-
-    const body = { touristUsername, cart, paymentMethod } as IPurchase;
+    const touristId = tourist._id;
+    const body = { touristId, cart, paymentMethod , address } as IPurchase;
 
     if (promoCode) {
       body.promoCode = promoCode;
     }
 
-    body.totalAmount = await getPurchaseTotalAmount(cart);
+    body.totalAmount = await getPurchaseTotalAmount(body);
 
     try {
       await handlePayment(paymentMethod, body.totalAmount, touristUsername);
@@ -57,9 +58,11 @@ router.post("/buy", async (req: Request, res: Response) => {
       }
       return res.status(200).send(purchase);
     } catch (error) {
+      console.log(error);
       return res.status(500).send(error);
     }
   } catch (error) {
+    console.log(error);
     return res.status(500).send(error);
   }
 });
