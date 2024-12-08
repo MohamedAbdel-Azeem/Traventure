@@ -173,8 +173,12 @@ const MoreItineraries: React.FC = () => {
 
   return (
     <div className="flex">
-      <div className="w-full mt-[80px]">
-        <h1 className="text-2xl font-bold mb-4 mx-auto">All Itineraries</h1>
+      <div className="w-full mt-[20px]">
+      <center>
+  <h1 className="text-4xl font-bold mb-4 mx-auto text-white">
+    All Itineraries
+  </h1>
+</center>
         <hr />
         <br />
         <div>
