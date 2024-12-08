@@ -263,31 +263,6 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
     </div>
   )}
 
-  {/* Booking Section */}
-  {type === "tourist" && activity.BookingIsOpen && (
-    <div className="flex justify-center gap-4 py-4">
-      {!isBookmarked && (
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-          title="Bookmark"
-          onClick={() => handleBookMark(activity._id)}
-        >
-          {loadingBookmark ? <ClipLoader size={30} color="#ffffff" /> : <BookmarkIcon />}
-        </button>
-      )}
-      {isBookmarked && currpath !== "bookmarks" && (
-        <button className="bg-green-700 text-white px-4 py-2 rounded-lg" disabled>
-          <BookmarkAddedIcon />
-        </button>
-      )}
-      <button
-        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-        onClick={() => handleBooking(activity._id)}
-      >
-        {loading ? <ClipLoader size={30} color="#ffffff" /> : "Book"}
-      </button>
-    </div>
-  )}
 
   {/* Dropdown Selectors */}
   <div className="px-6 py-4">
@@ -355,39 +330,70 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
     </div>
   </div>
 
+  {/* View Map, Bookmark, and Book Buttons Section */}
+<div className="mt-4 flex justify-center gap-4 px-6 py-4">
   {/* View Map Button */}
-  <div className="mt-4 flex justify-center">
-    <button
-      onClick={handleViewMap}
-      className="px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition-all duration-300"
-    >
-      View Map
-    </button>
+  <button
+    onClick={handleViewMap}
+    className="px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition-all duration-300"
+  >
+    View Map
+  </button>
+
+  {/* Bookmark Button */}
+  <div className="flex gap-4">
+    {!isBookmarked && (
+      <button
+        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+        title="Bookmark"
+        onClick={() => handleBookMark(activity._id)}
+      >
+        {loadingBookmark ? <ClipLoader size={30} color="#ffffff" /> : <BookmarkIcon />}
+      </button>
+    )}
+    {isBookmarked && currpath !== "bookmarks" && (
+      <button className="bg-green-700 text-white px-4 py-2 rounded-lg" disabled>
+        <BookmarkAddedIcon />
+      </button>
+    )}
   </div>
 
-  {/* Map Modal */}
-  {isModalOpen && (
-    <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-      <div className="relative bg-white rounded-lg overflow-hidden shadow-lg w-4/5 md:w-1/2">
-        <TheBIGMAP
-          arrayofmarkers={[
-            {
-              latitude: activity.Location.latitude,
-              longitude: activity.Location.longitude,
-            },
-          ]}
-          id="map"
-          className="h-[500px] w-full"
-        />
-        <button
-          onClick={handleCloseModal}
-          className="absolute h-[40px] w-[40px] top-2 left-2 text-[25px] text-center items-center text-white bg-red-500 hover:bg-red-600 font-bold rounded-full"
-        >
-          &times;
-        </button>
-      </div>
+  {/* Book Button */}
+  <button
+    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+    onClick={() => handleBooking(activity._id)}
+  >
+    {loading ? <ClipLoader size={30} color="#ffffff" /> : "Book"}
+  </button>
+</div>
+
+{/* Map Modal */}
+{isModalOpen && (
+  <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+    <div className="relative bg-white rounded-lg overflow-hidden shadow-lg w-4/5 md:w-1/2">
+      <TheBIGMAP
+        arrayofmarkers={[
+          {
+            latitude: activity.Location.latitude,
+            longitude: activity.Location.longitude,
+          },
+        ]}
+        id="map"
+        className="h-[500px] w-full"
+      />
+      <button
+        onClick={handleCloseModal}
+        className="absolute h-[40px] w-[40px] top-2 left-2 text-[25px] text-center items-center text-white bg-red-500 hover:bg-red-600 font-bold rounded-full"
+      >
+        &times;
+      </button>
     </div>
-  )}
+  </div>
+)}
+
+
+
+
 </div>
 
     </div>
