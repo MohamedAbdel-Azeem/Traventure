@@ -4,46 +4,58 @@
   
 
 </p>
-
+🚀 Motivation
+🧱 Build Status
+🎨 Code Style
+⚒️ Tech and Frameworks used
+🔥 Features & Screenshots
+💻 Code Examples
+⚙️ Installation
+📚 API Reference
+🧪 Tests
+🧑🏻‍🏫 How to Use
+🤝 Contribute
+©️ Credits
+📜 
 
 # Traventure
 ## Table of Contents  
-1. [Motivation](#motivation)  
-2. [Build Status](#build-status)  
-3. [Code Style](#code-style)  
-4. [Tech and Frameworks used](#tech-and-frameworks-used)  
-5. [Features & Screenshots](#features--screenshots)  
-6. [Code Examples](#code-examples)  
-7. [Installation](#installation)  
-8. [API Reference](#api-reference)  
-9. [Tests](#tests)  
-10. [How to Use](#how-to-use)  
-11. [Contribute](#contribute)  
-12. [Credits](#credits)  
-13. [License](#license)  
+1. [🚀 Motivation](#motivation)  
+2. [🧱 Build Status](#build-status)  
+3. [🎨 Code Style](#code-style)  
+4. [⚒️ Tech and Frameworks used](#tech-and-frameworks-used)  
+5. [🔥 Features & Screenshots](#features--screenshots)  
+6. [💻 Code Examples](#code-examples)  
+7. [⚙️ Installation](#installation)  
+8. [📚 API Reference](#api-reference)  
+9. [🧪 Tests](#tests)  
+10. [🧑🏻‍🏫 How to Use](#how-to-use)  
+11. [🤝 Contribute](#contribute)  
+12. [©️ Credits](#credits)  
+13. [📜 License](#license)  
 
 ---
 
-## Motivation  
+## 🚀 Motivation  
 Welcome to Traventure, an all-in-one travel platform designed to make vacation planning effortless and exciting! Whether you're dreaming of exploring historic landmarks, unwinding on relaxing beaches, or embarking on family-friendly adventures, our app brings everything together to create the perfect trip. With features tailored to simplify planning and enhance your travel experience, we’re here to turn your dream destinations into reality.
 
 ---
 
-## Build Status  
+## 🧱 Build Status
 
 - Still under development and not deployed yet
 - Regular updates planned to add new features and improvements.  
 - Still fixing some minor bugs.  
 ---
 
-## Code Style  
+## 🎨 Code Style
 
 The  full team works on vscode and uses **Prettier**  as its linter which automatically works when saving (ctrl + s)
 
 
 ---
 
-## Tech and Frameworks used  
+## ⚒️ Tech and Frameworks used
 - NodeJs
 - Express
 - ReactJs
@@ -56,7 +68,7 @@ The  full team works on vscode and uses **Prettier**  as its linter which automa
 
 ---
 
-## Features & Screenshots
+## 🔥 Features & Screenshots
 
 
 <details> 
@@ -163,7 +175,7 @@ The  full team works on vscode and uses **Prettier**  as its linter which automa
 
 ---
 
-## Code Examples  
+## 💻 Code Examples
 
 <details>
 <summary>Backend Routes Example</summary>
@@ -701,7 +713,7 @@ export default mongoose.model<IAdvertiser>("Advertiser", AdvertiserSchema);
 
 ---
 
-## Installation  
+## ⚙️ Installation
 
 - Make sure you have [Node](https://nodejs.org/en) and [Git](https://git-scm.com/) installed
 ```bash
@@ -719,7 +731,7 @@ npm run setup
 
 ---
 
-## API Reference  
+## 📚 API Reference
 
 
 <details>
@@ -1041,7 +1053,7 @@ npm run setup
 
 ---
 
-## Tests  
+## 🧪 Tests
 We  use Postman to manually test all our api references by making sure the response is as expected.
 
 Here are examples of testing one of our endpoints using Postman:
@@ -1057,8 +1069,7 @@ Here are examples of testing one of our endpoints using Postman:
 ![Updating tourist nationality](client/src/assets/PATCH.png)
 ---
 
-## How to Use  
-
+## 🧑🏻‍🏫 How to Use
 - Make sure to follow the [Installation](#-installation) steps first
 
 - Add a `.env` in the `client` and `server`
@@ -1091,7 +1102,7 @@ npm run start
 
 ---
 
-## Contribute  
+## 🤝 Contribute
 We welcome contributions to Traventure. All you need to do is:
 
 1- Fork the repo
@@ -1110,7 +1121,8 @@ We welcome contributions to Traventure. All you need to do is:
 
 ---
 
-## Credits  
+## ©️ Credits
+
 ### Docs 
 
 [Tailwind docs](https://v2.tailwindcss.com/docs)
@@ -1132,7 +1144,7 @@ We welcome contributions to Traventure. All you need to do is:
 
 ---
 
-## License  
+## 📜 License 
 The software is open source under the Apache 2.0 License.
 
 
