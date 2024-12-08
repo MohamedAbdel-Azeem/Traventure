@@ -4,19 +4,6 @@
   
 
 </p>
-🚀 Motivation
-🧱 Build Status
-🎨 Code Style
-⚒️ Tech and Frameworks used
-🔥 Features & Screenshots
-💻 Code Examples
-⚙️ Installation
-📚 API Reference
-🧪 Tests
-🧑🏻‍🏫 How to Use
-🤝 Contribute
-©️ Credits
-📜 
 
 # Traventure
 ## Table of Contents  
