@@ -281,7 +281,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
         )}
         {isBookmarked && currpath !== "bookmarks" && (
           <button
-            className="bg-green-600 text-white p-2 rounded-lg"
+            className="bg-purple-800 text-white p-2 rounded-lg"
             disabled
           >
             <BookmarkAddedIcon />

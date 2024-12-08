@@ -367,7 +367,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
               </button>
             )}
             {isBookmarked && currpath !== "bookmarks" && (
-              <button className="bg-green-700 text-white px-4 py-2 rounded-lg" disabled>
+              <button className="bg-purple-800 text-white px-4 py-2 rounded-lg" disabled>
                 <BookmarkAddedIcon />
               </button>
             )}
