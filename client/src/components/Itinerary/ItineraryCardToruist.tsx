@@ -194,10 +194,23 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
           alt={title}
           className="w-full h-full object-cover"
         />
-        
-      
+  
         {currentType === "tourist" && (
-          <div className="absolute top-2 right-2">
+          <div className="absolute top-2 right-2 flex gap-2">
+            {/* Interested Button */}
+            <button
+              className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600"
+              title={isInterested ? "Remove Interest" : "Interested"}
+              onClick={() => handleInterested(_id)}
+            >
+              {isInterested ? (
+                <ThumbUpAltIcon />
+              ) : (
+                <ThumbUpOffAltIcon />
+              )}
+            </button>
+  
+            {/* Bookmark Button */}
             {!isBookmarked ? (
               <button
                 className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600 shadow-lg hover:shadow-xl transition-all"
@@ -205,7 +218,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
                 onClick={() => handleBookmark(_id)}
               >
                 {loadingBookmark ? (
-                  <ClipLoader size={30} color="#ffffff"></ClipLoader>
+                  <ClipLoader size={30} color="#ffffff" />
                 ) : (
                   <BookmarkIcon />
                 )}
@@ -222,6 +235,8 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
             )}
           </div>
         )}
+  
+       
       </div>
   
       <div className="p-4">
@@ -300,18 +315,6 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   
             {currentType === "tourist" && (
               <>
-                {/* Interested Button */}
-                <button 
-                  className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600" 
-                  title={isInterested ? "Remove Interest" : "Interested"}  onClick={() => handleInterested(_id)}
-                >
-                  {isInterested ? (
-                 <ThumbUpAltIcon />
-                  ) : (
-                <ThumbUpOffAltIcon />
-                )}
-              </button>
-  
                 {/* Share Button */}
                 <div className="mt-2">
                   <ShareButton type={"itinerary"} ID={_id} />
@@ -328,7 +331,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
                 onClick={() => handleBooking(_id)}
               >
                 {loading ? (
-                  <ClipLoader size={30} color="#ffffff"></ClipLoader>
+                  <ClipLoader size={30} color="#ffffff" />
                 ) : (
                   "Book"
                 )}
@@ -353,6 +356,9 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
       </div>
     </div>
   );
+  
+
+  
   
    
 };
