@@ -183,6 +183,8 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
           handleOpen={() => setOpenPay(true)}
           handleClose={() => setOpenPay(false)}
           open={openPay}
+          amount={price}
+          name={username || "Guest"}
         />
       )}
       <div className="relative w-full h-[250px]">

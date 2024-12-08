@@ -10,10 +10,12 @@ router.post("/create-payment-intent", async (req: Request, res: Response) => {
   }
   const Stripe = new stripe(secretKey);
   const {
+    amount,
     currency,
     paymentMethodType,
     paymentMethodOptions,
   }: {
+    amount: number;
     currency: string;
     paymentMethodType: string;
     paymentMethodOptions?: object;
@@ -34,8 +36,8 @@ router.post("/create-payment-intent", async (req: Request, res: Response) => {
   params = {
     payment_method_types:
       paymentMethodType === "link" ? ["link", "card"] : [paymentMethodType],
-    amount: orderAmount,
-    currency: "USD",
+    amount: amount*100,
+    currency: "EGP",
   };
 
   // If this is for an ACSS payment, we add payment_method_options to create

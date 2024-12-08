@@ -14,12 +14,16 @@ interface PayStripeProps {
   handleOpen: () => void;
   handleClose: () => void;
   open: boolean;
+  amount: number;
+  name: string;
 }
 
 export const PayStripe: React.FC<PayStripeProps> = ({
   handleOpen,
   handleClose,
   open,
+  amount,
+  name
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -37,7 +41,9 @@ export const PayStripe: React.FC<PayStripeProps> = ({
 
     const {
       data: { error: backendError, clientSecret },
-    } = await axios.post("/traventure/api/stripe/create-payment-intent");
+    } = await axios.post("/traventure/api/stripe/create-payment-intent", {
+      amount: amount,
+    });
 
     if (backendError) {
       return;
@@ -48,7 +54,7 @@ export const PayStripe: React.FC<PayStripeProps> = ({
         payment_method: {
           card: elements.getElement(CardElement),
           billing_details: {
-            name: "Jenny Rosen",
+            name: name,
           },
         },
       });
