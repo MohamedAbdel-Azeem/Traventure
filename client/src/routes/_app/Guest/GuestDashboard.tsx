@@ -54,8 +54,8 @@ const GuestDashboard = () => {
 
       {/* Upcoming Itineraries Section */}
       <div className="bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 p-1 mx-4 lg:mx-20 rounded-lg shadow-md mt-5">
-        <section className="p-8 bg-white rounded-lg">
-          <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
+      <section className="p-8 rounded-lg" style={{ backgroundColor: 'rgba(255, 255, 255, 0.5)' }}>
+      <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
             Upcoming Itineraries
             <span className="block h-1 mt-2 bg-gradient-to-r from-purple-500 to-pink-500"></span>
           </h2>
@@ -106,8 +106,8 @@ const GuestDashboard = () => {
 
       {/* Upcoming Places Section */}
       <div className="bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 p-1 mx-4 lg:mx-20 rounded-lg shadow-md mt-5">
-        <section className="p-8 bg-white rounded-lg">
-          <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
+      <section className="p-8 rounded-lg" style={{ backgroundColor: 'rgba(255, 255, 255, 0.5)' }}>
+      <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
             Upcoming Places
             <span className="block h-1 mt-2 bg-gradient-to-r from-purple-500 to-pink-500"></span>
           </h2>
@@ -138,8 +138,8 @@ const GuestDashboard = () => {
 
       {/* Upcoming Activities Section */}
       <div className="bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 p-1 mx-4 lg:mx-20 rounded-lg shadow-md mt-5">
-        <section className="p-8 bg-white rounded-lg">
-          <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
+      <section className="p-8 rounded-lg" style={{ backgroundColor: 'rgba(255, 255, 255, 0.5)' }}>
+      <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
             Upcoming Activities
             <span className="block h-1 mt-2 bg-gradient-to-r from-purple-500 to-pink-500"></span>
           </h2>
