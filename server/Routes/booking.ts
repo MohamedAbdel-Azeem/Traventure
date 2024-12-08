@@ -55,7 +55,6 @@ router.post("/add", async (req, res) => {
   }
 });
 
-
 router.get("/:username", async (req, res) => {
   try {
     const bookings = await getBookingsByTourist(req.params.username);
@@ -64,6 +63,7 @@ router.get("/:username", async (req, res) => {
     res.status(500).send("error getting bookings");
   }
 });
+
 router.get("/getFlights/:username", async (req, res) => {
   try {
     const bookings = await getFlightBookings(req.params.username);

@@ -16,6 +16,7 @@ import GuestRouter from "./Routers/GuestRouter";
 import Checkout from "./components/Checkout";
 import ForgotPassword from "./components/ForgotPassword";
 import SwipeableTemporaryDrawer from "./components/Test";
+import EventCheckout from "./components/EventCheckout";
 function App() {
   return (
     <MantineProvider>
@@ -47,7 +48,7 @@ function App() {
           />
           <Route path="/landing" element={<LandingPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/test" element={<SwipeableTemporaryDrawer />} />
+          <Route path="/test" element={<EventCheckout />} />
         </Routes>
       </Router>
     </MantineProvider>
