@@ -7,8 +7,10 @@ function ImageUploader({
   OutsideClassName,
   OutsideText,
   className,
+  setExtra,
 }: {
   setSelectedImage: (file: File) => void;
+  setExtra?: () => void;
   selectedImage: File | null;
   OutsideClassName?: string;
   OutsideText?: string;
@@ -19,14 +21,15 @@ function ImageUploader({
       const file = event.target.files[0];
       if (file.type.startsWith("image/")) {
         setSelectedImage(file);
+        if (setExtra) {
+          setExtra();
+        }
       }
     }
   };
 
   return (
-    <div
-      className={`flex items-center justify-center w-full relative`}
-    >
+    <div className={`flex items-center justify-center w-full relative`}>
       {selectedImage ? (
         <div className={`relative w-full h-64 ${OutsideClassName || ""}`}>
           <img
@@ -50,7 +53,7 @@ function ImageUploader({
       ) : (
         <label
           htmlFor="dropzone-file"
-          className={`flex flex-col items-center justify-center w-full h-64 ${ className } border-2 border-slate-300 border-dashed rounded-lg cursor-pointer bg-white hover:bg-slate-100 ${
+          className={`flex flex-col items-center justify-center w-full h-64 ${className} border-2 border-slate-300 border-dashed rounded-lg cursor-pointer bg-white hover:bg-slate-100 ${
             OutsideClassName || ""
           }`}
         >

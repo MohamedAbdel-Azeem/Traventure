@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
-import { Button, TextField } from "@mui/material";
+import { Button, MenuItem, Select, TextField } from "@mui/material";
 import useUpdatePlace from "../../../../custom_hooks/places/useUpdatePlace";
 import Place from "../../../../custom_hooks/places/place_interface";
 import TheMAP from "../../../../components/Maps/TheMAP";
@@ -11,6 +11,7 @@ import TheBIGMAP from "../../../../components/Maps/TheBIGMAP";
 import EditButton from "../../../../components/Buttons/EditButton";
 import SaveButton from "../../../../components/Buttons/SaveButton";
 import ImageUploader from "../../../../components/PDFs&Images/ImageUploader";
+import { set } from "date-fns";
 interface LocationCardCRUDProps {
   id: string;
   onDelete: (id: string) => void;
@@ -50,7 +51,9 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
       target: { value },
     } = event;
     setSelectedTags(typeof value === "string" ? value.split(",") : value);
+    console.log(selectedTags + "selectedTags");
   };
+
 
   const handleTagsText = (value: string[]) => {
     const valueNames = tagsData
@@ -65,16 +68,27 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
 
   const handleCancelClick = async () => {
     setIsEditing(!isEditing);
+    setLocationName(details.name);
+    setDescription(details.description);
+    setNative(details.ticket_price.native);
+    setForeign(details.ticket_price.foreign);
+    setStudent(details.ticket_price.student);
+    setHours(details.opening_hrs);
+    setLatitude(details.location.latitude);
+    setLongitude(details.location.longitude);
+    setImages(details.pictures);
+    setSelectedTags(details.historicalTags.map((tag) => tag._id));
+
   };
 
   const handleSaveClick = async () => {
-    const filteredImages = images.filter((image) => image !== "");
-    setImages(filteredImages);
+    setImages(images);
     setIsEditing(!isEditing);
+    console.log(images);
     useUpdatePlace(details._id, {
       name: locationName,
       description: description,
-      pictures: images || [],
+      pictures: images || ["LIFE IS PAIN, I HATE MYSELF"],
       location: {
         latitude: latitude,
         longitude: longitude,
@@ -88,11 +102,13 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
       added_By: currentuser,
       historicalTags: selectedTags || [],
     });
+    
   };
   const handleDeleteClick = () => {
     onDelete(id);
   };
   const handleImageChange = (index: number, newValue: string) => {
+    console.log(newValue);
     if (newValue === "") {
       const updatedImages = images.filter((_, i) => i !== index);
       setImages(updatedImages);
@@ -135,7 +151,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
     >
       <div className="absolute top-[2px] right-[2px] z-10">
         {isEditing ? (
-          <SaveButton handleSaveClick={handleEditClick} />
+          <SaveButton handleSaveClick={handleSaveClick} />
         ) : (
           <EditButton handleEditClick={handleEditClick} />
         )}
@@ -220,7 +236,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
         } text-white hover:opacity-100 transition-all duration-300 flex flex-col p-6`}
       >
         {/* Ticket Prices and Hours (top) */}
-        <div className="flex w-full mb-4 mt-5">
+        <div className="flex w-full mt-5">
           {/* Ticket Prices Section */}
           <div className="flex-1 mr-4">
             <div className="flex items-center mb-2">
@@ -362,39 +378,89 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
               <span className="font-semibold">Hours of Operation</span>
             </div>
             {isEditing ? (
-              <TextField
-                label="Hours"
-                sx={{
-                  width: "200px",
-                  height: "50px",
-                  marginX: "auto",
-                  "& .MuiInputBase-input": {
-                    color: "white",
-                    fontSize: "14px",
+              <>
+                <TextField
+                  label="Hours"
+                  sx={{
+                    width: "200px",
                     height: "50px",
-                    boxSizing: "border-box",
-                  },
-                  "& .MuiInputBase-input::placeholder": {
-                    textAlign: "center",
-                  },
-                  "& .MuiInputLabel-root:not(.MuiInputLabel-shrink)": {
-                    fontSize: "14px",
-                    color: "white",
-                  },
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "white",
-                      borderRadius: "7px",
+                    marginX: "auto",
+                    "& .MuiInputBase-input": {
+                      color: "white",
+                      fontSize: "14px",
+                      height: "50px",
+                      boxSizing: "border-box",
                     },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "white",
-                      borderRadius: "7px",
+                    "& .MuiInputBase-input::placeholder": {
+                      textAlign: "center",
                     },
-                  },
-                }}
-                value={hours}
-                onChange={(e) => setHours(e.target.value)}
-              />
+                    "& .MuiInputLabel-root:not(.MuiInputLabel-shrink)": {
+                      fontSize: "14px",
+                      color: "white",
+                    },
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: "white",
+                        borderRadius: "7px",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "white",
+                        borderRadius: "7px",
+                      },
+                    },
+                  }}
+                  value={hours}
+                  onChange={(e) => setHours(e.target.value)}
+                />
+                <div className="flex flex-wrap justify-center items-center mb-4">
+                  {tagsLoading ? (
+                    <p>Loading...</p>
+                  ) : tagsError ? (
+                    <p>Error</p>
+                  ) : (
+                    <Select
+                      multiple
+                      value={selectedTags}
+                      onChange={handleTagsChange}
+                      renderValue={handleTagsText}
+                      sx={{
+                        width: "200px",
+                        height: "50px",
+                        marginX: "auto",
+                        "& .MuiInputBase-input": {
+                          color: "white",
+                          fontSize: "14px",
+                          height: "50px",
+                          boxSizing: "border-box",
+                        },
+                        "& .MuiInputBase-input::placeholder": {
+                          textAlign: "center",
+                        },
+                        "& .MuiInputLabel-root:not(.MuiInputLabel-shrink)": {
+                          fontSize: "14px",
+                          color: "white",
+                        },
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": {
+                            borderColor: "white",
+                            borderRadius: "7px",
+                          },
+                          "&.Mui-focused fieldset": {
+                            borderColor: "white",
+                            borderRadius: "7px",
+                          },
+                        },
+                      }}
+                    >
+                      {tagsData.map((tag) => (
+                        <MenuItem key={tag._id} value={tag._id}>
+                          {tag.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                </div>
+              </>
             ) : (
               <p className="text-white text-sm">{hours}</p>
             )}
@@ -402,14 +468,16 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
         </div>
 
         {/* Historical Tags */}
-        {Array.isArray(selectedTags) && selectedTags.length > 0 && (
+        {isEditing ? (
+          <></>
+        ) : (
           <div className="flex flex-wrap justify-center items-center mb-4">
-            {details?.historicalTags.slice(0, 3).map((tag, index) => (
+            {selectedTags.slice(0, 3).map((tag, index) => (
               <span
                 key={index}
                 className="px-3 py-1 bg-purple-200 text-purple-900 rounded-full text-sm font-medium mr-2 mb-2"
               >
-                {tag.name}
+                {handleTagsText([tag])}
               </span>
             ))}
             {selectedTags.length > 3 && (
@@ -555,13 +623,16 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
           <div className="relative bg-white rounded-lg overflow-hidden shadow-lg w-4/5 md:w-1/2">
             {isEditing ? (
               <div className="flex flex-row overflow-auto gap-5 h-[240px]">
-                
                 <div className="h-[100px] min-w-[200px] flex mt-[90px]">
-                  <ImageUploader
-                    setSelectedImage={setImage}
-                    selectedImage={image}
-                    className="h-[150px]"
-                  />
+                  {images.map((imaged, index) => (
+                    <ImageUploader
+                      key={index}
+                      selectedImage={image}
+                      setSelectedImage={setImage}
+                      setExtra={() => handleImageChange(index, image)}
+                      className="h-[100px] w-[100px] rounded-lg"
+                    />
+                  ))}
                 </div>
               </div>
             ) : (

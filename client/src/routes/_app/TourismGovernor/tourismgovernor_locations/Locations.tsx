@@ -158,7 +158,7 @@ const Locations = () => {
 
 return (
   <div className="flex justify-center">
-    <div className="grid grid-cols-3 mt-20">
+    <div className="grid grid-cols-3 mt-20 gap-5">
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
           <Box className="grid grid-cols-2">
