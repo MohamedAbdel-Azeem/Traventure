@@ -213,14 +213,17 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
       </Modal>
   
       <div className="w-[400px] bg-white rounded-lg shadow-lg overflow-hidden">
+        
         {/* Booking Status & Admin Status */}
         <div className="flex justify-between items-center bg-white-100 p-4">
-          {/* Booking Status */}
-          {!newBIO && (
-            <div className="flex items-center">
-              <BlockIcon className="text-red-500" />
-            </div>
-          )}
+          
+          <div className="flex items-center gap-2">
+            {/* Booking Status Icon */}
+            {!newBIO && <BlockIcon className="text-red-500" />}
+            
+            {/* Title Next to Block Icon */}
+            <h2 className="text-xl font-bold">{activity.Title}</h2>
+          </div>
   
           {/* Admin Controls */}
           {currenttype === "admin" && (
@@ -237,9 +240,8 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
           )}
         </div>
   
-        {/* Title */}
+        {/* Rating Section */}
         <div className="text-center py-4">
-          <h2 className="text-2xl font-bold">{activity.Title}</h2>
           <Rating disabled name="rating" value={averageRating} precision={0.1} />
         </div>
   
@@ -346,43 +348,44 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
             </div>
           </div>
         </div>
-
-         {/* View Map Button */}
-      <div className="mt-4 flex justify-center">
-        <button
-          onClick={handleViewMap}
-          className="px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition-all duration-300"
-        >
-          View Map
-        </button>
-      </div>
+  
+        {/* View Map Button */}
+        <div className="mt-4 flex justify-center">
+          <button
+            onClick={handleViewMap}
+            className="px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition-all duration-300"
+          >
+            View Map
+          </button>
+        </div>
   
         {/* Map Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-          <div className="relative bg-white rounded-lg overflow-hidden shadow-lg w-4/5 md:w-1/2">
-            <TheBIGMAP
-              arrayofmarkers={[
-                {
-                  latitude: activity.Location.latitude,
-                  longitude: activity.Location.longitude,
-                },
-              ]}
-              id="map"
-              className="h-[500px] w-full"
-            />
-            <button
-              onClick={handleCloseModal}
-              className="absolute h-[40px] w-[40px] top-2 left-2 text-[25px] text-center items-center text-white bg-red-500 hover:bg-red-600 font-bold rounded-full"
-            >
-              &times;
-            </button>
+        {isModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+            <div className="relative bg-white rounded-lg overflow-hidden shadow-lg w-4/5 md:w-1/2">
+              <TheBIGMAP
+                arrayofmarkers={[
+                  {
+                    latitude: activity.Location.latitude,
+                    longitude: activity.Location.longitude,
+                  },
+                ]}
+                id="map"
+                className="h-[500px] w-full"
+              />
+              <button
+                onClick={handleCloseModal}
+                className="absolute h-[40px] w-[40px] top-2 left-2 text-[25px] text-center items-center text-white bg-red-500 hover:bg-red-600 font-bold rounded-full"
+              >
+                &times;
+              </button>
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
     </div>
   );
+  
 };
 
 export default ActivityCardTourist;
