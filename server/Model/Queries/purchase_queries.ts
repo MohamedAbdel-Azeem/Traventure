@@ -355,6 +355,10 @@ export async function cancelPurchase(purchaseId: string) {
     if (!product) return null;
     if (product.status == PurchaseStatus.delivered) return null;
     product.status = PurchaseStatus.cancelled;
+    const tourist = await Tourist.findById(product.touristId);
+    if (!tourist) return null;
+    tourist.wallet += product.totalAmount as number;
+    await tourist.save();
     return await product.save();
   } catch (error) {
     throw error;
@@ -384,6 +388,7 @@ export async function handlePayment(
       if (tourist.wallet < totalAmount) throw new Error("Insufficient funds");
       tourist.wallet -= totalAmount;
       await tourist.save();
+      return;
     }
     if (paymentMethod == "card") {
       return;
