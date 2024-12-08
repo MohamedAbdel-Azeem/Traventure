@@ -10,6 +10,7 @@ import {
 import axios from "axios";
 import Itinerary from "../custom_hooks/itineraries/itinerarySchema";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import Slideshow from "./Slideshow";
 
 const Dashboard: React.FC = () => {
   const { upcoming, loading, error } = useGetUpcoming();
@@ -71,6 +72,11 @@ const Dashboard: React.FC = () => {
   tourist_activities = tourist_activities.slice(0, 5);
   tourist_itineraries = tourist_itineraries.slice(0, 5);
 
+  const slideshowItems = itineraries.map((itinerary) => ({
+    image: itinerary.main_Picture, 
+    title: itinerary.title,
+  }));
+
   return (
     <>
       {/* Page Header */}
@@ -83,6 +89,7 @@ const Dashboard: React.FC = () => {
           places, and activities all in one place.
         </p>
       </header>
+      <Slideshow items={slideshowItems} />
 
       {/* Upcoming Itineraries Section */}
       <div className="bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 p-1 mx-4 lg:mx-20 rounded-lg shadow-md mt-5">
