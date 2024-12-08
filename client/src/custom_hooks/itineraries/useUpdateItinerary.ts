@@ -32,6 +32,10 @@ interface Itinerary {
     user_id?: TouristProfileData;
   }[];
   accessibility: boolean;
+  allowBooking: boolean;
+  InterestedUsers: {
+    user_id?: TouristProfileData;
+  }[];
 }
 
 export const UseUpdateItinerary = async (

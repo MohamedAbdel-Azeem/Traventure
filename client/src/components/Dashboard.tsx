@@ -10,6 +10,7 @@ import {
 import axios from "axios";
 import Itinerary from "../custom_hooks/itineraries/itinerarySchema";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import Slideshow from "./Slideshow";
 
 const Dashboard: React.FC = () => {
   const { upcoming, loading, error } = useGetUpcoming();
@@ -71,23 +72,36 @@ const Dashboard: React.FC = () => {
   tourist_activities = tourist_activities.slice(0, 5);
   tourist_itineraries = tourist_itineraries.slice(0, 5);
 
+  const slideshowItems = [
+    ...itineraries.map((itinerary) => ({
+      image: itinerary.main_Picture, 
+      title: itinerary.title,
+    })),
+    ...locations.map((location) => ({
+      image: location.pictures?.[0] || '',
+      title: location.name,
+    })),
+  ];
+
   return (
     <>
       {/* Page Header */}
-      <header className="bg-gradient-to-r from-purple-500 via-blue-500 to-teal-500 py-16 text-center rounded-b-3xl shadow-lg">
-        <h1 className="text-5xl font-extrabold text-white drop-shadow-md">
-          Welcome Back, {currentuser}!
-        </h1>
-        <p className="mt-4 text-lg text-white opacity-90">
-          Plan your next adventure with ease. Check upcoming itineraries,
-          places, and activities all in one place.
-        </p>
-      </header>
+        <Slideshow items={slideshowItems} />
+     <header className="bg-gradient-to-r from-purple-500 via-blue-500 to-teal-500 py-6 min-h-[180px] text-center rounded-b-2xl shadow-lg mb-5">
+  <h1 className="text-3xl font-extrabold text-white drop-shadow-md">
+    Welcome Back, {currentuser}!
+  </h1>
+  <p className="mt-2 text-base text-white opacity-90">
+    Plan your next adventure with ease. Check upcoming itineraries, places, and activities all in one place.
+  </p>
+</header>
+    
+
 
       {/* Upcoming Itineraries Section */}
       <div className="bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 p-1 mx-4 lg:mx-20 rounded-lg shadow-md mt-5">
-        <section className="p-8 bg-white rounded-lg">
-          <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
+      <section className="p-8 rounded-lg" style={{ backgroundColor: 'rgba(255, 255, 255, 0.5)' }}>
+      <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
             Upcoming Itineraries
             <span className="block h-1 mt-2 bg-gradient-to-r from-purple-500 to-pink-500"></span>
           </h2>
@@ -106,6 +120,8 @@ const Dashboard: React.FC = () => {
                         (bookmarkedItinerary) =>
                           bookmarkedItinerary._id === itinerary._id
                       )}
+                      
+
                     />
                   </div>
                 ))
@@ -129,8 +145,8 @@ const Dashboard: React.FC = () => {
 
       {/* Upcoming Places Section */}
       <div className="bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 p-1 mx-4 lg:mx-20 rounded-lg shadow-md mt-5">
-        <section className="p-8 bg-white rounded-lg">
-          <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
+      <section className="p-8 rounded-lg" style={{ backgroundColor: 'rgba(255, 255, 255, 0.5)' }}>
+      <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
             Upcoming Places
             <span className="block h-1 mt-2 bg-gradient-to-r from-purple-500 to-pink-500"></span>
           </h2>
@@ -141,7 +157,7 @@ const Dashboard: React.FC = () => {
             <div className="flex gap-6 items-start">
               {locations.length > 0 ? (
                 locations.map((location) => (
-                  <div key={location._id} className="min-w-[600px]">
+                  <div key={location._id} className="min-w-[600px] mb-5">
                     <LocationCardTourist
                       id={String(location._id)}
                       wholeLocation={location}
@@ -168,8 +184,8 @@ const Dashboard: React.FC = () => {
 
       {/* Upcoming Activities Section */}
       <div className="bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 p-1 mx-4 lg:mx-20 rounded-lg shadow-md mt-5">
-        <section className="p-8 bg-white rounded-lg">
-          <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
+      <section className="p-8 rounded-lg" style={{ backgroundColor: 'rgba(255, 255, 255, 0.5)' }}>
+      <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
             Upcoming Activities
             <span className="block h-1 mt-2 bg-gradient-to-r from-purple-500 to-pink-500"></span>
           </h2>
@@ -177,7 +193,7 @@ const Dashboard: React.FC = () => {
             Get ready for exciting activities for your journey.
           </p>
           <div className="overflow-x-auto">
-            <div className="flex gap-6 items-start">
+            <div className="flex gap-6 items-start mb-5">
               {tourist_activities.length > 0 ? (
                 tourist_activities.map((activity) => (
                   <ActivityCardTourist
@@ -207,6 +223,26 @@ const Dashboard: React.FC = () => {
           </div>
         </section>
       </div>
+       <style jsx>{`
+      .overflow-x-auto {
+        overflow-x: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #8b3fe8 #e0e0e0; 
+      }
+
+      .overflow-x-auto::-webkit-scrollbar {
+        height: 8px; 
+      }
+
+      .overflow-x-auto::-webkit-scrollbar-track {
+        background: #e0e0e0; 
+      }
+
+      .overflow-x-auto::-webkit-scrollbar-thumb {
+        background: #9b4d96; 
+        border-radius: 10px;
+      }
+    `}</style>
     </>
   );
 };

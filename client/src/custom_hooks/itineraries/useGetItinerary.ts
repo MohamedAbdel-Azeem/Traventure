@@ -44,6 +44,7 @@ interface Itinerary {
   bookingActivated: boolean;
   category: string;
   inappropriate: boolean;
+
 }
 
 interface SActivity {

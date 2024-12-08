@@ -10,6 +10,7 @@ import { getprofileInfo } from "./user_queries";
 import mongoose from "mongoose";
 import complaint from "../Schemas/complaint";
 import { console } from "inspector";
+import { it } from "node:test";
 
 interface Tourist extends Document {
   username: string;
@@ -46,6 +47,7 @@ export async function getAll() {
 
     return { itineraries, activities, places };
   } catch (err) {
+    console.log("error in goowwa 5ales",err);
     throw err;
   }
 }
@@ -368,8 +370,55 @@ export async function updateUserWallet(username: string, amount: number) {
   }
 }
 
+export async function updateInterested(username: string, itineraryId: string,Interested:boolean) {
+  try {
+    const tourist = await touristModel.findOne({ username });
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    const itinerary = await Itinerary.findById(itineraryId);
+    
+    if (!itinerary) {
+      throw new Error("Itinerary not found");
+    }
+    if(Interested){
+      await Itinerary.updateOne(
+        { _id: itineraryId },
+        { $push: { InterestedUsers: { user_id: tourist._id.toString() } } }
+      );
+    }
+    else{
+      await Itinerary.updateOne(
+        { _id: itineraryId },
+        { $pull: { InterestedUsers: { user_id: tourist._id.toString() } } }
+      );
+    }
+  }
+  catch (err) {
+    throw err;
+  }
+}
+
+export async function getTouristUsername(userId: string) {
+  try {
+    const tourist = await touristModel.findById(userId);
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    return tourist.username;
+  }
+  catch (err) {
+    throw err;
+  }
+
+}
+
+
+
+
 module.exports = {
   getAll,
+  getTouristUsername,
   getTouristBookings,
   gettouristComplaints,
   getTouristUpcoming,
@@ -385,4 +434,7 @@ module.exports = {
   editAddress,
   deleteAddress,
   updateUserWallet,
+  updateInterested
 };
+
+

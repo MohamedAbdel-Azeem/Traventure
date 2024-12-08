@@ -8,6 +8,30 @@
   background-color: #f9f9f9;
 }
 
+body {
+  background-image: url("./assets/mtn2.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 10px;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed; 
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh; 
+  background-color: rgba(255, 255, 255, 0.2); 
+  z-index: -1;
+}
+
 /* Button styling */
 .btn,
 .login-btn {
@@ -843,13 +867,13 @@
 
 .shareBtn .social-link {
   display: inline-block;
-  margin: 0 5px; 
+  margin: 0 5px;
 }
 
 .shareBtn .social-link svg {
   text-shadow: 1px 1px rgba(31, 74, 121, 0.7);
   transform: scale(1);
-  transition: transform 0.4s linear; 
+  transition: transform 0.4s linear;
 }
 
 .shareBtn .social-link:hover svg {
@@ -929,7 +953,7 @@
   fill: #8b8d8b;
   stroke: white;
   stroke-width: 2px;
-  transition: transform 0.3s ease-in-out, fill 0.3s ease-in-out; 
+  transition: transform 0.3s ease-in-out, fill 0.3s ease-in-out;
 }
 
 .archiveBtn svg .togrow2 {
@@ -1026,11 +1050,11 @@
   transition: all 0.2s;
   transform-origin: bottom;
 }
-.saveBtn svg .tomove{
+.saveBtn svg .tomove {
   transform: translateX(34px);
   transition: transform 0.3s ease-in-out;
 }
-.saveBtn:hover svg .tomove{
+.saveBtn:hover svg .tomove {
   transform: translateX(0px);
   transition: transform 0.3s ease-in-out;
 }

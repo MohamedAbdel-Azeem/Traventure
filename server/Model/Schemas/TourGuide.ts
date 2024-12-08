@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { ITourGuide } from "../../Interfaces/Users/ITourGuide";
+import { read } from "fs";
 const Schema = mongoose.Schema;
 const tourGuideSchema = new Schema({
   username: { type: String, required: true, unique: true },
@@ -35,7 +36,17 @@ const tourGuideSchema = new Schema({
       createdAt: { type: Date, default: Date.now },
     },
   ],
+  notifications: [
+    {
+      message: { type: String, required: true },
+      sent_by_mail: { type: Boolean, default: false },
+      read: { type: Boolean, default: false },
+      createdAt: { type: Date, default: Date.now },
+    },
+  ],
+
   timeStamp: { type: Date, required: true, default: Date.now },
+
 });
 
 export default mongoose.model<ITourGuide>("TourGuide", tourGuideSchema);
