@@ -117,7 +117,7 @@ const GuestDashboard = () => {
             <div className="flex gap-6 items-start">
               {locations.length > 0 ? (
                 locations.map((location) => (
-                  <div key={location._id} className="min-w-[600px]">
+                  <div key={location._id} className="min-w-[600px] mb-5">
                     <LocationCardTourist id={String(location._id)} wholeLocation={location} />
                   </div>
                 ))
@@ -146,7 +146,7 @@ const GuestDashboard = () => {
             Get ready for exciting activities for your journey.
           </p>
           <div className="overflow-x-auto">
-            <div className="flex gap-6 items-start">
+            <div className="flex gap-6 items-start mb-5">
               {activities.length > 0 ? (
                 activities.map((activity) => (
                   <ActivityCardTourist

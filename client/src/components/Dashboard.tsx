@@ -155,7 +155,7 @@ const Dashboard: React.FC = () => {
             <div className="flex gap-6 items-start">
               {locations.length > 0 ? (
                 locations.map((location) => (
-                  <div key={location._id} className="min-w-[600px]">
+                  <div key={location._id} className="min-w-[600px] mb-5">
                     <LocationCardTourist
                       id={String(location._id)}
                       wholeLocation={location}
@@ -191,7 +191,7 @@ const Dashboard: React.FC = () => {
             Get ready for exciting activities for your journey.
           </p>
           <div className="overflow-x-auto">
-            <div className="flex gap-6 items-start">
+            <div className="flex gap-6 items-start mb-5">
               {tourist_activities.length > 0 ? (
                 tourist_activities.map((activity) => (
                   <ActivityCardTourist
