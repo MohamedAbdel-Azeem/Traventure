@@ -39,15 +39,16 @@ const GuestDashboard = () => {
   return (
     <>
       {/* Page Header */}
-      <header className="bg-gradient-to-r from-purple-500 via-blue-500 to-teal-500 py-6 min-h-[180px] text-center rounded-b-2xl shadow-lg">
-  <h1 className="text-3xl font-extrabold text-white drop-shadow-md">
+      <Slideshow items={slideshowItems} />
+      <header className="bg-gradient-to-r from-purple-500 via-blue-500 to-teal-500 py-6 min-h-[180px] text-center rounded-b-2xl shadow-lg mb-5">
+      <h1 className="text-3xl font-extrabold text-white drop-shadow-md">
     Welcome, Guest!
   </h1>
   <p className="mt-2 text-base text-white opacity-90">
     Sign in to explore the full features of the website.
   </p>
 </header>
-      <Slideshow items={slideshowItems} />
+      
 
       <hr></hr>
 

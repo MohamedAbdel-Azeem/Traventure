@@ -86,7 +86,8 @@ const Dashboard: React.FC = () => {
   return (
     <>
       {/* Page Header */}
-     <header className="bg-gradient-to-r from-purple-500 via-blue-500 to-teal-500 py-6 min-h-[180px] text-center rounded-b-2xl shadow-lg">
+        <Slideshow items={slideshowItems} />
+     <header className="bg-gradient-to-r from-purple-500 via-blue-500 to-teal-500 py-6 min-h-[180px] text-center rounded-b-2xl shadow-lg mb-5">
   <h1 className="text-3xl font-extrabold text-white drop-shadow-md">
     Welcome Back, {currentuser}!
   </h1>
@@ -94,7 +95,7 @@ const Dashboard: React.FC = () => {
     Plan your next adventure with ease. Check upcoming itineraries, places, and activities all in one place.
   </p>
 </header>
-      <Slideshow items={slideshowItems} />
+    
 
       <hr></hr>
 
