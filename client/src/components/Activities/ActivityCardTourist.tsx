@@ -20,12 +20,12 @@ import { updateActivity } from "../../custom_hooks/activities/updateActivity";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import BookmarkIcon from '@mui/icons-material/BookmarkAdd';
-import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
-import ClipLoader from 'react-spinners/ClipLoader';
-import BlockIcon from '@mui/icons-material/Block';
-import PriceCheckIcon from '@mui/icons-material/PriceCheck';
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import BookmarkIcon from "@mui/icons-material/BookmarkAdd";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import ClipLoader from "react-spinners/ClipLoader";
+import BlockIcon from "@mui/icons-material/Block";
+import PriceCheckIcon from "@mui/icons-material/PriceCheck";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import TheBIGMAP from "../Maps/TheBIGMAP";
 
@@ -80,9 +80,8 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
   const [inappropriate, setInappropriate] = useState(activity.inappropriate);
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);
 
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   const handleViewMap = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
@@ -139,21 +138,6 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
   };
   const alltags = handleTagsText;
 
-  const handleBooking = async (activity_id: string) => {
-    try {
-      await bookActivity(
-        activity_id,
-        username,
-        activity.Price,
-        activity.SpecialDiscount,
-        "",
-        "wallet"
-      );
-    } catch (error) {
-      console.error("Error booking activity:", error);
-    }
-  };
-
   const handleBookMark = async (activity_id: string) => {
     try {
       await bookmarkActivity(currentuser, activity_id);
@@ -188,6 +172,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
     )}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
   };
 
+  const currentpath = useLocation().pathname.split("/")[5];
   if (tagsLoading || CatLoading) {
     return <div>loading</div>;
   }
@@ -294,7 +279,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
             <div className="text-gray-700 flex items-center gap-2">
               <ConfirmationNumberIcon className="text-green-500" />
               <div>
-                <p className="font-bold text-lg">
+                <p className="font-bold text-lg flex mb-0">
                   {currentCurrency} {(activity.Price * exchangeRate).toFixed(2)}
                 </p>
               </div>
@@ -304,8 +289,8 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
             <div className="text-gray-700 flex items-center gap-2">
               <LocalOfferIcon className="text-red-500" />
               <div>
-                <p className="font-bold text-lg">
-                  {currentCurrency}{" "}
+                <p className="font-bold text-lg mb-0">
+                  {currentCurrency}
                   {(activity.SpecialDiscount * exchangeRate).toFixed(2)}
                 </p>
               </div>
@@ -346,57 +331,60 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
         </div>
 
         {/* View Map, Bookmark, and Book Buttons Section */}
-        {false?<></>: <div className="mt-4 flex justify-center gap-4 px-6 py-4">
-          {/* View Map Button */}
-          <button
-            onClick={handleViewMap}
-            className="px-4 py-2 bg-purple-500 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition-all duration-300"
-          >
-            View Map
-          </button>
-
-          {/* Bookmark Button */}
-          {currenttype === "tourist" && (
-            <div className="flex gap-4">
-              {!isBookmarked && (
-                <button
-                  className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600"
-                  title="Bookmark"
-                  onClick={() => handleBookMark(activity._id)}
-                >
-                  {loadingBookmark ? (
-                    <ClipLoader size={30} color="#ffffff" />
-                  ) : (
-                    <BookmarkIcon />
-                  )}
-                </button>
-              )}
-              {isBookmarked && currpath !== "bookmarks" && (
-                <button
-                  className="bg-purple-800 text-white px-4 py-2 rounded-lg"
-                  disabled
-                >
-                  <BookmarkAddedIcon />
-                </button>
-              )}
-            </div>
-          )}
-
-          {/* Book Button */}
-          {currenttype === "tourist" && (
+        {currentpath ? (
+          <></>
+        ) : (
+          <div className="mt-4 flex justify-center gap-4 px-6 py-4">
+            {/* View Map Button */}
             <button
-              className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600"
-              onClick={() =>
-                navigate(
-                  `/tourist/${username}/activity/${activity._id}/eventcheckout`
-                )
-              }
+              onClick={handleViewMap}
+              className="px-4 py-2 bg-purple-500 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition-all duration-300"
             >
-              {loading ? <ClipLoader size={30} color="#ffffff" /> : "Book"}
+              View Map
             </button>
-          )}
-        </div>}
-       
+
+            {/* Bookmark Button */}
+            {currenttype === "tourist" && (
+              <div className="flex gap-4">
+                {!isBookmarked && (
+                  <button
+                    className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600"
+                    title="Bookmark"
+                    onClick={() => handleBookMark(activity._id)}
+                  >
+                    {loadingBookmark ? (
+                      <ClipLoader size={30} color="#ffffff" />
+                    ) : (
+                      <BookmarkIcon />
+                    )}
+                  </button>
+                )}
+                {isBookmarked && currpath !== "bookmarks" && (
+                  <button
+                    className="bg-purple-800 text-white px-4 py-2 rounded-lg"
+                    disabled
+                  >
+                    <BookmarkAddedIcon />
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* Book Button */}
+            {currenttype === "tourist" && activity.BookingIsOpen && (
+              <button
+                className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600"
+                onClick={() =>
+                  navigate(
+                    `/tourist/${username}/activity/${activity._id}/eventcheckout`
+                  )
+                }
+              >
+                {loading ? <ClipLoader size={30} color="#ffffff" /> : "Book"}
+              </button>
+            )}
+          </div>
+        )}
 
         {/* Map Modal */}
         {isModalOpen && (
@@ -424,8 +412,6 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
       </div>
     </div>
   );
-  
-  
 };
 
 export default ActivityCardTourist;
