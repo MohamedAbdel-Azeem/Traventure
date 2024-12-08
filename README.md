@@ -1063,7 +1063,7 @@ Here are examples of testing one of our endpoints using Postman:
 
 - Add a `.env` in the `client` and `server`
 
-- `Backend env`
+ `Backend env`
 ```bash
 
 MONGODB_URI="Your Mongo Connection String"
@@ -1073,7 +1073,7 @@ GMAIL_PASSWORD="your gmail password"
 GMAIL_ADDRESS="your gmail address"
 ```
 
-- `Frontend env`
+ `Frontend env`
 
 ```bash
 VITE_API_URL="Currnecy API Key"
