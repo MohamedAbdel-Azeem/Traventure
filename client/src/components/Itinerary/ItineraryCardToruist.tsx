@@ -62,7 +62,6 @@ interface ItineraryCardCRUDProps {
   bookingActivated: boolean;
   inappropriate: boolean;
   bookmarked?: boolean;
-  interested?: boolean;
 }
 
 const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
@@ -83,7 +82,6 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   bookingActivated,
   inappropriate,
   bookmarked,
-  interested
 }) => {
 
   const { bookItinerary, data, loading, error } = useBookItinerary();
@@ -93,7 +91,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   const currpath = useLocation().pathname.split("/")[3];
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);
 
-  const [isInterested, setIsInterested] = useState(interested);
+  const [isInterested, setIsInterested] = useState(false);
 
 
   const handleInterested = async (id: string) => {
