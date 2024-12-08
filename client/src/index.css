@@ -8,6 +8,30 @@
   background-color: #f9f9f9;
 }
 
+body {
+  background-image: url("./assets/mtn2.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 10px;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed; 
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh; 
+  background-color: rgba(255, 255, 255, 0.2); 
+  z-index: -1;
+}
+
 /* Button styling */
 .btn,
 .login-btn {
