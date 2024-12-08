@@ -173,12 +173,29 @@ const MoreItineraries: React.FC = () => {
 
   return (
     <div className="flex">
-      <div className="w-full mt-[20px]">
+      <div className="w-full">
       <center>
-      <h1 className="text-4xl font-bold mb-4 mx-auto text-white animate-bounce" style={{ textShadow: "2px 2px 5px rgba(0, 0, 0, 0.7)" }}>
-  All Itineraries
-</h1>
 
+  <header className="bg-gradient-to-r from-purple-600 via-blue-600 to-purple-600 py-16 min-h-[200px] text-center rounded-b-3xl shadow-2xl mb-8 relative overflow-hidden">
+  <div className="absolute top-0 left-0 w-24 h-24 bg-white/25 rounded-full blur-3xl opacity-40 animate-pulse"></div>
+  <div className="absolute bottom-0 right-0 w-40 h-40 bg-pink-400/25 rounded-full blur-3xl opacity-50 animate-pulse"></div>
+
+  {/* Title */}
+  <h1 
+    className="text-5xl font-extrabold text-white relative" 
+    style={{
+      textShadow: "2px 2px 10px rgba(0, 0, 0, 0.7)", 
+      WebkitTextStroke: "1px black"
+    }}
+  >
+    Upcoming Itineraries
+  </h1>
+
+  {/* Subtitle */}
+  <p className="mt-6 text-xl text-white/90">
+    Explore and plan your next adventure with these upcoming itineraries.
+  </p>
+</header>
 
 
 
