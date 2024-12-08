@@ -6,18 +6,15 @@ import purchase, {
 import mongoose, { model } from "mongoose";
 import ProductModel, { IProduct } from "../Schemas/Product";
 import PromoCodes from "../Schemas/PromoCodes";
+import Tourist from "../Schemas/Tourist";
 
 export async function addPurchase(purchaseData: IPurchase) {
   try {
-    const totalAmount = await getPurchaseTotalAmount(purchaseData);
-    purchaseData["totalAmount"] = totalAmount;
-
     const promoCode = await PromoCodes.findOne({
       name: purchaseData.promoCode,
     });
 
     if (promoCode && !promoCode.used) {
-      purchaseData["totalAmount"] *= 0.9;
       promoCode.used = true;
     }
     const resultPurchase = await purchase.create(purchaseData);
@@ -49,6 +46,12 @@ export async function getPurchaseTotalAmount(purchaseData: IPurchase) {
       if (product) {
         totalAmount += product.price * purchased_product.quantity;
       }
+    }
+    const promoCode = await PromoCodes.findOne({
+      name: purchaseData.promoCode,
+    });
+    if (promoCode && !promoCode.used) {
+      totalAmount *= 0.9;
     }
     return totalAmount;
   } catch (error) {
@@ -369,6 +372,30 @@ export async function DeliverPurchase(purchaseId: string) {
   }
 }
 
+export async function handlePayment(
+  paymentMethod: string,
+  totalAmount: number,
+  touristUsername: string
+) {
+  try {
+    if (paymentMethod == "wallet") {
+      const tourist = await Tourist.findOne({ username: touristUsername });
+      if (!tourist) throw new Error("Tourist not found");
+      if (tourist.wallet < totalAmount) throw new Error("Insufficient funds");
+      tourist.wallet -= totalAmount;
+      await tourist.save();
+    }
+    if (paymentMethod == "card") {
+      return;
+    }
+    if (paymentMethod == "cod") {
+      return;
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   addPurchase,
   getTouristPurchases,
@@ -380,4 +407,5 @@ module.exports = {
   DeliverPurchase,
   getSellerRevenue,
   getExternalSellerRevenue,
+  handlePayment,
 };

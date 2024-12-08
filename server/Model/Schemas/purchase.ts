@@ -14,6 +14,12 @@ export enum PurchaseStatus {
   cancelled = "cancelled",
 }
 
+export enum PaymentMethod {
+  wallet = "wallet",
+  card = "card",
+  cod = "cod",
+}
+
 export interface IPurchase {
   touristUsername: mongoose.Types.ObjectId;
   cart: IPurchasedProduct[];
@@ -21,6 +27,7 @@ export interface IPurchase {
   status?: PurchaseStatus;
   totalAmount?: number;
   promoCode?: string;
+  paymentMethod: PaymentMethod;
 }
 
 const purchaseSchema = new schema({
@@ -36,6 +43,7 @@ const purchaseSchema = new schema({
     },
   ],
   timeStamp: { type: Date, required: true, default: Date.now },
+  paymentMethod: { type: String, required: true },
   status: { type: String, required: true, default: PurchaseStatus.processing },
   address: {
     latitude: { type: Number, required: true },

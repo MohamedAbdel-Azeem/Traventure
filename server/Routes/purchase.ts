@@ -10,6 +10,7 @@ import {
   cancelPurchase,
   getSellerRevenue,
   getExternalSellerRevenue,
+  handlePayment,
 } from "../Model/Queries/purchase_queries";
 import {
   getProduct,
@@ -22,7 +23,7 @@ const router = Router();
 
 router.post("/buy", async (req: Request, res: Response) => {
   try {
-    const { touristUsername, cart, promoCode } = req.body;
+    const { touristUsername, cart, promoCode, paymentMethod } = req.body; // payment Method is either Wallet , Card or COD
     const tourist = await Tourist.findOne({ username: touristUsername });
     if (!tourist) return res.status(404).send("Tourist not found");
     for (const singleProduct of cart) {
@@ -37,22 +38,27 @@ router.post("/buy", async (req: Request, res: Response) => {
       }
     }
 
-    for (const singleProduct of cart) {
-      await decrementProductQuantity(
-        singleProduct.productId,
-        singleProduct.quantity
-      );
-    }
-    const body = { touristUsername, cart } as IPurchase;
+    const body = { touristUsername, cart, paymentMethod } as IPurchase;
 
     if (promoCode) {
       body.promoCode = promoCode;
     }
 
-    const purchase = await addPurchase(body);
-    const totalAmount = await getPurchaseTotalAmount(body);
+    body.totalAmount = await getPurchaseTotalAmount(cart);
 
-    return res.status(200).send(purchase);
+    try {
+      await handlePayment(paymentMethod, body.totalAmount, touristUsername);
+      const purchase = await addPurchase(body);
+      for (const singleProduct of cart) {
+        await decrementProductQuantity(
+          singleProduct.productId,
+          singleProduct.quantity
+        );
+      }
+      return res.status(200).send(purchase);
+    } catch (error) {
+      return res.status(500).send(error);
+    }
   } catch (error) {
     return res.status(500).send(error);
   }
