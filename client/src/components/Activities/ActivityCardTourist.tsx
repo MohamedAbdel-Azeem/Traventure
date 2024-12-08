@@ -26,6 +26,13 @@ import BookmarkIcon from '@mui/icons-material/BookmarkAdd';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import ClipLoader from 'react-spinners/ClipLoader';
 import BlockIcon from '@mui/icons-material/Block';
+import PriceCheckIcon from '@mui/icons-material/PriceCheck';
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
+
+
+
+
 import TheBIGMAP from "../Maps/TheBIGMAP";
 
 export type Activity = {
@@ -286,23 +293,33 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
           </div>
         </div>
   
-        {/* Price & Date Section */}
-        <div className="px-6 py-4">
-          <div className="flex justify-between border-t pt-4">
-            <div className="text-gray-700">
-              <p>Price:</p>
-              <p className="font-bold">
-                {currentCurrency} {(activity.Price * exchangeRate).toFixed(2)}
-              </p>
-            </div>
-            <div className="text-gray-700">
-              <p>Special Discount:</p>
-              <p className="font-bold">
-                {currentCurrency} {(activity.SpecialDiscount * exchangeRate).toFixed(2)}
-              </p>
-            </div>
-          </div>
-        </div>
+{/* Price & Date Section */}
+
+<div className="px-6 py-4">
+  <div className="flex justify-between border-t pt-4">
+
+    {/* Price Section */}
+    <div className="text-gray-700 flex items-center gap-2">
+      <ConfirmationNumberIcon className="text-green-500" />
+      <div>
+        <p className="font-bold text-lg">
+          {currentCurrency} {(activity.Price * exchangeRate).toFixed(2)}
+        </p>
+      </div>
+    </div>
+
+    {/* Special Discount Section */}
+    <div className="text-gray-700 flex items-center gap-2">
+      <LocalOfferIcon className="text-red-500" />
+      <div>
+        <p className="font-bold text-lg">
+          {currentCurrency} {(activity.SpecialDiscount * exchangeRate).toFixed(2)}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
   
         {/* Tag Section */}
         <div className="px-6 py-4">
