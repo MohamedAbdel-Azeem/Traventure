@@ -219,7 +219,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
         </Box>
       </Modal>
   
-      <div className="w-[400px] bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="w-[400px] bg-gray-100 rounded-lg shadow-lg overflow-hidden">
     
 {/* Booking Status & Title Section */}
 <div className="bg-white-100 p-4">
