@@ -763,9 +763,13 @@ npm run setup
 <summary> Advertiser Endpoint </summary>
 
 `POST /add`  -create a new advertiser
+
 `GET /:username`  -get an advertiser by username
+
 `PATCH /update/:username`  -change username of a user
+
 `GET /revenue/:username`   -get revenue of a certain advertiser
+
 `GET /numstats/:username`  -get statistics of a certain advertiser
 </details> 
 
@@ -777,6 +781,7 @@ npm run setup
 
 <details>
 <summary>Booking Endpoint</summary>
+
 `POST /add`  -Create a new booking
 
 `GET /:username`   -Get all bookings of a user
@@ -795,16 +800,22 @@ npm run setup
 <summary>Category Endpoint</summary>
 
 `POST /add`  -Create a new category
+
 `GET /`   -Get all categories
+
 `DELETE /delete/:id`   -Delete a category by ID
+
 `PUT /update/:id`   -Update a category by ID
+
 </details>
 
 <details>
 <summary>ChangePassword Endpoint</summary>
 
 `PATCH /changePassword`   -Updates a user's password
+
 </details>
+
 
 <details>
  <summary>Complaint Endpoint</summary>
@@ -816,11 +827,14 @@ npm run setup
 `GET /`  -Get all complaints
 
 `GET /:complaintID`   -Get a complaint by its ID
+
 </details>
 
 <details>
 <summary>Current_user Endpoint</summary>
+
 `GET /me/:username` -Get the current user's username
+
 </details>
 
 <details>
@@ -839,21 +853,26 @@ npm run setup
 `GET /showActivityReviews/:ActivityId`  -Gets reviews of a certain activity by its ID
 
 `GET /showItineraryReviews/:itineraryId` -Gets reviews of a certain itinerary by its ID
+
 </details>
 
 <details>
 <summary> Governer Endpoint</summary>
 
 `POST /add/HistoricalTag`  -Adds  new historical tag
+
 </details>
 
 <details>
 <summary>historicalTags Endpoint</summary>
+
 `POST /add`  -Creates a new historical tag
+
 </details>
 
 <details>
 <summary> Itinerary Endpoint </summary>
+
 `POST /add`  -Creates a new itinerary
 
 `GET /`  -Gets all itineraries
@@ -869,10 +888,12 @@ npm run setup
 `PATCH /toggleActivation/:id`  -toggles the activation status of an itinerary by its ID
 
 `PATCH /toggleInappropriate/:id`  -toggles the "inappropriate" status of an itinerary based on its ID
+
 </details>
 
 <details>
 <summary> Places Endpoint</summary>
+
 `GET /`  -gets all places
 
 `GET /:id`  -gets a place by its ID
@@ -882,18 +903,26 @@ npm run setup
 `PATCH /update/:id` -updates a place based on its ID
 
 `DELETE /delete/:id`  -deletes a place
+
 </details>
+
 
 <details>
 <summary> preferenceTags Endpoint </summary>
+
 `POST /add`  -Adds a new preference tag
+
 `GET /`  -gets all preference tags
+
 `DELETE /delete/:id`  -deletes a preference tag by its ID
+
 `PUT /update/:id`  -updates a preference tag by its ID
+
 </details>
 
 <details>
 <summary> Product Endpoint </summary>
+
 `POST /add` -Adds a new product
 
 `GET /`  -gets all products
@@ -903,17 +932,21 @@ npm run setup
 `PATCH /archive/:id`  -Archives a product based on its ID
 
 `PATCH /feedback/:productid`  -Updates feedback for a product based on its ID
+
 </details>
 
 <details>
 <summary> PromoCodes Endpoint </summary>
+
 `GET /use/:name`  -uses promo code by its name
 
 `GET /check/:name`  -checks if promo code is still in use by its name
+
 </details>
 
 <details>
 <summary> purchase Endpoint </summary>
+
 `POST /buy`   -Adds product to user's cart
 
 `GET /tourist/:touristUsername`  -Gets all the purchases made by a specific tourist
@@ -923,6 +956,7 @@ npm run setup
 `POST /deliver`  -Marks a purchase as delivered
 
 `POST /cancel`  -Used to cancel a purchase
+
 </details>
 
 
@@ -930,22 +964,27 @@ npm run setup
 <summary> RequestDelete Endpoint </summary>
 
 `DELETE /deleterequestdelete`   -Deletes a user's account deletion request
+
 </details>
 
 <details>
 <summary> ReviewDoc Endpoint </summary>
+
 `GET /pendingusers`   -gets all pending users
 
 `PATCH /acceptuser`   -updates the status of a user whether accepted or rejected
+
 </details>
 
 <details>
 <summary> Seller Endpoint </summary>
+
 `POST /add`  -create a new seller user
 
 `GET /:username`  -Gets a certain seller
 
 `PATCH /update/:username`  -Update a certain seller by his username
+
 </details>
 
 <details>
@@ -960,10 +999,12 @@ npm run setup
 `GET /revenue/:username`  -get revenues of a tourguide by his username
 
 `GET "/userstats/:username`  -get stats of users interacting with a tourguide's itinerary
+
 </details>
 
 <details>
 <summary> Tourist Endpoint </summary>
+
 `POST /add`  -create a new tourist user
 
 `GET /upcoming` -get all upcoming activities
@@ -995,6 +1036,7 @@ npm run setup
 `GET /skipTutorial/:username` -gets the status of whether a specific tourist has skipped a tutorial
 
 `PATCH /skipTutorial/:username`  -allows a user to mark their tutorial as "skipped".
+
 </details>
 
 ---
@@ -1007,6 +1049,7 @@ Here are examples of testing one of our endpoints using Postman:
 [Tests Postman Collection](https://elements.getpostman.com/redirect?entityId=39534055-d77464fa-685e-400b-9b78-dfb9e3c907c4&entityType=collection)  
 
 ![Adding a new admin user 1](client/src/assets/addnewadmintest.png)  
+
 ![Getting count of users](client/src/assets/getcountuserstest.png)
 
 ---
