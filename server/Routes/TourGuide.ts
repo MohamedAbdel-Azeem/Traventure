@@ -15,6 +15,7 @@ import tourguidemodel from "../Model/Schemas/TourGuide";
 import { ITourGuide } from "../Interfaces/Users/ITourGuide";
 import { tourGuideUpdateValidator } from "../utils/express-validator/TourguideValidator";
 import {
+  toggleItineraryAllowBooking,
   tourguideItenRevenue,
   tourguideItenUsers,
 } from "../Model/Queries/itinerary_queries";
@@ -107,6 +108,17 @@ router.get("/userstats/:username", async (req: Request, res: Response) => {
     res.status(200).send(users);
   } catch (err) {
     res.status(500).send("error getting users");
+  }
+});
+
+router.patch("/toggleAllowBooking", async (req: Request, res: Response) => {
+  try {
+    const itineraryId = req.body.itineraryId;
+    toggleItineraryAllowBooking(itineraryId);
+
+  }
+  catch (err) {
+    res.status(500).send("error updating user profile");
   }
 });
 

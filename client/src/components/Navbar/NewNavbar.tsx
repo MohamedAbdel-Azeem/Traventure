@@ -1,6 +1,7 @@
 import React, { useState, useEffect ,useRef} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import moment from 'moment';
+
 import {
   AppBar,
   Box,
@@ -43,6 +44,8 @@ import HotelIcon from "@mui/icons-material/Hotel";
 import FlightIcon from "@mui/icons-material/Flight";
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import { set } from "date-fns";
+import { patchMarkAllAsRead } from "../../custom_hooks/notifications/markAllAsRead";
+import { patchMarkAsRead } from "../../custom_hooks/notifications/markAsRead";
 
 const drawerHeight = 64;
 
@@ -74,6 +77,8 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
       setUnreadNotifications(unreadNotifications)
       setUnreadCount(unreadNotifications.length);
       setNotifications(cuserdata.notifications);
+      console.log("userrrrrrrIddddd",cuserdata._id);
+      console.log("userrrrrrrType",currentusertype);
     }
   }, [cuserdata]);
   
@@ -81,6 +86,27 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   const OpenShowAllPopUp = () => {
     setShowAllPopup(true);
   }
+
+  const markAllAsRead = async () => {
+    try {
+      // Update local state to reflect the changes
+      if (cuserdata) {
+        cuserdata.notifications.forEach((notification) => {
+          notification.read = true;
+        });
+        setUnreadCount(0);
+      }
+
+      await patchMarkAllAsRead({
+        username: currentuser,
+        userType: currentusertype,
+      });
+      
+    } catch (error) {
+      console.error('Error marking all notifications as read:', error);
+    }
+  };
+
   const handlePasswordChangeSubmit = (data: AddContactLeadFormType) => {
     const { oldPassword, newPassword } = data;
     editpassword(currentuser, oldPassword, newPassword)
@@ -165,6 +191,7 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
       path: `/tourismgovernor/${currentuser}/historicaltags`,
     },
   ];
+ 
 
   const touristnavbaritems = [
     { text: "Home", icon: <HomeIcon />, path: `/tourist/${currentuser}` },
@@ -290,10 +317,22 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
     setNotificationPopUpVisible(false);
     setShowAllPopup(false);
   }
-  const handleNotificationClick = (notification:any) => {
+  const handleNotificationClick = async (notification:any) => {
+    notification.read = true;
+    unreadNotifications.splice(unreadNotifications.indexOf(notification), 1);
+    setUnreadCount(unreadCount - 1);
+    try{
+      await patchMarkAsRead({
+        username: currentuser,
+        userType: currentusertype,
+        notificationId: notification._id,
+      });
+    }catch(error){
+      console.error('Error marking notification as read:', error);
+    }
     // markAsRead(notification);
     // navigate(`/notifications/${notification.id}`);
-  }
+  };
 
   const NotificationItem = ({ notification}) => (
 
@@ -504,7 +543,31 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
           </span>
         )}
 
+<style jsx>{`
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 8px;
+    }
 
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #a855f7;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #00FFA3;
+
+      border-radius: 10px;
+      border: 2px solid #ff00000;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-button {
+      display: none;
+    }
+
+    .custom-scrollbar {
+      scrollbar-width: thin;
+      scrollbar-color: white #6d28d9;
+    }
+  `}</style>
       <Fade in={notificationPopUpVisible} timeout={200}>
               
               
@@ -514,9 +577,10 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   <div>          
           <h3 className="text-sm font-semibold mb-2 text-center text-white">Notifications</h3>
 
+          
 
 {unreadCount > 0 ? (
-               <ul className="space-y-2">
+               <ul className="space-y-2 max-h-[50vh] overflow-y-auto custom-scrollbar">
                {unreadNotifications.map((notification) => (
                  <NotificationItem  notification={notification}/>
                 ))}
@@ -528,7 +592,7 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
           {/* Buttons */}
           <div className="flex justify-between mt-4">
             <button
-              // onClick={markAllAsRead}
+              onClick={markAllAsRead}
               className="text-white text-sm font-semibold hover:underline"
             >
               Mark all as read

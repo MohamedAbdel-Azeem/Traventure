@@ -42,6 +42,10 @@ interface Itinerary {
   accesibility: boolean;
   bookingActivated: boolean;
   inappropriate: boolean;
+  allowBooking: boolean;
+  InterestedUsers: {
+    user_id?: TouristProfileData;
+  }[];
 }
 
 export default Itinerary;

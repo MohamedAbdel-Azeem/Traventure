@@ -26,6 +26,8 @@ import {
   getPromoCodeUsed,
   setPromoCodeUsed,
   updateUserWallet,
+  updateInterested,
+  getTouristUsername,
 } from "../Model/Queries/tourist_queries";
 const router = Router();
 
@@ -48,6 +50,17 @@ router.post(
   }
 );
 
+router.get("/:id", async (req: Request, res: Response) => {
+  try{
+    const username = await getTouristUsername(req.params.id);
+    res.status(200).send(username);
+  }
+  catch(err){
+    res.status(500).send("error getting username");
+  }
+
+
+});
 
 router.get("/upcoming", async (req: Request, res: Response) => {
   try {
@@ -205,6 +218,18 @@ router.patch("/promo_code/use/:username", async (req: Request, res: Response) =>
     const username = req.params.username;
     await setPromoCodeUsed(username);
     res.status(200).send("Promo code used");
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+});
+
+router.patch("/interested", async (req: Request, res: Response) => {
+  try {
+    const username = req.body.username;
+    const itineraryId = req.body.itineraryId;
+    const interested = req.body.interested;
+    await updateInterested(username, itineraryId, interested);
+      res.status(200).send("Interest updated");
   } catch (error: any) {
     res.status(500).send(error.message);
   }

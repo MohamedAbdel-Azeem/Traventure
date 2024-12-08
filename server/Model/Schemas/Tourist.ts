@@ -23,6 +23,12 @@ export interface ITourist extends Document {
   bookmarkedItineraries: mongoose.Types.ObjectId[];
   wishlisted_products: mongoose.Types.ObjectId[];
   promo_sent?: boolean;
+  notifications: {
+    message: string;
+    sent_by_mail: boolean;
+    read: boolean;
+    createdAt: Date;
+  }[];
 }
 
 const touristSchema = new Schema({

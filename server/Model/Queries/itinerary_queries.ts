@@ -3,7 +3,9 @@ import Itinerary from "../Schemas/Itinerary";
 import TourGuide from "../Schemas/TourGuide";
 import { ItineraryDocument } from "../../Interfaces/IItinerary";
 import Booking from "../Schemas/Booking";
+
 import Tourist from "../Schemas/Tourist";
+import sendMail from "../../utils/functions/email_sender";
 interface Revenue {
   name: string;
   year: number;
@@ -125,6 +127,46 @@ export async function toggleItineraryActivation(itinerary_Id: string) {
     throw error;
   }
 }
+
+export async function toggleItineraryAllowBooking(itineraryId:string){
+  try {
+    const itinerary = await Itinerary.findById(itineraryId);
+    if (!itinerary) throw new Error("Itinerary not found");
+    //if the allowBooking was true
+    if(itinerary.allowBooking){
+      itinerary.allowBooking = false;
+    }
+    else{
+      
+      itinerary.allowBooking = true;
+      for (const userobj of itinerary.InterestedUsers) {
+        const user_id=userobj.user_id;
+        await Tourist.findByIdAndUpdate(user_id, {
+          $push: {
+        notifications: {
+          message: `Booking for itinerary ${itinerary.title} is now allowed`,
+          sent_by_mail: false,
+          read: false,
+          createdAt: new Date(),
+        },
+          },
+        });
+        console.log("userrrrrrrrr Idddddddiddidd",user_id);
+        const tourist = await Tourist.findById(user_id);
+        if(!tourist) throw new Error("Tourist not found");
+        sendMail(tourist.email, "Booking Allowed", `Hello ${tourist?.username}, \n\nBooking for itinerary ${itinerary.title} is now allowed`);
+      }
+
+    }
+
+}
+catch (error) {
+  throw error;
+}
+}
+
+
+
 export async function toggleItineraryInappropriate(itinerary_Id: string) {
   try {
     const itinerary = (await Itinerary.findById(

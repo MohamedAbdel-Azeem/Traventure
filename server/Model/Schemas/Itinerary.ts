@@ -78,5 +78,5 @@ const itinerarychema = new schema({
   
 });
 // ToDo: plan a way to do timeline
-export default mongoose.model("Itinerary", itinerarychema);
+export default mongoose.model<ItineraryDocument>("Itinerary", itinerarychema);
 

@@ -360,6 +360,7 @@ const MoreItineraries: React.FC = () => {
                       (bookmarkedItinerary) =>
                         bookmarkedItinerary._id === itinerary._id
                     )}
+                    allowBooking={itinerary.allowBooking}
                   />
                 ))
               ) : (

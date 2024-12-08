@@ -243,6 +243,84 @@ export async function getAllTourists() {
   }
 }
 
+
+export async function markNotificationAsRead(username: string,userType: string, notificationId: string) {
+  try {
+  let model: mongoose.Model<any>;
+  console.log("userType",userType);
+  switch (userType) {
+    case "advertiser":
+      model = advertiserModel;
+      break;
+    case "seller":
+      model = sellerModel;
+      break;
+    case "tourguide":
+      model = tourGuideModel;
+      break;
+    case "tourist":
+      model = touristModel;
+      break;
+    default:
+      throw new Error("Invalid user type");
+  }
+
+
+
+  await model.updateOne(
+    { username, 'notifications._id': notificationId },
+    { $set: { 'notifications.$.read': true } }
+  );
+
+  const user = await model.findOne({ username });
+  if (!user) throw new Error("User not found");
+  return user;
+
+  } catch (err) {
+    console.log("Error mark notification as Read",err);
+
+}
+}
+
+export async function markAllNotificationAsRead(username:string,userType:string){
+
+  try {
+    let model: mongoose.Model<any>;
+    switch (userType) {
+      case "advertiser":
+        model = advertiserModel;
+        break;
+      case "seller":
+        model = sellerModel;
+        break;
+      case "tourGuide":
+        model = tourGuideModel;
+        break;
+      case "tourist":
+        model = touristModel;
+        break;
+      default:
+        throw new Error("Invalid user type");
+    }
+    
+    await model.updateMany(
+      { username, 'notifications.read': false },
+      { $set: { 'notifications.$[elem].read': true } },
+      { arrayFilters: [{ 'elem.read': false }] }
+    );
+    const user = await model.findOne({ username });
+    if (!user) throw new Error("User not found");
+    return user;
+  
+    } catch (err) {
+      console.log("Error mark all notifications as Read");
+  
+  }
+
+
+
+}
+
 module.exports = {
   getprofileInfo,
   getAllUsers,
@@ -251,4 +329,6 @@ module.exports = {
   changePassword,
   getcurrentuser,
   getAllTourists,
+  markNotificationAsRead,
+  markAllNotificationAsRead
 };
