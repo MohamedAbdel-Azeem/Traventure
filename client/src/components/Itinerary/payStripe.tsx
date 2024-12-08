@@ -13,6 +13,8 @@ import axios from "axios";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useParams } from "react-router-dom";
 import { GetCurrentUser } from "../../custom_hooks/currentuser";
+import { SwapCalls } from "@mui/icons-material";
+import Swal from "sweetalert2";
 
 interface PayStripeProps {
   handleOpen: () => void;
@@ -55,7 +57,12 @@ export const PayStripe: React.FC<PayStripeProps> = ({
       name: name,
     });
     if (backendError) {
-      return;
+      Swal.fire({
+        icon: "error",
+        title: "Payment Failed",
+        text: "Error in payment",
+      });
+      handleClose();
     }
 
     const { error: stripeError, paymentIntent } =
@@ -70,8 +77,12 @@ export const PayStripe: React.FC<PayStripeProps> = ({
     console.log(elements.getElement(CardNumberElement));
     if (stripeError) {
       // Show error to your customer (e.g., insufficient funds)
-      
-      return;
+      Swal.fire({
+        icon: "error",
+        title: "Payment Failed",
+        text: "Error in payment",
+      });
+      handleClose();
     }
     if(paymentIntent?.status === "succeeded") {
       const items = [];
@@ -83,11 +94,23 @@ export const PayStripe: React.FC<PayStripeProps> = ({
         });
       }
 
-      await axios.post("/traventure/api/stripe/create-invoice", {
+      const mail = await axios.post("/traventure/api/stripe/create-invoice", {
         items: items,
         payment_method: paymentIntent.payment_method,
       });
-
+      if(mail.status === 200  ) {
+        Swal.fire({
+          icon: "success",
+          title: "Payment Successful",
+          text: "Invoice has been sent to your email",
+        });
+      }else{
+        Swal.fire({
+          icon: "error",
+          title: "Payment Failed",
+          text: "Error in payment",
+        });
+      }
       handleClose();
     }
     // Show a success message to your customer
@@ -132,26 +155,26 @@ export const PayStripe: React.FC<PayStripeProps> = ({
   return (
     open && (
       <Modal onClose={handleClose} open={open}>
-        <div className="bg-purple-600 rounded-lg shadow-xl max-w-md mx-auto p-6">
+        <div className="bg-purple-600 rounded-lg shadow-xl max-w-md mx-auto p-6 relative">
+            <button
+            onClick={handleClose}
+            className="absolute top-2 right-2 text-white bg-red-500 rounded p-1 hover:bg-red-600 transition w-8"
+            >
+            &times;
+            </button>
           <h2 className="text-lg font-semibold text-white mb-4 text-left">
         Enter Card Details
           </h2>
-            <div className="p-2 border border-gray-300 rounded-lg bg-gray-100">
-            <div className="flex justify-end">
-              <button onClick={handleClose} className="text-white">
-                X
-              </button>
-            </div>
-            
-            <CardElement className="mb-4" options={CARD_ELEMENT_OPTIONS} />
-            <input
-            type="text"
-            placeholder="Name on Card"
-            value={cardName}
-            onChange={(e) => setCardName(e.target.value)}
-            className="p-2 bg-gray-100 rounded-lg w-full focus:outline-none"
-            />
-            </div>
+          <div className="p-2 border border-gray-300 rounded-lg bg-gray-100">
+        <CardElement className="mb-4" options={CARD_ELEMENT_OPTIONS} />
+        <input
+          type="text"
+          placeholder="Name on Card"
+          value={cardName}
+          onChange={(e) => setCardName(e.target.value)}
+          className="p-2 bg-gray-100 rounded-lg w-full focus:outline-none"
+        />
+          </div>
           {/* Pay Button */}
           <div className="mt-6 flex justify-end">
         <button
@@ -159,7 +182,7 @@ export const PayStripe: React.FC<PayStripeProps> = ({
           className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition shadow-md"
           disabled={loading}
         >
-            {loading ? <ClipLoader size={20} color={"#fff"} /> : "Pay"}
+          {loading ? <ClipLoader size={20} color={"#fff"} /> : "Pay"}
         </button>
           </div>
         </div>
