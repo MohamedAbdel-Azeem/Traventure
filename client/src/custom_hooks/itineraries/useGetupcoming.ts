@@ -16,11 +16,13 @@ const useGetUpcoming = () => {
   useEffect(() => {
     async function fetchItinerary() {
       setLoading(true);
+      console.log("current user type: ",currenttype);
       try {
         let response;
         if (currenttype !== "tourist") {
           response = await axios.get(`/traventure/api/tourist/upcoming`);
         } else {
+          
           response = await axios.get(
             `/traventure/api/tourist/upcoming/${currentuser}`
           );
@@ -31,6 +33,7 @@ const useGetUpcoming = () => {
           setItinerary(newdata);
         }
       } catch (err) {
+        console.log("error in front: ",err);
         setError("Error fetching upcoming");
       } finally {
         setLoading(false);

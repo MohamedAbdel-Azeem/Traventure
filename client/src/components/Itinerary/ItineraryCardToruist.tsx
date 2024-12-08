@@ -102,7 +102,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);
 
   console.log("allowBooking:  ", allowBooking);
-  console.log("InterestedUsers:  ", InterestedUsers);
+  console.log("ititnerary title", title,"InterestedUsers:  ", InterestedUsers);
 
   useEffect(() => {
     const checkInterestedUsers = async () => {
@@ -205,12 +205,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
       });
     }
   };
-  console.log(
-    "title:  ",
-    title,
-    "Interested:  ",
-    InterestedUsers.some((user) => user.user_id?.username === username)
-  );
+ 
   const [inappropriateV, setActive] = useState(inappropriate);
   const [Interested, setInterested] = useState(
     !InterestedUsers.some((user) => user.user_id?.username === username)
@@ -241,10 +236,10 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
             {/* Interested Button */}
             <button
               className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600"
-              title={isInterested ? "Remove Interest" : "Interested"}
-              onClick={() => handleInterested(_id)}
+              title={Interested ? "Remove Interest" : "Interested"}
+              onClick={() => handleInterested()}
             >
-              {isInterested ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />}
+              {Interested ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />}
             </button>
 
             {/* Bookmark Button */}
@@ -388,11 +383,11 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
           </Button>
         )}
 
-        {currentType === "tourist" && allowBooking === false && (
+        {/* {currentType === "tourist" && allowBooking === false && (
           <Button onClick={handleInterested}>
             {Interested ? " Interested" : " Not Interested"}
           </Button>
-        )}
+        )} */}
       </div>
     </div>
   );

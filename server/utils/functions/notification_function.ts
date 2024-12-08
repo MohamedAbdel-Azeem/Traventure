@@ -17,7 +17,7 @@ async function handleSendNotificationsUpcomingEvents(){
             today.getMonth() === dayBeforeStartingDate.getMonth() &&
             today.getDate() === dayBeforeStartingDate.getDate()
         ) {
-            for(let i = 0; i < itinerary.booked_By.length; i++){
+            for(let i = 0; i < itinerary.InterestedUsers.length; i++){
                 try {
                     const tourist = await tourstModel.findById(itinerary.booked_By[i].user_id);
                     if (!tourist) throw new Error("Tourist not found");
@@ -30,7 +30,7 @@ async function handleSendNotificationsUpcomingEvents(){
                     });
                    
                     await tourist.save();
-                    sendMail(tourist.email, "Itinerary Reminder", `Hello ${tourist.username}, \n\nThis is a reminder that your itinerary ${itinerary.title} is starting tomorrow. \n\nEnjoy your trip!`);
+                    await sendMail(tourist.email, "Itinerary Reminder", `Hello ${tourist.username}, \n\nThis is a reminder that your itinerary ${itinerary.title} is starting tomorrow. \n\nEnjoy your trip!`);
                 } catch (error) {
                     console.error("Error sending notification to: ", itinerary.booked_By[i].user_id);
                     console.error(error);

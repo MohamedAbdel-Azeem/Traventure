@@ -55,6 +55,16 @@ router.post(
   }
 );
 
+router.get("/upcoming", async (req: Request, res: Response) => {
+  try {
+    const all = await getAll();
+    res.status(200).send(all);
+  } catch (error) {
+    console.log("error in fetching",error);
+    res.status(500).send("error getting upcoming activities");
+  }
+});
+
 router.get("/:id", async (req: Request, res: Response) => {
   try {
     const username = await getTouristUsername(req.params.id);
@@ -64,14 +74,7 @@ router.get("/:id", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/upcoming", async (req: Request, res: Response) => {
-  try {
-    const all = await getAll();
-    res.status(200).send(all);
-  } catch (error) {
-    res.status(500).send("error getting upcoming activities");
-  }
-});
+
 
 router.get("/:username", async (req: Request, res: Response) => {
   try {

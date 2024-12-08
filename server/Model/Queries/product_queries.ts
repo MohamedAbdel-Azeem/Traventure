@@ -249,4 +249,5 @@ module.exports = {
   addFeedback,
   getProductsWithWishList,
   getExternalProducts,
+  sendMailAndNotificationToSeller
 };

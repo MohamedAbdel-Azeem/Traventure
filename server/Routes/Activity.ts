@@ -15,6 +15,7 @@ import {
 } from "../Model/Queries/activity_queries";
 import Advertiser from "../Model/Schemas/Advertiser";
 import sendMail from "../utils/functions/email_sender";
+import { Console } from "console";
 const router = Router();
 
 router.post(
@@ -94,10 +95,12 @@ router.patch(
   async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
+      console.log("activityid",id);
       const updatedActivity = await toggleInappropriate(id);
       res.status(200).send(updatedActivity);
       await sendMailAndNotificationToAdvertiser(id);
     } catch (err) {
+      console.log("activity error",err);
       res.status(500).send("error updating activity");
     }
   }

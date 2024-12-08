@@ -107,7 +107,7 @@ export async function sendMailAndNotificationToAdvertiser(activityId: string){
     if(activity.inappropriate){
     const advertiser = await Advertiser.findById(activity.added_By);
     if (!advertiser) throw new Error("advertiser not found");
-
+      if(!activity.inappropriate){return;}
        // notify the Advertise that this activity is inappropriate
        await Advertiser.findByIdAndUpdate(activity.added_By, {
         $push: {
@@ -119,9 +119,11 @@ export async function sendMailAndNotificationToAdvertiser(activityId: string){
           },
         },
       });
+      
     sendMail(advertiser.email, "Activity Inappropriate", `Hello ${advertiser.username}, \n\nYour activity ${activity.Title} has been marked as inappropriate`);
   }
   } catch (error) {
+    console.log("activitshyyyyyyyyyyyyyyyyyyyyyy error",error);
       throw error;
     }
   }
@@ -273,4 +275,5 @@ module.exports = {
   toggleInappropriate,
   advertiserRevenue,
   advNumTourists,
+  sendMailAndNotificationToAdvertiser,
 };

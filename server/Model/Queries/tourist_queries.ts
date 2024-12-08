@@ -47,6 +47,7 @@ export async function getAll() {
 
     return { itineraries, activities, places };
   } catch (err) {
+    console.log("error in goowwa 5ales",err);
     throw err;
   }
 }

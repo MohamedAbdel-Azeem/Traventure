@@ -65,7 +65,6 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   const [isPasswordModalOpen, setPasswordModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const togglePopup = () => setIsOpen(!isOpen);
-  console.log(cuserdata?.notifications);
   const [notifications, setNotifications] = useState([]);
   const [unreadNotifications, setUnreadNotifications] = useState([]);
   const [notificationPopUpVisible, setNotificationPopUpVisible] =
@@ -74,6 +73,7 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
 
   const [unreadCount, setUnreadCount] = useState(0);
   useEffect(() => {
+    if(currentusertype === "tourist" || currentusertype === "tourguide" || currentusertype === "governer"  || currentusertype === "seller" || currentusertype === "advertiser"){
     if (cuserdata) {
       const sortedNotifications = [...cuserdata.notifications].sort(
         (a, b) =>
@@ -89,6 +89,7 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
       console.log("userrrrrrrIddddd", cuserdata._id);
       console.log("userrrrrrrType", currentusertype);
     }
+  }
   }, [cuserdata]);
 
   const OpenShowAllPopUp = () => {
@@ -540,6 +541,8 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
               ))}
             </List>
           </Box>
+          { currentusertype === "tourist" || currentusertype === "tourguide" || currentusertype === "governer"  || currentusertype === "seller" || currentusertype === "advertiser" ? (
+            
           <Box
             sx={{ position: "relative", marginRight: "20px" }}
             className="relative flex justify-center items-center cursor-pointer text-[30px] text-gray-400"
@@ -634,7 +637,7 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
                 )}
               </div>
             </Fade>
-          </Box>
+          </Box>) : null}
           <Box
             onMouseEnter={handleMouseEnterProfilePic}
             onMouseLeave={handleMouseLeaveProfilePic}
