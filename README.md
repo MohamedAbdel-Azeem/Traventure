@@ -12,7 +12,7 @@
 2. [Build Status](#build-status)  
 3. [Code Style](#code-style)  
 4. [Tech and Frameworks used](#tech-and-frameworks-used)  
-5. [Features](#features--screenshots)  
+5. [Features & Screenshots](#features--screenshots)  
 6. [Code Examples](#code-examples)  
 7. [Installation](#installation)  
 8. [API Reference](#api-reference)  
@@ -56,58 +56,110 @@ The  full team works on vscode and uses **Prettier**  as its linter which automa
 
 ---
 
-## Features
+## Features & Screenshots
 
-### User Registration 
+
+<details> 
+<summary> User Registration </summary>
 
 - Register as a tourist/tourguide/seller/advertiser with essential details
  
+![Registration page](client/src/assets/addnewadmintest.png)  
 
-### User Authentication 
+</details> 
+
+<details> 
+<summary> User Authentication </summary>
 
 - Login and logout securely
 
-### Administrator Functions
+![Login Page](client/src/assets/addnewadmintest.png)  
+
+</details> 
+
+<details> 
+<summary> Administrator Functions </summary>
 
 - Add another administrator
+
 - Accept or reject tour guides and advertisers and sellers.
+
 - View documents uploaded by Tourguide, Advertisers or sellers
 
+![Admin page](client/src/assets/addnewadmintest.png)  
 
-### Account Management:
+</details> 
+
+<details> 
+<summary> Account Management </summary>
 
 - Change password. 
+
 - Reset forgotten password via email. 
+
 - Edit/update email or affiliation.
 
-### Seller Functions
+![User settings page](client/src/assets/addnewadmintest.png)  
+
+</details> 
+
+<details> 
+<summary> Seller Functions </summary>
 
 - Add a new product
+
 - View sales
 
+![Seller page](client/src/assets/addnewadmintest.png)  
 
-### Tourist Functions
+</details> 
+
+<details> 
+<summary> Tourist Functions </summary>
 
 - Access the shop
+
 - View available Itineraries, activities, bookings, hotels and flights
 
-Activities management
+![Tourist homepage](client/src/assets/addnewadmintest.png)  
+
+</details> 
+
+<details> 
+<summary> Activities management </summary>
+
  - Filter activities by date,budged,tag or language
+
  - Sort activities by price 
 
+![Activities page](client/src/assets/addnewadmintest.png)  
+
+</details> 
 
 
-### Iterinary management
-
+<details> 
+<summary> Itineraries management </summary>
 
 - Tour Guide can create/read/update/delete an itinerary 
+
 - Tourists can view and filter itineraries based on various criteria
 
+![Itineraries page](client/src/assets/addnewadmintest.png)  
 
-### Wallet management
+</details> 
 
-- Receive a refund in the wallet for canceled appointments.
+
+<details> 
+<summary> Wallet management </summary>
+
+- Receive a refund in the wallet for cancelled appointments.
+
 - View the amount in the wallet.
+
+![Wallet](client/src/assets/addnewadmintest.png)  
+
+</details> 
+
 
 ---
 
@@ -537,50 +589,6 @@ export { getFlightOffers, getHotelsInCity, getHotelByInfo };
 </details>
 
 
-
-<details>
-<summary>FE waiting for the user response example</summary>
-
-```js
-
-// WaitingResponse.tsx
-import React from 'react';
-import './WaitingResponse.css';
-
-interface WaitingResponseProps {
-  message: string;
-  onConfirm: () => void;
-  onCancel: () => void;
-}
-
-const WaitingResponse: React.FC<WaitingResponseProps> = ({ message, onConfirm, onCancel }) => {
-  return (
-    <div className="waiting-response-overlay">
-      <div className="waiting-response-content">
-        <h3 className="waiting-response-message">{message}</h3>
-        <div className="waiting-response-buttons">
-          <button className="confirm-button" onClick={onConfirm}>Yes</button>
-          <button className="cancel-button2" onClick={onCancel}>No</button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default WaitingResponse;
-
-
-
-
-```
-</details>
-
-
-
-
-
-
-
 <details>
 <summary>FE showing the awarded badges for the user</summary>
 
@@ -998,7 +1006,8 @@ Here are examples of testing one of our endpoints using Postman:
 
 [Tests Postman Collection](https://elements.getpostman.com/redirect?entityId=39534055-d77464fa-685e-400b-9b78-dfb9e3c907c4&entityType=collection)  
 
- 
+![Adding a new admin user 1](client/src/assets/addnewadmintest.png)  
+![Getting count of users](client/src/assets/getcountuserstest.png)
 
 ---
 
