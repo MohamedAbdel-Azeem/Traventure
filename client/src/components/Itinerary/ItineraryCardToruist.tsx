@@ -96,7 +96,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
 
   const handleBooking = async (id: string) => {
     try {
-      await bookItinerary(id, username,price);
+      await bookItinerary(id, username,price,"","wallet");
     } catch (error) {
       console.error("Error booking itinerary  :", error);
     }

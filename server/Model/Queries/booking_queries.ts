@@ -69,12 +69,13 @@ export async function getBookingsByTourist(username: string) {
   }
 }
 
-async function checkBooking(
+export async function checkBooking(
   tourist_id: string,
   activity_id: string | undefined,
   itinerary_id: string | undefined
 ) {
   try {
+    
     const query: any = { tourist: tourist_id };
     const now = new Date();
     if (activity_id) {
@@ -99,29 +100,71 @@ async function checkBooking(
   }
 }
 
+export async function getBookingTotalAmount(bookingData: any) {
+  try {
+    let price = 0;
+    if(bookingData.type && (bookingData.type === "activity" || bookingData.type === "itinerary")){
+    price = bookingData.price;
+    }
+    else{
+      price = bookingData.totalPrice;
+    }
+    var totalAmount = price;
+    
+    const promoCode = await PromoCodes.findOne({
+      name: bookingData.promoCode,
+    });
+    if (promoCode && !promoCode.used) {
+      totalAmount *= 0.9;
+    }
+    return totalAmount;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function handlePayment(
+  paymentMethod: string,
+  totalAmount: number,
+  tourist_id: string,
+  bookingType: string
+) {
+  try {
+    if (paymentMethod == "wallet") {
+      let tourist ;
+      if(bookingType === "flight/hotel"){
+        tourist = await touristModel.findOne({username:tourist_id});}
+      else{
+        tourist = await touristModel.findById(tourist_id);
+      }
+      if (!tourist) throw new Error("Tourist not found");
+      if (tourist.wallet < totalAmount) throw new Error("Insufficient funds");
+      tourist.wallet -= totalAmount;
+      await tourist.save();
+    }
+    if (paymentMethod == "card") {
+      return;
+    }
+    if (paymentMethod == "cod") {
+      return;
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function addBooking(bookingData: any) {
   let booked = null;
   try {
-    if (bookingData.type === "activity") {
-      booked = await checkBooking(
-        bookingData.tourist,
-        bookingData.activity,
-        undefined
-      );
-    }
-    if (bookingData.type === "itinerary") {
-      booked = await checkBooking(
-        bookingData.tourist,
-        undefined,
-        bookingData.itinerary
-      );
-    }
     if (booked === null) {
+
+      const tourist=await touristModel.findById(bookingData.tourist);
+      if(!tourist) throw new Error("Tourist not found");
+
     
       if (bookingData.promoCode) {
         const promo = await PromoCodes.findOne({ name: bookingData.promoCode });
         if (promo && !promo.used) {
-          (bookingData.totalPrice *= 0.9).toFixed(2);
           promo.used = true;
           await promo.save();
         } else {
@@ -130,9 +173,9 @@ export async function addBooking(bookingData: any) {
       }
 
 
-    
       await bookingModel.create(bookingData);
       await updateLoyaltyPoints(bookingData);
+    
     } else {
       throw new Error("Booking already exists");
     }
@@ -286,7 +329,6 @@ export async function addFlightBooking(bookingData: any) {
     if (bookingData.promoCode) {
       const promo = await PromoCodes.findOne({ name: bookingData.promoCode });
       if (promo && !promo.used) {
-        (bookingData.totalPrice *= 0.9).toFixed(2);
         promo.used = true;
         await promo.save();
       } else {
@@ -306,7 +348,6 @@ export async function addHotelBooking(bookingData: any) {
     if (bookingData.promoCode) {
       const promo = await PromoCodes.findOne({ name: bookingData.promoCode });
       if (promo && !promo.used) {
-        (bookingData.totalPrice *= 0.9).toFixed(2);
         promo.used = true;
         await promo.save();
       } else {
@@ -360,4 +401,7 @@ module.exports = {
   addHotelBooking,
   getFlightBookings,
   getHotelBookings,
+  handlePayment,
+  getBookingTotalAmount,
+  checkBooking
 };

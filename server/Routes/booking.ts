@@ -8,6 +8,9 @@ import {
   addHotelBooking,
   getFlightBookings,
   getHotelBookings,
+  getBookingTotalAmount,
+  handlePayment,
+  checkBooking
 } from "../Model/Queries/booking_queries";
 import Booking from "../Model/Schemas/Booking";
 
@@ -15,16 +18,44 @@ const router = Router();
 
 router.post("/add", async (req, res) => {
   try {
-    await addBooking(req.body);
-    res.status(201).send("Booking added successfully");
+    let booked = null;
+    const bookingData = req.body;
+      if (bookingData.type === "activity") {
+        booked = await checkBooking(
+          bookingData.tourist,
+          bookingData.activity,
+          undefined
+        );
+      }
+      if (bookingData.type === "itinerary") {
+        booked = await checkBooking(
+          bookingData.tourist,
+          undefined,
+          bookingData.itinerary
+        );
+      }
+
+    if(booked==null){
+    const totalAmount= await getBookingTotalAmount(req.body);
+    await handlePayment(bookingData.paymentMethod, totalAmount, bookingData.tourist,"activity/itinerary");
+    bookingData.price=totalAmount;
+    await addBooking(bookingData);
+  }
+    else{
+      throw new Error("Booking already exists");
+    }
+    res.status(201).send(bookingData);
   } catch (error) {
     if ((error as any).message === "Booking already exists") {
       res.status(403).send("Booking already exists");
     } else {
+      console.log(error);
       res.status(500).send("error creating booking");
     }
   }
 });
+
+
 router.get("/:username", async (req, res) => {
   try {
     const bookings = await getBookingsByTourist(req.params.username);
@@ -71,8 +102,11 @@ router.delete("/cancel/:booking_id", async (req, res) => {
 
 router.post("/addFlight/:username", async (req, res) => {
   try {
+    const totalAmount= await getBookingTotalAmount(req.body);
+    await handlePayment(req.body.paymentMethod, totalAmount, req.params.username,"flight/hotel");
+    req.body.totalPrice=totalAmount;
     const response = await addFlightBooking(req.body);
-    res.status(201).send(response);
+    res.status(201).send(req.body);
   } catch (error) {
     res.status(500).send("error creating booking");
   }
@@ -80,8 +114,11 @@ router.post("/addFlight/:username", async (req, res) => {
 
 router.post("/addHotel/:username", async (req, res) => {
   try {
+    const totalAmount= await getBookingTotalAmount(req.body);
+    await handlePayment(req.body.paymentMethod, totalAmount, req.params.username,"flight/hotel");
+    req.body.totalPrice=totalAmount;
     const response = await addHotelBooking(req.body);
-    res.status(201).send(response);
+    res.status(201).send(req.body);
   } catch (error) {
     res.status(500).send("error creating booking");
   }
