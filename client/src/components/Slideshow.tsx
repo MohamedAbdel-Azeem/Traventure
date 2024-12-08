@@ -30,7 +30,7 @@ const Slideshow: React.FC<SlideshowProps> = ({ items }) => {
   };
 
   return (
-    <div className="relative w-full h-[400px] overflow-hidden rounded-xl my-8">
+    <div className="relative w-full h-[700px] overflow-hidden rounded-xl mb-5">
       {items.map((item, index) => (
         <div
           key={index}
