@@ -1063,6 +1063,7 @@ Here are examples of testing one of our endpoints using Postman:
 
 - Add a `.env` in the `client` and `server`
 
+- `Backend env`
 ```bash
 
 MONGODB_URI="Your Mongo Connection String"
@@ -1071,6 +1072,16 @@ AMADEUS_CLIENT_SECRET="A secret string to use for encrypting passwords"
 GMAIL_PASSWORD="your gmail password"
 GMAIL_ADDRESS="your gmail address"
 ```
+
+- `Frontend env`
+
+```bash
+VITE_API_URL="Currnecy API Key"
+VITE_STRIPE_PUBLIC_KEY="Stripe Public key"
+
+```
+
+
 - Start Traventure
 
 ```bash
