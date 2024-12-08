@@ -166,7 +166,7 @@ The  full team works on vscode and uses **Prettier**  as its linter which automa
 ## Code Examples  
 
 <details>
-<summary>BE Routes Example</summary>
+<summary>Backend Routes Example</summary>
 
 ```js
 app.use("/api/admin", adminRouter);
@@ -195,7 +195,7 @@ app.use("/api/promocode", promocodeRouter);
 </details>
 
 <details>
-<summary>FE currency dropdown Example</summary>
+<summary>Frontend currency dropdown Example</summary>
 
 ```js
 const CurrencyDropdown: React.FC = () => {
@@ -280,7 +280,7 @@ export default CurrencyDropdown;
 </details>
 
 <details>
-<summary>BE Scheduler Function Example</summary>
+<summary>Backend Scheduler Function Example</summary>
 
 ```js
 module.exports = () => {
@@ -296,7 +296,7 @@ module.exports = () => {
 
 
 <details>
-<summary>FE Cart Slice Example</summary>
+<summary>Frontend Cart Slice Example</summary>
 
 ```js
 export interface IProduct {
@@ -384,7 +384,7 @@ export default cartSlice.reducer;
 
 
 <details>
-<summary>FE Filter Example</summary>
+<summary>Frontend Filter Example</summary>
 
 ```js
 
@@ -491,7 +491,7 @@ export default FilterComponent;
 
 
 <details>
-<summary>BE Amadeus sdk for flight and hotel data Example</summary>
+<summary>Backend Amadeus sdk for flight and hotel data Example</summary>
 
 ```js
 
@@ -590,7 +590,7 @@ export { getFlightOffers, getHotelsInCity, getHotelByInfo };
 
 
 <details>
-<summary>FE showing the awarded badges for the user</summary>
+<summary>Frontend showing the awarded badges for the user</summary>
 
 ```js
 
@@ -661,7 +661,7 @@ export default BadgePopup;
 
 
 <details>
-<summary>BE Advertiser Schema Example</summary>
+<summary>Backend Advertiser Schema Example</summary>
 
 ```js
 
