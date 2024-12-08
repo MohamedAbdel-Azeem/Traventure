@@ -4,6 +4,7 @@ import { timeStamp } from "console";
 const Schema = mongoose.Schema;
 
 export interface IAddress {
+  _id?: mongoose.Types.ObjectId;
   latitude: number;
   longitude: number;
   street: string;
@@ -34,6 +35,12 @@ export interface ITourist extends Document {
   wishlisted_products: mongoose.Types.ObjectId[];
   skipWebsiteTutorial: boolean;
   promo_sent?: boolean;
+  notifications: {
+    message: string;
+    sent_by_mail: boolean;
+    read: boolean;
+    createdAt: Date;
+  }[];
   saved_addressess?: IAddress[];
 }
 
@@ -56,6 +63,14 @@ const touristSchema = new Schema({
   bookmarkedActivities: [{ type: mongoose.Types.ObjectId, ref: "Activity" }],
   bookmarkedItineraries: [{ type: mongoose.Types.ObjectId, ref: "Itinerary" }],
   wishlisted_products: [{ type: mongoose.Types.ObjectId, ref: "Product" }],
+  notifications: [
+    {
+      message: { type: String, required: true },
+      sent_by_mail: { type: Boolean, default: false },
+      read: { type: Boolean, default: false },
+      createdAt: { type: Date, default: Date.now },
+    },
+  ],
   skipWebsiteTutorial: { type: Boolean, default: false },
   promo_sent: { type: Boolean, default: false },
   saved_addressess: {

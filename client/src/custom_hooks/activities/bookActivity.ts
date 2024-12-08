@@ -7,7 +7,16 @@ const useBookActivity = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const bookActivity = async (activity_id: string | undefined, tourist_username: string | undefined,price:Number,discount:Number) => {
+  const fetchTouristWallet = async (username:string|undefined) => {
+    try {
+        const response = await axios.get(`/traventure/api/tourist/${username}`);
+        return response.data;
+    } catch (error: any) {
+        throw new Error('Failed to fetch tourist wallet');
+    }
+};
+
+  const bookActivity = async (activity_id: string | undefined, tourist_username: string | undefined,price:Number,discount:Number,promoCode:string,paymentMethod:string) => {
     const url1 = `/traventure/api/tourist/${tourist_username}`;
     const url = `/traventure/api/bookings/add`;
     setLoading(true); // Set loading to true when the request starts
@@ -20,14 +29,34 @@ const useBookActivity = () => {
         type:"activity",
         activity:activity_id,
         tourist:tourist_id,
-        price:validPrice-validDiscount
+        price:validPrice-validDiscount,
+        promoCode:promoCode,
+        paymentMethod:paymentMethod
       });
       setData(response.data);
       Swal.fire({
         title: "Booking Successful",
         text: "Your booking has been added successfully",
         icon: "success",
-      })
+      }).then(async () => {
+        if (paymentMethod === "wallet") {
+          try{
+          const walletData= await fetchTouristWallet(tourist_username);
+          Swal.fire({
+            title: "Payment Successful",
+            html: `<p><strong>Booking Value :</strong> ${response.data.price}$</p><p>Your current wallet balance is ${walletData.wallet}</p>`,
+            icon: "info",
+          });
+        }
+        catch (error) {
+          Swal.fire({
+            title: "Error",
+            text: "Failed to fetch tourist wallet",
+            icon: "error",
+          });
+        }
+      }
+      });
     
     } catch (error: any) {
       setError(error.message);

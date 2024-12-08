@@ -6,18 +6,15 @@ import purchase, {
 import mongoose, { model } from "mongoose";
 import ProductModel, { IProduct } from "../Schemas/Product";
 import PromoCodes from "../Schemas/PromoCodes";
+import Tourist from "../Schemas/Tourist";
 
 export async function addPurchase(purchaseData: IPurchase) {
   try {
-    const totalAmount = await getPurchaseTotalAmount(purchaseData);
-    purchaseData["totalAmount"] = totalAmount;
-
     const promoCode = await PromoCodes.findOne({
       name: purchaseData.promoCode,
     });
 
     if (promoCode && !promoCode.used) {
-      purchaseData["totalAmount"] *= 0.9;
       promoCode.used = true;
     }
     const resultPurchase = await purchase.create(purchaseData);
@@ -50,39 +47,17 @@ export async function getPurchaseTotalAmount(purchaseData: IPurchase) {
         totalAmount += product.price * purchased_product.quantity;
       }
     }
+    const promoCode = await PromoCodes.findOne({
+      name: purchaseData.promoCode,
+    });
+    if (promoCode && !promoCode.used) {
+      totalAmount *= 0.9;
+    }
     return totalAmount;
   } catch (error) {
     throw error;
   }
 }
-
-// export async function updateLoyaltyPoints(touristId:string, amount:number){
-//   try {
-//     const tourist = await touristModel.findById(touristId);
-//     if (!tourist) return null;
-//     var points=0;
-//     switch(tourist.loyaltyLevel){
-//       case 1: points=amount*0.5; break;
-//       case 2: points=amount; break;
-//       case 3: points=amount*1.5; break;
-//     }
-//     tourist.currentLoyaltyPoints += points;
-//     tourist.totalLoyaltyPoints += points;
-
-//     if(tourist.totalLoyaltyPoints>500000){
-//       tourist.loyaltyLevel=3;
-//     }
-//     else if(tourist.totalLoyaltyPoints>100000){
-//       tourist.loyaltyLevel=2;
-//     }
-//     else {
-//       tourist.loyaltyLevel=1;
-//     }
-//     await tourist.save();
-//   } catch (error) {
-//     throw error;
-//   }
-// }
 
 export async function getTouristPurchases(
   touristId: string | mongoose.Types.ObjectId
@@ -352,6 +327,10 @@ export async function cancelPurchase(purchaseId: string) {
     if (!product) return null;
     if (product.status == PurchaseStatus.delivered) return null;
     product.status = PurchaseStatus.cancelled;
+    const tourist = await Tourist.findById(product.touristId);
+    if (!tourist) return null;
+    tourist.wallet += product.totalAmount as number;
+    await tourist.save();
     return await product.save();
   } catch (error) {
     throw error;
@@ -369,15 +348,40 @@ export async function DeliverPurchase(purchaseId: string) {
   }
 }
 
+export async function handlePayment(
+  paymentMethod: string,
+  totalAmount: number,
+  touristUsername: string
+) {
+  try {
+    if (paymentMethod == "wallet") {
+      const tourist = await Tourist.findOne({ username: touristUsername });
+      if (!tourist) throw new Error("Tourist not found");
+      if (tourist.wallet < totalAmount) throw new Error("Insufficient funds");
+      tourist.wallet -= totalAmount;
+      await tourist.save();
+      return;
+    }
+    if (paymentMethod == "card") {
+      return;
+    }
+    if (paymentMethod == "cod") {
+      return;
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   addPurchase,
   getTouristPurchases,
   getSellerSales,
   getExternalSellerSales,
-  // updateLoyaltyPoints,
   getPurchaseTotalAmount,
   cancelPurchase,
   DeliverPurchase,
   getSellerRevenue,
   getExternalSellerRevenue,
+  handlePayment,
 };

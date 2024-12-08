@@ -6,6 +6,7 @@ import "./ProductCard.css";
 import Swal from "sweetalert2";
 import useBookFlight from "../../../../custom_hooks/usebookFlight";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 interface FlightCardProps {
   flight: any;
@@ -29,19 +30,12 @@ const FlightCard: React.FC<FlightCardProps> = ({
       const response = await bookFlight(
         flight,
         includeTransportation,
-        currentuser
+        currentuser,
+        "",
+        "wallet"
       );
-      Swal.fire({
-        icon: "success",
-        title: "Flight Booked Successfully!",
-        text: "You have successfully booked the flight.",
-      });
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Booking Failed!",
-        text: "An error occurred while booking the flight.",
-      });
+
     }
   };
 

@@ -157,7 +157,7 @@ export function AdminUsersNumPage() {
           height: "100vh",
         }}
       >
-        <h1>Error 403 Unauthrized access</h1>
+        <h1>Error 403 Unauthorized access</h1>
       </div>
     );
   }

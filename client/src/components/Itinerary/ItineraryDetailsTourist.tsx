@@ -46,6 +46,11 @@ interface Itinerary {
     user_id?: TouristProfileData;
   }[];
   accesibility: boolean;
+  allowBooking: boolean;
+  
+  InterestedUsers: {
+    user_id?: TouristProfileData;
+  }[];
 }
 
 const ItineraryDetailsTourist: React.FC = () => {

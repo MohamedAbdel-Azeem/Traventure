@@ -31,6 +31,8 @@ import {
   editAddress,
   deleteAddress,
   updateUserWallet,
+  updateInterested,
+  getTouristUsername,
 } from "../Model/Queries/tourist_queries";
 const router = Router();
 
@@ -58,9 +60,21 @@ router.get("/upcoming", async (req: Request, res: Response) => {
     const all = await getAll();
     res.status(200).send(all);
   } catch (error) {
+    console.log("error in fetching",error);
     res.status(500).send("error getting upcoming activities");
   }
 });
+
+router.get("/:id", async (req: Request, res: Response) => {
+  try {
+    const username = await getTouristUsername(req.params.id);
+    res.status(200).send(username);
+  } catch (err) {
+    res.status(500).send("error getting username");
+  }
+});
+
+
 
 router.get("/:username", async (req: Request, res: Response) => {
   try {
@@ -233,6 +247,18 @@ router.get("/skipTutorial/:username", async (req: Request, res: Response) => {
   }
 });
 
+router.patch("/interested", async (req: Request, res: Response) => {
+  try {
+    const username = req.body.username;
+    const itineraryId = req.body.itineraryId;
+    const interested = req.body.interested;
+    await updateInterested(username, itineraryId, interested);
+    res.status(200).send("Interest updated");
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+});
+
 router.patch("/add/address/:username", async (req: Request, res: Response) => {
   try {
     const username = req.body.username;
@@ -256,26 +282,28 @@ router.patch("/edit/address/:username", async (req: Request, res: Response) => {
   }
 });
 
-router.patch("/delete/address/:username", async (req: Request, res: Response) => {
-  try {
-    const username = req.body.username;
-    const index = req.body.index;
-    deleteAddress(username, index);
-    res.status(200).send("Address deleted"); 
-  } catch (error: any) {
-    res.status(500).send(error.message);
+router.patch(
+  "/delete/address/:username",
+  async (req: Request, res: Response) => {
+    try {
+      const username = req.body.username;
+      const index = req.body.index;
+      deleteAddress(username, index);
+      res.status(200).send("Address deleted");
+    } catch (error: any) {
+      res.status(500).send(error.message);
+    }
   }
-});
+);
 
 router.patch("/skipTutorial/:username", async (req: Request, res: Response) => {
   try {
     const username = req.params.username;
     await skipWebsiteTutorial(username);
     res.status(200).send("Tutorial skipped");
-    } catch (error: any) {
+  } catch (error: any) {
     res.status(500).send(error.message);
   }
 });
-  
 
 export default router;

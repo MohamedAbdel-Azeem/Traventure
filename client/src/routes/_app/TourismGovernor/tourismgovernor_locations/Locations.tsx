@@ -141,167 +141,187 @@ const Locations = () => {
   );
   if (isLoading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
         <ClipLoader color="#f86c6b" loading={true} size={150} />
       </div>
     );
   }
   if (isError || isAuthenticated !== username) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-        <h1>Error 403 Unauthrized access</h1>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <h1>Error 403 Unauthorized access</h1>
       </div>
     );
   }
   if (idgloading) return <p>Loading...</p>;
   if (idgerror) return <p>Error</p>;
 
-return (
-  <div className="flex justify-center">
-    <div className="grid grid-cols-3 mt-20">
-      <Modal open={open} onClose={handleClose}>
-        <Box sx={style}>
-          <Box className="grid grid-cols-2">
-            <FormControl fullWidth sx={{ marginY: 1 }}>
-              <InputLabel>Name</InputLabel>
-              <OutlinedInput
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                label="Name"
-              />
-            </FormControl>
-
-            <FormControl fullWidth sx={{ marginY: 1 }}>
-              <InputLabel>Description</InputLabel>
-              <OutlinedInput
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                label="Description"
-              />
-            </FormControl>
-
-            <FormControl fullWidth sx={{ marginY: 1 }}>
-              <InputLabel>Native Price</InputLabel>
-              <OutlinedInput
-                type="number"
-                value={nativePrice}
-                startAdornment={
-                  <InputAdornment position="start">{currentCurrency}</InputAdornment>
-                }
-                onChange={(e) => setNativePrice(Number(e.target.value))}
-                label="Native Price"
-              />
-            </FormControl>
-
-            <FormControl fullWidth sx={{ marginY: 1 }}>
-              <InputLabel>Foreign Price</InputLabel>
-              <OutlinedInput
-                type="number"
-                value={foreignPrice}
-                startAdornment={
-                  <InputAdornment position="start">{currentCurrency}</InputAdornment>
-                }
-                onChange={(e) => setForeignPrice(Number(e.target.value))}
-                label="Foreign Price"
-              />
-            </FormControl>
-
-            <FormControl fullWidth sx={{ marginY: 1 }}>
-              <InputLabel>Student Price</InputLabel>
-              <OutlinedInput
-                type="number"
-                value={studentPrice}
-                startAdornment={
-                  <InputAdornment position="start">{currentCurrency}</InputAdornment>
-                }
-                onChange={(e) => setStudentPrice(Number(e.target.value))}
-                label="Student Price"
-              />
-            </FormControl>
-
-            <FormControl fullWidth sx={{ marginY: 1 }}>
-              <InputLabel>Hours</InputLabel>
-              <OutlinedInput
-                label="Hours"
-                type="string"
-                value={hours}
-                onChange={(e) => setHours(e.target.value)}
-              />
-            </FormControl>
-            <FormControl fullWidth sx={{ marginY: 1 }} className="col-span-2">
-              <div>
-                <TheMAP
-                  id="create map"
-                  lat={latitude}
-                  long={longitude}
-                  setLatitude={setLatitude}
-                  setLongitude={setLongitude}
+  return (
+    <div className="flex justify-center">
+      <div className="grid grid-cols-3 mt-20">
+        <Modal open={open} onClose={handleClose}>
+          <Box sx={style}>
+            <Box className="grid grid-cols-2">
+              <FormControl fullWidth sx={{ marginY: 1 }}>
+                <InputLabel>Name</InputLabel>
+                <OutlinedInput
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  label="Name"
                 />
-              </div>
-            </FormControl>
+              </FormControl>
 
-            <FormControl fullWidth sx={{ marginY: 1 }}>
-              <InputLabel>Image</InputLabel>
-              <OutlinedInput
-                label="Image"
-                type="string"
-                value={image}
-                onChange={(e) => {
-                  setImage(e.target.value);
-                }}
-              />
-            </FormControl>
+              <FormControl fullWidth sx={{ marginY: 1 }}>
+                <InputLabel>Description</InputLabel>
+                <OutlinedInput
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  label="Description"
+                />
+              </FormControl>
 
-            <FormControl fullWidth sx={{ marginY: 1 }}>
-              <Select
-                labelId="tags-select-label"
-                multiple
-                value={selectedTags}
-                onChange={handleTagsChange}
-                renderValue={handleTagsText}
-                MenuProps={{
-                  PaperProps: {
-                    style: {
-                      maxHeight: 200,
-                      width: 250,
+              <FormControl fullWidth sx={{ marginY: 1 }}>
+                <InputLabel>Native Price</InputLabel>
+                <OutlinedInput
+                  type="number"
+                  value={nativePrice}
+                  startAdornment={
+                    <InputAdornment position="start">
+                      {currentCurrency}
+                    </InputAdornment>
+                  }
+                  onChange={(e) => setNativePrice(Number(e.target.value))}
+                  label="Native Price"
+                />
+              </FormControl>
+
+              <FormControl fullWidth sx={{ marginY: 1 }}>
+                <InputLabel>Foreign Price</InputLabel>
+                <OutlinedInput
+                  type="number"
+                  value={foreignPrice}
+                  startAdornment={
+                    <InputAdornment position="start">
+                      {currentCurrency}
+                    </InputAdornment>
+                  }
+                  onChange={(e) => setForeignPrice(Number(e.target.value))}
+                  label="Foreign Price"
+                />
+              </FormControl>
+
+              <FormControl fullWidth sx={{ marginY: 1 }}>
+                <InputLabel>Student Price</InputLabel>
+                <OutlinedInput
+                  type="number"
+                  value={studentPrice}
+                  startAdornment={
+                    <InputAdornment position="start">
+                      {currentCurrency}
+                    </InputAdornment>
+                  }
+                  onChange={(e) => setStudentPrice(Number(e.target.value))}
+                  label="Student Price"
+                />
+              </FormControl>
+
+              <FormControl fullWidth sx={{ marginY: 1 }}>
+                <InputLabel>Hours</InputLabel>
+                <OutlinedInput
+                  label="Hours"
+                  type="string"
+                  value={hours}
+                  onChange={(e) => setHours(e.target.value)}
+                />
+              </FormControl>
+              <FormControl fullWidth sx={{ marginY: 1 }} className="col-span-2">
+                <div>
+                  <TheMAP
+                    id="create map"
+                    lat={latitude}
+                    long={longitude}
+                    setLatitude={setLatitude}
+                    setLongitude={setLongitude}
+                  />
+                </div>
+              </FormControl>
+
+              <FormControl fullWidth sx={{ marginY: 1 }}>
+                <InputLabel>Image</InputLabel>
+                <OutlinedInput
+                  label="Image"
+                  type="string"
+                  value={image}
+                  onChange={(e) => {
+                    setImage(e.target.value);
+                  }}
+                />
+              </FormControl>
+
+              <FormControl fullWidth sx={{ marginY: 1 }}>
+                <Select
+                  labelId="tags-select-label"
+                  multiple
+                  value={selectedTags}
+                  onChange={handleTagsChange}
+                  renderValue={handleTagsText}
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        maxHeight: 200,
+                        width: 250,
+                      },
                     },
-                  },
-                }}
-              >
-                {tagsLoading && <MenuItem>Loading...</MenuItem>}
-                {tagsError && <MenuItem>Error</MenuItem>}
-                {tagsData.map((tag) => (
-                  <MenuItem key={tag._id} value={tag._id}>
-                    <Checkbox checked={selectedTags.indexOf(tag._id) > -1} />
-                    <ListItemText primary={tag.name} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <Button className="col-span-2" onClick={handleCreate}>
-              Add
-            </Button>
+                  }}
+                >
+                  {tagsLoading && <MenuItem>Loading...</MenuItem>}
+                  {tagsError && <MenuItem>Error</MenuItem>}
+                  {tagsData.map((tag) => (
+                    <MenuItem key={tag._id} value={tag._id}>
+                      <Checkbox checked={selectedTags.indexOf(tag._id) > -1} />
+                      <ListItemText primary={tag.name} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <Button className="col-span-2" onClick={handleCreate}>
+                Add
+              </Button>
+            </Box>
           </Box>
-        </Box>
-      </Modal>
-      <div
-        className="flex w-[422px] h-[422px] bg-[#D9D9D9] rounded-[11px] m-4 hover:bg-[#c0c0c0] transition duration-300 cursor-pointer"
-        onClick={handleOpen}
-      >
-        <p className="m-auto text-[40px]">Create New Place</p>
+        </Modal>
+        <div
+          className="flex w-[422px] h-[422px] bg-[#D9D9D9] rounded-[11px] m-4 hover:bg-[#c0c0c0] transition duration-300 cursor-pointer"
+          onClick={handleOpen}
+        >
+          <p className="m-auto text-[40px]">Create New Place</p>
+        </div>
+        {newcards?.map((card) => (
+          <LocationCardCRUD
+            wholeLocation={card}
+            key={card._id}
+            id={card._id ?? ""}
+            onDelete={handleDelete}
+            className="hover:bg-[#f0f0f0] transition duration-300"
+          />
+        ))}
       </div>
-      {newcards?.map((card) => (
-        <LocationCardCRUD
-          wholeLocation={card}
-          key={card._id}
-          id={card._id ?? ""}
-          onDelete={handleDelete}
-          className="hover:bg-[#f0f0f0] transition duration-300"
-        />
-      ))}
     </div>
-  </div>
-);
+  );
 };
 
 export default Locations;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import StarIcon from "@mui/icons-material/Star";
@@ -22,14 +22,10 @@ import InfoIcon from "@mui/icons-material/Info";
 import { Icon } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { useGetStripe } from "../../custom_hooks/useGetStripe";
-import { PayStripe } from "./payStripe";
-import {
-  CardElement,
-  useStripe,
-  useElements,
-  Elements,
-} from "@stripe/react-stripe-js";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+
 interface TagStructure {
   _id: string;
   name: string;
@@ -37,6 +33,7 @@ interface TagStructure {
 }
 
 interface ItineraryCardCRUDProps {
+  className?: string;
   _id: string;
   main_Picture?: string;
   title: string;
@@ -69,6 +66,7 @@ interface ItineraryCardCRUDProps {
 }
 
 const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
+  className,
   _id,
   title,
   description,
@@ -94,6 +92,18 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   const currenttype = useLocation().pathname.split("/")[1];
   const currpath = useLocation().pathname.split("/")[3];
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);
+
+  const [isInterested, setIsInterested] = useState(false);
+
+  const handleInterested = async (id: string) => {
+    try {
+      //const response = await bookmarkItinerary(username, id);
+      setIsInterested((prevState) => !prevState);
+    } catch (error) {
+      console.error("Error marking itinerary as interested  :", error);
+    }
+  };
+
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
@@ -121,8 +131,6 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
       console.error("Error bookmarking itinerary  :", error);
     }
   };
-  const stripe = useStripe();
-  const elements = useElements();
 
   const exchangeRate = useSelector(
     (state: any) => state.exchangeRate.exchangeRate
@@ -164,7 +172,8 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
     }
   };
   const [inappropriateV, setActive] = useState(inappropriate);
-
+  const location = useLocation();
+  const currentpath = useLocation().pathname.split("/")[5];
   const getRatingStatus = (rating: number) => {
     if (rating >= 4.5) return "Excellent";
     if (rating >= 4.0) return "Very Good";
@@ -172,10 +181,11 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
     if (rating >= 3.0) return "Average";
     return "Below Average";
   };
-
+  const navigate = useNavigate();
   return (
     <div
-      className="m-4 transition transform hover:scale-105 w-96 bg-gray-200 rounded-lg overflow-hidden shadow-lg"
+      className={`m-4 transition transform hover:scale-105 w-96 bg-gray-200 rounded-lg overflow-hidden
+         shadow-lg ${className}`}
       style={{ boxShadow: "10px 10px 20px rgba(0, 0, 0, 0.2)" }}
     >
       {openPay && (
@@ -194,7 +204,50 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
           alt={title}
           className="w-full h-full object-cover"
         />
+        {currentpath ? (
+          <></>
+        ) : (
+          <>
+            {currentType === "tourist" && (
+              <div className="absolute top-2 right-2 flex gap-2">
+                {/* Interested Button */}
+                <button
+                  className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600"
+                  title={isInterested ? "Remove Interest" : "Interested"}
+                  onClick={() => handleInterested(_id)}
+                >
+                  {isInterested ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />}
+                </button>
+
+                {/* Bookmark Button */}
+                {!isBookmarked ? (
+                  <button
+                    className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600 shadow-lg hover:shadow-xl transition-all"
+                    title="Bookmark"
+                    onClick={() => handleBookmark(_id)}
+                  >
+                    {loadingBookmark ? (
+                      <ClipLoader size={30} color="#ffffff" />
+                    ) : (
+                      <BookmarkIcon />
+                    )}
+                  </button>
+                ) : (
+                  currpath !== "bookmarks" && (
+                    <button
+                      className="bg-purple-800 text-white p-2 rounded-lg shadow-lg hover:shadow-xl transition-all"
+                      disabled
+                    >
+                      <BookmarkAddedIcon />
+                    </button>
+                  )
+                )}
+              </div>
+            )}
+          </>
+        )}
       </div>
+
       <div className="p-4">
         <div className="mb-2">
           <h2 className="text-2xl font-semibold text-gray-800 text-center truncate">
@@ -203,7 +256,6 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
         </div>
 
         {/* Rating */}
-
         <div className="mb-2 flex justify-between items-center">
           <p className="text-s font-bold text-gray-800 flex items-center">
             <StarIcon className="mr-1 text-yellow-500" /> {rating.toFixed(1)} ·{" "}
@@ -218,7 +270,6 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
         </div>
 
         {/* Date */}
-
         <div className="mb-4 text-left">
           <p className="text-gray-600 text-sm font-semibold">
             {`${format(new Date(starting_Date), "MMM dd")} - ${format(
@@ -228,16 +279,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
           </p>
         </div>
 
-        {/* Description */}
-
-        {/* <div className="mb-4">
-          <p className="text-gray-600 text-center text-sm truncate">
-            {description}
-          </p>
-        </div> */}
-
         {/* Tags */}
-
         {Array.isArray(selectedTags) && selectedTags.length > 0 && (
           <div className="mb-2">
             <div className="flex flex-wrap justify-center items-center">
@@ -257,99 +299,72 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
         )}
 
         {/* Buttons */}
-        <div className="mt-2">
-          <div className="flex justify-between items-center">
-            <Link
-              to={`/${
-                currenttype + "/" + username
-              }/itineraries/tourist-itinerary/${_id}`}
-              state={{
-                title,
-                description,
-                price,
-                starting_Date,
-                ending_Date,
-                rating,
-                main_Picture,
-                language,
-                pickup_location,
-                accesibility,
-                dropoff_location,
-                plan,
-                selectedTags,
-              }}
-              className="p-2 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition flex items-center"
-            >
-              <InfoIcon className="w-6 h-6 text-white" />
-            </Link>
+        {currentpath ? (
+          <></>
+        ) : (
+          <div className="mt-2">
+            <div className="flex justify-between items-center">
+              <Link
+                to={`/${
+                  currenttype + "/" + username
+                }/itineraries/tourist-itinerary/${_id}`}
+                state={{
+                  title,
+                  description,
+                  price,
+                  starting_Date,
+                  ending_Date,
+                  rating,
+                  main_Picture,
+                  language,
+                  pickup_location,
+                  accesibility,
+                  dropoff_location,
+                  plan,
+                  selectedTags,
+                }}
+                className="p-2 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition flex items-center"
+              >
+                <InfoIcon className="w-6 h-6 text-white" />
+              </Link>
+
+              {currentType === "tourist" && (
+                <>
+                  {/* Share Button */}
+                  <div className="mt-2">
+                    <ShareButton type={"itinerary"} ID={_id} />
+                  </div>
+                </>
+              )}
+            </div>
 
             {currentType === "tourist" && (
-              <>
-                {/* Bookmark Button */}
-
-                {!isBookmarked && (
-                  <button
-                    className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600"
-                    title="Bookmark"
-                    onClick={() => handleBookmark(_id)}
-                  >
-                    {loadingBookmark ? (
-                      <ClipLoader size={30} color="#ffffff"></ClipLoader>
-                    ) : (
-                      <BookmarkIcon />
-                    )}
-                  </button>
-                )}
-                {isBookmarked && currpath !== "bookmarks" && (
-                  <button
-                    className="bg-purple-800 text-white p-2 rounded-lg"
-                    disabled
-                  >
-                    <BookmarkAddedIcon />
-                  </button>
-                )}
-
-                {/* Interested Button */}
-
+              <div className="mt-4">
+                {/* Book Button */}
                 <button
-                  className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600"
-                  title="Interested"
+                  className="w-full bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600"
+                  onClick={() =>
+                    navigate(
+                      `/tourist/${username}/itinerary/${_id}/eventcheckout`
+                    )
+                  }
                 >
-                  <FavoriteBorderIcon />
+                  {loading ? <ClipLoader size={30} color="#ffffff" /> : "Book"}
                 </button>
+              </div>
+            )}
 
-                {/* Share Button */}
-                <div className="mt-2">
-                  <ShareButton type={"itinerary"} ID={_id} />
-                </div>
-              </>
+            {currentType === "admin" && (
+              <div className="bg-yellow-500 text-white p-2 rounded-lg flex flex-col items-center w-full mt-4">
+                <p className="text-sm flex items-center">
+                  {bookingActivated
+                    ? "Booking Activated"
+                    : "Booking Deactivated"}
+                </p>
+              </div>
             )}
           </div>
-
-          {currentType === "tourist" && (
-            <div className="mt-4">
-              {/* Book Button */}
-              <button
-                className="w-full bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600"
-                onClick={() => handleBooking(_id)}
-              >
-                {loading ? (
-                  <ClipLoader size={30} color="#ffffff"></ClipLoader>
-                ) : (
-                  "Book"
-                )}
-              </button>
-            </div>
-          )}
-
-          {currentType === "admin" && (
-            <div className="bg-yellow-500 text-white p-2 rounded-lg flex flex-col items-center w-full mt-4">
-              <p className="text-sm flex items-center">
-                {bookingActivated ? "Booking Activated" : "Booking Deactivated"}
-              </p>
-            </div>
-          )}
-        </div>
+        )}
 
         {currentType === "admin" && (
           <Button onClick={handleInappropriate}>

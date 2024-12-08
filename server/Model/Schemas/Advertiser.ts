@@ -16,7 +16,15 @@ const AdvertiserSchema = new Schema({
   hotline: { type: String },
   founded: { type: Number },
   description: { type: String },
-  location: { type: String },
+  location: { type: String},
+  notifications: [
+    {
+      message: { type: String, required: true },
+      sent_by_mail: { type: Boolean, default: false },
+      read: { type: Boolean, default: false },
+      createdAt: { type: Date, default: Date.now },
+    },
+  ],
   timeStamp: { type: Date, required: true, default: Date.now },
 });
 

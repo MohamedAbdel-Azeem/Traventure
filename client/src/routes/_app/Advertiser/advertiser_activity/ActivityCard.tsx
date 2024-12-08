@@ -165,8 +165,8 @@ export const ActivityCard: React.FC<ActivityProp> = ({
       date.getDate()
     )}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
   };
-  const [latitude, setLatitude] = useState(30.0);
-  const [longitude, setLongitude] = useState(31.2);
+  const [latitude, setLatitude] = useState(currentActivity.Location.latitude);
+  const [longitude, setLongitude] = useState(currentActivity.Location.longitude);
 
   if (tagsLoading || CatLoading) {
     return <div>loading</div>;
