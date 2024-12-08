@@ -15,14 +15,21 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 import ShareButton from "../Buttons/ShareButton";
-import BookmarkIcon from '@mui/icons-material/BookmarkAdd';
-import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
-import ClipLoader from 'react-spinners/ClipLoader';
-import InfoIcon from '@mui/icons-material/Info';
+import BookmarkIcon from "@mui/icons-material/BookmarkAdd";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import ClipLoader from "react-spinners/ClipLoader";
+import InfoIcon from "@mui/icons-material/Info";
 import { Icon } from "@mui/material";
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useGetStripe } from "../../custom_hooks/useGetStripe";
+import { PayStripe } from "./payStripe";
+import {
+  CardElement,
+  useStripe,
+  useElements,
+  Elements,
+} from "@stripe/react-stripe-js";
 interface TagStructure {
   _id: string;
   name: string;
@@ -78,11 +85,11 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   plan,
   bookingActivated,
   inappropriate,
-  bookmarked
+  bookmarked,
 }) => {
-
   const { bookItinerary, data, loading, error } = useBookItinerary();
-  const { bookmarkItinerary,loading:loadingBookmark} = useBookmarkItinerary();
+  const { bookmarkItinerary, loading: loadingBookmark } =
+    useBookmarkItinerary();
   const { username } = useParams<{ username: string }>();
   const currenttype = useLocation().pathname.split("/")[1];
   const currpath = useLocation().pathname.split("/")[3];
@@ -95,24 +102,27 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
       return "Invalid Date";
     }
   };
-
+  const [openPay, setOpenPay] = useState(false);
   const handleBooking = async (id: string) => {
+    setOpenPay(true);
+    return;
     try {
-      await bookItinerary(id, username,price);
+      await bookItinerary(id, username, price);
     } catch (error) {
       console.error("Error booking itinerary  :", error);
     }
   };
 
   const handleBookmark = async (id: string) => {
-    try{
+    try {
       const response = await bookmarkItinerary(username, id);
       setIsBookmarked(true);
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error bookmarking itinerary  :", error);
     }
-  }
+  };
+  const stripe = useStripe();
+  const elements = useElements();
 
   const exchangeRate = useSelector(
     (state: any) => state.exchangeRate.exchangeRate
@@ -166,8 +176,15 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   return (
     <div
       className="m-4 transition transform hover:scale-105 w-96 bg-gray-200 rounded-lg overflow-hidden shadow-lg"
-      style={{ boxShadow: "10px 10px 20px rgba(0, 0, 0, 0.2)" }} 
+      style={{ boxShadow: "10px 10px 20px rgba(0, 0, 0, 0.2)" }}
     >
+      {openPay && (
+        <PayStripe
+          handleOpen={() => setOpenPay(true)}
+          handleClose={() => setOpenPay(false)}
+          open={openPay}
+        />
+      )}
       <div className="relative w-full h-[250px]">
         <img
           src={main_Picture}
@@ -182,33 +199,33 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
           </h2>
         </div>
 
-
         {/* Rating */}
 
         <div className="mb-2 flex justify-between items-center">
-  <p className="text-s font-bold text-gray-800 flex items-center">
-    <StarIcon className="mr-1 text-yellow-500" /> {rating.toFixed(1)} · {getRatingStatus(rating)}
-  </p>
+          <p className="text-s font-bold text-gray-800 flex items-center">
+            <StarIcon className="mr-1 text-yellow-500" /> {rating.toFixed(1)} ·{" "}
+            {getRatingStatus(rating)}
+          </p>
 
-       {/* Price */}
-  <p className="text-s font-bold text-gray-800 flex items-center">
-    <ConfirmationNumberIcon className="mr-1" /> {currentCurrency}{" "}
-    {(price * exchangeRate).toFixed(2)}
-  </p>
-</div>
-  
+          {/* Price */}
+          <p className="text-s font-bold text-gray-800 flex items-center">
+            <ConfirmationNumberIcon className="mr-1" /> {currentCurrency}{" "}
+            {(price * exchangeRate).toFixed(2)}
+          </p>
+        </div>
+
         {/* Date */}
-        
-          <div className="mb-4 text-left">
-            <p className="text-gray-600 text-sm font-semibold">
-              {`${format(new Date(starting_Date), "MMM dd")} - ${format(
-                new Date(ending_Date),
-                "MMM dd"
-              )}`}
-            </p>
-          </div>
-      
-              {/* Description */}
+
+        <div className="mb-4 text-left">
+          <p className="text-gray-600 text-sm font-semibold">
+            {`${format(new Date(starting_Date), "MMM dd")} - ${format(
+              new Date(ending_Date),
+              "MMM dd"
+            )}`}
+          </p>
+        </div>
+
+        {/* Description */}
 
         {/* <div className="mb-4">
           <p className="text-gray-600 text-center text-sm truncate">
@@ -216,125 +233,121 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
           </p>
         </div> */}
 
-
         {/* Tags */}
-  
+
         {Array.isArray(selectedTags) && selectedTags.length > 0 && (
-  <div className="mb-2">
-    <div className="flex flex-wrap justify-center items-center">
-      {selectedTags.slice(0, 3).map((tag) => (
-        <span
-          key={tag._id}
-          className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-sm mr-2 mb-2"
-        >
-          {tag.name}
-        </span>
-      ))}
-      {selectedTags.length > 3 && (
-        <span className="text-purple-800 px-2 py-1 text-sm">...</span>
-      )}
-    </div>
-  </div>
-)}
-
-
-       {/* Buttons */}
-<div className="mt-2">
-  <div className="flex justify-between items-center">
-    <Link
-      to={`/${currenttype + "/" + username}/itineraries/tourist-itinerary/${_id}`}
-      state={{
-        title,
-        description,
-        price,
-        starting_Date,
-        ending_Date,
-        rating,
-        main_Picture,
-        language,
-        pickup_location,
-        accesibility,
-        dropoff_location,
-        plan,
-        selectedTags,
-      }}
-      className="p-2 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition flex items-center"
-    >
-      <InfoIcon className="w-6 h-6 text-white" />
-    </Link>
-
-    {currentType === "tourist" && (
-      <>
-        {/* Bookmark Button */}
-        {!isBookmarked && (
-          <button
-            className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600"
-            title="Bookmark"
-            onClick={() => handleBookmark(_id)}
-          >
-            {loadingBookmark ? (
-              <ClipLoader size={30} color="#ffffff"></ClipLoader>
-            ) : (
-              <BookmarkIcon />
-            )}
-          </button>
-        )}
-        {isBookmarked && currpath !== "bookmarks" && (
-          <button
-            className="bg-purple-800 text-white p-2 rounded-lg"
-            disabled
-          >
-            <BookmarkAddedIcon />
-          </button>
+          <div className="mb-2">
+            <div className="flex flex-wrap justify-center items-center">
+              {selectedTags.slice(0, 3).map((tag) => (
+                <span
+                  key={tag._id}
+                  className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-sm mr-2 mb-2"
+                >
+                  {tag.name}
+                </span>
+              ))}
+              {selectedTags.length > 3 && (
+                <span className="text-purple-800 px-2 py-1 text-sm">...</span>
+              )}
+            </div>
+          </div>
         )}
 
-        {/* Interested Button */}
-        
-        <button 
-        className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600" 
-        title="Interested"
-        >
-        <FavoriteBorderIcon />
-        </button>
-
-
-
-        {/* Share Button */}
+        {/* Buttons */}
         <div className="mt-2">
-          <ShareButton type={"itinerary"} ID={_id} />
+          <div className="flex justify-between items-center">
+            <Link
+              to={`/${
+                currenttype + "/" + username
+              }/itineraries/tourist-itinerary/${_id}`}
+              state={{
+                title,
+                description,
+                price,
+                starting_Date,
+                ending_Date,
+                rating,
+                main_Picture,
+                language,
+                pickup_location,
+                accesibility,
+                dropoff_location,
+                plan,
+                selectedTags,
+              }}
+              className="p-2 bg-purple-500 text-white rounded-full hover:bg-purple-600 transition flex items-center"
+            >
+              <InfoIcon className="w-6 h-6 text-white" />
+            </Link>
+
+            {currentType === "tourist" && (
+              <>
+                {/* Bookmark Button */}
+
+                {!isBookmarked && (
+                  <button
+                    className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600"
+                    title="Bookmark"
+                    onClick={() => handleBookmark(_id)}
+                  >
+                    {loadingBookmark ? (
+                      <ClipLoader size={30} color="#ffffff"></ClipLoader>
+                    ) : (
+                      <BookmarkIcon />
+                    )}
+                  </button>
+                )}
+                {isBookmarked && currpath !== "bookmarks" && (
+                  <button
+                    className="bg-purple-800 text-white p-2 rounded-lg"
+                    disabled
+                  >
+                    <BookmarkAddedIcon />
+                  </button>
+                )}
+
+                {/* Interested Button */}
+
+                <button
+                  className="bg-purple-500 text-white p-2 rounded-lg hover:bg-purple-600"
+                  title="Interested"
+                >
+                  <FavoriteBorderIcon />
+                </button>
+
+                {/* Share Button */}
+                <div className="mt-2">
+                  <ShareButton type={"itinerary"} ID={_id} />
+                </div>
+              </>
+            )}
+          </div>
+
+          {currentType === "tourist" && (
+            <div className="mt-4">
+              {/* Book Button */}
+              <button
+                className="w-full bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600"
+                onClick={() => handleBooking(_id)}
+              >
+                {loading ? (
+                  <ClipLoader size={30} color="#ffffff"></ClipLoader>
+                ) : (
+                  "Book"
+                )}
+              </button>
+            </div>
+          )}
+
+          {currentType === "admin" && (
+            <div className="bg-yellow-500 text-white p-2 rounded-lg flex flex-col items-center w-full mt-4">
+              <p className="text-sm flex items-center">
+                {bookingActivated ? "Booking Activated" : "Booking Deactivated"}
+              </p>
+            </div>
+          )}
         </div>
-      </>
-    )}
-  </div>
 
-  {currentType === "tourist" && (
-    <div className="mt-4">
-      {/* Book Button */}
-      <button
-        className="w-full bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600"
-        onClick={() => handleBooking(_id)}
-      >
-        {loading ? (
-          <ClipLoader size={30} color="#ffffff"></ClipLoader>
-        ) : (
-          "Book"
-        )}
-      </button>
-    </div>
-  )}
-
-  {currentType === "admin" && (
-    <div className="bg-yellow-500 text-white p-2 rounded-lg flex flex-col items-center w-full mt-4">
-      <p className="text-sm flex items-center">
-        {bookingActivated ? "Booking Activated" : "Booking Deactivated"}
-      </p>
-    </div>
-  )}
-
-</div>
-
-  
-        
         {currentType === "admin" && (
           <Button onClick={handleInappropriate}>
             {inappropriateV ? "Declare Appropriate" : "Declare Inappropriate"}
@@ -343,7 +356,6 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
       </div>
     </div>
   );
-   
 };
 
 export default ItineraryCardCRUDTourist;
