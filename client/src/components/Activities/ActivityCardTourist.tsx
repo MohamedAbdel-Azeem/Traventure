@@ -26,6 +26,7 @@ import BookmarkIcon from '@mui/icons-material/BookmarkAdd';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import ClipLoader from 'react-spinners/ClipLoader';
 import BlockIcon from '@mui/icons-material/Block';
+import TheBIGMAP from "../Maps/TheBIGMAP";
 
 export type Activity = {
   _id: string;
@@ -79,6 +80,11 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
     activity.inappropriate
   );
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const handleViewMap = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
 
   const handleInappropriate = async () => {
@@ -340,18 +346,43 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
             </div>
           </div>
         </div>
-  
-        {/* Embedded Google Map */}
-        <div className="w-full h-[200px]">
-          <iframe
-            title="map"
-            className="w-full h-full rounded-b-lg"
-            src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${activity.Location.longitude}!3d${activity.Location.latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
-          ></iframe>
-        </div>
+
+         {/* View Map Button */}
+      <div className="mt-4 flex justify-center">
+        <button
+          onClick={handleViewMap}
+          className="px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition-all duration-300"
+        >
+          View Map
+        </button>
       </div>
+  
+        {/* Map Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="relative bg-white rounded-lg overflow-hidden shadow-lg w-4/5 md:w-1/2">
+            <TheBIGMAP
+              arrayofmarkers={[
+                {
+                  latitude: activity.Location.latitude,
+                  longitude: activity.Location.longitude,
+                },
+              ]}
+              id="map"
+              className="h-[500px] w-full"
+            />
+            <button
+              onClick={handleCloseModal}
+              className="absolute h-[40px] w-[40px] top-2 left-2 text-[25px] text-center items-center text-white bg-red-500 hover:bg-red-600 font-bold rounded-full"
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
     </div>
   );
-  
-  
 };
+
+export default ActivityCardTourist;
