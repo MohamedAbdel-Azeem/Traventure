@@ -310,19 +310,16 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
 </div>
 
   
-        {/* Tag Section */}
-        <div className="px-6 py-4">
-          {/* Tag Section */}
+{/* Tag Section */}
 <div className="px-6 py-4">
   <div className="flex flex-wrap justify-center items-center gap-2">
-    {/* Display selected tags as tags */}
     {selectedTags && selectedTags.length > 0 ? (
       selectedTags.map((tagId) => {
         const tag = tagsOptions.find((t) => t._id === tagId);
         return (
           <span
             key={tagId}
-            className="px-3 py-1 bg-blue-200 text-blue-900 rounded-full text-sm font-medium"
+            className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium"
           >
             {tag?.name}
           </span>
@@ -331,25 +328,26 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
     ) : (
       <span className="text-gray-500 italic">No tags selected</span>
     )}
+    
+    {/* View More Button */}
+    <button
+      title="View Tags"
+      onClick={() => setmOpen(true)}
+      className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium hover:bg-purple-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50"
+    >
+      +
+    </button>
   </div>
 </div>
 
-  
-          <button
-            title="View Tags"
-            onClick={() => setmOpen(true)}
-            className="text-center mt-4 text-blue-600 underline"
-          >
-            View More
-          </button>
-        </div>
+
   
         {/* View Map, Bookmark, and Book Buttons Section */}
         <div className="mt-4 flex justify-center gap-4 px-6 py-4">
           {/* View Map Button */}
           <button
             onClick={handleViewMap}
-            className="px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition-all duration-300"
+            className="px-4 py-2 bg-purple-500 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition-all duration-300"
           >
             View Map
           </button>
@@ -358,7 +356,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
           <div className="flex gap-4">
             {!isBookmarked && (
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600"
                 title="Bookmark"
                 onClick={() => handleBookMark(activity._id)}
               >
@@ -374,7 +372,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
   
           {/* Book Button */}
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+            className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600"
             onClick={() => handleBooking(activity._id)}
           >
             {loading ? <ClipLoader size={30} color="#ffffff" /> : "Book"}
