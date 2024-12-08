@@ -221,38 +221,40 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
   
       <div className="w-[400px] bg-white rounded-lg shadow-lg overflow-hidden">
     
-        {/* Booking Status & Title Section */}
-        <div className="bg-white-100 p-4">
-          <div className="flex justify-between items-start">
-            
-            {/* Title and Date on Left Side */}
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2">
-                {/* Booking Status Icon */}
-                {!newBIO && <BlockIcon className="text-red-500" />}
-                
-                {/* Title */}
-                <h2 className="text-xl font-bold">{activity.Title}</h2>
-              </div>
-              {/* Date Below Title */}
-              <input
-                title="date"
-                name="date"
-                disabled
-                value={formatDate(newDate)}
-                onChange={handleDateChange}
-                type="datetime-local"
-                className="border-0 text-sm text-gray-600 mt-1"
-              />
-            </div>
-  
-            {/* Ratings on the Right Side */}
-            <div className="ml-auto flex items-center">
-              <Rating disabled name="rating" value={averageRating} precision={0.1} />
-            </div>
-  
-          </div>
-        </div>
+{/* Booking Status & Title Section */}
+<div className="bg-white-100 p-4">
+  <div className="flex justify-between items-start">
+    
+    {/* Title and Date Section */}
+
+    <div className="flex flex-col flex-grow max-w-[calc(70%-10px)]">
+      <div className="flex items-center gap-2">
+        {/* Booking Status Icon */}
+        {!newBIO && <BlockIcon className="text-red-500" />}
+        
+        {/* Title */}
+        <h2 className="text-xl font-bold overflow-hidden text-ellipsis whitespace-nowrap" title={activity.Title}>{activity.Title}</h2>
+      </div>
+      {/* Date */}
+      <input
+        title="date"
+        name="date"
+        disabled
+        value={formatDate(newDate)}
+        onChange={handleDateChange}
+        type="datetime-local"
+        className="border-0 text-sm text-gray-600 mt-1"
+      />
+    </div>
+
+    {/* Ratings */}
+    <div className="ml-4 flex-shrink-0">
+      <Rating disabled name="rating" value={averageRating} precision={0.1} />
+    </div>
+  </div>
+</div>
+
+
   
         {/* Admin Controls */}
         {currenttype === "admin" && (
@@ -273,7 +275,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
        {/* Categorical Tag */}
 <div className="px-6 py-4">
   <div className="flex flex-wrap justify-center items-center gap-2">
-    {/* Display selected category as a tag */}
+   
     {selectedCat && (
       <span className="px-3 py-1 bg-purple-200 text-purple-900 rounded-full text-sm font-medium">
         {CatOptions.find(tag => tag._id === selectedCat)?.name || 'No Category'}
