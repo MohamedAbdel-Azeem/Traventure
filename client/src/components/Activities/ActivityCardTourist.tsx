@@ -312,26 +312,28 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
   
         {/* Tag Section */}
         <div className="px-6 py-4">
-          <div className="flex justify-between gap-4">
-            <FormControl fullWidth>
-              <Select
-                disabled
-                labelId="tags-select-label"
-                multiple
-                value={selectedTags}
-                onChange={handleTagsChange}
-                renderValue={handleTagsText}
-                className="bg-gray-100"
-              >
-                {tagsOptions.map((tag) => (
-                  <MenuItem key={tag._id} value={tag._id}>
-                    <Checkbox checked={selectedTags.indexOf(tag._id) > -1} />
-                    <ListItemText primary={tag.name} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </div>
+          {/* Tag Section */}
+<div className="px-6 py-4">
+  <div className="flex flex-wrap justify-center items-center gap-2">
+    {/* Display selected tags as tags */}
+    {selectedTags && selectedTags.length > 0 ? (
+      selectedTags.map((tagId) => {
+        const tag = tagsOptions.find((t) => t._id === tagId);
+        return (
+          <span
+            key={tagId}
+            className="px-3 py-1 bg-blue-200 text-blue-900 rounded-full text-sm font-medium"
+          >
+            {tag?.name}
+          </span>
+        );
+      })
+    ) : (
+      <span className="text-gray-500 italic">No tags selected</span>
+    )}
+  </div>
+</div>
+
   
           <button
             title="View Tags"
