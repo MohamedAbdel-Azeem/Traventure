@@ -314,7 +314,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
 <div className="px-6 py-4">
   <div className="flex flex-wrap justify-center items-center gap-2">
     {selectedTags && selectedTags.length > 0 ? (
-      selectedTags.map((tagId) => {
+      selectedTags.slice(0, 3).map((tagId) => {
         const tag = tagsOptions.find((t) => t._id === tagId);
         return (
           <span
@@ -328,17 +328,20 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
     ) : (
       <span className="text-gray-500 italic">No tags selected</span>
     )}
-    
+
     {/* View More Button */}
-    <button
-      title="View Tags"
-      onClick={() => setmOpen(true)}
-      className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium hover:bg-purple-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50"
-    >
-      +
-    </button>
+    {selectedTags.length > 3 && (
+      <button
+        title="View Tags"
+        onClick={() => setmOpen(true)}
+        className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium hover:bg-purple-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50"
+      >
+        +
+      </button>
+    )}
   </div>
 </div>
+
 
 
   
