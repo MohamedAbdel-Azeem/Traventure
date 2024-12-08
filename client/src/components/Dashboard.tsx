@@ -9,7 +9,7 @@ import {
 } from "./Activities/ActivityCardTourist";
 import axios from "axios";
 import Itinerary from "../custom_hooks/itineraries/itinerarySchema";
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 const Dashboard: React.FC = () => {
   const { upcoming, loading, error } = useGetUpcoming();
@@ -23,9 +23,6 @@ const Dashboard: React.FC = () => {
   const currenttype = useLocation().pathname.split("/")[1];
   const { username } = useParams<{ username: string }>();
   const currentuser = username as string;
-  
-
-
 
   useEffect(() => {
     const fetchBookmarks = async () => {
@@ -73,7 +70,6 @@ const Dashboard: React.FC = () => {
 
   tourist_activities = tourist_activities.slice(0, 5);
   tourist_itineraries = tourist_itineraries.slice(0, 5);
-  
 
   return (
     <>
@@ -83,10 +79,11 @@ const Dashboard: React.FC = () => {
           Welcome Back, {currentuser}!
         </h1>
         <p className="mt-4 text-lg text-white opacity-90">
-          Plan your next adventure with ease. Check upcoming itineraries, places, and activities all in one place.
+          Plan your next adventure with ease. Check upcoming itineraries,
+          places, and activities all in one place.
         </p>
       </header>
-  
+
       {/* Upcoming Itineraries Section */}
       <div className="bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 p-1 mx-4 lg:mx-20 rounded-lg shadow-md mt-5">
         <section className="p-8 bg-white rounded-lg">
@@ -98,33 +95,38 @@ const Dashboard: React.FC = () => {
             Stay on top of your travel plans with these upcoming trips.
           </p>
           <div className="overflow-x-auto">
-            <div className="flex gap-6 items-start">
+            <div className="flex gap-12 items-start">
               {tourist_itineraries.length > 0 ? (
                 tourist_itineraries.map((itinerary) => (
                   <div className="w-96 flex-shrink-0">
-                    <ItineraryCardToruist 
-                      key={itinerary._id} 
-                      {...itinerary} 
+                    <ItineraryCardToruist
+                      key={itinerary._id}
+                      {...itinerary}
                       bookmarked={bookmarkedItineraries.some(
-                        (bookmarkedItinerary) => bookmarkedItinerary._id === itinerary._id
-                      )} 
+                        (bookmarkedItinerary) =>
+                          bookmarkedItinerary._id === itinerary._id
+                      )}
                     />
                   </div>
                 ))
               ) : (
-                <div className="text-gray-500 italic text-center">No upcoming itineraries available.</div>
+                <div className="text-gray-500 italic text-center">
+                  No upcoming itineraries available.
+                </div>
               )}
               <button
-                className="flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-4 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 mt-4"
-                onClick={() => navigate(`/${currenttype}/${currentuser}/itineraries`)}
+                className="flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-4 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 my-auto"
+                onClick={() =>
+                  navigate(`/${currenttype}/${currentuser}/itineraries`)
+                }
               >
-                <MoreHorizIcon className="w-6 h-6 text-white" />
+                <MoreHorizIcon className="w-6 h-6 text-white my-auto" />
               </button>
             </div>
           </div>
         </section>
       </div>
-  
+
       {/* Upcoming Places Section */}
       <div className="bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 p-1 mx-4 lg:mx-20 rounded-lg shadow-md mt-5">
         <section className="p-8 bg-white rounded-lg">
@@ -140,15 +142,22 @@ const Dashboard: React.FC = () => {
               {locations.length > 0 ? (
                 locations.map((location) => (
                   <div key={location._id} className="min-w-[600px]">
-                    <LocationCardTourist id={String(location._id)} wholeLocation={location} />
+                    <LocationCardTourist
+                      id={String(location._id)}
+                      wholeLocation={location}
+                    />
                   </div>
                 ))
               ) : (
-                <div className="text-gray-500 italic">No upcoming places available.</div>
+                <div className="text-gray-500 italic">
+                  No upcoming places available.
+                </div>
               )}
               <button
-                className="flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-4 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 mt-4"
-                onClick={() => navigate(`/${currenttype}/${currentuser}/locations`)}
+                className="flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-4 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 my-auto"
+                onClick={() =>
+                  navigate(`/${currenttype}/${currentuser}/locations`)
+                }
               >
                 <MoreHorizIcon className="w-6 h-6 text-white" />
               </button>
@@ -156,7 +165,7 @@ const Dashboard: React.FC = () => {
           </div>
         </section>
       </div>
-  
+
       {/* Upcoming Activities Section */}
       <div className="bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 p-1 mx-4 lg:mx-20 rounded-lg shadow-md mt-5">
         <section className="p-8 bg-white rounded-lg">
@@ -171,21 +180,26 @@ const Dashboard: React.FC = () => {
             <div className="flex gap-6 items-start">
               {tourist_activities.length > 0 ? (
                 tourist_activities.map((activity) => (
-              <ActivityCardTourist
-                key={activity._id}
-                activity={activity}
-                bookmarked={bookmarkedActivities.some(
-                  (bookmarkedActivity) =>
-                    bookmarkedActivity._id === activity._id
-                )}
-                {...(currenttype === "tourist" && { type: "tourist" })}
-              />                ))
+                  <ActivityCardTourist
+                    key={activity._id}
+                    activity={activity}
+                    bookmarked={bookmarkedActivities.some(
+                      (bookmarkedActivity) =>
+                        bookmarkedActivity._id === activity._id
+                    )}
+                    {...(currenttype === "tourist" && { type: "tourist" })}
+                  />
+                ))
               ) : (
-                <div className="text-gray-500 italic text-center">No upcoming activities available.</div>
+                <div className="text-gray-500 italic text-center">
+                  No upcoming activities available.
+                </div>
               )}
               <button
-                className="flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-4 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 mt-4"
-                onClick={() => navigate(`/${currenttype}/${currentuser}/activities`)}
+                className="flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-4 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 my-auto"
+                onClick={() =>
+                  navigate(`/${currenttype}/${currentuser}/activities`)
+                }
               >
                 <MoreHorizIcon className="w-6 h-6 text-white" />
               </button>
@@ -195,9 +209,6 @@ const Dashboard: React.FC = () => {
       </div>
     </>
   );
-  
-  };
-  
-  export default Dashboard;
-  
-  
+};
+
+export default Dashboard;

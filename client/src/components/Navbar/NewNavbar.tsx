@@ -12,7 +12,6 @@ import {
   ListItemText,
   Toolbar,
 } from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
 import ShopIcon from "@mui/icons-material/Shop";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -28,9 +27,7 @@ import NavbarDropdown from "./NavbarDropdown";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Logout } from "@mui/icons-material";
-import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import ChangePasswordModal, {
   AddContactLeadFormType,
 } from "../ChangePasswordModal";
@@ -85,7 +82,6 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   };
 
   const adminnavbaritems = [
-    { text: "Home", icon: <HomeIcon />, path: `/admin/${currentuser}` },
     { text: "Shop", icon: <ShopIcon />, path: `/admin/${currentuser}/shop` },
     {
       text: "Sales",
@@ -111,7 +107,6 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   ];
 
   const TGnavbaritems = [
-    { text: "Home", icon: <HomeIcon />, path: `/tourguide/${currentuser}` },
     {
       text: "Locations",
       icon: <LocationOnIcon />,
@@ -131,11 +126,6 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
 
   const TGonavbaritems = [
     {
-      text: "Home",
-      icon: <HomeIcon />,
-      path: `/tourismgovernor/${currentuser}`,
-    },
-    {
       text: "Locations",
       icon: <LocationOnIcon />,
       path: `/tourismgovernor/${currentuser}/locations`,
@@ -148,7 +138,6 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   ];
 
   const touristnavbaritems = [
-    { text: "Home", icon: <HomeIcon />, path: `/tourist/${currentuser}` },
     { text: "Shop", icon: <ShopIcon />, path: `/tourist/${currentuser}/shop` },
     {
       text: "Bookings",
@@ -183,7 +172,6 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   ];
 
   const advertisernavbaritems = [
-    { text: "Home", icon: <HomeIcon />, path: `/advertiser/${currentuser}` },
     {
       text: "Locations",
       icon: <LocationOnIcon />,
@@ -212,7 +200,6 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   ];
 
   const sellernavbaritems = [
-    { text: "Home", icon: <HomeIcon />, path: `/seller/${currentuser}` },
     {
       text: "Sales",
       icon: <ShowChartIcon />,
@@ -221,7 +208,6 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   ];
 
   const guestnavbaritems = [
-    { text: "Home", icon: <HomeIcon />, path: `/guest/guest-page` },
     { text: "Shop", icon: <ShopIcon />, path: `/guest/shop` },
     {
       text: "Itineraries",
@@ -363,7 +349,8 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   }, [cuserdata]);
 
   const currentPath = location.pathname;
-
+  const currentlocation = useLocation();
+  const currenttab = currentlocation.pathname.split("/")[3];
   return (
     <Box sx={{ display: "flex" }} className={className}>
       <CssBaseline />
@@ -383,13 +370,25 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
           }}
         >
           <img
-            src="/src/assets/logowhite.png"
+            src={
+              currenttab
+                ? `/src/assets/logowhite.png`
+                : `/src/assets/logowhite2.png`
+            }
             alt="Navbar Logo"
+            className="cursor-pointer"
             style={{
               height: "100%",
               width: "auto",
               maxHeight: "35%",
               maxWidth: "30%",
+            }}
+            onClick={() => {
+              if (!currentusertype.includes("guest")) {
+                navigate(`/${currentusertype}/${currentuser}`);
+              } else {
+                navigate(`/guest`);
+              }
             }}
           />
           <Box sx={{ flex: 1, display: "flex", justifyContent: "center" }}>

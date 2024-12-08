@@ -15,6 +15,7 @@ import SellerRouter from "./Routers/SellerRouter";
 import GuestRouter from "./Routers/GuestRouter";
 import Checkout from "./components/Checkout";
 import ForgotPassword from "./components/ForgotPassword";
+import SwipeableTemporaryDrawer from "./components/Test";
 function App() {
   return (
     <MantineProvider>
@@ -27,7 +28,10 @@ function App() {
           {/* Tourist */}
           <Route path="/tourist/*" element={<TouristRouter />} />
           {/* Tourism Governor */}
-          <Route path="/tourismgovernor/*" element={<TourismGovernorRouter />}/>
+          <Route
+            path="/tourismgovernor/*"
+            element={<TourismGovernorRouter />}
+          />
           {/* Advertiser */}
           <Route path="/advertiser/*" element={<AdvertiserRouter />} />
           {/* Tour Guide */}
@@ -37,9 +41,13 @@ function App() {
           {/* Guest */}
           <Route path="/guest/*" element={<GuestRouter />} />
           {/* Extra */}
-          <Route path="/terms-and-conditions" element={<TermsAndConditions />}/>
+          <Route
+            path="/terms-and-conditions"
+            element={<TermsAndConditions />}
+          />
           <Route path="/landing" element={<LandingPage />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/test" element={<SwipeableTemporaryDrawer />} />
         </Routes>
       </Router>
     </MantineProvider>

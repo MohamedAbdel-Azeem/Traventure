@@ -157,7 +157,7 @@ const Checkout = () => {
   }
   return (
     <div
-      className="h-screen flex items-center justify-center bg-gray-900"
+      className="h-screen flex items-start justify-center bg-gray-900 gap-[100px]"
       style={{
         backgroundImage: `url('/src/assets/mtn.jpg')`,
         backgroundSize: "cover",
@@ -166,7 +166,7 @@ const Checkout = () => {
         backgroundColor: "rgba(0, 0, 0, 0.7)",
       }}
     >
-      <div className="ml-[100px] h-[650px] mt-8 w-[650px] bg-gradient-to-b from-[#A855F7] to-[#6D28D9] flex flex-col rounded-[10px] overflow-auto lasttimeipromise relative">
+      <div className="h-[650px] mt-[70px] w-[650px] bg-gradient-to-b from-[#A855F7] to-[#6D28D9] flex flex-col rounded-[10px] overflow-auto lasttimeipromise relative">
         <div className="flex text-[30px] h-[68px] mt-[2px] w-[612px] justify-center items-center text-white">
           Order Summary
         </div>
@@ -201,7 +201,7 @@ const Checkout = () => {
           </div>
         ))}
       </div>
-      <div className="mr-[90px] ml-auto mt-8 w-[529.2px] h-[589px] rounded-[10px] bg-gradient-to-t from-violet-700 to-violet-900 flex flex-col">
+      <div className="w-[529.2px] mt-[70px] h-[589px] rounded-[10px] bg-gradient-to-b from-[#A855F7] to-[#6D28D9] flex flex-col">
         {isEditing ? (
           isEditing2 ? (
             <div className="relative">
@@ -1028,7 +1028,7 @@ const Checkout = () => {
                   {(onAccept ? subtotal * 0.9 : subtotal * 1.0).toFixed(2)}
                 </p>
                 <button className="my-auto ml-auto mr-[9.8px] w-[189px] h-[46.2px] bg-gradient-to-t hover:bg-gradient-to-b from-[#A855F7] via-[#bb7bff] to-[#c49ffc] border-[#652795] border-[0.7px] rounded-[7.7px] text-[21px]">
-                  Checkout
+                  Buy
                 </button>
               </div>
             </div>

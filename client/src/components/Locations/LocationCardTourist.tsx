@@ -7,7 +7,7 @@ import Place from "../../custom_hooks/places/place_interface";
 import TheMAP from "../Maps/TheMAP";
 import { useSelector } from "react-redux";
 import { useGetHTags } from "../../custom_hooks/useCreateHistoricalTag";
-
+import TheBIGMAP from "../Maps/TheBIGMAP";
 interface LocationCardTouristProps {
   id: string;
   className?: string;
@@ -19,7 +19,6 @@ const LocationCardTourist: React.FC<LocationCardTouristProps> = ({
   className,
   wholeLocation: details,
 }) => {
-  const [isEditing, setIsEditing] = useState(false);
   const [locationName, setLocationName] = useState(details?.name || "");
   const [description, setDescription] = useState(details?.description || "");
   const [native, setNative] = useState(details?.ticket_price.native ?? 0);
@@ -47,7 +46,6 @@ const LocationCardTourist: React.FC<LocationCardTouristProps> = ({
       .filter((tag) => value.includes(tag._id))
       .map((tag) => tag.name);
     return valueNames.join(", ");
-
   };
 
   console.log(details.historicalTags.map((tag) => typeof tag.name));
@@ -60,9 +58,6 @@ const LocationCardTourist: React.FC<LocationCardTouristProps> = ({
     (state: any) => state.exchangeRate.currentCurrency
   );
 
-  
-  
-  
   const handleViewMap = () => {
     setIsModalOpen(true);
   };
@@ -70,185 +65,131 @@ const LocationCardTourist: React.FC<LocationCardTouristProps> = ({
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-//   <iframe
-//   title="map"
-//   className="rounded-[10px] my-auto ml-auto mr-[58px]"
-//   src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${details.longitude}!3d${details.latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
-//   width="225px"
-//   height="225px"
-// ></iframe>
 
-return (
-  <div 
-    className={`relative w-full max-w-[500px] h-[350px] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all ${className}`}
-  >
-    {/* Background Image */}
-    <div 
-      className="absolute inset-0 bg-cover bg-center transition-all duration-300"
-      style={{ backgroundImage: `url(${images?.[0] || 'https://via.placeholder.com/500'})` }}
-      alt="Location Background"  
+  return (
+    <div
+      className={`relative w-full max-w-[500px] h-[350px] rounded-lg overflow-hidden shadow-lg transition-all ${className}`}
+      style={{ boxShadow: "10px 10px 20px rgba(0, 0, 0, 0.2)" }}
     >
-      <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
-    </div>
-  
-    {/* Title displayed at bottom-left */}
-    <div className="absolute bottom-4 left-4 z-10 w-full px-4">
-      {isEditing ? (
-        <TextField
-          value={locationName}
-          onChange={(e) => setLocationName(e.target.value)}
-          className="w-full text-center bg-white bg-opacity-70 rounded-md p-1"
-          placeholder="Location Name"
-          aria-label="Location Name"
-        />
-      ) : (
-        <h2 
-          className="text-2xl font-bold text-white drop-shadow-md truncate"  
-          style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)' }}
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center transition-all duration-300"
+        style={{
+          backgroundImage: `url(${
+            images?.[0] || "https://via.placeholder.com/500"
+          })`,
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+      </div>
+
+      {/* Title displayed at bottom-left */}
+      <div className="absolute bottom-4 left-4 z-10 w-full px-4 pointer-events-none">
+        <h2
+          className="text-2xl font-bold text-white drop-shadow-md truncate"
+          style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.7)" }}
         >
           {locationName}
         </h2>
-      )}
-    </div>
-  
-    {/* Hover Overlay Content */}
-    <div 
-      className="absolute inset-0 bg-purple-800 bg-opacity-50 text-white opacity-0 hover:opacity-100 transition-all duration-300 flex flex-col p-6"
-    >
-      {/* Ticket Prices and Hours (top) */}
-      <div className="flex w-full mb-4 mt-5">
-        {/* Ticket Prices Section */}
-        <div className="flex-1 mr-4">
-          <div className="flex items-center mb-2">
-            <ConfirmationNumberIcon className="mr-2 text-white" />
-            <span className="font-semibold">Ticket Prices</span>
-          </div>
-          {isEditing ? (
-            <div className="space-y-3 text-white text-sm">
-              <TextField 
-                value={native} 
-                onChange={(e) => setNative(Number(e.target.value))} 
-                placeholder="Native" 
-                fullWidth
-                aria-label="Native Price"
-              />
-              <TextField 
-                value={foreign} 
-                onChange={(e) => setForeign(Number(e.target.value))} 
-                placeholder="Foreign" 
-                fullWidth
-                aria-label="Foreign Price" 
-              />
-              <TextField 
-                value={student} 
-                onChange={(e) => setStudent(Number(e.target.value))} 
-                placeholder="Student" 
-                fullWidth
-                aria-label="Student Price" 
-              />
-            </div>
-          ) : (
-            <div>
-              <p className="text-white text-sm">Native: {currentCurrency} {(native * exchangeRate).toFixed(2)}</p>
-              <p className="text-white text-sm">Foreign: {currentCurrency} {(foreign * exchangeRate).toFixed(2)}</p>
-              <p className="text-white text-sm">Student: {currentCurrency} {(student * exchangeRate).toFixed(2)}</p>
-            </div>
-          )}
-        </div>
-  
-        {/* Hours of Operation Section */}
-        <div className="flex-1">
-          <div className="flex items-center mb-2">
-            <AccessTimeIcon className="mr-2 text-white" />
-            <span className="font-semibold">Hours of Operation</span>
-          </div>
-          {isEditing ? (
-            <TextField 
-              value={hours} 
-              onChange={(e) => setHours(e.target.value)} 
-              placeholder="Hours" 
-              fullWidth 
-              aria-label="Operating Hours" 
-            />
-          ) : (
-            <p className="text-white text-sm">{hours}</p>
-          )}
-        </div>
       </div>
-  
-      {/* Historical Tags */}
-      {Array.isArray(selectedTags) && selectedTags.length > 0 && (
-        <div className="flex flex-wrap justify-center items-center mb-4">
-          {details?.historicalTags.slice(0, 3).map((tag, index) => (
-            <span 
-              key={index} 
-              className="px-3 py-1 bg-purple-200 text-purple-900 rounded-full text-sm font-medium mr-2 mb-2"
-            >
-              {tag.name}
-            </span>
-          ))}
-          {selectedTags.length > 3 && (
-            <span className="text-sm text-purple-200">...</span>
-          )}
+
+      {/* Hover Overlay Content */}
+      <div className="absolute inset-0 bg-purple-800 bg-opacity-50 text-white opacity-0 hover:opacity-100 transition-all duration-300 flex flex-col p-6">
+        {/* Ticket Prices and Hours (top) */}
+        <div className="flex w-full mb-4 mt-5">
+          {/* Ticket Prices Section */}
+          <div className="flex-1 mr-4">
+            <div className="flex items-center mb-2">
+              <ConfirmationNumberIcon className="mr-2 text-white" />
+              <span className="font-semibold">Ticket Prices</span>
+            </div>
+            <div>
+              <p className="text-white text-sm">
+                Native: {currentCurrency} {(native * exchangeRate).toFixed(2)}
+              </p>
+              <p className="text-white text-sm">
+                Foreign: {currentCurrency} {(foreign * exchangeRate).toFixed(2)}
+              </p>
+              <p className="text-white text-sm">
+                Student: {currentCurrency} {(student * exchangeRate).toFixed(2)}
+              </p>
+            </div>
+          </div>
+
+          {/* Hours of Operation Section */}
+          <div className="flex-1">
+            <div className="flex items-center mb-2">
+              <AccessTimeIcon className="mr-2 text-white" />
+              <span className="font-semibold">Hours of Operation</span>
+            </div>
+            <p className="text-white text-sm">{hours}</p>
+          </div>
         </div>
-      )}
-  
-      {/* Description */}
-      <div className="w-full mb-4">
-        {isEditing ? (
-          <TextField
-            multiline
-            maxRows={2}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full"
-            placeholder="Description"
-            aria-label="Description" 
-          />
-        ) : (
-          <p 
-            className="text-center text-sm text-gray-200 truncate" 
-            style={{ maxWidth: '100%' }}
+
+        {/* Historical Tags */}
+        {Array.isArray(selectedTags) && selectedTags.length > 0 && (
+          <div className="flex flex-wrap justify-center items-center mb-4">
+            {details?.historicalTags.slice(0, 3).map((tag, index) => (
+              <span
+                key={index}
+                className="px-3 py-1 bg-purple-200 text-purple-900 rounded-full text-sm font-medium mr-2 mb-2"
+              >
+                {tag.name}
+              </span>
+            ))}
+            {selectedTags.length > 3 && (
+              <span className="text-sm text-purple-200">...</span>
+            )}
+          </div>
+        )}
+
+        {/* Description */}
+        <div className="w-full mb-4">
+          <p
+            className="text-center text-sm text-gray-200 truncate"
+            style={{ maxWidth: "100%" }}
           >
             {description}
           </p>
-        )}
-      </div>
+        </div>
 
-      {/* View Map Button */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hover:opacity-100 transition-all duration-300">
-        <button 
-          onClick={handleViewMap}
-          className="px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition-all duration-300"
-        >
-          View Map
-        </button>
-      </div>
-    </div>
-
-    {/* Map Modal */}
-    {isModalOpen && (
-      <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-        <div className="relative bg-white rounded-lg overflow-hidden shadow-lg w-4/5 md:w-1/2">
-          {/* Close Button */}
-          <button 
-            onClick={handleCloseModal}
-            className="absolute top-2 right-2 text-white bg-red-500 hover:bg-red-600 p-2 rounded-full"
+        {/* View Map Button */}
+        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hover:opacity-100 transition-all duration-300">
+          <button
+            onClick={handleViewMap}
+            className="px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition-all duration-300"
           >
-            &times;
+            View Map
           </button>
-          <iframe
-                  title="map"
-                  className="rounded-b-[19px]"
-                  src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${longitude}!3d${latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
-                  width="100%"
-                  height="450px"
-                ></iframe>
         </div>
       </div>
-    )}
-  </div>
-);
+
+      {/* Map Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="relative bg-white rounded-lg overflow-hidden shadow-lg w-4/5 md:w-1/2">
+            {/* Close Button */}
+            <TheBIGMAP
+              arrayofmarkers={[
+                {
+                  latitude: latitude,
+                  longitude: longitude,
+                },
+              ]}
+              id="map"
+              className="h-[500px] w-full"
+            />{" "}
+            <button
+              onClick={handleCloseModal}
+              className="absolute h-[40px] w-[40px] top-2 left-2 text-[25px] text-center items-center text-white bg-red-500 hover:bg-red-600 font-bold rounded-full"
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default LocationCardTourist;

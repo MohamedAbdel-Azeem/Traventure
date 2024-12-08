@@ -14,7 +14,7 @@ export default function GuestRouter() {
     <div className="flex flex-col w-screen h-screen">
       <NewNavbar />
       <Routes>
-        <Route path="/guest-page" element={<GuestPage />} />
+        <Route path="/" element={<GuestPage />} />
         <Route path="/more-itineraries" element={<GuestMoreItineraries />} />
         <Route
           path="/:username/itineraries/tourist-itinerary/:id"
