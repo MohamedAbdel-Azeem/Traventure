@@ -213,176 +213,183 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
       </Modal>
   
       <div className="w-[400px] bg-white rounded-lg shadow-lg overflow-hidden">
-        
-        {/* Booking Status & Admin Status */}
-        <div className="flex justify-between items-center bg-white-100 p-4">
+  
+  {/* Booking Status & Title Section */}
+  <div className="bg-white-100 p-4">
+    <div className="flex justify-between items-start">
+      
+      {/* Title and Date on Left Side */}
+      <div className="flex flex-col">
+        <div className="flex items-center gap-2">
+          {/* Booking Status Icon */}
+          {!newBIO && <BlockIcon className="text-red-500" />}
           
-          <div className="flex items-center gap-2">
-            {/* Booking Status Icon */}
-            {!newBIO && <BlockIcon className="text-red-500" />}
-            
-            {/* Title Next to Block Icon */}
-            <h2 className="text-xl font-bold">{activity.Title}</h2>
-          </div>
-  
-          {/* Admin Controls */}
-          {currenttype === "admin" && (
-            <select
-              title="status"
-              name="status"
-              value={inappropriate ? "true" : "false"}
-              onChange={handleInappropriate}
-              className="text-sm bg-gray-200 rounded-full px-2 py-1"
-            >
-              <option value="true">Inappropriate</option>
-              <option value="false">Appropriate</option>
-            </select>
-          )}
+          {/* Title */}
+          <h2 className="text-xl font-bold">{activity.Title}</h2>
         </div>
-  
-        {/* Rating Section */}
-        <div className="text-center py-4">
-          <Rating disabled name="rating" value={averageRating} precision={0.1} />
-        </div>
-  
-        {/* Booking Section */}
-        {type === "tourist" && activity.BookingIsOpen && (
-          <div className="flex justify-center gap-4 py-4">
-            {!isBookmarked && (
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                title="Bookmark"
-                onClick={() => handleBookMark(activity._id)}
-              >
-                {loadingBookmark ? <ClipLoader size={30} color="#ffffff" /> : <BookmarkIcon />}
-              </button>
-            )}
-            {isBookmarked && currpath !== "bookmarks" && (
-              <button className="bg-green-700 text-white px-4 py-2 rounded-lg" disabled>
-                <BookmarkAddedIcon />
-              </button>
-            )}
-            <button
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-              onClick={() => handleBooking(activity._id)}
-            >
-              {loading ? <ClipLoader size={30} color="#ffffff" /> : "Book"}
-            </button>
-          </div>
-        )}
-  
-        {/* Dropdown Selectors */}
-        <div className="px-6 py-4">
-          <div className="flex justify-between gap-4">
-            <FormControl fullWidth>
-              <Select
-                disabled
-                labelId="cat-select-label"
-                value={selectedCat}
-                onChange={handleCatChange}
-                className="bg-gray-100"
-              >
-                {CatOptions.map((tag) => (
-                  <MenuItem key={tag._id} value={tag._id}>
-                    <ListItemText primary={tag.name} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-  
-            <FormControl fullWidth>
-              <Select
-                disabled
-                labelId="tags-select-label"
-                multiple
-                value={selectedTags}
-                onChange={handleTagsChange}
-                renderValue={handleTagsText}
-                className="bg-gray-100"
-              >
-                {tagsOptions.map((tag) => (
-                  <MenuItem key={tag._id} value={tag._id}>
-                    <Checkbox checked={selectedTags.indexOf(tag._id) > -1} />
-                    <ListItemText primary={tag.name} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </div>
-  
-          <button
-            title="View Tags"
-            onClick={() => setmOpen(true)}
-            className="text-center mt-4 text-blue-600 underline"
-          >
-            View More
-          </button>
-        </div>
-  
-        {/* Price & Date Section */}
-        <div className="px-6 py-4">
-          <div className="flex justify-between border-t pt-4">
-            <input
-              title="date"
-              name="date"
-              disabled
-              value={formatDate(newDate)}
-              onChange={handleDateChange}
-              type="datetime-local"
-              className="border border-gray-300 rounded-md p-2 text-sm w-full"
-            />
-          </div>
-  
-          <div className="flex justify-between pt-4">
-            <div className="text-gray-700">
-              <p>Price:</p>
-              <p className="font-bold">
-                {currentCurrency} {(activity.Price * exchangeRate).toFixed(2)}
-              </p>
-            </div>
-            <div className="text-gray-700">
-              <p>Special Discount:</p>
-              <p className="font-bold">
-                {currentCurrency} {(activity.SpecialDiscount * exchangeRate).toFixed(2)}
-              </p>
-            </div>
-          </div>
-        </div>
-  
-        {/* View Map Button */}
-        <div className="mt-4 flex justify-center">
-          <button
-            onClick={handleViewMap}
-            className="px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition-all duration-300"
-          >
-            View Map
-          </button>
-        </div>
-  
-        {/* Map Modal */}
-        {isModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-            <div className="relative bg-white rounded-lg overflow-hidden shadow-lg w-4/5 md:w-1/2">
-              <TheBIGMAP
-                arrayofmarkers={[
-                  {
-                    latitude: activity.Location.latitude,
-                    longitude: activity.Location.longitude,
-                  },
-                ]}
-                id="map"
-                className="h-[500px] w-full"
-              />
-              <button
-                onClick={handleCloseModal}
-                className="absolute h-[40px] w-[40px] top-2 left-2 text-[25px] text-center items-center text-white bg-red-500 hover:bg-red-600 font-bold rounded-full"
-              >
-                &times;
-              </button>
-            </div>
-          </div>
-        )}
+        {/* Date Below Title */}
+        <input
+          title="date"
+          name="date"
+          disabled
+          value={formatDate(newDate)}
+          onChange={handleDateChange}
+          type="datetime-local"
+          className="border-0 text-sm text-gray-600 mt-1"
+        />
       </div>
+
+      {/* Ratings on the Right Side */}
+      <div className="ml-auto flex items-center">
+        <Rating disabled name="rating" value={averageRating} precision={0.1} />
+      </div>
+
+    </div>
+  </div>
+
+  {/* Admin Controls */}
+  {currenttype === "admin" && (
+    <div className="flex justify-end p-4">
+      <select
+        title="status"
+        name="status"
+        value={inappropriate ? "true" : "false"}
+        onChange={handleInappropriate}
+        className="text-sm bg-gray-200 rounded-full px-2 py-1"
+      >
+        <option value="true">Inappropriate</option>
+        <option value="false">Appropriate</option>
+      </select>
+    </div>
+  )}
+
+  {/* Booking Section */}
+  {type === "tourist" && activity.BookingIsOpen && (
+    <div className="flex justify-center gap-4 py-4">
+      {!isBookmarked && (
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+          title="Bookmark"
+          onClick={() => handleBookMark(activity._id)}
+        >
+          {loadingBookmark ? <ClipLoader size={30} color="#ffffff" /> : <BookmarkIcon />}
+        </button>
+      )}
+      {isBookmarked && currpath !== "bookmarks" && (
+        <button className="bg-green-700 text-white px-4 py-2 rounded-lg" disabled>
+          <BookmarkAddedIcon />
+        </button>
+      )}
+      <button
+        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+        onClick={() => handleBooking(activity._id)}
+      >
+        {loading ? <ClipLoader size={30} color="#ffffff" /> : "Book"}
+      </button>
+    </div>
+  )}
+
+  {/* Dropdown Selectors */}
+  <div className="px-6 py-4">
+    <div className="flex justify-between gap-4">
+      <FormControl fullWidth>
+        <Select
+          disabled
+          labelId="cat-select-label"
+          value={selectedCat}
+          onChange={handleCatChange}
+          className="bg-gray-100"
+        >
+          {CatOptions.map((tag) => (
+            <MenuItem key={tag._id} value={tag._id}>
+              <ListItemText primary={tag.name} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+      <FormControl fullWidth>
+        <Select
+          disabled
+          labelId="tags-select-label"
+          multiple
+          value={selectedTags}
+          onChange={handleTagsChange}
+          renderValue={handleTagsText}
+          className="bg-gray-100"
+        >
+          {tagsOptions.map((tag) => (
+            <MenuItem key={tag._id} value={tag._id}>
+              <Checkbox checked={selectedTags.indexOf(tag._id) > -1} />
+              <ListItemText primary={tag.name} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </div>
+
+    <button
+      title="View Tags"
+      onClick={() => setmOpen(true)}
+      className="text-center mt-4 text-blue-600 underline"
+    >
+      View More
+    </button>
+  </div>
+
+  {/* Price & Date Section */}
+  <div className="px-6 py-4">
+    <div className="flex justify-between border-t pt-4">
+      <div className="text-gray-700">
+        <p>Price:</p>
+        <p className="font-bold">
+          {currentCurrency} {(activity.Price * exchangeRate).toFixed(2)}
+        </p>
+      </div>
+      <div className="text-gray-700">
+        <p>Special Discount:</p>
+        <p className="font-bold">
+          {currentCurrency} {(activity.SpecialDiscount * exchangeRate).toFixed(2)}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  {/* View Map Button */}
+  <div className="mt-4 flex justify-center">
+    <button
+      onClick={handleViewMap}
+      className="px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition-all duration-300"
+    >
+      View Map
+    </button>
+  </div>
+
+  {/* Map Modal */}
+  {isModalOpen && (
+    <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+      <div className="relative bg-white rounded-lg overflow-hidden shadow-lg w-4/5 md:w-1/2">
+        <TheBIGMAP
+          arrayofmarkers={[
+            {
+              latitude: activity.Location.latitude,
+              longitude: activity.Location.longitude,
+            },
+          ]}
+          id="map"
+          className="h-[500px] w-full"
+        />
+        <button
+          onClick={handleCloseModal}
+          className="absolute h-[40px] w-[40px] top-2 left-2 text-[25px] text-center items-center text-white bg-red-500 hover:bg-red-600 font-bold rounded-full"
+        >
+          &times;
+        </button>
+      </div>
+    </div>
+  )}
+</div>
+
     </div>
   );
   
