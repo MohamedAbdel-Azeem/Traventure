@@ -50,7 +50,6 @@ const GuestDashboard = () => {
 </header>
       
 
-      <hr></hr>
 
       {/* Upcoming Itineraries Section */}
       <div className="bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 p-1 mx-4 lg:mx-20 rounded-lg shadow-md mt-5">
@@ -168,6 +167,28 @@ const GuestDashboard = () => {
           </div>
         </section>
       </div>
+
+      <style jsx>{`
+      .overflow-x-auto {
+        overflow-x: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #8b3fe8 #e0e0e0; 
+      }
+
+      .overflow-x-auto::-webkit-scrollbar {
+        height: 8px;
+      }
+
+      .overflow-x-auto::-webkit-scrollbar-track {
+        background: #e0e0e0; 
+      }
+
+      .overflow-x-auto::-webkit-scrollbar-thumb {
+        background: #9b4d96; 
+        border-radius: 10px;
+      }
+    `}</style>
+
     </>
   );
 };
