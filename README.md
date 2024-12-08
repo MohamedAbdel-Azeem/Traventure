@@ -1,3 +1,4 @@
+
 <p align="center">
 <img src="client/src/assets/logocolored.png" width="400" />
   
@@ -30,14 +31,14 @@ Welcome to Traventure, an all-in-one travel platform designed to make vacation p
 
 ## Build Status  
 
-- Still under development and not deployed yet
+- Still under development and not deployed yet
 - Regular updates planned to add new features and improvements.  
 - No known issues as of now.  
 ---
 
 ## Code Style  
 
-The  full team works on vscode and uses *Prettier*  as its linter which automatically works when saving (ctrl + s)
+The  full team works on vscode and uses **Prettier**  as its linter which automatically works when saving (ctrl + s)
 
 
 ---
@@ -115,7 +116,7 @@ Activities management
 <details>
 <summary>BE Routes Example</summary>
 
-js
+```js
 app.use("/api/admin", adminRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/activity", activityRouter);
@@ -138,17 +139,13 @@ app.use("/api/feedBack", feedbackRouter);
 app.use("/api/admin/", reviewdocsRouter);
 app.use("/api/promocode", promocodeRouter);
 
-
+```
 </details>
 
 <details>
 <summary>FE currency dropdown Example</summary>
 
-<<<<<<< HEAD
 ```js
-=======
-js
->>>>>>> d59fecdc3039098e2476f4f7f172ca9f9088dfb8
 const CurrencyDropdown: React.FC = () => {
   const initialCurrency = useSelector(
     (state) => state.exchangeRate.currentCurrency
@@ -227,21 +224,13 @@ const CurrencyDropdown: React.FC = () => {
 export default CurrencyDropdown;
 
 
-<<<<<<< HEAD
 ```
-=======
-
->>>>>>> d59fecdc3039098e2476f4f7f172ca9f9088dfb8
 </details>
 
 <details>
 <summary>BE Scheduler Function Example</summary>
 
-<<<<<<< HEAD
 ```js
-=======
-js
->>>>>>> d59fecdc3039098e2476f4f7f172ca9f9088dfb8
 module.exports = () => {
   schedule.scheduleJob("00 13 * * *", async () => {
     console.log("Running promo code scheduler");
@@ -250,22 +239,14 @@ module.exports = () => {
 };
 
 
-<<<<<<< HEAD
 ```
-=======
-
->>>>>>> d59fecdc3039098e2476f4f7f172ca9f9088dfb8
 </details>
 
 
 <details>
 <summary>FE Cart Slice Example</summary>
 
-<<<<<<< HEAD
 ```js
-=======
-js
->>>>>>> d59fecdc3039098e2476f4f7f172ca9f9088dfb8
 export interface IProduct {
   _id: string;
   name: string;
@@ -343,11 +324,7 @@ export const {
 export default cartSlice.reducer;
 
 
-<<<<<<< HEAD
 ```
-=======
-
->>>>>>> d59fecdc3039098e2476f4f7f172ca9f9088dfb8
 </details>
 
 
@@ -357,11 +334,7 @@ export default cartSlice.reducer;
 <details>
 <summary>BE Scheduler Function Example</summary>
 
-<<<<<<< HEAD
 ```js
-=======
-js
->>>>>>> d59fecdc3039098e2476f4f7f172ca9f9088dfb8
 
 interface FilterComponentProps {
   onApplyFilters: (filters: {
@@ -461,7 +434,6 @@ const FilterComponent: React.FC<FilterComponentProps> = ({ onApplyFilters }) => 
 
 export default FilterComponent;
 
-<<<<<<< HEAD
 ```
 </details>
 
@@ -575,12 +547,6 @@ export { getFlightOffers, getHotelsInCity, getHotelByInfo };
 
 
 
-=======
-
-</details>
-
-
->>>>>>> d59fecdc3039098e2476f4f7f172ca9f9088dfb8
 
 
 ---
@@ -588,13 +554,13 @@ export { getFlightOffers, getHotelsInCity, getHotelByInfo };
 ## Installation  
 
 - Make sure you have [Node](https://nodejs.org/en) and [Git](https://git-scm.com/) installed
-bash
+```bash
 git clone https://github.com/MohamedAbdel-Azeem/Traventure.git
-
+```
 - install dependencies for Traventure
-bash
+```bash
 npm run setup
-
+```
 - run the web app 
 
 
@@ -609,36 +575,36 @@ npm run setup
 <details>
 <summary> Activity Endpoint </summary>
 
-POST /add -Add a new activity
+`POST /add` -Add a new activity
 
-GET / -Get all activities
+`GET /` -Get all activities
 
-GET /:username  -Get activities of a certain advertiser
+`GET /:username`  -Get activities of a certain advertiser
 
-DELETE /delete/:id   -Delete activity by its ID
+`DELETE /delete/:id`   -Delete activity by its ID
 
-PUT /update/:id   -Update activity by its ID
+`PUT /update/:id`   -Update activity by its ID
 
-PATCH /toggleInappropriate/:id  - Updates a certain field (toggleInappropriate) in an activity 
+`PATCH /toggleInappropriate/:id`  - Updates a certain field (toggleInappropriate) in an activity 
 
 </details>
 
 <details> 
 <summary> Admin Endpoint </summary>
 
-POST /add  -Creates a new admin
+`POST /add`  -Creates a new admin
 
-GET /all   -Get all users
+`GET /all`   -Get all users
 
-POST /add/governer  -Creates a new governer 
+`POST /add/governer`  -Creates a new governer 
 
-DELETE /delete/user/:username/:type  -Deletes user
+`DELETE /delete/user/:username/:type`  -Deletes user
 
-GET /externalSellers -Gets all sellers
+`GET /externalSellers` -Gets all sellers
 
-GET /revenues  -Gets all revenues
+`GET /revenues`  -Gets all revenues
 
-GET /numberofusers  -Gets the number of users
+`GET /numberofusers`  -Gets the number of users
 
 </details> 
 
@@ -646,239 +612,239 @@ GET /numberofusers  -Gets the number of users
 <details> 
 <summary> Advertiser Endpoint </summary>
 
-POST /add  -create a new advertiser
-GET /:username  -get an advertiser by username
-PATCH /update/:username  -change username of a user
-GET /revenue/:username   -get revenue of a certain advertiser
-GET /numstats/:username  -get statistics of a certain advertiser
+`POST /add`  -create a new advertiser
+`GET /:username`  -get an advertiser by username
+`PATCH /update/:username`  -change username of a user
+`GET /revenue/:username`   -get revenue of a certain advertiser
+`GET /numstats/:username`  -get statistics of a certain advertiser
 </details> 
 
 <details>
 <summary>Auth Endpoint</summary>
 
-POST /auth -Checks permission of a user by verifying the access token
+`POST /auth` -Checks permission of a user by verifying the access token
 </details> 
 
 <details>
 <summary>Booking Endpoint</summary>
-POST /add  -Create a new booking
+`POST /add`  -Create a new booking
 
-GET /:username   -Get all bookings of a user
+`GET /:username`   -Get all bookings of a user
 
-GET /getHotels/:username  -Get hotel bookings of a user
+`GET /getHotels/:username`  -Get hotel bookings of a user
 
-DELETE /cancel/:booking_id  -Cancel  booking by its ID
+`DELETE /cancel/:booking_id`  -Cancel  booking by its ID
 
-POST /addFlight/:username  -Create a new flight booking for a user
+`POST /addFlight/:username`  -Create a new flight booking for a user
 
-POST /addHotel/:username  -Create a new hotel booking for a user
+`POST /addHotel/:username`  -Create a new hotel booking for a user
 
 </details> 
 
 <details>
 <summary>Category Endpoint</summary>
 
-POST /add  -Create a new category
-GET /   -Get all categories
-DELETE /delete/:id   -Delete a category by ID
-PUT /update/:id   -Update a category by ID
+`POST /add`  -Create a new category
+`GET /`   -Get all categories
+`DELETE /delete/:id`   -Delete a category by ID
+`PUT /update/:id`   -Update a category by ID
 </details>
 
 <details>
 <summary>ChangePassword Endpoint</summary>
 
-PATCH /changePassword   -Updates a user's password
+`PATCH /changePassword`   -Updates a user's password
 </details>
 
 <details>
  <summary>Complaint Endpoint</summary>
 
-POST /add  -Create a new complaint
+`POST /add`  -Create a new complaint
 
-PATCH  /update/:complaintId  -Update a complaint by its ID
+`PATCH  /update/:complaintId`  -Update a complaint by its ID
 
-GET /  -Get all complaints
+`GET /`  -Get all complaints
 
-GET /:complaintID   -Get a complaint by its ID
+`GET /:complaintID`   -Get a complaint by its ID
 </details>
 
 <details>
 <summary>Current_user Endpoint</summary>
-GET /me/:username -Get the current user's username
+`GET /me/:username` -Get the current user's username
 </details>
 
 <details>
 <summary> Feedback Endpoint </summary>
 
-POST /rateItinerary/:itineraryId -Add  new rating for an itinerary
+`POST /rateItinerary/:itineraryId` -Add  new rating for an itinerary
 
-POST /rateTourGuide/:tourGuideUserId  -Add new rating for a tourguide
+`POST /rateTourGuide/:tourGuideUserId`  -Add new rating for a tourguide
 
-POST /rateActivity/:ActivityId  -Add new rating for an activity
+`POST /rateActivity/:ActivityId`  -Add new rating for an activity
 
-GET /canfeedback   -Checks if a tourist can provide feedback for a tourguide
+`GET /canfeedback`   -Checks if a tourist can provide feedback for a tourguide
 
-GET /showTourGuideReviews/:tourGuideUserId  -Gets reviews of a certain tourguide by ID
+`GET /showTourGuideReviews/:tourGuideUserId`  -Gets reviews of a certain tourguide by ID
 
-GET /showActivityReviews/:ActivityId  -Gets reviews of a certain activity by its ID
+`GET /showActivityReviews/:ActivityId`  -Gets reviews of a certain activity by its ID
 
-GET /showItineraryReviews/:itineraryId -Gets reviews of a certain itinerary by its ID
+`GET /showItineraryReviews/:itineraryId` -Gets reviews of a certain itinerary by its ID
 </details>
 
 <details>
 <summary> Governer Endpoint</summary>
 
-POST /add/HistoricalTag  -Adds  new historical tag
+`POST /add/HistoricalTag`  -Adds  new historical tag
 </details>
 
 <details>
 <summary>historicalTags Endpoint</summary>
-POST /add  -Creates a new historical tag
+`POST /add`  -Creates a new historical tag
 </details>
 
 <details>
 <summary> Itinerary Endpoint </summary>
-POST /add  -Creates a new itinerary
+`POST /add`  -Creates a new itinerary
 
-GET /  -Gets all itineraries
+`GET /`  -Gets all itineraries
 
-GET /:username  -gets itinerary of a specific user
+`GET /:username`  -gets itinerary of a specific user
 
-GET /get/:itinerary_id  -gets itinerary by its ID
+`GET /get/:itinerary_id`  -gets itinerary by its ID
 
-PATCH  /update/:id  -updates an existing itinerary based on its ID
+`PATCH  /update/:id`  -updates an existing itinerary based on its ID
 
-DELETE /delete/:id  -deletes an itinerary
+`DELETE /delete/:id`  -deletes an itinerary
 
-PATCH /toggleActivation/:id  -toggles the activation status of an itinerary by its ID
+`PATCH /toggleActivation/:id`  -toggles the activation status of an itinerary by its ID
 
-PATCH /toggleInappropriate/:id  -toggles the "inappropriate" status of an itinerary based on its ID
+`PATCH /toggleInappropriate/:id`  -toggles the "inappropriate" status of an itinerary based on its ID
 </details>
 
 <details>
 <summary> Places Endpoint</summary>
-GET /  -gets all places
+`GET /`  -gets all places
 
-GET /:id  -gets a place by its ID
+`GET /:id`  -gets a place by its ID
 
-POST /add -Adds a new place
+`POST /add` -Adds a new place
 
-PATCH /update/:id -updates a place based on its ID
+`PATCH /update/:id` -updates a place based on its ID
 
-DELETE /delete/:id  -deletes a place
+`DELETE /delete/:id`  -deletes a place
 </details>
 
 <details>
 <summary> preferenceTags Endpoint </summary>
-POST /add  -Adds a new preference tag
-GET /  -gets all preference tags
-DELETE /delete/:id  -deletes a preference tag by its ID
-PUT /update/:id  -updates a preference tag by its ID
+`POST /add`  -Adds a new preference tag
+`GET /`  -gets all preference tags
+`DELETE /delete/:id`  -deletes a preference tag by its ID
+`PUT /update/:id`  -updates a preference tag by its ID
 </details>
 
 <details>
 <summary> Product Endpoint </summary>
-POST /add -Adds a new product
+`POST /add` -Adds a new product
 
-GET /  -gets all products
+`GET /`  -gets all products
 
-PATCH /update/:id -updates a product by its ID
+`PATCH /update/:id` -updates a product by its ID
 
-PATCH /archive/:id  -Archives a product based on its ID
+`PATCH /archive/:id`  -Archives a product based on its ID
 
-PATCH /feedback/:productid  -Updates feedback for a product based on its ID
+`PATCH /feedback/:productid`  -Updates feedback for a product based on its ID
 </details>
 
 <details>
 <summary> PromoCodes Endpoint </summary>
-GET /use/:name  -uses promo code by its name
+`GET /use/:name`  -uses promo code by its name
 
-GET /check/:name  -checks if promo code is still in use by its name
+`GET /check/:name`  -checks if promo code is still in use by its name
 </details>
 
 <details>
 <summary> purchase Endpoint </summary>
-POST /buy   -Adds product to user's cart
+`POST /buy`   -Adds product to user's cart
 
-GET /tourist/:touristUsername  -Gets all the purchases made by a specific tourist
+`GET /tourist/:touristUsername`  -Gets all the purchases made by a specific tourist
 
-GET /seller  -Gets sales information for a seller
+`GET /seller`  -Gets sales information for a seller
 
-POST /deliver  -Marks a purchase as delivered
+`POST /deliver`  -Marks a purchase as delivered
 
-POST /cancel  -Used to cancel a purchase
+`POST /cancel`  -Used to cancel a purchase
 </details>
 
 
 <details>
 <summary> RequestDelete Endpoint </summary>
 
-DELETE /deleterequestdelete   -Deletes a user's account deletion request
+`DELETE /deleterequestdelete`   -Deletes a user's account deletion request
 </details>
 
 <details>
 <summary> ReviewDoc Endpoint </summary>
-GET /pendingusers   -gets all pending users
+`GET /pendingusers`   -gets all pending users
 
-PATCH /acceptuser   -updates the status of a user whether accepted or rejected
+`PATCH /acceptuser`   -updates the status of a user whether accepted or rejected
 </details>
 
 <details>
 <summary> Seller Endpoint </summary>
-POST /add  -create a new seller user
+`POST /add`  -create a new seller user
 
-GET /:username  -Gets a certain seller
+`GET /:username`  -Gets a certain seller
 
-PATCH /update/:username  -Update a certain seller by his username
+`PATCH /update/:username`  -Update a certain seller by his username
 </details>
 
 <details>
 <summary> TourGuide Endpoint </summary>
 
-POST /add  -create a new tourguide user
+`POST /add`  -create a new tourguide user
 
-GET /username  -gets a certain tourguide
+`GET /username`  -gets a certain tourguide
 
-PATCH /update/:username   -updates a tourguide by his username
+`PATCH /update/:username`   -updates a tourguide by his username
 
-GET /revenue/:username  -get revenues of a tourguide by his username
+`GET /revenue/:username`  -get revenues of a tourguide by his username
 
-GET "/userstats/:username  -get stats of users interacting with a tourguide's itinerary
+`GET "/userstats/:username`  -get stats of users interacting with a tourguide's itinerary
 </details>
 
 <details>
 <summary> Tourist Endpoint </summary>
-POST /add  -create a new tourist user
+`POST /add`  -create a new tourist user
 
-GET /upcoming -get all upcoming activities
+`GET /upcoming` -get all upcoming activities
 
-GET /:username  -get a certain tourist's user profile
+`GET /:username`  -get a certain tourist's user profile
 
-PATCH /update/:username  -update a user
+`PATCH /update/:username`  -update a user
 
-GET /bookings/:username  -get all bookings of a certain tourist
+`GET /bookings/:username`  -get all bookings of a certain tourist
 
-GET /upcoming/:username  -get all upcoming activities of a certain tourist
+`GET /upcoming/:username`  -get all upcoming activities of a certain tourist
 
-GET /complains/:username  -get all complaints of a certain tourist
+`GET /complains/:username`  -get all complaints of a certain tourist
 
-GET /bookmarks/:username  -get bookmarks of a certain tourist by his username
+`GET /bookmarks/:username`  -get bookmarks of a certain tourist by his username
 
-PATCH /updateWallet/:username  -update a tourist's wallet by his username
+`PATCH /updateWallet/:username`  -update a tourist's wallet by his username
 
-PATCH /bookmark_activity/:username  -bookmark an activity for a certain tourist
+`PATCH /bookmark_activity/:username`  -bookmark an activity for a certain tourist
 
-PATCH /bookmark_itinerary/:username   -bookmark an itinerary for a certain tourist
+`PATCH /bookmark_itinerary/:username`   -bookmark an itinerary for a certain tourist
 
-POST /wishlist/:username  -Add to a wishlist of a tourist
+`POST /wishlist/:username`  -Add to a wishlist of a tourist
 
-GET /promo_code/get/:username  -get promo codes used by a tourist 
+`GET /promo_code/get/:username`  -get promo codes used by a tourist 
 
-PATCH /promo_code/use/:username -update the status of a promo code for a specific tourist
+`PATCH /promo_code/use/:username` -update the status of a promo code for a specific tourist
 
-GET /skipTutorial/:username -gets the status of whether a specific tourist has skipped a tutorial
+`GET /skipTutorial/:username` -gets the status of whether a specific tourist has skipped a tutorial
 
-PATCH /skipTutorial/:username  -allows a user to mark their tutorial as "skipped".
+`PATCH /skipTutorial/:username`  -allows a user to mark their tutorial as "skipped".
 </details>
 
 ---
@@ -898,22 +864,22 @@ Here are examples of testing one of our endpoints using Postman:
 
 - Make sure to follow the [Installation](#-installation) steps first
 
-- Add a .env in the client and server
+- Add a `.env` in the `client` and `server`
 
-bash
+```bash
 
 MONGODB_URI="Your Mongo Connection String"
 AMADEUS_CLIENT_ID="Your Amadeus Client ID"
 AMADEUS_CLIENT_SECRET="A secret string to use for encrypting passwords"
 GMAIL_PASSWORD="your gmail password"
 GMAIL_ADDRESS="your gmail address"
-
+```
 - Start Traventure
 
-bash
+```bash
 
 npm run start
-
+```
 
 ---
 
