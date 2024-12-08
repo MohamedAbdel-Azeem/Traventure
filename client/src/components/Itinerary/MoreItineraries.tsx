@@ -176,7 +176,7 @@ const MoreItineraries: React.FC = () => {
       <div className="w-full">
       <center>
 
-  <header className="bg-gradient-to-r from-purple-600 via-blue-600 to-purple-600 py-16 min-h-[200px] text-center rounded-b-3xl shadow-2xl mb-8 relative overflow-hidden">
+  <header className="bg-gradient-to-r from-purple-500 via-blue-500 to-teal-500 py-16 min-h-[200px] text-center rounded-b-3xl shadow-2xl mb-8 relative overflow-hidden">
   <div className="absolute top-0 left-0 w-24 h-24 bg-white/25 rounded-full blur-3xl opacity-40 animate-pulse"></div>
   <div className="absolute bottom-0 right-0 w-40 h-40 bg-pink-400/25 rounded-full blur-3xl opacity-50 animate-pulse"></div>
 
