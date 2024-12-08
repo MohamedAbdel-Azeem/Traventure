@@ -142,6 +142,411 @@ app.use("/api/promocode", promocodeRouter);
 ```
 </details>
 
+<details>
+<summary>FE currency dropdown Example</summary>
+
+```js
+const CurrencyDropdown: React.FC = () => {
+  const initialCurrency = useSelector(
+    (state) => state.exchangeRate.currentCurrency
+  );
+
+  const [selectedCurrency, setSelectedCurrency] =
+    useState<string>(initialCurrency); // Default selected currency
+  const dispatch = useDispatch();
+
+  const {
+    currencies,
+    loading: currencyLoading,
+    error: currencyError,
+  } = useGetCurrencies(); // Fetch currencies
+
+  const { exchangeRate, error: rateError } =
+    useGetExchangeRate(selectedCurrency); // Fetch exchange rate
+
+  dispatch(
+    setExchangeRate({
+      rate: exchangeRate,
+      currency: selectedCurrency,
+    })
+  ); // Set exchange rate in redux store
+
+  // Handle currency selection change
+  const handleCurrencyChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setSelectedCurrency(event.target.value);
+  };
+
+  const navigate = useLocation();
+
+  if (currencyError || rateError) {
+    return <p>Error fetching currencies: ${currencyError}</p>;
+  }
+
+  if (currencyLoading) {
+    return <p>Loading currencies...</p>;
+  }
+  return (
+    <div
+      className={`flex flex-col w-52 
+    ${
+      navigate.pathname.split("/").length < 4 ||
+      navigate.pathname.split("/")[3]?.includes("shop") ||
+      navigate.pathname.split("/")[3]?.includes("locations") ||
+      navigate.pathname.split("/")[3]?.includes("itineraries") ||
+      navigate.pathname.split("/")[3]?.includes("activities") ||
+      navigate.pathname.split("/")[3]?.includes("bookings") ||
+      navigate.pathname.split("/")[3]?.includes("purchases") ||
+      navigate.pathname.split("/")[3]?.includes("flights") ||
+      navigate.pathname.split("/")[3]?.includes("hotels")
+        ? ""
+        : "hidden"
+    }`}
+    >
+      <label htmlFor="currency">Select Currency: </label>
+      <select
+        id="currency"
+        value={selectedCurrency}
+        onChange={handleCurrencyChange}
+      >
+        {currencies.length > 0 &&
+          currencies.map((currency) => (
+            <option key={currency.code} value={currency.code}>
+              {currency.name} ({currency.code})
+            </option>
+          ))}
+      </select>
+    </div>
+  );
+};
+
+export default CurrencyDropdown;
+
+
+```
+</details>
+
+<details>
+<summary>BE Scheduler Function Example</summary>
+
+```js
+module.exports = () => {
+  schedule.scheduleJob("00 13 * * *", async () => {
+    console.log("Running promo code scheduler");
+    handlePromoCode();
+  });
+};
+
+
+```
+</details>
+
+
+<details>
+<summary>FE Cart Slice Example</summary>
+
+```js
+export interface IProduct {
+  _id: string;
+  name: string;
+  price: number;
+  imageUrl: string;
+  quantity: number;
+  stock: number;
+}
+
+const initialState: IProduct[] = [];
+
+const cartSlice = createSlice({
+  name: "cart",
+  initialState,
+  reducers: {
+    addToCart: (state, action: PayloadAction<IProduct>) => {
+      if (!state.some((item) => item._id === action.payload._id)) {
+        const addedProduct = {
+          ...action.payload,
+          quantity: 1,
+          stock: action.payload.quantity - 1,
+        };
+        state.push(addedProduct);
+      }
+    },
+    removeFromCart: (state, action: PayloadAction<string>) => {
+      const newProducts = state.filter((item) => item._id !== action.payload);
+      return newProducts;
+    },
+    clearCart: (state) => {
+      return initialState;
+    },
+    incrementQuantity: (state, action: PayloadAction<string>) => {
+      const product = state.find((item) => item._id === action.payload);
+      if (!product) return;
+      if (product.stock === 0) return;
+      const newProduct = {
+        ...product,
+        quantity: product.quantity + 1,
+        stock: product.stock - 1,
+      };
+      const newProducts = state.map((item) =>
+        item._id === action.payload ? newProduct : item
+      );
+      return newProducts;
+    },
+    decrementQuantity: (state, action: PayloadAction<string>) => {
+      const product = state.find((item) => item._id === action.payload);
+      if (!product) return;
+      const newProduct = {
+        ...product,
+        quantity: product.quantity - 1,
+        stock: product.stock + 1,
+      };
+      const newProducts = state.map((item) =>
+        item._id === action.payload ? newProduct : item
+      );
+      return newProducts;
+    },
+    resetState: () => {
+      return initialState;
+    },
+  },
+  
+});
+
+export const {
+  addToCart,
+  removeFromCart,
+  clearCart,
+  incrementQuantity,
+  decrementQuantity,
+  resetState
+} = cartSlice.actions;
+export default cartSlice.reducer;
+
+
+```
+</details>
+
+
+
+
+
+<details>
+<summary>BE Scheduler Function Example</summary>
+
+```js
+
+interface FilterComponentProps {
+  onApplyFilters: (filters: {
+    category: string;
+    minPrice: number | null;
+    maxPrice: number | null;
+    tags: string[];
+    date: string | null;
+  }) => void;
+}
+
+const FilterComponent: React.FC<FilterComponentProps> = ({ onApplyFilters }) => {
+  const [showFilters, setShowFilters] = useState(false);
+  const [categoryFilter, setCategoryFilter] = useState('');
+  const [minPriceFilter, setMinPriceFilter] = useState<number | null>(null);
+  const [maxPriceFilter, setMaxPriceFilter] = useState<number | null>(null);
+  const [tagsFilter, setTagsFilter] = useState<string>('');
+  const [dateFilter, setDateFilter] = useState<string | null>(null);
+
+  const toggleFilters = () => {
+    setShowFilters(!showFilters);
+  };
+
+  const handleApplyFilters = () => {
+    onApplyFilters({
+      category: categoryFilter,
+      minPrice: minPriceFilter,
+      maxPrice: maxPriceFilter,
+      tags: tagsFilter.split(',').map(tag => tag.trim()),
+      date: dateFilter,
+    });
+  };
+
+  return (
+    <div className="max-w-[30%] mx-auto p-4 bg-white shadow-md rounded-lg">
+      <button
+        onClick={toggleFilters}
+        className="mt-4 bg-gray-300 text-gray-700 p-2 rounded-lg hover:bg-gray-400 transition-colors">
+        {showFilters ? 'Hide Filters' : 'Show Filters'}
+      </button>
+
+      {showFilters && (
+        <div className="mt-4 border-t pt-4">
+          <h2 className="text-lg font-semibold mb-2">Filters</h2>
+
+          <select
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
+          >
+            <option value="">Category</option>
+         
+          </select>
+
+          <div className="flex space-x-2 mb-2">
+            <input
+              type="number"
+              value={minPriceFilter || ''}
+              onChange={(e) => setMinPriceFilter(e.target.value ? parseFloat(e.target.value) : null)}
+              placeholder="Min Price"
+              className="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              type="number"
+              value={maxPriceFilter || ''}
+              onChange={(e) => setMaxPriceFilter(e.target.value ? parseFloat(e.target.value) : null)}
+              placeholder="Max Price"
+              className="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <input
+            type="text"
+            value={tagsFilter}
+            onChange={(e) => setTagsFilter(e.target.value)}
+            placeholder="Tags (comma-separated)"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
+          />
+
+          <input
+            type="date"
+            value={dateFilter || ''}
+            onChange={(e) => setDateFilter(e.target.value ? e.target.value : null)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
+          />
+
+          <button
+            onClick={handleApplyFilters}
+            className="mt-4 bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors">
+            Apply Filters
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default FilterComponent;
+
+```
+</details>
+
+
+<details>
+<summary>BE Amadeus sdk for flight and hotel data Example</summary>
+
+```js
+
+import Amadeus, { ResponseError, TravelClass } from "amadeus-ts";
+import { Console } from "console";
+
+require("dotenv").config();
+const amadeus = new Amadeus({
+  clientId: process.env.AMADEUS_CLIENT_ID,
+  clientSecret: process.env.AMADEUS_CLIENT_SECRET,
+});
+async function getFlightOffers(
+  originLocationCode: string,
+  destinationLocationCode: string,
+  departureDate: string,
+  adults: number,
+  children?: number,
+  travelClass?: TravelClass,
+  nonStop?: boolean,
+  max?: number
+) {
+  try {
+    const response = await amadeus.shopping.flightOffersSearch.get({
+      originLocationCode,
+      destinationLocationCode,
+      departureDate,
+      adults,
+      children,
+      travelClass,
+      nonStop: true,
+      max: 10,
+      currencyCode: "USD",
+    });
+
+    return response.data;
+  } catch (error: unknown) {
+    if (error instanceof ResponseError) {
+      throw new Error(
+        `Error code: ${error.code}, Message: ${error.description}`
+      );
+    }
+    throw new Error("An unknown error occurred");
+  }
+}
+
+async function getHotelsInCity(cityCode: string) {
+  try {
+    const response = await amadeus.referenceData.locations.hotels.byCity.get({
+      cityCode,
+    });
+
+    return response.data;
+  } catch (error: unknown) {
+    if (error instanceof ResponseError) {
+      throw new Error(
+        `Error code: ${error.code}, Message: ${error.description}`
+      );
+    }
+    throw new Error("An unknown error occurred");
+  }
+}
+async function getHotelByInfo(
+  hotels: any,
+  adults: number,
+  checkInDate: string,
+  checkOutDate: string
+) {
+  try {
+    const hotelList = hotels.slice(0, 50).map((hotel: any) => hotel.hotelId);
+
+    const response = await amadeus.shopping.hotelOffersSearch.get({
+      hotelIds: hotelList.join(","),
+      adults,
+      checkInDate,
+      checkOutDate,
+      currencyCode: "USD",
+    });
+
+    return response.data;
+  } catch (error: unknown) {
+    console.error(error);
+    if (error instanceof ResponseError) {
+      throw new Error(
+        `Error code: ${error.code}, Message: ${error.description}`
+      );
+    }
+    throw new Error("An unknown error occurred");
+  }
+}
+
+export { getFlightOffers, getHotelsInCity, getHotelByInfo };
+
+
+```
+</details>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ---
