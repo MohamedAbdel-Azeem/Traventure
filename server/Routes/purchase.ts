@@ -43,13 +43,11 @@ router.post("/buy", async (req: Request, res: Response) => {
     const touristId = tourist._id;
     const body = { touristId, cart, paymentMethod, address } as IPurchase;
 
-
     if (promoCode) {
       body.promoCode = promoCode;
     }
 
     body.totalAmount = await getPurchaseTotalAmount(body);
-
 
     try {
       await handlePayment(paymentMethod, body.totalAmount, touristUsername);
@@ -59,13 +57,13 @@ router.post("/buy", async (req: Request, res: Response) => {
           singleProduct.productId,
           singleProduct.quantity
         );
+        await sendMailAndNotificationToSeller(singleProduct.productId);
       }
       return res.status(200).send(purchase);
     } catch (error) {
       console.log(error);
       return res.status(500).send(error);
     }
-
   } catch (error) {
     console.log(error);
     return res.status(500).send(error);
