@@ -1,6 +1,6 @@
-import React, { useState, useEffect ,useRef} from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import moment from 'moment';
+import moment from "moment";
 
 import {
   AppBar,
@@ -14,10 +14,9 @@ import {
   ListItemText,
   Toolbar,
 } from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
 import ShopIcon from "@mui/icons-material/Shop";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ActivityIcon from "@mui/icons-material/LocalActivity";
 import CategoryIcon from "@mui/icons-material/Category";
@@ -31,9 +30,7 @@ import NavbarDropdown from "./NavbarDropdown";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Logout } from "@mui/icons-material";
-import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import ChangePasswordModal, {
   AddContactLeadFormType,
 } from "../ChangePasswordModal";
@@ -42,10 +39,13 @@ import { editpassword } from "../../custom_hooks/changepassowrd";
 import { GetCurrentUser } from "../../custom_hooks/currentuser";
 import HotelIcon from "@mui/icons-material/Hotel";
 import FlightIcon from "@mui/icons-material/Flight";
-import BookmarksIcon from '@mui/icons-material/Bookmarks';
-import { set } from "date-fns";
 import { patchMarkAllAsRead } from "../../custom_hooks/notifications/markAllAsRead";
 import { patchMarkAsRead } from "../../custom_hooks/notifications/markAsRead";
+import BookmarksIcon from "@mui/icons-material/Bookmarks";
+import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { resetCartState } from "../../redux/cartSlice";
+import { resetCurrencyState } from "../../redux/exchangeRateSlice";
 
 const drawerHeight = 64;
 
@@ -56,6 +56,7 @@ interface NewNavbarProps {
 export default function NewNavbar({ className = "" }: NewNavbarProps) {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const currentuser = location.pathname.split(`/`)[2];
   const currentusertype = location.pathname.split(`/`)[1];
 
@@ -67,29 +68,32 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   console.log(cuserdata?.notifications);
   const [notifications, setNotifications] = useState([]);
   const [unreadNotifications, setUnreadNotifications] = useState([]);
-  const [notificationPopUpVisible, setNotificationPopUpVisible] = useState(false);
-  const [showAllPopup, setShowAllPopup] = useState(false);  
+  const [notificationPopUpVisible, setNotificationPopUpVisible] =
+    useState(false);
+  const [showAllPopup, setShowAllPopup] = useState(false);
 
   const [unreadCount, setUnreadCount] = useState(0);
   useEffect(() => {
     if (cuserdata) {
       const sortedNotifications = [...cuserdata.notifications].sort(
-        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
-      const unreadNotifications = sortedNotifications.filter(notification => !notification.read);
+      const unreadNotifications = sortedNotifications.filter(
+        (notification) => !notification.read
+      );
 
-      setUnreadNotifications(unreadNotifications)
+      setUnreadNotifications(unreadNotifications);
       setUnreadCount(unreadNotifications.length);
       setNotifications(sortedNotifications);
-      console.log("userrrrrrrIddddd",cuserdata._id);
-      console.log("userrrrrrrType",currentusertype);
+      console.log("userrrrrrrIddddd", cuserdata._id);
+      console.log("userrrrrrrType", currentusertype);
     }
   }, [cuserdata]);
-  
 
   const OpenShowAllPopUp = () => {
     setShowAllPopup(true);
-  }
+  };
 
   const markAllAsRead = async () => {
     try {
@@ -105,9 +109,8 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
         username: currentuser,
         userType: currentusertype,
       });
-      
     } catch (error) {
-      console.error('Error marking all notifications as read:', error);
+      console.error("Error marking all notifications as read:", error);
     }
   };
 
@@ -134,7 +137,6 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   };
 
   const adminnavbaritems = [
-    { text: "Home", icon: <HomeIcon />, path: `/admin/${currentuser}` },
     { text: "Shop", icon: <ShopIcon />, path: `/admin/${currentuser}/shop` },
     {
       text: "Sales",
@@ -160,7 +162,6 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   ];
 
   const TGnavbaritems = [
-    { text: "Home", icon: <HomeIcon />, path: `/tourguide/${currentuser}` },
     {
       text: "Locations",
       icon: <LocationOnIcon />,
@@ -180,11 +181,6 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
 
   const TGonavbaritems = [
     {
-      text: "Home",
-      icon: <HomeIcon />,
-      path: `/tourismgovernor/${currentuser}`,
-    },
-    {
       text: "Locations",
       icon: <LocationOnIcon />,
       path: `/tourismgovernor/${currentuser}/locations`,
@@ -195,10 +191,8 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
       path: `/tourismgovernor/${currentuser}/historicaltags`,
     },
   ];
- 
 
   const touristnavbaritems = [
-    { text: "Home", icon: <HomeIcon />, path: `/tourist/${currentuser}` },
     { text: "Shop", icon: <ShopIcon />, path: `/tourist/${currentuser}/shop` },
     {
       text: "Bookings",
@@ -233,7 +227,6 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   ];
 
   const advertisernavbaritems = [
-    { text: "Home", icon: <HomeIcon />, path: `/advertiser/${currentuser}` },
     {
       text: "Locations",
       icon: <LocationOnIcon />,
@@ -262,7 +255,6 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   ];
 
   const sellernavbaritems = [
-    { text: "Home", icon: <HomeIcon />, path: `/seller/${currentuser}` },
     {
       text: "Sales",
       icon: <ShowChartIcon />,
@@ -271,7 +263,6 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   ];
 
   const guestnavbaritems = [
-    { text: "Home", icon: <HomeIcon />, path: `/guest/guest-page` },
     { text: "Shop", icon: <ShopIcon />, path: `/guest/shop` },
     {
       text: "Itineraries",
@@ -316,48 +307,50 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   };
   const handleMouseEnterNotifications = () => {
     setNotificationPopUpVisible(true);
-  }
+  };
   const handleMouseLeaveNotifications = () => {
     setNotificationPopUpVisible(false);
     setShowAllPopup(false);
-  }
-  const handleNotificationClick = async (notification:any) => {
+  };
+  const handleNotificationClick = async (notification: any) => {
     notification.read = true;
     unreadNotifications.splice(unreadNotifications.indexOf(notification), 1);
     setUnreadCount(unreadCount - 1);
-    try{
+    try {
       await patchMarkAsRead({
         username: currentuser,
         userType: currentusertype,
         notificationId: notification._id,
       });
-    }catch(error){
-      console.error('Error marking notification as read:', error);
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
     }
     // markAsRead(notification);
     // navigate(`/notifications/${notification.id}`);
   };
 
-  const NotificationItem = ({ notification}) => (
- 
-
-    <li className={`${
-      notification.read
-        ? 'text-red ' 
-        : 'text-white' 
-    } bg-white rounded  hover:bg-gray-100`}
-    onClick={() => {
-      handleNotificationClick(notification)
-    }}
-    
-  >
-    
+  const NotificationItem = ({ notification }) => (
+    <li
+      className={`${
+        notification.read ? "text-red " : "text-white"
+      } bg-white rounded  hover:bg-gray-100`}
+      onClick={() => {
+        handleNotificationClick(notification);
+      }}
+    >
       <p className="px-2 ">{notification.message}</p>
       <p className="text-right text-xs text-gray-400 ">
-        {moment(notification.createdAt).fromNow()} 
+        {moment(notification.createdAt).fromNow()}
       </p>
     </li>
   );
+
+  const handleLogOut = () => {
+    Cookies.set("access_token", "", { expires: 0 });
+    dispatch(resetCartState());
+    dispatch(resetCurrencyState());
+    navigate("/");
+  };
 
   const profileDropdownItems = [
     ...(!currentusertype.includes("tourismgovernor") &&
@@ -432,7 +425,7 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
       ? [
           {
             label: "Log out",
-            onClick: () => navigate("/"),
+            onClick: handleLogOut,
             icon: Logout,
           },
         ]
@@ -450,7 +443,8 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   }, [cuserdata]);
 
   const currentPath = location.pathname;
-
+  const currentlocation = useLocation();
+  const currenttab = currentlocation.pathname.split("/")[3];
   return (
     <Box sx={{ display: "flex" }} className={className}>
       <CssBaseline />
@@ -470,13 +464,25 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
           }}
         >
           <img
-            src="/src/assets/logowhite.png"
+            src={
+              currenttab
+                ? `/src/assets/logowhite.png`
+                : `/src/assets/logowhite2.png`
+            }
             alt="Navbar Logo"
+            className="cursor-pointer"
             style={{
               height: "100%",
               width: "auto",
               maxHeight: "35%",
               maxWidth: "30%",
+            }}
+            onClick={() => {
+              if (!currentusertype.includes("guest")) {
+                navigate(`/${currentusertype}/${currentuser}`);
+              } else {
+                navigate(`/guest`);
+              }
             }}
           />
           <Box sx={{ flex: 1, display: "flex", justifyContent: "center" }}>
@@ -541,93 +547,91 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
             onMouseLeave={handleMouseLeaveNotifications}
             onClick={togglePopup}
           >
+            <NotificationsNoneIcon className="text-white" fontSize="large" />
 
-        <NotificationsNoneIcon className="text-white" fontSize="large" />
-
-        {unreadCount > 0 && (
-          <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center translate-y-[-1px]">
-            {unreadCount}
-          </span>
-        )}
-
-<style jsx>{`
-.custom-scrollbar {
-    scrollbar-width: thin;
-    scrollbar-color: white #6d28d9;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 12px;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: white;
-    border-radius: 10px;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #6d28d9;
-    border-radius: 10px;
-    border: 2px solid white;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-button {
-    display: none;
-  }
-  `}</style>
-      <Fade in={notificationPopUpVisible} timeout={200}>
-              
-              
-
-        <div  className="absolute top-16 right-0 w-64 bg-gradient-to-r from-[#a855f7] to-[#6d28d9] shadow-lg rounded-lg p-4 z-10 text-white">
-{!showAllPopup ? (
-  <div>          
-          <h3 className="text-sm font-semibold mb-2 text-center text-white">Notifications</h3>
-
-          
-
-{unreadCount > 0 ? (
-               <ul className="space-y-2 max-h-[50vh] overflow-y-auto custom-scrollbar">
-               {unreadNotifications.map((notification) => (
-                 <NotificationItem  notification={notification}/>
-                ))}
-             </ul>
-            ) : (
-              <p className="text-sm text-gray-500">No new notifications</p>
+            {unreadCount > 0 && (
+              <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center translate-y-[-1px]">
+                {unreadCount}
+              </span>
             )}
 
-          {/* Buttons */}
-          <div className="flex justify-between mt-4">
-            <button
-              onClick={markAllAsRead}
-              className="text-white text-sm font-semibold hover:underline"
-            >
-              Mark all as read
-            </button>
-            {/* text-[#a855f7]*/}
-            <button className="text-white text-sm font-semibold hover:underline"
-              onClick={() => {
-                OpenShowAllPopUp();
-              }}
-            >
-              Show all
-            </button>
-          </div>
-        </div>
-          ):(
-            // Show all notifications
-            <div>
-              <h3 className="text-sm font-semibold mb-2 text-center text-white">All Notifications</h3>
-              <ul className="space-y-2 max-h-[50vh] overflow-y-auto custom-scrollbar">
-                {notifications.map((notification) => (
-                  <NotificationItem notification={notification} />
-                ))}
-              </ul>
+            <style jsx>{`
+              .custom-scrollbar {
+                scrollbar-width: thin;
+                scrollbar-color: white #6d28d9;
+              }
 
-              </div>
-          )}
+              .custom-scrollbar::-webkit-scrollbar {
+                width: 12px;
+              }
 
-      
+              .custom-scrollbar::-webkit-scrollbar-track {
+                background: white;
+                border-radius: 10px;
+              }
+
+              .custom-scrollbar::-webkit-scrollbar-thumb {
+                background-color: #6d28d9;
+                border-radius: 10px;
+                border: 2px solid white;
+              }
+
+              .custom-scrollbar::-webkit-scrollbar-button {
+                display: none;
+              }
+            `}</style>
+            <Fade in={notificationPopUpVisible} timeout={200}>
+              <div className="absolute top-16 right-0 w-64 bg-gradient-to-r from-[#a855f7] to-[#6d28d9] shadow-lg rounded-lg p-4 z-10 text-white">
+                {!showAllPopup ? (
+                  <div>
+                    <h3 className="text-sm font-semibold mb-2 text-center text-white">
+                      Notifications
+                    </h3>
+
+                    {unreadCount > 0 ? (
+                      <ul className="space-y-2 max-h-[50vh] overflow-y-auto custom-scrollbar">
+                        {unreadNotifications.map((notification) => (
+                          <NotificationItem notification={notification} />
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-sm text-gray-500">
+                        No new notifications
+                      </p>
+                    )}
+
+                    {/* Buttons */}
+                    <div className="flex justify-between mt-4">
+                      <button
+                        onClick={markAllAsRead}
+                        className="text-white text-sm font-semibold hover:underline"
+                      >
+                        Mark all as read
+                      </button>
+                      {/* text-[#a855f7]*/}
+                      <button
+                        className="text-white text-sm font-semibold hover:underline"
+                        onClick={() => {
+                          OpenShowAllPopUp();
+                        }}
+                      >
+                        Show all
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  // Show all notifications
+                  <div>
+                    <h3 className="text-sm font-semibold mb-2 text-center text-white">
+                      All Notifications
+                    </h3>
+                    <ul className="space-y-2 max-h-[50vh] overflow-y-auto custom-scrollbar">
+                      {notifications.map((notification) => (
+                        <NotificationItem notification={notification} />
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             </Fade>
           </Box>
@@ -656,11 +660,9 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
                   onMouseEnter={handleMouseEnterProfilePic}
                   onMouseLeave={handleMouseLeaveProfilePic}
                 />
-                
               </div>
             </Fade>
           </Box>
-
         </Toolbar>
       </AppBar>
       {isPasswordModalOpen && (

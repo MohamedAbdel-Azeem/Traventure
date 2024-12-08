@@ -185,7 +185,27 @@ export async function getExternalSellers() {
     throw error;
   }
 }
-
+export async function getExternalProducts(externalSeller: string) {
+  try {
+    if (externalSeller) {
+      const products = await productModel
+        .find({
+          externalseller: externalSeller,
+        })
+        .select("name");
+      return products;
+    } else {
+      const products = await productModel
+        .find({
+          externalseller: { $exists: true, $ne: "" },
+        })
+        .select("name");
+      return products;
+    }
+  } catch (error) {
+    throw error;
+  }
+}
 export async function addFeedback(ObjectId: string, feedback: IFeedback) {
   try {
     const product = await productModel.findById(ObjectId);
@@ -228,4 +248,5 @@ module.exports = {
   getExternalSellers,
   addFeedback,
   getProductsWithWishList,
+  getExternalProducts,
 };

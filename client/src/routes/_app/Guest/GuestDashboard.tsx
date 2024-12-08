@@ -4,6 +4,9 @@ import useGetUpcoming from "../../../custom_hooks/itineraries/useGetupcoming";
 import ItineraryCardToruist from "../../../components/Itinerary/ItineraryCardToruist";
 import LocationCardTourist from "../../../components/Locations/LocationCardTourist";
 import { ActivityCardTourist } from "../../../components/Activities/ActivityCardTourist";
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import Slideshow from "../../../components/Slideshow";
+
 
 
 const GuestDashboard = () => {
@@ -22,93 +25,147 @@ const GuestDashboard = () => {
   const locations = upcoming?.places.slice(0, 5) || [];
   const activities = upcoming?.activities.slice(0, 5) || [];
 
+  const slideshowItems = [
+    ...itineraries.map((itinerary) => ({
+      image: itinerary.main_Picture, 
+      title: itinerary.title,
+    })),
+    ...locations.map((location) => ({
+      image: location.pictures?.[0] || '',
+      title: location.name,
+    })),
+  ];
+
   return (
     <>
-      <h1 className="text-2xl font-bold mb-4">Upcoming Itineraries</h1>
-      <div className="overflow-x-auto">
-        <div className="flex gap-4 items-center">
-          {itineraries.length > 0 ? (
-            itineraries.map((itinerary) => (
-              <ItineraryCardToruist
-                key={itinerary._id}
-                _id={String(itinerary._id)}
-                title={itinerary.title}
-                description={itinerary.description}
-                added_By={itinerary.added_By}
-                price={itinerary.price}
-                starting_Date={itinerary.starting_Date}
-                ending_Date={itinerary.ending_Date}
-                rating={itinerary.rating}
-                total={itinerary.total}
-                language={itinerary.language}
-                pickup_location={itinerary.pickup_location}
-                dropoff_location={itinerary.dropoff_location}
-                plan={itinerary.plan}
-                selectedTags={itinerary.selectedTags}
-                main_Picture={itinerary.main_Picture}
-                accesibility={itinerary.accesibility}
-                booked_By={itinerary.booked_By}
-                bookingActivated={false}
-                inappropriate={false}
-              />
-            ))
-          ) : (
-            <div>No upcoming itineraries available.</div>
-          )}
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-            onClick={() => navigate(`/guest/more-itineraries`)}
-          >
-            View More
-          </button>
-        </div>
+      {/* Page Header */}
+      <header className="bg-gradient-to-r from-purple-500 via-blue-500 to-teal-500 py-6 min-h-[180px] text-center rounded-b-2xl shadow-lg">
+  <h1 className="text-3xl font-extrabold text-white drop-shadow-md">
+    Welcome, Guest!
+  </h1>
+  <p className="mt-2 text-base text-white opacity-90">
+    Sign in to explore the full features of the website.
+  </p>
+</header>
+      <Slideshow items={slideshowItems} />
+
+      <hr></hr>
+
+      {/* Upcoming Itineraries Section */}
+      <div className="bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 p-1 mx-4 lg:mx-20 rounded-lg shadow-md mt-5">
+        <section className="p-8 bg-white rounded-lg">
+          <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
+            Upcoming Itineraries
+            <span className="block h-1 mt-2 bg-gradient-to-r from-purple-500 to-pink-500"></span>
+          </h2>
+          <p className="mb-6 text-gray-600">
+            Stay on top of your travel plans with these upcoming trips.
+          </p>
+          <div className="overflow-x-auto">
+            <div className="flex gap-6 items-start">
+              {itineraries.length > 0 ? (
+                itineraries.map((itinerary) => (
+                  <div className="w-96 flex-shrink-0" key={itinerary._id}>
+                    <ItineraryCardToruist
+                      _id={String(itinerary._id)}
+                      title={itinerary.title}
+                      description={itinerary.description}
+                      added_By={itinerary.added_By}
+                      price={itinerary.price}
+                      starting_Date={itinerary.starting_Date}
+                      ending_Date={itinerary.ending_Date}
+                      rating={itinerary.rating}
+                      total={itinerary.total}
+                      language={itinerary.language}
+                      pickup_location={itinerary.pickup_location}
+                      dropoff_location={itinerary.dropoff_location}
+                      plan={itinerary.plan}
+                      selectedTags={itinerary.selectedTags}
+                      main_Picture={itinerary.main_Picture}
+                      accesibility={itinerary.accesibility}
+                      booked_By={itinerary.booked_By}
+                      bookingActivated={false}
+                      inappropriate={false}
+                    />
+                  </div>
+                ))
+              ) : (
+                <div>No upcoming itineraries available.</div>
+              )}
+              <button
+                className="flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-4 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 mt-4"
+                onClick={() => navigate(`/guest/more-itineraries`)}
+              >
+                <MoreHorizIcon className="w-6 h-6 text-white" />
+              </button>
+            </div>
+          </div>
+        </section>
       </div>
 
-      {/* Upcoming Places */}
-      <h1 className="text-2xl font-bold mt-8 mb-4">Upcoming Places</h1>
-      <div className="overflow-x-auto">
-        <div className="flex gap-4 items-center">
-          {locations.length > 0 ? (
-            locations.map((location) => (
-              <LocationCardTourist
-                key={location._id}
-                id={String(location._id)}
-                wholeLocation={location}
-              />
-            ))
-          ) : (
-            <div>No upcoming places available.</div>
-          )}
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-            onClick={() => navigate(`/guest/more-places`)}
-          >
-            View More
-          </button>
-        </div>
+      {/* Upcoming Places Section */}
+      <div className="bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 p-1 mx-4 lg:mx-20 rounded-lg shadow-md mt-5">
+        <section className="p-8 bg-white rounded-lg">
+          <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
+            Upcoming Places
+            <span className="block h-1 mt-2 bg-gradient-to-r from-purple-500 to-pink-500"></span>
+          </h2>
+          <p className="mb-6 text-gray-600">
+            Explore new destinations you’re about to discover.
+          </p>
+          <div className="overflow-x-auto">
+            <div className="flex gap-6 items-start">
+              {locations.length > 0 ? (
+                locations.map((location) => (
+                  <div key={location._id} className="min-w-[600px]">
+                    <LocationCardTourist id={String(location._id)} wholeLocation={location} />
+                  </div>
+                ))
+              ) : (
+                <div>No upcoming places available.</div>
+              )}
+              <button
+                className="flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-4 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 mt-4"
+                onClick={() => navigate(`/guest/more-places`)}
+              >
+                <MoreHorizIcon className="w-6 h-6 text-white" />
+              </button>
+            </div>
+          </div>
+        </section>
       </div>
 
-      {/* Upcoming Activities */}
-      <h1 className="text-2xl font-bold mt-8 mb-4">Upcoming Activities</h1>
-      <div className="overflow-x-auto">
-        <div className="flex gap-4 items-center">
-          {activities.length > 0 ? (
-            activities.map((activity) => (
-              <ActivityCardTourist
-                key={activity._id}
-                activity={activity}
-              />
-            ))
-          ) : (
-            <div>No upcoming activities available.</div>
-          )}
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-            onClick={() => navigate(`/guest/more-activities`)}
-          >
-            View More
-          </button>
-        </div>
+      {/* Upcoming Activities Section */}
+      <div className="bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 p-1 mx-4 lg:mx-20 rounded-lg shadow-md mt-5">
+        <section className="p-8 bg-white rounded-lg">
+          <h2 className="text-3xl font-bold mb-2 text-gray-800 relative inline-block">
+            Upcoming Activities
+            <span className="block h-1 mt-2 bg-gradient-to-r from-purple-500 to-pink-500"></span>
+          </h2>
+          <p className="mb-6 text-gray-600">
+            Get ready for exciting activities for your journey.
+          </p>
+          <div className="overflow-x-auto">
+            <div className="flex gap-6 items-start">
+              {activities.length > 0 ? (
+                activities.map((activity) => (
+                  <ActivityCardTourist
+                    key={activity._id}
+                    activity={activity}
+                  />
+                ))
+              ) : (
+                <div>No upcoming activities available.</div>
+              )}
+              <button
+                className="flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-4 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-110 mt-4"
+                onClick={() => navigate(`/guest/more-activities`)}
+              >
+                <MoreHorizIcon className="w-6 h-6 text-white" />
+              </button>
+            </div>
+          </div>
+        </section>
       </div>
     </>
   );

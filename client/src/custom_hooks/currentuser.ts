@@ -5,6 +5,7 @@ interface Currentuserdata {
   profilepic: string;
   _id: string;
   notifications: object[];
+  saved_addressess: string[];
 }
 
 export function GetCurrentUser(username: string) {

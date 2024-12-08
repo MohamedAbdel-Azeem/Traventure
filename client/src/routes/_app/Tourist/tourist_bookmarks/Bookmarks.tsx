@@ -1,10 +1,12 @@
 // Bookmarks.tsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import ItineraryCardToruist from '../../../../components/Itinerary/ItineraryCardToruist';
 import { Activity, ActivityCardTourist } from '../../../../components/Activities/ActivityCardTourist';
 import Itinerary from '../../../../custom_hooks/itineraries/itinerarySchema';
+import { useAuth } from '../../../../custom_hooks/auth';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 const Bookmarks = () => {
   const [itineraries, setItineraries] = useState<Itinerary[]>([]);
@@ -13,7 +15,9 @@ const Bookmarks = () => {
   const [error, setError] = useState(null);
   const currenttype = useLocation().pathname.split("/")[1];
   const currentuser = useLocation().pathname.split("/")[2];
-
+  const { isAuthenticated, isLoading, isError } = useAuth(4);
+  const { username } = useParams<{ username: string }>();
+  
   useEffect(() => {
     const fetchBookmarks = async () => {
       try {
@@ -29,7 +33,20 @@ const Bookmarks = () => {
 
     fetchBookmarks();
   }, []);
-
+  if (isLoading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <ClipLoader color="#f86c6b" loading={true} size={150} />
+      </div>
+    );
+  }
+  if (isError || isAuthenticated !== username) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <h1>Error 403 Unauthrized access</h1>
+      </div>
+    );
+  }
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 

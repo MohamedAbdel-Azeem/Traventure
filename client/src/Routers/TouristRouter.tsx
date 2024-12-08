@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import NewNavbar from "../components/Navbar/NewNavbar";
 import Bookings from "../routes/_app/Tourist/tourist_bookings/Bookings";
 import FlightsPage from "../routes/_app/Tourist/tourist_flights/flightsPage";
@@ -15,30 +15,113 @@ import CurrencyDropdown from "../components/currencyDrop";
 import ItineraryDetailsTourist from "../components/Itinerary/ItineraryDetailsTourist";
 import Bookmarks from "../routes/_app/Tourist/tourist_bookmarks/Bookmarks";
 import CartButton from "../components/cart/CartButton";
+import Checkout from "../components/Checkout";
 import { TouristWishList } from "../routes/_app/Tourist/tourist_purchases/TouristWishList";
-
+import {isAccessTokenPresent} from "../components/Protection/authUtils";
+import TouristComplaints from "../routes/_app/Tourist/TouristComplaints";
+import { useLocation } from "react-router-dom";
 export default function TouristRouter() {
+const location = useLocation();
+const currentpage = location.pathname.split(`/`)[3];
   return (
     <div className="flex flex-col w-screen h-screen">
       <NewNavbar />
       <Routes>
-        <Route path="/:username" element={<TouristPage />} />
-        <Route path="/:username/shop" element={<ShopPage type="Tourist" />} />
-        <Route path="/:username/locations" element={<MorePlaces />} />
-        <Route path="/:username/itineraries" element={<MoreItineraries />} />
-        <Route path="/:username/itineraries/tourist-itinerary/:id" element={<ItineraryDetailsTourist />}/>
-        <Route path="/:username/activities" element={<MoreActivities />} />
-        <Route path="/:username/complaints" element={<ComplaintsTable />} />
-        <Route path="/:username/profile" element={<Tourist_Profile />} />
-        <Route path="/:username/bookings" element={<Bookings />} />
-        <Route path="/:username/purchases" element={<TouristPurchases />} />
-        <Route path="/:username/flights" element={<FlightsPage />} />
-        <Route path="/:username/hotels" element={<HotelsPage />} />
-        <Route path="/:username/bookmarks" element={<Bookmarks />} />
-        <Route path="/:username/wishlist" element={<TouristWishList />} />
+        <Route
+          path="/:username"
+          element={
+            isAccessTokenPresent() ? <TouristPage /> : <Navigate to="/" />
+          }
+        />
+        <Route
+          path="/:username/shop"
+          element={
+            isAccessTokenPresent() ? (
+              <ShopPage type="Tourist" />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+        <Route
+          path="/:username/locations"
+          element={
+            isAccessTokenPresent() ? <MorePlaces /> : <Navigate to="/" />
+          }
+        />
+        <Route
+          path="/:username/itineraries"
+          element={
+            isAccessTokenPresent() ? <MoreItineraries /> : <Navigate to="/" />
+          }
+        />
+        <Route
+          path="/:username/itineraries/tourist-itinerary/:id"
+          element={
+            isAccessTokenPresent() ? (
+              <ItineraryDetailsTourist />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+        <Route
+          path="/:username/activities"
+          element={
+            isAccessTokenPresent() ? <MoreActivities /> : <Navigate to="/" />
+          }
+        />
+        <Route
+          path="/:username/complaints"
+          element={
+            isAccessTokenPresent() ? <TouristComplaints /> : <Navigate to="/" />
+          }
+        />
+        <Route
+          path="/:username/profile"
+          element={
+            isAccessTokenPresent() ? <Tourist_Profile /> : <Navigate to="/" />
+          }
+        />
+        <Route
+          path="/:username/bookings"
+          element={isAccessTokenPresent() ? <Bookings /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/:username/purchases"
+          element={
+            isAccessTokenPresent() ? <TouristPurchases /> : <Navigate to="/" />
+          }
+        />
+        <Route
+          path="/:username/flights"
+          element={
+            isAccessTokenPresent() ? <FlightsPage /> : <Navigate to="/" />
+          }
+        />
+        <Route
+          path="/:username/hotels"
+          element={
+            isAccessTokenPresent() ? <HotelsPage /> : <Navigate to="/" />
+          }
+        />
+        <Route
+          path="/:username/bookmarks"
+          element={isAccessTokenPresent() ? <Bookmarks /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/:username/wishlist"
+          element={
+            isAccessTokenPresent() ? <TouristWishList /> : <Navigate to="/" />
+          }
+        />
+        <Route
+          path="/:username/checkout"
+          element={isAccessTokenPresent() ? <Checkout /> : <Navigate to="/" />}
+        />
       </Routes>
       {/* <CurrencyDropdown /> */}
-      <CartButton />
+      {currentpage === "shop" ? <CartButton /> : <></>}
     </div>
   );
 }

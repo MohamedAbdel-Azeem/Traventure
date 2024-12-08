@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 import ProfilePictureEdit from "../../../../components/PDFs&Images/ProfilePictureEdit";
 import { uploadFileToStorage } from "../../../../firebase/firebase_storage";
 import { handleDeleteAccount } from "../../../../custom_hooks/usedeleterequest";
+import Cookies from 'js-cookie';
 interface TourGuideProfileProps {
   tourGuide: ITourGuide;
 }
@@ -73,6 +74,9 @@ const TourGuideProfile: React.FC<TourGuideProfileProps> = ({ tourGuide }) => {
   };
 
   const handleLogout = () => {
+    Cookies.set("access_token", "", { expires: 0});
+    Cookies.set("reduxPersistIndex", "", { expires: 0});
+    Cookies.set("persist%3Aroot", "", { expires: 0});
     navigate("/");
   };
 

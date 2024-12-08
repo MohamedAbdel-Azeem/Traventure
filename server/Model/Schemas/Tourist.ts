@@ -3,6 +3,16 @@ import Booking from "./Booking";
 import { timeStamp } from "console";
 const Schema = mongoose.Schema;
 
+export interface IAddress {
+  latitude: number;
+  longitude: number;
+  street: string;
+  buildingNumber: string;
+  floor?: string;
+  apartmentNumber?: string;
+  additionalDirections?: string;
+}
+
 export interface ITourist extends Document {
   username: string;
   email: string;
@@ -22,6 +32,7 @@ export interface ITourist extends Document {
   bookmarkedActivities: mongoose.Types.ObjectId[];
   bookmarkedItineraries: mongoose.Types.ObjectId[];
   wishlisted_products: mongoose.Types.ObjectId[];
+  skipWebsiteTutorial: boolean;
   promo_sent?: boolean;
   notifications: {
     message: string;
@@ -29,6 +40,7 @@ export interface ITourist extends Document {
     read: boolean;
     createdAt: Date;
   }[];
+  saved_addressess?: IAddress[];
 }
 
 const touristSchema = new Schema({
@@ -58,7 +70,22 @@ const touristSchema = new Schema({
       createdAt: { type: Date, default: Date.now },
     },
   ],
+  skipWebsiteTutorial: { type: Boolean, default: false },
   promo_sent: { type: Boolean, default: false },
+  saved_addressess: {
+    type: [
+      {
+        latitude: { type: Number, required: true },
+        longitude: { type: Number, required: true },
+        street: { type: String, required: true },
+        buildingNumber: { type: String, required: true },
+        floor: { type: String, default: null },
+        apartmentNumber: { type: String },
+        additionalDirections: { type: String, default: "" },
+      },
+    ],
+    default: [],
+  },
 });
 
 export default mongoose.model<ITourist>("Tourist", touristSchema);

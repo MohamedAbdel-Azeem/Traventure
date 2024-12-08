@@ -21,6 +21,8 @@ import { ActivityCardTourist } from "../../../../components/Activities/ActivityC
 import getFlights from "../../../../custom_hooks/getTouristFlights";
 import getHotels from "../../../../custom_hooks/getTouristHotels";
 import FeedbackDisplay from "../../../../components/Shenawy/FeedbackDisplay";
+import { useAuth } from "../../../../custom_hooks/auth";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -103,7 +105,7 @@ const Bookings: React.FC = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
-
+  const { isAuthenticated, isLoading, isError } = useAuth(4);
   const showActivity = (activity: any) => {
     setSelectedActivity(activity);
     setOpen(true);
@@ -334,6 +336,20 @@ const Bookings: React.FC = () => {
       rate: 4,
     },
   ];
+  if (isLoading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <ClipLoader color="#f86c6b" loading={true} size={150} />
+      </div>
+    );
+  }
+  if (isError || isAuthenticated !== username) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <h1>Error 403 Unauthrized access</h1>
+      </div>
+    );
+  }
 
   return (
     <div>

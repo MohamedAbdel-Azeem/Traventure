@@ -26,36 +26,70 @@ export function ChangePassword(username: string, oldPassword: string, newpasswor
     return { loading, error };
 }
 
-export const editpassword = async (username: string, oldPassword: string, newpassword: string) => {
-    const body = {
-        username: username,
-        oldPassword: oldPassword,
-        newPassword: newpassword
-    };
-    const response = await fetch(`/traventure/api/user/changePassword`,{
-        method: "PATCH",
-        headers: {
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
-
-    if (!response.ok) {
-      let errorMessage;
-      switch (response.status) {
-        case 401:
-          errorMessage = "Incorrect old password";
-          break;
-        case 403:
-          errorMessage ="Can't change to same old password";
-          break;
-        case 404:
-          errorMessage = "User not found";
-          break;
-        default:
-          errorMessage = "Something went wrong";
-      }
-      throw new Error(errorMessage); // Throw the specific error message
-    }
-    return response.json();
+export const editpassword = async (
+  username: string,
+  oldPassword: string,
+  newpassword: string
+) => {
+  const body = {
+    username: username,
+    oldPassword: oldPassword,
+    newPassword: newpassword,
   };
+  const response = await fetch(`/traventure/api/user/changePassword`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    let errorMessage;
+    switch (response.status) {
+      case 401:
+        errorMessage = "Incorrect old password";
+        break;
+      case 403:
+        errorMessage = "Can't change to same old password";
+        break;
+      case 404:
+        errorMessage = "User not found";
+        break;
+      default:
+        errorMessage = "Something went wrong";
+    }
+    throw new Error(errorMessage); // Throw the specific error message
+  }
+  return response.json();
+};
+
+export const updatepassword = async (
+  email: string,
+  newpassword: string
+) => {
+  const body = {
+    email: email,
+    newpassword: newpassword,
+  };
+  const response = await fetch(`/traventure/api/user/updatePassword`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    let errorMessage;
+    switch (response.status) {
+      case 404:
+        errorMessage = "User not found";
+        break;
+      default:
+        errorMessage = "Something went wrong";
+    }
+    throw new Error(errorMessage); // Throw the specific error message
+  }
+  return response.json();
+};

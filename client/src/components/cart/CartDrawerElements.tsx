@@ -5,18 +5,19 @@ import { IProduct, clearCart } from "../../redux/cartSlice";
 import { CartProduct } from "./CartProduct";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 export default function CartDrawerElements() {
   const cart = useSelector((state) => state.cart) as IProduct[];
-
+  const navigate = useNavigate();
   const exchangeRate = useSelector(
     (state: any) => state.exchangeRate.exchangeRate
   );
   const currentCurrency = useSelector(
     (state: any) => state.exchangeRate.currentCurrency
   );
-
-
+ const location = useLocation();
+ const username = location.pathname.split(`/`)[2];
   const dispatch = useDispatch();
   const [totalPrice, setTotal] = useState(0);
   useEffect(() => {
@@ -63,7 +64,10 @@ export default function CartDrawerElements() {
                 {currentCurrency} {(totalPrice * exchangeRate).toFixed(2)}
               </h1>
             </div>
-            <button className="py-3 px-6 bg-indigo-700 rounded-xl text-slate-50 flex items-center justify-center">
+            <button
+              className="py-3 px-6 bg-indigo-700 rounded-xl text-slate-50 flex items-center justify-center"
+              onClick={() => navigate(`${username}/checkout`)}
+            >
               <PaymentsIcon className="mr-2" />
               Proceed to Checkout
             </button>

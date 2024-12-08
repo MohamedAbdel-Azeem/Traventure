@@ -6,6 +6,8 @@ import useUpdatePlace from "../../custom_hooks/places/useUpdatePlace";
 import Place from "../../custom_hooks/places/place_interface";
 import TheMAP from "../Maps/TheMAP";
 import { useSelector } from "react-redux";
+import { useGetHTags } from "../../custom_hooks/useCreateHistoricalTag";
+import TheBIGMAP from "../Maps/TheBIGMAP";
 interface LocationCardTouristProps {
   id: string;
   className?: string;
@@ -17,7 +19,6 @@ const LocationCardTourist: React.FC<LocationCardTouristProps> = ({
   className,
   wholeLocation: details,
 }) => {
-  const [isEditing, setIsEditing] = useState(false);
   const [locationName, setLocationName] = useState(details?.name || "");
   const [description, setDescription] = useState(details?.description || "");
   const [native, setNative] = useState(details?.ticket_price.native ?? 0);
@@ -29,6 +30,25 @@ const LocationCardTourist: React.FC<LocationCardTouristProps> = ({
   const [images, setImages] = useState(details?.pictures || []);
   const [image, setImage] = useState("");
   const [apiBody, setApiBody] = useState<Place | null>(details);
+  const [selectedTags, setSelectedTags] = useState<string[]>(
+    details?.historicalTags?.map((tag) => tag._id) || []
+  );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const {
+    loading: tagsLoading,
+    error: tagsError,
+    data: tagsData,
+  } = useGetHTags();
+
+  const handleTagsText = (value: string[]) => {
+    const valueNames = tagsData
+      .filter((tag) => value.includes(tag._id))
+      .map((tag) => tag.name);
+    return valueNames.join(", ");
+  };
+
+  console.log(details.historicalTags.map((tag) => typeof tag.name));
 
   useUpdatePlace(id, apiBody);
   const exchangeRate = useSelector(
@@ -38,210 +58,136 @@ const LocationCardTourist: React.FC<LocationCardTouristProps> = ({
     (state: any) => state.exchangeRate.currentCurrency
   );
 
+  const handleViewMap = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
-    <div>
+    <div
+      className={`relative w-full max-w-[500px] h-[350px] rounded-lg overflow-hidden shadow-lg transition-all ${className}`}
+      style={{ boxShadow: "10px 10px 20px rgba(0, 0, 0, 0.2)" }}
+    >
+      {/* Background Image */}
       <div
-        className={`w-[422px] h-[422px] bg-[#D9D9D9] rounded-[11px] m-4 ${className}`}
+        className="absolute inset-0 bg-cover bg-center transition-all duration-300"
+        style={{
+          backgroundImage: `url(${
+            images?.[0] || "https://via.placeholder.com/500"
+          })`,
+        }}
       >
-        <div className="w-[422px] h-[121px] relative">
-          {isEditing ? (
-            <div className="flex flex-col">
-              <div className="flex w-full h-full object-cover overflow-auto whitespace-nowrap">
-                {images?.map((cimage, index) => (
-                  <TextField
-                    key={index}
-                    title="Upload Image"
-                    value={cimage}
-                    className="pr-[10px]"
-                  />
-                ))}
-              </div>
-              <div className="flex flex-row">
-                <TextField onChange={(e) => setImage(e.target.value)} />
-                <Button onClick={() => setImages([...images, image])}>
-                  Add Image
-                </Button>
-              </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+      </div>
+
+      {/* Title displayed at bottom-left */}
+      <div className="absolute bottom-4 left-4 z-10 w-full px-4 pointer-events-none">
+        <h2
+          className="text-2xl font-bold text-white drop-shadow-md truncate"
+          style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.7)" }}
+        >
+          {locationName}
+        </h2>
+      </div>
+
+      {/* Hover Overlay Content */}
+      <div className="absolute inset-0 bg-purple-800 bg-opacity-50 text-white opacity-0 hover:opacity-100 transition-all duration-300 flex flex-col p-6">
+        {/* Ticket Prices and Hours (top) */}
+        <div className="flex w-full mb-4 mt-5">
+          {/* Ticket Prices Section */}
+          <div className="flex-1 mr-4">
+            <div className="flex items-center mb-2">
+              <ConfirmationNumberIcon className="mr-2 text-white" />
+              <span className="font-semibold">Ticket Prices</span>
             </div>
-          ) : (
-            <div className="w-full h-full object-cover rounded-t-[11px] relative">
-              <div className="flex bg-[#333333] w-full h-full object-cover overflow-auto whitespace-nowrap">
-                {images?.map((cimage) => (
-                  <img className="pr-[10px]" src={cimage} alt={locationName} />
-                ))}
-              </div>
+            <div>
+              <p className="text-white text-sm">
+                Native: {currentCurrency} {(native * exchangeRate).toFixed(2)}
+              </p>
+              <p className="text-white text-sm">
+                Foreign: {currentCurrency} {(foreign * exchangeRate).toFixed(2)}
+              </p>
+              <p className="text-white text-sm">
+                Student: {currentCurrency} {(student * exchangeRate).toFixed(2)}
+              </p>
             </div>
-          )}          
+          </div>
+
+          {/* Hours of Operation Section */}
+          <div className="flex-1">
+            <div className="flex items-center mb-2">
+              <AccessTimeIcon className="mr-2 text-white" />
+              <span className="font-semibold">Hours of Operation</span>
+            </div>
+            <p className="text-white text-sm">{hours}</p>
+          </div>
         </div>
-        <div className="w-[422px] h-[30px]">
-          {isEditing ? (
-            <TextField
-              value={locationName}
-              onChange={(e) => setLocationName(e.target.value)}
-              className="text-center w-full"
-              placeholder="Location Name"
-              size="small"
-              sx={{
-                "& .MuiInputBase-input": {
-                  textAlign: "center",
-                  padding: "4px",
-                },
-                "& .MuiInputBase-input::placeholder": {
-                  textAlign: "center",
-                },
-              }}
-            />
-          ) : (
-            <p className="text-[24px] text-center font-medium">
-              {locationName}
-            </p>
-          )}
-        </div>
-        <div className="w-[422px] h-[60px]">
-          {isEditing ? (
-            <TextField
-              multiline
-              maxRows="2"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="text-[16px] text-center w-full"
-              placeholder="Description"
-              size="small"
-              sx={{
-                "& .MuiInputBase-input": {
-                  textAlign: "center",
-                  padding: "0px",
-                },
-              }}
-            />
-          ) : (
-            <p className="text-[16px] text-center  h-[84px] overflow-auto">
-              {description}
-            </p>
-          )}
-        </div>
-        <div className="w-[422px] h-[211px] flex">
-          <div className="w-[311px] h-full rounded-bl-[11px]">
-            {isEditing ? (
-              <div>
-                <TheMAP
-                  lat={latitude}
-                  long={longitude}
-                  setLatitude={setLatitude}
-                  setLongitude={setLongitude}
-                />
-              </div>
-            ) : (
-              <div className="text-[16px] h-full overflow-auto">
-                <iframe
-                  title="map"
-                  className="h-full rounded-bl-[11px]"
-                  src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${longitude}!3d${latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
-                  width="311px"
-                ></iframe>
-              </div>
+
+        {/* Historical Tags */}
+        {Array.isArray(selectedTags) && selectedTags.length > 0 && (
+          <div className="flex flex-wrap justify-center items-center mb-4">
+            {details?.historicalTags.slice(0, 3).map((tag, index) => (
+              <span
+                key={index}
+                className="px-3 py-1 bg-purple-200 text-purple-900 rounded-full text-sm font-medium mr-2 mb-2"
+              >
+                {tag.name}
+              </span>
+            ))}
+            {selectedTags.length > 3 && (
+              <span className="text-sm text-purple-200">...</span>
             )}
           </div>
-          <div className="flex flex-col">
-            <div className="w-[111px] h-full bg-[#B03131] flex flex-col">
-              <div className="m-auto">
-                <ConfirmationNumberIcon />
-                {isEditing ? (
-                  <div>
-                    <TextField
-                      value={native}
-                      size="small"
-                      onChange={(e) => setNative(Number(e.target.value))}
-                      className="w-[124px]"
-                      placeholder="native"
-                      sx={{
-                        "& .MuiInputBase-input": {
-                          textAlign: "center",
-                          padding: "3.6px",
-                        },
-                        "& .MuiInputBase-input::placeholder": {
-                          textAlign: "center",
-                        },
-                      }}
-                    />
-                    <TextField
-                      value={foreign}
-                      size="small"
-                      onChange={(e) => setForeign(Number(e.target.value))}
-                      className="w-[124px]"
-                      placeholder="foreign"
-                      sx={{
-                        "& .MuiInputBase-input": {
-                          textAlign: "center",
-                          padding: "3.6px",
-                        },
-                        "& .MuiInputBase-input::placeholder": {
-                          textAlign: "center",
-                        },
-                      }}
-                    />
-                    <TextField
-                      value={student}
-                      size="small"
-                      onChange={(e) => setStudent(Number(e.target.value))}
-                      className="w-[124px]"
-                      placeholder="student"
-                      sx={{
-                        "& .MuiInputBase-input": {
-                          textAlign: "center",
-                          padding: "3.6px",
-                        },
-                        "& .MuiInputBase-input::placeholder": {
-                          textAlign: "center",
-                        },
-                      }}
-                    />
-                  </div>
-                ) : (
-                  <p className="overflow-auto w-[100px]">
-                    <div>
-                      Native: {currentCurrency}{" "}
-                      {(native * exchangeRate).toFixed(2)}
-                    </div>
-                    <div>
-                      Foreign: {currentCurrency}{" "}
-                      {(foreign * exchangeRate).toFixed(2)}
-                    </div>
-                    <div>
-                      Student: {currentCurrency}{" "}
-                      {(student * exchangeRate).toFixed(2)}
-                    </div>
-                  </p>
-                )}
-              </div>
-            </div>
-            <div className="w-[110px] h-full bg-[#7CC7E7] rounded-br-[11px] grid">
-              <div className="m-auto flex flex-row">
-                <AccessTimeIcon />
-                {isEditing ? (
-                  <TextField
-                    value={hours}
-                    size="small"
-                    onChange={(e) => setHours(e.target.value)}
-                    className="w-[124px]"
-                    placeholder="Hours"
-                    sx={{
-                      "& .MuiInputBase-input": {
-                        textAlign: "center",
-                      },
-                      "& .MuiInputBase-input::placeholder": {
-                        textAlign: "center",
-                      },
-                    }}
-                  />
-                ) : (
-                  <p className="overflow-auto w-[100px]">{hours}</p>
-                )}
-              </div>
-            </div>
-          </div>
+        )}
+
+        {/* Description */}
+        <div className="w-full mb-4">
+          <p
+            className="text-center text-sm text-gray-200 truncate"
+            style={{ maxWidth: "100%" }}
+          >
+            {description}
+          </p>
+        </div>
+
+        {/* View Map Button */}
+        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hover:opacity-100 transition-all duration-300">
+          <button
+            onClick={handleViewMap}
+            className="px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition-all duration-300"
+          >
+            View Map
+          </button>
         </div>
       </div>
+
+      {/* Map Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="relative bg-white rounded-lg overflow-hidden shadow-lg w-4/5 md:w-1/2">
+            {/* Close Button */}
+            <TheBIGMAP
+              arrayofmarkers={[
+                {
+                  latitude: latitude,
+                  longitude: longitude,
+                },
+              ]}
+              id="map"
+              className="h-[500px] w-full"
+            />{" "}
+            <button
+              onClick={handleCloseModal}
+              className="absolute h-[40px] w-[40px] top-2 left-2 text-[25px] text-center items-center text-white bg-red-500 hover:bg-red-600 font-bold rounded-full"
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

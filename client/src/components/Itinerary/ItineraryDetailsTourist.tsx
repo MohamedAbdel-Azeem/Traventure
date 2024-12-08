@@ -95,8 +95,8 @@ const ItineraryDetailsTourist: React.FC = () => {
   });
 
   return (
-    <Box className="flex justify-center items-center h-auto py-8 bg-gray-100">
-      <div className="flex flex-col">
+    <div className="flex justify-center items-center h-auto py-8 bg-gray-100 overflow-auto lasttimeipromise">
+      <div className="flex flex-col mt-[300px] justify-start items-start">
         <div
           className="relative w-[700px] h-[200px] rounded-[20px] bg-cover bg-center"
           style={{ backgroundImage: `url(${itinerary.main_Picture})` }}
@@ -315,10 +315,10 @@ const ItineraryDetailsTourist: React.FC = () => {
 
       <TheBIGMAP
         id="bigmap"
-        className="flex h-[800px] w-[500px] ml-2 mb-0 mt-auto"
+        className="flex h-[100%] w-[500px] ml-2 mb-0 mt-auto"
         arrayofmarkers={locations}
       />
-    </Box>
+    </div>
   );
 };
 

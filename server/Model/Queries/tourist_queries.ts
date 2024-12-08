@@ -1,5 +1,5 @@
 import { hashPassword } from "../../utils/functions/bcrypt_functions";
-import touristModel from "../Schemas/Tourist";
+import touristModel, { IAddress } from "../Schemas/Tourist";
 import Itinerary from "../Schemas/Itinerary";
 import Activity from "../Schemas/Activity";
 import Place from "../Schemas/Places";
@@ -90,12 +90,14 @@ export async function getTouristBookmarks(username: string) {
     }
     console.log(tourist);
     let bookmarkedActivities = await Activity.find({
-      _id: { $in: tourist.bookmarkedActivities},inappropriate:false 
+      _id: { $in: tourist.bookmarkedActivities },
+      inappropriate: false,
     })
       .populate("Tags")
       .populate("Category");
     let bookmarkedItineraries = await Itinerary.find({
-      _id: { $in: tourist.bookmarkedItineraries },inappropriate:false 
+      _id: { $in: tourist.bookmarkedItineraries },
+      inappropriate: false,
     })
       .populate("added_By")
       .populate("plan.place")
@@ -198,6 +200,34 @@ export async function toggleWishlistProduct(
   }
 }
 
+export async function skipWebsiteTutorial(username: string) {
+  try {
+    const tourist = await touristModel.findOne({ username: username });
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    tourist.skipWebsiteTutorial = true;
+    await tourist.save();
+    return "Tutorial skipped";
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getSkipTutorialStatus(username: string) {
+  try {
+    const tourist = await touristModel
+      .findOne({ username: username })
+      .select("skipWebsiteTutorial");
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    return tourist.skipWebsiteTutorial;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function bookmarkActivity(
   touristUsername: string,
   activityId: string
@@ -271,6 +301,60 @@ export async function setPromoCodeUsed(username: string) {
   }
 }
 
+export async function addAddress(username: String, address: IAddress) {
+  try {
+    const tourist = await touristModel.findOne({ username: username });
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    if (tourist.saved_addressess === undefined) {
+      tourist.saved_addressess = [];
+    }
+    tourist.saved_addressess.push(address);
+    return await tourist.save();
+  } catch {
+    throw new Error("Error adding address");
+  }
+}
+
+export async function editAddress(username: String, address: IAddress, index: number) {
+  try {
+    const tourist = await touristModel.findOne({ username: username });
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    if (tourist.saved_addressess === undefined) {
+      tourist.saved_addressess = [];
+    }
+    //edit specific address based on index number
+    tourist.saved_addressess[index] = address;
+    return await tourist.save();
+  } catch {
+    throw new Error("Error adding address");
+  }
+}
+
+export async function deleteAddress(username: String, index: number) {
+  try {
+    const tourist = await touristModel.findOne({ username
+    });
+    if (!tourist) {
+      throw new Error("Tourist not found");
+    }
+    if (!tourist.saved_addressess || tourist.saved_addressess.length <= index) {
+      throw new Error("Address not found");
+    }
+    if (tourist.saved_addressess === undefined) {
+      tourist.saved_addressess = [];
+    }
+    tourist.saved_addressess.splice(index, 1);
+    return await tourist.save();
+  }
+  catch {
+    throw new Error("Error deleting address");
+  }
+}
+
 export async function updateUserWallet(username: string, amount: number) {
   try {
     const tourist = await touristModel.findOne({ username });
@@ -280,8 +364,7 @@ export async function updateUserWallet(username: string, amount: number) {
     tourist.wallet += amount;
     await tourist.save();
     return tourist;
-  }
-  catch (err) {
+  } catch (err) {
     throw err;
   }
 }
@@ -342,8 +425,13 @@ module.exports = {
   bookmarkItinerary,
   getTouristBookmarks,
   toggleWishlistProduct,
+  skipWebsiteTutorial,
+  getSkipTutorialStatus,
   getPromoCodeUsed,
   setPromoCodeUsed,
+  addAddress,
+  editAddress,
+  deleteAddress,
   updateUserWallet,
   updateInterested
 };

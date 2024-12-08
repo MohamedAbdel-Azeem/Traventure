@@ -13,6 +13,9 @@ import {
 } from "@mui/material";
 import FlightCard from "./flightCard";
 import { useSelector } from "react-redux";
+import { useAuth } from "../../../../custom_hooks/auth";
+import { useParams } from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const cityOptions = [
   { city: "Atlanta", code: "ATL" },
@@ -126,10 +129,11 @@ const AvailableFlights = () => {
   const [children, setChildren] = useState(0);
   const [travelClass, setTravelClass] = useState("ECONOMY");
   const [flights, setFlights] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading2, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [includeTransportation, setIncludeTransportation] = useState(false);
-
+  const { isAuthenticated, isLoading, isError } = useAuth(4);
+  const { username } = useParams<{ username: string }>();
   const exchangeRate = useSelector(
     (state: any) => state.exchangeRate.exchangeRate
   );
@@ -163,8 +167,20 @@ const AvailableFlights = () => {
       });
   };
 
-
-
+    if (isLoading) {
+        return (
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+            <ClipLoader color="#f86c6b" loading={true} size={150} />
+          </div>
+        );
+      }
+      if (isError || isAuthenticated !== username) {
+        return (
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+            <h1>Error 403 Unauthrized access</h1>
+          </div>
+        );
+      }
 
 
   return (
@@ -285,7 +301,7 @@ const AvailableFlights = () => {
 
         {/* Display Flights */}
         <Box mt={3}>
-          {isLoading ? (
+          {isLoading2 ? (
             <Typography variant="body1">Loading flights...</Typography>
           ) : error ? (
             <Typography variant="body1" color="error">

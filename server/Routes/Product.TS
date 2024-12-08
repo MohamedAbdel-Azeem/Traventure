@@ -8,6 +8,7 @@ import {
   toggleProductArchive,
   addFeedback,
   getProductsWithWishList,
+  getExternalProducts,
 } from "../Model/Queries/product_queries";
 import { addPurchase } from "../Model/Queries/purchase_queries";
 import {
@@ -108,6 +109,15 @@ router.patch("/feedback/:productId", async (req: Request, res: Response) => {
     }
   } catch (error) {
     res.status(500).send(error);
+  }
+});
+router.get("/externalproducts", async (req: Request, res: Response) => {
+  try {
+    const { externalSeller } = req.query;
+    const products = await getExternalProducts(externalSeller as string);
+    res.status(200).send(products);
+  } catch (error) {
+    res.status(500).send;
   }
 });
 

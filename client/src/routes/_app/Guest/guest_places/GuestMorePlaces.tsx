@@ -38,9 +38,10 @@ const GuestMorePlaces: React.FC = () => {
         return true;
     });
     ;
+    
 
     return (
-        <div className="flex">
+        <div className="flex-grow">
             <Box p={3} mt={7}>
                 <Typography variant="h4" component="h1" gutterBottom>
                     All Places

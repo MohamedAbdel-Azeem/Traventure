@@ -1,7 +1,7 @@
 import { TextField } from "@mui/material";
 import { useCheckPromoCode } from "../custom_hooks/promo_codes/promocodecustomhooks";
 import { useState } from "react";
-
+import Swal from "sweetalert2";
 interface PromoCodeButtonProps {
   onAccept: (accepted: boolean) => void;
   className?: string;
@@ -18,7 +18,7 @@ const PromoCodeButton = ({ onAccept, className }: PromoCodeButtonProps) => {
       if (res) {
         onAccept(true);
         setError(false);
-        setErrorText("");
+        setErrorText("Code Accepted");
       } else {
         onAccept(false);
         setError(true);
@@ -32,23 +32,20 @@ const PromoCodeButton = ({ onAccept, className }: PromoCodeButtonProps) => {
   };
 
   return (
-    <div className={`w-[648px] h-[43px] rounded-[16px] ${className}`}>
-      <div className="flex mb-1">
+    <div className={`w-[212px] rounded-[16px] ${className}`}>
+      <div className="flex flex-col gap-[9px]">
         <TextField
           value={promoCode}
           onChange={(e) => setPromoCode(e.target.value)}
           error={error}
           sx={{
-            marginLeft: "20px",
-            width: "423px",
-            height: "43px",
+            height: "34px",
             borderRadius: "4px",
             "& .MuiInputBase-root": {
               height: "100%",
             },
             "& .MuiInput-input": {
               height: "100%",
-              padding: "10px 12px",
               fontSize: "16px",
             },
             backgroundColor: "#FFFFFF",
@@ -57,10 +54,11 @@ const PromoCodeButton = ({ onAccept, className }: PromoCodeButtonProps) => {
         />
         <button
           onClick={handleApplyCode}
-          className=" ml-[55px] w-[170px] h-[43px] bg-[#000000] rounded-[16px] text-[#FFFFFF] font-normal text-[22px]"
+          className="h-[34px] bg-gradient-to-r from-violet-400 to-violet-600 hover:bg-gradient-to-l rounded-[6px] font-normal text-[20px] text-black"
         >
-          Apply Code
+          Apply
         </button>
+        <p className="text-red-900 text-center">{errorText}</p>
       </div>
     </div>
   );

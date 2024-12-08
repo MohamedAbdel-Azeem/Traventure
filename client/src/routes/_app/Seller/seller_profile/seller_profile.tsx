@@ -16,6 +16,7 @@ import { FaEdit } from "react-icons/fa";
 import ProfilePictureEdit from "../../../../components/PDFs&Images/ProfilePictureEdit";
 import { uploadFileToStorage } from "../../../../firebase/firebase_storage";
 import { handleDeleteAccount } from "../../../../custom_hooks/usedeleterequest";
+import Cookies from 'js-cookie';
 
 interface SellerProfileProps {
   seller: ISeller;
@@ -90,6 +91,9 @@ const SellerProfile: React.FC<SellerProfileProps> = ({ seller }) => {
 
   // Handle logout
   const handleLogout = () => {
+    Cookies.set("access_token", "", { expires: 0});
+    Cookies.set("reduxPersistIndex", "", { expires: 0});
+    Cookies.set("persist%3Aroot", "", { expires: 0});
     navigate("/");
   };
   const [isPasswordModalOpen, setPasswordModalOpen] = useState(false);

@@ -8,7 +8,22 @@ import {
   LineChart,
   Line,
 } from "recharts";
-
+import { useMemo } from "react";
+const months = [
+  "ALL",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 const CustomTooltip: React.FC = ({ active, payload }) => {
   if (active && payload && payload.length) {
     const { productName, soldQuantity, remainingQuantity } = payload[0].payload;
@@ -45,17 +60,27 @@ function SingleProductSalesChart({ data }) {
 function DetailedViewSalesChart({ data }) {
   const newdata = data.map((sale) => ({
     ...sale,
-    timestamp:
-      new Date(sale.timestamp).toISOString().split("T")[0] +
-      " " +
-      new Date(sale.timestamp)
-        .toISOString()
-        .split("T")[1]
-        .split(":")
-        .slice(0, 2)
-        .join(":"),
+    timestamp: months[new Date(sale.timestamp).getMonth() + 1],
   }));
+  const groupedSalesData = useMemo(() => {
+    const salesByMonth = months.reduce((acc, month) => {
+      acc[month] = 0; // Initialize every month with 0 sales
+      return acc;
+    }, {});
 
+    // Group the sales data by month
+    data.forEach(({ timestamp, soldQuantity }) => {
+      const date = new Date(timestamp);
+      const monthName = months[date.getMonth()]; // Get the month name from the date
+      salesByMonth[monthName] += soldQuantity; // Accumulate sales for the month
+    });
+
+    // Convert the grouped data into an array for the chart
+    return Object.entries(salesByMonth).map(([month, total]) => ({
+      month,
+      total,
+    }));
+  }, [data]);
   return (
     <LineChart
       width={730}
