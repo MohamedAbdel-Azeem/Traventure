@@ -33,7 +33,7 @@ Welcome to Traventure, an all-in-one travel platform designed to make vacation p
 
 - Still under development and not deployed yet
 - Regular updates planned to add new features and improvements.  
-- No known issues as of now.  
+- Still fixing some minor bugs.  
 ---
 
 ## Code Style  
@@ -651,6 +651,39 @@ export default BadgePopup;
 </details>
 
 
+
+<details>
+<summary>BE Advertiser Schema Example</summary>
+
+```js
+
+import mongoose from "mongoose";
+import { IAdvertiser } from "../../Interfaces/Users/IAdvertiser";
+
+const Schema = mongoose.Schema;
+
+const AdvertiserSchema = new Schema({
+  username: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  documents: { type: String, required: true },
+  company: { type: String },
+  isAccepted: { type: Boolean, default: false },
+  profilepic: { type: String, default: null },
+  wallet: { type: Number, required: true, default: 0 },
+  websiteLink: { type: String },
+  hotline: { type: String },
+  founded: { type: Number },
+  description: { type: String },
+  location: { type: String },
+  timeStamp: { type: Date, required: true, default: Date.now },
+});
+
+export default mongoose.model<IAdvertiser>("Advertiser", AdvertiserSchema);
+
+
+```
+</details>
 
 
 
