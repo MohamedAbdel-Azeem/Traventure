@@ -67,13 +67,6 @@ const MorePlaces: React.FC = () => {
           <hr className="border-t-2 border-white/40 w-2/3 mx-auto mt-6" />
 
 
-
-
-          
-        </header>
-  
-        {/* Search and Filter Section */}
-        <Box p={3} style={{ marginTop: '80px' }}>
           <Box my={3} className="flex justify-center gap-4">
             {/* Search Input */}
             <div className="flex items-center bg-white shadow-lg rounded-full px-4 py-2">
@@ -94,31 +87,49 @@ const MorePlaces: React.FC = () => {
               />
             </div>
   
+  
             {/* Filter Dropdown for Tags */}
-            <FormControl variant="outlined" className="min-w-[120px]">
-              <InputLabel id="filter-type-label">Filter By</InputLabel>
-              <Select
-                labelId="filter-type-label"
-                value={filterType}
-                onChange={(e) => setFilterType(e.target.value)}
-                label="Filter By"
-              >
-                {tagsLoading ? (
-                  <MenuItem disabled>Loading...</MenuItem>
-                ) : tagsError ? (
-                  <MenuItem disabled>Error loading tags</MenuItem>
-                ) : (
-                  tagsData.map((tag: any) => (
-                    <MenuItem key={tag._id} value={tag.name}>
-                      {tag.name}
-                    </MenuItem>
-                  ))
-                )}
-              </Select>
-            </FormControl>
+<FormControl
+  variant="outlined"
+  className="min-w-[150px] w-[200px] bg-white shadow-lg rounded-full px-4 py-2">
+
+  <InputLabel id="filter-type-label" className="text-gray-700 font-medium">
+    Filter By
+  </InputLabel>
+  <Select
+    labelId="filter-type-label"
+    value={filterType}
+    onChange={(e) => setFilterType(e.target.value)}
+    label="Filter By"
+    className="bg-transparent outline-none text-gray-700"
+    MenuProps={{
+      PaperProps: {
+        className: 'bg-white shadow-lg rounded-xl',
+      },
+    }}
+  >
+    {tagsLoading ? (
+      <MenuItem disabled>Loading...</MenuItem>
+    ) : tagsError ? (
+      <MenuItem disabled>Error loading tags</MenuItem>
+    ) : (
+      tagsData.map((tag: any) => (
+        <MenuItem key={tag._id} value={tag.name}>
+          {tag.name}
+        </MenuItem>
+      ))
+    )}
+  </Select>
+</FormControl>
+
           </Box>
 
-
+          
+        </header>
+  
+        {/* Search and Filter Section */}
+        <Box p={3} style={{ marginTop: '80px' }}>
+          
 
           {/* Places Grid */}
           <Box mt={3}>
