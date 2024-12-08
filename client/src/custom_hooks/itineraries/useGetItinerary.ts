@@ -41,6 +41,9 @@ interface Itinerary {
     user_id?: TouristProfileData;
   }[];
   accessibility: boolean;
+  bookingActivated: boolean;
+  category: string;
+  inappropriate: boolean;
 }
 
 interface SActivity {

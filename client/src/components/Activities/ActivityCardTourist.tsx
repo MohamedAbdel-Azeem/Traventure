@@ -19,12 +19,12 @@ import useBookActivity from "../../custom_hooks/activities/bookActivity";
 import useBookmarkActivity from "../../custom_hooks/activities/bookmarkActivity";
 import { updateActivity } from "../../custom_hooks/activities/updateActivity";
 
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import BookmarkIcon from '@mui/icons-material/BookmarkAdd';
-import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
-import ClipLoader from 'react-spinners/ClipLoader';
+import BookmarkIcon from "@mui/icons-material/BookmarkAdd";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import ClipLoader from "react-spinners/ClipLoader";
 
 export type Activity = {
   _id: string;
@@ -62,7 +62,7 @@ type CatStructure = {
 export const ActivityCardTourist: React.FC<ActivityProp> = ({
   type,
   activity,
-  bookmarked
+  bookmarked,
 }) => {
   const currentuser = useLocation().pathname.split("/")[2];
   const currpath = useLocation().pathname.split("/")[3];
@@ -73,12 +73,9 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
   const { username } = useParams<{ username: string }>();
 
   const { bookActivity, data, loading, error } = useBookActivity();
-  const { bookmarkActivity,loading:loadingBookmark } = useBookmarkActivity();
-  const [inappropriate, setInappropriate] = useState(
-    activity.inappropriate
-  );
+  const { bookmarkActivity, loading: loadingBookmark } = useBookmarkActivity();
+  const [inappropriate, setInappropriate] = useState(activity.inappropriate);
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);
-
 
   const handleInappropriate = async () => {
     try {
@@ -107,7 +104,7 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
     const totalRating = allRatings?.reduce((acc, rating) => acc + rating, 0);
     return allRatings?.length ? totalRating / allRatings?.length : 0;
   };
-
+  const navigate = useNavigate();
   const averageRating = calculateAverageRating(activity);
 
   const {
@@ -132,25 +129,28 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
   };
   const alltags = handleTagsText;
 
- 
   const handleBooking = async (activity_id: string) => {
     try {
-      await bookActivity(activity_id, username,activity.Price,activity.SpecialDiscount,"","wallet");
+      await bookActivity(
+        activity_id,
+        username,
+        activity.Price,
+        activity.SpecialDiscount,
+        "",
+        "wallet"
+      );
     } catch (error) {
       console.error("Error booking activity:", error);
     }
   };
 
-
-
   const handleBookMark = async (activity_id: string) => {
     try {
-      await bookmarkActivity(currentuser,activity_id);
+      await bookmarkActivity(currentuser, activity_id);
       setIsBookmarked(true);
     } catch (error) {
       console.error("Error bookmarking activity:", error);
     }
-
   };
 
   const handleDateChange = (e) => {
@@ -212,28 +212,41 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
             </div>
             {type === "tourist" && activity.BookingIsOpen && (
               <div className=" flex justify-end items-center py-2 px-5">
-               {!isBookmarked && (
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ml-2"
-                title="Bookmark"
-                onClick={() => handleBookMark(activity._id)}
-              >
-                {loadingBookmark?<ClipLoader size={30} color="#ffffff"></ClipLoader>: <BookmarkIcon />}
-              </button>
-            )}
-            {isBookmarked && currpath!=="bookmarks" && (
-              <button
-                className="bg-green-700 text-white px-4 py-2 rounded-lg  ml-2" disabled
-              >
-                <BookmarkAddedIcon />
-              </button>
-            )}
+                {!isBookmarked && (
+                  <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ml-2"
+                    title="Bookmark"
+                    onClick={() => handleBookMark(activity._id)}
+                  >
+                    {loadingBookmark ? (
+                      <ClipLoader size={30} color="#ffffff"></ClipLoader>
+                    ) : (
+                      <BookmarkIcon />
+                    )}
+                  </button>
+                )}
+                {isBookmarked && currpath !== "bookmarks" && (
+                  <button
+                    className="bg-green-700 text-white px-4 py-2 rounded-lg  ml-2"
+                    disabled
+                  >
+                    <BookmarkAddedIcon />
+                  </button>
+                )}
 
                 <button
                   className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ml-2"
-                  onClick={() => handleBooking(activity._id)}
+                  onClick={() =>
+                    navigate(
+                      `/tourist/${username}/activity/${activity._id}/eventcheckout`
+                    )
+                  }
                 >
-                  {loading?<ClipLoader size={30} color="#ffffff"></ClipLoader>: "Book"}
+                  {loading ? (
+                    <ClipLoader size={30} color="#ffffff"></ClipLoader>
+                  ) : (
+                    "Book"
+                  )}
                 </button>
               </div>
             )}

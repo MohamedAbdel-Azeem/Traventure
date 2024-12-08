@@ -83,7 +83,6 @@ const Bookmarks = () => {
                 _id={String(itinerary._id)}
                 title={itinerary.title}
                 description={itinerary.description}
-                added_By={itinerary.added_By}
                 price={itinerary.price}
                 starting_Date={itinerary.starting_Date}
                 ending_Date={itinerary.ending_Date}

@@ -1,85 +1,101 @@
 import * as React from "react";
 import Radio from "@mui/material/Radio";
 import { FormControlLabel, TextField } from "@mui/material";
-import PromoCodeButton from "./PromoCodeButton";
+import PromoCodeButton from "../../../../components/PromoCodeButton";
 import { useEffect, useState } from "react";
-import EditButton from "./Buttons/EditButton";
-import { GetCurrentUser } from "../custom_hooks/currentuser";
-import { useSelector } from "react-redux";
-import { IProduct } from "../redux/cartSlice";
+import { GetCurrentUser } from "../../../../custom_hooks/currentuser";
 import { useLocation, useParams } from "react-router-dom";
-// import { useAuth } from "../custom_hooks/auth";
+import { useAuth } from "../../../../custom_hooks/auth";
 import {
-  addAddress,
-  editAddress,
-  deleteAddress,
-} from "../custom_hooks/checkout";
-
+  useGetActivityID,
+  Activityd,
+} from "../../../../custom_hooks/activities/useGetActivity";
 import ClipLoader from "react-spinners/ClipLoader";
-import ItineraryCardToruist from "./Itinerary/ItineraryCardToruist";
-import { useGetItineraryID } from "../custom_hooks/itineraries/useGetItinerary";
-import { TouristProfileData } from "../routes/_app/Tourist/tourist_profile/tourist_profile_data";
-import { IActivity } from "../custom_hooks/activities/activity_interface";
-import Place from "../custom_hooks/places/place_interface";
+import useBookItinerary from "../../../../custom_hooks/itineraries/bookItinerary";
+import useBookActivity from "../../../../custom_hooks/activities/bookActivity";
+import { useGetItineraryID } from "../../../../custom_hooks/itineraries/useGetItinerary";
+import ItineraryCardToruist from "../../../../components/Itinerary/ItineraryCardToruist";
+import { ActivityCardTourist } from "../../../../components/Activities/ActivityCardTourist";
 const EventCheckout = () => {
-  //   const { isAuthenticated, isLoading, isError } = useAuth(4);
-  //   const { username } = useParams();
-  const { itinerary, loading, error } = useGetItineraryID(
-    "67275f9513bcb818687c62ee"
-  );
+  const { isAuthenticated, isLoading, isError } = useAuth(4);
+  const { username, id, type } = useParams();
   interface TagStructure {
     _id: string;
     name: string;
     __v: number;
   }
-
-  interface Itinerary {
-    _id: string;
-    main_Picture?: string;
-    title: string;
-    description: string;
-    added_By: string;
-    price: number;
-    starting_Date: string;
-    ending_Date: string;
-    rating: number;
-    total: number;
-    language: string;
-    selectedTags?: TagStructure[];
-    pickup_location: { longitude: number; latitude: number };
-    dropoff_location: { longitude: number; latitude: number };
-    plan: {
-      place: Place;
-      activities: IActivity[];
-    }[];
-    booked_By: {
-      user_id?: TouristProfileData;
-    }[];
-    accesibility: boolean;
-  }
-  const [itineraryd, setItinerary] = useState<Itinerary | null>(itinerary);
-
-  useEffect(() => {
-    console.log(itinerary);
-    if (itinerary) {
-      setItinerary(itinerary);
-    }
-  }, [itinerary]);
-
-  const username = "hamadageh2";
   const [selectedValue, setSelectedValue] = useState("cod");
   const [onAccept, setOnAccept] = useState(false);
-  const [subtotal, setSubtotal] = useState(7969.69);
-  const { cuserdata } = GetCurrentUser(username);
+  const [PromoCode, setPromoCode] = useState("");
+  const { cuserdata } = GetCurrentUser(username ?? "");
   const [currentUser, setCurrentUser] = useState(cuserdata);
-  const cart = useSelector((state) => state.cart) as IProduct[];
+  const { itinerary } = useGetItineraryID(id);
+  const { activity, loading } = useGetActivityID(id);
+  const [currentactivity, setCurrentActivity] = useState<Activityd>(activity);
+  const [subtotal, setSubtotal] = useState(0);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [rating, setRating] = useState(0);
+  const [language, setLanguage] = useState("");
+  const [main_Picture, setMain_Picture] = useState("");
+  const [selectedTags, setSelectedTags] = useState<TagStructure[]>([]);
+  const [starting_Date, setStarting_date] = useState(
+    "2025-11-16T00:00:00.000Z"
+  );
+  const [ending_Date, setEnding_Date] = useState("2025-11-16T00:00:00.000Z");
+  const [accessibility, setAccessibility] = useState(false);
+  const [bookingActivated, setBookingActivated] = useState(false);
+  const [inappropriate, setInappropriate] = useState(false);
+  const [pickupLocation, setPickupLocation] = useState({
+    longitude: 0,
+    latitude: 0,
+  });
+  const [dropoffLocation, setDropoffLocation] = useState({
+    longitude: 0,
+    latitude: 0,
+  });
 
   useEffect(() => {
-    const newSubtotal = cart
-      .map((product) => product.price * product.quantity)
-      .reduce((total, price) => total + price, 0);
-    setSubtotal(newSubtotal);
-  }, [cart]);
+    if (activity) {
+      console.log(activity);
+      setCurrentActivity(activity);
+      setSubtotal(activity?.Price);
+    }
+  }, [activity]);
+
+  useEffect(() => {
+    if (itinerary) {
+      console.log(itinerary);
+      setSubtotal(itinerary?.price ?? 0);
+      setTitle(itinerary?.title ?? "");
+      setDescription(itinerary?.description ?? "");
+      setPrice(itinerary?.price ?? 0);
+      setTotal(itinerary?.total ?? 0);
+      setRating(itinerary?.rating ?? 0);
+      setLanguage(itinerary?.language ?? "");
+      setMain_Picture(itinerary?.main_Picture ?? "");
+      setStarting_date((itinerary?.starting_Date ?? "").toString());
+      setEnding_Date((itinerary?.ending_Date ?? "").toString());
+      setSelectedTags(itinerary?.selectedTags ?? []);
+      setAccessibility(itinerary?.accessibility ?? false);
+      setBookingActivated(itinerary?.bookingActivated ?? false);
+      setInappropriate(itinerary?.inappropriate ?? false);
+      setPickupLocation(
+        itinerary?.pickup_location ?? {
+          longitude: 0,
+          latitude: 0,
+        }
+      );
+      setDropoffLocation(
+        itinerary?.dropoff_location ?? {
+          longitude: 0,
+          latitude: 0,
+        }
+      );
+    }
+  }, [itinerary]);
 
   useEffect(() => {
     if (cuserdata) {
@@ -91,27 +107,58 @@ const EventCheckout = () => {
     setSelectedValue(event.target.value);
   };
 
-    if (loading) {
-      return (
-        <div className="flex items-center justify-center h-screen">
-          <ClipLoader color="#f86c6b" loading={true} size={150} />
-        </div>
-      );
+  const { bookItinerary } = useBookItinerary();
+  const { bookActivity } = useBookActivity();
+  const handleBooking = async (id: string) => {
+    try {
+      if (type?.includes("itinerary")) {
+        await bookItinerary(
+          id,
+          username,
+          subtotal,
+          PromoCode,
+          selectedValue
+        );
+      } else {
+        await bookActivity(
+          id,
+          username,
+          subtotal,
+          currentactivity?.SpecialDiscount,
+          PromoCode,
+          selectedValue
+        );
+      }
+    } catch (error) {
+      console.error("Error booking itinerary  :", error);
     }
-    if (error) {
-      return (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100vh",
-          }}
-        >
-          <h1>Error 403 Unauthorized access</h1>
-        </div>
-      );
-    }
+  };
+
+  if (
+    isLoading ||
+    loading ||
+    (type?.includes("itinerary") ? !itinerary : !currentactivity)
+  ) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <ClipLoader color="#f86c6b" loading={true} size={150} />
+      </div>
+    );
+  }
+  if (isError || isAuthenticated !== username) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <h1>Error 403 Unauthorized access</h1>
+      </div>
+    );
+  }
   return (
     <div
       className="h-screen flex items-start justify-center bg-gray-900 gap-[100px]"
@@ -123,28 +170,38 @@ const EventCheckout = () => {
         backgroundColor: "rgba(0, 0, 0, 0.7)",
       }}
     >
-      <ItineraryCardToruist
-        key={"67275f9513bcb818687c62ee"}
-        _id={"67275f9513bcb818687c62ee"}
-        title={itineraryd?.title}
-        description={itineraryd?.description}
-        added_By={itineraryd?.added_By}
-        price={itineraryd?.price}
-        starting_Date={itineraryd?.starting_Date}
-        ending_Date={itineraryd?.ending_Date}
-        rating={itineraryd?.rating}
-        total={itineraryd?.total}
-        language={itineraryd?.language}
-        pickup_location={itineraryd?.pickup_location}
-        dropoff_location={itineraryd?.dropoff_location}
-        plan={itineraryd?.plan}
-        selectedTags={itineraryd?.selectedTags}
-        main_Picture={itineraryd?.main_Picture}
-        booked_By={itineraryd?.booked_By}
-        accesibility={itineraryd?.accesibility}
-        bookingActivated={itineraryd?.bookingActivated}
-        inappropriate={itineraryd?.inappropriate}
-      />
+      <div className="mt-[120px]">
+        {type?.includes("itinerary") ? (
+          <ItineraryCardToruist
+            className="w-[450px]"
+            key={id}
+            _id={id ?? ""}
+            title={title}
+            description={description}
+            price={price}
+            starting_Date={starting_Date}
+            ending_Date={ending_Date}
+            rating={rating}
+            total={total}
+            language={language}
+            pickup_location={pickupLocation}
+            dropoff_location={dropoffLocation}
+            selectedTags={selectedTags}
+            main_Picture={main_Picture}
+            accesibility={accessibility}
+            bookingActivated={bookingActivated}
+            inappropriate={inappropriate}
+          />
+        ) : (
+          <>
+            <ActivityCardTourist
+              key={currentactivity._id}
+              activity={currentactivity}
+            />
+          </>
+        )}
+      </div>
+
       <div className="w-[529.2px] mt-[70px] h-[550px] rounded-[10px] bg-gradient-to-b from-[#A855F7] to-[#6D28D9] flex flex-col">
         <div>
           <div className="w-[529.2px] h-[49px] flex">
@@ -333,6 +390,7 @@ const EventCheckout = () => {
                 </div>
               </div>
               <PromoCodeButton
+                setPromoCodeAgain={setPromoCode}
                 onAccept={setOnAccept}
                 className="mt-[7.7px] mx-auto h-[120px] w-[300px]"
               />
@@ -355,12 +413,20 @@ const EventCheckout = () => {
             </div>
             <div className="ml-auto">
               <p className="text-[18px] text-white justify-end flex mb-[0px]">
-                {subtotal.toFixed(2)}
+                {type?.includes("itinerary")
+                  ? subtotal.toFixed(2)
+                  : subtotal - currentactivity?.SpecialDiscount}
               </p>
 
               {onAccept ? (
                 <p className="text-[18px] text-white justify-end flex">
-                  -{(subtotal * 0.1).toFixed(2)}
+                  -
+                  {type?.includes("itinerary")
+                    ? (subtotal * 0.1).toFixed(2)
+                    : (
+                        (subtotal - currentactivity?.SpecialDiscount) *
+                        0.1
+                      ).toFixed(2)}
                 </p>
               ) : (
                 <></>
@@ -370,10 +436,27 @@ const EventCheckout = () => {
           <div>
             <div className="bg-gradient-to-r from-[#DBC3FF] to-[#A855F7] rounded-tl-[10px] rounded-br-[10px] h-[63.7px] w-[508.2px] flex flex-row mx-auto mt-[11px]">
               <p className="text-[21px] text-black my-auto ml-2">
-                {(onAccept ? subtotal * 0.9 : subtotal * 1.0).toFixed(2)}
+                {(onAccept
+                  ? type?.includes("itinerary")
+                    ? subtotal * 0.9
+                    : (subtotal - currentactivity?.SpecialDiscount) * 0.9
+                  : type?.includes("itinerary")
+                  ? subtotal
+                  : (subtotal - currentactivity?.SpecialDiscount) * 1.0
+                ).toFixed(2)}
               </p>
-              <button className="my-auto ml-auto mr-[9.8px] w-[189px] h-[46.2px] bg-gradient-to-t hover:bg-gradient-to-b from-[#A855F7] via-[#bb7bff] to-[#c49ffc] border-[#652795] border-[0.7px] rounded-[7.7px] text-[21px]">
-                Buy
+              <button
+                className={`my-auto ml-auto mr-[9.8px] w-[189px] h-[46.2px] ${
+                  selectedValue === "wallet" && currentUser?.wallet < subtotal
+                    ? "bg-[#7d1919]"
+                    : "bg-gradient-to-t  hover:bg-gradient-to-b from-[#A855F7] via-[#bb7bff] to-[#c49ffc]"
+                }  border-[#652795] border-[0.7px] rounded-[7.7px] text-[21px]`}
+                onClick={() => handleBooking(id ?? "")}
+                disabled={
+                  selectedValue === "wallet" && currentUser?.wallet < subtotal
+                }
+              >
+                Book
               </button>
             </div>
           </div>

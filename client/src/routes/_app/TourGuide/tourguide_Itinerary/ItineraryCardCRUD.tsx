@@ -7,7 +7,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CircularProgress from "@mui/material/CircularProgress";
 import { format } from "date-fns";
 import { TouristProfileData } from "../../../../routes/_app/Tourist/tourist_profile/tourist_profile_data";
-import {IActivity} from "../../../../custom_hooks/activities/activity_interface";
+import { IActivity } from "../../../../custom_hooks/activities/activity_interface";
 import Place from "../../../../custom_hooks/places/place_interface";
 import Button from "@mui/material/Button";
 import axios from "axios";
@@ -126,7 +126,7 @@ const ItineraryCardCRUD: React.FC<ItineraryCardCRUDProps> = ({
     (state: any) => state.exchangeRate.currentCurrency
   );
 
-  const {username : currentuser}  = useParams();
+  const { username: currentuser } = useParams();
 
   return (
     <div className="m-4 transition transform hover:scale-105 w-96 bg-gray-100 rounded-lg">

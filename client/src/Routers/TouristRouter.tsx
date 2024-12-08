@@ -15,14 +15,15 @@ import CurrencyDropdown from "../components/currencyDrop";
 import ItineraryDetailsTourist from "../components/Itinerary/ItineraryDetailsTourist";
 import Bookmarks from "../routes/_app/Tourist/tourist_bookmarks/Bookmarks";
 import CartButton from "../components/cart/CartButton";
-import Checkout from "../components/Checkout";
+import Checkout from "../routes/_app/Tourist/tourist_purchases/Checkout";
 import { TouristWishList } from "../routes/_app/Tourist/tourist_purchases/TouristWishList";
-import {isAccessTokenPresent} from "../components/Protection/authUtils";
+import { isAccessTokenPresent } from "../components/Protection/authUtils";
 import TouristComplaints from "../routes/_app/Tourist/TouristComplaints";
 import { useLocation } from "react-router-dom";
+import EventCheckout from "../routes/_app/Tourist/tourist_bookings/EventCheckout";
 export default function TouristRouter() {
-const location = useLocation();
-const currentpage = location.pathname.split(`/`)[3];
+  const location = useLocation();
+  const currentpage = location.pathname.split(`/`)[3];
   return (
     <div className="flex flex-col w-screen h-screen">
       <NewNavbar />
@@ -118,6 +119,12 @@ const currentpage = location.pathname.split(`/`)[3];
         <Route
           path="/:username/checkout"
           element={isAccessTokenPresent() ? <Checkout /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/:username/:type/:id/eventcheckout"
+          element={
+            isAccessTokenPresent() ? <EventCheckout /> : <Navigate to="/" />
+          }
         />
       </Routes>
       {/* <CurrencyDropdown /> */}

@@ -1,22 +1,22 @@
 import * as React from "react";
 import Radio from "@mui/material/Radio";
 import { FormControlLabel, TextField } from "@mui/material";
-import TheMAP from "./Maps/TheMAP";
-import PromoCodeButton from "./PromoCodeButton";
+import TheMAP from "../../../../components/Maps/TheMAP";
+import PromoCodeButton from "../../../../components/PromoCodeButton";
 import { useEffect, useState } from "react";
-import EditButton from "./Buttons/EditButton";
-import { GetCurrentUser } from "../custom_hooks/currentuser";
+import EditButton from "../../../../components/Buttons/EditButton";
+import { GetCurrentUser } from "../../../../custom_hooks/currentuser";
 import { useSelector } from "react-redux";
-import { IProduct } from "../redux/cartSlice";
+import { IProduct } from "../../../../redux/cartSlice";
 import { useParams } from "react-router-dom";
-import { useAuth } from "../custom_hooks/auth";
+import { useAuth } from "../../../../custom_hooks/auth";
 import {
   addAddress,
   editAddress,
   deleteAddress,
-} from "../custom_hooks/checkout";
+} from "../../../../custom_hooks/checkout";
 
-import BestDeleteButton from "./Buttons/BestDeleteButton";
+import BestDeleteButton from "../../../../components/Buttons/BestDeleteButton";
 import ClipLoader from "react-spinners/ClipLoader";
 const Checkout = () => {
   const { isAuthenticated, isLoading, isError } = useAuth(4);

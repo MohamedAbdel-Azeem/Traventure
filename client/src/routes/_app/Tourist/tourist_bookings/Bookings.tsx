@@ -15,8 +15,6 @@ import Itinerary from "../../../../custom_hooks/itineraries/itinerarySchema";
 import { useNavigate, useParams } from "react-router-dom";
 import getBookings from "../../../../custom_hooks/getTouristBookings";
 import cancelBookings from "../../../../custom_hooks/cancelBooking";
-import { set } from "date-fns";
-import { get } from "react-hook-form";
 import { ActivityCardTourist } from "../../../../components/Activities/ActivityCardTourist";
 import getFlights from "../../../../custom_hooks/getTouristFlights";
 import getHotels from "../../../../custom_hooks/getTouristHotels";
@@ -36,12 +34,11 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 export interface IBooking {
   _id: string;
   type: string;
-  itinerary: Itinerary;
+  itinerary: string;
   activity: Activity;
   price: number;
 }
 function Reviews(props: { id: string; type: string; text: string }) {
-  const [openFeedback, setOpenFeedback] = useState(false);
   const { id, type, text } = props;
   const { username } = useParams<{ username: string }>();
   const [showFeedback, setShowFeedback] = useState(false);
@@ -122,6 +119,7 @@ const Bookings: React.FC = () => {
       setActivityBookings(
         data.filter((booking) => booking.type === "activity")
       );
+      console.log(data,"LIFE IS PAIN");
     }
 
     if (flightsdata) {
@@ -148,194 +146,6 @@ const Bookings: React.FC = () => {
     return now > startTime;
   }
 
-  const sampleFeedback = [
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-  ];
-
-  const sampleITFeedback = [
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great ittt guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-  ];
-
-  const sampleActivityFeedback = [
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-    {
-      user_Id: "1",
-      username: "user123",
-      feedback: "Great tour guide!",
-      rate: 5,
-    },
-    {
-      user_Id: "1",
-      username: "user456",
-      feedback: "Very knowledgeable.",
-      rate: 4,
-    },
-  ];
   if (isLoading) {
     return (
       <div
@@ -434,7 +244,7 @@ const Bookings: React.FC = () => {
                           {booking.itinerary.language}
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          {booking.price}$
+                          {booking.price}
                         </StyledTableCell>
                         <StyledTableCell align="right">
                           {(booking.itinerary.added_By as any).username}
@@ -721,8 +531,6 @@ const Bookings: React.FC = () => {
         </div>
       </div>
     </div>
-    // </div>
-    // </div>
   );
 };
 

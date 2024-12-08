@@ -11,6 +11,7 @@ import {
   updateActivity,
   getActivitiesid,
   toggleInappropriate,
+  getActivityid,
 } from "../Model/Queries/activity_queries";
 import Advertiser from "../Model/Schemas/Advertiser";
 const router = Router();
@@ -68,6 +69,18 @@ router.delete("/delete/:id", async (req: Request, res: Response) => {
     res.status(500).send("error deleting activity");
   }
 });
+
+router.get("/get/:id", async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const activity = await getActivityid(id);
+    res.status(200).send(activity);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("error getting activity");
+  }
+});
+
 router.put(
   "/update/:id",
   updateActivityValidator,
