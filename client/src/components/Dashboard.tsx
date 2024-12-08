@@ -10,6 +10,7 @@ import {
 import axios from "axios";
 import Itinerary from "../custom_hooks/itineraries/itinerarySchema";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import Slideshow from "./Slideshow";
 
 const Dashboard: React.FC = () => {
   const { upcoming, loading, error } = useGetUpcoming();
@@ -71,18 +72,31 @@ const Dashboard: React.FC = () => {
   tourist_activities = tourist_activities.slice(0, 5);
   tourist_itineraries = tourist_itineraries.slice(0, 5);
 
+  const slideshowItems = [
+    ...itineraries.map((itinerary) => ({
+      image: itinerary.main_Picture, 
+      title: itinerary.title,
+    })),
+    ...locations.map((location) => ({
+      image: location.pictures?.[0] || '',
+      title: location.name,
+    })),
+  ];
+
   return (
     <>
       {/* Page Header */}
-      <header className="bg-gradient-to-r from-purple-500 via-blue-500 to-teal-500 py-16 text-center rounded-b-3xl shadow-lg">
-        <h1 className="text-5xl font-extrabold text-white drop-shadow-md">
-          Welcome Back, {currentuser}!
-        </h1>
-        <p className="mt-4 text-lg text-white opacity-90">
-          Plan your next adventure with ease. Check upcoming itineraries,
-          places, and activities all in one place.
-        </p>
-      </header>
+     <header className="bg-gradient-to-r from-purple-500 via-blue-500 to-teal-500 py-6 min-h-[180px] text-center rounded-b-2xl shadow-lg">
+  <h1 className="text-3xl font-extrabold text-white drop-shadow-md">
+    Welcome Back, {currentuser}!
+  </h1>
+  <p className="mt-2 text-base text-white opacity-90">
+    Plan your next adventure with ease. Check upcoming itineraries, places, and activities all in one place.
+  </p>
+</header>
+      <Slideshow items={slideshowItems} />
+
+      <hr></hr>
 
       {/* Upcoming Itineraries Section */}
       <div className="bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 p-1 mx-4 lg:mx-20 rounded-lg shadow-md mt-5">
