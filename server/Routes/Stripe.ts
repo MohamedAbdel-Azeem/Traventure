@@ -218,7 +218,7 @@ router.post("/create-invoice", async (req: Request, res: Response) => {
 
     // 6. Respond with Invoice URLs
     console.log("Finalized invoice:", finalizedInvoice);
-    await sendMailWithPdf("oelharridy@gmail.com", "Traventure Invoice Purchase", "", finalizedInvoice?.invoice_pdf || "");
+    await sendMailWithPdf(email || " ", "Traventure Invoice Purchase", "", finalizedInvoice?.invoice_pdf || "");
     res.status(200).send({
       hostedInvoiceUrl: finalizedInvoice.hosted_invoice_url,
       invoicePdfUrl: finalizedInvoice.invoice_pdf,
