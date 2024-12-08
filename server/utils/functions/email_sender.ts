@@ -37,7 +37,7 @@ export function sendMail(email: string, subject: string, textHtml: string) {
 }
 
 // pdf is provided as a link
-export function sendMailWithPdf(
+export async function sendMailWithPdf(
   email: string,
   subject: string,
   textHtml: string,
@@ -70,5 +70,4 @@ export function sendMailWithPdf(
     }
   });
 }
-
 export default sendMail;

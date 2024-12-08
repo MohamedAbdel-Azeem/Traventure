@@ -1,6 +1,9 @@
 import express, { Request, Response, Router } from "express";
 import dotenv from "dotenv";
 import stripe from "stripe";
+import { sendMailWithPdf } from "../utils/functions/email_sender";
+import Tourist from "../Model/Schemas/Tourist";
+import jwt from 'jsonwebtoken';
 const router = Router();
 const secretKey = process.env.STRIPE_SECRET_KEY;
 
@@ -36,7 +39,7 @@ router.post("/create-payment-intent", async (req: Request, res: Response) => {
   params = {
     payment_method_types:
       paymentMethodType === "link" ? ["link", "card"] : [paymentMethodType],
-    amount: amount*100,
+    amount: amount*1000,
     currency: "EGP",
   };
 
@@ -73,7 +76,7 @@ router.post("/create-payment-intent", async (req: Request, res: Response) => {
       await Stripe.paymentIntents.create(params);
 
     // Send publishable key and PaymentIntent client_secret to client.
-    res.send({
+       res.send({
       clientSecret: paymentIntent.client_secret,
       nextAction: paymentIntent.next_action,
     });
@@ -135,6 +138,94 @@ router.get("/session/:id", async (req: Request, res: Response) => {
     res.status(200).send(session);
   } catch (error) {
     res.status(500).send({ error: "Unable to fetch session details" });
+  }
+});
+
+router.post("/create-invoice", async (req: Request, res: Response) => {
+  const { items, payment_method} = req.body;
+  console.log(items);
+ 
+  const token = req.cookies['access_token'];
+  const decoded = jwt.verify(token, 'supersecret') as { id: string };
+  const userId = decoded.id;
+  const user = await Tourist.findById(userId);
+  const name = user?.username;
+  const email = user?.email;
+  if (!secretKey) {
+    return res.status(500).send({ error: "Stripe secret key is missing" });
+  }
+  console.log("Creating invoice for:", name, email, items);
+  const Stripe = new stripe(secretKey);
+  const guestCustomer = await Stripe.customers.create({
+    email: email,
+    name: name,
+  });
+
+  const customerId = guestCustomer.id;
+  console.log("Creating invoice for ttrs");
+  try {
+    const invoice = await Stripe.invoices.create({
+      customer: customerId,
+      auto_advance: true,
+      currency: "EGP",
+      // Automatically finalize the invoice
+      collection_method: "send_invoice", // For sending invoices manually (no immediate payment link)
+      days_until_due: 7,
+
+      // Optional: Set a due date
+    });
+    console.log("before for");
+    // 1. Add Invoice Items
+    for (const item of items) {
+      //console.log("Creating invoice item:", item);
+
+      // Create the product and price dynamically
+      const product = await Stripe.products.create({
+        name: item.name,
+      });
+
+      const price = await Stripe.prices.create({
+        unit_amount: item.amount*100,
+        currency: "EGP",
+        product: product.id,
+      });
+
+      const invoiceItem = await Stripe.invoiceItems.create({
+        customer: customerId,
+        price: price.id,
+        quantity: item.quantity || 1,
+        invoice: invoice.id,
+      });
+
+      //console.log("Created invoice item:", invoiceItem);
+    }
+    console.log(customerId);
+    // 2. Create Invoice (this automatically includes the invoice items linked to the customer)
+
+    //console.log("Invoice created:", invoice);
+
+    // 3. Finalize the Invoice
+    const finalizedInvoice = await Stripe.invoices.finalizeInvoice(invoice.id);
+    //  console.log("Finalized invoice lines:", finalizedInvoice.lines);
+
+    // 4. Retrieve Finalized Invoice
+    const retrievedInvoice = await Stripe.invoices.retrieve(
+      finalizedInvoice.id
+    );
+
+    // 5. Send the Invoice via Email
+    //const mailres = await Stripe.invoices.sendInvoice(retrievedInvoice.id);
+
+    // 6. Respond with Invoice URLs
+    console.log("Finalized invoice:", finalizedInvoice);
+    await sendMailWithPdf("oelharridy@gmail.com", "Traventure Invoice Purchase", "", finalizedInvoice?.invoice_pdf || "");
+    res.status(200).send({
+      hostedInvoiceUrl: finalizedInvoice.hosted_invoice_url,
+      invoicePdfUrl: finalizedInvoice.invoice_pdf,
+    });
+  } catch (error: any) {
+    console.error("Error creating or sending invoice:", error);
+    res.status(500).send({ error: error.message });
   }
 });
 export default router;

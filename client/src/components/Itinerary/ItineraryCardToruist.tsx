@@ -104,8 +104,6 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
   };
   const [openPay, setOpenPay] = useState(false);
   const handleBooking = async (id: string) => {
-    setOpenPay(true);
-    return;
     try {
       await bookItinerary(id, username, price);
     } catch (error) {
@@ -178,15 +176,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
       className="m-4 transition transform hover:scale-105 w-96 bg-gray-200 rounded-lg overflow-hidden shadow-lg"
       style={{ boxShadow: "10px 10px 20px rgba(0, 0, 0, 0.2)" }}
     >
-      {openPay && (
-        <PayStripe
-          handleOpen={() => setOpenPay(true)}
-          handleClose={() => setOpenPay(false)}
-          open={openPay}
-          amount={price}
-          name={username || "Guest"}
-        />
-      )}
+    
       <div className="relative w-full h-[250px]">
         <img
           src={main_Picture}
