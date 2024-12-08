@@ -25,6 +25,7 @@ import { useSelector } from "react-redux";
 import BookmarkIcon from '@mui/icons-material/BookmarkAdd';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import ClipLoader from 'react-spinners/ClipLoader';
+import BlockIcon from '@mui/icons-material/Block';
 
 export type Activity = {
   _id: string;
@@ -207,11 +208,15 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
   
       <div className="w-[400px] bg-white rounded-lg shadow-lg overflow-hidden">
         {/* Booking Status & Admin Status */}
-        <div className="flex justify-between items-center bg-gray-100 p-4">
-          <div className={`text-sm px-3 py-1 rounded-full ${newBIO ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
-            {newBIO ? "Open" : "Closed"}
-          </div>
+        <div className="flex justify-between items-center bg-white-100 p-4">
+          {/* Booking Status */}
+          {!newBIO && (
+            <div className="flex items-center">
+              <BlockIcon className="text-red-500" />
+            </div>
+          )}
   
+          {/* Admin Controls */}
           {currenttype === "admin" && (
             <select
               title="status"
@@ -347,5 +352,6 @@ export const ActivityCardTourist: React.FC<ActivityProp> = ({
       </div>
     </div>
   );
+  
   
 };
