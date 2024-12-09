@@ -24,6 +24,7 @@ import EventCheckout from "../routes/_app/Tourist/tourist_bookings/EventCheckout
 export default function TouristRouter() {
   const location = useLocation();
   const currentpage = location.pathname.split(`/`)[3];
+  
   return (
     <div className="flex flex-col w-screen h-screen">
       <NewNavbar />

@@ -3,11 +3,40 @@ import {
   changePassword,
   markNotificationAsRead,
   markAllNotificationAsRead,
+  getcurrentuser,
+  auth,
 } from "../Model/Queries/user_queries";
+import jwt from "jsonwebtoken";
 import { updatePassword } from "../Model/Queries/user_queries";
 
 const router = Router();
 
+router.get("/me/:username", async (req: Request, res: Response) => {
+  try {
+    const { username } = req.params;
+    const user = await getcurrentuser(username);
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+router.post("/auth", async (req, res) => {
+  try {
+    const token = req.cookies["access_token"];
+    const decoded = jwt.verify(token, "supersecret") as { id: string };
+    const userId = decoded.id;
+    const module2 = req.body.module;
+    const name = await auth(userId, module2);
+    res.status(200).send(name);
+  } catch (error) {
+    if ((error as any).message === "unauthorized") {
+      res.status(403).send("unauthorized access to this page");
+    } else {
+      res.status(500).send("error occured");
+    }
+  }
+});
 router.patch("/changePassword", async (req: Request, res: Response) => {
   try {
     const user = await changePassword(

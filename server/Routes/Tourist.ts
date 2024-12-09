@@ -74,8 +74,6 @@ router.get("/id/:id", async (req: Request, res: Response) => {
   }
 });
 
-
-
 router.get("/:username", async (req: Request, res: Response) => {
   try {
     const username = req.params.username;
@@ -85,6 +83,7 @@ router.get("/:username", async (req: Request, res: Response) => {
       return res.status(200).json(user);
     }
   } catch (err) {
+    console.log(err);
     res.status(500).send("error getting user profile");
   }
 });

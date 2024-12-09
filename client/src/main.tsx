@@ -11,6 +11,8 @@ import { PersistGate } from "redux-persist/integration/react";
 import { CookieStorage } from "redux-persist-cookie-storage"; // Correct import
 import Cookies from "js-cookie";
 import { combineReducers } from "redux";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 
 //TODO: the cookie still persist when I change user so for example the cart of user 1 is still there when I log in as user 2 , handle it with login
 // Persist configuration
@@ -37,12 +39,16 @@ const store = configureStore({
 });
 
 export const persistor = persistStore(store);
+const secretPBKEY = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
 
+const stripeKey = secretPBKEY ? loadStripe(secretPBKEY) : null;
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <App />
+        <Elements stripe={stripeKey}>
+          <App />
+        </Elements>
       </PersistGate>
     </Provider>
   </React.StrictMode>

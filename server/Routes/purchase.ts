@@ -25,6 +25,7 @@ const router = Router();
 
 router.post("/buy", async (req: Request, res: Response) => {
   try {
+    //takes address id
     const { touristUsername, cart, promoCode, paymentMethod, address } =
       req.body; // payment Method is either Wallet , Card or COD
     const tourist = await Tourist.findOne({ username: touristUsername });

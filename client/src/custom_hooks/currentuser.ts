@@ -6,6 +6,7 @@ interface Currentuserdata {
   _id: string;
   notifications: object[];
   saved_addressess: string[];
+  email: string;
 }
 
 export function GetCurrentUser(username: string) {

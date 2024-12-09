@@ -112,7 +112,7 @@ const ItineraryCardCRUDTourist: React.FC<ItineraryCardCRUDProps> = ({
       return "Invalid Date";
     }
   };
-
+  const [openPay, setOpenPay] = useState(false);
   const handleBooking = async (id: string) => {
     try {
       await bookItinerary(id, username, price);

@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import { useCheckPromoCode } from "../custom_hooks/promo_codes/promocodecustomhooks";
+import { useCheckPromoCode } from "../../../custom_hooks/promo_codes/promocodecustomhooks";
 import { useState } from "react";
 import Swal from "sweetalert2";
 interface PromoCodeButtonProps {
