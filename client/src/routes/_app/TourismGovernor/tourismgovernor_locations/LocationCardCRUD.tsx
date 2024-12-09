@@ -10,7 +10,7 @@ import { useGetHTags } from "../../../../custom_hooks/useCreateHistoricalTag";
 import TheBIGMAP from "../../../../components/Maps/TheBIGMAP";
 import EditButton from "../../../../components/Buttons/EditButton";
 import SaveButton from "../../../../components/Buttons/SaveButton";
-import ImageUploader from "../../../../components/PDFs&Images/ImageUploader";
+import MiniImageEditor from "./MiniImageEdiitor";
 interface LocationCardCRUDProps {
   id: string;
   onDelete: (id: string) => void;
@@ -35,7 +35,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
   const [latitude, setLatitude] = useState(details?.location.latitude ?? 0);
   const [longitude, setLongitude] = useState(details?.location.longitude ?? 0);
   const [images, setImages] = useState(details?.pictures || []);
-  const [image, setImage] = useState<File | null>(null);
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>(
     details?.historicalTags?.map((tag) => tag._id) || []
   );
@@ -68,13 +68,11 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
   };
 
   const handleSaveClick = async () => {
-    const filteredImages = images.filter((image) => image !== "");
-    setImages(filteredImages);
     setIsEditing(!isEditing);
     useUpdatePlace(details._id, {
       name: locationName,
       description: description,
-      pictures: images || [],
+      pictures: selectedImages || [],
       location: {
         latitude: latitude,
         longitude: longitude,
@@ -130,12 +128,12 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
 
   return (
     <div
-      className={`relative w-full max-w-[500px] h-[350px] rounded-lg overflow-hidden shadow-lg transition-all ${className}`}
+      className={`relative w-[470px] h-[350px] rounded-lg overflow-hidden shadow-lg transition-all ${className}`}
       style={{ boxShadow: "10px 10px 20px rgba(0, 0, 0, 0.2)" }}
     >
       <div className="absolute top-[2px] right-[2px] z-10">
         {isEditing ? (
-          <SaveButton handleSaveClick={handleEditClick} />
+          <SaveButton handleSaveClick={handleSaveClick} />
         ) : (
           <EditButton handleEditClick={handleEditClick} />
         )}
@@ -332,7 +330,7 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
                         },
                       }}
                       value={student}
-                      onChange={(e) => setNative(Number(e.target.value))}
+                      onChange={(e) => setStudent(Number(e.target.value))}
                     />
                   </div>
                 </>
@@ -555,12 +553,13 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
           <div className="relative bg-white rounded-lg overflow-hidden shadow-lg w-4/5 md:w-1/2">
             {isEditing ? (
               <div className="flex flex-row overflow-auto gap-5 h-[240px]">
-                
                 <div className="h-[100px] min-w-[200px] flex mt-[90px]">
-                  <ImageUploader
-                    setSelectedImage={setImage}
-                    selectedImage={image}
-                    className="h-[150px]"
+                  <MiniImageEditor
+                    id={id}
+                    selectedImages={selectedImages}
+                    setSelectedImages={setSelectedImages}
+                    OutsideClassName="w-[200px] h-[100px]"
+                    OutsideText="Select Image"
                   />
                 </div>
               </div>
@@ -570,9 +569,15 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
 
             <button
               onClick={handleCloseModal2}
-              className="absolute h-[40px] w-[40px] top-2 left-2 text-[25px] text-center items-center text-white bg-red-500 hover:bg-red-600 font-bold rounded-full"
+              className="absolute h-[40px] w-[40px] top-2 right-2 text-[28px] text-center items-center text-white bg-red-500 hover:bg-red-600 font-bold rounded-full"
             >
               &times;
+            </button>
+            <button
+              onClick={() => setImages([...images, ""])}
+              className="absolute h-[40px] w-[40px] bottom-2 right-2 text-[28px] text-center items-center text-white bg-green-500 hover:bg-green-600 font-bold rounded-full"
+            >
+              +
             </button>
           </div>
         </div>
