@@ -42,7 +42,7 @@ export const Seller_Profile = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="text-lg font-semibold text-blue-600">Loading...</div>
+        <ClipLoader size={30} color="#ffffff" />
       </div>
     );
   }

@@ -5,7 +5,7 @@ import useGetUpcoming from '../../../../custom_hooks/itineraries/useGetupcoming'
 import Place from '../../../../custom_hooks/places/place_interface';
 import LocationCardTourist from '../../../../components/Locations/LocationCardTourist';
 import { useGetHTags } from '../../../../custom_hooks/useCreateHistoricalTag';
-
+import ClipLoader from "react-spinners/ClipLoader";
 const GuestMorePlaces: React.FC = () => {
     const {
         loading: tagsLoading,
@@ -52,7 +52,6 @@ const GuestMorePlaces: React.FC = () => {
               className="text-5xl font-extrabold text-white relative drop-shadow-xl"
               style={{
                 textShadow: "2px 2px 10px rgba(0, 0, 0, 0.7)",
-                WebkitTextStroke: "1px black"
               }}
             >
               Upcoming Places
@@ -104,7 +103,7 @@ const GuestMorePlaces: React.FC = () => {
       }}
     >
       {tagsLoading ? (
-        <MenuItem disabled>Loading...</MenuItem>
+        <MenuItem disabled><ClipLoader size={30} color="#ffffff" /></MenuItem>
       ) : tagsError ? (
         <MenuItem disabled>Error loading tags</MenuItem>
       ) : (
