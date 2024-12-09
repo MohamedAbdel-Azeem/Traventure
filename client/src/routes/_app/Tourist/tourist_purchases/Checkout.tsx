@@ -1109,10 +1109,17 @@ const Checkout = () => {
                 <button
                   className="my-auto ml-auto mr-[9.8px] w-[189px] h-[46.2px] bg-gradient-to-t hover:bg-gradient-to-b from-[#A855F7] via-[#bb7bff] to-[#c49ffc] border-[#652795] border-[0.7px] rounded-[7.7px] text-[21px]"
                   onClick={() => handleBuy()}
-                  disabled={isPurchaseLoading}
+                  disabled={
+                    isPurchaseLoading ||
+                    (selectedValue === "wallet" &&
+                      currentUser?.wallet < subtotal)
+                  }
                 >
                   {isPurchaseLoading ? (
                     <ClipLoader size={20} color={"#fff"} />
+                  ) : selectedValue === "wallet" &&
+                    currentUser?.wallet < subtotal ? (
+                    "Insufficient Funds"
                   ) : (
                     "Buy"
                   )}
