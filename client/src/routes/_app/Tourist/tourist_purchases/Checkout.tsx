@@ -149,7 +149,7 @@ const Checkout = () => {
   };
   const [openPay, setOpenPay] = useState(false);
   const [isPurchaseLoading, setIsPurchaseLoading] = useState(false);
-  function handleBuy(): void {
+  async function handleBuy(): Promise<void> {
     if (!username) return;
     if (!currentaddress._id) return;
 
@@ -157,20 +157,14 @@ const Checkout = () => {
       productId: product._id,
       quantity: product.quantity,
     }));
-    let paymentMethod = selectedValue;
-    if (selectedValue === "creditcard") {
+    const paymentMethod = selectedValue;
+    if (paymentMethod === "creditcard") {
       setOpenPay(true);
-      paymentMethod = "card";
-    } else if (selectedValue === "cod") {
-      setOpenPay(false);
-      if (!username) return;
-      // checkoutPurchase({ touristUsername: username, cart });
+      setSelectedValue("card");
     } else {
       setOpenPay(false);
-    }
-    if (paymentIsSuccess || selectedValue != "card") {
       setIsPurchaseLoading(true);
-      const succeed = checkoutPurchase({
+      const succeed = await checkoutPurchase({
         touristUsername: username,
         cart: usedCart,
         paymentMethod,
@@ -189,6 +183,12 @@ const Checkout = () => {
             dispatch(clearCart());
             navigate(-1);
           });
+      } else {
+        swal.fire({
+          icon: "error",
+          title: "Failed",
+          text: "Purchase failed",
+        });
       }
     }
   }
@@ -241,6 +241,7 @@ const Checkout = () => {
             amount: product.price,
             quantity: product.quantity,
           }))}
+          handleBuy={handleBuy}
         />
       )}
       <div className="h-[650px] mt-[70px] w-[650px] bg-gradient-to-b from-[#A855F7] to-[#6D28D9] flex flex-col rounded-[10px] overflow-auto lasttimeipromise relative">
