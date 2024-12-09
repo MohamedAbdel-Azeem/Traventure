@@ -58,6 +58,7 @@ router.post("/buy", async (req: Request, res: Response) => {
           singleProduct.productId,
           singleProduct.quantity
         );
+        await sendMailAndNotificationToSeller(singleProduct.productId);
       }
       return res.status(200).send(purchase);
     } catch (error) {
