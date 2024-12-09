@@ -1009,6 +1009,8 @@ npm run setup
 
 `GET /upcoming` -get all upcoming activities
 
+`GET /id/:id` -get user profile
+
 `GET /:username`  -get a certain tourist's user profile
 
 `PATCH /update/:username`  -update a user
@@ -1034,6 +1036,14 @@ npm run setup
 `PATCH /promo_code/use/:username` -update the status of a promo code for a specific tourist
 
 `GET /skipTutorial/:username` -gets the status of whether a specific tourist has skipped a tutorial
+
+`PATCH /interested` -Update tourist interest
+
+`PATCH /add/address/:username` -Adds an adress for a tourist
+
+`PATCH /edit/address/:username` -Updates address of a tourist
+
+`PATCH /delete/address/:username` -Deletes address of a tourist
 
 `PATCH /skipTutorial/:username`  -allows a user to mark their tutorial as "skipped".
 
