@@ -24,6 +24,7 @@ import TheMAP from "../../../../components/Maps/TheMAP";
 import { useSelector } from "react-redux";
 import { useAuth } from "../../../../custom_hooks/auth";
 import ClipLoader from "react-spinners/ClipLoader";
+import ImageUploader from "../../../../components/PDFs&Images/ImageUploader";
 
 const Locations = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -40,7 +41,7 @@ const Locations = () => {
   const [hours, setHours] = useState("9:00→5:00");
   const [latitude, setLatitude] = useState(30.0);
   const [longitude, setLongitude] = useState(31.2);
-  const [image, setImage] = useState<string>("");
+  const [image, setImage] = useState<File|null>(null);
   const [newcards, setNewcards] = useState<Place[] | null>(null);
   const { isAuthenticated, isLoading, isError } = useAuth(5);
   const handleTagsChange = (event: SelectChangeEvent<string[]>) => {
@@ -62,9 +63,10 @@ const Locations = () => {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
+    width: "600px",
+    bgcolor: "white",
     border: "2px solid #000",
+    borderRadius: 2,
     boxShadow: 24,
     p: 4,
   };
@@ -112,7 +114,7 @@ const Locations = () => {
 
     setName("");
     setDescription("");
-    setImage("");
+    setImage(null);
     setNativePrice(0);
     setStudentPrice(0);
     setForeignPrice(0);
@@ -172,7 +174,7 @@ const Locations = () => {
 
   return (
     <div className="flex justify-center">
-      <div className="grid grid-cols-3 mt-20">
+      <div className="grid grid-cols-3 mt-20 gap-5">
         <Modal open={open} onClose={handleClose}>
           <Box sx={style}>
             <Box className="grid grid-cols-2">
@@ -248,7 +250,7 @@ const Locations = () => {
                   onChange={(e) => setHours(e.target.value)}
                 />
               </FormControl>
-              <FormControl fullWidth sx={{ marginY: 1 }} className="col-span-2">
+              <FormControl fullWidth sx={{ marginY: 1 }}>
                 <div>
                   <TheMAP
                     id="create map"
@@ -256,23 +258,18 @@ const Locations = () => {
                     long={longitude}
                     setLatitude={setLatitude}
                     setLongitude={setLongitude}
+                    className="w-full h-[250px]"
                   />
                 </div>
               </FormControl>
-
               <FormControl fullWidth sx={{ marginY: 1 }}>
-                <InputLabel>Image</InputLabel>
-                <OutlinedInput
-                  label="Image"
-                  type="string"
-                  value={image}
-                  onChange={(e) => {
-                    setImage(e.target.value);
-                  }}
+                <ImageUploader
+                  className="h-[250px]"
+                  selectedImage={image}
+                  setSelectedImage={setImage}
                 />
               </FormControl>
-
-              <FormControl fullWidth sx={{ marginY: 1 }}>
+              <FormControl fullWidth sx={{ marginY: 1 }} className="col-span-2">
                 <Select
                   labelId="tags-select-label"
                   multiple
@@ -305,10 +302,10 @@ const Locations = () => {
           </Box>
         </Modal>
         <div
-          className="flex w-[422px] h-[422px] bg-[#D9D9D9] rounded-[11px] m-4 hover:bg-[#c0c0c0] transition duration-300 cursor-pointer"
+          className="flex w-[500] h-[350px] bg-[#D9D9D9] rounded-[11px] hover:bg-[#c0c0c0] transition duration-300 cursor-pointer"
           onClick={handleOpen}
         >
-          <p className="m-auto text-[40px]">Create New Place</p>
+          <p className="m-auto text-[40px]">Create New Location</p>
         </div>
         {newcards?.map((card) => (
           <LocationCardCRUD

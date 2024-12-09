@@ -165,7 +165,7 @@ const SignIn: React.FC = () => {
               <br></br>
               <br></br>
               <a
-                href="/guest/guest-page"
+                href="/guest"
                 className="text-purple-700 hover:text-purple-600 underline"
               >
                 Enter as Guest

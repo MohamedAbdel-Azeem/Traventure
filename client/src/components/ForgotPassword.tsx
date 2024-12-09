@@ -110,7 +110,7 @@ const ForgotPassword = () => {
               }}
             />
             <button
-              className="bg-[#707070] w-[318px] h-[52px] mt-[13px] flex mx-auto text-white text-center items-center justify-center text-[20px] rounded-[4px]"
+              className="mx-auto mt-[9px] w-[189px] flex items-center justify-center h-[46.2px] bg-gradient-to-t hover:bg-gradient-to-b from-[#A855F7] via-[#bb7bff] to-[#c49ffc] border-[#652795] border-[0.7px] rounded-[7.7px] text-[21px]"
               onClick={() => handleSendCode(email)}
             >
               Send
@@ -162,10 +162,8 @@ const ForgotPassword = () => {
               }}
             />
             <button
-              className="bg-[#707070] w-[318px] h-[52px] mt-[13px] flex mx-auto text-white text-center items-center justify-center text-[20px] rounded-[4px]"
-              onClick={() => {
-                HandleUseCode(email);
-              }}
+              className="mx-auto mt-[9px] w-[189px] flex items-center justify-center h-[46.2px] bg-gradient-to-t hover:bg-gradient-to-b from-[#A855F7] via-[#bb7bff] to-[#c49ffc] border-[#652795] border-[0.7px] rounded-[7.7px] text-[21px]"
+              onClick={() => HandleUseCode(email)}
             >
               Send
             </button>
@@ -205,8 +203,9 @@ const ForgotPassword = () => {
               }}
             />
             {error && <p className="text-red-500 text-center mt-2">{error}</p>}
+
             <button
-              className="bg-[#707070] w-[318px] h-[52px] mt-[13px] flex mx-auto text-white text-center items-center justify-center text-[20px] rounded-[4px]"
+              className="mx-auto mt-[9px] w-[189px] flex items-center justify-center h-[46.2px] bg-gradient-to-t hover:bg-gradient-to-b from-[#A855F7] via-[#bb7bff] to-[#c49ffc] border-[#652795] border-[0.7px] rounded-[7.7px] text-[21px]"
               onClick={handleSubmit}
             >
               Send

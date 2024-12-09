@@ -25,7 +25,6 @@ interface PayStripeProps {
   amount: number;
   name: string;
   products: any;
-
 }
 
 export const PayStripe: React.FC<PayStripeProps> = ({

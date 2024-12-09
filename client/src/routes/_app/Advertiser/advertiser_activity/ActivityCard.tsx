@@ -1,9 +1,13 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import BlockIcon from "@mui/icons-material/Block";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
+import TheBIGMAP from "../../../../components/Maps/TheBIGMAP";
 import TheMAP from "../../../../components/Maps/TheMAP";
 import {
   Box,
   Checkbox,
-  FormControl,
   ListItemText,
   MenuItem,
   Modal,
@@ -19,6 +23,7 @@ import {
 import { updateActivity } from "../../../../custom_hooks/activities/updateActivity";
 import BestDeleteButton from "../../../../components/Buttons/BestDeleteButton";
 import EditButton from "../../../../components/Buttons/EditButton";
+import SaveButton from "../../../../components/Buttons/SaveButton";
 type Activity = {
   _id: string;
   Title: string;
@@ -55,6 +60,12 @@ export const ActivityCard: React.FC<ActivityProp> = ({
   activity,
   onDelete,
 }) => {
+  const exchangeRate = useSelector(
+    (state: any) => state.exchangeRate.exchangeRate
+  );
+  const currentCurrency = useSelector(
+    (state: any) => state.exchangeRate.currentCurrency
+  );
   const [isEditing, setIsEditing] = useState(false);
   const [currentActivity, setCurrentActivity] = useState<Activity>(activity);
   const [newTitle, setNewTitle] = useState(currentActivity.Title);
@@ -166,8 +177,14 @@ export const ActivityCard: React.FC<ActivityProp> = ({
     )}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
   };
   const [latitude, setLatitude] = useState(currentActivity.Location.latitude);
-  const [longitude, setLongitude] = useState(currentActivity.Location.longitude);
+  const [longitude, setLongitude] = useState(
+    currentActivity.Location.longitude
+  );
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleViewMap = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
   if (tagsLoading || CatLoading) {
     return <div>loading</div>;
   }
@@ -186,188 +203,378 @@ export const ActivityCard: React.FC<ActivityProp> = ({
     boxShadow: 24,
     p: 4,
   };
+  const handleCancelClick = () => {
+    setNewTitle(currentActivity.Title);
+    setNewDate(new Date(currentActivity.DateAndTime));
+    setNewLatitude(currentActivity.Location.latitude);
+    setNewLongitude(currentActivity.Location.longitude);
+    setNewPrice(currentActivity.Price);
+    setNewSpecialDiscount(currentActivity.SpecialDiscount);
+    setNewBIO(currentActivity.BookingIsOpen);
+    setIsEditing(false);
+  };
   return (
-    <div className="flex flex-col items-center justify-center mt-12 mx-4">
+    <div className="flex flex-col items-center justify-center mx-4">
+      {/* Modal for Tags */}
       <Modal open={mopen} onClose={() => setmOpen(false)}>
         <Box sx={style}>
           <div>{alltags(selectedTags)}</div>
         </Box>
       </Modal>
-      <div className="rounded-[19px]">
-        <div className="w-[400px] h-[475px] bg-[#25b396] rounded-[19px] relative">
-          <div className="w-[400px] h-[69px] rounded-t-[19px]">
-            <div className="flex-row space-x-24">
-              <div className="absolute text-center top-0 left-0 w-[71px] h-[30px] rounded-tl-[19px] bg-[#FF0000] border-black border-[1px] rounded-br-[19px]">
+
+      <div className="w-[400px] bg-gray-100 rounded-lg shadow-lg overflow-hidden relative">
+        <div className="absolute right-[10px] bottom-[10px]">
+          {isEditing ? (
+            <>
+              <SaveButton handleSaveClick={handleSave} />
+            </>
+          ) : (
+            <>
+              <EditButton handleEditClick={handleEditClick} />
+            </>
+          )}
+        </div>
+        <div className="absolute left-[10px] bottom-[10px]">
+          {isEditing ? (
+            <>
+              <button
+                title="Reject"
+                className="rejectBtn z-10"
+                onClick={handleCancelClick}
+              >
+                <svg
+                  height="1em"
+                  viewBox="0 0 512 512"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <line
+                    x1="0"
+                    y1="0"
+                    x2="512"
+                    y2="512"
+                    stroke="white"
+                    strokeWidth="80"
+                  />
+                  <line
+                    x1="512"
+                    y1="0"
+                    x2="0"
+                    y2="512"
+                    stroke="white"
+                    strokeWidth="80"
+                  />
+                </svg>
+              </button>
+            </>
+          ) : (
+            <BestDeleteButton onDelete={handleDeleteClick} />
+          )}
+        </div>
+        {/* Booking Status & Title Section */}
+        <div className="bg-white-100 m-[5px] h-[50px]">
+          <div className="flex justify-between items-start">
+            {/* Title and Date Section */}
+
+            <div className="flex flex-col flex-grow max-w-[calc(70%-10px)]">
+              <div className="flex items-center gap-2">
+                {/* Booking Status Icon */}
                 {isEditing ? (
-                  <select
-                    title="status"
-                    name="status"
-                    value={newBIO ? "true" : "false"}
-                    onChange={() => setNewBIO(!newBIO)}
-                    className="bg-transparent text-black border-none"
-                  >
-                    <option value="true">Open</option>
-                    <option value="false">Closed</option>
-                  </select>
-                ) : newBIO ? (
-                  "Open"
+                  <input
+                    title="Booking Status"
+                    aria-label="Booking Status"
+                    type="checkbox"
+                    checked={newBIO}
+                    onChange={(e) => setNewBIO(e.target.checked)}
+                    className="w-5 h-5 text-green-500"
+                  />
                 ) : (
-                  "Closed"
+                  newBIO && <BlockIcon className="text-red-500" />
+                )}
+
+                {/* Title */}
+                {isEditing ? (
+                  <TextField
+                    value={newTitle}
+                    onChange={(e) => setNewTitle(e.target.value)}
+                    sx={{
+                      width: "335px",
+                      "& .MuiInputBase-input": {
+                        color: "black",
+                        fontSize: "20px",
+                        fontWeight: "bold",
+                        boxSizing: "border-box",
+                        width: "335px",
+                      },
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                          borderColor: "black",
+                          borderRadius: "7px",
+                          height: "38px",
+                          width: "335px",
+                        },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "black",
+                          borderRadius: "7px",
+                          width: "335px",
+                        },
+                      },
+                    }}
+                  />
+                ) : (
+                  <h2
+                    className="text-xl font-bold overflow-hidden text-ellipsis whitespace-nowrap"
+                    title={activity.Title}
+                  >
+                    {activity.Title}
+                  </h2>
                 )}
               </div>
-              {inappropriate && (
-                <div className="bg-red-500 text-white  rounded-lg flex flex-col items-center h-[50%] w-1/2 space-x-2 ">
-                  <h1 className="text-sm flex items-center">Inappropiate</h1>
-                  <p className="text-sm flex items-center  text-white">
-                    please modify the Acitvity
-                  </p>
-                </div>
-              )}
+              {/* Date */}
+              <input
+                title="date"
+                name="date"
+                disabled={!isEditing}
+                value={formatDate(newDate)}
+                onChange={handleDateChange}
+                type="datetime-local"
+                className="border-0 text-sm text-gray-600 h-[25px]"
+              />
             </div>
-            <div className="absolute top-[60px] right-[10px]">
-              <EditButton handleEditClick={() => handleEditClick()} />
-            </div>
-            <BestDeleteButton
-              className="absolute top-[10px] right-[10px]"
-              onDelete={() => handleDeleteClick()}
-            />
+
+            {/* Ratings */}
+            {!isEditing ? (
+              <div className="ml-4 flex-shrink-0">
+                <Rating
+                  disabled
+                  name="rating"
+                  value={averageRating}
+                  precision={0.1}
+                />
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
-          <Rating
-            disabled
-            name="rating"
-            value={averageRating}
-            precision={0.1}
-          />
-          {!isEditing ? (
-            <div className="text-[38px] h-[45px] text-center leading-[43px]">
-              {newTitle}
-            </div>
+        </div>
+
+        {/* Categorical Tag */}
+        <div className="px-6 h-[40px]">
+          {isEditing ? (
+            <Select
+              labelId="cat-select-label"
+              value={selectedCat}
+              onChange={handleCatChange}
+              sx={{ width: 350, height: 40, fontSize: "0.875rem" }} // Adjust the width and font size as needed
+            >
+              {CatOptions.map((cat) => (
+                <MenuItem key={cat._id} value={cat._id}>
+                  {cat.name}
+                </MenuItem>
+              ))}
+            </Select>
           ) : (
-            <TextField
-              size="small"
-              label="Title"
-              name="Title"
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
-              className="text-center border-none bg-transparent"
-            />
-          )}
-          <div className="flex flex-row">
-            <FormControl fullWidth>
-              <Select
-                disabled={isEditing ? false : true}
-                labelId="cat-select-label"
-                value={selectedCat}
-                onChange={handleCatChange}
-              >
-                {CatOptions.map((tag) => (
-                  <MenuItem key={tag._id} value={tag._id}>
-                    <ListItemText primary={tag.name} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl fullWidth>
-              <Select
-                disabled={isEditing ? false : true}
-                labelId="tags-select-label"
-                multiple
-                value={selectedTags}
-                onChange={handleTagsChange}
-                renderValue={handleTagsText}
-                sx={{ padding: "4.45px" }}
-              >
-                {tagsOptions.map((tag) => (
-                  <MenuItem key={tag._id} value={tag._id}>
-                    <Checkbox checked={selectedTags.indexOf(tag._id) > -1} />
-                    <ListItemText primary={tag.name} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <div className="my-auto w-[50px] h-[65px] text-[11px] flex flex-col items-center justify-center">
-              <button
-                title="View Tags"
-                onClick={() => setmOpen(true)}
-                className="text-center"
-              >
-                {" "}
-                View More
-              </button>
-            </div>
-          </div>
-          <hr className="border-dotted border-t-2 border-gray-400  mt-[10px]" />
-          <div className="w-[400px] h-[284px] rounded-b-[19px] flex flex-col">
-            <div className="flex flex-row">
-              <div className="border-dotted border-r-2 border-gray-400 flex flex-col w-[260px]">
-                <input
-                  title="date"
-                  name="date"
-                  disabled={!isEditing}
-                  value={formatDate(newDate)}
-                  onChange={handleDateChange}
-                  type="datetime-local"
-                  className="text-[20px] py-3 border border-gray-300 rounded-md"
-                />
-              </div>
-              <div className="flex flex-col items-center justify-center text-[13px] w-[160px] h-full">
-                <div>
-                  {isEditing ? (
-                    <TextField
-                      size="small"
-                      label="Price"
-                      name="price"
-                      value={newPrice}
-                      onChange={(e) => setNewPrice(Number(e.target.value))}
-                      className="text-center border-none bg-transparent"
-                    />
-                  ) : (
-                    <div>Price: {currentActivity.Price}</div>
-                  )}
-                </div>
-                <div>
-                  {isEditing ? (
-                    <TextField
-                      size="small"
-                      label="Special Discount"
-                      name="special Discount"
-                      value={newSpecialDiscount}
-                      onChange={(e) =>
-                        setNewSpecialDiscount(Number(e.target.value))
-                      }
-                      className="text-center border-none bg-transparent"
-                    />
-                  ) : (
-                    <div>
-                      Special Discount: {currentActivity.SpecialDiscount}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col items-center justify-center text-[13px] h-[236px]">
-              {isEditing ? (
-                <TheMAP
-                  id={"map" + activity._id}
-                  className="rounded-b-[19px] h-[209px] w-[400px]"
-                  lat={latitude}
-                  long={longitude}
-                  setLatitude={setLatitude}
-                  setLongitude={setLongitude}
-                />
-              ) : (
-                <iframe
-                  title="map"
-                  className="rounded-b-[19px]"
-                  src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${longitude}!3d${latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
-                  width="400px"
-                  height="166px"
-                ></iframe>
+            <div className="flex flex-wrap justify-center items-center gap-2">
+              {selectedCat && (
+                <span className="px-3 py-1 bg-purple-200 text-purple-900 rounded-full text-sm font-medium">
+                  {CatOptions.find((tag) => tag._id === selectedCat)?.name ||
+                    "No Category"}
+                </span>
               )}
+            </div>
+          )}
+        </div>
+
+        {/* Price & Date Section */}
+
+        <div className="px-6 py-4">
+          <div className="flex justify-between border-t pt-2 h-[50px]">
+            {/* Price Section */}
+            <div className="text-gray-700 flex items-center gap-2">
+              <ConfirmationNumberIcon className="text-green-500" />
+              <div>
+                {isEditing ? (
+                  <TextField
+                    type="number"
+                    value={newPrice}
+                    onChange={(e) => setNewPrice(+e.target.value)}
+                    sx={{
+                      width: "120px",
+                      height: "45px",
+                      "& .MuiInputBase-input": {
+                        color: "black",
+                        fontSize: "14px",
+                        height: "45px",
+                        boxSizing: "border-box",
+                      },
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                          borderColor: "black",
+                          borderRadius: "7px",
+                        },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "black",
+                          borderRadius: "7px",
+                        },
+                      },
+                    }}
+                  />
+                ) : (
+                  <p className="font-bold text-lg flex mb-0">
+                    {currentCurrency}{" "}
+                    {(activity.Price * exchangeRate).toFixed(2)}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Special Discount Section */}
+            <div className="text-gray-700 flex items-center gap-2">
+              <LocalOfferIcon className="text-red-500" />
+              <div>
+                {isEditing ? (
+                  <TextField
+                    type="number"
+                    value={newSpecialDiscount}
+                    onChange={(e) => setNewSpecialDiscount(+e.target.value)}
+                    sx={{
+                      width: "120px",
+                      height: "45px",
+                      "& .MuiInputBase-input": {
+                        color: "black",
+                        fontSize: "14px",
+                        height: "45px",
+                        boxSizing: "border-box",
+                      },
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                          borderColor: "black",
+                          borderRadius: "7px",
+                        },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "black",
+                          borderRadius: "7px",
+                        },
+                      },
+                    }}
+                  />
+                ) : (
+                  <p className="font-bold text-lg mb-0">
+                    {currentCurrency}
+                    {(activity.SpecialDiscount * exchangeRate).toFixed(2)}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>
+
+        {/* Tag Section */}
+        <div className="px-6 h-[40px]">
+          {isEditing ? (
+            <Select
+              labelId="tags-select-label"
+              multiple
+              value={selectedTags}
+              onChange={handleTagsChange}
+              renderValue={handleTagsText}
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    maxHeight: 350,
+                    width: 350,
+                  },
+                },
+              }}
+              sx={{ width: 350, height: 40, fontSize: "0.875rem" }}
+            >
+              {tagsLoading && <MenuItem>Loading...</MenuItem>}
+              {tagsError && <MenuItem>Error</MenuItem>}
+              {tagsOptions.map((tag) => (
+                <MenuItem key={tag._id} value={tag._id}>
+                  <Checkbox checked={selectedTags.indexOf(tag._id) > -1} />
+                  <ListItemText primary={tag.name} />
+                </MenuItem>
+              ))}
+            </Select>
+          ) : (
+            <div className="flex flex-wrap justify-center items-center gap-2">
+              {selectedTags && selectedTags.length > 0 ? (
+                selectedTags.slice(0, 3).map((tagId) => {
+                  const tag = tagsOptions.find((t) => t._id === tagId);
+                  return (
+                    <span
+                      key={tagId}
+                      className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium"
+                    >
+                      {tag?.name}
+                    </span>
+                  );
+                })
+              ) : (
+                <span className="text-gray-500 italic">No tags selected</span>
+              )}
+
+              {/* View More Button */}
+              {selectedTags.length > 3 && (
+                <button
+                  title="View Tags"
+                  onClick={() => setmOpen(true)}
+                  className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium hover:bg-purple-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50"
+                >
+                  +
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div className="mt-4 flex justify-center gap-4 px-6 py-4">
+          {/* View Map Button */}
+          <button
+            onClick={handleViewMap}
+            className="px-4 py-2 bg-purple-500 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition-all duration-300"
+          >
+            View Map
+          </button>
+        </div>
+
+        {/* Map Modal */}
+        {isModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+            <div className="relative bg-white rounded-lg overflow-hidden shadow-lg w-4/5 md:w-1/2">
+              {isEditing ? (
+                <TheMAP
+                  lat={newLatitude}
+                  long={newLongitude}
+                  setLatitude={setNewLatitude}
+                  setLongitude={setNewLongitude}
+                  className="h-[500px] w-full"
+                />
+              ) : (
+                <TheBIGMAP
+                  arrayofmarkers={[
+                    {
+                      latitude: activity.Location.latitude,
+                      longitude: activity.Location.longitude,
+                    },
+                  ]}
+                  id="map"
+                  className="h-[500px] w-full"
+                />
+              )}
+
+              <button
+                onClick={handleCloseModal}
+                className="absolute h-[40px] w-[40px] top-2 left-2 text-[25px] text-center items-center text-white bg-red-500 hover:bg-red-600 font-bold rounded-full"
+              >
+                &times;
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 };
+
+export default ActivityCard;
