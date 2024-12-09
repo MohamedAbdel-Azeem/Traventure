@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { setExchangeRate } from "../redux/exchangeRateSlice";
 
 const apiKey = import.meta.env.VITE_API_URL;
 

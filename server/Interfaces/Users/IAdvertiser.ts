@@ -11,6 +11,13 @@ export interface IAdvertiser extends Document {
   founded: Number;
   description: String;
   location: String;
+  notifications: {
+    message: string;
+    sent_by_mail: boolean;
+    read: boolean;
+    createdAt: Date;
+  }[];
+
 
 }
 

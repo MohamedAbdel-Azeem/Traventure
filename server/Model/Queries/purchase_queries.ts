@@ -1,14 +1,25 @@
 import path from "path";
-import purchase, { IPurchase } from "../../Model/Schemas/purchase";
+import purchase, {
+  IPurchase,
+  PurchaseStatus,
+} from "../../Model/Schemas/purchase";
 import mongoose, { model } from "mongoose";
-import touristModel from "../Schemas/Tourist";
 import ProductModel, { IProduct } from "../Schemas/Product";
-import { ObjectId } from "mongoose"; 
+import PromoCodes from "../Schemas/PromoCodes";
+import Tourist from "../Schemas/Tourist";
 
-
-export async function addPurchase(purchaseData: object) {
+export async function addPurchase(purchaseData: IPurchase) {
   try {
-    return await purchase.create(purchaseData);
+    const promoCode = await PromoCodes.findOne({
+      name: purchaseData.promoCode,
+    });
+
+    if (promoCode && !promoCode.used) {
+      promoCode.used = true;
+    }
+    const resultPurchase = await purchase.create(purchaseData);
+    if (promoCode) await promoCode.save();
+    return resultPurchase;
   } catch (error) {
     throw error;
   }
@@ -26,69 +37,27 @@ const getProduct = async (productId: string): Promise<IProduct | null> => {
   }
 };
 
-//TODO : still not tested
-export async function getPurchaseTotalAmount(purchaseData: IPurchase){
-  
+export async function getPurchaseTotalAmount(purchaseData: IPurchase) {
   try {
-
-    const cart=purchaseData.cart;
-    var totalAmount=0;
+    const cart = purchaseData.cart;
+    var totalAmount = 0;
     for (const purchased_product of cart) {
       const product = await getProduct(purchased_product.productId.toString());
       if (product) {
         totalAmount += product.price * purchased_product.quantity;
       }
     }
-    // cart.forEach(purchased_product => {
-    //   const product= async () =>{
-    //     try{
-    //       await ProductModel.findById(purchased_product.productId);
-    //     }catch(error){
-    //       throw error;
-    //     }
-    //   }
-      
-    //   if(product){
-    //     totalAmount+=product.price*purchased_product.quantity;
-
-    //   }
-
-
-    // });
+    const promoCode = await PromoCodes.findOne({
+      name: purchaseData.promoCode,
+    });
+    if (promoCode && !promoCode.used) {
+      totalAmount *= 0.9;
+    }
     return totalAmount;
   } catch (error) {
     throw error;
   }
 }
-
-
-// export async function updateLoyaltyPoints(touristId:string, amount:number){
-//   try {
-//     const tourist = await touristModel.findById(touristId);
-//     if (!tourist) return null;
-//     var points=0;
-//     switch(tourist.loyaltyLevel){
-//       case 1: points=amount*0.5; break;
-//       case 2: points=amount; break; 
-//       case 3: points=amount*1.5; break;
-//     }
-//     tourist.currentLoyaltyPoints += points;
-//     tourist.totalLoyaltyPoints += points;
-
-//     if(tourist.totalLoyaltyPoints>500000){
-//       tourist.loyaltyLevel=3;
-//     }
-//     else if(tourist.totalLoyaltyPoints>100000){
-//       tourist.loyaltyLevel=2;
-//     }
-//     else {
-//       tourist.loyaltyLevel=1;
-//     }
-//     await tourist.save();
-//   } catch (error) {
-//     throw error;
-//   }
-// }
 
 export async function getTouristPurchases(
   touristId: string | mongoose.Types.ObjectId
@@ -111,7 +80,8 @@ export async function getTouristPurchases(
 
 export async function getSellerSales(
   sellerId: string | mongoose.Types.ObjectId,
-  compactView: boolean
+  compactView: boolean,
+  month?: number
 ) {
   try {
     const purchases: Array<{
@@ -125,6 +95,7 @@ export async function getSellerSales(
       }>;
       timeStamp: Date;
     }> = await purchase
+      .find()
       .find()
       .populate({
         path: "cart.productId",
@@ -164,7 +135,67 @@ export async function getSellerSales(
       });
       return Object.values(compactSellerSales);
     }
-    return sellerSales;
+    if (month)
+      return sellerSales.filter(
+        (sale) => sale.timestamp.getMonth() == month - 1
+      );
+    else return sellerSales;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getSellerRevenue(
+  sellerId: string | mongoose.Types.ObjectId,
+  month: number,
+  year: number,
+  productName: string
+) {
+  try {
+    const purchases: Array<{
+      cart: Array<{
+        productId: {
+          _id: mongoose.Types.ObjectId;
+          name?: string;
+          price?: number;
+        };
+        quantity: number;
+      }>;
+      timeStamp: Date;
+    }> = await purchase
+      .find({ status: "delivered" })
+      .populate({
+        path: "cart.productId",
+        match: { seller: sellerId },
+        select: "name quantity price",
+      })
+      .lean();
+
+    const sellerSales = purchases.map((purchase) => {
+      return purchase.cart
+        .filter((item) => item.productId)
+        .map((item) => ({
+          productName: item.productId.name,
+          price: item.productId.price
+            ? item.productId.price * item.quantity * 0.9
+            : 0,
+          soldQuantity: item.quantity,
+          month: purchase.timeStamp.getMonth() + 1,
+          year: purchase.timeStamp.getFullYear(),
+          day: purchase.timeStamp.getDate(),
+        }));
+    });
+
+    const sellerRevenue = sellerSales.flat().filter((sale) => {
+      if (productName) return sale.productName == productName;
+      if (!isNaN(month) && !isNaN(year))
+        return sale.month == month && sale.year == year;
+      else if (!isNaN(month)) return sale.month == month;
+      else if (!isNaN(year)) return sale.year == year;
+      else return true;
+    });
+
+    return sellerRevenue;
   } catch (error) {
     throw error;
   }
@@ -181,9 +212,11 @@ export async function getExternalSellerSales(
           _id: mongoose.Types.ObjectId;
           name?: string;
           quantity?: number;
+          price?: number;
         };
         quantity: number;
       }>;
+
       timeStamp: Date;
     }> = await purchase
       .find()
@@ -231,12 +264,124 @@ export async function getExternalSellerSales(
     throw error;
   }
 }
+export async function getExternalSellerRevenue(
+  externalSeller: string | null,
+  month: number,
+  year: number,
+  productName: string
+) {
+  try {
+    const purchases: Array<{
+      cart: Array<{
+        productId: {
+          _id: mongoose.Types.ObjectId;
+          name?: string;
+          quantity?: number;
+          price?: number;
+        };
+        quantity: number;
+      }>;
+
+      timeStamp: Date;
+    }> = await purchase
+      .find({ status: "delivered" })
+      .populate({
+        path: "cart.productId",
+        match: externalSeller
+          ? { externalseller: externalSeller }
+          : { externalseller: { $ne: null } },
+        select: "name quantity price externalseller",
+      })
+      .lean();
+    const sellerSales = purchases.map((purchase) => {
+      return purchase.cart
+        .filter((item) => item.productId)
+        .map((item) => ({
+          productName: item.productId.name,
+          price: item.productId.price
+            ? item.productId.price * item.quantity
+            : 0,
+          soldQuantity: item.quantity,
+          month: purchase.timeStamp.getMonth() + 1,
+          year: purchase.timeStamp.getFullYear(),
+          day: purchase.timeStamp.getDate(),
+        }));
+    });
+
+    const sellerRevenue = sellerSales.flat().filter((sale) => {
+      if (productName) return sale.productName == productName;
+      if (!isNaN(month) && !isNaN(year))
+        return sale.month == month && sale.year == year;
+      else if (!isNaN(month)) return sale.month == month;
+      else if (!isNaN(year)) return sale.year == year;
+      else return true;
+    });
+    return sellerRevenue;
+  } catch (error) {
+    throw error;
+  }
+}
+export async function cancelPurchase(purchaseId: string) {
+  try {
+    const product = await purchase.findById(purchaseId);
+    if (!product) return null;
+    if (product.status == PurchaseStatus.delivered) return null;
+    product.status = PurchaseStatus.cancelled;
+    const tourist = await Tourist.findById(product.touristId);
+    if (!tourist) return null;
+    tourist.wallet += product.totalAmount as number;
+    await tourist.save();
+    return await product.save();
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function DeliverPurchase(purchaseId: string) {
+  try {
+    const product = await purchase.findByIdAndUpdate(purchaseId, {
+      status: PurchaseStatus.delivered,
+    });
+    return product;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function handlePayment(
+  paymentMethod: string,
+  totalAmount: number,
+  touristUsername: string
+) {
+  try {
+    if (paymentMethod == "wallet") {
+      const tourist = await Tourist.findOne({ username: touristUsername });
+      if (!tourist) throw new Error("Tourist not found");
+      if (tourist.wallet < totalAmount) throw new Error("Insufficient funds");
+      tourist.wallet -= totalAmount;
+      await tourist.save();
+      return;
+    }
+    if (paymentMethod == "card") {
+      return;
+    }
+    if (paymentMethod == "cod") {
+      return;
+    }
+  } catch (error) {
+    throw error;
+  }
+}
 
 module.exports = {
   addPurchase,
   getTouristPurchases,
   getSellerSales,
   getExternalSellerSales,
-  // updateLoyaltyPoints,
-  getPurchaseTotalAmount
+  getPurchaseTotalAmount,
+  cancelPurchase,
+  DeliverPurchase,
+  getSellerRevenue,
+  getExternalSellerRevenue,
+  handlePayment,
 };

@@ -3,7 +3,8 @@ import axios from "axios";
 
 export const useGetSellerSales = (
   id: string | undefined,
-  compactView: boolean
+  compactView: boolean,
+  month: number
 ) => {
   const [sales, setSales] = useState<any>([]);
   const [loading, setLoading] = useState(false);
@@ -19,6 +20,7 @@ export const useGetSellerSales = (
           params: {
             sellerId: id,
             compactView: compactView,
+            month: month === 0 ? null : month,
           },
         });
         setSales(data);
@@ -29,6 +31,6 @@ export const useGetSellerSales = (
       }
     };
     fetchSales();
-  }, [id, compactView]);
+  }, [id, compactView, month]);
   return { sales, loading, error };
 };

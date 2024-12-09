@@ -7,7 +7,16 @@ const useBookItinerary = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const bookItinerary= async (itinerary_id: string | undefined, tourist_username: string | undefined) => {
+  const fetchTouristWallet = async (username:string|undefined) => {
+    try {
+        const response = await axios.get(`/traventure/api/tourist/${username}`);
+        return response.data;
+    } catch (error: any) {
+        throw new Error('Failed to fetch tourist wallet');
+    }
+};
+
+  const bookItinerary= async (itinerary_id: string | undefined, tourist_username: string | undefined,order_price:number,promoCode:string,paymentMethod:string) => {
     const url1 = `/traventure/api/tourist/${tourist_username}`;
     const url = `/traventure/api/bookings/add`;
     setLoading(true); // Set loading to true when the request starts
@@ -17,8 +26,11 @@ const useBookItinerary = () => {
         const response = await axios.post(url, {
             type:"itinerary",
             itinerary:itinerary_id,
-            tourist:tourist_id
-        });
+            tourist:tourist_id,
+            price:order_price,
+            promoCode:promoCode,
+            paymentMethod:paymentMethod});
+            
         if (response.status === 201 ){
             const getItinerary = await axios.get(`/traventure/api/itinerary/get/${itinerary_id}`);
             const Bookings= getItinerary.data.booked_By;
@@ -30,7 +42,26 @@ const useBookItinerary = () => {
         title: "Booking Successful",
         text: "Your booking has been added successfully",
         icon: "success",
-      })
+      }).then(async () => {
+        if (paymentMethod === "wallet") {
+          try{
+          const walletData= await fetchTouristWallet(tourist_username);
+          Swal.fire({
+            title: "Payment Successful",
+            html: `<p><strong>Booking Value :</strong> ${response.data.price}$</p><p>Your current wallet balance is ${walletData.wallet}</p>`,
+            icon: "info",
+          });
+        }
+        catch (error) {
+          Swal.fire({
+            title: "Error",
+            text: "Failed to fetch tourist wallet",
+            icon: "error",
+          });
+        }
+      }
+      });
+    
     } catch (error: any) {
       setError(error.message);
       Swal.fire({

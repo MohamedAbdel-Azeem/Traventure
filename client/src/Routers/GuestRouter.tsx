@@ -8,12 +8,13 @@ import GuestShop from "../routes/_app/Guest/guest_shop/GuestShop";
 import CurrencyDropdown from "../components/currencyDrop";
 import ItineraryDetailsTourist from "../components/Itinerary/ItineraryDetailsTourist";
 
+
 export default function GuestRouter() {
   return (
     <div className="flex flex-col w-screen h-screen">
       <NewNavbar />
       <Routes>
-        <Route path="/guest-page" element={<GuestPage />} />
+        <Route path="/" element={<GuestPage />} />
         <Route path="/more-itineraries" element={<GuestMoreItineraries />} />
         <Route
           path="/:username/itineraries/tourist-itinerary/:id"
@@ -23,7 +24,7 @@ export default function GuestRouter() {
         <Route path="/more-activities" element={<GuestMoreActivities />} />
         <Route path="/shop" element={<GuestShop type={"Tourist"} />} />
       </Routes>
-      <CurrencyDropdown />
+      {/* <CurrencyDropdown /> */}
     </div>
   );
 }

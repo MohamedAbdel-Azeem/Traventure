@@ -29,7 +29,6 @@ export interface INActivity extends mongoose.Document {
 }
 
 const ActivitySchema = new schema({
-  
   Title: { type: String, required: true },
   DateAndTime: { type: Date, required: true },
   Location: {
@@ -58,16 +57,22 @@ const ActivitySchema = new schema({
     ref: "Advertiser",
   },
   inappropriate: { type: Boolean, default: false },
-  feedback:{type: [
-    {
-      user_id: { type: mongoose.Types.ObjectId, required: true ,ref: "Tourist" },
-      review: String,
-      rating: String,
-      username: String,
-      createdAt: { type: Date, default: Date.now },
-    },
-  ],default: []},
-
+  feedback: {
+    type: [
+      {
+        user_id: {
+          type: mongoose.Types.ObjectId,
+          required: true,
+          ref: "Tourist",
+        },
+        review: String,
+        rating: String,
+        username: String,
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
+    default: [],
+  },
 });
 
 const Activity = mongoose.model<INActivity>("Activity", ActivitySchema);

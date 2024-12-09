@@ -1,21 +1,16 @@
 import React, { useState } from "react";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
-import {
-  Button,
-  Checkbox,
-  FormControl,
-  ListItemText,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  TextField,
-} from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import useUpdatePlace from "../../../../custom_hooks/places/useUpdatePlace";
 import Place from "../../../../custom_hooks/places/place_interface";
-import TheMAP from  "../../../../components/Maps/TheMAP";
-import { useGetHTags } from "../../../../custom_hooks/useCreateHistoricalTag";
+import TheMAP from "../../../../components/Maps/TheMAP";
 import { useSelector } from "react-redux";
+import { useGetHTags } from "../../../../custom_hooks/useCreateHistoricalTag";
+import TheBIGMAP from "../../../../components/Maps/TheBIGMAP";
+import EditButton from "../../../../components/Buttons/EditButton";
+import SaveButton from "../../../../components/Buttons/SaveButton";
+import ImageUploader from "../../../../components/PDFs&Images/ImageUploader";
 interface LocationCardCRUDProps {
   id: string;
   onDelete: (id: string) => void;
@@ -40,12 +35,10 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
   const [latitude, setLatitude] = useState(details?.location.latitude ?? 0);
   const [longitude, setLongitude] = useState(details?.location.longitude ?? 0);
   const [images, setImages] = useState(details?.pictures || []);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState<File | null>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>(
     details?.historicalTags?.map((tag) => tag._id) || []
   );
-  const [apiBody, setApiBody] = useState<Place | null>(details);
-  useUpdatePlace(id, apiBody);
   const {
     loading: tagsLoading,
     error: tagsError,
@@ -66,11 +59,19 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
     return valueNames.join(", ");
   };
 
-  const handleEditClick = () => {
+  const handleEditClick = async () => {
+    setIsEditing(!isEditing);
+  };
+
+  const handleCancelClick = async () => {
+    setIsEditing(!isEditing);
+  };
+
+  const handleSaveClick = async () => {
     const filteredImages = images.filter((image) => image !== "");
     setImages(filteredImages);
     setIsEditing(!isEditing);
-    setApiBody({
+    useUpdatePlace(details._id, {
       name: locationName,
       description: description,
       pictures: images || [],
@@ -102,7 +103,6 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
     }
   };
 
-
   const exchangeRate = useSelector(
     (state: any) => state.exchangeRate.exchangeRate
   );
@@ -110,306 +110,473 @@ const LocationCardCRUD: React.FC<LocationCardCRUDProps> = ({
   const currentCurrency = useSelector(
     (state: any) => state.exchangeRate.currentCurrency
   );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen2, setIsModalOpen2] = useState(false);
 
+  const handleViewMap = () => {
+    setIsModalOpen(true);
+  };
 
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+  const handleViewImage = () => {
+    setIsModalOpen2(true);
+  };
+
+  const handleCloseModal2 = () => {
+    setIsModalOpen2(false);
+  };
 
   return (
-    <div>
-      <div
-        className={`w-[422px] h-[422px] bg-[#D9D9D9] rounded-[11px] m-4 ${className}`}
-      >
-        <div className="w-[422px] h-[121px] relative">
-          {isEditing ? (
-            <div className="flex flex-col">
-              <div className="flex w-full h-full object-cover overflow-auto whitespace-nowrap">
-                {images?.map((cimage, index) => (
-                  <TextField
-                    key={index}
-                    title="Upload Image"
-                    value={cimage}
-                    onChange={(e) => handleImageChange(index, e.target.value)}
-                    className="pr-[10px]"
-                  />
-                ))}
-              </div>
-              <div className="flex flex-row">
-                <TextField onChange={(e) => setImage(e.target.value)} />
-                <Button onClick={() => setImages([...images, image])}>
-                  Add Image
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <div className="w-full h-full object-cover rounded-t-[11px] relative">
-              <div className="flex bg-[#333333] w-full h-full object-cover overflow-auto whitespace-nowrap">
-                {images?.map((cimage) => (
-                  <img className="pr-[10px]" src={cimage} alt={locationName} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="absolute top-[60px] right-[10px]">
-            <button title="Edit" className="editBtn" onClick={handleEditClick}>
-              <svg height="1em" viewBox="0 0 512 512">
-                <path d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z"></path>
-              </svg>
-            </button>
-          </div>
-
+    <div
+      className={`relative w-full max-w-[500px] h-[350px] rounded-lg overflow-hidden shadow-lg transition-all ${className}`}
+      style={{ boxShadow: "10px 10px 20px rgba(0, 0, 0, 0.2)" }}
+    >
+      <div className="absolute top-[2px] right-[2px] z-10">
+        {isEditing ? (
+          <SaveButton handleSaveClick={handleEditClick} />
+        ) : (
+          <EditButton handleEditClick={handleEditClick} />
+        )}
+      </div>
+      <div className="absolute top-[2px] left-[2px] z-10">
+        {isEditing ? (
           <button
-            className="bin-button absolute top-[10px] right-[10px]"
-            title="Delete"
-            onClick={handleDeleteClick}
+            title="Reject"
+            className="rejectBtn z-10"
+            onClick={handleCancelClick}
           >
             <svg
-              className="bin-top"
-              viewBox="0 0 39 7"
-              fill="none"
+              height="1em"
+              viewBox="0 0 512 512"
               xmlns="http://www.w3.org/2000/svg"
             >
               <line
-                y1="5"
-                x2="39"
-                y2="5"
+                x1="0"
+                y1="0"
+                x2="512"
+                y2="512"
                 stroke="white"
-                stroke-width="4"
-              ></line>
+                strokeWidth="80"
+              />
               <line
-                x1="12"
-                y1="1.5"
-                x2="26.0357"
-                y2="1.5"
+                x1="512"
+                y1="0"
+                x2="0"
+                y2="512"
                 stroke="white"
-                stroke-width="3"
-              ></line>
-            </svg>
-            <svg
-              className="bin-bottom"
-              viewBox="0 0 33 39"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <mask id="path-1-inside-1_8_19" fill="white">
-                <path d="M0 0H33V35C33 37.2091 31.2091 39 29 39H4C1.79086 39 0 37.2091 0 35V0Z"></path>
-              </mask>
-              <path
-                d="M0 0H33H0ZM37 35C37 39.4183 33.4183 43 29 43H4C-0.418278 43 -4 39.4183 -4 35H4H29H37ZM4 43C-0.418278 43 -4 39.4183 -4 35V0H4V35V43ZM37 0V35C37 39.4183 33.4183 43 29 43V35V0H37Z"
-                fill="white"
-                mask="url(#path-1-inside-1_8_19)"
-              ></path>
-              <path d="M12 6L12 29" stroke="white" stroke-width="4"></path>
-              <path d="M21 6V29" stroke="white" stroke-width="4"></path>
+                strokeWidth="80"
+              />
             </svg>
           </button>
+        ) : (
+          <></>
+        )}
+      </div>
+
+      <div className="absolute left-[40%] top-[10px] z-10">
+        {isEditing ? (
+          <button
+            className="bg-white transition-all hover:bg-slate-300 rounded-[6px] h-[30px] w-[100px]"
+            onClick={handleViewImage}
+          >
+            Edit Image
+          </button>
+        ) : (
+          <></>
+        )}
+      </div>
+
+      <div
+        className="absolute inset-0 bg-cover bg-center transition-all duration-300"
+        style={{
+          backgroundImage: `url(${
+            images?.[0] || "https://via.placeholder.com/500"
+          })`,
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
+      </div>
+
+      {/* Title displayed at bottom-left */}
+      <div className="absolute bottom-4 left-4 z-10 w-full px-4 pointer-events-none">
+        {isEditing ? (
+          <></>
+        ) : (
+          <h2
+            className="text-2xl font-bold text-white drop-shadow-md truncate"
+            style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.7)" }}
+          >
+            {locationName}
+          </h2>
+        )}
+      </div>
+
+      {/* Hover Overlay Content */}
+      <div
+        className={`absolute inset-0 bg-purple-800 bg-opacity-50 ${
+          isEditing ? "opacity-100" : "opacity-0"
+        } text-white hover:opacity-100 transition-all duration-300 flex flex-col p-6`}
+      >
+        {/* Ticket Prices and Hours (top) */}
+        <div className="flex w-full mb-4 mt-5">
+          {/* Ticket Prices Section */}
+          <div className="flex-1 mr-4">
+            <div className="flex items-center mb-2">
+              <ConfirmationNumberIcon className="mr-2 text-white" />
+              <span className="font-semibold">Ticket Prices</span>
+            </div>
+            <div>
+              {isEditing ? (
+                <>
+                  <div className="flex flex-row">
+                    <TextField
+                      label="Native"
+                      type="number"
+                      sx={{
+                        width: "100px",
+                        height: "40px",
+                        "& .MuiInputBase-input": {
+                          color: "white",
+                          fontSize: "14px",
+                          height: "40px",
+                          boxSizing: "border-box",
+                        },
+                        "& .MuiInputBase-input::placeholder": {
+                          textAlign: "center",
+                        },
+                        "& .MuiInputLabel-root:not(.MuiInputLabel-shrink)": {
+                          fontSize: "14px",
+                          color: "white",
+                        },
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": {
+                            borderColor: "white",
+                            borderRadius: "7px",
+                          },
+                          "&.Mui-focused fieldset": {
+                            borderColor: "white",
+                            borderRadius: "7px",
+                          },
+                        },
+                      }}
+                      value={native}
+                      onChange={(e) => setNative(Number(e.target.value))}
+                    />
+                    <TextField
+                      label="Foreign"
+                      type="number"
+                      sx={{
+                        width: "100px",
+                        height: "40px",
+                        "& .MuiInputBase-input": {
+                          color: "white",
+                          fontSize: "14px",
+                          height: "40px",
+                          boxSizing: "border-box",
+                        },
+                        "& .MuiInputBase-input::placeholder": {
+                          textAlign: "center",
+                        },
+                        "& .MuiInputLabel-root:not(.MuiInputLabel-shrink)": {
+                          fontSize: "14px",
+                          color: "white",
+                        },
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": {
+                            borderColor: "white",
+                            borderRadius: "7px",
+                          },
+                          "&.Mui-focused fieldset": {
+                            borderColor: "white",
+                            borderRadius: "7px",
+                          },
+                        },
+                      }}
+                      value={foreign}
+                      onChange={(e) => setNative(Number(e.target.value))}
+                    />
+                  </div>
+                  <div className="flex">
+                    <TextField
+                      label="Student"
+                      type="number"
+                      sx={{
+                        width: "100px",
+                        height: "40px",
+                        marginX: "auto",
+                        marginTop: "10px",
+                        "& .MuiInputBase-input": {
+                          color: "white",
+                          fontSize: "14px",
+                          height: "40px",
+                          boxSizing: "border-box",
+                        },
+                        "& .MuiInputBase-input::placeholder": {
+                          textAlign: "center",
+                        },
+                        "& .MuiInputLabel-root:not(.MuiInputLabel-shrink)": {
+                          fontSize: "14px",
+                          color: "white",
+                        },
+                        "& .MuiOutlinedInput-root": {
+                          "& fieldset": {
+                            borderColor: "white",
+                            borderRadius: "7px",
+                          },
+                          "&.Mui-focused fieldset": {
+                            borderColor: "white",
+                            borderRadius: "7px",
+                          },
+                        },
+                      }}
+                      value={student}
+                      onChange={(e) => setNative(Number(e.target.value))}
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="text-white text-sm">
+                    Native: {currentCurrency}{" "}
+                    {(native * exchangeRate).toFixed(2)}
+                  </p>
+                  <p className="text-white text-sm">
+                    Foreign: {currentCurrency}{" "}
+                    {(foreign * exchangeRate).toFixed(2)}
+                  </p>
+                  <p className="text-white text-sm">
+                    Student: {currentCurrency}{" "}
+                    {(student * exchangeRate).toFixed(2)}
+                  </p>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Hours of Operation Section */}
+          <div className="flex-1">
+            <div className="flex items-center mb-2">
+              <AccessTimeIcon className="mr-2 text-white" />
+              <span className="font-semibold">Hours of Operation</span>
+            </div>
+            {isEditing ? (
+              <TextField
+                label="Hours"
+                sx={{
+                  width: "200px",
+                  height: "50px",
+                  marginX: "auto",
+                  "& .MuiInputBase-input": {
+                    color: "white",
+                    fontSize: "14px",
+                    height: "50px",
+                    boxSizing: "border-box",
+                  },
+                  "& .MuiInputBase-input::placeholder": {
+                    textAlign: "center",
+                  },
+                  "& .MuiInputLabel-root:not(.MuiInputLabel-shrink)": {
+                    fontSize: "14px",
+                    color: "white",
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "white",
+                      borderRadius: "7px",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "white",
+                      borderRadius: "7px",
+                    },
+                  },
+                }}
+                value={hours}
+                onChange={(e) => setHours(e.target.value)}
+              />
+            ) : (
+              <p className="text-white text-sm">{hours}</p>
+            )}
+          </div>
         </div>
-        <div className="w-[422px] h-[30px]">
+
+        {/* Historical Tags */}
+        {Array.isArray(selectedTags) && selectedTags.length > 0 && (
+          <div className="flex flex-wrap justify-center items-center mb-4">
+            {details?.historicalTags.slice(0, 3).map((tag, index) => (
+              <span
+                key={index}
+                className="px-3 py-1 bg-purple-200 text-purple-900 rounded-full text-sm font-medium mr-2 mb-2"
+              >
+                {tag.name}
+              </span>
+            ))}
+            {selectedTags.length > 3 && (
+              <span className="text-sm text-purple-200">...</span>
+            )}
+          </div>
+        )}
+
+        {/* Description */}
+        <div className="w-full mb-4">
           {isEditing ? (
-            <TextField
-              value={locationName}
-              onChange={(e) => setLocationName(e.target.value)}
-              className="text-center w-full"
-              placeholder="Location Name"
-              size="small"
-              sx={{
-                "& .MuiInputBase-input": {
-                  textAlign: "center",
-                  padding: "4px",
-                },
-                "& .MuiInputBase-input::placeholder": {
-                  textAlign: "center",
-                },
-              }}
-            />
+            <>
+              <TextField
+                sx={{
+                  width: "400px",
+                  height: "40px",
+                  marginLeft: "9.8px",
+                  "& .MuiInputBase-input": {
+                    color: "white",
+                    fontSize: "14px",
+                    padding: "0 9.8px",
+                    height: "40px",
+                    boxSizing: "border-box",
+                  },
+                  "& .MuiInputBase-input::placeholder": {
+                    textAlign: "center",
+                  },
+                  "& .MuiInputLabel-root:not(.MuiInputLabel-shrink)": {
+                    fontSize: "14px",
+                    color: "white",
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "white",
+                      borderRadius: "7px",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "white",
+                      borderRadius: "7px",
+                    },
+                  },
+                }}
+                label="Title"
+                value={locationName}
+                onChange={(e) => setLocationName(e.target.value)}
+              />
+              <TextField
+                sx={{
+                  width: "400px",
+                  height: "40px",
+                  marginLeft: "9.8px",
+                  marginTop: "10px",
+                  "& .MuiInputBase-input": {
+                    color: "white",
+                    fontSize: "14px",
+                    padding: "0 9.8px",
+                    height: "40px",
+                    boxSizing: "border-box",
+                  },
+                  "& .MuiInputBase-input::placeholder": {
+                    textAlign: "center",
+                  },
+                  "& .MuiInputLabel-root:not(.MuiInputLabel-shrink)": {
+                    fontSize: "14px",
+                    color: "white",
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "white",
+                      borderRadius: "7px",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "white",
+                      borderRadius: "7px",
+                    },
+                  },
+                }}
+                label="Description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </>
           ) : (
-            <p className="text-[24px] text-center font-medium">
-              {locationName}
-            </p>
-          )}
-        </div>
-        <div className="w-[422px] h-[60px]">
-          {isEditing ? (
-            <TextField
-              multiline
-              maxRows="2"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="text-[16px] text-center w-full"
-              placeholder="Description"
-              size="small"
-              sx={{
-                "& .MuiInputBase-input": {
-                  textAlign: "center",
-                  padding: "0px",
-                },
-              }}
-            />
-          ) : (
-            <p className="text-[16px] text-center  h-[84px] overflow-auto">
+            <p
+              className="text-center text-sm text-gray-200 truncate"
+              style={{ maxWidth: "100%" }}
+            >
               {description}
             </p>
           )}
         </div>
-        <div className="w-[422px] h-[211px] flex">
-          <div className="w-[311px] h-full rounded-bl-[11px]">
-            {isEditing ? (
-              <div>
-                <TheMAP
-                  id={"map" + id}
-                  className="h-[300px] w-[300px]"
-                  lat={latitude}
-                  long={longitude}
-                  setLatitude={setLatitude}
-                  setLongitude={setLongitude}
-                />
-              </div>
-            ) : (
-              <div className="text-[16px] h-full overflow-auto">
-                <iframe
-                  title="map"
-                  className="h-full rounded-bl-[11px]"
-                  src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${longitude}!3d${latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
-                  width="311px"
-                  height="211px"
-                ></iframe>
-              </div>
-            )}
-          </div>
-          <div className="flex flex-col">
-            <div className="w-[111px] h-full bg-[#B03131] flex flex-col">
-              <div className="m-auto">
-                <ConfirmationNumberIcon />
-                {isEditing ? (
-                  <div>
-                    <TextField
-                      value={
-                    currentCurrency +
-                    " " +
-                    (native * exchangeRate).toFixed(2)
-                  }
-                      size="small"
-                      onChange={(e) => setNative(Number(e.target.value))}
-                      className="w-[124px]"
-                      placeholder="native"
-                      sx={{
-                        "& .MuiInputBase-input": {
-                          textAlign: "center",
-                          padding: "3.6px",
-                        },
-                        "& .MuiInputBase-input::placeholder": {
-                          textAlign: "center",
-                        },
-                      }}
-                    />
-                    <TextField
-                      value={
-                    currentCurrency +
-                    " " +
-                    (foreign * exchangeRate).toFixed(2)
-                  }
-                      size="small"
-                      onChange={(e) => setForeign(Number(e.target.value))}
-                      className="w-[124px]"
-                      placeholder="foreign"
-                      sx={{
-                        "& .MuiInputBase-input": {
-                          textAlign: "center",
-                          padding: "3.6px",
-                        },
-                        "& .MuiInputBase-input::placeholder": {
-                          textAlign: "center",
-                        },
-                      }}
-                    />
-                    <TextField
-                      value={
-                    currentCurrency +
-                    " " +
-                    (student * exchangeRate).toFixed(2)
-                  }
-                      size="small"
-                      onChange={(e) => setStudent(Number(e.target.value))}
-                      className="w-[124px]"
-                      placeholder="student"
-                      sx={{
-                        "& .MuiInputBase-input": {
-                          textAlign: "center",
-                          padding: "3.6px",
-                        },
-                        "& .MuiInputBase-input::placeholder": {
-                          textAlign: "center",
-                        },
-                      }}
-                    />
-                  </div>
-                ) : (
-                  <p className="overflow-auto w-[100px]">
-                    <div>Native:{currentCurrency+ " " +(native * exchangeRate).toFixed(2)}</div>
-                    <div>Foreign:{currentCurrency+ " " +(foreign * exchangeRate).toFixed(2)}</div>
-                    <div>Student:{currentCurrency+ " " +(student * exchangeRate).toFixed(2)}</div>
-                  </p>
-                )}
-              </div>
-            </div>
-            <div className="w-[110px] h-full bg-[#7CC7E7] rounded-br-[11px] grid">
-              <div className="m-auto flex flex-row">
-                <AccessTimeIcon />
-                {isEditing ? (
-                  <div>
-                    <TextField
-                      value={hours}
-                      size="small"
-                      onChange={(e) => setHours(e.target.value)}
-                      className="w-[124px]"
-                      placeholder="Hours"
-                      sx={{
-                        "& .MuiInputBase-input": {
-                          textAlign: "center",
-                        },
-                        "& .MuiInputBase-input::placeholder": {
-                          textAlign: "center",
-                        },
-                      }}
-                    />
-                  </div>
-                ) : (
-                  <p className="overflow-auto w-[100px]">{hours}</p>
-                )}
-              </div>
-              <FormControl fullWidth sx={{ marginY: 1 }}>
-                <Select
-                  labelId="tags-select-label"
-                  multiple
-                  disabled={!isEditing}
-                  value={selectedTags}
-                  onChange={handleTagsChange}
-                  renderValue={handleTagsText}
-                  MenuProps={{
-                    PaperProps: {
-                      style: {
-                        maxHeight: 200,
-                        width: 250,
-                      },
-                    },
-                  }}
-                >
-                  {tagsData.map((tag) => (
-                    <MenuItem key={tag._id} value={tag._id}>
-                      <Checkbox checked={selectedTags.indexOf(tag._id) > -1} />
-                      <ListItemText primary={tag.name} />
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              {!isEditing &&
-                details &&
-                details.historicalTags.map((tag) => (
-                  <div>my Tag : {tag.name}</div>
-                ))}
-            </div>
-          </div>
+
+        {/* View Map Button */}
+        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 hover:opacity-100 transition-all duration-300">
+          <button
+            onClick={handleViewMap}
+            className="px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-lg hover:bg-purple-700 transition-all duration-300"
+          >
+            View Map
+          </button>
         </div>
       </div>
+
+      {/* Map Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="relative bg-white rounded-lg overflow-hidden shadow-lg w-4/5 md:w-1/2">
+            {/* Close Button */}
+            {isEditing ? (
+              <TheMAP
+                id="map"
+                className="h-[500px] w-full"
+                lat={latitude}
+                long={longitude}
+                setLatitude={setLatitude}
+                setLongitude={setLongitude}
+              />
+            ) : (
+              <TheBIGMAP
+                arrayofmarkers={[
+                  {
+                    latitude: latitude,
+                    longitude: longitude,
+                  },
+                ]}
+                id="map"
+                className="h-[500px] w-full"
+              />
+            )}
+
+            <button
+              onClick={handleCloseModal}
+              className="absolute h-[40px] w-[40px] top-2 left-2 text-[25px] text-center items-center text-white bg-red-500 hover:bg-red-600 font-bold rounded-full"
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+      )}
+
+      {isModalOpen2 && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="relative bg-white rounded-lg overflow-hidden shadow-lg w-4/5 md:w-1/2">
+            {isEditing ? (
+              <div className="flex flex-row overflow-auto gap-5 h-[240px]">
+                
+                <div className="h-[100px] min-w-[200px] flex mt-[90px]">
+                  <ImageUploader
+                    setSelectedImage={setImage}
+                    selectedImage={image}
+                    className="h-[150px]"
+                  />
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
+
+            <button
+              onClick={handleCloseModal2}
+              className="absolute h-[40px] w-[40px] top-2 left-2 text-[25px] text-center items-center text-white bg-red-500 hover:bg-red-600 font-bold rounded-full"
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

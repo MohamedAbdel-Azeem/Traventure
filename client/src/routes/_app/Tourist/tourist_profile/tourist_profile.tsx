@@ -12,8 +12,16 @@ import BadgePopup from "../../../../components/Shenawy/BadgePopup";
 import { redeemPoints } from "../../../../custom_hooks/touristpoints/redeemPoints";
 import Swal from "sweetalert2";
 import { handleDeleteAccount } from "../../../../custom_hooks/usedeleterequest";
-import ChangePasswordModal, { AddContactLeadFormType } from "../../../../components/ChangePasswordModal";
+import ChangePasswordModal, {
+  AddContactLeadFormType,
+} from "../../../../components/ChangePasswordModal";
 import { editpassword } from "../../../../custom_hooks/changepassowrd";
+import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { resetCartState } from "../../../../redux/cartSlice";
+import { resetCurrencyState } from "../../../../redux/exchangeRateSlice";
+import ProfilePictureEdit from "../../../../components/PDFs&Images/ProfilePictureEdit";
+import { uploadFileToStorage } from "../../../../firebase/firebase_storage";
 
 interface TouristProfileProps {
   tourist: TouristProfileData;
@@ -39,6 +47,7 @@ const schema = z.object({
 export type TouristProfileUpdate = z.infer<typeof schema>;
 
 const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
+  const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
   const [currentTourist, setCurrentTourist] = useState(tourist);
@@ -89,7 +98,11 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
 
   const [isPasswordModalOpen, setPasswordModalOpen] = useState(false);
   // Handle form submission (save edited data)
-  const onSubmit = (data: TouristProfileData) => {
+  const onSubmit = async (data: TouristProfileData) => {
+    if (profilePicture) {
+      const firebaseurl = await uploadFileToStorage(profilePicture);
+      data.profilepic = firebaseurl;
+    }
     setIsEditing(false);
     setApiBody(data);
     setApiUsername(data.username);
@@ -102,6 +115,9 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
   };
 
   const handleLogout = () => {
+    Cookies.set("access_token", "", { expires: 0 });
+    dispatch(resetCartState());
+    dispatch(resetCurrencyState());
     navigate("/");
   };
 
@@ -157,7 +173,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
       }
     });
   };
-
+  const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const [walletBalance, setWalletBalance] = useState(currentTourist.wallet);
   return (
     <>
@@ -174,11 +190,19 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
         <div className="bg-white rounded-lg shadow-xl w-11/12 max-w-4xl p-8 backdrop-blur-lg bg-opacity-90">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex items-center gap-6">
-              <img
-                src={currentTourist.profilePicture}
-                alt="Profile"
-                className="w-32 h-32 rounded-full object-cover shadow-md border-4 border-purple-500"
-              />
+              {isEditing ? (
+                <ProfilePictureEdit
+                  profilePicture={profilePicture}
+                  onChange={setProfilePicture}
+                  isEditing={isEditing}
+                />
+              ) : (
+                <img
+                  src={currentTourist.profilepic}
+                  alt="Profile"
+                  className="w-32 h-32 rounded-full object-cover shadow-md border-4 border-purple-500"
+                />
+              )}
               <div className="text-left">
                 {isEditing ? (
                   <Controller
@@ -379,7 +403,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
                     Wallet Balance:
                   </label>
                   <p className="text-4xl font-bold text-purple-900">
-                    ${walletBalance}
+                    ${walletBalance.toFixed(2)}
                   </p>
                 </div>
               </div>

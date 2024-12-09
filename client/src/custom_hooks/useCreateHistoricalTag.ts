@@ -2,6 +2,7 @@ import axios, { AxiosError } from "axios";
 import React from "react";
 
 interface DataStructure {
+    _id?: string;
     name: string;
   }
 

@@ -2,6 +2,9 @@ import { useGetExternalSellers } from "../../../../custom_hooks/useGetExternalSe
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { SalesChart } from "../../../../components/Shop/SalesChart";
+import { useAuth } from "../../../../custom_hooks/auth";
+import { useParams } from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
 
 interface ISales {
   productId: string;
@@ -11,12 +14,13 @@ interface ISales {
 }
 
 export function AdminSalesPage() {
+  const { isAuthenticated, isLoading, isError } = useAuth(3);
+  const { username } = useParams<{ username: string }>();
   const {
     externalSellers,
     loading: sellersLoading,
     error: sellersError,
   } = useGetExternalSellers();
-
   const [chosenExternalSeller, setChosenExternalSeller] = useState<string>("");
   const [sales, setSales] = useState<ISales[]>([]);
 
@@ -38,7 +42,34 @@ export function AdminSalesPage() {
     };
     fetchSales();
   }, [chosenExternalSeller]);
-
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <ClipLoader color="#f86c6b" loading={true} size={150} />
+      </div>
+    );
+  }
+  if (isError || isAuthenticated !== username) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <h1>Error 403 Unauthorized access</h1>
+      </div>
+    );
+  }
   if (sellersLoading) {
     return <div>Loading...</div>;
   }

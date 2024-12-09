@@ -87,6 +87,8 @@ const Itineraries = () => {
             accesibility={card.accesibility}
             bookingActivated={card.bookingActivated}
             inappropriate={card.inappropriate}
+            allowBooking={card.allowBooking}
+            InterestedUsers={card.InterestedUsers}
           />
         ))}
       </div>

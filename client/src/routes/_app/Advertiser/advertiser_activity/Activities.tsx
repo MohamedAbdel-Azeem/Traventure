@@ -22,6 +22,9 @@ import {
 import { createActivity } from "../../../../custom_hooks/activities/useCreateActivity";
 import useDeleteActivity from "../../../../custom_hooks/activities/deleteActivity";
 import TheMAP from "../../../../components/Maps/TheMAP";
+import { useAuth } from "../../../../custom_hooks/auth";
+import { useParams } from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
 
 export const Activities = () => {
   const [newname, setnName] = useState("");
@@ -31,7 +34,8 @@ export const Activities = () => {
   const [newlatitude, setnLatitude] = useState(30.0);
   const [newlongitude, setnLongitude] = useState(31.2);
   const [newBIO, setnnewBIO] = useState(false);
-
+  const { isAuthenticated, isLoading, isError } = useAuth(1);
+  const { username } = useParams<{ username: string }>();
   interface Activity {
     _id: string;
     Title: string;
@@ -165,7 +169,34 @@ export const Activities = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <ClipLoader color="#f86c6b" loading={true} size={150} />
+      </div>
+    );
+  }
+  if (isError || isAuthenticated !== username) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <h1>Error 403 Unauthorized access</h1>
+      </div>
+    );
+  }
   if (aloading || tagsLoading || CatLoading) {
     return <div>loading</div>;
   }

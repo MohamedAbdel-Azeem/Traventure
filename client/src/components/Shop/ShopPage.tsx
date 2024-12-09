@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./ProductCard.css"; // Assuming styles are in this file
 import { ACTUALProduct } from "../data/ProductData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -24,13 +24,15 @@ import ImageUploader from "../PDFs&Images/ImageUploader";
 import ProductCard from "../Shenawy/ProductCard";
 import ShowingResponse from "../Shenawy/ShowingResponse";
 
-
 const itemsPerPage = 8;
 interface ShopPageProps {
   type: string;
 }
 const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
-  const { data, loading, error } = useGetAllProducts();
+  const currentuser = location.pathname.split(`/`)[2];
+  const currenttype = location.pathname.split(`/`)[1];
+
+  const { data, loading, error } = useGetAllProducts(currenttype, currentuser);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [products, setProducts] = useState(data);
@@ -52,8 +54,6 @@ const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
     externalseller?: string;
   }
 
-  const currentuser = location.pathname.split(`/`)[2];
-  const currenttype = location.pathname.split(`/`)[1];
   React.useEffect(() => {
     if (data) {
       if (currenttype.includes("tourist") || currenttype.includes("guest")) {
@@ -241,12 +241,15 @@ const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
     boxShadow: 24,
     p: 4,
   };
-
-  
-
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error</div>;
+  }
 
   return (
-    <div className="flex">
+    <div className="flex items-center justify-center">
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
           <Box className="grid grid-cols-2">
@@ -318,8 +321,8 @@ const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
           </Box>
         </Box>
       </Modal>
-      <div className="flex flex-col flex-1" style={{ marginTop: '64px' }}>
-      <div className="search-bar">
+      <div className="flex flex-col flex-1" style={{ marginTop: "64px" }}>
+        <div className="search-bar">
           <input
             type="text"
             placeholder="Search products by name..."
@@ -394,7 +397,7 @@ const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
             )}
           </div>
         </div>
-        <div className="product-list">
+        <div className="flex flex-wrap items-center justify-center w-full gap-14">
           {sortedProducts.length > 0 ? (
             displayedProducts.length > 0 ? (
               displayedProducts.map((product) => (

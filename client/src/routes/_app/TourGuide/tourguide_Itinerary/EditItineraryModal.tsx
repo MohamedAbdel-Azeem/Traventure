@@ -11,7 +11,6 @@ interface EditItineraryModalProps {
         date: string;
         rating: string;
         image: string;
-        //places: Place[];
     };
     onSave: (updatedData: any) => void;
 }
@@ -27,7 +26,6 @@ const EditItineraryModal: React.FC<EditItineraryModalProps> = ({
     const [price, setPrice] = React.useState(itineraryData.price);
     const [date, setDate] = React.useState(itineraryData.date);
     const [rating, setRating] = React.useState(itineraryData.rating);
-    //const [places, setPlaces] = React.useState(itineraryData.places);
 
     const handleSave = () => {
         const updatedData = { title, description, price, date, rating, /*places*/ };

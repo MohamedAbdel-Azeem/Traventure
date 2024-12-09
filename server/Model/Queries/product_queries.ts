@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import productModel, { IFeedback } from "../Schemas/Product";
 import Tourist from "../Schemas/Tourist";
+import Seller from "../Schemas/Seller";
+import sendMail from "../../utils/functions/email_sender";
 
 export async function addProduct(product: Object) {
   try {
@@ -37,7 +39,50 @@ export async function getProducts() {
       })
     );
     return populatedProducts;
-    return products;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getProductsWithWishList(touristUsername: string) {
+  try {
+    const products = await productModel.find().populate("seller");
+    let tourist = await Tourist.find({ username: touristUsername }).select(
+      "wishlisted_products"
+    );
+
+    if (!tourist || tourist.length == 0) throw Error("Tourist Does not Exist");
+
+    const wishList = tourist[0].wishlisted_products;
+
+    const populatedProducts = await Promise.all(
+      products.map(async (product) => {
+        const populatedFeedback = await Promise.all(
+          product.feedback.map(async (feedback) => {
+            const tourist = await Tourist.findById(
+              feedback.touristId,
+              "username"
+            );
+            return {
+              touristId: feedback.touristId,
+              rating: feedback.rating,
+              review: feedback.review,
+              touristUsername: tourist?.username,
+            };
+          })
+        );
+        return {
+          ...product.toObject(),
+          feedback: populatedFeedback,
+        };
+      })
+    );
+
+    populatedProducts.map(
+      (product) => (product.isWishListed = wishList.includes(product._id))
+    );
+
+    return populatedProducts;
   } catch (error) {
     throw error;
   }
@@ -84,6 +129,7 @@ export async function decrementProductQuantity(
     if (product) {
       const prodQuantity = product.quantity;
       product.quantity = prodQuantity - quantity;
+      
       const newProduct = await product.save();
       return newProduct;
     }
@@ -91,6 +137,35 @@ export async function decrementProductQuantity(
   } catch (error) {
     throw error;
   }
+}
+
+export async function sendMailAndNotificationToSeller(productId:string){
+  try {
+    const product = await productModel.findById(productId);
+    if (!product) throw new Error("product not found");
+  
+      if(product.quantity == 0){
+        // notify the Advertise that this activity is inappropriate
+        const seller = await Seller.findById(product.seller).lean();
+       if (!seller) throw new Error("seller not found");
+ await Seller.findByIdAndUpdate(product.seller, {
+   $push: {
+     notifications: {
+       message: `Your product ${product.name} is Out of Stock`,
+       sent_by_mail: false,
+       read: false,
+       createdAt: new Date(),
+     },
+   },
+ });
+
+ sendMail(seller.email, "Product Out of Stock", `Hello ${seller.username}, \n\nYour product ${product.name} is Out of Stock`);
+ }
+
+} catch (error) {
+    throw error;
+}
+
 }
 
 export async function getExternalSellers() {
@@ -110,7 +185,27 @@ export async function getExternalSellers() {
     throw error;
   }
 }
-
+export async function getExternalProducts(externalSeller: string) {
+  try {
+    if (externalSeller) {
+      const products = await productModel
+        .find({
+          externalseller: externalSeller,
+        })
+        .select("name");
+      return products;
+    } else {
+      const products = await productModel
+        .find({
+          externalseller: { $exists: true, $ne: "" },
+        })
+        .select("name");
+      return products;
+    }
+  } catch (error) {
+    throw error;
+  }
+}
 export async function addFeedback(ObjectId: string, feedback: IFeedback) {
   try {
     const product = await productModel.findById(ObjectId);
@@ -152,4 +247,7 @@ module.exports = {
   decrementProductQuantity,
   getExternalSellers,
   addFeedback,
+  getProductsWithWishList,
+  getExternalProducts,
+  sendMailAndNotificationToSeller
 };

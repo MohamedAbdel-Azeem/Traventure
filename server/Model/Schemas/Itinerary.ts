@@ -68,9 +68,15 @@ const itinerarychema = new schema({
     },
   ],default: []},
   bookingActivated: { type: Boolean, default: true },
+  allowBooking: { type: Boolean, default: false },
+  InterestedUsers: [
+    {
+      user_id: { type: mongoose.Types.ObjectId, ref: "Tourist" },
+    },
+  ],
   inappropriate: { type: Boolean, default: false },
   
 });
 // ToDo: plan a way to do timeline
-export default mongoose.model("Itinerary", itinerarychema);
+export default mongoose.model<ItineraryDocument>("Itinerary", itinerarychema);
 

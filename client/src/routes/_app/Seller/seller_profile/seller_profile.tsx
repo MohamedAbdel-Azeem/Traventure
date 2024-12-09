@@ -16,6 +16,7 @@ import { FaEdit } from "react-icons/fa";
 import ProfilePictureEdit from "../../../../components/PDFs&Images/ProfilePictureEdit";
 import { uploadFileToStorage } from "../../../../firebase/firebase_storage";
 import { handleDeleteAccount } from "../../../../custom_hooks/usedeleterequest";
+import Cookies from 'js-cookie';
 
 interface SellerProfileProps {
   seller: ISeller;
@@ -42,8 +43,6 @@ const SellerProfile: React.FC<SellerProfileProps> = ({ seller }) => {
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
   const [currentSeller, setCurrentSeller] = useState(seller);
-  const [apiBody, setApiBody] = useState({});
-  const [apiUsername, setApiUsername] = useState("");
   const [update, setUpdate] = useState(false);
   // React Hook Form setup with Zod validation
   const {
@@ -92,6 +91,9 @@ const SellerProfile: React.FC<SellerProfileProps> = ({ seller }) => {
 
   // Handle logout
   const handleLogout = () => {
+    Cookies.set("access_token", "", { expires: 0});
+    Cookies.set("reduxPersistIndex", "", { expires: 0});
+    Cookies.set("persist%3Aroot", "", { expires: 0});
     navigate("/");
   };
   const [isPasswordModalOpen, setPasswordModalOpen] = useState(false);
@@ -118,10 +120,7 @@ const SellerProfile: React.FC<SellerProfileProps> = ({ seller }) => {
   };
 
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
-  const handleProfilePictureClick = () => {
-    document.getElementById("profilePictureInput")?.click();
-  };
-
+ 
   const handleDelete = () => {
     Swal.fire({
       title: "Are you sure?",

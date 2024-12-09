@@ -6,27 +6,64 @@ import { SalesChart } from "../../../../components/Shop/SalesChart";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import ClipLoader from "react-spinners/ClipLoader";
-
+import { useAuth } from "../../../../custom_hooks/auth";
+import { SellerRevPage } from "./SellerRevPage";
 
 export function SellerSalesPage() {
   const { username } = useParams<{ username: string }>();
   const [compactView, setCompactView] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState("");
+  const { isAuthenticated, isLoading, isError } = useAuth(0);
+  const [selectedMonth, setSelectedMonth] = useState<string>("ALL");
+  const generateYearsArray = (): number[] => {
+    const currentYear = new Date().getFullYear();
+    const startYear = 2024;
+    const yearsArray = [];
+
+    for (let year = startYear; year <= currentYear; year++) {
+      yearsArray.push(year);
+    }
+
+    return yearsArray;
+  };
+  const years = generateYearsArray();
+  const [selectedYear, setSelectedYear] = useState<string>(
+    new Date().getFullYear().toString()
+  );
 
   const {
     user: seller,
     loading: sellerLoading,
     error: sellerError,
   } = useGetSeller(username);
-
+  const months = [
+    "ALL",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
   const {
     sales,
     loading: salesLoading,
     error: salesError,
-  } = useGetSellerSales(seller?._id, compactView);
+  } = useGetSellerSales(
+    seller?._id,
+    compactView,
+    months.indexOf(selectedMonth)
+  );
 
   const [filteredSales, setFilteredSales] = useState(sales);
-
+  console.log("sales", sales);
+  console.log("filtered", filteredSales);
   const handleCompactViewChange = (
     event: React.MouseEvent<HTMLElement>,
     newCompactView: boolean
@@ -48,21 +85,50 @@ export function SellerSalesPage() {
       )
     );
   };
-
-  if (sellerLoading) {
+  const handleSelectMonthChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setSelectedMonth(event.target.value);
+    setFilteredSales(
+      sales.filter((sale: { productName: string }) =>
+        selectedProduct !== "" ? sale.productName === event.target.value : true
+      )
+    );
+  };
+  if (isLoading) {
     return (
-      <div>
-        Loading...
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <ClipLoader color="#f86c6b" loading={true} size={150} />
       </div>
     );
   }
-
-  if (sellerError || !seller || salesError) {
+  if (isError || isAuthenticated !== username) {
     return (
-      <div>
-        Error: {sellerError || salesError}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <h1>Error 403 Unauthorized access</h1>
       </div>
     );
+  }
+  if (sellerLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (sellerError || !seller || salesError) {
+    return <div>Error: {sellerError || salesError}</div>;
   }
 
   const productsSet: { [key: string]: boolean } = {};
@@ -111,12 +177,44 @@ export function SellerSalesPage() {
                   </option>
                 ))}
               </select>
+              <label htmlFor="year-select" className="mr-2 ml-3">
+                Filter by year:{" "}
+              </label>
+              <select
+                className="p-2 border rounded "
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+              >
+                {years.map((year, index) => (
+                  <option key={index} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+              <label htmlFor="month-select" className="mr-2 ml-3">
+                Filter by Month:{" "}
+              </label>
+              <select
+                id="month-select"
+                className="px-4 py-3 border border-gray-300 rounded-lg"
+                value={selectedMonth}
+                onChange={handleSelectMonthChange}
+              >
+                {months.map((month) => (
+                  <option key={month} value={month}>
+                    {month}
+                  </option>
+                ))}
+              </select>
             </div>
           )}
-          {(compactView || (!compactView && selectedProduct !== "")) && (
-            <SalesChart
-              data={compactView ? sales : filteredSales}
-              compactView={compactView}
+          {compactView && <SalesChart data={sales} compactView={compactView} />}
+          {!compactView && (
+            <SellerRevPage
+              sellerId={seller?._id}
+              month={months.indexOf(selectedMonth)}
+              year={parseInt(selectedYear)}
+              productName={selectedProduct}
             />
           )}
         </>
