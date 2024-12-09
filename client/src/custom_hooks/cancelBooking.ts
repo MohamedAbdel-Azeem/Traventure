@@ -32,7 +32,7 @@ import { useNavigate, useParams } from 'react-router-dom';
                         const walletData = await fetchTouristWallet(username);
                         Swal.fire({
                             title: "Wallet",
-                            html: `<p><strong>Booking Value Refunded:</strong> ${response.data.price}$</p><p>Your current wallet balance is ${walletData.wallet}</p>`,
+                            html: `<p><strong>Booking Value Refunded:</strong> ${response.data.price}$</p><p>Your current wallet balance is ${walletData.wallet.toFixed(2)}</p>`,
                             icon: "info",
                         });
                     } catch (error) {
