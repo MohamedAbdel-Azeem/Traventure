@@ -191,6 +191,7 @@ export const PayStripe: React.FC<PayStripeProps> = ({
               value={cardName}
               onChange={(e) => setCardName(e.target.value)}
               className="p-2 bg-gray-100 rounded-lg w-full focus:outline-none"
+              required
             />
           </div>
           {/* Pay Button */}
@@ -198,7 +199,7 @@ export const PayStripe: React.FC<PayStripeProps> = ({
             <button
               onClick={handleSubmit}
               className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition shadow-md"
-              disabled={loading}
+              disabled={loading || !cardName.trim()}
             >
               {loading ? <ClipLoader size={20} color={"#fff"} /> : "Pay"}
             </button>
