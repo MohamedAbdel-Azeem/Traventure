@@ -835,12 +835,7 @@ npm run setup
 
 </details>
 
-<details>
-<summary>Current_user Endpoint</summary>
 
-`GET /me/:username` -Get the current user's username
-
-</details>
 
 <details>
 <summary> Feedback Endpoint </summary>
