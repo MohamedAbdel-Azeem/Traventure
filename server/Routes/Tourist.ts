@@ -65,7 +65,7 @@ router.get("/upcoming", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/:id", async (req: Request, res: Response) => {
+router.get("/id/:id", async (req: Request, res: Response) => {
   try {
     const username = await getTouristUsername(req.params.id);
     res.status(200).send(username);
