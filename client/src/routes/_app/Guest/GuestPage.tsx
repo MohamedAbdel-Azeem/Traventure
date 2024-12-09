@@ -41,7 +41,9 @@ const GuestPage = () => {
           Open Tutorial
         </Button> */}
       </div>
-      {/* <WebsiteTutorial open={isTutorialOpen} onClose={handleTutorialClose} userType="guest" /> */}
+      <WebsiteTutorial open={isTutorialOpen} onClose={handleTutorialClose} userType="guest" onDontShowAgain={function (): void {
+        throw new Error("Function not implemented.");
+      } } />
     </div>
   );
 };
