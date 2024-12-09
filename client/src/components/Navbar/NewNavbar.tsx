@@ -46,6 +46,7 @@ import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { resetCartState } from "../../redux/cartSlice";
 import { resetCurrencyState } from "../../redux/exchangeRateSlice";
+import { useAddPromoCode } from "../../custom_hooks/promo_codes/promocodecustomhooks";
 
 const drawerHeight = 64;
 
@@ -63,6 +64,7 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   const { cuserdata } = GetCurrentUser(currentuser);
   const [dropdownVisible, setProfileDropdownVisible] = useState(false);
   const [isPasswordModalOpen, setPasswordModalOpen] = useState(false);
+  const [isPromoModalOpen, setPromoModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const togglePopup = () => setIsOpen(!isOpen);
   const [notifications, setNotifications] = useState([]);
@@ -136,7 +138,31 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
         });
       });
   };
-
+  const createPromo = async ()=>{
+    const generateRandomString = (length: number) => {
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let result = '';
+      const charactersLength = characters.length;
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
+    };
+  const promo = await useAddPromoCode(generateRandomString(7));
+  if (promo) {
+    Swal.fire({
+      title: "Promo Code Created Successfully",
+      text: promo,
+      icon: "success",
+    });
+  } else {
+    Swal.fire({
+      title: "Error",
+      text: "Failed to create promo code",
+      icon: "error",
+    });
+  }
+}
   const adminnavbaritems = [
     { text: "Shop", icon: <ShopIcon />, path: `/admin/${currentuser}/shop` },
     {
@@ -375,6 +401,15 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
           },
         ]
       : []),
+      ...(currentusertype === "admin" 
+        ? [
+            {
+              label: "Create Promo",
+              onClick: () => createPromo(),
+              icon: EditCalendarIcon,
+            },
+          ]
+        : []),
     ...(currentusertype.includes("tourist")
       ? [
           {
@@ -700,6 +735,7 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
           onFormSubmit={handlePasswordChangeSubmit}
         />
       )}
+
       <Box sx={{ marginTop: `${drawerHeight}px` }}></Box>
     </Box>
   );
