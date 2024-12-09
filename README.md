@@ -1080,7 +1080,7 @@ AMADEUS_CLIENT_ID="Your Amadeus Client ID"
 AMADEUS_CLIENT_SECRET="A secret string to use for encrypting passwords"
 GMAIL_PASSWORD="Your gmail password"
 GMAIL_ADDRESS="Your gmail address"
-STRIPE_SECRET_KEY="Strip secret key"
+STRIPE_SECRET_KEY="Stripe secret key"
 ```
 
  `Frontend env`
