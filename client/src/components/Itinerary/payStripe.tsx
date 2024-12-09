@@ -15,8 +15,10 @@ import { useParams } from "react-router-dom";
 import { GetCurrentUser } from "../../custom_hooks/currentuser";
 import { SwapCalls } from "@mui/icons-material";
 import Swal from "sweetalert2";
+import {usePromoCode} from "../../custom_hooks/promo_codes/promocodecustomhooks";
 
 interface PayStripeProps {
+  className?: string;
   handleOpen: () => void;
   handleClose: () => void;
   open: boolean;
@@ -27,6 +29,7 @@ interface PayStripeProps {
 }
 
 export const PayStripe: React.FC<PayStripeProps> = ({
+  className,
   handleOpen,
   handleClose,
   open,
@@ -154,36 +157,42 @@ export const PayStripe: React.FC<PayStripeProps> = ({
 
   return (
     open && (
-      <Modal onClose={handleClose} open={open}>
-        <div className="bg-purple-600 rounded-lg shadow-xl max-w-md mx-auto p-6 relative">
-            <button
+      <Modal
+        className="flex m-auto h-[270px] w-[400px]"
+        onClose={handleClose}
+        open={open}
+      >
+        <div
+          className={`bg-gradient-to-b from-[#A855F7] to-[#6D28D9] rounded-lg shadow-xl max-w-md mx-auto p-6 relative flex flex-col h-[270px] w-[400px]`}
+        >
+          <button
             onClick={handleClose}
-            className="absolute top-2 right-2 text-white bg-red-500 rounded p-1 hover:bg-red-600 transition w-8"
-            >
+            className="text-[28px] absolute top-2 right-2 text-white bg-red-500 rounded hover:bg-red-600 transition w-10 h-10"
+          >
             &times;
-            </button>
+          </button>
           <h2 className="text-lg font-semibold text-white mb-4 text-left">
-        Enter Card Details
+            Enter Card Details
           </h2>
           <div className="p-2 border border-gray-300 rounded-lg bg-gray-100">
-        <CardElement className="mb-4" options={CARD_ELEMENT_OPTIONS} />
-        <input
-          type="text"
-          placeholder="Name on Card"
-          value={cardName}
-          onChange={(e) => setCardName(e.target.value)}
-          className="p-2 bg-gray-100 rounded-lg w-full focus:outline-none"
-        />
+            <CardElement className="mb-4 p-4" options={CARD_ELEMENT_OPTIONS} />
+            <input
+              type="text"
+              placeholder="Name on Card"
+              value={cardName}
+              onChange={(e) => setCardName(e.target.value)}
+              className="p-2 bg-gray-100 rounded-lg w-full focus:outline-none"
+            />
           </div>
           {/* Pay Button */}
           <div className="mt-6 flex justify-end">
-        <button
-          onClick={handleSubmit}
-          className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition shadow-md"
-          disabled={loading}
-        >
-          {loading ? <ClipLoader size={20} color={"#fff"} /> : "Pay"}
-        </button>
+            <button
+              onClick={handleSubmit}
+              className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition shadow-md"
+              disabled={loading}
+            >
+              {loading ? <ClipLoader size={20} color={"#fff"} /> : "Pay"}
+            </button>
           </div>
         </div>
       </Modal>

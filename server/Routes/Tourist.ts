@@ -65,16 +65,6 @@ router.get("/upcoming", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/:id", async (req: Request, res: Response) => {
-  try {
-    const username = await getTouristUsername(req.params.id);
-    res.status(200).send(username);
-  } catch (err) {
-    res.status(500).send("error getting username");
-  }
-});
-
-
 
 router.get("/:username", async (req: Request, res: Response) => {
   try {
@@ -85,6 +75,7 @@ router.get("/:username", async (req: Request, res: Response) => {
       return res.status(200).json(user);
     }
   } catch (err) {
+    console.log(err);
     res.status(500).send("error getting user profile");
   }
 });

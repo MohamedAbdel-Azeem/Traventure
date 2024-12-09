@@ -2,7 +2,7 @@ import * as React from "react";
 import Radio from "@mui/material/Radio";
 import { FormControlLabel, TextField } from "@mui/material";
 import TheMAP from "../../../../components/Maps/TheMAP";
-import PromoCodeButton from "../../../../components/PromoCodeButton";
+import PromoCodeButton from "../PromoCodeButton";
 import { useEffect, useState } from "react";
 import EditButton from "../../../../components/Buttons/EditButton";
 import { GetCurrentUser } from "../../../../custom_hooks/currentuser";
@@ -18,7 +18,10 @@ import {
 
 import BestDeleteButton from "../../../../components/Buttons/BestDeleteButton";
 import ClipLoader from "react-spinners/ClipLoader";
+import PayStripe from "../../../../components/Itinerary/payStripe";
+import { Modal } from "@mui/material";
 const Checkout = () => {
+  const [promocode, setPromocode] = useState("");
   const { isAuthenticated, isLoading, isError } = useAuth(4);
   const { username } = useParams();
   const [selectedValue, setSelectedValue] = useState("cod");
@@ -134,6 +137,17 @@ const Checkout = () => {
       setCurrentIndex(saved_addresses.length - 1);
     }
   };
+  const [openPay, setOpenPay] = useState(true);
+  function handleBuy(): void {
+    if (selectedValue === "creditcard") {
+      setOpenPay(true);
+    } else if (selectedValue === "cod") {
+      setOpenPay(false);
+    } else {
+      setOpenPay(false);
+    }
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -155,6 +169,7 @@ const Checkout = () => {
       </div>
     );
   }
+
   return (
     <div
       className="h-screen flex items-start justify-center bg-gray-900 gap-[100px]"
@@ -166,6 +181,21 @@ const Checkout = () => {
         backgroundColor: "rgba(0, 0, 0, 0.7)",
       }}
     >
+      {openPay && (
+        <PayStripe
+          className="justify-center items-center"
+          handleOpen={() => setOpenPay(true)}
+          handleClose={() => setOpenPay(false)}
+          open={openPay}
+          amount={subtotal}
+          name={username || "Guest"}
+          products={cart.map((product) => ({
+            name: product.name,
+            amount: product.price,
+            quantity: product.quantity,
+          }))}
+        />
+      )}
       <div className="h-[650px] mt-[70px] w-[650px] bg-gradient-to-b from-[#A855F7] to-[#6D28D9] flex flex-col rounded-[10px] overflow-auto lasttimeipromise relative">
         <div className="flex text-[30px] h-[68px] mt-[2px] w-[612px] justify-center items-center text-white">
           Order Summary
@@ -990,6 +1020,7 @@ const Checkout = () => {
                 <PromoCodeButton
                   onAccept={setOnAccept}
                   className="mt-[7.7px] mx-auto h-[120px]"
+                  setPromoCodeAgain={setPromocode}
                 />
               </div>
             </div>
@@ -1027,7 +1058,10 @@ const Checkout = () => {
                 <p className="text-[21px] text-black my-auto ml-2">
                   {(onAccept ? subtotal * 0.9 : subtotal * 1.0).toFixed(2)}
                 </p>
-                <button className="my-auto ml-auto mr-[9.8px] w-[189px] h-[46.2px] bg-gradient-to-t hover:bg-gradient-to-b from-[#A855F7] via-[#bb7bff] to-[#c49ffc] border-[#652795] border-[0.7px] rounded-[7.7px] text-[21px]">
+                <button
+                  className="my-auto ml-auto mr-[9.8px] w-[189px] h-[46.2px] bg-gradient-to-t hover:bg-gradient-to-b from-[#A855F7] via-[#bb7bff] to-[#c49ffc] border-[#652795] border-[0.7px] rounded-[7.7px] text-[21px]"
+                  onClick={() => handleBuy()}
+                >
                   Buy
                 </button>
               </div>

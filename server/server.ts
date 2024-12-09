@@ -24,9 +24,7 @@ import complaintRouter from "./Routes/Complaint";
 import feedbackRouter from "./Routes/Feedback";
 import reviewdocsRouter from "./Routes/ReviewDoc";
 import amadeusRouter from "./amadeus/amadeus-router";
-import currentuserRouter from "./Routes/Current_user";
 import requestdeleteRouter from "./Routes/RequestDelete";
-import authRouter from "./Routes/Auth";
 import promocodeRouter from "./Routes/PromoCodes";
 import recoveryRouter from "./Routes/Code";
 import Stripe from "stripe";
@@ -65,11 +63,9 @@ app.use("/api/feedBack", feedbackRouter);
 app.use("/api/admin/", reviewdocsRouter);
 app.use("/api/promocode", promocodeRouter);
 app.use("/api/recovery", recoveryRouter);
-
 app.use("/amadeus", amadeusRouter);
 app.use("/api/requestdelete", requestdeleteRouter);
-app.use("/api/user/", currentuserRouter);
-app.use("/api/user/", authRouter);
+
 app.use("/api/stripe", StripeRouter);
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Traventure API");

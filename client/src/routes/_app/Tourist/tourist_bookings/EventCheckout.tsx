@@ -1,7 +1,7 @@
 import * as React from "react";
 import Radio from "@mui/material/Radio";
 import { FormControlLabel, TextField } from "@mui/material";
-import PromoCodeButton from "../../../../components/PromoCodeButton";
+import PromoCodeButton from "../PromoCodeButton";
 import { useEffect, useState } from "react";
 import { GetCurrentUser } from "../../../../custom_hooks/currentuser";
 import { useLocation, useParams } from "react-router-dom";
@@ -112,13 +112,7 @@ const EventCheckout = () => {
   const handleBooking = async (id: string) => {
     try {
       if (type?.includes("itinerary")) {
-        await bookItinerary(
-          id,
-          username,
-          subtotal,
-          PromoCode,
-          selectedValue
-        );
+        await bookItinerary(id, username, subtotal, PromoCode, selectedValue);
       } else {
         await bookActivity(
           id,
