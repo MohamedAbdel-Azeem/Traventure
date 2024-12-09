@@ -46,6 +46,7 @@ import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { resetCartState } from "../../redux/cartSlice";
 import { resetCurrencyState } from "../../redux/exchangeRateSlice";
+import { useAddPromoCode } from "../../custom_hooks/promo_codes/promocodecustomhooks";
 
 const drawerHeight = 64;
 
@@ -63,6 +64,7 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
   const { cuserdata } = GetCurrentUser(currentuser);
   const [dropdownVisible, setProfileDropdownVisible] = useState(false);
   const [isPasswordModalOpen, setPasswordModalOpen] = useState(false);
+  const [isPromoModalOpen, setPromoModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const togglePopup = () => setIsOpen(!isOpen);
   const [notifications, setNotifications] = useState([]);
@@ -136,7 +138,31 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
         });
       });
   };
-
+  const createPromo = async ()=>{
+    const generateRandomString = (length: number) => {
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let result = '';
+      const charactersLength = characters.length;
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
+    };
+  const promo = await useAddPromoCode(generateRandomString(7));
+  if (promo) {
+    Swal.fire({
+      title: "Promo Code Created Successfully",
+      text: promo,
+      icon: "success",
+    });
+  } else {
+    Swal.fire({
+      title: "Error",
+      text: "Failed to create promo code",
+      icon: "error",
+    });
+  }
+}
   const adminnavbaritems = [
     { text: "Shop", icon: <ShopIcon />, path: `/admin/${currentuser}/shop` },
     {
@@ -375,6 +401,15 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
           },
         ]
       : []),
+      ...(currentusertype === "admin" 
+        ? [
+            {
+              label: "Create Promo",
+              onClick: () => createPromo(),
+              icon: EditCalendarIcon,
+            },
+          ]
+        : []),
     ...(currentusertype.includes("tourist")
       ? [
           {
@@ -445,7 +480,10 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
 
   const currentPath = location.pathname;
   const currentlocation = useLocation();
+  const currenttype = currentlocation.pathname.split("/")[1];
   const currenttab = currentlocation.pathname.split("/")[3];
+  const guestview = currentlocation.pathname.split("/")[2];
+ 
   return (
     <Box sx={{ display: "flex" }} className={className}>
       <CssBaseline />
@@ -466,10 +504,28 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
         >
           <img
             src={
-              currenttab
-                ? `/src/assets/logowhite.png`
-                : `/src/assets/logowhite2.png`
+              currenttab || currenttype === "guest" && guestview
+                ? `/src/assets/logowhite2.png`
+                : `/src/assets/logocoloredleft.png`
             }
+            alt="Navbar Logo"
+            className="cursor-pointer"
+            style={{
+              height: "100%",
+              width: "auto",
+              maxHeight: "35%",
+              maxWidth: "30%",
+            }}
+            onClick={() => {
+              if (!currentusertype.includes("guest")) {
+                navigate(`/${currentusertype}/${currentuser}`);
+              } else {
+                navigate(`/guest`);
+              }
+            }}
+          />
+          <img
+            src={`/src/assets/logowhiteright.png`}
             alt="Navbar Logo"
             className="cursor-pointer"
             style={{
@@ -541,103 +597,107 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
               ))}
             </List>
           </Box>
-          { currentusertype === "tourist" || currentusertype === "tourguide" || currentusertype === "governer"  || currentusertype === "seller" || currentusertype === "advertiser" ? (
-            
-          <Box
-            sx={{ position: "relative", marginRight: "20px" }}
-            className="relative flex justify-center items-center cursor-pointer text-[30px] text-gray-400"
-            onMouseEnter={handleMouseEnterNotifications}
-            onMouseLeave={handleMouseLeaveNotifications}
-            onClick={togglePopup}
-          >
-            <NotificationsNoneIcon className="text-white" fontSize="large" />
+          {currentusertype === "tourist" ||
+          currentusertype === "tourguide" ||
+          currentusertype === "governer" ||
+          currentusertype === "seller" ||
+          currentusertype === "advertiser" ? (
+            <Box
+              sx={{ position: "relative", marginRight: "20px" }}
+              className="relative flex justify-center items-center cursor-pointer text-[30px] text-gray-400"
+              onMouseEnter={handleMouseEnterNotifications}
+              onMouseLeave={handleMouseLeaveNotifications}
+              onClick={togglePopup}
+            >
+              <NotificationsNoneIcon className="text-white" fontSize="large" />
 
-            {unreadCount > 0 && (
-              <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center translate-y-[-1px]">
-                {unreadCount}
-              </span>
-            )}
+              {unreadCount > 0 && (
+                <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center translate-y-[-1px]">
+                  {unreadCount}
+                </span>
+              )}
 
-            <style jsx>{`
-              .custom-scrollbar {
-                scrollbar-width: thin;
-                scrollbar-color: white #6d28d9;
-              }
+              <style jsx>{`
+                .custom-scrollbar {
+                  scrollbar-width: thin;
+                  scrollbar-color: white #6d28d9;
+                }
 
-              .custom-scrollbar::-webkit-scrollbar {
-                width: 12px;
-              }
+                .custom-scrollbar::-webkit-scrollbar {
+                  width: 12px;
+                }
 
-              .custom-scrollbar::-webkit-scrollbar-track {
-                background: white;
-                border-radius: 10px;
-              }
+                .custom-scrollbar::-webkit-scrollbar-track {
+                  background: white;
+                  border-radius: 10px;
+                }
 
-              .custom-scrollbar::-webkit-scrollbar-thumb {
-                background-color: #6d28d9;
-                border-radius: 10px;
-                border: 2px solid white;
-              }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                  background-color: #6d28d9;
+                  border-radius: 10px;
+                  border: 2px solid white;
+                }
 
-              .custom-scrollbar::-webkit-scrollbar-button {
-                display: none;
-              }
-            `}</style>
-            <Fade in={notificationPopUpVisible} timeout={200}>
-              <div className="absolute top-16 right-0 w-64 bg-gradient-to-r from-[#a855f7] to-[#6d28d9] shadow-lg rounded-lg p-4 z-10 text-white">
-                {!showAllPopup ? (
-                  <div>
-                    <h3 className="text-sm font-semibold mb-2 text-center text-white">
-                      Notifications
-                    </h3>
+                .custom-scrollbar::-webkit-scrollbar-button {
+                  display: none;
+                }
+              `}</style>
+              <Fade in={notificationPopUpVisible} timeout={200}>
+                <div className="absolute top-16 right-0 w-64 bg-gradient-to-r from-[#a855f7] to-[#6d28d9] shadow-lg rounded-lg p-4 z-10 text-white">
+                  {!showAllPopup ? (
+                    <div>
+                      <h3 className="text-sm font-semibold mb-2 text-center text-white">
+                        Notifications
+                      </h3>
 
-                    {unreadCount > 0 ? (
+                      {unreadCount > 0 ? (
+                        <ul className="space-y-2 max-h-[50vh] overflow-y-auto custom-scrollbar">
+                          {unreadNotifications.map((notification) => (
+                            <NotificationItem notification={notification} />
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-gray-500">
+                          No new notifications
+                        </p>
+                      )}
+
+                      {/* Buttons */}
+                      <div className="flex justify-between mt-4">
+                        <button
+                          onClick={markAllAsRead}
+                          className="text-white text-sm font-semibold hover:underline"
+                        >
+                          Mark all as read
+                        </button>
+                        {/* text-[#a855f7]*/}
+                        <button
+                          className="text-white text-sm font-semibold hover:underline"
+                          onClick={() => {
+                            OpenShowAllPopUp();
+                          }}
+                        >
+                          Show all
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    // Show all notifications
+                    <div>
+                      <h3 className="text-sm font-semibold mb-2 text-center text-white">
+                        All Notifications
+                      </h3>
                       <ul className="space-y-2 max-h-[50vh] overflow-y-auto custom-scrollbar">
-                        {unreadNotifications.map((notification) => (
+                        {notifications.map((notification) => (
                           <NotificationItem notification={notification} />
                         ))}
                       </ul>
-                    ) : (
-                      <p className="text-sm text-gray-500">
-                        No new notifications
-                      </p>
-                    )}
-
-                    {/* Buttons */}
-                    <div className="flex justify-between mt-4">
-                      <button
-                        onClick={markAllAsRead}
-                        className="text-white text-sm font-semibold hover:underline"
-                      >
-                        Mark all as read
-                      </button>
-                      {/* text-[#a855f7]*/}
-                      <button
-                        className="text-white text-sm font-semibold hover:underline"
-                        onClick={() => {
-                          OpenShowAllPopUp();
-                        }}
-                      >
-                        Show all
-                      </button>
                     </div>
-                  </div>
-                ) : (
-                  // Show all notifications
-                  <div>
-                    <h3 className="text-sm font-semibold mb-2 text-center text-white">
-                      All Notifications
-                    </h3>
-                    <ul className="space-y-2 max-h-[50vh] overflow-y-auto custom-scrollbar">
-                      {notifications.map((notification) => (
-                        <NotificationItem notification={notification} />
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            </Fade>
-          </Box>) : null}
+                  )}
+                </div>
+              </Fade>
+            </Box>
+          ) : null}
           <Box
             onMouseEnter={handleMouseEnterProfilePic}
             onMouseLeave={handleMouseLeaveProfilePic}
@@ -675,6 +735,7 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
           onFormSubmit={handlePasswordChangeSubmit}
         />
       )}
+
       <Box sx={{ marginTop: `${drawerHeight}px` }}></Box>
     </Box>
   );

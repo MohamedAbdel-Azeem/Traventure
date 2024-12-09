@@ -120,7 +120,6 @@ const GuestMoreActivities: React.FC = () => {
             className="text-5xl font-extrabold text-white relative drop-shadow-xl"
             style={{
               textShadow: "2px 2px 10px rgba(0, 0, 0, 0.7)",
-              WebkitTextStroke: "1px black"
             }}
           >
     Upcoming Activities

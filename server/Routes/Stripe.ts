@@ -39,7 +39,7 @@ router.post("/create-payment-intent", async (req: Request, res: Response) => {
   params = {
     payment_method_types:
       paymentMethodType === "link" ? ["link", "card"] : [paymentMethodType],
-    amount: amount*1000,
+    amount: Math.round(amount*1000),
     currency: "EGP",
   };
 

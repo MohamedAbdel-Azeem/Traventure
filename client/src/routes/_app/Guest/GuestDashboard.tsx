@@ -6,7 +6,7 @@ import LocationCardTourist from "../../../components/Locations/LocationCardTouri
 import { ActivityCardTourist } from "../../../components/Activities/ActivityCardTourist";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Slideshow from "../../../components/Slideshow";
-
+import ClipLoader from "react-spinners/ClipLoader";
 
 
 const GuestDashboard = () => {
@@ -15,7 +15,11 @@ const GuestDashboard = () => {
   const currentuser = useLocation().pathname.split("/")[2];
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <ClipLoader size={30} color="#ffffff" />
+      </div>
+    );
   }
   if (error) {
     return <div>Error Fetching: {error}</div>;

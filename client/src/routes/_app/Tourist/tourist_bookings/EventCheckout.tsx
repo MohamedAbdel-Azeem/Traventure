@@ -16,6 +16,8 @@ import useBookActivity from "../../../../custom_hooks/activities/bookActivity";
 import { useGetItineraryID } from "../../../../custom_hooks/itineraries/useGetItinerary";
 import ItineraryCardToruist from "../../../../components/Itinerary/ItineraryCardToruist";
 import { ActivityCardTourist } from "../../../../components/Activities/ActivityCardTourist";
+import PayStripe from "../../../../components/Itinerary/payStripe";
+import { set } from "date-fns";
 const EventCheckout = () => {
   const { isAuthenticated, isLoading, isError } = useAuth(4);
   const { username, id, type } = useParams();
@@ -48,6 +50,10 @@ const EventCheckout = () => {
   const [accessibility, setAccessibility] = useState(false);
   const [bookingActivated, setBookingActivated] = useState(false);
   const [inappropriate, setInappropriate] = useState(false);
+  const [openPay, setOpenPay] = useState(false);
+  const [paymentIsSuccess, setPaymentIsSuccess] = useState<boolean | null>(
+    null
+  );
   const [pickupLocation, setPickupLocation] = useState({
     longitude: 0,
     latitude: 0,
@@ -110,10 +116,13 @@ const EventCheckout = () => {
   const { bookItinerary } = useBookItinerary();
   const { bookActivity } = useBookActivity();
   const handleBooking = async (id: string) => {
+   
     try {
+      setOpenPay(false);
       if (type?.includes("itinerary")) {
         await bookItinerary(id, username, subtotal, PromoCode, selectedValue);
-      } else {
+        }
+      else {
         await bookActivity(
           id,
           username,
@@ -123,6 +132,7 @@ const EventCheckout = () => {
           selectedValue
         );
       }
+      
     } catch (error) {
       console.error("Error booking itinerary  :", error);
     }
@@ -164,6 +174,25 @@ const EventCheckout = () => {
         backgroundColor: "rgba(0, 0, 0, 0.7)",
       }}
     >
+        {openPay && (
+        <PayStripe
+          className="justify-center items-center"
+          handleOpen={() => setOpenPay(true)}
+          handleClose={() => setOpenPay(false)}
+          open={openPay}
+          returnSuccess={paymentIsSuccess}
+          setIsSuccess={setPaymentIsSuccess}
+          amount={PromoCode ? subtotal *0.9 : subtotal}
+          name={username || "Guest"}
+          products={[{name: title === "" ? currentactivity.Title : title, amount: PromoCode ? type?.includes("itinerary")
+            ? subtotal * 0.9
+            : (subtotal - currentactivity?.SpecialDiscount) * 0.9
+          : type?.includes("itinerary")
+          ? subtotal
+          : (subtotal - currentactivity?.SpecialDiscount) * 1.0, quantity: 1}]}
+          handleBuy={() => handleBooking(id ?? "")}
+        />
+      )}
       <div className="mt-[120px]">
         {type?.includes("itinerary") ? (
           <ItineraryCardToruist
@@ -439,19 +468,23 @@ const EventCheckout = () => {
                   : (subtotal - currentactivity?.SpecialDiscount) * 1.0
                 ).toFixed(2)}
               </p>
-              <button
+                <button
                 className={`my-auto ml-auto mr-[9.8px] w-[189px] h-[46.2px] ${
                   selectedValue === "wallet" && currentUser?.wallet < subtotal
-                    ? "bg-[#7d1919]"
-                    : "bg-gradient-to-t  hover:bg-gradient-to-b from-[#A855F7] via-[#bb7bff] to-[#c49ffc]"
+                  ? "bg-[#7d1919]"
+                  : "bg-gradient-to-t  hover:bg-gradient-to-b from-[#A855F7] via-[#bb7bff] to-[#c49ffc]"
                 }  border-[#652795] border-[0.7px] rounded-[7.7px] text-[21px]`}
-                onClick={() => handleBooking(id ?? "")}
+                onClick={() =>
+                  selectedValue === "creditcard"
+                  ? setOpenPay(true)
+                  : handleBooking(id ?? "")
+                }
                 disabled={
                   selectedValue === "wallet" && currentUser?.wallet < subtotal
                 }
-              >
+                >
                 Book
-              </button>
+                </button>
             </div>
           </div>
         </div>

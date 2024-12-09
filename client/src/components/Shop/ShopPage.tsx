@@ -23,7 +23,7 @@ import {
 import ImageUploader from "../PDFs&Images/ImageUploader";
 import ProductCard from "../Shenawy/ProductCard";
 import ShowingResponse from "../Shenawy/ShowingResponse";
-
+import ClipLoader from "react-spinners/ClipLoader";
 const itemsPerPage = 8;
 interface ShopPageProps {
   type: string;
@@ -242,7 +242,11 @@ const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
     p: 4,
   };
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <ClipLoader size={30} color="#ffffff" />
+      </div>
+    );
   }
   if (error) {
     return <div>Error</div>;

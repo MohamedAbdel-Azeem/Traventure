@@ -334,10 +334,10 @@ export const Activities = () => {
       </Modal>
       <div className="grid grid-cols-3 ml-8 mb-4 mt-14 flex-row flex-wrap">
         <div
-          className="mt-12 mx-4 w-[400px] h-[475px]  rounded-[19px] bg-slate-500 cursor-pointer"
+          className="flex items-center justify-center rounded-[19px] bg-slate-500 cursor-pointer h-[310px] my-auto"
           onClick={handleOpen}
         >
-          <p className="text-[46px] mt-[40%] text-center">
+          <p className="text-[46px] text-center">
             Create New Activity
           </p>
         </div>
