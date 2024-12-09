@@ -738,6 +738,8 @@ npm run setup
 
 `DELETE /delete/:id`   -Delete activity by its ID
 
+`GET /get/:id` -Get activity by ID
+
 `PUT /update/:id`   -Update activity by its ID
 
 `PATCH /toggleInappropriate/:id`  - Updates a certain field (toggleInappropriate) in an activity 
@@ -778,11 +780,6 @@ npm run setup
 `GET /numstats/:username`  -get statistics of a certain advertiser
 </details> 
 
-<details>
-<summary>Auth Endpoint</summary>
-
-`POST /auth` -Checks permission of a user by verifying the access token
-</details> 
 
 <details>
 <summary>Booking Endpoint</summary>
@@ -791,8 +788,9 @@ npm run setup
 
 `GET /:username`   -Get all bookings of a user
 
-`GET /getHotels/:username`  -Get hotel bookings of a user
+`GET /getFlights/:username` -Get flight bookings by username
 
+`GET /getHotels/:username`  -Get hotel bookings by username
 `DELETE /cancel/:booking_id`  -Cancel  booking by its ID
 
 `POST /addFlight/:username`  -Create a new flight booking for a user
@@ -814,12 +812,15 @@ npm run setup
 
 </details>
 
+
 <details>
-<summary>ChangePassword Endpoint</summary>
+<summary>Code Endpoint</summary>
 
-`PATCH /changePassword`   -Updates a user's password
+POST /add -Creates code for password change
 
-</details>
+DELETE /use -Uses the code
+
+</details> 
 
 
 <details>
@@ -864,7 +865,7 @@ npm run setup
 </details>
 
 <details>
-<summary>historicalTags Endpoint</summary>
+<summary>Historical Tags Endpoint</summary>
 
 `POST /add`  -Creates a new historical tag
 
@@ -891,6 +892,16 @@ npm run setup
 
 </details>
 
+
+<details>
+<summary> Login Endpoint</summary>
+
+`POST /`  -Login user
+
+</details>
+
+
+
 <details>
 <summary> Places Endpoint</summary>
 
@@ -908,7 +919,7 @@ npm run setup
 
 
 <details>
-<summary> preferenceTags Endpoint </summary>
+<summary> preference Tags Endpoint </summary>
 
 `POST /add`  -Adds a new preference tag
 
@@ -953,6 +964,8 @@ npm run setup
 
 `GET /seller`  -Gets sales information for a seller
 
+`GET /revenue`  -Gets revenue for a seller
+
 `POST /deliver`  -Marks a purchase as delivered
 
 `POST /cancel`  -Used to cancel a purchase
@@ -986,6 +999,19 @@ npm run setup
 `PATCH /update/:username`  -Update a certain seller by his username
 
 </details>
+
+
+<details>
+<summary> Stripe Endpoint </summary>
+
+`POST /create-payment-intent` -
+
+`GET /session/:id`  -Get the session ID
+
+`POST /create-invoice` -Creat an invoice
+
+</details>
+
 
 <details>
 <summary> TourGuide Endpoint </summary>
@@ -1049,6 +1075,23 @@ npm run setup
 
 </details>
 
+
+<details>
+<summary> User Endpoint </summary>
+
+`GET /me/:username` -get current username
+
+`POST /auth` -Checks permission of a user by verifying the access token
+
+`PATCH /changePassword` -Update user password
+
+`PATCH /markNotificationAsRead`  -Update notification as read for a user
+
+`PATCH /markAllNotificationAsRead` -Update all notifications as read for a user
+
+`PATCH /updatePassword` -Update user password
+
+</details>
 ---
 
 ## 🧪 Tests
