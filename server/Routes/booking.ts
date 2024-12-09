@@ -95,6 +95,7 @@ router.delete("/cancel/:booking_id", async (req, res) => {
         error: "Cannot cancel activity within 48 hours of the start time",
       });
     } else {
+      console.log(error);
       res.status(500).json({ error: "Cannot cancel booking" });
     }
   }

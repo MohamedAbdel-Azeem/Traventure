@@ -10,17 +10,24 @@ import { useSelector } from "react-redux";
 import { IProduct } from "../../../../redux/cartSlice";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../../../custom_hooks/auth";
+import { useDispatch } from "react-redux";
+import { clearCart } from "../../../../redux/cartSlice";
+import { useNavigate } from "react-router-dom";
 import {
   addAddress,
   editAddress,
   deleteAddress,
 } from "../../../../custom_hooks/checkout";
-
+import { checkoutPurchase } from "../../../../custom_hooks/checkout_purchase";
+import swal from "sweetalert2";
 import BestDeleteButton from "../../../../components/Buttons/BestDeleteButton";
 import ClipLoader from "react-spinners/ClipLoader";
 import PayStripe from "../../../../components/Itinerary/payStripe";
 import { Modal } from "@mui/material";
+import { set } from "date-fns";
 const Checkout = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [promocode, setPromocode] = useState("");
   const { isAuthenticated, isLoading, isError } = useAuth(4);
   const { username } = useParams();
@@ -47,6 +54,10 @@ const Checkout = () => {
     saved_addresses?.[currentIndex] ?? {}
   );
   const cart = useSelector((state) => state.cart) as IProduct[];
+
+  const [paymentIsSuccess, setPaymentIsSuccess] = useState<boolean | null>(
+    null
+  );
 
   useEffect(() => {
     const newSubtotal = cart
@@ -127,7 +138,6 @@ const Checkout = () => {
       setCurrentAddress(saved_addresses[currentIndex]);
     }
   }, [currentIndex]);
-
   const handleDelete = (index: number) => {
     deleteAddress(username ?? "", index);
     setSavedAddresses(saved_addresses?.filter((_, i) => i !== index));
@@ -137,14 +147,49 @@ const Checkout = () => {
       setCurrentIndex(saved_addresses.length - 1);
     }
   };
-  const [openPay, setOpenPay] = useState(true);
-  function handleBuy(): void {
-    if (selectedValue === "creditcard") {
+  const [openPay, setOpenPay] = useState(false);
+  const [isPurchaseLoading, setIsPurchaseLoading] = useState(false);
+  async function handleBuy(): Promise<void> {
+    if (!username) return;
+    if (!currentaddress._id) return;
+
+    const usedCart = cart.map((product) => ({
+      productId: product._id,
+      quantity: product.quantity,
+    }));
+    const paymentMethod = selectedValue;
+    if (paymentMethod === "creditcard") {
       setOpenPay(true);
-    } else if (selectedValue === "cod") {
-      setOpenPay(false);
+      setSelectedValue("card");
     } else {
       setOpenPay(false);
+      setIsPurchaseLoading(true);
+      const succeed = await checkoutPurchase({
+        touristUsername: username,
+        cart: usedCart,
+        paymentMethod,
+        address: currentaddress._id,
+        promoCode: promocode,
+      });
+      setIsPurchaseLoading(false);
+      if (succeed) {
+        swal
+          .fire({
+            icon: "success",
+            title: "Success",
+            text: "Purchase successful",
+          })
+          .then(() => {
+            dispatch(clearCart());
+            navigate(-1);
+          });
+      } else {
+        swal.fire({
+          icon: "error",
+          title: "Failed",
+          text: "Purchase failed",
+        });
+      }
     }
   }
 
@@ -187,6 +232,8 @@ const Checkout = () => {
           handleOpen={() => setOpenPay(true)}
           handleClose={() => setOpenPay(false)}
           open={openPay}
+          returnSuccess={paymentIsSuccess}
+          setIsSuccess={setPaymentIsSuccess}
           amount={subtotal}
           name={username || "Guest"}
           products={cart.map((product) => ({
@@ -194,6 +241,7 @@ const Checkout = () => {
             amount: product.price,
             quantity: product.quantity,
           }))}
+          handleBuy={handleBuy}
         />
       )}
       <div className="h-[650px] mt-[70px] w-[650px] bg-gradient-to-b from-[#A855F7] to-[#6D28D9] flex flex-col rounded-[10px] overflow-auto lasttimeipromise relative">
@@ -1061,8 +1109,20 @@ const Checkout = () => {
                 <button
                   className="my-auto ml-auto mr-[9.8px] w-[189px] h-[46.2px] bg-gradient-to-t hover:bg-gradient-to-b from-[#A855F7] via-[#bb7bff] to-[#c49ffc] border-[#652795] border-[0.7px] rounded-[7.7px] text-[21px]"
                   onClick={() => handleBuy()}
+                  disabled={
+                    isPurchaseLoading ||
+                    (selectedValue === "wallet" &&
+                      currentUser?.wallet < subtotal)
+                  }
                 >
-                  Buy
+                  {isPurchaseLoading ? (
+                    <ClipLoader size={20} color={"#fff"} />
+                  ) : selectedValue === "wallet" &&
+                    currentUser?.wallet < subtotal ? (
+                    "Insufficient Funds"
+                  ) : (
+                    "Buy"
+                  )}
                 </button>
               </div>
             </div>

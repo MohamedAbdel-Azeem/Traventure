@@ -403,7 +403,7 @@ const TouristProfile: React.FC<TouristProfileProps> = ({ tourist }) => {
                     Wallet Balance:
                   </label>
                   <p className="text-4xl font-bold text-purple-900">
-                    ${walletBalance}
+                    ${walletBalance.toFixed(2)}
                   </p>
                 </div>
               </div>

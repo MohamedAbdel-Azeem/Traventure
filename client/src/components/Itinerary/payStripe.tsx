@@ -15,7 +15,10 @@ import { useParams } from "react-router-dom";
 import { GetCurrentUser } from "../../custom_hooks/currentuser";
 import { SwapCalls } from "@mui/icons-material";
 import Swal from "sweetalert2";
-import {usePromoCode} from "../../custom_hooks/promo_codes/promocodecustomhooks";
+import { usePromoCode } from "../../custom_hooks/promo_codes/promocodecustomhooks";
+import { useDispatch } from "react-redux";
+import { clearCart } from "../../redux/cartSlice";
+import { useNavigate } from "react-router-dom";
 
 interface PayStripeProps {
   className?: string;
@@ -25,6 +28,7 @@ interface PayStripeProps {
   amount: number;
   name: string;
   products: any;
+  handleBuy: () => void;
 }
 
 export const PayStripe: React.FC<PayStripeProps> = ({
@@ -34,13 +38,18 @@ export const PayStripe: React.FC<PayStripeProps> = ({
   open,
   amount,
   name,
-  products
+  products,
+  handleBuy,
 }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [cardName, setCardName] = useState("");
   const { username } = useParams<{ username: string }>();
   const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleSubmit = async () => {
     // We don't want to let default form submission happen here,
     // which would refresh the page.
@@ -86,7 +95,8 @@ export const PayStripe: React.FC<PayStripeProps> = ({
       });
       handleClose();
     }
-    if(paymentIntent?.status === "succeeded") {
+    if (paymentIntent?.status === "succeeded") {
+      handleBuy();
       const items = [];
       for (const product of products) {
         items.push({
@@ -100,19 +110,19 @@ export const PayStripe: React.FC<PayStripeProps> = ({
         items: items,
         payment_method: paymentIntent.payment_method,
       });
-      if(mail.status === 200  ) {
-        Swal.fire({
-          icon: "success",
-          title: "Payment Successful",
-          text: "Invoice has been sent to your email",
-        });
-      }else{
-        Swal.fire({
-          icon: "error",
-          title: "Payment Failed",
-          text: "Error in payment",
-        });
-      }
+      // if (mail.status === 200) {
+      //   Swal.fire({
+      //     icon: "success",
+      //     title: "Payment Successful",
+      //     text: "Invoice has been sent to your email",
+      //   });
+      // } else {
+      //   Swal.fire({
+      //     icon: "error",
+      //     title: "Payment Failed",
+      //     text: "Error in payment",
+      //   });
+      // }
       handleClose();
     }
     // Show a success message to your customer
@@ -136,7 +146,7 @@ export const PayStripe: React.FC<PayStripeProps> = ({
       },
     },
     hidePostalCode: true,
-    
+
     CardExpiryElement: {
       style: {
         base: {
@@ -197,7 +207,6 @@ export const PayStripe: React.FC<PayStripeProps> = ({
       </Modal>
     )
   );
-    
 };
 
 export default PayStripe;
