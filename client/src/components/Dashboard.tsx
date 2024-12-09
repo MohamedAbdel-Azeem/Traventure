@@ -11,7 +11,6 @@ import axios from "axios";
 import Itinerary from "../custom_hooks/itineraries/itinerarySchema";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Slideshow from "./Slideshow";
-import ClipLoader from "react-spinners/ClipLoader";
 
 const Dashboard: React.FC = () => {
   const { upcoming, loading, error } = useGetUpcoming();
@@ -45,11 +44,7 @@ const Dashboard: React.FC = () => {
   }, []);
 
   if (loading) {
-    return (
-      <div>
-        <ClipLoader size={30} color="#ffffff" />
-      </div>
-    );
+    return <div>Loading...</div>;
   }
   if (error) {
     return <div>Error Fetching: {error}</div>;
