@@ -27,6 +27,7 @@ import {
 import { useUpdateComplain } from "../../custom_hooks/Complaints/useUpdateComplain";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { useLocation, useParams } from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
 import { UseCreateComplain } from "../../custom_hooks/Complaints/useCreateComplaint";
 import { useGetBookings } from "../../custom_hooks/useGetBookings";
 type Complaint = {
@@ -336,7 +337,11 @@ export default function ComplaintsTable() {
     },
   };
   if (cloading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <ClipLoader size={30} color="#ffffff" />
+      </div>
+    );
   }
   return (
     <div className="w-full flex justify-center my-8">

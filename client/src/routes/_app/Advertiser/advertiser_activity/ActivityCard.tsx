@@ -4,6 +4,7 @@ import BlockIcon from "@mui/icons-material/Block";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 import TheBIGMAP from "../../../../components/Maps/TheBIGMAP";
+import ClipLoader from "react-spinners/ClipLoader";
 import TheMAP from "../../../../components/Maps/TheMAP";
 import {
   Box,
@@ -186,7 +187,11 @@ export const ActivityCard: React.FC<ActivityProp> = ({
   const handleViewMap = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
   if (tagsLoading || CatLoading) {
-    return <div>loading</div>;
+    return (
+      <div className="flex flex-col items-center justify-center mx-4">
+        <ClipLoader size={30} color="#ffffff" />
+      </div>
+    );
   }
   if (tagsError || CatError) {
     return <div>{tagsError || CatError}</div>;

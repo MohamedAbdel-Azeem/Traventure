@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
 import {
   LineChart,
   Line,
@@ -112,7 +113,7 @@ export function SellerRevPage(props: {
     <div>
       <h1>Revenue Page</h1>
       {loading ? (
-        <p>Loading...</p>
+        <ClipLoader size={30} color="#ffffff" />
       ) : error ? (
         <p>{error}</p>
       ) : (
