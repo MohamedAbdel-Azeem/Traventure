@@ -10,18 +10,24 @@ import { useSelector } from "react-redux";
 import { IProduct } from "../../../../redux/cartSlice";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../../../custom_hooks/auth";
+import { useDispatch } from "react-redux";
+import { clearCart } from "../../../../redux/cartSlice";
+import { useNavigate } from "react-router-dom";
 import {
   addAddress,
   editAddress,
   deleteAddress,
 } from "../../../../custom_hooks/checkout";
 import { checkoutPurchase } from "../../../../custom_hooks/checkout_purchase";
+import swal from "sweetalert2";
 import BestDeleteButton from "../../../../components/Buttons/BestDeleteButton";
 import ClipLoader from "react-spinners/ClipLoader";
 import PayStripe from "../../../../components/Itinerary/payStripe";
 import { Modal } from "@mui/material";
 import { set } from "date-fns";
 const Checkout = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [promocode, setPromocode] = useState("");
   const { isAuthenticated, isLoading, isError } = useAuth(4);
   const { username } = useParams();
@@ -142,7 +148,7 @@ const Checkout = () => {
     }
   };
   const [openPay, setOpenPay] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPurchaseLoading, setIsPurchaseLoading] = useState(false);
   function handleBuy(): void {
     if (!username) return;
     if (!currentaddress._id) return;
@@ -163,15 +169,27 @@ const Checkout = () => {
       setOpenPay(false);
     }
     if (paymentIsSuccess || selectedValue != "card") {
-      setIsLoading(true);
-      checkoutPurchase({
+      setIsPurchaseLoading(true);
+      const succeed = checkoutPurchase({
         touristUsername: username,
         cart: usedCart,
         paymentMethod,
         address: currentaddress._id,
         promoCode: promocode,
       });
-      setIsLoading(false);
+      setIsPurchaseLoading(false);
+      if (succeed) {
+        swal
+          .fire({
+            icon: "success",
+            title: "Success",
+            text: "Purchase successful",
+          })
+          .then(() => {
+            dispatch(clearCart());
+            navigate(-1);
+          });
+      }
     }
   }
 
@@ -1090,9 +1108,13 @@ const Checkout = () => {
                 <button
                   className="my-auto ml-auto mr-[9.8px] w-[189px] h-[46.2px] bg-gradient-to-t hover:bg-gradient-to-b from-[#A855F7] via-[#bb7bff] to-[#c49ffc] border-[#652795] border-[0.7px] rounded-[7.7px] text-[21px]"
                   onClick={() => handleBuy()}
-                  disabled={isLoading}
+                  disabled={isPurchaseLoading}
                 >
-                  Buy
+                  {isPurchaseLoading ? (
+                    <ClipLoader size={20} color={"#fff"} />
+                  ) : (
+                    "Buy"
+                  )}
                 </button>
               </div>
             </div>

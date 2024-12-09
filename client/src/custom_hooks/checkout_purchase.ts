@@ -2,7 +2,7 @@ import axios from "axios";
 
 interface IcheckoutPurchase {
   touristUsername: string;
-  cart: { product_id: string; quantity: number }[];
+  cart: { productId: string; quantity: number }[];
   promoCode?: string;
   paymentMethod: string;
   address: string;
@@ -12,9 +12,12 @@ interface IcheckoutPurchase {
 export const checkoutPurchase = async (body: IcheckoutPurchase) => {
   try {
     const response = await axios.post("/traventure/api/purchase/buy", body);
-    return response.data;
+    if (response.status === 200) {
+      return true;
+    } else {
+      return false;
+    }
   } catch (error) {
-    console.log(error);
-    return error;
+    return false;
   }
 };
