@@ -128,7 +128,7 @@ The  full team works on vscode and uses **Prettier**  as its linter which automa
 <details> 
 <summary> Activities management </summary>
 
- - Filter activities by date,budged,tag or language
+ - Filter activities by date,budget,tag or language
 
  - Sort activities by price 
 
