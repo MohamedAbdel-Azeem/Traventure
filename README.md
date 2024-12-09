@@ -110,7 +110,7 @@ The  full team works on vscode and uses **Prettier**  as its linter which automa
 
 - View sales
 
-![Seller page](client/src/assets/shopadd.png)  
+![Seller page](client/src/assets/addshop.png)  
 
 </details> 
 
@@ -132,7 +132,7 @@ The  full team works on vscode and uses **Prettier**  as its linter which automa
 
  - Sort activities by price 
 
-![Activities page](client/src/assets/Activities.png)  
+![Activities page](client/src/assets/Activity.png)  
 
 </details> 
 
@@ -144,7 +144,7 @@ The  full team works on vscode and uses **Prettier**  as its linter which automa
 
 - Tourists can view and filter itineraries based on various criteria
 
-![Itineraries page](client/src/assets/Itinerary_page.png)  
+![Itineraries page](client/src/assets/Itinerary.png)  
 
 </details> 
 
@@ -1078,8 +1078,9 @@ Here are examples of testing one of our endpoints using Postman:
 MONGODB_URI="Your Mongo Connection String"
 AMADEUS_CLIENT_ID="Your Amadeus Client ID"
 AMADEUS_CLIENT_SECRET="A secret string to use for encrypting passwords"
-GMAIL_PASSWORD="your gmail password"
-GMAIL_ADDRESS="your gmail address"
+GMAIL_PASSWORD="Your gmail password"
+GMAIL_ADDRESS="Your gmail address"
+STRIPE_SECRET_KEY="Strip secret key"
 ```
 
  `Frontend env`
