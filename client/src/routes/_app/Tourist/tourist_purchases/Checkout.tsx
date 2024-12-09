@@ -15,11 +15,12 @@ import {
   editAddress,
   deleteAddress,
 } from "../../../../custom_hooks/checkout";
-
+import { checkoutPurchase } from "../../../../custom_hooks/checkout_purchase";
 import BestDeleteButton from "../../../../components/Buttons/BestDeleteButton";
 import ClipLoader from "react-spinners/ClipLoader";
 import PayStripe from "../../../../components/Itinerary/payStripe";
 import { Modal } from "@mui/material";
+import { set } from "date-fns";
 const Checkout = () => {
   const [promocode, setPromocode] = useState("");
   const { isAuthenticated, isLoading, isError } = useAuth(4);
@@ -47,6 +48,10 @@ const Checkout = () => {
     saved_addresses?.[currentIndex] ?? {}
   );
   const cart = useSelector((state) => state.cart) as IProduct[];
+
+  const [paymentIsSuccess, setPaymentIsSuccess] = useState<boolean | null>(
+    null
+  );
 
   useEffect(() => {
     const newSubtotal = cart
@@ -127,7 +132,6 @@ const Checkout = () => {
       setCurrentAddress(saved_addresses[currentIndex]);
     }
   }, [currentIndex]);
-
   const handleDelete = (index: number) => {
     deleteAddress(username ?? "", index);
     setSavedAddresses(saved_addresses?.filter((_, i) => i !== index));
@@ -137,14 +141,37 @@ const Checkout = () => {
       setCurrentIndex(saved_addresses.length - 1);
     }
   };
-  const [openPay, setOpenPay] = useState(true);
+  const [openPay, setOpenPay] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   function handleBuy(): void {
+    if (!username) return;
+    if (!currentaddress._id) return;
+
+    const usedCart = cart.map((product) => ({
+      productId: product._id,
+      quantity: product.quantity,
+    }));
+    let paymentMethod = selectedValue;
     if (selectedValue === "creditcard") {
       setOpenPay(true);
+      paymentMethod = "card";
     } else if (selectedValue === "cod") {
       setOpenPay(false);
+      if (!username) return;
+      // checkoutPurchase({ touristUsername: username, cart });
     } else {
       setOpenPay(false);
+    }
+    if (paymentIsSuccess || selectedValue != "card") {
+      setIsLoading(true);
+      checkoutPurchase({
+        touristUsername: username,
+        cart: usedCart,
+        paymentMethod,
+        address: currentaddress._id,
+        promoCode: promocode,
+      });
+      setIsLoading(false);
     }
   }
 
@@ -187,6 +214,8 @@ const Checkout = () => {
           handleOpen={() => setOpenPay(true)}
           handleClose={() => setOpenPay(false)}
           open={openPay}
+          returnSuccess={paymentIsSuccess}
+          setIsSuccess={setPaymentIsSuccess}
           amount={subtotal}
           name={username || "Guest"}
           products={cart.map((product) => ({
@@ -1061,6 +1090,7 @@ const Checkout = () => {
                 <button
                   className="my-auto ml-auto mr-[9.8px] w-[189px] h-[46.2px] bg-gradient-to-t hover:bg-gradient-to-b from-[#A855F7] via-[#bb7bff] to-[#c49ffc] border-[#652795] border-[0.7px] rounded-[7.7px] text-[21px]"
                   onClick={() => handleBuy()}
+                  disabled={isLoading}
                 >
                   Buy
                 </button>

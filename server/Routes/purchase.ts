@@ -25,6 +25,7 @@ const router = Router();
 
 router.post("/buy", async (req: Request, res: Response) => {
   try {
+    //takes address id
     const { touristUsername, cart, promoCode, paymentMethod, address } =
       req.body; // payment Method is either Wallet , Card or COD
     const tourist = await Tourist.findOne({ username: touristUsername });
@@ -43,13 +44,11 @@ router.post("/buy", async (req: Request, res: Response) => {
     const touristId = tourist._id;
     const body = { touristId, cart, paymentMethod, address } as IPurchase;
 
-
     if (promoCode) {
       body.promoCode = promoCode;
     }
 
     body.totalAmount = await getPurchaseTotalAmount(body);
-
 
     try {
       await handlePayment(paymentMethod, body.totalAmount, touristUsername);
@@ -65,7 +64,6 @@ router.post("/buy", async (req: Request, res: Response) => {
       console.log(error);
       return res.status(500).send(error);
     }
-
   } catch (error) {
     console.log(error);
     return res.status(500).send(error);
