@@ -64,7 +64,7 @@ The  full team works on vscode and uses **Prettier**  as its linter which automa
 
 - Register as a tourist/tourguide/seller/advertiser with essential details
  
-![Registration page](client/src/assets/addnewadmintest.png)  
+![Registration page](client/src/assets/registerfr.png)  
 
 </details> 
 
@@ -73,7 +73,7 @@ The  full team works on vscode and uses **Prettier**  as its linter which automa
 
 - Login and logout securely
 
-![Login Page](client/src/assets/addnewadmintest.png)  
+![Login Page](client/src/assets/loginfr.png)  
 
 </details> 
 
@@ -86,7 +86,7 @@ The  full team works on vscode and uses **Prettier**  as its linter which automa
 
 - View documents uploaded by Tourguide, Advertisers or sellers
 
-![Admin page](client/src/assets/addnewadmintest.png)  
+![Admin page](client/src/assets/Adminnew.png)  
 
 </details> 
 
@@ -99,7 +99,7 @@ The  full team works on vscode and uses **Prettier**  as its linter which automa
 
 - Edit/update email or affiliation.
 
-![User settings page](client/src/assets/addnewadmintest.png)  
+![User settings page](client/src/assets/Edit_profile.png)  
 
 </details> 
 
@@ -110,7 +110,7 @@ The  full team works on vscode and uses **Prettier**  as its linter which automa
 
 - View sales
 
-![Seller page](client/src/assets/addnewadmintest.png)  
+![Seller page](client/src/assets/shopadd.png)  
 
 </details> 
 
@@ -121,7 +121,7 @@ The  full team works on vscode and uses **Prettier**  as its linter which automa
 
 - View available Itineraries, activities, bookings, hotels and flights
 
-![Tourist homepage](client/src/assets/addnewadmintest.png)  
+![Tourist homepage](client/src/assets/shop.png)  
 
 </details> 
 
@@ -132,7 +132,7 @@ The  full team works on vscode and uses **Prettier**  as its linter which automa
 
  - Sort activities by price 
 
-![Activities page](client/src/assets/addnewadmintest.png)  
+![Activities page](client/src/assets/Activities.png)  
 
 </details> 
 
@@ -144,7 +144,7 @@ The  full team works on vscode and uses **Prettier**  as its linter which automa
 
 - Tourists can view and filter itineraries based on various criteria
 
-![Itineraries page](client/src/assets/addnewadmintest.png)  
+![Itineraries page](client/src/assets/Itinerary_page.png)  
 
 </details> 
 
@@ -156,7 +156,7 @@ The  full team works on vscode and uses **Prettier**  as its linter which automa
 
 - View the amount in the wallet.
 
-![Wallet](client/src/assets/addnewadmintest.png)  
+![Wallet](client/src/assets/Wallet.png)  
 
 </details> 
 
