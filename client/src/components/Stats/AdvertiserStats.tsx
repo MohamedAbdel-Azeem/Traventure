@@ -75,7 +75,7 @@ export const AdvertiserStats = () => {
     );
   }
   return (
-    <div className="flex flex-col items-center gap-8 pt-6">
+    <div className="flex flex-col items-center gap-8 pt-6 bg-white">
       <h1 className="font-sans text-xl font-medium">Revenue and Statistics</h1>
       <ToggleButtonGroup
         color="primary"
