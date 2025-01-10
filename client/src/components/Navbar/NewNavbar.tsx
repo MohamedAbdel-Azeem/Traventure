@@ -657,7 +657,7 @@ export default function NewNavbar({ className = "" }: NewNavbarProps) {
                           ))}
                         </ul>
                       ) : (
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-white">
                           No new notifications
                         </p>
                       )}

@@ -23,6 +23,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { useGetStripe } from "../../custom_hooks/useGetStripe";
 import { loadStripe } from "@stripe/stripe-js";
+import ClipLoader from "react-spinners/ClipLoader";
 const MoreItineraries: React.FC = () => {
   const { upcoming, loading, error } = useGetUpcoming();
   const currenttype = useLocation().pathname.split("/")[1];
@@ -99,7 +100,7 @@ const MoreItineraries: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="text-lg font-semibold text-blue-600">Loading...</div>
+        <ClipLoader size={20} color={"#ffffff"} />
       </div>
     );
   }

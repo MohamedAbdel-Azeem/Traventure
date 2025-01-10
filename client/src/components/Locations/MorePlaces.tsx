@@ -11,6 +11,7 @@ import useGetUpcoming from "../../custom_hooks/itineraries/useGetupcoming";
 import Place from "../../custom_hooks/places/place_interface";
 import LocationCardTourist from "./LocationCardTourist";
 import { useGetHTags } from "../../custom_hooks/useCreateHistoricalTag";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const MorePlaces: React.FC = () => {
   const {
@@ -44,6 +45,25 @@ const MorePlaces: React.FC = () => {
       }
       return true;
     });
+
+    if (loading) {
+      return (
+        <div className="flex items-center justify-center h-screen">
+          <ClipLoader size={20} color={"#ffffff"} />
+        </div>
+      );
+    }
+  
+    if (error) {
+      return (
+        <div className="flex items-center justify-center h-screen">
+          <div className="text-lg font-semibold text-red-600">
+            Error Fetching: {error}
+          </div>
+        </div>
+      );
+    }
+    
     return (
       <div className="flex-grow">
         {/* Header Section */}

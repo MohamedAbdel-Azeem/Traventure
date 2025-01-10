@@ -11,6 +11,7 @@ import {IActivity} from "../../custom_hooks/activities/activity_interface";
 import { useGetAllCategories } from "../../custom_hooks/categoryandTagCRUD";
 import useGetUpcoming from "../../custom_hooks/itineraries/useGetupcoming";
 import axios from "axios";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const MoreActivities: React.FC = () => {
   const { upcoming, loading, error } = useGetUpcoming();
@@ -131,7 +132,7 @@ const MoreActivities: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="text-lg font-semibold text-blue-600">Loading...</div>
+        <ClipLoader size={20} color={"#ffffff"} />
       </div>
     );
   }

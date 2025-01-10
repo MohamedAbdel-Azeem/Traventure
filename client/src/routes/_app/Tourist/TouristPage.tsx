@@ -34,15 +34,8 @@ const TouristPage = () => {
 
   if (isLoading) {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <ClipLoader color="#f86c6b" loading={true} size={150} />
+      <div className="flex items-center justify-center h-screen">
+        <ClipLoader size={20} color={"#ffffff"} />
       </div>
     );
   }

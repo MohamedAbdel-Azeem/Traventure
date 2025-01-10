@@ -243,8 +243,8 @@ const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
   };
   if (loading) {
     return (
-      <div>
-        <ClipLoader size={30} color="#ffffff" />
+      <div className="flex items-center justify-center h-screen">
+        <ClipLoader size={20} color={"#ffffff"} />
       </div>
     );
   }
