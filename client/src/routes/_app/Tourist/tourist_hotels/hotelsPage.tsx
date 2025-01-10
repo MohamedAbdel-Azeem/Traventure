@@ -210,119 +210,118 @@ const AvailableHotels = () => {
     );
   }
   return (
-    <div className="flex">
-      <Box p={3}>
-        <Typography variant="h4" component="h1" gutterBottom>
+    <div className="flex flex-col min-h-screen">
+      {/* Header Section */}
+      <header className="bg-gradient-to-r from-purple-500 via-blue-500 to-teal-500 py-16 text-center rounded-b-3xl shadow-lg">
+        <h1
+          className="text-5xl font-extrabold text-white relative drop-shadow-xl"
+          style={{ textShadow: "2px 2px 10px rgba(0, 0, 0, 0.7)" }}
+        >
           Available Hotels
-        </Typography>
-        <hr />
-        <Box my={3}>
-          <Grid container spacing={3} alignItems="center">
+        </h1>
+        <p className="mt-4 text-lg text-white opacity-90">
+          Explore luxury hotels accommodated to your every need.
+        </p>
+  
+        {/* Search and Filter Section */}
+        <section className="p-8">
+          <div className="mb-4 flex justify-center gap-6 items-center flex-wrap">
             {/* City Dropdown */}
-            <Grid item>
-              <Autocomplete
-                options={cityOptions}
-                getOptionLabel={(option) => `${option.city} (${option.code})`}
-                value={city}
-                onChange={(event, newValue) => setCity(newValue)}
-                renderInput={(params) => (
-                  <TextField {...params} label="City" variant="outlined" />
-                )}
-                className="min-w-[200px]"
-              />
-            </Grid>
-
+            <Autocomplete
+              options={cityOptions}
+              getOptionLabel={(option) => `${option.city} (${option.code})`}
+              value={city}
+              onChange={(event, newValue) => setCity(newValue)}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="City"
+                  variant="outlined"
+                  className="min-w-[200px] bg-white rounded-full shadow-md"
+                />
+              )}
+            />
+  
             {/* Check-in Date Picker */}
-            <Grid item>
-              <TextField
-                label="Check-in Date"
-                type="date"
-                InputLabelProps={{ shrink: true }}
-                value={checkInDate}
-                onChange={(e) => setCheckInDate(e.target.value)}
-                className="min-w-[200px]"
-              />
-            </Grid>
-
+            <TextField
+              label="Check-in Date"
+              type="date"
+              InputLabelProps={{ shrink: true }}
+              value={checkInDate}
+              onChange={(e) => setCheckInDate(e.target.value)}
+              className="min-w-[200px] bg-white rounded-full shadow-md"
+            />
+  
             {/* Check-out Date Picker */}
-            <Grid item>
-              <TextField
-                label="Check-out Date"
-                type="date"
-                InputLabelProps={{ shrink: true }}
-                value={checkOutDate}
-                onChange={(e) => setCheckOutDate(e.target.value)}
-                className="min-w-[200px]"
-              />
-            </Grid>
-
+            <TextField
+              label="Check-out Date"
+              type="date"
+              InputLabelProps={{ shrink: true }}
+              value={checkOutDate}
+              onChange={(e) => setCheckOutDate(e.target.value)}
+              className="min-w-[200px] bg-white rounded-full shadow-md"
+            />
+  
             {/* Adults Number Picker */}
-            <Grid item>
-              <TextField
-                label="Adults"
-                type="number"
-                inputProps={{ min: 1, max: 10 }}
-                value={adults}
-                onChange={(e) => setAdults(Number(e.target.value))}
-                className="min-w-[120px]"
-              />
-            </Grid>
-
+            <TextField
+              label="Adults"
+              type="number"
+              inputProps={{ min: 1, max: 10 }}
+              value={adults}
+              onChange={(e) => setAdults(Number(e.target.value))}
+              className="min-w-[120px] bg-white rounded-full shadow-md"
+            />
+  
             {/* Max Price Field */}
-            <Grid item>
-              <TextField
-                label="Max Price"
-                type="number"
-                inputProps={{ min: 0 }}
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(Number(e.target.value))}
-                className="min-w-[120px]"
-              />
-            </Grid>
-
+            <TextField
+              label="Max Price"
+              type="number"
+              inputProps={{ min: 0 }}
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(Number(e.target.value))}
+              className="bg-white shadow-lg rounded-full px-4 py-2"
+            />
+  
             {/* Search Button */}
-            <Grid item>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSearch}
-              >
-                Search Hotels
-              </Button>
-            </Grid>
+            <Button
+              variant="contained"
+              className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-transform hover:scale-110"
+              onClick={handleSearch}
+            >
+              Search Hotels
+            </Button>
+          </div>
+        </section>
+      </header>
+  
+      {/* Display Hotels */}
+      <main className="flex-grow px-6 py-8">
+        {isLoading2 ? (
+          <Typography variant="body1">Loading hotels...</Typography>
+        ) : error ? (
+          <Typography variant="body1" color="error">
+            Error fetching hotels. Please try again later.
+          </Typography>
+        ) : hotels.length === 0 ? (
+          <Typography variant="body1">
+            No hotels available for the selected criteria.
+          </Typography>
+        ) : (
+          <Grid container spacing={6}>
+            {hotels.map((hotel, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <HotelCard
+                  hotel={hotel}
+                  exchangeRate={exchangeRate}
+                  currentCurrency={currentCurrency}
+                />
+              </Grid>
+            ))}
           </Grid>
-        </Box>
-        <hr />
-
-        {/* Display Hotels */}
-        <Box mt={3}>
-          {isLoading2 ? (
-            <Typography variant="body1">Loading hotels...</Typography>
-          ) : error ? (
-            <Typography variant="body1" color="error">
-              Error fetching hotels. Please try again later.
-            </Typography>
-          ) : hotels.length === 0 ? (
-            <Typography variant="body1">
-              No hotels available for the selected criteria.
-            </Typography>
-          ) : (
-            <Grid container spacing={3}>
-              {hotels.map((hotel, index) => (
-                <Grid item xs={12} sm={6} md={4} key={index}>
-                  <HotelCard
-                    hotel={hotel}
-                    exchangeRate={exchangeRate} // Adjust according to your requirements (e.g., currency conversion)
-                    currentCurrency={currentCurrency} // Example currency
-                  />
-                </Grid>
-              ))}
-            </Grid>
-          )}
-        </Box>
-      </Box>
+        )}
+      </main>
     </div>
   );
-};
-
-export default AvailableHotels;
+}
+  export default AvailableHotels;
+  
