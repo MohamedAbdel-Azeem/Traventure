@@ -35,22 +35,7 @@ const LocationCardTourist: React.FC<LocationCardTouristProps> = ({
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const {
-    loading: tagsLoading,
-    error: tagsError,
-    data: tagsData,
-  } = useGetHTags();
 
-  const handleTagsText = (value: string[]) => {
-    const valueNames = tagsData
-      .filter((tag) => value.includes(tag._id))
-      .map((tag) => tag.name);
-    return valueNames.join(", ");
-  };
-
-  console.log(details.historicalTags.map((tag) => typeof tag.name));
-
-  useUpdatePlace(id, apiBody);
   const exchangeRate = useSelector(
     (state: any) => state.exchangeRate.exchangeRate
   );
