@@ -16,6 +16,9 @@ import TheBIGMAP from "../Maps/TheBIGMAP";
 import { useSelector } from "react-redux";
 import { Accordion } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { FaUserAlt, FaUserGraduate, FaGlobe, FaMapMarkerAlt, FaCalendarAlt, FaTags } from 'react-icons/fa';
+import { MdAccessTime } from 'react-icons/md';
+import { GiTicket } from 'react-icons/gi';
 
 interface TagStructure {
   _id: string;
@@ -95,231 +98,204 @@ const ItineraryDetailsTourist: React.FC = () => {
   });
 
   return (
-    <div className="flex justify-center items-center h-auto py-8 bg-gray-100 overflow-auto lasttimeipromise">
-      <div className="flex flex-col mt-[300px] justify-start items-start">
-        <div
-          className="relative w-[700px] h-[200px] rounded-[20px] bg-cover bg-center"
-          style={{ backgroundImage: `url(${itinerary.main_Picture})` }}
-        >
-          <p
-            className="w-[690px] h-[50px] text-[20px] text-white break-words overflow-auto lasttimeipromise
-             from-neutral-500 absolute bottom-[30px] left-[10px]"
-            style={{ textShadow: "0 4px 4px rgba(0, 0, 0, 0.25)" }}
-          >
-            {itinerary.title}
-          </p>
-          <img
-            src={itinerary.added_By.profilepic}
-            alt="Profile Picture"
-            className="w-[25px] h-[25px] rounded-[25px] absolute bottom-[20px] left-[30px]"
-          />
+<div className="flex justify-center items-center py-8 bg-gradient-to-br from-purple-200 via-pink-100 to-blue-200 overflow-auto">
+<div className="flex flex-col mt-[150px] justify-start items-start w-full max-w-3xl mx-auto">
+      <div
+  className="relative w-full h-[350px] rounded-[20px] bg-cover bg-center shadow-lg transform transition-all hover:scale-105"
+  style={{ backgroundImage: `url(${itinerary.main_Picture})` }}
+>
+  <p
+    className="absolute bottom-[60px] left-[20px] w-[90%] text-[24px] text-white font-bold break-words overflow-auto"
+    style={{
+      textShadow: "0 4px 6px rgba(0, 0, 0, 0.7), 0 2px 4px rgba(0, 0, 0, 0.5)" 
+    }}
+  >
+    {itinerary.title}
+  </p>
+  <div className="absolute bottom-[20px] left-[20px] flex items-center">
+    <img
+      src={itinerary.added_By.profilepic}
+      alt="Profile Picture"
+      className="w-[35px] h-[35px] rounded-full"
+    />
+    <p
+      className="ml-2 text-[18px] text-white font-semibold"
+      style={{
+        textShadow: "0 4px 6px rgba(0, 0, 0, 0.7), 0 2px 4px rgba(0, 0, 0, 0.5)" 
+      }}
+    >
+      {itinerary.added_By.username}
+    </p>
+  </div>
+</div>
 
-          <p
-            className="w-[690px] h-[50px] text-[20px] text-white
-             from-neutral-500 absolute top-[151px] left-[60px]"
-            style={{ textShadow: "0 4px 4px rgba(0, 0, 0, 0.25)" }}
-          >
-            {itinerary.added_By.username}
+
+  
+        <div className="mt-6 space-y-4">
+          <p className="text-[18px] font-semibold text-gray-700">
+            {formatDate(itinerary.starting_Date)} → {formatDate(itinerary.ending_Date)}
+          </p>
+          <p className="text-[18px] font-medium text-gray-700">
+            {currentCurrency} {(itinerary.price * exchangeRate).toFixed(2)}
+          </p>
+          <p className="text-[20px] text-gray-800 leading-relaxed">
+            {itinerary.description}
           </p>
         </div>
-
-        <p>
-          {formatDate(itinerary.starting_Date) +
-            " → " +
-            formatDate(itinerary.ending_Date)}
-        </p>
-        <p className="w-[200px] h-[30px] text-[16px]">
-          {currentCurrency + " " + (itinerary.price * exchangeRate).toFixed(2)}
-        </p>
-        <p className="w-[700px] h-[90px] text-[28px]">
-          {itinerary.description}
-        </p>
-        {itinerary.plan.map((plan) => (
-          <Accordion
-            key={itinerary._id}
-            disableGutters
-            sx={{
-              width: "700px",
-              backgroundColor: "transparent",
-              borderRadius: "10px",
-              borderColor: "transparent",
-              boxShadow: "none",
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}
-          >
-            <AccordionSummary
-              expandIcon={
-                <ExpandMoreIcon fontSize="large" sx={{ color: "black" }} />
-              }
+  
+        <div className="space-y-4 mt-6">
+          {itinerary.plan.map((plan) => (
+            <Accordion
+              key={itinerary._id}
+              disableGutters
               sx={{
-                backgroundImage: `url(${plan.place.pictures[0]})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                minHeight: "unset",
-                backgroundColor: "#413B3B",
-                borderRadius: "20px",
-                marginBottom: "8px",
-              }}
-            >
-              <div className="relative w-[600px] h-[130px] rounded-[20px]">
-                <p
-                  className="w-[150px] h-[60px] text-[35px] text-white absolute bottom-[10px] left-[10px]"
-                  style={{ textShadow: "0 4px 4px rgba(0, 0, 0, 0.25)" }}
-                >
-                  {plan.place.name}
-                </p>
-              </div>
-            </AccordionSummary>
-            <AccordionDetails
-              sx={{
+                width: "200%",
+                backgroundColor: "transparent",
                 borderRadius: "10px",
-                borderColor: "transparent",
                 boxShadow: "none",
-                marginBottom: "16px",
               }}
             >
-              <div className="flex flex-col w-[700px]">
-                <div className="flex flex-col relative h-[170px] w-[650px]">
-                  <span className="w-[10px] h-[170px] bg-black m-[30px] rounded-b-[3px] absolute rounded-t-[10px] top-[-30px] left-[-20px]" />
-                  <line
-                    className={`w-[1px] h-[250px] bg-black m-[30px] absolute top-[-46px] left-[-15px]`}
-                    style={{ borderLeft: "1px solid black" }}
-                  ></line>
-                  <p className="text-[18px] ml-12 mt-0 mb-auto text-black">
-                    {"Native: " +
-                      currentCurrency +
-                      " " +
-                      (plan.place.ticket_price.native * exchangeRate).toFixed(
-                        2
-                      ) +
-                      " "}
-                    {"Foreign: " +
-                      currentCurrency +
-                      " " +
-                      (plan.place.ticket_price.foreign * exchangeRate).toFixed(
-                        2
-                      ) +
-                      " "}
-                    {"Student: " +
-                      currentCurrency +
-                      " " +
-                      (plan.place.ticket_price.student * exchangeRate).toFixed(
-                        2
-                      )}
-                  </p>
-                  <p className="text-[18px] h-[50px] mt-auto ml-12 text-black overflow-auto">
-                    {plan.place.opening_hrs}
-                  </p>
-                  <p className="text-[18px] h-[100px] mt-auto ml-12 text-black overflow-auto break-words lasttimeipromise">
-                    {plan.place.description}
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon fontSize="large" sx={{ color: "#fff" }} />}
+                sx={{
+                  backgroundImage: `url(${plan.place.pictures[0]})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  borderRadius: "15px",
+                  minHeight: "unset",
+                  marginBottom: "12px",
+                }}
+              >
+                <div className="relative w-full h-[160px] rounded-[15px]">
+                  <p
+                    className="absolute bottom-[10px] left-[20px] text-[30px] text-white font-bold"
+                    style={{ textShadow: "0 4px 6px rgba(0, 0, 0, 0.6)" }}
+                  >
+                    {plan.place.name}
                   </p>
                 </div>
-                {plan.activities.map((activity) => (
-                  <div className="flex flex-row relative mt-[35px] w-[650px]">
-                    <span className="w-[30px] h-[30px] bg-black m-[30px] rounded-[30px] absolute top-[-30px] left-[-30px]" />
-                    <line
-                      className={`w-[1px] h-[150px] bg-black m-[30px] absolute top-[0px] left-[-15px]`}
-                      style={{ borderLeft: "1px solid black" }}
-                    ></line>
-                    <div className="w-[600px] h-[140px] rounded-[15px] bg-[#D9D9D9] ml-[60px] flex flex-row">
-                      <div className="flex flex-col w-[250px]">
-                        <p className="w-[250px] h-[35px] text-[26px] ml-2 mr-auto mt-0 mb-auto text-black">
-                          {activity.activity_id.Title}
-                        </p>
-                        <p className="w-[250px] h-[30px] text-[16px] ml-2 mr-auto mt-0 mb-auto text-black">
-                          {activity.activity_id.Category.name}
-                        </p>
-                        {activity.activity_id.SpecialDiscount >
-                          activity.activity_id.Price ||
-                        activity.activity_id.SpecialDiscount ===
-                          activity.activity_id.Price ? (
-                          <p className="w-[100px] h-[16px] text-[16px] ml-2 mr-auto mt-2 mb-4 text-black">
-                            {currentCurrency +
-                              " " +
-                              (
-                                activity.activity_id.Price * exchangeRate
-                              ).toFixed(2)}
-                          </p>
-                        ) : (
-                          <div className="relative h-[35px]">
-                            <p className="w-[100px] h-[13px] text-[13px] ml-2 mr-auto mt-2 mb-1 text-red-500 line-through">
-                              {currentCurrency +
-                                " " +
-                                (
-                                  activity.activity_id.Price * exchangeRate
-                                ).toFixed(2)}
-                            </p>
-                            <p className="w-[100px] h-[16px] text-[16px] absolute bottom-[10px] left-[70px] text-black">
-                              {currentCurrency +
-                                " " +
-                                (
-                                  activity.activity_id.SpecialDiscount *
-                                  exchangeRate
-                                ).toFixed(2)}
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex flex-col w-[130px] h-[140px]">
-                        <p className="text-[12px] w-[130px] h-[24px] mt-2 mb-0 text-center">
-                          {formatDate(
-                            activity.activity_id.DateAndTime.split("T")[0]
-                          )}
-                        </p>
-                        <Rating
-                          name="read-only"
-                          value={activity.activity_id.rating}
-                          readOnly
-                          sx={{
-                            marginTop: "2px",
-                            marginBottom: "5px",
-                            marginLeft: "auto",
-                            marginRight: "auto",
-                          }}
-                        />
-                        <div className="flex flex-col w-[130px] h-[80px] overflow-auto lasttimeipromise">
-                          {activity.activity_id.Tags.map(
-                            (tag: TagStructure) => (
-                              <Chip
-                                key={tag._id}
-                                label={tag.name}
-                                color="info"
-                                size="small"
-                                sx={{
-                                  width: "80px",
-                                  marginLeft: "auto",
-                                  marginRight: "auto",
-                                  marginTop: "3.5px",
-                                }}
-                              />
-                            )
-                          )}
-                        </div>
-                      </div>
-                      <iframe
-                        title="map"
-                        className="rounded-r-[15px] mt-0 mb-auto mr-0 ml-auto w-[220px] h-[140px]"
-                        src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${activity.activity_id.Location.longitude}!3d${activity.activity_id.Location.latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
-                        width="220px"
-                        height="140px"
-                      ></iframe>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </AccordionDetails>
-          </Accordion>
-        ))}
-      </div>
+              </AccordionSummary>
+  
+              
 
-      <TheBIGMAP
-        id="bigmap"
-        className="flex h-[100%] w-[500px] ml-2 mb-0 mt-auto"
-        arrayofmarkers={locations}
-      />
+<AccordionDetails sx={{ backgroundColor: "rgba(255, 255, 255, 0.9)", borderRadius: "20px", padding: "25px", boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)" }}>
+  <div className="flex flex-col space-y-8 w-full">
+    
+    {/* Ticket Pricing Section */}
+    <div className="flex flex-col space-y-4 bg-gradient-to-r from-purple-100 via-pink-100 to-blue-100 p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-transform transform hover:scale-105">
+      <div className="flex items-center space-x-3 text-gray-800 text-lg font-semibold">
+        <GiTicket className="text-purple-600 text-2xl" />
+        <span>Native:</span>
+        <span className="text-purple-600">{currentCurrency} {(plan.place.ticket_price.native * exchangeRate).toFixed(2)}</span>
+      </div>
+      <div className="flex items-center space-x-3 text-gray-800 text-lg font-semibold">
+        <FaGlobe className="text-blue-600 text-2xl" />
+        <span>Foreign:</span>
+        <span className="text-blue-600">{currentCurrency} {(plan.place.ticket_price.foreign * exchangeRate).toFixed(2)}</span>
+      </div>
+      <div className="flex items-center space-x-3 text-gray-800 text-lg font-semibold">
+        <FaUserGraduate className="text-green-600 text-2xl" />
+        <span>Student:</span>
+        <span className="text-green-600">{currentCurrency} {(plan.place.ticket_price.student * exchangeRate).toFixed(2)}</span>
+      </div>
+      <div className="flex items-center space-x-3 text-gray-600">
+        <MdAccessTime className="text-yellow-500 text-xl" />
+        <span>{plan.place.opening_hrs}</span>
+      </div>
+      <p className="text-[16px] text-gray-600 break-words leading-relaxed italic">{plan.place.description}</p>
+    </div>
+
+    {/* Activities Section */}
+    {plan.activities.map((activity) => (
+      <div className="flex space-x-6 items-start bg-white p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-transform transform hover:scale-105">
+        
+        {/* Activity Icon */}
+        <div className="flex-shrink-0">
+          <span className="w-[55px] h-[55px] bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-2xl shadow-md">
+            <FaTags />
+          </span>
+        </div>
+
+        <div className="flex flex-col w-full">
+          <div className="flex justify-between items-center">
+            <p className="text-[22px] text-gray-800 font-bold">{activity.activity_id.Title}</p>
+            <p className="text-[16px] text-gray-500 flex items-center space-x-2">
+              <FaTags className="text-gray-400" />
+              <span>{activity.activity_id.Category.name}</span>
+            </p>
+          </div>
+
+          {/* Price Section */}
+          <div className="flex justify-between mt-2">
+            {activity.activity_id.SpecialDiscount >= activity.activity_id.Price ? (
+              <p className="text-[16px] text-red-500 font-bold">
+                {currentCurrency} {(activity.activity_id.Price * exchangeRate).toFixed(2)}
+              </p>
+            ) : (
+              <div className="relative">
+                <p className="text-[16px] text-gray-500 line-through">
+                  {currentCurrency} {(activity.activity_id.Price * exchangeRate).toFixed(2)}
+                </p>
+                <p className="absolute bottom-0 left-[70px] text-[16px] text-green-500 font-semibold">
+                  {currentCurrency} {(activity.activity_id.SpecialDiscount * exchangeRate).toFixed(2)}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Date */}
+          <p className="text-[16px] text-gray-700 mt-2 flex items-center space-x-2">
+            <FaCalendarAlt className="text-blue-400" />
+            <span>{formatDate(activity.activity_id.DateAndTime.split("T")[0])}</span>
+          </p>
+
+          {/* Rating */}
+          <Rating
+            name="read-only"
+            value={activity.activity_id.rating}
+            readOnly
+            sx={{ marginTop: "8px", marginBottom: "5px" }}
+          />
+
+          {/* Tags */}
+          <div className="flex flex-wrap space-x-2 mt-2">
+            {activity.activity_id.Tags.map((tag) => (
+              <Chip
+                key={tag._id}
+                icon={<FaTags />}
+                label={tag.name}
+                color="primary"
+                size="small"
+                sx={{ marginTop: "5px" }}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Google Map iframe */}
+        <iframe
+          title="map"
+          className="rounded-xl border-2 border-gray-200 shadow-md w-[220px] h-[150px] hover:shadow-lg hover:scale-105 transition-transform"
+          src={`https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d12554.522849119294!2d${activity.activity_id.Location.longitude}!3d${activity.activity_id.Location.latitude}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2seg!4v1728092539784!5m2!1sen!2seg`}
+        ></iframe>
+      </div>
+    ))}
+  </div>
+</AccordionDetails>
+
+
+            </Accordion>
+          ))}
+        </div>
+      </div>
+      <div className="w-px h-full bg-gray-400 mx-11"></div>
+
+      <div className="flex flex-col justify-start items-center w-[500px] mt-8">
+        <TheBIGMAP id="bigmap" arrayofmarkers={locations} />
+      </div>
     </div>
   );
+  
 };
 
 export default ItineraryDetailsTourist;
