@@ -253,80 +253,26 @@ const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
   }
 
   return (
-    <div className="flex items-center justify-center">
-      <Modal open={open} onClose={handleClose}>
-        <Box sx={style}>
-          <Box className="grid grid-cols-2">
-            <FormControl fullWidth sx={{ marginY: 1 }}>
-              <InputLabel>Name</InputLabel>
-              <OutlinedInput
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                label="Name"
-              />
-            </FormControl>
+    <div className="flex flex-col items-center justify-center">
+      <header className="bg-gradient-to-r from-purple-500 via-blue-500 to-teal-500 py-16 min-h-[220px] w-full text-center rounded-b-3xl shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-32 h-32 bg-white/25 rounded-full blur-3xl opacity-40 animate-pulse"></div>
+          <div className="absolute bottom-0 right-0 w-48 h-48 bg-pink-400/25 rounded-full blur-3xl opacity-50 animate-pulse"></div>
+  
+          {/* Title and Subtitle */}
+          <h1
+            className="text-5xl font-extrabold text-white relative drop-shadow-xl"
+            style={{
+              textShadow: "2px 2px 10px rgba(0, 0, 0, 0.7)",
+            }}
+          >
+            The Shop
+          </h1>
+          <p className="mt-4 text-xl text-white/90">
+            Browse through many of the available products to purchase.
+          </p>
+          <hr className="border-t-2 border-white/40 w-2/3 mx-auto mt-6" />  
 
-            <FormControl fullWidth sx={{ marginY: 1 }}>
-              <InputLabel>Description</InputLabel>
-              <OutlinedInput
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                label="Description"
-              />
-            </FormControl>
-
-            <FormControl fullWidth sx={{ marginY: 1 }}>
-              <InputLabel>Price</InputLabel>
-              <OutlinedInput
-                type="number"
-                startAdornment={
-                  <InputAdornment position="start">$</InputAdornment>
-                }
-                value={price}
-                onChange={(e) => setPrice(Number(e.target.value))}
-                label="Price"
-              />
-            </FormControl>
-
-            <FormControl fullWidth sx={{ marginY: 1 }}>
-              <InputLabel>Quantity</InputLabel>
-              <OutlinedInput
-                label="Hours"
-                type="number"
-                value={quantity}
-                onChange={(e) => setQuantity(Number(e.target.value))}
-              />
-            </FormControl>
-            {type.includes("Admin") ? (
-              <FormControl fullWidth className="col-span-2" sx={{ marginY: 1 }}>
-                <InputLabel>External Seller</InputLabel>
-                <OutlinedInput
-                  label="ExternalSeller"
-                  type="string"
-                  value={externalseller}
-                  onChange={(e) => {
-                    setExternalSeller(e.target.value);
-                  }}
-                />
-              </FormControl>
-            ) : (
-              <></>
-            )}
-            <FormControl fullWidth className="col-span-2" sx={{ marginY: 1 }}>
-              <ImageUploader
-                setSelectedImage={setImage}
-                selectedImage={image}
-              />
-            </FormControl>
-
-            <Button className="col-span-2" onClick={handleCreate}>
-              Add
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
-      <div className="flex flex-col flex-1" style={{ marginTop: "64px" }}>
-        <div className="search-bar">
+          <div className="search-bar">
           <input
             type="text"
             placeholder="Search products by name..."
@@ -401,6 +347,81 @@ const ShopPage: React.FC<ShopPageProps> = ({ type }) => {
             )}
           </div>
         </div>
+
+        </header>
+      <Modal open={open} onClose={handleClose}>
+        <Box sx={style}>
+          <Box className="grid grid-cols-2">
+            <FormControl fullWidth sx={{ marginY: 1 }}>
+              <InputLabel>Name</InputLabel>
+              <OutlinedInput
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                label="Name"
+              />
+            </FormControl>
+
+            <FormControl fullWidth sx={{ marginY: 1 }}>
+              <InputLabel>Description</InputLabel>
+              <OutlinedInput
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                label="Description"
+              />
+            </FormControl>
+
+            <FormControl fullWidth sx={{ marginY: 1 }}>
+              <InputLabel>Price</InputLabel>
+              <OutlinedInput
+                type="number"
+                startAdornment={
+                  <InputAdornment position="start">$</InputAdornment>
+                }
+                value={price}
+                onChange={(e) => setPrice(Number(e.target.value))}
+                label="Price"
+              />
+            </FormControl>
+
+            <FormControl fullWidth sx={{ marginY: 1 }}>
+              <InputLabel>Quantity</InputLabel>
+              <OutlinedInput
+                label="Hours"
+                type="number"
+                value={quantity}
+                onChange={(e) => setQuantity(Number(e.target.value))}
+              />
+            </FormControl>
+            {type.includes("Admin") ? (
+              <FormControl fullWidth className="col-span-2" sx={{ marginY: 1 }}>
+                <InputLabel>External Seller</InputLabel>
+                <OutlinedInput
+                  label="ExternalSeller"
+                  type="string"
+                  value={externalseller}
+                  onChange={(e) => {
+                    setExternalSeller(e.target.value);
+                  }}
+                />
+              </FormControl>
+            ) : (
+              <></>
+            )}
+            <FormControl fullWidth className="col-span-2" sx={{ marginY: 1 }}>
+              <ImageUploader
+                setSelectedImage={setImage}
+                selectedImage={image}
+              />
+            </FormControl>
+
+            <Button className="col-span-2" onClick={handleCreate}>
+              Add
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
+      <div className="flex flex-col flex-1" style={{ marginTop: "64px" }}>
+        
         <div className="flex flex-wrap items-center justify-center w-full gap-14">
           {sortedProducts.length > 0 ? (
             displayedProducts.length > 0 ? (
